@@ -64,7 +64,8 @@
   const LOOK = {
     'ai-today': { name: '今天 AI 后台自动维护', icon: 'sparkle', tint: 'gold', art: 'ai' },
     online: { name: '云端和 GitHub', icon: 'loop', tint: 'green', art: 'online' },
-    ai: { name: 'AI 工作', icon: 'sparkle', tint: 'gold', art: 'ai' }, upkeep: { name: '电脑维护', icon: 'wrench', tint: 'aqua', art: 'upkeep' }, hardware: { name: '硬件和灯效', icon: 'chip', tint: 'lilac', art: 'hardware' },
+    // “AI 工作”“电脑维护”两张卡头用强调绿（本人 11-24：“变成绿色强调色”，M778）
+    ai: { name: 'AI 工作', icon: 'sparkle', tint: 'green', art: 'ai' }, upkeep: { name: '电脑维护', icon: 'wrench', tint: 'green', art: 'upkeep' }, hardware: { name: '硬件和灯效', icon: 'chip', tint: 'lilac', art: 'hardware' },
     backup: { name: '备份', icon: 'stack', tint: 'blue', art: 'backup' }, daily: { name: '听写和日常记录', icon: 'mic', tint: 'peach', art: 'daily' }, remote: { name: '远程和网络', icon: 'wifi', tint: 'cyan', art: 'remote' },
     vendor: { name: '第三方软件自带', icon: 'box', tint: 'pink', art: 'vendor' }, 'ai-schedule': { name: 'AI 定时任务（Claude、Codex）', icon: 'chat', tint: 'lilac', art: 'ai-schedule' }, disabled: { name: '已停用', icon: 'moon', tint: 'blue', art: 'idle', last: true },
   };

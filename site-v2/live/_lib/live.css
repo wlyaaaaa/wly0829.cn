@@ -612,6 +612,8 @@ body:not(.page--automation, .page--ledger, [data-record="issue"]) .notice-target
 :root {
   --glow-green: 0 166 80; --glow-sage: 108 167 140; --glow-lilac: 150 92 190; --glow-cyan: 65 153 182; --glow-blue: 80 106 196;
   --glow-coral: 216 115 105; --glow-pink: 193 80 139; --glow-peach: 227 151 115; --glow-red: 225 39 30; --glow-amber: 242 138 0;
+  /* 分组看板卡头另用的两色（_lib/live-board.css 的 data-tint），虚化圆圈不抽这两色；原来没定义，给了这两色的卡头是白的（M778） */
+  --glow-gold: 214 163 38; --glow-aqua: 32 165 150;
 }
 .glow .blob--a {
   background: radial-gradient(60% 65% at 34% 45%, rgb(var(--glow-a) / calc(.30 * var(--glow-alpha-a, 1))) 0%, rgb(var(--glow-a) / calc(.12 * var(--glow-alpha-a, 1))) 50%, transparent 100%), radial-gradient(60% 65% at 66% 55%, rgb(var(--glow-b) / calc(.28 * var(--glow-alpha-b, 1))) 0%, rgb(var(--glow-b) / calc(.10 * var(--glow-alpha-b, 1))) 50%, transparent 100%);

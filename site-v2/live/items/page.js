@@ -79,7 +79,7 @@
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
-    const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'gold'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
+    const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'green'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
     c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hintText(kind, pairedHere ? 'owner' : 'public'); cards.set(kind, c);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
@@ -265,9 +265,10 @@
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), 30, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
-    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, 30, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
+    // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
+    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）

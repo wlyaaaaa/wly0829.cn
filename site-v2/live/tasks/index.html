@@ -67,6 +67,8 @@
 .task-compact .lb-cell--name { overflow-wrap: normal; }
 .task-compact .lb-cell--name > p:first-child { text-wrap: pretty; }
 .task-compact .task-purpose { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 任务名下面那行用途整句显示，放不下就换行，不截成“…”（M760） */
+.page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
 .task-compact .lb-cell--time > * { overflow: visible; }
 .task-compact .task-last > span { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
 .task-compact .task-last:has(.task-week) { line-height: 14px; }

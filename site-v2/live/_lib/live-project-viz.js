@@ -39,7 +39,7 @@
       return `<button type="button" class="pj-heat-cell${!finite(n) ? ' is-unknown' : ''}" style="--heat:${heat(n)}" aria-label="${esc(label)}"></button>`;
     }).join('')}`).join('')}</div></div>
     <div class="pj-heat-legend"><span>每天提交次数</span>${[[0, '0'], [1, '1–2'], [3, '3–5'], [6, '6+'], [null, U.collectionText()]].map(([n, label]) => `<span><i class="pj-heat-cell${n == null ? ' is-unknown' : ''}" style="--heat:${heat(n)}"></i>${label}</span>`).join('')}</div>
-    <p class="pj-note">${days.length ? `${esc(days[0].slice(5))} — ${esc(days.at(-1).slice(5))}` : ''}${viewer === 'owner' && data.hidden ? ` · ${U.hiddenMore(data.hidden, '个', data.hidden_what || '项目')}` : ''}</p><p class="pj-heat-read pj-note">指向或点一格查看提交数</p>`;
+    <p class="pj-note">${days.length ? `${esc(days[0].slice(5))} — ${esc(days.at(-1).slice(5))}` : ''}${viewer === 'owner' && data.hidden ? ` · ${U.hiddenMore(data.hidden, '个', data.hidden_what || '项目')}` : ''}</p>`;
     bindHeat(host);
   }
   // 点一格：这一格加粗框、放大，同一行的项目名一起亮，读数写在这一格旁边（M315）；指着别的格子时临时显示那一格，移开回到已选的那格

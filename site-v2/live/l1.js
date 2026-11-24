@@ -575,7 +575,8 @@
     }
     if (it.kind === 'know') sub = elapsed(it.episode_at || it.born);
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
-    if (viewer === 'owner' && U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), 30, true)]);
+    // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760）
+    if (viewer === 'owner' && U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), Infinity, true)]);
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
@@ -584,7 +585,7 @@
       key: it.id,
       cls: 'row',
       html: `${lamp({ ...it, level: it.light })}<div class="row__text">
-          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(U.capText(it.text, 30, true)), 'items')}${fresh}${marks}</p>
+          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items')}${fresh}${marks}</p>
           ${sub ? `<p class="row__sub">${sub}</p>` : ''}${detail}
         </div><div class="row__acts">${U.goActions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
     };
