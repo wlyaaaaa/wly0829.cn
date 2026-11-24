@@ -982,6 +982,14 @@
       const body = U.fieldHtml(text || empty, { name: NAME[t.key] }), marker = body.includes('live-mark');
       return `<i class="mach__pt" style="left:${pt[0]}%;top:${pt[1]}%"></i><${marker ? 'span' : 'a'} class="mach__tag${text ? '' : ' is-none'}"${offline() && !text ? ' hidden' : ''}${marker ? '' : ` href="#grp-${go}" data-goto="${go}"`} style="left:${Math.min(94, Math.max(12, at[0]))}%;top:${at[1]}%">${U.status(reading, { small: true }).lamp}${body}</${marker ? 'span' : 'a'}>`;
     }).join(''));
+    // 标签变长（比如连不上时多了“上次”）会往左伸进左栏、压住那边的字：左沿最多到左栏正文右沿外 16px，
+    // 再往左就把标签往右挪，右边不出卡片（留 12px）。在线时现有的标签都够不着这条线，位置不变（M741）。
+    const body = hero.querySelector('.card__body'), edge = body.getBoundingClientRect().right - parseFloat(getComputedStyle(body).paddingRight) + 16;
+    const right = hero.querySelector('.card__glass').getBoundingClientRect().right - 12;
+    for (const tag of part('tags').querySelectorAll('.mach__tag:not([hidden])')) {
+      const r = tag.getBoundingClientRect(), shift = Math.min(edge - r.left, right - r.right);
+      if (r.width && shift > 0) tag.style.left = `calc(${tag.style.left} + ${shift.toFixed(1)}px)`;
+    }
   }
 
   const PC = { main: 'main', secondary: 'sub', secondary_laptop: 'sub' };   // 连接电脑页上的哪一台
