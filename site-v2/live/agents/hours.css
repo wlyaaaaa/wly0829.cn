@@ -1,0 +1,58 @@
+/* 实况 · 智能体：三家干了多少（M738，hours.js）。左边一张表（三类 × 三家 + 全部），右边横条；只看一家时表只剩这一家、横条只画这一家。 */
+.ag-hhead { align-items: flex-start; }
+.ag-hhead h2 small { white-space: nowrap; }
+.ag-hside { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex: none; }
+/* 时间那排选中的照本人点头的样子图：绿底白字（页面现成的强调绿），不用灰底里一块白 */
+.ag-hseg-pick button[aria-pressed="true"] { background: var(--tp-green); color: #fff; box-shadow: none; }
+.ag-hseg-pick button[aria-pressed="true"]:hover { color: #fff; }
+.ag-hgrid-wrap { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.ag-hgrid-wrap > * + * { border-left: 1px solid var(--tp-hair); padding-left: 26px; }
+.ag-hgrid-wrap.is-one { grid-template-columns: 380px minmax(0, 1fr); align-items: center; }
+.is-one .ag-hbar__track { height: 56px; }
+.is-one .ag-hbar__num { font-size: 26px; }
+.is-one .ag-hplot { padding-top: 26px; }
+
+/* 表：数靠右、等宽数字；“全部”一列淡绿底；合计一行加粗 */
+.ag-htable { border: 1px solid var(--tp-line); border-radius: 10px; font-size: 16px; line-height: 24px; }
+.ag-htable th, .ag-htable td { padding: 12px 16px; }
+.ag-htable td { text-align: right; font-family: var(--tp-num); font-variant-numeric: tabular-nums; border-left: 1px solid var(--tp-hair); }
+.ag-htable thead th + th { text-align: right; border-left: 1px solid var(--tp-hair); }
+.ag-htable tbody th { font-size: 15.5px; font-weight: 500; color: #3d3d3a; }
+.ag-htable thead th { font-size: 14.5px; }
+.ag-htable .is-all { background: rgb(0 166 80 / .07); }
+.ag-htable thead .is-all { background: rgb(0 166 80 / .13); }
+.ag-htable tr.is-sum > * { font-weight: 800; font-size: 19px; border-top: 1px solid var(--tp-line); }
+.ag-htable tr.is-sum th { font-family: var(--black); color: var(--ink); }
+.ag-htable .tp-fog { font-size: 13px; }
+.ag-hpick { display: inline-flex; align-items: center; margin: -3px -8px; padding: 3px 8px; border: 0; border-radius: 7px; background: none; font: inherit; font-weight: 700; color: var(--ink); cursor: pointer; transition: background .15s ease; }
+.ag-hpick:hover { background: color-mix(in srgb, var(--host) 16%, #fff); }
+.ag-hpick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+/* 横条：每家一条，三段由深到浅是普通对话、子代理、自动任务；“全部”用绿。整条是按钮，点了整页只看这一家 */
+.ag-hchart { --hname: 104px; }
+.ag-hplot { position: relative; display: grid; gap: 10px; margin-right: 62px; padding: 4px 0 28px; }
+.ag-hgrids { position: absolute; top: 0; bottom: 24px; left: calc(var(--hname) + 12px); right: 0; pointer-events: none; }
+.ag-hgrid { position: absolute; top: 0; bottom: 0; width: 1px; background: rgb(20 20 19 / .07); font-style: normal; }
+.ag-hgrid:first-child { background: rgb(20 20 19 / .18); }
+.ag-hgrid span { position: absolute; top: calc(100% + 6px); left: 0; translate: -50% 0; font-size: 12px; color: #6c6b64; white-space: nowrap; }
+.ag-hbar { position: relative; display: grid; grid-template-columns: var(--hname) minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; min-height: 42px; padding: 0; border: 0;
+  border-radius: 8px; background: none; font: inherit; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s ease; }
+.ag-hbar:hover { background: rgb(20 20 19 / .04); }
+.ag-hbar:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.ag-hbar__name { justify-self: end; font-size: 16px; font-weight: 700; white-space: nowrap; }
+.ag-hbar.is-all .ag-hbar__name { font-weight: 800; }
+.ag-hbar__track { position: relative; display: block; height: 30px; }
+.ag-hbar__fill { display: flex; height: 100%; min-width: 0; border-radius: 3px; overflow: hidden; transform-origin: left; }
+.ag-hbar__fill.is-grow { animation: ag-hgrow .8s cubic-bezier(.3, .7, .3, 1) both; }
+.ag-hbar__num { position: absolute; top: 50%; translate: 8px -50%; font-family: var(--tp-num); font-size: 20px; line-height: 1; white-space: nowrap; }
+.ag-hbar__num .tp-fog { font-size: 13px; }
+.ag-hseg { display: block; height: 100%; min-width: 3px; background: var(--host); font-style: normal; }
+.ag-hseg[data-kind="subagent"] { background: color-mix(in srgb, var(--host) 58%, #fff); }
+.ag-hseg[data-kind="automatic"] { background: color-mix(in srgb, var(--host) 30%, #fff); }
+.ag-hseg[data-kind="rest"] { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--host) 22%, #fff) 0 5px, #fff 5px 8px); }
+.ag-hunit { margin: 0 62px 0 calc(var(--hname) + 12px); text-align: center; font-size: 12.5px; color: #6c6b64; }
+.ag-hlegend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 26px; margin: 12px 0 0; font-size: 14px; color: #3d3d3a; }
+.ag-hlegend span { display: inline-flex; align-items: center; gap: 8px; }
+.ag-hlegend .ag-hseg { width: 18px; height: 14px; border-radius: 3px; }
+.ag-hnote { margin: 14px 0 0; }
+@keyframes ag-hgrow { from { scale: 0 1; } to { scale: 1 1; } }
