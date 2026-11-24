@@ -69,6 +69,8 @@
     sweep(document);
   }
   const entries = new Map();
+  const ACCESS = 'access';
+  let readSequence = 0;
   // RF142：只把可枚举的页卡名写到请求上，与资源缓存键和筛选参数分开。
   const opened = (() => {
     const pages = 'home apps automation backup backups chat chats computer environment issue item items ledger notifications phone phone/apps power project projects records security smooth storage task tasks traffic usage'.split(' ');
@@ -451,7 +453,7 @@
     const viewer = publicPaused ? { kind: 'public', device: 'none' } : e.viewer;
     const pairNotice = !publicPaused && e.previewOwner && viewer.kind === 'public' && viewer.device === 'invalid'
       ? '这台设备的配对已失效，正在显示公开版。重新配对后可查看本人实况。' : '';
-    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer,
+    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead,
       source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn }, link, viewer, now,
       shownAt: resourceAt, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
@@ -516,7 +518,7 @@
   }
   function forgetData(e, forgetCopy = false) {
     if (forgetCopy) storage(cacheKey(e, e.viewer.kind), null);
-    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, lastCells: null, fallbackNote: '' });
+    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '' });
   }
   function audience(e, viewer) {
     if (!viewer) return;
@@ -711,9 +713,13 @@
       e.fallbackNote = `这是 ${sameDay ? time(e.at) : stamp(e.at)} 的旧数，现在读不到新的。`;
     }
   }
-  function read(e, isInitial = false, card, retryCopy = false) {
-    if (e.pending && e.requestVersion === publicationVersion) return e.pending;
+  function read(e, isInitial = false, card, retryCopy = false, replace = false) {
+    if (!replace && e.pending && e.requestVersion === publicationVersion) return e.pending;
+    if (replace) { clearFailure(e); e.etag = null; }
     const version = e.requestVersion = publicationVersion;
+    const id = e.readId = ++readSequence;
+    const obsolete = () => id !== e.readId || version !== publicationVersion || e.token !== device();
+    const discarded = () => ({ ...snapshot(e), data: null });
     begin(e); awaitFresh(e);
     e.requestedAt = Date.now();
     const request = (async () => {
@@ -729,10 +735,10 @@
         response = await fetch(url, { cache: 'no-store', credentials: target.credentials,
           headers: { ...target.headers,
             ...(e.etag ? { 'If-None-Match': e.etag } : {}) }, signal: AbortSignal.timeout(15000) });
-        if (version !== publicationVersion || publicPaused && response.headers.get('X-Live-Source') === 'oss') return present(e);
+        if (obsolete() || publicPaused && response.headers.get('X-Live-Source') === 'oss') return discarded();
         if (response.status !== 204 && response.status !== 304) body = await response.json().catch(error => { if (response.ok) throw error; return null; });
       } catch {
-        if (version !== publicationVersion || e.token !== device() || publicPaused || e.stopped) return present(e);
+        if (obsolete() || publicPaused || e.stopped) return discarded();
         let notListening = false;
         if (directLan && e.resource === 'home') {
           const probe = await fetch(base + 'access', { cache: 'no-store', credentials: 'omit',
@@ -740,18 +746,20 @@
           if (probe?.status === 502) notListening =
             (await probe.json().catch(() => null))?.error === 'preview_upstream_not_listening';
         }
-        if (version !== publicationVersion || e.token !== device() || publicPaused || e.stopped) return present(e);
+        if (obsolete() || publicPaused || e.stopped) return discarded();
         failed(e, 0, null, notListening ? 'service' : undefined);
         await retryFailure(e, retryCopy, notListening);
+        if (obsolete()) return discarded();
         return emit(e);
       }
-      if (version !== publicationVersion || e.token !== device()) return present(e);
+      if (obsolete()) return discarded();
       const oss = response.headers.get('X-Live-Source') === 'oss';
       if (!oss && body?.error === 'live_public_paused') return pausePublication(e);
       if (!oss && body?.error === 'live_publication_revoked') {
         revokePublication(e, body);
+        const revoked = publicationVersion;
         if (!e.stopped) await retryFailure(e, false);
-        return emit(e);
+        return id === e.readId && revoked === publicationVersion && e.token === device() ? emit(e) : discarded();
       }
       if (!site && body?.viewer) e.previewOwner = directLan && body.viewer.kind === 'owner' || response.headers.get('X-Wly-Preview-View') === 'owner';
       // 退订后仍遵守停公开和设备失效；该订阅本身不再读数、重试或参与整页离线判断。
@@ -771,7 +779,10 @@
         if (fixture === null && body?.error === 'snapshot_metadata_only' && offline()) fallbackMetadata(e, body.at, {
           policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience')
         });
-        await retryFailure(e, retryCopy); if (e.data !== null || offline()) settle(e); return emit(e);
+        await retryFailure(e, retryCopy);
+        if (obsolete()) return discarded();
+        if (e.data !== null || offline()) settle(e);
+        return emit(e);
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
@@ -792,6 +803,7 @@
         e.warming = response.status === 202 || body?.q === 'warming';
         if (fixture === null && itemDetail(e) && e.link.state === 'offline' && e.viewer.device !== 'invalid') {
           await retryFailure(e, retryCopy);
+          if (obsolete()) return discarded();
           settle(e);
           return emit(e);
         }
@@ -802,16 +814,17 @@
         } else if (e.source === 'copy' && e.data !== null && e.warming && body?.data == null) {
           settle(e);
           return emit(e);
-        } else if (body?.data != null && (wasFallback || e.source === 'copy' ||
+        } else if (body?.data != null && (e.path !== ACCESS || response.status === 200) && (wasFallback || e.source === 'copy' ||
                    (instance && instance !== e.instance) || body.seq >= e.seq)) {
           e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at;
+          if (e.path === ACCESS) e.dataRead = id;
           e.withdrawn = false;
           e.instance = instance;
           e.stale_after = body.stale_after; e.refresh_seconds = body.refresh_seconds;
         }
         e.fallbackNote = '';
         e.source = fixture === null ? 'net' : 'fixture';
-        e.etag = e.status === 403 ? null : response.headers.get('ETag');
+        if (e.path !== ACCESS || e.dataRead === id) e.etag = e.status === 403 ? null : response.headers.get('ETag');
         save(e);
       } else {
         failed(e, response.status, body, via);
@@ -820,7 +833,7 @@
             /^\/live(?:\/(?:index\.html)?)?$/.test(location.pathname) &&
             response.status === 502 && body?.error === 'preview_upstream_not_listening';
           await retryFailure(e, retryCopy, notListening);
-          return emit(e);
+          return obsolete() ? discarded() : emit(e);
         }
         clearFailure(e);
       }
@@ -829,18 +842,19 @@
     })().finally(() => { if (e.pending === request) e.pending = null; });
     return e.pending = request;
   }
-  async function refresh(onlyDue, fresh = false) {
-    if (pairing) return pairing.then(() => refresh(onlyDue, fresh));
+  async function refresh(onlyDue, fresh = false, path) {
+    if (pairing) return pairing.then(() => refresh(onlyDue, fresh, path));
     const polling = onlyDue === true || onlyDue === 'due';
     if (publicPaused && polling) return { ok: false, at: null };
     // 点页面上的刷新：和浏览器刷新一样从头读。页面早先顺手取过、现在没在显示的那几份（翻页、展开、探测）
     // 当作已退订：不再拿它们上一回（或还在路上那一读）的“连不上”压住整页，也不再重读，页面再要时 get 会重新订上；
     // 正在显示的每份都整份重读，不带上一回的条件和重试计时。
-    if (fresh) for (const e of entries.values()) {
+    if (fresh && !path) for (const e of entries.values()) {
       clearFailure(e); e.etag = null;
       if (!e.listeners.size) { e.stopped = true; e.receivedAt = null; end(e); }
     }
     const active = [...entries.values()].filter(e => !e.stopped
+      && (!path || e.path === path && e.listeners.size)
       && (onlyDue !== 'due' || healthy(e))
       && (e.listeners.size || e.receivedAt != null && e.validatedLink?.state === 'offline')).map(e => {
       if (e.token === device()) return e;
@@ -851,18 +865,21 @@
       emit(next);
       return next;
     });
-    const probe = publicPaused && (active[0] || entry(pausedEntry.resource, pausedEntry.query));
-    const states = probe ? [await read(probe)] : [];
+    const replace = Boolean(path && fresh);
+    const probe = publicPaused && (active[0] || !path && entry(pausedEntry.resource, pausedEntry.query));
+    const states = probe ? [await read(probe, false, undefined, false, replace)] : [];
     if (publicPaused) return { ok: false, at: null };
-    const due = polling ? active.filter(e => healthy(e) ? Date.now() - (e.requestedAt || 0) >= pollEvery(e) * 1000 - 1000
+    const due = polling ? active.filter(e => healthy(e)
+      ? e.path === ACCESS && e.listeners.size || Date.now() - (e.requestedAt || 0) >= pollEvery(e) * 1000 - 1000
       : e.failure || !e.refresh_seconds || e.refresh_seconds <= pollSeconds(e) || Date.now() - e.requestedAt >= e.refresh_seconds * 1000) : active;
-    states.push(...await Promise.all(due.filter(e => e !== probe).map(e => read(e, false, undefined, true))));
+    states.push(...await Promise.all(due.filter(e => e !== probe).map(e => read(e, false, undefined, true, replace))));
     if (probe && !publicPaused) window.LiveUI?.publicPause?.(false, publicPauseText);
     return {
       ok: states.every(s => s.meta.status >= 200 && s.meta.status < 400),
       at: states.map(s => s.shownAt).filter(Boolean).sort().at(-1) || null
     };
   }
+  const refreshPath = (path, fresh = false) => refresh(false, fresh, path);
   function watch(resource, query, callbacks) {
     if (pairing) {
       let subscription, stopped = false;
@@ -889,6 +906,7 @@
   }
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) return;
+    if (mainResource === ACCESS) return refreshPath(ACCESS, true);
     const e = opened.initial();
     if (!publicPaused && e?.listeners.size && e.token === device()) read(e, true);
     refresh();
@@ -1037,7 +1055,7 @@
     return changed;
   }
   window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
-    get, afterReady, markOpened: opened.card, mergeHardware,
+    get, refreshPath, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {
         const name = String(item.name || item.title || '自动任务').replace(/\s+/g, ' ').slice(0, 90);

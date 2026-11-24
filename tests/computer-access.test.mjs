@@ -573,8 +573,8 @@ test('v2 adapter reuses create/verify, queries uncertainty, cancels only the req
   for (const outcome of ['succeeded', 'failed', 'unknown', 'busy']) {
     const calls = [], original = { state_version: 'v1', personal_data: { state: 'unlocked' } };
     const env = { local: false, base: '', state: structuredClone(original), fields: { pd: 'personal_data' }, kinds: { pd: 'personal-data', ur: 'unrestricted', win: 'windows' }, meta: { viewer: { kind: 'owner' } },
-      busy: false, pending: null, disconnected: false, openKey: null, fresh: () => true, crypto: { randomUUID: () => 'same-request' }, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {}, message() {}, begin() {}, waiting() {}, failed() {}, unsure: 'unsure', grantResultNeedsQuery, notice: { prepend() {} },
-      window: { Live: { refresh() {} } }, localStorage: { getItem: () => 'synthetic-device' }, createGrantAttempt, canRestartUnsubmittedGrant, reductionFailureResult, errorMessages };
+      busy: false, pending: null, actionSequence: 0, disconnected: false, openKey: null, fresh: () => true, crypto: { randomUUID: () => 'same-request' }, clock: () => 100, createGrantRecovery: () => ({ start() {} }), render() {}, message() {}, begin() {}, waiting() {}, failed() {}, unsure: 'unsure', grantResultNeedsQuery, notice: { prepend() {} },
+      refreshAccess() {}, localStorage: { getItem: () => 'synthetic-device' }, createGrantAttempt, canRestartUnsubmittedGrant, reductionFailureResult, errorMessages };
     env.remember = value => { env.pending = grantResultNeedsQuery(value) ? { ...value, key: value.key || env.pending?.key || 'pd' } : null; };
     env.receipt = value => { if (value) { env.result = value; env.remember(value); } };
     env.apiRequest = async (base, path, options) => {
@@ -589,7 +589,7 @@ test('v2 adapter reuses create/verify, queries uncertainty, cancels only the req
       }
       return { request_id: 'same-request', state: outcome === 'unknown' ? 'succeeded' : outcome };
     };
-    vm.runInNewContext(source.slice(source.indexOf('  async function query('), source.indexOf('  cancelButton.onclick')) + '\nthis.submit=submit;this.query=query;this.lock=lock;', env);
+    vm.runInNewContext(source.match(/  const grantKeys = [^\n]+/)[0] + '\n' + source.slice(source.indexOf('  async function query('), source.indexOf('  cancelButton.onclick')) + '\nthis.submit=submit;this.query=query;this.lock=lock;', env);
     await env.submit('pd', '8', true, '012345');
     assert.equal(calls[0].options.body.state_version, 'v1'); assert.equal(calls[0].options.body.combined, true);
     assert.equal(calls[1].options.csrf, 'synthetic-csrf'); assert.equal(calls[1].options.body.totp, '012345');

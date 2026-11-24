@@ -10,10 +10,10 @@ function setup(owner = false) {
     local: false, busy: false, pending: null, disconnected: false, fresh: () => true,
     state: owner ? { state_version: 'v1', personal_data: { state: 'unlocked' } } : { personal_data: { state: 'private' } },
     meta: { viewer: { kind: owner ? 'owner' : 'public' } }, fields: { pd: 'personal_data' }, kinds: { pd: 'personal-data' },
-    lockIds: {}, deals: { pd: { sync() {} } }, base: '', readAfter: 0, clock: () => 123,
+    lockIds: {}, deals: { pd: { sync() {} } }, base: '', actionSequence: 0, clock: () => 123,
     cooldownUntil: 0, cooldownRead: null, openKey: null,
     crypto: { randomUUID: () => `request-${calls.length}` }, localStorage: { getItem: () => owner ? 'device' : null },
-    window: { Live: { refresh() {} }, TrustModal: { show() { throw Error('unexpected modal'); } } },
+    refreshAccess() {}, window: { TrustModal: { show() { throw Error('unexpected modal'); } } },
     remember(value) { context.pending = value; }, render() {}, setOpen() {},
     message: text => messages.push(text), receipt(value) { receipts.push(value); context.pending = null; },
     begin() {}, waiting() {}, failed: (_key, text) => failures.push(text),
@@ -97,5 +97,7 @@ test('the authorization form only uses its separately read source deadline', asy
 test('public lock receipt records the lock time separately from private state',()=>{
  const lockedAt={},fixed=Date.UTC(2026,10,16,19,11),c={lockedAt,BJ:8*3600e3,pad:n=>String(n).padStart(2,'0'),Date:class extends Date{static now(){return fixed}},state:{personal_data:{state:'private'}},fields:{pd:'personal_data'},openKey:'pd',pending:null,setOpen(){},message(){},remember(){},waiting(){},settle(){},successText:()=>['',''],toast(){},celebrate(){},keysOf:()=>[],grantResultNeedsQuery:()=>false,cooldownText:()=>'',unsure:''};
  vm.runInNewContext(source.slice(source.indexOf('  function receipt('),source.indexOf('  async function query('))+';this.receive=receipt;',c);
- c.receive({action:'personal-data',state:'succeeded'});assert.equal(lockedAt.pd,'03:11');
+ const receipt={action:'personal-data',state:'succeeded'};
+ c.receive(receipt); assert.equal(lockedAt.pd, undefined);
+ c.receive(receipt,true); assert.equal(lockedAt.pd,'03:11');
 });

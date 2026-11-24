@@ -14,22 +14,33 @@
   cancelButton.type = 'button'; cancelButton.className = 'btn btn--cancel'; cancelButton.textContent = '取消请求'; cancelButton.dataset.moPress = '';
   const storageKey = 'site-v2-access-request';
   const lockIds = {}, lockedAt = {};
-  let state = null, meta = {}, online = false, disconnected = false, openKey = null, busy = false, attempt = null, pending = null, readAfter = 0, winMessage = '', inlineAction = null;
+  let state = null, meta = {}, online = false, disconnected = false, openKey = null, busy = false, attempt = null, pending = null, winMessage = '', inlineAction = null;
+  let actionSequence = 0, readAfter = 0, serverClock;
   let reading = true;   // 第一份授权状态回来之前：三块都写“正在读…”，不摆按钮，不写像出错的“状态未知”
   let cooldownUntil = 0, cooldownRead = null;
   let notice = null, shown = null;   // 这一页最近一张成功／失败浮窗；刚办成、新读数还没跟上时先照回执显示的那几项
   if (!local) { try { pending = JSON.parse(sessionStorage.getItem(storageKey) || 'null'); } catch {} }
-  const clock = () => Date.now() / 1000;
+  const clock = () => (serverClock ? Date.parse(serverClock.at) + performance.now() - serverClock.received : Date.now()) / 1000;
   // 照定稿样板：到今天 18:30／到明天 10:04／到周一 10:04，按北京时间换日。
   const BJ = 8 * 3600e3;
   const dayOf = ms => Math.floor((ms + BJ) / 86400e3);
   const pad = n => String(n).padStart(2, '0');
   function untilText(ms) {
-    const d = new Date(ms + BJ), diff = dayOf(ms) - dayOf(Date.now());
+    const d = new Date(ms + BJ), diff = dayOf(ms) - dayOf(clock() * 1000);
     const day = diff <= 0 ? '今天' : diff === 1 ? '明天' : '周' + '日一二三四五六'[d.getUTCDay()];
     return `到${day} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
   }
-  const fresh = () => online && meta.source === 'net' && Number.isFinite(Date.parse(meta.at)) && Math.abs(clock() - Date.parse(meta.at) / 1000) <= 120 && Date.parse(meta.at) / 1000 >= readAfter;
+  const fresh = key => {
+    const at = state?.[fields[key]]?.observed_at_unix ?? Date.parse(meta.at) / 1000;
+    return online && meta.source === 'net' && (meta.status === 200 || meta.status === 304)
+      && meta.dataRead > readAfter && Math.abs(clock() - at) <= 120;
+  };
+  const grantKeys = (key, combined) => combined ? ['pd', 'ur'] : [key];
+  function refreshAccess() {
+    // Reads started before this action returned cannot enable another action.
+    readAfter = window.Live.readSequence();
+    return window.Live.refreshPath('access', true);
+  }
   const entry = () => { if (state?.entry) window.open(state.entry, '_blank', 'noopener'); };
   const unsure = '结果还没确认，页面会自己再核对。';
   const errorMessages = {
@@ -57,9 +68,9 @@
 
   function refreshCooldown() {
     if (local || busy || disconnected || cooldownRead) return;
-    const before = readAfter;
+    const before = actionSequence;
     cooldownRead = apiRequest(base, '/requests/cooldown', { timeout: 4000 }).then(value => {
-      if (readAfter !== before || !Number.isFinite(value.cooldown_until_unix)) return;
+      if (actionSequence !== before || !Number.isFinite(value.cooldown_until_unix)) return;
       cooldownUntil = value.cooldown_until_unix;
       if (openKey) {
         if (cooldownText()) message(cooldownText());
@@ -144,11 +155,11 @@
     // Store no factor, CSRF token or local authority; reload only queries this ID.
     if (pending) sessionStorage.setItem(storageKey, JSON.stringify(pending)); else sessionStorage.removeItem(storageKey);
   }
-  function receipt(value) {
+  function receipt(value, directWrite = false) {
     if (!value) return;
     if (Number.isFinite(value.cooldown_until_unix)) cooldownUntil = value.cooldown_until_unix;
     const lockedKey = ({ 'personal-data': 'pd', unrestricted: 'ur' })[value.action];
-    if (value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') {
+    if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') {
       const d = new Date(Date.now() + BJ);
       lockedAt[lockedKey] = `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
     }
@@ -177,7 +188,7 @@
   async function query(cancel = false) {
     if (local) return entry();
     if (busy || !pending) return;
-    busy = true; render();
+    busy = true; if (cancel) actionSequence++; render();
     try {
       const old = pending, path = '/requests/' + encodeURIComponent(old.request_id);
       let value = await apiRequest(base, path);
@@ -190,7 +201,7 @@
       if (!pending?.action && canRestartUnsubmittedGrant(pending, null, error)) { message('码还没提交，请重新办。'); remember(null); }
       else message(unsure);
     }
-    finally { busy = false; render(); window.Live.refresh(); }
+    finally { busy = false; if (cancel || !pending) refreshAccess(); render(); }
   }
   function canRetryPending(key) {
     return !!pending && !pending.action && pending.key === key && pending.state === 'pending' && pending.request_created && pending.factor_submitted === false;
@@ -198,9 +209,9 @@
   async function submit(key, hours, combined, code) {
     if (local) return entry();
     const retry = canRetryPending(key);
-    if (busy || disconnected || (pending ? !retry : !fresh() || !state?.state_version)) return;
-    const id = retry ? pending.request_id : crypto.randomUUID(); busy = true; readAfter = clock();
-    begin(combined ? ['pd', 'ur'] : [key]);
+    if (busy || disconnected || (pending ? !retry : !grantKeys(key, combined).every(fresh) || !state?.state_version)) return;
+    const id = retry ? pending.request_id : crypto.randomUUID(); busy = true; actionSequence++;
+    begin(grantKeys(key, combined));
     try {
       remember({ request_id: id, state: 'pending', request_created: retry, factor_submitted: false });
       attempt = createGrantAttempt({ requestId: id, existing: retry, body: { purpose: fields[key], combined, duration_hours: hours, state_version: state?.state_version, save_default: false },
@@ -211,7 +222,7 @@
       const text = errorMessages[error.data?.error];
       if (text && text !== unsure && !grantResultNeedsQuery(pending)) failed(key, text); else { waiting([], false); message(text || unsure); }
     }
-    finally { attempt = null; busy = false; waiting([], false); render(); window.Live.refresh(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
+    finally { attempt = null; busy = false; waiting([], false); refreshAccess(); render(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
   }
   function openLock(key, id = crypto.randomUUID()) {
     lockIds[key] = id; setOpen(key, true); message(cooldownText() || '输动态码确认是本人'); render(); refreshCooldown();
@@ -222,7 +233,7 @@
     const owner = meta.viewer?.kind === 'owner';
     if (busy || pending || disconnected) return;
     if (!owner && !code) return openLock(key);
-    const action = kinds[key]; let id = code ? lockIds[key] : crypto.randomUUID(); busy = true; readAfter = clock();
+    const action = kinds[key]; let id = code ? lockIds[key] : crypto.randomUUID(); busy = true; actionSequence++;
     begin([key]);
     try {
       for (let round = 0; ; round++) {
@@ -230,12 +241,12 @@
         try {
           const value = await apiRequest(base, '/locks/' + action, { method: 'POST', body: { request_id: id, ...(owner && state?.state_version ? { state_version: state.state_version } : {}), ...(code ? { totp: code } : {}) }, device: localStorage.getItem('wly-cockpit-device') });
           if (value.status === 'blocked') throw { data: value };
-          receipt({ ...value, action });
+          receipt({ ...value, action }, true);
           break;
         } catch (error) {
           // 配对过的设备拿着旧状态点的：重读一次、用新状态再办一次
           if (!(owner && !code && round === 0 && error?.data?.error === 'public_state_changed')) throw error;
-          remember(null); await window.Live.refresh(); id = crypto.randomUUID();
+          remember(null); await refreshAccess(); id = crypto.randomUUID();
         }
       }
     } catch (error) {
@@ -243,18 +254,17 @@
       if (reason === 'public_totp_required') { remember(null); waiting([], false); openLock(key, id); }
       else if (code && (reason?.startsWith('public_totp_') || reason === 'totp_verification_failed' || reason === 'public_state_changed')) {
         remember(null); lockIds[key] = crypto.randomUUID();
-        if (reason === 'public_state_changed') await window.Live.refresh();
         if (Number.isFinite(data.cooldown_until_unix)) cooldownUntil = data.cooldown_until_unix;
         message(cooldownText());
         failed(key, cooldownText() || lockMessages[reason]);
       } else { receipt(reductionFailureResult(error, id, action)); if (reason === 'cockpit_owner_required') window.TrustModal?.show(); }
     }
-    finally { busy = false; waiting([], false); render(); window.Live.refresh(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
+    finally { busy = false; waiting([], false); refreshAccess(); render(); if (openKey) refreshCooldown(); if (pending) recovery.start(); }
   }
   const recovery = createGrantRecovery(() => query(), { canQuery: () => !local && !!pending && !busy });
   cancelButton.onclick = async () => {
     if (local) return entry();
-    if (attempt) { try { receipt(await attempt.cancel()); } catch { message('取消还没确认，页面会自己再核对。'); } }
+    if (attempt) { try { receipt(await attempt.cancel()); } catch { message('取消还没确认，页面会自己再核对。'); } finally { refreshAccess(); } }
     else await query(true);
     render();
   };
@@ -300,11 +310,11 @@
       own.disabled = m !== null && m < least;
       own.setAttribute('aria-label', `自己填几小时，0.5 到 ${m === null ? 72 : roomHours(m)}`);
       const minutes = durationMinutes(hours);
-      const keys = both.checked ? ['personal_data', 'unrestricted'] : [fields[key]];
+      const keys = grantKeys(key, both.checked);
       if (root.classList.contains('is-lock')) { go.disabled = busy || !!pending || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
       go.textContent = retry ? '重新验证' : '验证';
       if (retry) { go.disabled = busy || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
-      go.disabled = busy || !!pending || !fresh() || !/^\d{6}$/.test(code()) || minutes === null || !p?.factor?.available || cooldownUntil > clock() || minutes < p.minimum_minutes || keys.some(k => (remainingMinutes(state[k], clock()) || 0) + minutes > p.maximum_minutes);
+      go.disabled = busy || !!pending || !keys.every(fresh) || !/^\d{6}$/.test(code()) || minutes === null || !p?.factor?.available || cooldownUntil > clock() || minutes < p.minimum_minutes || keys.some(k => (remainingMinutes(state[fields[k]], clock()) || 0) + minutes > p.maximum_minutes);
     }
     boxes.forEach((box, i) => {
       box.oninput = () => { if (root.classList.contains('has-error')) { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); } box.value = box.value.replace(/\D/g, '').slice(-1); if (box.value) boxes[i + 1]?.focus(); sync(); };
@@ -356,7 +366,7 @@
         // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）。锁定、结束随时能点，不等“状态是最新的”（本人 11-24）
         const anytime = kind === 'close' && !local;
         const why = !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
-          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh() || !state.state_version) ? '状态不是最新的，刷新后再试' : '';
+          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || !state.state_version) ? '状态不是最新的，刷新后再试' : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
         const inline = local || kind === 'close' && meta.viewer?.kind === 'owner' && !privateState;
         if (inline) b.setAttribute('aria-expanded', String(inlineAction?.key === key && inlineAction?.kind === kind));
@@ -405,7 +415,7 @@
     }
     for (const d of Object.values(deals)) { d.defaults(); d.sync(); d.clear(); }
   }
-  window.addEventListener('focus', () => { window.Live.refresh(); if (openKey) refreshCooldown(); if (!local && pending && !busy) recovery.start(); });
+  window.addEventListener('focus', () => { if (openKey) refreshCooldown(); if (!local && pending && !busy) recovery.start(); });
   window.addEventListener('resize', () => { if (openKey) setOpen(openKey); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { setOpen(null); render(); } });
   function renderLink(s) {
@@ -416,7 +426,9 @@
     if (!['idle', 'wait', 'slow'].includes(s.phase)) reading = false;
     online = !disconnected && s.link?.state === 'online';
     document.body.classList.toggle('live-off', disconnected);
-    if (s.meta.source === 'net' && s.meta.status >= 200 && s.meta.status < 400) winMessage = '';
+    if (s.meta.source === 'net' && (s.meta.status === 200 || s.meta.status === 304) && s.now !== serverClock?.at && Number.isFinite(Date.parse(s.now))) {
+      serverClock = { at: s.now, received: performance.now() };
+    }
     if (disconnected) {
       const at = s.shownAt || s.cutoffAt;
       offlineNote.textContent = '电脑开机后自己恢复' + (at ? ` · 北京时间 ${window.Live.stamp(at)} 最后读到` : '');
