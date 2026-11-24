@@ -287,6 +287,7 @@
 
   let filesWatch = null, filesHead = null, filesRequest = null, filesState = null, filesTarget = 'drive';
   const pointsResult = $('points-result'), filesButton = $('files-more'), filesFold = $('files-fold'), filesOpen = () => filesButton?.getAttribute('aria-expanded') === 'true';
+  const files = $('files'), filesStatus = $('files-status');
   const ownerFile = value => value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner';
   const fileName = value => viewer === 'public' && ownerFile(value) ? '—' : pathHtml(value, '文件名');
   const privateNames = d => /^文件名(?:仅本人|可信设备)可见[。.]?$/u.test(typeof d?.text === 'string' ? d.text : '');
@@ -306,14 +307,15 @@
   function stopFiles() {
     filesWatch?.stop();
     filesWatch = null;
+    filesStatus.textContent = '';
   }
-  function resetFiles(target = filesTarget) {
+  function resetFiles(target = filesTarget, keepDisplayed = false) {
     stopFiles();
     filesTarget = target; $('files-target').value = target;
     filesHead = filesRequest = filesState = null; fileLimit = 5;
     if (filesFold) filesFold._loaded = false;
-    if ($('files')) U.html($('files'), '');
-    filePrivacy(null);
+    files.inert = keepDisplayed;
+    if (!keepDisplayed) { U.html(files, ''); filePrivacy(null); }
   }
   const filesResource = () => `backups/${encodeURIComponent(id)}/files${params.has('fixture') && filesTarget === 'photos' ? '-photos' : ''}`;
   const filesQuery = cursor => ({ target: filesTarget === 'photos' ? 'photos' : null, cursor });
@@ -321,10 +323,15 @@
     || state.viewer?.kind === 'owner' && viewer !== 'owner';
   function watchFiles() {
     if (!set || !filesOpen() || notApplicable(set.transfer_summary) || notApplicable(set[filesTarget])) return false;
-    if (!filesWatch) filesWatch = window.Live.watch(filesResource(), filesQuery(null), {
+    if (filesWatch) return true;
+    if (!filesState) filesStatus.textContent = id === 'personal_media' ? `正在读「${CLOUDS[filesTarget]}」的明细…` : '正在读逐项明细…';
+    filesWatch = window.Live.watch(filesResource(), filesQuery(null), {
       link(state) {
+        if (state.data == null && ['idle', 'wait', 'slow'].includes(state.phase)) return;
+        filesStatus.textContent = '';
+        files.inert = false;
         if (filesUnavailable(state)) {
-          if (!filesState) U.html($('files'), `<p class="fe-l3b-note">${esc(missing('在等、没传成的资料'))}</p>`);
+          if (!filesState) { filePrivacy(null); U.html(files, `<p class="fe-l3b-note">${esc(missing('在等、没传成的资料'))}</p>`); }
           return;
         }
         const head = JSON.stringify(state.data);
@@ -371,7 +378,8 @@
       if (!nextPage) { fileLimit += 5; renderFiles(state); return; }
       const button = event.currentTarget;
       button.disabled = true;
-      if (!await loadFiles(d.next) && button.isConnected) {
+      button.textContent = '正在读…';
+      if (!await loadFiles(d.next) && button.isConnected && !$('files').inert) {
         button.disabled = false;
         button.textContent = '这一批暂时读不到，重试 ›';
       }
@@ -395,7 +403,7 @@
   }
   $('files-target').addEventListener('change', e => {
     if (offline()) { e.target.value = filesTarget; return; }
-    resetFiles(e.target.value); showCoverage();
+    resetFiles(e.target.value, filesOpen()); showCoverage();
     if (filesOpen()) watchFiles();
   });
   if (!id) showUnavailable('没有说是哪类备份');
