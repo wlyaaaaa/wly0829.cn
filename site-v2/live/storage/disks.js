@@ -106,7 +106,10 @@
     ].filter(Boolean);
     const key = K.letter(v) || v.id;
     const folders = b?.none ? '' : `<section><h4>全部最大的文件夹${b?.stale ? ' · 清理前量的' : ''}</h4>${list(entries(dirs, '文件夹', r => folder(r, viewer)), b?.cap || '这块盘没有文件夹读数', `${key}-dirs`, viewer, K.hiddenRows(dirs.hidden, '文件夹记录', '文件夹名称和大小'))}</section>`;
-    return `<div class="dk-more${b?.none ? ' dk-more--nofolders' : ''}">${folders}<section><h4>本盘用途</h4>${list(entries(cats, '用途', r => K.field(r.label, '用途名称', viewer)), '没有登记的用途', `${key}-cats`, viewer, K.hiddenRows(cats.hidden, '用途记录', '用途名称和大小'))}</section><section class="dk-notes"><h4>口径</h4>${notes.map(n => `<p>${esc(n)}</p>`).join('') || '<p>没有更多说明</p>'}</section></div>`;
+    // 回包里这块盘一条用途都没登记（也不是访客版藏起来的）：不留“本盘用途”那一栏（M683）
+    const uses = !cats.visible.length && !cats.hidden ? '' : `<section><h4>本盘用途</h4>${list(entries(cats, '用途', r => K.field(r.label, '用途名称', viewer)), '没有登记的用途', `${key}-cats`, viewer, K.hiddenRows(cats.hidden, '用途记录', '用途名称和大小'))}</section>`;
+    const columns = 1 + !!folders + !!uses;
+    return `<div class="dk-more${columns === 2 ? ' dk-more--two' : columns === 1 ? ' dk-more--one' : ''}">${folders}${uses}<section class="dk-notes"><h4>口径</h4>${notes.map(n => `<p>${esc(n)}</p>`).join('') || '<p>没有更多说明</p>'}</section></div>`;
   }
 
   function row(v, barW, last, d, viewer) {
