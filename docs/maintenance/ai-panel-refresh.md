@@ -31,11 +31,11 @@ npm run refresh:ai -- --all
 | `source_fingerprint` | 由 AI 根据本次选用的 Owner 观察和保留证据填写，计划阶段为 null；网页文件未变不能证明来源状态未变 |
 | `observed_at` | 作者输入声明的观察日期；没有声明就明确 Unknown，不用脚本运行时间冒充事实新鲜度 |
 
-转换后的 Markdown 也进入构建指纹；作者源与分叉处理见 [Astro 作者源说明](../../site-astro/README.md#内容文件怎么写)。新页或迁移完成后，同步维护 Registry 的真实入口；冻结与原生并存的项目不能漏掉仍上线的子页。
+转换后的 Markdown 也进入构建指纹。新页或迁移完成后，同步维护 Registry 的真实入口；冻结与原生并存的项目不能漏掉仍上线的子页。
 
-全局表面的 `content_paths` 可以登记作者目录；计划和验证器展开为相同的实际文件清单：Rules 包含 `sources/rules` 与当前规则页面源，Skills 包含当前目录和详情源，System 指向已合并内容的保留首页。`/system/` 是去向页。首页构建与回读见 [Astro 说明](../../site-astro/README.md#首页授权页和驾驶舱)。
+全局表面的 `content_paths` 可以登记作者目录；计划和验证器展开为相同的实际文件清单：Rules 包含 `sources/rules` 与当前规则页面源，Skills 包含当前目录和详情源，System 指向已合并内容的保留首页。`/system/` 是去向页。
 
-旧 React 正文、`app/panel-facts.generated.js` 及其专用快照生成、保留、验证脚本已退役。规则快照流程见 [Astro 规则原文](../../site-astro/README.md#规则原文)；不得以旧快照 PASS 代替当前活动版验证。
+旧 React 正文、`app/panel-facts.generated.js` 及其专用快照生成、保留、验证脚本已退役。旧快照的通过结果只适用于当时的版本。
 
 ## v2 结果包
 
