@@ -76,9 +76,11 @@
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
   const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '放着，到了该办的时候再提醒。', know: '只需了解的进展与通知。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
+  const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
     const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'gold'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
-    c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hints[kind]; cards.set(kind, c);
+    c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hintText(kind, pairedHere ? 'owner' : 'public'); cards.set(kind, c);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
   const closedCard = cards.get('closed');
@@ -384,7 +386,7 @@
   watch('home', (d, meta) => {
     viewer = meta.viewer?.kind || 'public';
     document.body.dataset.viewer = viewer;   // 本人版标题不收行
-    pageTitle();
+    pageTitle(); for (const [kind, c] of cards) c.sub.textContent = hintText(kind);
     at = meta.now || meta.at;
     const needs = d.needs; if (d.q === 'warming' || needs?.q === 'warming') { missingHome('正在准备'); return; } if (!needs) { missingHome(U.collectionText()); return; }
     const embedded = Object.hasOwn(needs, 'items'), page = !embedded && openRows?.kind === viewer ? openRows : null;
