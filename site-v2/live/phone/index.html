@@ -84,7 +84,23 @@
 .page--phone [data-key="usage"] .vz-share__name { overflow-wrap:anywhere; }
 .page--phone .use-two.is-compact .vz-share { grid-template-columns:140px minmax(0,1fr); gap:18px; }
 .page--phone .use-two.is-compact .vz-share__ring { width:140px; }
-.page--phone [data-key="usage"] .vz-legend { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.page--phone [data-key="usage"] .vz-legend { grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px 24px; }
+.page--phone .phone-days__plot { position:relative; height:220px; margin-top:6px; touch-action:none; }
+.page--phone .phone-days__plot.is-empty { height:64px; }
+.page--phone .phone-days__plot > svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.page--phone .phone-days__plot > .vz-wait { position:absolute; inset:0; display:grid; place-items:center; padding:0; }
+.page--phone .phone-days__hl { fill:rgb(20 20 19 / .045); }
+.page--phone .phone-days__x { display:flex; margin-top:6px; }
+.page--phone .phone-days__lab { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; font-size:13px; line-height:18px; letter-spacing:.02em; color:#68665f; font-variant-numeric:tabular-nums; white-space:nowrap; transition:color calc(150ms * var(--sp)) ease; }
+.page--phone .phone-days__lab.is-on { color:var(--ink); }
+.page--phone .phone-days__lab > small { font-size:12px; color:#68665f; }
+.page--phone .phone-days__lanes { display:flex; gap:var(--gap); margin-bottom:2px; }
+.page--phone .phone-days__lanes small { width:var(--bw); font-size:12px; text-align:center; color:#68665f; }
+.page--phone .phone-days__tip { height:auto; flex-direction:column; align-items:stretch; gap:2px; padding:9px 13px 10px; border-radius:12px; }
+.page--phone .phone-days__tip small { margin-top:5px; font-size:12px; color:#68665f; }
+.page--phone .phone-days__tip span { display:flex; }
+.page--phone .phone-days__tip em { margin-left:auto; padding-left:16px; font-style:normal; color:var(--ink); }
+.page--phone .phone-days__note { margin-top:10px; }
 .page--phone [data-key="usage"] .vz-heat__cell { height:12px; }
 .page--phone .phone-battery-overlay { display:grid; padding-right:54px; }
 .page--phone .phone-battery-overlay > .phone-chart { grid-area:1 / 1; }

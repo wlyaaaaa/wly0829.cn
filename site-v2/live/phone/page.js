@@ -10,6 +10,12 @@
   // 图址写全，构建才认得出、换成云端地址（页面里拼出来的地址构建认不出，图收不进产物）
   const groupPics = { usage: '/live/img/s1900-phone-corridor-v1.webp', network: '/live/img/s1900-phone-tower-v1.webp', collect: '/live/img/grp-phone-collect.webp', battery: '/live/img/grp-phone-battery.webp', storage: '/live/img/grp-phone-storage.webp', apps: '/live/img/grp-phone-apps.webp' };
   const palettes = [['violet', 'blue'], ['teal', 'blue'], ['blue', 'violet'], ['pink', 'apricot'], ['apricot', 'violet'], ['violet', 'teal']];
+  // 手机和电脑的使用记录（近 24 小时横带、近 7 天叠柱）共用一套状态顺序、名字和颜色（本人 11-24：两张图保持一致、色彩分明）：
+  // 手机亮屏用强调绿、电脑在用用青，两台一眼分得开；锁屏浅灰蓝、关机深灰蓝；锁屏是两台共用的一类。
+  const USAGE_ORDER = ['on', 'active', 'away', 'off', 'sleep', 'shutdown', 'unrecorded', 'pending'];
+  const USAGE_HUES = { on: '#00A650', active: 'teal', away: 'apricot', off: '#8f9bb3', sleep: 'violet', shutdown: '#3a4459', unrecorded: 'stone', pending: 'teal' };
+  const USAGE_LABELS = { unrecorded: '没记录', pending: '等下一轮记录' };
+  const usageRank = id => { const k = USAGE_ORDER.indexOf(id); return k < 0 ? USAGE_ORDER.length : k; };
   let phone = null, viewer = 'public', done = false, linkOff = false, trafficProject = null, trafficDays = null, trafficDaysWatch = null;
   const ranges = {}, shownRanges = {}, watches = {}, generations = {}, chartStates = {};
   const packs = new Map(), chartDone = new Set(), sync = C.sync(), metric = id => phone?.metrics?.find(m => m.id === id);
@@ -131,7 +137,7 @@
   }
   // 采集图、上网图也写清各条记到几点和缺口怎么算（M380）：后台给的各条说明原样接上；上网图的“没记录”不是没网。
   function timelineNote(id, data) {
-    if (id === 'usage-timeline') return cutoffText(data);
+    if (id === 'usage-timeline') return cutoffText(data) + (Object.values(data?.rows || {}).some(row => row?.restart_points?.some(t => t >= seconds(row.from) && t <= seconds(row.to))) ? '◆ 是电脑开机或重启的时刻。' : '');
     if (id === 'collect-timeline') {
       const lanes = [['usage', '使用记录'], ['location', '定位'], ['packages', '装机清单'], ['runs', '采集执行情况']];
       const notes = lanes.filter(([key]) => key !== 'runs').map(([key, name]) => { const note = data?.rows?.[key]?.note; return typeof note === 'string' && note.trim() ? `${name}：${sp(note).replace(/[。.]?$/, '。')}` : ''; }).filter(Boolean);
@@ -147,9 +153,17 @@
     if (s?.timeline) {
       // 锁屏用自己的颜色：和“没记录”同为石灰色时，点图例“锁屏”带子上看不出哪段亮了。
       const hues = { wifi: 'blue', sim1: 'apricot', sim2: 'violet', none: 'stone', off: '#8f9bb3' };
-      const states = s.timeline.states.map((state, i) => ({ ...state, label: s.group === 'collect' && state.id === 'tailscale' ? '远程线路' : state.label, hue: state.hue || hues[state.id] || V.stateHues[state.id] || ['teal', 'violet', 'pink', 'apricot'][i % 4] }));
+      const usage = s.id === 'usage-timeline';
+      const states = s.timeline.states.map((state, i) => ({ ...state, label: s.group === 'collect' && state.id === 'tailscale' ? '远程线路' : state.label, hue: (usage && USAGE_HUES[state.id]) || state.hue || hues[state.id] || V.stateHues[state.id] || ['teal', 'violet', 'pink', 'apricot'][i % 4] }));
       if (!['network-timeline', 'usage-timeline', 'collect-timeline'].includes(s.id)) return { ...s.timeline, states };
-      const data = s.id === 'collect-timeline' ? collectTimeline(s) : s.timeline;
+      let data = s.id === 'collect-timeline' ? collectTimeline(s) : s.timeline;
+      // 使用记录照近 7 天的顺序排（亮屏、在用、离开、锁屏、睡眠、关机），图例两张图一个顺序；横带上的状态号跟着换
+      if (usage) {
+        const sorted = states.map((state, i) => [state, i]).sort((a, b) => usageRank(a[0].id) - usageRank(b[0].id) || a[1] - b[1]);
+        const moved = new Map(sorted.map(([, old], i) => [old, i]));
+        states.splice(0, states.length, ...sorted.map(([state]) => state));
+        data = { ...data, rows: Object.fromEntries(Object.entries(data.rows || {}).map(([key, row]) => [key, { ...row, spans: (row.spans || []).map(([t, v]) => [t, v == null ? v : moved.get(v) ?? v]) }])) };
+      }
       const omitted = s.id === 'collect-timeline' ? states.findIndex(state => state.id === 'not_run') : -1;
       if (omitted >= 0) states.splice(omitted, 1);
       const since = s.id === 'network-timeline' ? seconds(phone?.collect?.since) : NaN, day = data.rows?.day;
@@ -175,16 +189,18 @@
     const rows = Array.from(host.querySelectorAll('.vz-tl__row'), el => el.dataset.row).filter(k => data.rows[k]?.spans?.length), totals = stateTotals(data);
     for (const li of host.querySelectorAll('.vz-legend__item')) {
       const state = data.states.findIndex(s => s.id === li.dataset.state), values = rows.map(k => data.states.reduce((n, s, i) => n + (s.label === data.states[state]?.label ? totals[k][i] || 0 : 0), 0));
-      const visible = values.some(v => v > 0), shutdown = key === 'usage' && li.dataset.state === 'shutdown';
+      // 使用记录的关机（两台）、睡眠（只有电脑）这段没有也照样列出，写明没记录到，不让人以为没加（本人 11-24 20:34）
+      const always = key === 'usage' && ['shutdown', 'sleep'].includes(li.dataset.state);
+      const visible = values.some(v => v > 0) || always;
       li.style.display = visible ? '' : 'none';
       if (marked(data.states[state]?.label)) li.querySelector('.vz-legend__name b').textContent = '';
       li.querySelectorAll('.vz-legend__vals > span').forEach((cell, i) => {
         const value = values[i], label = rows.length > 1 && cell.querySelector('small')?.textContent;
         if (/没记录|没读到|缺口|下一轮/.test(data.states[state]?.label || '')) cell.className = 'row__sub';
-        const noShutdown = visible && shutdown && label && !value;
-        cell.style.display = value > 0 || noShutdown ? '' : 'none';
-        if (noShutdown) {
-          const text = Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录暂时读不到';
+        const none = always && label && !value && (li.dataset.state === 'shutdown' || rows[i] === 'computer');
+        cell.style.display = value > 0 || none ? '' : 'none';
+        if (none) {
+          const text = li.dataset.state === 'sleep' ? '未记录到睡眠' : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录暂时读不到';
           cell.innerHTML = `<small>${esc(label)}</small> ${text}`;
         } else if (value > 0) {
           cell.innerHTML = cell.classList.contains('row__sub') ? `${rows.length > 1 && label ? `<small>${esc(label)}</small> ` : ''}${V.dur(value)}` : rows.length === 1 ? value >= 360000 ? `<b>${Math.round(value / 3600)}</b><small>小时</small>` : V.durHtml(value)
@@ -279,6 +295,138 @@
     if (!host._qualityObserver && items?.some(x => x.q === 'partial')) { host._qualityObserver = new MutationObserver(qualify); host._qualityObserver.observe(host, { childList: true, characterData: true, subtree: true }); }
     qualify();
   }
+  // 近 7 天逐日状态：后台 usage-days 的 daily_states（每天每台各状态多少秒，今天只到已过的时间）；名字和颜色换成和近 24 小时同一套
+  function usageDays(s) {
+    const d = s?.daily_states;
+    if (!d || !Array.isArray(d.days)) return null;
+    const states = (d.states || []).map((st, i) => ({ ...st, i, label: USAGE_LABELS[st.id] || st.label, hue: USAGE_HUES[st.id] || ['teal', 'violet', 'pink', 'apricot'][i % 4], pattern: st.id === 'pending' ? 'hatch' : undefined }))
+      .sort((a, b) => usageRank(a.id) - usageRank(b.id) || a.i - b.i);
+    return { states, days: d.days, phoneOff: s.phone_power?.off_spans };
+  }
+  // 近 7 天每天两根叠起来的柱（本人 11-24 21:54 选 B）：手机一根、电脑一根，按状态从下往上叠；图例写 7 天合计，
+  // 点图例只亮那一种、别的淡下去（和横带一样）；指着哪天，旁边写那天两台各状态多久。
+  function dayStack(host) {
+    const NS = 'http://www.w3.org/2000/svg', LEFT = 58, TOP = 10, DAY = 86400, lanes = [['phone', '手机'], ['computer', '电脑']];
+    const id = `pd${Math.random().toString(36).slice(2, 8)}`;
+    host.classList.add('phone-days');
+    host.innerHTML = '<div class="phone-days__plot"><svg aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div><p class="vz-wait">正在读</p><span class="vz-tip phone-days__tip" hidden></span></div><div class="phone-days__x"></div><ul class="vz-legend"></ul><p class="use-note phone-days__note" hidden></p>';
+    const plot = host.querySelector('.phone-days__plot'), svg = plot.querySelector('svg'), axis = plot.querySelector('.chart__axis'), wait = plot.querySelector('.vz-wait'), tip = plot.querySelector('.vz-tip');
+    const xs = host.querySelector('.phone-days__x'), legend = host.querySelector('.vz-legend'), note = host.querySelector('.phone-days__note');
+    let data = null, W = 0, hover = null, pinned = null, hovered = null, muted = null;
+    const focus = () => hovered ?? pinned;
+    const hex = h => V.hues[h] || h;
+    const mix = (c, k) => { const n = parseInt(hex(c).slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return `rgb(${Math.round(r + (255 - r) * k)} ${Math.round(g + (255 - g) * k)} ${Math.round(b + (255 - b) * k)})`; };
+    const chip = st => st.pattern === 'hatch' ? `<i class="vz-chip vz-chip--hatch" style="--c:${hex(st.hue)}"></i>` : `<i class="vz-chip" style="--c:${hex(st.hue)}"></i>`;
+    const fill = st => st.pattern === 'hatch' ? `url(#${id}-hatch)` : st.hue === 'stone' ? 'rgb(201 197 187 / .62)' : `url(#${id}-${st.id})`;
+    const total = (st, lane) => data.days.reduce((n, day) => n + (Number(day[lane]?.[st.id]) || 0), 0);
+    const hasLane = (st, lane) => data.days.some(day => day[lane] && Object.hasOwn(day[lane], st.id));
+    const sum = n => n >= 36000 ? `${Math.round(n / 3600)} 小时` : V.dur(n);
+    const today = day => day.elapsed_s < DAY - 1;
+    const dayStart = day => Date.parse(`${day.date}T00:00:00+08:00`) / 1000;
+    const clock = day => U.time(iso(dayStart(day) + day.elapsed_s));
+    function zeroText(st, lane) {
+      if (st.id === 'shutdown') return lane === 'phone' && !Array.isArray(data.phoneOff) ? '关机记录暂时读不到' : '未记录到关机';
+      if (st.id === 'sleep' && hasLane(st, lane)) return '未记录到睡眠';
+      return '';
+    }
+    function legendHtml() {
+      return data.states.map(st => {
+        const cells = lanes.filter(([lane]) => hasLane(st, lane)).map(([lane, name]) => {
+          const n = total(st, lane), zero = n > 0 ? '' : zeroText(st, lane);
+          return n > 0 || zero ? `<span${/没记录|下一轮/.test(st.label) ? ' class="row__sub"' : ''}><small>${name}</small> ${n > 0 ? esc(sum(n)) : zero}</span>` : '';
+        }).join('');
+        if (!cells) return '';
+        const f = focus();
+        return `<li class="vz-legend__item${pinned === st.id ? ' is-picked' : ''}${f != null && f !== st.id ? ' is-dim' : ''}" data-state="${esc(st.id)}" tabindex="0" role="button" aria-pressed="${pinned === st.id}">
+          <span class="vz-legend__name" title="${esc(st.label)}">${chip(st)}<b>${esc(st.label)}</b></span><span class="vz-legend__vals">${cells}</span></li>`;
+      }).join('');
+    }
+    function draw() {
+      svg.replaceChildren(); axis.innerHTML = '';
+      if (!data?.days.length || !W) return;
+      const H = plot.clientHeight, base = H - 1, n = data.days.length, band = (W - LEFT) / n, f = focus();
+      const y = v => base - Math.min(v, DAY) / DAY * (base - TOP);
+      const bw = Math.max(8, Math.min(band * .27, 30)), gap = Math.max(3, Math.min(band * .06, 6));
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      let defs = `<pattern id="${id}-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fff"/><rect width="6" height="6" fill="${hex('teal')}" fill-opacity=".14"/><line x1="1" y1="0" x2="1" y2="6" stroke="${hex('teal')}" stroke-opacity=".62" stroke-width="1.6"/></pattern>`;
+      for (const st of data.states) if (st.pattern !== 'hatch' && st.hue !== 'stone') defs += `<linearGradient id="${id}-${esc(st.id)}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${mix(st.hue, .2)}"/><stop offset=".55" stop-color="${hex(st.hue)}"/><stop offset="1" stop-color="${hex(st.hue)}"/></linearGradient>`;
+      let grid = '', ys = '', body = '';
+      for (let h = 0; h <= 24; h += 6) {
+        const yy = Math.round(y(h * 3600)) + .5;
+        grid += `<line x1="${LEFT}" x2="${W}" y1="${yy}" y2="${yy}"${h ? '' : ' class="is-base"'}/>`;
+        ys += `<span class="chart__y" style="top:${yy}px;width:${LEFT - 12}px">${h ? `${h} 小时` : '0'}</span>`;
+      }
+      data.days.forEach((day, i) => {
+        const cx = LEFT + band * i + band / 2;
+        lanes.forEach(([lane], j) => {
+          const vals = day[lane]; if (!vals) return;
+          const x = j ? cx + gap / 2 : cx - gap / 2 - bw;
+          let acc = 0, segs = '';
+          for (const st of data.states) {
+            const v = Number(vals[st.id]) || 0; if (!(v > 0)) continue;
+            const y0 = y(acc), y1 = y(acc + v); acc += v;
+            const picked = f === st.id, dim = f != null && !picked;
+            segs += `<rect x="${x.toFixed(1)}" y="${y1.toFixed(2)}" width="${bw.toFixed(1)}" height="${Math.max(y0 - y1, 0).toFixed(2)}" fill="${fill(st)}"${dim ? ' opacity=".12"' : ''}/>`;
+            if (picked) segs += `<rect x="${(x + .75).toFixed(1)}" y="${(y1 + .75).toFixed(2)}" width="${Math.max(bw - 1.5, .5).toFixed(1)}" height="${Math.max(y0 - y1 - 1.5, .5).toFixed(2)}" fill="none" stroke="rgba(28,36,48,.88)" stroke-width="1.5"/>`;
+          }
+          if (!segs) return;
+          const top = y(acc), clip = `${id}-c${i}-${j}`;
+          defs += `<clipPath id="${clip}"><rect x="${x.toFixed(1)}" y="${top.toFixed(2)}" width="${bw.toFixed(1)}" height="${(base - top).toFixed(2)}" rx="${Math.min(6, bw / 2)}"/></clipPath>`;
+          body += `<g clip-path="url(#${clip})">${segs}</g>`;
+        });
+      });
+      const hl = hover == null ? '' : `<rect class="phone-days__hl" x="${(LEFT + band * hover + 2).toFixed(1)}" y="${TOP - 6}" width="${(band - 4).toFixed(1)}" height="${base - TOP + 6}" rx="8"/>`;
+      svg.innerHTML = `<defs>${defs}</defs><g class="chart__grid">${grid}</g>${hl}<g>${body}</g>`;
+      axis.innerHTML = ys;
+      xs.style.paddingLeft = `${LEFT}px`; xs.style.setProperty('--bw', `${bw}px`); xs.style.setProperty('--gap', `${gap}px`);
+      xs.innerHTML = data.days.map((day, i) => `<span class="phone-days__lab${i === hover ? ' is-on' : ''}"><span class="phone-days__lanes"${i ? ' style="visibility:hidden"' : ''}>${lanes.map(([, name]) => `<small>${name}</small>`).join('')}</span>${esc(V.md(dayStart(day)))}${today(day) ? '<small>今天</small>' : ''}</span>`).join('');
+    }
+    function point(i) {
+      if (i === hover) return;
+      hover = i; draw();
+      if (i == null || !data) { tip.hidden = true; return; }
+      const day = data.days[i], t = dayStart(day);
+      // 一种状态一行、两台上下分开：提示窄，放在这一天两根柱的旁边，不挡住它们
+      const lines = lanes.filter(([lane]) => day[lane]).map(([lane, name]) => {
+        const parts = data.states.filter(st => Number(day[lane][st.id]) > 0).map(st => `<span>${chip(st)}${esc(st.label)}<em>${esc(V.dur(Number(day[lane][st.id])))}</em></span>`);
+        return `<small>${name}</small>${parts.join('') || '<span>没有记录</span>'}`;
+      });
+      tip.innerHTML = `<b>${esc(V.md(t))} ${esc(V.weekday(t))}${today(day) ? `（今天，到 ${clock(day)}）` : ''}</b>${lines.join('')}`;
+      tip.hidden = false;
+      const band = (W - LEFT) / data.days.length, bw = Math.max(8, Math.min(band * .27, 30)), cx = LEFT + band * i + band / 2, w = tip.offsetWidth;
+      const right = cx + bw + 14, left = cx - bw - 14 - w;
+      tip.style.left = `${right + w <= W ? right : left >= 0 ? left : Math.max(0, W - w)}px`;
+      tip.style.top = `${TOP}px`;
+    }
+    U.pointing(plot, e => {
+      if (!data?.days.length) return;
+      const r = plot.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width, band = (W - LEFT) / data.days.length;
+      const i = Math.floor((x - LEFT) / band);
+      point(i >= 0 && i < data.days.length ? i : null);
+    }, () => point(null));
+    const paintLegend = () => { U.html(legend, data ? legendHtml() : '', false); };
+    const show = () => { draw(); paintLegend(); };
+    const itemOf = e => e.target.closest?.('.vz-legend__item');
+    function toggle(li) { const s = li.dataset.state; pinned = pinned === s ? null : s; hovered = null; muted = pinned ? null : s; show(); legend.querySelector(`[data-state="${CSS.escape(s)}"]`)?.focus({ preventScroll: true }); }
+    legend.addEventListener('pointerover', e => { const s = itemOf(e)?.dataset.state ?? null; if (s !== muted) { muted = null; if (s !== hovered) { hovered = s; show(); } } });
+    legend.addEventListener('pointerleave', () => { muted = null; if (hovered != null) { hovered = null; show(); } });
+    legend.addEventListener('click', e => { const li = itemOf(e); if (li) toggle(li); });
+    legend.addEventListener('keydown', e => { const li = (e.key === 'Enter' || e.key === ' ') && itemOf(e); if (li) { e.preventDefault(); toggle(li); } });
+    new ResizeObserver(() => { const w = Math.round(plot.clientWidth); if (w !== W) { W = w; draw(); } }).observe(plot);
+    return {
+      set(payload) {
+        data = payload && payload.days.length && (!pcOffline() || payload.days.some(day => lanes.some(([lane]) => day[lane]))) ? payload : null;
+        const text = data ? '' : payload ? '没有记录' : pcOffline() ? missing : U.collectionText();
+        wait.textContent = text; wait.hidden = !text; plot.classList.toggle('is-empty', !!text);
+        if (data && !data.states.some(st => st.id === pinned)) pinned = null;
+        W = Math.round(plot.clientWidth); hover = null; tip.hidden = true; show();
+        if (!data) xs.innerHTML = '';
+        const last = data?.days.at(-1);
+        note.hidden = !data; U.html(note, data ? esc(`图例是这 ${data.days.length} 天的合计。${last && today(last) ? `今天（${V.md(dayStart(last))}）只画到 ${clock(last)}，后面还没过。` : ''}`) : '');
+        if (data) { plot.classList.remove('is-in'); void plot.offsetWidth; plot.classList.add('is-in'); }
+      },
+    };
+  }
   function chartHost(el, title) { const h = document.createElement('div'); h.className = 'phone-chart'; h.innerHTML = `<h3 class="use-two__k">${fh(title, '图表', 'title')}</h3><div></div>`; el.append(h); return h.lastElementChild; }
   const rangeStatus = key => $(`grp-${key}`)?.querySelector('.phone-range [role="status"]');
   function rangeBar(el, key, label) {
@@ -305,15 +453,15 @@
       // 两条带子各记到几点：最后一次记到之后的那一小段在图上是“等下一轮记录”，不是缺数据。
       const cut = ['usage-timeline', 'collect-timeline', 'network-timeline'].includes(id) ? document.createElement('p') : null;
       if (cut) { cut.className = 'use-note'; cut.hidden = true; n.after(cut); }
-      const dayHost = id === 'usage-timeline' ? chartHost(el, '近 7 天每天亮屏') : null;
-      const days = dayHost && V.bars(dayHost, { series: [{ id: 'screen', label: '亮屏', hue: 'violet' }], unit: '秒' });
+      const dayHost = id === 'usage-timeline' ? chartHost(el, '近 7 天 · 每天手机和电脑各是什么状态') : null;
+      const days = dayHost && dayStack(dayHost);
       const decorate = () => timelineLabels(host, data, key);
       new ResizeObserver(() => requestAnimationFrame(decorate)).observe(host);
       setters.push(() => {
         const s = series(key, id), restricted = s?.visibility === 'owner' && viewer !== 'owner', daily = days && shownRanges[key] === '7d';
         host.hidden = !!restricted || !!daily; host.parentElement.hidden = !!daily;
-        const dayBars = series(key, 'usage-days')?.bars;
-        if (dayHost) { dayHost.parentElement.hidden = !daily; days.set(dayBars ? { ...dayBars, labels: dayBars.labels?.map(l => typeof l.text === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(l.text) ? { ...l, title: l.title || l.text, text: l.text.slice(5) } : l) } : null); }
+        const dayS = series(key, 'usage-days');
+        if (dayHost) { dayHost.parentElement.hidden = !daily || dayS?.visibility === 'owner' && viewer !== 'owner'; if (daily) days.set(usageDays(dayS)); }
         if (!restricted) updateGraph(s);
         data = restricted ? null : timeline(s);
         if (key === 'collect') {

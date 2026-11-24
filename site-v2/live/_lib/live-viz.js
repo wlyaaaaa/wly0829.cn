@@ -295,6 +295,8 @@
       waitBox(r.plot, '正在读');
     }
     let states = [], focus = null, W = 0, pinned = null, hovered = null, muted = null;
+    // 关机段：有单独“关机”状态的图（手机页使用记录，那里 off 是锁屏）认 shutdown，别的图沿用 off
+    const isShutdown = (st) => st?.id === 'shutdown' || st?.id === 'off' && !states.some((x) => x.id === 'shutdown');
 
     function prep(r, d) {
       r.d = null;
@@ -449,7 +451,7 @@
           const a = Math.max(0, (Math.max(t, from) - from) / per), b = Math.min(n, (Math.min(spans[i + 1]?.[0] ?? to, to) - from) / per), width = Math.min(3 * dpr, n);
           if (!(b > a && b - a < width)) return;
           const left = Math.min(Math.max((a + b - width) / 2, 0), n - width);
-          r.marks.push({ left: left / dpr, right: (left + width) / dpr, index: i, off: states[s].id === 'off' });
+          r.marks.push({ left: left / dpr, right: (left + width) / dpr, index: i, off: isShutdown(states[s]) });
         });
         // Nearby short gaps must not cover a confirmed shutdown.
         r.marks.sort((a, b) => Number(a.off) - Number(b.off));
@@ -567,7 +569,7 @@
         r.cursor.hidden = true;
         const stamp = bj(restart).toISOString().slice(5, 19).replace('T', ' ');
         const before = spans.findLast(([t0]) => t0 < restart);
-        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · ${states[before?.[1]]?.id === 'off' ? '前面那段算关机' : '关机时刻不明'}</span>`, (box.left - hostBox.left) * scale + px, tipY);
+        tip.show(`<b>开机或重启</b><span>${esc(stamp)} · ${isShutdown(states[before?.[1]]) ? '前面那段算关机' : '关机时刻不明'}</span>`, (box.left - hostBox.left) * scale + px, tipY);
         return;
       }
       const marked = r.marks.findLast((m) => px >= m.left && px <= m.right);
