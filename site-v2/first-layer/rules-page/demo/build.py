@@ -80,10 +80,49 @@ SENTENCE_END = re.compile(r"[。！？；](?:[」”’）)]*)")
 ATOMIC = re.compile(r"\*\*.+?\*\*|`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)")
 
 
-def load_policy(raw):
+POLICY_KEYS = {"说明", "替换", "收起的词"}
+
+
+def kind_of(value):
+    return {dict: "对象", list: "列表", str: "文字", int: "数字", float: "数字", bool: "真假值", type(None): "null"}.get(type(value), type(value).__name__)
+
+
+def load_policy(raw, source="规则公开改写.json"):
+    """认两种结构：新格式对象 {"说明", "替换", "收起的词"}，旧格式（只有一个替换列表）。认不出的直接报错停下，不悄悄跳过。"""
+    def bad(where, want, value):
+        raise ValueError(f"{source}：{where}应是{want}，实际是{kind_of(value)}：{json.dumps(value, ensure_ascii=False)[:120]}")
+
+    def rows(value, where):
+        if not isinstance(value, list):
+            bad(where, "列表", value)
+        for i, row in enumerate(value, 1):
+            here = f"{where}第 {i} 项"
+            if not isinstance(row, dict):
+                bad(here, '对象 {"old", "new", "file"（可选）}', row)
+            extra = set(row) - {"old", "new", "file"}
+            if extra:
+                bad(here, '只带 "old"、"new"、"file"（可选）的对象', row)
+            for key in ("old", "new"):
+                if not isinstance(row.get(key), str) or (key == "old" and not row[key]):
+                    bad(f"{here}的“{key}”", "非空文字" if key == "old" else "文字", row.get(key))
+            if "file" in row and not (isinstance(row["file"], str) and row["file"]):
+                bad(f"{here}的“file”", "页面文件名（文字）", row["file"])
+        return value
+
     if isinstance(raw, list):
-        return dict(replace=raw, hide=[])
-    return dict(replace=raw.get("替换", []), hide=[w for w in raw.get("收起的词", []) if w])
+        return dict(replace=rows(raw, "旧格式列表"), hide=[])
+    if not isinstance(raw, dict):
+        bad("整个文件", '对象 {"替换", "收起的词"} 或旧格式列表', raw)
+    unknown = set(raw) - POLICY_KEYS
+    if unknown:
+        bad(f"顶层的“{'”“'.join(sorted(unknown))}”", "“说明”“替换”“收起的词”之一", {key: raw[key] for key in sorted(unknown)})
+    hide = raw.get("收起的词", [])
+    if not isinstance(hide, list):
+        bad("“收起的词”", "列表", hide)
+    for i, word in enumerate(hide, 1):
+        if not (isinstance(word, str) and word):
+            bad(f"“收起的词”第 {i} 项", "非空文字", word)
+    return dict(replace=rows(raw.get("替换", []), "“替换”"), hide=hide)
 
 
 def sentences(text):
@@ -367,7 +406,8 @@ def main():
     release = args.release.resolve()
     records = HERE.parents[3] / ".publish/site-v2-rules"
     records.mkdir(parents=True, exist_ok=True)
-    policy = load_policy(json.loads((HERE.parents[2] / "配置/规则公开改写.json").read_text(encoding="utf-8-sig")))
+    policy_path = HERE.parents[2] / "配置/规则公开改写.json"
+    policy = load_policy(json.loads(policy_path.read_text(encoding="utf-8-sig")), str(policy_path))
     topics_in_release = [(key, name) for key, name in TOPICS
                          if key != "antigravity-adapter" or (release / f"docs/contracts/agents.{key}.md").is_file()]
     documents = documents_for(release, topics_in_release, policy)
