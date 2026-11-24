@@ -37,6 +37,11 @@
 .page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
 .page--backups .backup-grid b { font-weight: 400; }
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
+/* G、H 盘这一轮按备上多少分档，和计划任务同一套颜色（M780、M806）：大部分成功黄、部分成功橙、备份失败红；字用深一点的同色，格底一条粗色线 */
+.page--backups .backup-grid td[data-copy]:is([data-state="mostly"],[data-state="partial"],[data-state="failed"]) > b { font-weight: 600; white-space: nowrap; }
+.page--backups .backup-grid td[data-state="mostly"] { color: #8a6800; box-shadow: inset 0 -3px #e9b714; }
+.page--backups .backup-grid td[data-state="partial"] { color: #b14e0a; box-shadow: inset 0 -3px #ef7a22; }
+.page--backups .backup-grid td[data-state="failed"] { color: #a8362c; box-shadow: inset 0 -3px #d9443a; }
 .page--backups .backup-grid th[scope="row"] { color: var(--ink); font-size: 14px; font-weight: 500; }
 .page--backups .backup-grid th[scope="row"] small { font-weight: 400; }
 /* 窗口不到 1280 宽：五个副本列加宽一点（资料名、本地位置让出），表头的记录时间在日期和钟点之间换行，不再横着串到隔壁列（M497）；1440 宽不变 */
