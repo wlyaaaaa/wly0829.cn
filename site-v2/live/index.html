@@ -189,6 +189,20 @@
 .page--live #needs .row__main { grid-column: 2; grid-row: 1; }
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
+/* 等你的事卡每件事三行（M752，本人 11-24 16:09 点头的样子）：第一行“要本人做 ·”加标题占满整行，长了照原样折行；
+   第二行按钮从左排，种类、顺序、样子照旧；第三行原来的灰字。卡窄到一行放不下这些按钮时，按钮自己折行。
+   以后要“标题短、放得下就和按钮同一行”，把下面标题的 flex 从 1 0 100% 改成 0 1 auto 即可（按钮会靠右） */
+.page--live #needs [data-part="main"] { container-type: inline-size; }
+.page--live #needs [data-part="main"] > .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 10px; position: relative; padding-left: var(--gut); }
+.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; left: 2px; top: 14px; margin: 0; }
+.page--live #needs [data-part="main"] > .row .row__main { order: 1; flex: 1 0 100%; min-width: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts, .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { order: 2; flex: none; padding-left: 0; }
+.page--live #needs [data-part="main"] > .row .row__text > :not(.row__main) { order: 3; flex: 1 0 100%; margin-top: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts > :first-child { justify-self: start; }
+@container (max-width: 390px) {
+ .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; gap: 6px 8px; max-width: 100%; }
+ .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="go"] { margin-right: 0; }
+}
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
 .page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
