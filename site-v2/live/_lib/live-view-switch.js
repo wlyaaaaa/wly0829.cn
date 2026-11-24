@@ -17,6 +17,8 @@
     if (!button) {
       button = document.createElement('button'); button.id = 'wly-preview-view'; button.type = 'button';
       button.className = 'pill live-view-pill';
+      // 实况页右边按钮多，1440 宽时这颗照普通的左右各 15 会贴上居中的站名；左右各收 3，站名照样居中、字和按钮隔开约 16
+      button.style.paddingInline = '12px';
       button.onclick = () => {
         // 看本人版只有可信设备能做：不是本人（访客、配对已失效）就弹现成的说明框，不切换
         if (!publicView && !owner) return void window.TrustModal?.show();
