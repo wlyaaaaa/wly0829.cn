@@ -4,6 +4,50 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 const source = readFileSync(new URL('../site-v2/live/_lib/live-client.js', import.meta.url), 'utf8');
 
+test('after an access write, only a new access read can update subscribers and the ETag', async () => {
+  const at = new Date().toISOString(), viewer = {kind: 'owner', device: 'ok'}, token = 'a'.repeat(43);
+  const requests = [], replies = [], events = {}, shown = [];
+  let tick, time = Date.parse(at);
+  const document = {hidden: false, addEventListener(event, fn) { events[event] = fn; }};
+  const packet = (state, seq, audience = viewer) => Response.json({at, now: at, seq, rev: String(seq), viewer: audience,
+    data: {personal_data: {state}}}, {headers: {ETag: `"${state}"`}});
+  const window = {};
+  vm.runInNewContext(source, {window, document, location: new URL('https://wly0829.cn/computer-access/'),
+    URLSearchParams, Intl, Date: class extends Date { static now() { return time; } }, AbortSignal,
+    localStorage: {getItem: key => key === 'wly-cockpit-device' ? token : null, setItem() {}},
+    setTimeout: () => 1, clearTimeout() {}, setInterval(fn) { tick = fn; return 1; },
+    fetch: (url, {headers = {}}) => {
+      if (url.startsWith('/release-identity.json')) return Promise.resolve(Response.json({release_id: 'local-test'}));
+      requests.push([url.split('/').at(-1), headers['If-None-Match']]);
+      if (url.endsWith('/connect')) return Promise.resolve(packet('unrelated', 1));
+      return new Promise(resolve => replies.push(resolve));
+    }});
+  const live = window.Live;
+  live.watch('access', {}, {data: data => shown.push(data?.personal_data.state)});
+  replies[0](packet('unlocked', 1)); await live.get('access');
+  live.watch('connect', {}, {}); await live.get('connect'); requests.length = 0;
+  time += 5000; tick();
+  const old = live.get('access'), before = live.readSequence(); time += 3500;
+  const refresh = live.refreshPath('access', true), readback = live.get('access');
+  assert.deepEqual(requests, [['access', '"unlocked"'], ['access', undefined]]);
+  replies[2](packet('locked', 2)); await refresh;
+  assert.deepEqual(shown, ['unlocked', 'locked']);
+  const confirmed = (await readback).meta.dataRead;
+  assert.ok(confirmed > before);
+  replies[1](packet('unlocked', 9, {kind: 'public', device: 'invalid'})); await old;
+  assert.deepEqual(shown, ['unlocked', 'locked']);
+  time += 1500; tick();
+  assert.deepEqual(requests.at(-1), ['access', '"locked"']);
+  const validation = live.get('access'); replies[3](new Response(null, {status: 304}));
+  assert.equal((await validation).meta.dataRead, confirmed);
+  document.hidden = true; time += 5000; tick();
+  assert.equal(requests.length, 3);
+  document.hidden = false; const foreground = events.visibilitychange();
+  assert.deepEqual(requests.slice(3), [['access', undefined]]);
+  replies[4](packet('unlocked', 3)); await foreground;
+  assert.deepEqual(shown, ['unlocked', 'locked', 'unlocked']);
+});
+
 test('LAN reader is only selected for a direct unpaired owner view', () => {
   for (const [origin, publicMode, token, resource, expected] of [
     ['http://192.168.31.235:8829', false, '', 'screen', 'http://192.168.31.235:18829/__live/screen'],
