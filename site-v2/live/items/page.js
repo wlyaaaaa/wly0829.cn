@@ -490,7 +490,7 @@
   $('closed-next').addEventListener('click', async (event) => {
     const button = event.currentTarget, cursor = next, kind = viewer;
     if (cursor == null) return;
-    button.disabled = true;
+    button.disabled = true; U.html(button, '正在读…', false);
     try {
       const r = await window.Live.get('items/closed', { project, cursor });
       if (viewer !== kind || next !== cursor) return;
@@ -502,6 +502,7 @@
       }
     } finally {
       button.disabled = false;
+      if (button.textContent === '正在读…') U.html(button, '再往前读 ›', false);
     }
   });
   // M662：“近 7 天下去的”里已经记着关掉的汇报，上面“等你答的汇报”不再挂着（两处、两版同一个结果）。

@@ -539,9 +539,9 @@
     return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${title}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
   }
   async function loadChanges(b) {
-    const cursor = changeLog?.next, epoch = changeEpoch;
+    const cursor = changeLog?.next, epoch = changeEpoch, label = b.page.innerHTML;
     if (!cursor || changeRefill) return;
-    b.page.disabled = true;
+    b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
       const result = await getChanges(cursor);
       if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
@@ -550,7 +550,7 @@
       const extended = extendChanges(changeLog, page);
       if (!extended) { await readChanges(); return; }
       changeLog = extended; publishChanges();
-    } finally { b.page.disabled = false; }
+    } finally { b.page.disabled = false; U.html(b.page, label, false); }
   }
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
@@ -563,15 +563,15 @@
     U.html(b.note, [esc(count), esc(available), cutoff && esc(`上次改动记录截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
   }
   async function loadArtifacts(b) {
-    const generation = audience, cursor = arts?.next;
+    const generation = audience, cursor = arts?.next, label = b.page.innerHTML;
     if (!cursor) return;
-    b.page.disabled = true;
+    b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
       const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
       if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
       if (result.data) { arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; renderBoard(true); }
       else { b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer })); }
-    } finally { b.page.disabled = false; }
+    } finally { b.page.disabled = false; U.html(b.page, label, false); }
   }
   function graphBlock(key, label) {
     const b = block(key, 'figs'); b.el.classList.add('pj-sec--chart');
@@ -824,7 +824,7 @@
         U.html(b.reading, changed ? `最近一次提交 ${esc(stamp(changed.at))}${hasText ? ` · ${U.fieldHtml(restricted(changed) ? changed : changed.text, { name: '提交说明', kind: projectViewer })}` : ''}` : '');
         changeCounts(b);
         b.page.hidden = !changeLog?.next;
-        U.html(b.page, '更早的改动 <span class="more__chev">›</span>');
+        if (b.page.textContent !== '正在读…') U.html(b.page, '更早的改动 <span class="more__chev">›</span>');
         right.push(b);
       }
       // 整段都不对外的

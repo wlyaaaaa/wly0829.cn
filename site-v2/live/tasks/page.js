@@ -215,7 +215,10 @@
   async function loadGroup(id, append = false) {
     const s = sections.get(id), ticket = generation;
     if (!s.remote) return true;
+    if (s.next.disabled) return false;
+    const text = append ? s.next : s.more.querySelector('.lb-more__shut'), label = text.textContent;
     s.next.disabled = true;
+    text.textContent = '正在读…';
     try {
       const r = await window.Live.get('tasks', { scope, project, q: query || null, group: id, cursor: append ? s.cursor : null });
       if (ticket !== generation || r.meta?.viewer?.kind !== viewer || r.meta?.at !== batchAt || !maintenance && !scheduledPacket(r.data)) return false;
@@ -227,7 +230,7 @@
       s.next.hidden = !s.cursor;
       L.lightUp([s.el]);
       return true;
-    } finally { s.next.disabled = false; taskWords(); }
+    } finally { s.next.disabled = false; text.textContent = label; taskWords(); }
   }
   function render(d, append = false) {
     function changeDetail(c) {
@@ -451,7 +454,16 @@
     });
   }
   $('q').value = query; let timer; $('search').addEventListener('submit', e => { e.preventDefault(); clearTimeout(timer); query = $('q').value.trim(); const u = new URL(location.href); query ? u.searchParams.set('q', query) : u.searchParams.delete('q'); history.replaceState(null, '', u); load(); }); $('q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('search').requestSubmit(), 300); });
-  $('next').addEventListener('click', async () => { const ticket = generation; $('next').disabled = true; try { const r = await window.Live.get('tasks', { scope, project, q: query || null, cursor }); if (ticket !== generation) return; if (r.data && r.meta?.at === batchAt && r.meta?.viewer?.kind === viewer) U.anchor(() => render(r.data, true)); else U.html($('coverage'), U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer })); } finally { $('next').disabled = false; } });
+  $('next').addEventListener('click', async (event) => {
+    const button = event.currentTarget, ticket = generation, label = button.textContent;
+    button.disabled = true; button.textContent = '正在读…';
+    try {
+      const r = await window.Live.get('tasks', { scope, project, q: query || null, cursor });
+      if (ticket !== generation) return;
+      if (r.data && r.meta?.at === batchAt && r.meta?.viewer?.kind === viewer) U.anchor(() => render(r.data, true));
+      else U.html($('coverage'), U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer }));
+    } finally { button.disabled = false; button.textContent = label; }
+  });
   function scheduledRunning(packet) {
     if (maintenance || !packet || !dataAt) return null;
     if (Object.hasOwn(packet, 'running_reading')) return packet.running_reading;

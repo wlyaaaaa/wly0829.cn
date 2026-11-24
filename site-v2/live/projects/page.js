@@ -457,15 +457,17 @@
     switchRoster();
   });
   addEventListener('popstate', switchRoster);
-  $('next').addEventListener('click', async () => {
-    if (!next) return; $('next').disabled = true;
+  $('next').addEventListener('click', async (event) => {
+    if (!next) return;
+    const button = event.currentTarget, label = button.textContent;
+    button.disabled = true; button.textContent = '正在读…';
     try {
       const cursor = next, source = changeAt(changes), s = await window.Live.get('projects/changes', { cursor });
       if (cursor !== next || source !== changeAt(changes)) return;
       if (s.data?.items && (s.meta.viewer?.kind || 'public') === changeViewer && source === changeAt(s.data) && s.data.next !== cursor) {
         U.anchor(() => { changeRows = [...new Map([...changeRows, ...s.data.items].map(it => [it.id, it])).values()]; next = s.data.next; renderChanges(); });
       } else { changesNote.hidden = false; U.html(changesNote, '下一页暂时读不到，已读到的留在这里。'); }
-    } finally { $('next').disabled = false; }
+    } finally { button.disabled = false; button.textContent = label; }
   });
   window.LiveProjectLook?.load().then(data => {
     looks = data || {}; looksReady = true;
