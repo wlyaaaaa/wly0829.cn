@@ -14,7 +14,8 @@
 .page--items .lb-card--items .lb-rows > .lb-item { border-radius: 0; background: none; box-shadow: none; border-bottom: 1px solid var(--hair); }
 .page--items .lb-rows { gap: 0; }
 .page--items .lb-item { --gut: 0px; }
-.page--items .row__title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+/* 标题整句显示，放不下就换行，不收成两行“…”（M760） */
+.page--items .row__title { overflow-wrap: anywhere; }
 .page--items [data-text-open="true"] .row__title,.page--items .is-expanded .row__title,.page--items[data-viewer="owner"] .row__title { -webkit-line-clamp: unset; }
 .page--items .row__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .page--items .row__main .row__title { flex: 1 1 100%; min-width: 0; }
@@ -37,7 +38,7 @@
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
 .closed-peek { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 15.5px; line-height: 23px; color: var(--ink); text-decoration: none; }
-.closed-peek span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.closed-peek span { overflow-wrap: anywhere; }   /* 标题整句显示，放不下就换行，不截成“…”（M760） */
 .closed-peek time { color: var(--muted); }
 .trend-last { margin: 4px 0; font-size: 14px; }
 .needs-trend { width: 100%; height: 112px; overflow: visible; }

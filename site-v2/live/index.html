@@ -242,6 +242,8 @@
 .page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
 .page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
 .page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
+/* 等你的事、计划任务、备份卡的每条标题整句显示，放不下就换行，不收成两行“…”（M760） */
+.page--live .board :is(#needs,#tasks,#backups) .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
 /* AI 对话：软件、型号、档位、状态和时间整行都显示，放不下就换行，不截成省略号。 */
 .page--live .board #chats .row--chat .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
 .page--live #projects .project-cell > a > .project-name { flex: 1; min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow: hidden; }
