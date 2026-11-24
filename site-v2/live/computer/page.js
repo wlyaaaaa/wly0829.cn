@@ -1101,13 +1101,14 @@
       const note = U.fieldHtml({ value: '', visibility: x.visibility }, { name: '连接地址', kind: netViewer });
       const href = typeof x.href === 'string' ? x.href : '', localLink = href.startsWith('/mcp/');
       const nameNote = [x.name, x.state].map(value => U.fieldHtml(value, { name: '远程入口' })).filter(html => html.includes('live-mark')).join(' · ');
-      if (x.connection_type === 'moonlight') return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, ...[x.host, x.connect_hint].filter(Boolean).map(value => U.fieldHtml(value, { name: '串流连接信息' }))].filter(Boolean).join(' · ')}</p>${x.streaming ? window.ComputerDraw10?.streaming(x.streaming, netViewer, streamProject) || '' : ''}</div>`;
+      const stamp = readingStamp(x.state === 'online' && x.authenticated_at || x.at), stampText = stamp && `${esc(stamp)} ${probed ? '探测' : '实测'}`;
+      // 串流和旁边两条 MCP 一样标上读到的时刻（M759）。
+      if (x.connection_type === 'moonlight') return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, stampText, ...[x.host, x.connect_hint].filter(Boolean).map(value => U.fieldHtml(value, { name: '串流连接信息' }))].filter(Boolean).join(' · ')}</p>${x.streaming ? window.ComputerDraw10?.streaming(x.streaming, netViewer, streamProject) || '' : ''}</div>`;
       // MCP 接口本身只认 AI 客户端，浏览器打开是一页 405；“MCP 地址”改去连接电脑页，那里写着地址和怎么连。
       const mcpPage = isMcp && !localLink && route(`/mcp/?pc=${x.id === 'secondary-mcp' ? 'sub' : 'main'}`);
       const label = localLink ? '连接电脑 ›' : isMcp ? 'MCP 地址和连法 ›' : href;
       const link = href && (netViewer === 'owner' || x.visibility !== 'owner') ? `<a class="more" href="${esc(mcpPage || href)}" data-needs-pc>${esc(label)}</a>` : note || U.fieldHtml(x.href || U.collectionText(), { name: '连接地址' });
-      const stamp = readingStamp(x.state === 'online' && x.authenticated_at || x.at);
-      return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, stamp && `${esc(stamp)} ${probed ? '探测' : '实测'}`, link].filter(Boolean).join(' · ')}</p></div>`;
+      return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, stampText, link].filter(Boolean).join(' · ')}</p></div>`;
     }).join('');
   }
   function updateWarning() {
