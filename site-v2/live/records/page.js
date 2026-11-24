@@ -438,7 +438,7 @@
       const row = bookRow(r, data, i), n = A.recorded;
       if (row.wide || row.locked) return row;
       const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
-        [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), text(r.last_at ? humanTime(r.last_at) : '没有记录')];
+        [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), text(row.never ? '没用过' : r.last_at ? humanTime(r.last_at) : '没有记录')];
       // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
       return { ...row, cells, detail: row.skillMore || row.detail || '', pick: { count: cells[2], last: r.last ? text(stamp(r.last)) : cells[6] }, sort: { ...row.sort, at: Date.parse(r.last_at) } };
     });
@@ -532,10 +532,14 @@
     // 技能：只有一列次数的表把 Claude、Codex 各自的数摆在名字下面；三家分列的用量表（skillUsageTable）另取 nameCell、skillMore，各家的数有自己的列
     const nameCell = cells[0], skillMore = skills ? detailOf(r) : '';
     if (skills) cells[0] += skillMore;
+    // 技能一次也没用过（M747，本人 11-24 16:13 选 A，例 personal-profile）：没有最近一次、近 30 天 0 次、各家累计也是 0；只是没读到的不算。
+    // “很久没用”卡把它排最前、写“没用过”，表里“最近使用日期”也写“没用过”
+    const never = skills && r.last == null && num(r.count) === 0 && ['claude_total', 'codex_total'].every(k => !(k in r) || num(r[k]) === 0) && !(num(r.antigravity_d30) > 0);
+    if (never && 'last' in r) cells[2] = text('没用过');
     return {
-      key, cells, nameCell, skillMore, title: esc(labelText), text: labelText, attention: attention(r), detail, lamp: lamp ? status.lamp : '',
+      key, cells, nameCell, skillMore, never, title: esc(labelText), text: labelText, attention: attention(r), detail, lamp: lamp ? status.lamp : '',
       expand: knowledge && long,
-      sort: { name: labelText.toLowerCase(), count: num(r.count), last: when(r.last), at: when(r.file_at || r.at || r.observed_utc) },
+      sort: { name: labelText.toLowerCase(), count: num(r.count), last: when(r.last), idle: never ? 0 : when(r.last), at: when(r.file_at || r.at || r.observed_utc) },
       bar: skills ? num(r.count) : null,
     };
   }
@@ -589,10 +593,10 @@
     if (skills) return {
       name: '技能名称', more: loadNext, singleUntil: 8, ...(skillUsageSection ? { spread: false, page: 40 } : {}),
       columns: [{ id: 'name', label: '技能名称' }, { id: 'count', label: '近 30 天用了几次', bar: true }, { id: 'last', label: '最近使用日期' }],
-      sorts: [by('count-desc', '按近 30 天用了几次（降序）', 'count', -1), by('count-asc', '按近 30 天用了几次（升序）', 'count', 1), by('last-desc', '按最近使用日期（近的在前）', 'last', -1), by('last-asc', '按最近使用日期（久的在前）', 'last', 1), by('name', '按技能名称（A→Z）', 'name', 1)],
+      sorts: [by('count-desc', '按近 30 天用了几次（降序）', 'count', -1), by('count-asc', '按近 30 天用了几次（升序）', 'count', 1), by('last-desc', '按最近使用日期（近的在前）', 'last', -1), by('last-asc', '按最近使用日期（久的在前）', 'idle', 1), by('name', '按技能名称（A→Z）', 'name', 1)],
       picks: [
         { id: 'top', title: '用得最多', sub: n => `前 ${n} 项`, by: 'count', dir: -1, n: 3, keep: r => r.sort.count > 0, icon: 'bars', tone: 'green', mark: 'crown', value: r => r.pick?.count ?? r.cells?.[1] ?? '', sort: 'count-desc' },
-        { id: 'old', title: '很久没用', sub: n => `最久的 ${n} 项`, by: 'last', dir: 1, n: 3, icon: 'time', tone: 'warm', mark: 'clock', value: r => r.pick?.last ?? r.cells?.[2] ?? '', sort: 'last-asc' },
+        { id: 'old', title: '很久没用', sub: n => `最久的 ${n} 项`, by: 'idle', dir: 1, n: 3, icon: 'time', tone: 'warm', mark: 'clock', value: r => r.never ? '没用过' : r.pick?.last ?? r.cells?.[2] ?? '', sort: 'last-asc' },
       ],
     };
     if (knowledge) return {
