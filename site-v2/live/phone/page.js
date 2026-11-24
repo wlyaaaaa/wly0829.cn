@@ -101,8 +101,11 @@
     const spans = row?.spans || [], to = seconds(row?.to), last = spans.findLastIndex(([, v]) => v != null);
     return last < 0 ? NaN : Math.min(spans[last + 1]?.[0] ?? to, to);
   }
-  function markSpans(row, gap, pending, since, omitted) {
-    const spans = row.spans || [], from = seconds(row.from), to = seconds(row.to), cutoff = recordedTo(row);
+  // 最后一次记到之后、不到 35 分钟的那一段只是等下一轮，不算缺口（本人 11-24：“数据缺口的前提是真拿不到，而不是等下一轮”）
+  const waitingGap = g => { const start = seconds(g?.from), at = seconds(phone?.at), now = Number.isFinite(at) ? at : Date.now() / 1000; return Number.isFinite(start) && now >= start && now - start <= PENDING_SECONDS; };
+  // round：采集图最近一轮执行的时刻。某条（如定位）自己最后一条记录早，但最近一轮已经跑过，那之后的末尾一样是等下一轮
+  function markSpans(row, gap, pending, since, omitted, round = NaN) {
+    const own = recordedTo(row), spans = row.spans || [], from = seconds(row.from), to = seconds(row.to), cutoff = Number.isFinite(round) && !(own >= round) ? round : own;
     const waiting = Number.isFinite(cutoff) && to - cutoff > 0 && to - cutoff <= PENDING_SECONDS;
     return spans.map(([t, v], i) => {
       if (v === omitted) return [t, null];
@@ -152,8 +155,8 @@
       const since = s.id === 'network-timeline' ? seconds(phone?.collect?.since) : NaN, day = data.rows?.day;
       const sinceStart = Number.isFinite(since) && day?.spans?.[0]?.[1] == null && seconds(day.from) < since && since < seconds(day.to)
         && Math.abs((day.spans[1]?.[0] ?? NaN) - since) <= 60 ? since : null;
-      return { ...data, sinceStart, states: [...states, { id: 'unrecorded', label: '没记录', hue: 'stone' }, { id: 'pending', label: '等下一轮记录', hue: 'stone' }],
-        rows: Object.fromEntries(Object.entries(data.rows).map(([key, row]) => [key, { ...row, recorded_to: Number.isFinite(recordedTo(row)) ? iso(recordedTo(row)) : null, spans: markSpans(row, states.length, states.length + 1, since, omitted) }])) };
+      return { ...data, sinceStart, states: [...states, { id: 'unrecorded', label: '没记录', hue: 'stone' }, { id: 'pending', label: '等下一轮记录', hue: 'teal', pattern: 'hatch' }],
+        rows: Object.fromEntries(Object.entries(data.rows).map(([key, row]) => [key, { ...row, recorded_to: Number.isFinite(recordedTo(row)) ? iso(recordedTo(row)) : null, spans: markSpans(row, states.length, states.length + 1, since, omitted, s.id === 'collect-timeline' ? recordedTo(data.rows?.runs) : NaN) }])) };
     }
     if (!s?.points?.length) return null;
     const states = Object.entries(s.states || {}).map(([id, label]) => ({ id, label, hue: V.stateHues[id] || 'teal' }));
@@ -463,7 +466,7 @@
     if (key === 'collect') {
       const gaps = d?.gaps == null ? `<li>${paragraph(null)}</li>` : shortList([...d.gaps].sort((a, b) => Date.parse(b.from) - Date.parse(a.from)), (g, i) => `<li class="row">
         <div class="row__text">${g.text === phone?.why ? '' : `<p class="row__main">${fh(g.text, '手机空档')}</p>`}
-          <p class="row__sub">${stampHtml(g.from)}${g.to && stamp(g.to) !== stamp(g.from) ? `–${stampHtml(g.to)}` : ''} · ${g.to && stamp(g.to) === stamp(g.from) ? '不到 1 分钟' : '这段'}${g.kind === 'not_run' ? '没采集' : '缺记录'}</p></div>
+          <p class="row__sub">${stampHtml(g.from)}${g.to && stamp(g.to) !== stamp(g.from) ? `–${stampHtml(g.to)}` : ''} · ${g.to && stamp(g.to) === stamp(g.from) ? '不到 1 分钟' : '这段'}${g.kind === 'not_run' ? '没采集' : waitingGap(g) ? '等下一轮记录' : '缺记录'}</p></div>
         <span class="row__acts">${U.actions({ id: `phone-gap-${i}`, text: g.text }, [{ kind: 'copy', label: '问情况',
           text: `帮我看看手机：${sp(g.text)}，${stamp(g.from)}，卡在哪。` }])}</span></li>`, '条', true, 5) || `<li>${paragraph('这段时间没有空档')}</li>`;
       const helpers = shortList(d?.helpers?.filter(h => h.name && !['MacroDroid', 'TailSocks'].includes(h.name)) || [], h => `<p class="use-note">${fh(h.name, '辅助应用', 'label')} · ${fh(h.text ?? (h.state === 'online' ? '在跑' : h.state === 'offline' ? '没在跑' : unread()), '辅助应用状态')}</p>`);
@@ -538,7 +541,7 @@
     const r = phone?.received;
     if (key === 'usage') return shownRanges.usage === '7d' ? '' : compareText(phone?.usage?.compare_text) || '';
     if (key === 'network') return val('net_kind') == null && pcOffline() ? '' : `${pcOffline() ? '上网走' : '现在走'} ${val('net_kind') === 'wifi' ? 'WiFi' : netText()}`;
-    if (key === 'collect') return (r?.gap?.text || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered)) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
+    if (key === 'collect') return (r?.gap?.text && !waitingGap(r.gap) || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered && !waitingGap(g))) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
     if (key === 'battery') return val('charging') == null ? pcOffline() ? '' : U.collectionText("充电状态 · ") : val('charging') ? '在充电' : '没充电';
     if (key === 'storage') return [!pcOffline() || val('storage_free') != null ? `还剩 ${reading('storage_free')}` : '', !pcOffline() || val('storage_total') != null ? `共 ${reading('storage_total')}` : ''].filter(Boolean).join(' · ');
     return phone?.apps?.text || '';
