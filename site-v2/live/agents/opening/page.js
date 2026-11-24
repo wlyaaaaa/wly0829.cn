@@ -159,11 +159,13 @@
 
   // —— 画 ——
   const words = n => known(n) ? `${int(n)} 字` : '字数没读到';
+  // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”），别的字不动
   function versionText(m, h) {
     if (!h.version) return '<span class="op-warn">版本没读到</span>';
-    if (h.current === true) return `${esc(h.version)} 当前版`;
-    if (h.current === false) return `<span class="op-warn">${esc(h.version)}，${h.behind > 0 ? `比当前版 ${esc(m.active)} 落后 ${h.behind} 版` : `不是当前版${m.active ? ' ' + esc(m.active) : ''}`}</span>`;
-    return `${esc(h.version)}<small>是不是当前版没比对上</small>`;
+    const ver = link(m.rulesHref, esc(h.version));
+    if (h.current === true) return `${ver} 当前版`;
+    if (h.current === false) return `<span class="op-warn">${ver}，${h.behind > 0 ? `比当前版 ${esc(m.active)} 落后 ${h.behind} 版` : `不是当前版${m.active ? ' ' + esc(m.active) : ''}`}</span>`;
+    return `${ver}<small>是不是当前版没比对上</small>`;
   }
   function head() {
     return `<div class="tp-head op-head"><div><h1>开场页</h1><p>每家 AI 开对话时最先读到的那一整页，原样照登。和规则页一样的段落收起来，只这一家有的展开标出来。</p></div></div>`;
@@ -213,7 +215,7 @@
       ${h.current === false ? `<span class="op-cmp__only op-warn">${esc(h.version || '')} 不是当前版</span>` : ''}</button>`).join('')}</aside>`;
   }
   function charterOnly(m) {
-    return `<div class="tp-panel op-main"><p class="tp-note" data-tone="off">这一轮只读到规则页的正文${m.charter?.version ? `（${esc(m.charter.version)}）` : ''}，三家开场页的原文没读到。</p>
+    return `<div class="tp-panel op-main"><p class="tp-note" data-tone="off">这一轮只读到规则页的正文${m.charter?.version ? `（${link(m.rulesHref, esc(m.charter.version))}）` : ''}，三家开场页的原文没读到。</p>
       <p class="tp-small">和规则页一样的部分在${link(m.rulesHref, '规则页 ›')}</p></div>`;
   }
   function feed(m) {
