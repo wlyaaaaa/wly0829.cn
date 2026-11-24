@@ -53,6 +53,8 @@ def source_text(node, list_item=False):
     kind = node["type"]
     if kind in {"softbreak", "linebreak"}:
         return "\n"
+    if kind in {"inline_html", "block_html"}:  # 原文里的 HTML 标签是标记，只算其中的字
+        return dom_text(BeautifulSoup(node["raw"], "html.parser"))
     if "raw" in node:
         return node["raw"] if kind in {"codespan", "block_code"} else unescape(node["raw"])
     inline = {"paragraph", "heading", "block_text", "emphasis", "strong", "link", "table_cell"}
