@@ -253,7 +253,7 @@
       ['内存', U.memorySpec(h.memory ?? computer?.memory?.spec, h.source_at, true).split(' · ').filter(Boolean).map(part => `<span class="live-unit">${U.esc(part)}</span>`).join(' · ')], ['硬盘', (Array.isArray(h.disks) ? h.disks : []).map(disk).filter(Boolean).join('<br>')]].filter(([, html]) => html);
     if (!rows.length) return '';
     const at = Number.isFinite(Date.parse(h.source_at)) ? ` · 截至 ${U.esc(U.date(h.source_at))}` : '';
-    return `<p class="row__sub computer-hardware__at">从机器上读到的规格${at}</p><dl class="desktop-config__summary computer-hardware">${rows.map(([label, html]) => `<div><dt>${label}</dt><dd>${html}</dd></div>`).join('')}</dl>`;
+    return `<section class="desktop-config__group"><h3>从机器上读到的规格${at}</h3><dl>${rows.map(([label, html]) => `<div><dt>${label}</dt><dd>${html}</dd></div>`).join('')}</dl></section>`;
   }
   function hostChapter(el) { return { set() { U.html(el, hostRows('machine')); } }; }
   const iso = time => Number.isFinite(time) ? new Date(time * 1000).toISOString() : Number.isFinite(Date.parse(time)) ? time : null;
@@ -1003,7 +1003,7 @@
     return `<div class="desktop-config__head"><h2 id="desktop-config-title" tabindex="-1">${title}</h2>
       <button class="desktop-config__action" type="button" data-desktop-config-close>收起 <span aria-hidden="true">‹</span></button></div>
       <div class="desktop-config__columns"><div>${group('host', '主机')}${group('storage', '硬盘')}</div>
-      <div>${group('screens', '屏幕', screens)}${group('former', '以前的主屏')}</div></div>`;
+      <div>${group('screens', '屏幕', screens)}${group('former', '以前的主屏')}</div></div>${hardwareSpecHtml()}`;
   }
 
   let homeDevices = null, devicesWatch = null, streamProject = null, streamWatch = null, streamAudience = null;
@@ -1051,7 +1051,7 @@
         // 数和单位不拆行（“32 GB”不折成“32 / GB”）。
         const summary = rows.filter(row => row.brief).map(row => `<div><dt>${esc(row.label)}</dt><dd>${unitHtml(row.brief === true ? row.spec : row.brief, row.label)}</dd></div>`).join('');
         return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}
-          <dl class="desktop-config__summary">${summary}</dl>${hardwareSpecHtml()}
+          <dl class="desktop-config__summary">${summary}</dl>
           <button class="desktop-config__action" type="button" aria-controls="desktop-config" aria-expanded="${!hardwarePane.hidden}" data-desktop-config-toggle>
             <span>全部配置（${shown} 项${former ? `，另有以前的主屏 ${former} 台` : ''}）</span><span>收起</span><span aria-hidden="true">›</span></button></div>`;
       }
