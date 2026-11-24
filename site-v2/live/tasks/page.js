@@ -275,9 +275,14 @@
       U.html(s.more, `<span class="lb-more__open">${incomplete && group?.total == null ? '展开' : `展开（还有 ${remaining} 条）`}</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
     for (const [id, s] of sections) if (!groups.has(id)) s.el.hidden = true;
-    const tail = [...sections.values()].filter(s => !s.el.hidden).at(-1);
-    const disabled = sections.get('disabled');
-    for (const s of sections.values()) s.el.classList.toggle('task-full', !maintenance && (s === disabled || cards > 1 && cards % 3 === 1 && s === tail));
+    const vendor = sections.get('vendor'), disabled = sections.get('disabled');
+    const besideVendor = vendor && disabled && !vendor.el.hidden && !disabled.el.hidden;
+    if (besideVendor && vendor.el.nextElementSibling !== disabled.el) vendor.el.after(disabled.el);
+    const tail = [...board.el.children].filter(el => !el.hidden).at(-1);
+    for (const s of sections.values()) {
+      const full = s === disabled ? !besideVendor : cards > 1 && cards % 3 === 1 && s.el === tail;
+      s.el.classList.toggle('task-full', !maintenance && full);
+    }
     board.layout(); pickGroup(); pickProjects();
     const noTasks = maintenance && (d.q !== 'ok' || maintenanceRounds(d) !== 0) ? '还没读到维护明细'
       : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
