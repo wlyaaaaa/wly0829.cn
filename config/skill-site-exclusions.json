@@ -1,9 +1,0 @@
-{
-  "schema": "wly.skill-site-exclusions.v1",
-  "excluded": {
-    "personal-litigation": "私人话题，是否上网站待本人定",
-    "personal-profile": "2026-11-19 本人明确不进入网站技能讲解页",
-    "career-development": "私人话题，是否上网站待本人定",
-    "personal-finance": "私人话题，是否上网站待本人定"
-  }
-}

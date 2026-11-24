@@ -688,8 +688,6 @@ def build_lists(projects, skills):
         pid = prow['项目ID']
         for row in by_project.get(pid, []):
             sid = row['技能ID']
-            if sid == 'personal-litigation':
-                continue
             page = next((p for p in real_pages.get(pid, []) if p['种类'] == '技能页' and p['技能ID'] == sid), None)
             card = {'ID': sid, '项目ID': pid, '名字': row['中文名'], '真': bool(page)}
             if page:

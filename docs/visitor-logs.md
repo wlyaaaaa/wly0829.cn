@@ -30,12 +30,12 @@ python -B -X utf8 tools/query-site-visitors.py start-site-era --execute
 
 ## 查询
 
-简历使用两条链接。`https://wly0829.cn/cv` 打开网站首页，`https://wly0829.cn/cv/live` 打开实况首页。两条跳转只记入口，落地页各记一次打开。用 `--entry live-cv` 筛实况入口及其后续页面，`--cv` 继续查根入口的逐次记录。
+专用链接有两条。`https://wly0829.cn/cv` 打开网站首页，`https://wly0829.cn/cv/live` 打开实况首页。两条跳转只记入口，落地页各记一次打开。用 `--entry live-cv` 筛实况入口及其后续页面，`--cv` 继续查根入口的逐次记录。
 
 ```powershell
 # 当前口径；上线配置存在时自动去掉上线前事件
 python -B -X utf8 tools/query-site-visitors.py --days 7
-# 专用简历链接：逐次入口、后续页面、停留；/cv 和 /cv/ 都支持
+# 专用链接：逐次入口、后续页面、停留；/cv 和 /cv/ 都支持
 python -B -X utf8 tools/query-site-visitors.py --cv --days 30
 # 某页的事件；忽略路径末尾斜线。/cv 的跳转计入口，不计阅读 PV 和停留
 python -B -X utf8 tools/query-site-visitors.py --page /cv --days 30
