@@ -3,8 +3,6 @@
 .laptop-trail { position: relative; display: flex; align-items: center; gap: 11px; min-height: 30px; margin: 0 0 14px 16px; padding-right: 144px; color: var(--muted); }
 .laptop-trail .back { display: inline; height: auto; padding: 0; margin: 0; background: none; border: 0; box-shadow: none; font-size: inherit; }
 .laptop-trail .back::before { content: none; }
-.laptop-trail [data-live-view-row] { display: contents !important; }
-.laptop-trail #wly-preview-view { position: absolute !important; inset: 50% 0 auto auto !important; translate: 0 -50%; }
 .laptop-trail [aria-current] { color: var(--ink); font-weight: 600; }
 .laptop-symbols { position: absolute; width: 0; height: 0; overflow: hidden; }
 .laptop-icon { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
