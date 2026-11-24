@@ -118,7 +118,9 @@
       return { key: `group:${label}`, cls: 'pj-list-group', html: `${key === 'changes' ? first.band || '' : ''}${label ? `<p class="part">${title}</p>` : ''}${list(items.slice(0, shown))}${items.length > shown ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${items.length - shown} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${list(items.slice(shown))}</details>` : ''}` };
     });
   }
-  const name = (it, kind = viewer) => { const field = it.name || it.label || '', hidden = kind === 'public' && (field?.hidden || field?.visibility === 'owner' || field?.public === 'owner'), text = U.fieldHtml(field, { name: '项目', place: 'label', kind }), note = hidden ? U.fieldHtml(field, { name: '项目名', kind }) : U.visibilityNote(it, kind, it.hidden_what || '这个项目'); return (it.href ? `<a class="row__title" href="${esc(route(it.href))}">${text} <span class="more__chev">›</span></a>` : `<span class="row__title">${text}</span>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
+  // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），名字旁挂“访客看不到”；访客版和没标的不挂
+  const projectTag = (it, kind = viewer) => kind === 'owner' ? U.visitorLabel(it, ['$', 'name'], '这个项目', kind) : '';
+  const name = (it, kind = viewer) => { const field = it.name || it.label || '', hidden = kind === 'public' && (field?.hidden || field?.visibility === 'owner' || field?.public === 'owner'), text = U.fieldHtml(field, { name: '项目', place: 'label', kind }), note = (hidden ? U.fieldHtml(field, { name: '项目名', kind }) : U.visibilityNote(it, kind, it.hidden_what || '这个项目')) || projectTag(it, kind); return (it.href ? `<a class="row__title" href="${esc(route(it.href))}">${text} <span class="more__chev">›</span></a>` : `<span class="row__title">${text}</span>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
   const stamp = at => {
     if (typeof at !== 'string' || !at) return '';
     if (/^\d{4}-\d\d-\d\d$/.test(at)) return at.startsWith('2026-') ? at.slice(5) : at;
@@ -153,7 +155,7 @@
   function renderActive(items) {
     fill('active', items?.filter(it => it.name || it.label).sort((a, b) => (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
-      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = (it.new === true && viewer === 'owner' ? newProjectLabel(it) : '') + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目');
+      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = (it.new === true && viewer === 'owner' ? newProjectLabel(it) : '') + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
       const hasText = !!(text || marked), valueHtml = marked || remote ? U.fieldHtml(marked || text, { name: '项目读数', kind: viewer }) : rosterStat(text);
@@ -333,7 +335,7 @@
       const hot = it.commits > 0;
       const words = [it.files > 0 && `${it.files} 个文件没提交`, age && `已放 ${age}`, it.local_only === true && '按你说的只留本地', it.note && it.note !== '按你说的只留本地' && field(it.note)].filter(Boolean);
       const lead = hot ? `<p class="pj-mini__big"><b>${esc(it.commits)}</b> 个提交没推</p>` : '';
-      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
+      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
     }), unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '');
   }
   function drawRecentArtifacts(recent, section, field, audience = 'public') {

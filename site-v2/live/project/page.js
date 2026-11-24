@@ -1038,7 +1038,9 @@
     const tag = phase ? `<span class="tag pj-phase" data-phase="${esc(d.phase)}">${phase}</span>` : d.phase_gap ? `<span class="pj-phase-gap">${U.fieldHtml(d.phase_gap, { name: '分档', kind: projectViewer })}</span>` : '';
     const anonymous = projectViewer === 'public' && /^project-[0-9a-f]{32}$/.test(d.id);
     const heading = titleText(d.name || (anonymous ? '项目名称仅本人可见' : d.id), anonymous ? '项目名称仅本人可见' : '项目');
-    U.html(part('head'), status.lamp + U.head(heading, { lamp: false }) + tag);
+    // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），标题旁挂“访客看不到”
+    const visitorTag = projectViewer === 'owner' ? U.visitorLabel(d, ['$', 'name'], '这个项目', projectViewer) : '';
+    U.html(part('head'), status.lamp + U.head(heading, { lamp: false }) + tag + (visitorTag ? `<span class="head__rewrite">${visitorTag}</span>` : ''));
     document.title = `${heading} · 实况`;
     const acts = heroActs(d); part('acts').hidden = !acts; U.html(part('acts'), acts);
     // 一行：最近改动 ｜ 一句话说明（没有说明时用后端那句，例如冻结项目的“已冻结，保留已有资料”）
