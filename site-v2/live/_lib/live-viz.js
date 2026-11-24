@@ -908,13 +908,13 @@
       const c = color(r.hue, i), m = markOf(r);
       const name = field(r.name, opts.name || opts.title || '程序', 'title');
       const marker = name !== esc(sp(r.name)) ? field(r.name, opts.name || '程序', 'body', true) : '';
-      // visitor_tag：页面给的本人版小签（U.visitorLabel 生成），名字自己带了签就不再挂第二个
-      const note = marker.includes('live-mark') ? marker : r.visitor_tag || '';
+      // visitor_tag：页面给的本人版小签（U.visitorLabel 生成），挂在副行；name_tag 挂在名字那一行（标的是名字本身时用），名字自己带了签就都不再挂
+      const own = marker.includes('live-mark'), note = own ? marker : r.visitor_tag || '', nameTag = own ? '' : r.name_tag || '';
       const sub = r.sub;
       return {
         key: r.key,
         cls: `vz-rank__row${i === 0 && opts.top !== false && rowsLen > 1 ? ' is-top' : ''}`,
-        html: `${opts.bar === false ? '' : `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${c};--v:${max ? Math.max((r.value || 0) / max, 0).toFixed(4) : 0}"></i></span>`}${m ? `<span class="vz-mark" style="--c:${c}" aria-hidden="true">${esc(String(m).toUpperCase())}</span>` : ''}<span class="vz-rank__name" title="${esc(sp(r.name))}">${r.time ? `<span class="vz-rank__t">${esc(r.time)}</span>` : ''}<span class="vz-rank__label">${name}</span>${sub || note ? `<small>${[sub ? field(sub) : '', note].filter(Boolean).join(' · ')}</small>` : ''}</span><span class="vz-rank__v">${missingHtml(r.text ?? fmt(r.value, r.unit ?? opts.unit) ?? window.LiveUI.collectionText(r.name, r))}</span>${opts.trailing?.(r) || ''}`,
+        html: `${opts.bar === false ? '' : `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${c};--v:${max ? Math.max((r.value || 0) / max, 0).toFixed(4) : 0}"></i></span>`}${m ? `<span class="vz-mark" style="--c:${c}" aria-hidden="true">${esc(String(m).toUpperCase())}</span>` : ''}<span class="vz-rank__name" title="${esc(sp(r.name))}">${r.time ? `<span class="vz-rank__t">${esc(r.time)}</span>` : ''}${nameTag ? `<span class="vz-rank__line"><span class="vz-rank__label">${name}</span>${nameTag}</span>` : `<span class="vz-rank__label">${name}</span>`}${sub || note ? `<small>${[sub ? field(sub) : '', note].filter(Boolean).join(' · ')}</small>` : ''}</span><span class="vz-rank__v">${missingHtml(r.text ?? fmt(r.value, r.unit ?? opts.unit) ?? window.LiveUI.collectionText(r.name, r))}</span>${opts.trailing?.(r) || ''}`,
       };
     };
     const markup = (r) => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`;
