@@ -691,25 +691,8 @@
   }
   function justSaved(item) { const hit = item && savedWrites()[item.id]; return !!hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind; }   // 晚点提醒后到了“你放着”就照常显示
   // 回执弹窗（定稿：异步的成功失败回执；本人 11-23 11:51 要弹窗告诉他保存成功还是失败）：先写“正在保存…”，后台真结果回来再换；失败的留着，能再点一次。
-  function itemReceipt(head = '正在保存…', detail = '') {
-    let lane = document.getElementById('item-action-receipts');
-    if (!lane) { lane = document.createElement('ul'); lane.id = 'item-action-receipts'; lane.className = 'notices'; document.body.append(lane); }
-    const note = document.createElement('li');
-    note.setAttribute('role', 'status');
-    lane.prepend(note);
-    let timer;
-    const set = (state, text, { name = detail, retry, error } = {}) => {
-      clearTimeout(timer);
-      note.className = 'notice glass live-receipt is-' + state;
-      if (error) note.dataset.error = error;   // 后台回的错误名，查问题用
-      note.innerHTML = `<span class="live-receipt__icon" aria-hidden="true"></span><b class="live-receipt__head">${esc(text)}</b>${name ? `<span class="live-receipt__name">${esc(name)}</span>` : ''}${state === 'busy' ? '' : `<span class="live-receipt__acts">${retry ? '<button type="button" class="btn btn--sm" data-retry>再点一次</button>' : ''}<button type="button" class="btn btn--sm" data-close>关掉</button></span>`}`;
-      note.querySelector('[data-retry]')?.addEventListener('click', () => { note.remove(); retry(); }, { once: true });
-      note.querySelector('[data-close]')?.addEventListener('click', () => note.remove(), { once: true });
-      if (state === 'ok') timer = setTimeout(() => note.remove(), 9000);
-    };
-    set('busy', head);
-    return { set };
-  }
+  // 用全站共用的通知浮窗（trust-modal.js 的 SiteNotice），列表还是 #item-action-receipts，等你的事页在它上面听 item-write。
+  function itemReceipt(head = '正在保存…', detail = '') { return window.SiteNotice(head, detail, 'item-action-receipts'); }
   function itemFeedback(trigger, message) { itemReceipt().set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
   // 再点一次用页面上最新的那份（版本变了的卡，重读后按新版本提交）。
   const latestItem = item => [...actionSets.values()].reverse().find(it => it.id === item.id && it.item_version) || item;

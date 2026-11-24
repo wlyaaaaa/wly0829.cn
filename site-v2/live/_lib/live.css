@@ -1000,20 +1000,3 @@ html .live-conn > #notices > li + li, html .live-conn__rows:not(:empty) + #notic
 .row__acts:has(> [data-slot]) > [data-slot="later"] { grid-column: 4; }
 .row__acts:has(> [data-slot]) > [data-slot="pick"] { grid-column: 5; }
 .row__acts > .btn.is-busy { opacity: .75; cursor: progress; }
-/* 按钮的回执弹窗：先“正在保存…”，后台真结果回来换成办成了什么或没保存上（定稿：异步的成功失败回执） */
-#item-action-receipts { position: fixed; z-index: 60; top: 88px; left: 50%; width: min(460px, calc(100vw - 48px)); margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; transform: translateX(-50%); pointer-events: none; }
-#item-action-receipts:empty { display: none; }
-#item-action-receipts .live-receipt { pointer-events: auto; display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 12px; padding: 14px 18px; border-radius: 16px; background: rgb(255 255 255 / .97); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .07), 0 22px 44px -20px rgb(20 28 36 / .45); animation: live-receipt-in .22s ease-out both; }
-#item-action-receipts .live-receipt__icon { grid-row: 1 / span 3; display: grid; place-items: center; box-sizing: border-box; width: 24px; height: 24px; border-radius: 50%; color: #fff; font-size: 14px; font-weight: 800; }
-#item-action-receipts .live-receipt.is-busy .live-receipt__icon { border: 3px solid rgb(0 166 80 / .22); border-top-color: #00A650; animation: live-receipt-spin .8s linear infinite; }
-#item-action-receipts .live-receipt.is-ok .live-receipt__icon::after { content: '✓'; }
-#item-action-receipts .live-receipt.is-ok .live-receipt__icon { background: #00A650; }
-#item-action-receipts .live-receipt.is-fail .live-receipt__icon::after { content: '!'; }
-#item-action-receipts .live-receipt.is-fail .live-receipt__icon { background: #d4561c; }
-.live-receipt__head { grid-column: 2; font-size: 16px; line-height: 24px; font-weight: 700; color: var(--ink); }
-.live-receipt.is-fail .live-receipt__head { color: #b8460f; }
-.live-receipt__name { grid-column: 2; margin-top: 2px; font-size: 14px; line-height: 21px; color: var(--ink-soft); white-space: pre-line; overflow-wrap: anywhere; }
-.live-receipt__acts { grid-column: 2; display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
-.live-receipt__acts [data-retry] { background: #00A650; border-color: #00A650; color: #fff; }
-@keyframes live-receipt-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
-@keyframes live-receipt-spin { to { transform: rotate(360deg); } }
