@@ -41,6 +41,16 @@
   // 今天的北京日期（YYYY-MM-DD）
   const today = () => T.dayKey(new Date().toISOString());
   const dayOf = date => date === 'today' ? today() : date;
+  // 暂停到几点：后台的 until_at 是 Unix 秒数（ISO 字符串也认），先换成 ISO 再交给 T.clock 这些（M801）
+  const untilIso = v => { const t = typeof v === 'number' ? v * 1000 : T.stamp(v); return Number.isFinite(t) ? new Date(t).toISOString() : ''; };
+  // 北京时间、看得懂的中文日期：今天的写“暂停到今天 22:00”，别的日子写“暂停到 11 月 25 日 周三 08:00”；读不出时刻给空。
+  // 按钮上（brk）在日期后折一行，免得开关这一列撑宽、把“上次结果”挤成一条
+  const pausedText = (v, brk = ' ') => {
+    const at = untilIso(v);
+    if (!at) return '';
+    const d = new Date(T.stamp(at) + 8 * 3600000);
+    return T.dayKey(at) === today() ? `暂停到今天 ${T.clock(at)}` : `暂停到 ${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日${brk}周${'日一二三四五六'[d.getUTCDay()]} ${T.clock(at)}`;
+  };
   function setFilter(next) {
     const dateChanged = Object.hasOwn(next, 'date') && next.date !== filter.date;
     Object.assign(filter, next);
@@ -316,13 +326,13 @@
   // 只有本人能点的按钮：访客版加 data-need-trusted，现成的可信设备弹框（trust-modal.js）在捕获阶段拦下、弹“这一步只有可信设备能做”；本人版不加，照常
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
   function switchCell(c, offline) {
-    const m = flipping?.id === c.id ? flipping.mode : mode(c), until = c.setting?.until_at;
-    const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? `暂停到 ${esc(when(until))}` : '没读到';
+    const m = flipping?.id === c.id ? flipping.mode : mode(c), until = c.setting?.until_at, paused = esc(pausedText(until) || '暂停中');
+    const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? paused : '没读到';
     if (offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
     const fb = feedback?.id === c.id ? `<small role="status" data-tone="${feedback.tone || ''}">${esc(feedback.text)}</small>` : `<small role="status"></small>`;
     // 访客版照样摆同一套开关和“暂停到…”（M716，定稿：公开版保留已定按钮）；点了由现成的可信设备弹框拦下，只提示本人才能操作，什么都不改
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
-      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? `暂停到 ${esc(when(until))}` : '暂停到…'}</button>${fb}`;
+      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
   }
   function whenCell(d, c) {
     const g = G[c.id] || {}, p = pauseOf(d, c.id);
@@ -453,8 +463,8 @@
   const bjNow = () => new Date(Date.now() + 8 * 3600000);
   // 打开时填好下拉：今天起 14 天，00–23 时，每 5 分钟；先选好原来暂停到的那个钟点，没有就选下一个整点
   function fillWhen(untilAt) {
-    const now = bjNow(), from = T.stamp(untilAt) > Date.now() ? new Date(T.stamp(untilAt) + 8 * 3600000) : new Date(now.getTime() + 3600000);
-    if (!(T.stamp(untilAt) > Date.now())) from.setUTCMinutes(0, 0, 0);
+    const until = T.stamp(untilIso(untilAt)), now = bjNow(), from = until > Date.now() ? new Date(until + 8 * 3600000) : new Date(now.getTime() + 3600000);
+    if (!(until > Date.now())) from.setUTCMinutes(0, 0, 0);
     const days = Array.from({ length: 14 }, (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + i)));
     const key = x => `${x.getUTCFullYear()}-${pad(x.getUTCMonth() + 1)}-${pad(x.getUTCDate())}`;
     form.elements.day.innerHTML = days.map((x, i) => `<option value="${key(x)}">${x.getUTCMonth() + 1}月${x.getUTCDate()}日 周${WEEK[x.getUTCDay()]}${['（今天）', '（明天）', '（后天）'][i] || ''}</option>`).join('');
