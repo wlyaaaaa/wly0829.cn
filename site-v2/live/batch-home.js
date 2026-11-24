@@ -16,16 +16,18 @@
   const METRICS = [['repaired', '修好', 'auto-repair', n => `修好 ${n} 件`],
     ['messages_logged', '记下新消息', 'message-review', n => `记下 ${n} 件新消息`],
     ['rules_fixed', '规矩改好', 'weekly-rules', n => `规矩改好 ${n} 处`]];
-  function automationView(d, { viewer, now }) {
+  function automationView(d, { viewer }) {
     const today = d.results_today && typeof d.results_today === 'object' ? d.results_today : d.today || {};
     const metrics = METRICS.map(([key, label, category]) => ({ key, label, n: today[key], href: R.listHref({ category, date: 'today' }) }));
-    // 上一次：后台给的“最近有产出的那一轮”优先；没有就从三项各自的上一次里取最近的一项，链到那一类那一天。
-    const lc = d.latest_completed, prev = today.previous && typeof today.previous === 'object' ? today.previous : {};
+    // 上一次：三个数各自的上一次（后台 results_today.previous，只算今天以前、数不是 0 的那天）里取最近的一项，链到那一类那一天。
+    // 不拿 latest_completed 顶：它把自动修理“查实已经好了、不是 AI 动手修的”那轮和别的类也算有产出，
+    // 卡上会一边写“修好 0”一边写“上次：今天 06:17 …已修复”（M720）。
+    const prev = today.previous && typeof today.previous === 'object' ? today.previous : {};
     const before = METRICS.map(([key, , category, say]) => ({ p: prev[key], category, say }))
       .filter(x => x.p && R.timed(x.p.at) && x.p.count > 0).sort((a, b) => Date.parse(b.p.at) - Date.parse(a.p.at))[0];
-    const last = lc && (lc.summary || R.runHref(lc))
-      ? { at: [lc.finished_at, lc.last_activity_at, lc.started_at].find(R.timed), text: lc.summary || R.categoryName(lc.category, viewer), href: R.runHref(lc) }
-      : before ? { at: before.p.at, text: before.say(before.p.count), href: R.listHref({ category: before.category, date: before.p.date }) } : null;
+    const last = before ? { at: before.p.at, text: before.say(before.p.count), href: R.listHref({ category: before.category, date: before.p.date }) } : null;
+    // 今天跑完了几个：后台 results_today.finished_runs，和自动任务页“今天跑完的”同一口径；后台还没给就只给一个看今天跑完的链接
+    const finished = count(today.finished_runs) ? today.finished_runs : null;
     const running = items(d.running).map(r => ({
       what: [R.categoryName(r.category, viewer), r.title || r.summary].filter(Boolean),
       round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href,
@@ -36,7 +38,7 @@
       return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: R.runPage(p.href) };
     });
     const aiMinutes = count(today.ai_seconds) ? Math.round(today.ai_seconds / 60) : d.today?.ai_minutes;
-    return { date: R.todayLabel(today.from || now), metrics, zero: metrics.every(m => m.n === 0), last, running, problems, aiMinutes };
+    return { metrics, zero: metrics.every(m => m.n === 0), last, finished, todayHref: R.listHref({ date: 'today' }), running, problems, aiMinutes };
   }
 
   // 首页智能体卡：今天三家干了多久、本人说了几句；每家一行（家色、小签、今天的数）。被拦几次本人 11-24 03:00 定了不写（别处也不放）。
@@ -110,13 +112,13 @@
     const attention = path => typeof path === 'string' && /^\/live\/(?:items?\/|[?#])/.test(path);
     const d = data || {};
     if (id === 'automation') {
-      const v = automationView(d, { viewer, now }), toOwner = !offline && attention(d.attention?.href);
+      const v = automationView(d, { viewer }), toOwner = !offline && attention(d.attention?.href);
       const problem = !offline && v.problems.length > 0;
       const repairing = v.problems.filter(p => p.repairing).length;
       const tone = offline ? 'off' : toOwner ? 'owner' : problem ? (repairing ? 'repair' : 'owner') : d.health?.state_code === 'lost' ? 'off' : Array.isArray(d.problems) ? 'ok' : 'off';
-      // 标题右边写今天几号（本人选 A）；要本人动手时照旧在标题后面写“要你做 ›”
+      // 标题右边不写日期（本人 11-24 13:00 说不要，M720）；要本人动手时照旧在标题后面写“要你做 ›”
       const status = toOwner ? link(d.attention.href, `要${own}做 ›`) : '', next = d.next || {};
-      const head = cardTitle('自动任务', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`;
+      const head = cardTitle('自动任务', href, tone, status);
       const metric = m => `<a class="b6-metric" href="${esc(route(m.href))}"><b>${num(m.n)}</b><small>${esc(m.label)}</small></a>`;
       const handled = p => p.handler === '本人' ? `等${own}处理`
         : p.handler ? `${p.repairing && !/^已交|在修/.test(p.handler) ? '已交' : ''}${p.handler}` : p.repairing ? 'AI 在修' : '还没人接手';
@@ -125,9 +127,18 @@
         const who = [handled(p), p.round && !/轮/.test(p.handler) && `第 ${p.round} 轮`].filter(Boolean).join(' · ');
         return `<p>${dot(p.repairing ? 'repair' : 'owner')}出毛病的：${what} · ${go(p.href, esc(who))}</p>`;
       };
+      // 三个数都是 0：写明是这三样今天还是 0、今天其实跑完了几个（点了到自动任务页今天跑完的），再写这三样上次有数是哪天（M720）
+      const zeroLine = () => {
+        const ran = v.finished != null ? `${go(v.todayHref, `今天跑完 ${esc(v.finished)} 个`)}，这三样还都是 0`
+          : `这三样今天还都是 0 · ${go(v.todayHref, '看今天跑完的')}`;
+        // “上次：昨晚 22:44”连在一起不断行（免得“昨晚”被拆在两行）
+        const at = v.last && R.when(v.last.at, now, { relative: true });
+        const before = v.last ? ` · <span class="live-unit">上次：${at ? esc(at) : ''}</span> ${goWrap(v.last.href, field(v.last.text, '那一轮的结果'))}` : '';
+        return `<p class="b6-last">${ran}${before}</p>`;
+      };
       return { tone, head, body:
         `<div class="b6-metrics">${v.metrics.map(metric).join('')}</div>
-        ${v.zero && v.last ? `<p class="b6-last">今天还没有${v.last.at ? ` · 上次：${esc(R.when(v.last.at, now, { relative: true }))}` : ' · 上次：'} ${goWrap(v.last.href, field(v.last.text, '那一轮的结果'))}</p>` : ''}
+        ${v.zero ? zeroLine() : ''}
         ${v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join(' · ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
           : `<p>${next.title ? `下次 ${esc(time(next.at) || next.wait || '')} · ${link(next.href, field(next.title, '任务名称'))}`
             : Array.isArray(d.running) && d.next === null ? '没有排定的运行' : '运行和下次时间没读到'}</p>`}
