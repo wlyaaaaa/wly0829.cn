@@ -101,11 +101,12 @@
     const spans = row?.spans || [], to = seconds(row?.to), last = spans.findLastIndex(([, v]) => v != null);
     return last < 0 ? NaN : Math.min(spans[last + 1]?.[0] ?? to, to);
   }
-  function markSpans(row, gap, pending, since = NaN) {
+  function markSpans(row, gap, pending, since, omitted) {
     const spans = row.spans || [], from = seconds(row.from), to = seconds(row.to), cutoff = recordedTo(row);
     const waiting = Number.isFinite(cutoff) && to - cutoff > 0 && to - cutoff <= PENDING_SECONDS;
     return spans.map(([t, v], i) => {
-      if (v != null) return [t, v];
+      if (v === omitted) return [t, null];
+      if (v != null) return [t, omitted >= 0 && v > omitted ? v - 1 : v];
       const end = Math.min(spans[i + 1]?.[0] ?? to, to);
       // 按整天统计的图，起点那天不满一天的那一小截不在统计里，不画、不算“没记录”。
       if (i === 0 && t <= from + 1 && end < from + 86400 && end === Math.floor((end + 8 * 3600) / 86400) * 86400 - 8 * 3600) return [t, null];
@@ -118,10 +119,11 @@
     const shown = lanes.map(([key, name]) => [name, data?.rows?.[key]]).filter(([, row]) => row?.spans?.length);
     const parts = shown.map(([name, row]) => { const at = recordedTo(row), to = seconds(row.to); return Number.isFinite(at) ? [name, at, to - at] : null; }).filter(Boolean);
     if (!parts.length) return '';
+    const waiting = parts.filter(([, , tail]) => tail > 60 && tail <= PENDING_SECONDS);
     const late = parts.filter(([, , tail]) => tail > PENDING_SECONDS), times = new Map();
     for (const [name, at] of parts) times.set(clock(at), [...(times.get(clock(at)) || []), name]);
     return [...times].map(([at, names]) => `${names.join('、')}记到 ${at}`).join('，')
-      + (parts.some(([, , tail]) => tail > 60 && tail <= PENDING_SECONDS) ? '；之后的一小段等下一轮记录（约每 30 分钟一轮），不算没记录' : '')
+      + (waiting.length ? `；${waiting.map(([name]) => name).join('、')}末尾等下一轮记录（约每 30 分钟一轮）` : '')
       + (tail && late.length ? `；${late.map(([name]) => name).join('、')}超过 35 分钟没有新记录` : '') + '。';
   }
   // 采集图、上网图也写清各条记到几点和缺口怎么算（M380）：后台给的各条说明原样接上；上网图的“没记录”不是没网。
@@ -129,7 +131,7 @@
     if (id === 'usage-timeline') return cutoffText(data);
     if (id === 'collect-timeline') {
       const lanes = [['usage', '使用记录'], ['location', '定位'], ['packages', '装机清单'], ['runs', '采集执行情况']];
-      const notes = lanes.map(([key, name]) => { const note = data?.rows?.[key]?.note; return typeof note === 'string' && note.trim() ? `${name}：${sp(note).replace(/[。.]?$/, '。')}` : ''; }).filter(Boolean);
+      const notes = lanes.filter(([key]) => key !== 'runs').map(([key, name]) => { const note = data?.rows?.[key]?.note; return typeof note === 'string' && note.trim() ? `${name}：${sp(note).replace(/[。.]?$/, '。')}` : ''; }).filter(Boolean);
       return [cutoffText(data, lanes, t => stamp(iso(t)), false), ...notes].filter(Boolean).join('');
     }
     if (id === 'network-timeline') {
@@ -145,11 +147,13 @@
       const states = s.timeline.states.map((state, i) => ({ ...state, label: s.group === 'collect' && state.id === 'tailscale' ? '远程线路' : state.label, hue: state.hue || hues[state.id] || V.stateHues[state.id] || ['teal', 'violet', 'pink', 'apricot'][i % 4] }));
       if (!['network-timeline', 'usage-timeline', 'collect-timeline'].includes(s.id)) return { ...s.timeline, states };
       const data = s.id === 'collect-timeline' ? collectTimeline(s) : s.timeline;
+      const omitted = s.id === 'collect-timeline' ? states.findIndex(state => state.id === 'not_run') : -1;
+      if (omitted >= 0) states.splice(omitted, 1);
       const since = s.id === 'network-timeline' ? seconds(phone?.collect?.since) : NaN, day = data.rows?.day;
       const sinceStart = Number.isFinite(since) && day?.spans?.[0]?.[1] == null && seconds(day.from) < since && since < seconds(day.to)
         && Math.abs((day.spans[1]?.[0] ?? NaN) - since) <= 60 ? since : null;
       return { ...data, sinceStart, states: [...states, { id: 'unrecorded', label: '没记录', hue: 'stone' }, { id: 'pending', label: '等下一轮记录', hue: 'stone' }],
-        rows: Object.fromEntries(Object.entries(data.rows).map(([key, row]) => [key, { ...row, recorded_to: Number.isFinite(recordedTo(row)) ? iso(recordedTo(row)) : null, spans: markSpans(row, states.length, states.length + 1, since) }])) };
+        rows: Object.fromEntries(Object.entries(data.rows).map(([key, row]) => [key, { ...row, recorded_to: Number.isFinite(recordedTo(row)) ? iso(recordedTo(row)) : null, spans: markSpans(row, states.length, states.length + 1, since, omitted) }])) };
     }
     if (!s?.points?.length) return null;
     const states = Object.entries(s.states || {}).map(([id, label]) => ({ id, label, hue: V.stateHues[id] || 'teal' }));
@@ -168,11 +172,18 @@
     const rows = Array.from(host.querySelectorAll('.vz-tl__row'), el => el.dataset.row).filter(k => data.rows[k]?.spans?.length), totals = stateTotals(data);
     for (const li of host.querySelectorAll('.vz-legend__item')) {
       const state = data.states.findIndex(s => s.id === li.dataset.state), values = rows.map(k => data.states.reduce((n, s, i) => n + (s.label === data.states[state]?.label ? totals[k][i] || 0 : 0), 0));
-      li.style.display = values.some(v => v > 0) ? '' : 'none';
+      const visible = values.some(v => v > 0), shutdown = key === 'usage' && li.dataset.state === 'shutdown';
+      li.style.display = visible ? '' : 'none';
       if (marked(data.states[state]?.label)) li.querySelector('.vz-legend__name b').textContent = '';
       li.querySelectorAll('.vz-legend__vals > span').forEach((cell, i) => {
-        const value = values[i]; if (/没记录|没读到|缺口|下一轮/.test(data.states[state]?.label || '')) cell.className = 'row__sub'; cell.style.display = value > 0 ? '' : 'none';
-        if (value > 0) { const label = rows.length > 1 && cell.querySelector('small')?.textContent;
+        const value = values[i], label = rows.length > 1 && cell.querySelector('small')?.textContent;
+        if (/没记录|没读到|缺口|下一轮/.test(data.states[state]?.label || '')) cell.className = 'row__sub';
+        const noShutdown = visible && shutdown && label && !value;
+        cell.style.display = value > 0 || noShutdown ? '' : 'none';
+        if (noShutdown) {
+          const text = Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录暂时读不到';
+          cell.innerHTML = `<small>${esc(label)}</small> ${text}`;
+        } else if (value > 0) {
           cell.innerHTML = cell.classList.contains('row__sub') ? `${rows.length > 1 && label ? `<small>${esc(label)}</small> ` : ''}${V.dur(value)}` : rows.length === 1 ? value >= 360000 ? `<b>${Math.round(value / 3600)}</b><small>小时</small>` : V.durHtml(value)
             : `${label ? `<small>${esc(label)}</small> ` : ''}${value >= 360000 ? `${Math.round(value / 3600)} 小时` : V.dur(value)}`; }
       });
@@ -504,7 +515,7 @@
     const ram = dev?.ram_nominal_gb, rom = dev?.storage_nominal_gb;
     const rows = [
       ['型号', [dev?.market_name && fh(dev.market_name, '手机型号'), s?.model && fh(s.model, '手机型号')].filter(Boolean).join(' · ')],
-      ['处理器', dev?.soc ? fh(dev.soc, '处理器') : ''],
+      ['SoC', dev?.soc ? fh(dev.soc, 'SoC') : ''],
       ['规格', ram != null || rom != null ? `${[ram != null && `${fh(ram, '运行内存')} GB 运行内存`, rom != null && `${fh(rom, '存储')} GB 存储`].filter(Boolean).join(' + ')}<small>标称</small>` : ''],
       ['电池', Number.isFinite(dev?.battery_mah) ? `${Math.round(dev.battery_mah).toLocaleString('en-US')} mAh` : dev?.battery_mah ? fh(dev.battery_mah, '电池容量') : ''],
       ['屏幕', screenText(dev?.screen)],
