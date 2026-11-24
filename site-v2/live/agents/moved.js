@@ -109,7 +109,8 @@
       const all = sum(r.v, keys), mine = f ? r.v?.[f] : null;
       const label = f ? (known(mine) ? int(mine) : '') : all > 0 ? int(all) : '';
       if (label !== '' && n <= 31) out += `<text class="ag-val${f ? ' is-focus' : ''}" x="${cx}" y="${top - 6}" text-anchor="middle"${f ? ` style="fill:${fam(f).color}"` : ''}>${label}</text>`;
-      if (i % step === 0 || i === n - 1) out += `<text x="${cx}" y="${H - 7}" text-anchor="middle">${esc(md(r.date))}</text>`;
+      // 最后一天总标；按间隔标的那天离最后一天太近（两个日期会挤成“11-2111-24”）就少标这一个
+      if (i === n - 1 || i % step === 0 && (n - 1 - i) * w / n >= 40) out += `<text x="${cx}" y="${H - 7}" text-anchor="middle">${esc(md(r.date))}</text>`;
     });
     out += `<line class="tp-axis" x1="${pad.l}" x2="${pad.l + w}" y1="${pad.t + h}" y2="${pad.t + h}"/>`;
     return `<svg class="tp-chart ag-cols" viewBox="0 0 ${W} ${H}" role="img" aria-label="按天">${out}</svg>`;

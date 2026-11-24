@@ -88,6 +88,10 @@
   }
 
   function detail(v, b, forecast, viewer) {
+    // 插着的 U 盘（回包 removable）一条文件夹读数都没有：点开只写整盘用了多少、还剩多少，那句短说明就是盘条下后台给的原因，不再列用途和别的口径（本人 11-24 08:50，M683）
+    if (v.removable === true && b?.none && Number.isFinite(v.used) && Number.isFinite(v.free)) {
+      return `<div class="dk-more dk-more--one"><section class="dk-notes"><h4>口径</h4><p>${esc(`已用 ${K.size(v.used)}${Number.isFinite(v.total) ? ` / 共 ${K.size(v.total)}` : ''}，还剩 ${K.size(v.free)}`)}</p></section></div>`;
+    }
     const dirs = K.splitRows(v.directories, viewer), cats = K.splitRows([...(v.categories || []), ...(v.unclassified_usage || [])], viewer);
     const entries = (rows, label, name) => rows.visible.map(r => {
       const value = K.field(r.bytes, `${label}大小`, viewer);
