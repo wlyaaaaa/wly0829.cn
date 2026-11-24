@@ -55,6 +55,9 @@ site-v2/first-layer/rules-page/demo/*.diff.txt
 /site-v2/first-layer/rules-page/demo/index.html
 /site-v2/first-layer/rules-page/demo/topic-*.html
 
+# The principles generator writes this self-check when it regenerates its demo in place.
+/site-v2/first-layer/principles-page/source/generator/content-check.json
+
 # New image sources are the WebP files used by the site; PNG exports stay temporary.
 site-v2/**/*.png
 .live/
