@@ -313,46 +313,35 @@
     return 'Gemini ' + m[2].split('-').map(s => /^\d/.test(s) ? s : s[0].toUpperCase() + s.slice(1)).join(' ');
   };
   const summaryModel = row => /^gpt-6-luna$/.test(row.model) && row.effort === 'low';
-  // 时间那排“全部｜近 7 天｜近 30 天”（本人 16:35 选 B：只改时间那排、不加“全部”卡）。开工、派出去、型号读 periods.<段>.hosts.<家>.work
+  // 时间那排“全部｜近 7 天｜近 30 天”（本人 16:35 选 B：只改时间那排、不加“全部”卡）。开工、总工时、派出去、型号都读 periods.<段>.hosts.<家>.work；
+  // 总工时照旧是登记的完工用时（R56 对这张卡只说改时间选项），和右边按周的柱子同一种算法；按实际干活时间算的是上面“三家干了多少”和首页智能体卡。
+  // 后台还没给这一段（旧后台每家只有五个数）就是 null，每格写“后台还没送来”
   const workFor = (d, h) => inPeriod(d, period, h)?.work || null;
-  // 总工时和上面“三家干了多少”、实况首页智能体卡用同一份：work_stats.today.activity.periods（按实际干活的时间算，同时在干的分别计）。
-  // 后台还没出 periods 时：“全部”照旧读工期账的完工用时（现在公网的样子），近 7／30 天写“后台还没送来”，不拿旧算法的数顶上
-  const ACT_OF = { all: 'all', '7d': 'd7', '30d': 'd30' };
-  function workHours(d, h) {
-    const a = d.work_stats?.today?.activity, periods = a?.periods && typeof a.periods === 'object' ? a.periods : null;
-    if (periods) { const p = periods[ACT_OF[period]]; return p ? { sent: true, v: p.hosts?.[h.id]?.actual_minutes, since: p.earliest_record_at, observed: true } : { sent: false }; }
-    // 旧算法这一支沿 r79 的做法：一件没开工、也没有完工用时，就是 0 小时，不写“没读到”
-    const w = stats(d, h).work;
-    return period === 'all' ? { sent: true, v: known(w?.actual_minutes) ? w.actual_minutes : w?.starts === 0 ? 0 : null } : { sent: false };
-  }
   function workCard(d, h) {
-    const w = workFor(d, h), lost = missing(d, h), hrs = workHours(d, h);
+    const w = workFor(d, h), lost = missing(d, h);
     const models = list(w?.models).filter(m => !summaryModel(m)).sort((a, b) => b.count - a.count);
     const orders = !w ? null : known(w.work_orders) ? w.work_orders : known(w.orders) ? w.orders - list(w.models).filter(summaryModel).reduce((s, m) => s + m.count, 0) : null;
-    const cell = (label, value, unit, key, { sent = !!w, lostHere = lost && key !== 'orders', fmt } = {}) => `<div class="ag-work__row"><span>${label}</span>${!sent ? '<b class="tp-fog">后台还没送来</b>'
-      : lostHere ? `<b class="tp-fog">还没采上</b>` : known(value) ? `<b class="tp-mid">${big(value, `work-${h.id}-${key}-${period}`, fmt)}<small>${unit}</small></b>` : `<b class="tp-fog">没读到</b>`}</div>`;
-    // 实际干活的时间比工期账晚几天才有记录，“全部”时在“总工时”旁边写从哪天起
-    const first = list(stats(d, h).weeks)[0]?.week_start, since = period === 'all' && hrs.since && (!first || T.dayKey(hrs.since) > first) ? `<small>${esc(T.day(hrs.since))} 起</small>` : '';
+    // 一件没开工、也没有完工用时，就是 0 小时，不写“没读到”（沿 r79）
+    const minutes = !w ? null : known(w.actual_minutes) ? w.actual_minutes : w.starts === 0 ? 0 : null;
+    const cell = (label, value, unit, key, fmt) => `<div class="ag-work__row"><span>${label}</span>${!w ? '<b class="tp-fog">后台还没送来</b>' : lost && key !== 'orders' ? `<b class="tp-fog">还没采上</b>`
+      : known(value) ? `<b class="tp-mid">${big(value, `work-${h.id}-${key}-${period}`, fmt)}<small>${unit}</small></b>` : `<b class="tp-fog">没读到</b>`}</div>`;
     // 型号是普通清单，不做成像按钮的圆角小签；超过 4 种的“另 N 种”是真按钮，就地展开全部、再点收起（本人 11-23 23:53：“这种怎么都按不了？”）
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
-      ${cell('开工', w?.starts, '件', 'starts')}${cell(`总工时${since}`, known(hrs.v) ? hrs.v / 60 : null, '小时', 'hours', { sent: hrs.sent, lostHere: lost && !hrs.observed, fmt: hrs.observed && known(hrs.v) && Math.round(hrs.v / 6) >= 1000 ? 'int' : 'dec' })}${cell('派出去', orders, '单', 'orders')}
+      ${cell('开工', w?.starts, '件', 'starts')}${cell('总工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
-      ${lost ? `<p class="tp-small">开工${hrs.observed ? '' : '和工时'}这一家还没采上，派单数是派活工具记的。</p>` : ''}</article>`;
+      ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
     const ws = d.work_stats;
     if (!ws || ws.unavailable_reason) return '';
-    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d);
-    const first = weeks[0]?.week_start, observed = HOSTS.some(h => workHours(d, h).observed);
+    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d), first = weeks[0]?.week_start;
     // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
-    // 后台只给了按周的完工用时，没给按周的实际干活时间：柱子照旧，标清是哪种算法，不和左边总工时混成一种
     return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first + 'T00:00:00+08:00'))} 起有记录</span>` : ''}</div></div>
-      <div class="tp-grid ag-workgrid"><div><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-        ${observed ? '<p class="tp-small ag-foot">总工时按实际干活的时间算，和上面“三家干了多少”同一份数；开工、派出去按登记算。</p>' : ''}</div>
-      <div><p class="tp-sub">按周比 · 工时（小时）${observed ? '<small>按完工时登记的用时，后台还没给按周的实际干活时间</small>' : ''}</p>${columns(rows, -1)}${chips()}</div></div></section>`;
+      <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
+      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 

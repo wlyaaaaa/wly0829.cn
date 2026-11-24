@@ -12,7 +12,9 @@
   const PERIODS = [['today', '今天'], ['d7', '近 7 天'], ['d30', '近 30 天'], ['all', '全部']];
   const KINDS = [['conversation', '普通对话'], ['subagent', '子代理'], ['automatic', '自动任务']];
   const ALL = { id: 'all', name: '全部', color: '#00a650' };
-  let period = DEFAULT_PERIOD, last = null, lastOnly, grow = true;
+  // 从首页智能体卡“今天三家干了 N 小时”点进来带 ?hours=today：先选“今天”，和首页那个数对得上；直接打开照旧是默认
+  const asked = new URLSearchParams(location.search).get('hours');
+  let period = PERIODS.some(([id]) => id === asked) ? asked : DEFAULT_PERIOD, last = null, lastOnly, grow = true;
 
   const md = at => T.day(at);   // 带时刻的取北京日期“11-21”
   // 小时：不到 100 一律写一位小数（74.0，表里一列对得齐），再大写整数；有一点点但不到 0.1 写“不到 0.1”，免得看着像 0

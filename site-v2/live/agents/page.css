@@ -93,7 +93,6 @@
 .ag-more .tp-chev { color: inherit; }
 .ag-work > .tp-small { margin: -4px 14px 12px; }
 .ag-work__row > span { white-space: nowrap; }
-.ag-work__row > span small { margin-left: 6px; font-size: 12px; color: var(--muted); }
 /* 窗口窄时三张卡占满一行、按周的图挪到下面，免得“总工时”一字一行、型号被截断 */
 @media (max-width: 1280px) { .ag-workgrid { grid-template-columns: minmax(0, 1fr); } .ag-workgrid > div:last-child { max-width: 560px; } }
 

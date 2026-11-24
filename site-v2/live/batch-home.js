@@ -180,8 +180,8 @@
       return { tone, head: cardTitle('智能体', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`, body:
         // 后台这一块没给今天的数（today 为空）：不画“··”免得像还在加载，写明没送到、最近一次是几点读到的（主持 11-24 06:12）
         (v.noToday ? `<div class="b6-big"><strong>今天的数还没送到</strong>${v.at ? `<span class="b6-big__aside">最近一次记录于 ${esc(v.at)}</span>` : ''}</div>`
-          // 这句点进智能体页“三家干了多少”那块（#hours），不预先选哪一家（M738）
-          : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/#hours'))}">今天三家干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
+          // 这句点进智能体页“三家干了多少”那块（#hours），时间直接选“今天”和这里对得上（?hours=today），不预先选哪一家（M738）
+          : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
         <p class="b6-foot b6-foot--split">${ruleLine(`规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
