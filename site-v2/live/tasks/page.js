@@ -280,6 +280,7 @@
     for (const [id, s] of sections) if (!groups.has(id)) s.el.hidden = true;
     const vendor = sections.get('vendor'), disabled = sections.get('disabled');
     const besideVendor = vendor && disabled && !vendor.el.hidden && !disabled.el.hidden;
+    board.el.classList.toggle('task-pair', !!besideVendor);
     if (besideVendor && vendor.el.nextElementSibling !== disabled.el) vendor.el.after(disabled.el);
     const tail = [...board.el.children].filter(el => !el.hidden).at(-1);
     for (const s of sections.values()) {
