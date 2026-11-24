@@ -1332,10 +1332,12 @@
       const ribbonWidth = ribbon.clientWidth || $('weave').clientWidth - parseFloat(ribbonCss.left) - parseFloat(ribbonCss.right);
       return Math.max(V.chartWidth(card?.querySelector('.grp__main')) || heroWidth || 0, g.key === 'long' ? 0 : ribbonWidth || 0);
     };
-    chartsWatch = window.watchComputerChartViewport(wanted, (g, read) => V.watchChart('computer/charts', g.group, g.key === 'long' ? '24h' : span, () => width(g), {
+    const noteHost = g => board.cards().find(card => card.dataset.key === g.key)?.querySelector('.card__body');
+    chartsWatch = window.watchComputerChartViewport(wanted, (g, read) => {
+      const watch = V.watchChart('computer/charts', g.group, g.key === 'long' ? '24h' : span, () => width(g), {
       link(state) {
         read(state.data != null || state.phase === 'none' || state.phase === 'gone');
-        U.blockNote(board.cards().find(card => card.dataset.key === g.key)?.querySelector('.card__body'), state);
+        U.blockNote(noteHost(g), state);
       },
       phase: state => keepWeavePosition(() => {
         if (state.data != null) return;
@@ -1353,7 +1355,10 @@
         renderTags();
         if (computer) renderGrafana();
       }),
-    }));
+      });
+      // 收起订阅时已经连上了：这块上次挂的“旧数”说明一起收走，不留到连上以后（M741）。
+      return { stop() { watch.stop(); if (!window.Live?.offline?.()) U.blockNote(noteHost(g), null); } };
+    });
     updateChartTargets();
   }
   for (const b of rangeButtons) {

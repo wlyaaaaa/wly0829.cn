@@ -234,7 +234,7 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   await client.get('home'); lapse();
   const slow = await client.get('home');
   assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
-  // 浏览器真断网才算整页连不上：访客数据清掉，只用备用包的元数据
+  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；没读到过的只用备用包的元数据
   sandbox.navigator = {onLine: false};
   await client.get('home');
   assert.equal((await client.get('projects')).data, null);
@@ -249,9 +249,9 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.ok(requested.includes('https://assets.example.test/policy-9.json'));
   assert.ok(requested.includes('https://assets.example.test/policy-10.json'));
   const edge = await client.get('home');
-  assert.equal(edge.data, null);
-  assert.equal(edge.meta.rev, 'metadata-' + audience);
-  assert.deepEqual(shown, ['safe', undefined]);
+  assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
+  assert.match(edge.text, / · 下面是 .+ 的数据。$/);
+  assert.deepEqual(shown, ['safe']);
   paused = true;
   assert.equal((await client.get('home')).publicPaused, true);
   assert.deepEqual([stored.get(owner), stored.get(token)], ['owner', 'example']);
