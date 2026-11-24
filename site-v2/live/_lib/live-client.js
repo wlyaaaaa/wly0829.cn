@@ -229,9 +229,13 @@
   const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
   const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
+  // 根首页副屏（screen）读到过数以后一直读不到新的：超过这份读数自己的过期时限（后台给的 stale_after，副屏 180 秒）还没读到，
+  // 就和一打开就读不到一样算连不上：小签、按钮上的橙点、四格留着数标“截止”，不再一直当“这次刷新慢了”（M734）。
+  const screenGone = e => e.resource === 'screen' && Number.isFinite(e.freshAt)
+    && Date.now() - e.freshAt >= (Number(e.data?.stale_after) > 0 ? Number(e.data.stale_after) : 180) * 1000;
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
-    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback')) {
+    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback' || screenGone(e))) {
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
       // 一算连不上就马上取备用包的时刻，不再等失败后 15 秒那一下（M608）。
       const f = e.failure;
@@ -241,7 +245,7 @@
       }
     } else if (isMain(e)) {
       // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
-      // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号；后台明确撤回照旧立刻清。
+      // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号（根首页副屏另有上面那条时限）；后台明确撤回照旧立刻清。
       if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
@@ -772,11 +776,11 @@
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); freshArrived(e); e.fallbackNote = '';
+        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.fallbackNote = '';
         observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
-        freshArrived(e);
+        freshArrived(e); e.freshAt = Date.now();
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
         // 公网回来的是弱标签 W/"live-…"；弱标签也要认出后台实例，否则后台重载后旧标签页停在旧数上
