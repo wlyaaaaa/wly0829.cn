@@ -59,14 +59,11 @@
     if (!data?.items?.length) return null;
     return { key: 'weekly-new', title: `这周新能办的事 · ${data.week.from} — ${data.week.to}`, html: data.items.map(it => `<p class="knowledge-prose">${link(it.href, it.change)}<small>可以这样说：${e(it.say)}</small></p>`).join('') };
   }
-  function beforeAfter(data, stamp) {
-    if (!data?.before?.length || !data.after?.length) return null;
-    const rows = [...data.before, ...data.after], values = key => rows.map((r, i) => (key === 'before' ? i < data.before.length : i >= data.before.length) ? r.value == null ? null : r.value / 60 : null);
-    return { key: 'before-after', title: data.title, html: paragraph(data.change), after: paragraph(data.skipped) + paragraph(data.note) + paragraph(`数据截至 ${stamp(data.as_of)}`), chart: { labels: rows.map(r => ({ text: r.date.slice(5), title: r.date })), values: { before: values('before'), after: values('after') } }, series: [{ id: 'before', label: '改前', hue: '#8b9690' }, { id: 'after', label: '改后', hue: '#00A650' }], unit: '分' };
-  }
-  function showcase(data, viewer, stamp) {
+  // 电脑心电图“11-15 那批采集修复前后”那张卡拿掉了（前端手写、一次性，本人 11-25 选 A）。
+  // 私塾“可以拿来讲的作品”只留作品和链接：后台手写的说明里全是写死、不会更新的数，连同“数据截至”那行都不摆（本人 11-25 选 A）。
+  function showcase(data, viewer) {
     if (viewer !== 'owner' || !data?.items?.length) return null;
-    return { key: 'showcase', title: '可以拿来讲的作品', html: data.items.map(it => `<p class="knowledge-prose">${link(it.open, it.title)} · ${e(it.kind)}<small>${e(it.note)}</small></p>`).join('') + paragraph(data.gap) + paragraph(data.at && `数据截至 ${stamp(data.at)}`) };
+    return { key: 'showcase', title: '可以拿来讲的作品', html: data.items.map(it => `<p class="knowledge-prose">${link(it.open, it.title)}${it.kind ? ` · ${e(it.kind)}` : ''}</p>`).join('') };
   }
   function rulesLengthDelta(delta) {
     if (!delta || ![delta.charter, delta.topics, delta.total].every(finite)) return '';
@@ -152,6 +149,6 @@
     if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
   window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
-    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'timeaudit' && beforeAfter(source.beforeAfter, stamp), id === 'career-development' && showcase(proj.showcase, viewer, stamp), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
+    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase, viewer), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();
