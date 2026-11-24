@@ -170,6 +170,7 @@
             reading.done(); finish(true);
             if (d.rewrite === 'pending' && itemText(d) != null && itemText(d) !== '') target.insertAdjacentHTML('afterbegin', `<p class="row__line">${U.fieldHtml(d.text && typeof d.text === 'object' ? { ...d, ...d.text } : d, { kind: viewer })}${d.at ? ` · ${U.date(d.at)} ${U.time(d.at)}` : ''}</p>`);
             if (d.origin && !d.origin.href && U.originName(d.origin, d)) target.insertAdjacentHTML('beforeend', `<p class="row__sub">来源：${U.fieldHtml({ ...d.origin, text: U.originName(d.origin, d) }, { kind: viewer })}</p>`);
+            if (!row.querySelector('.item-source')) target.insertAdjacentHTML('beforeend', runSource(d));
             if (d.closed) target.insertAdjacentHTML('beforeend', `<p class="row__sub">${U.fieldHtml(closedText(d), { kind: viewer })} · ${U.date(d.closed.at)} ${U.time(d.closed.at)}</p>${d.closed.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(d.closed.to)))}">看并入的事 ›</a>` : ''}`);
           },
         });
@@ -177,6 +178,8 @@
       btn.addEventListener('click', () => row.classList.toggle('is-expanded', btn.getAttribute('aria-expanded') === 'true'));
     }
   }
+  // 这张卡是哪一轮自动任务弄出来的：后台 automation_runs 写明了才写，点了到那一轮；老卡没写的不按标题、时间去猜（本人 11-24 定的来回的路）
+  const runSource = it => { const runs = window.LiveRuns?.sources(it, viewer) || []; return runs.length ? `<p class="row__sub item-source">来源：${runs.map(r => r.href ? `<a href="${esc(route(r.href))}">${esc(r.label)} ›</a>` : esc(r.label)).join('、')}</p>` : ''; };
   const sourceAt = data => Object.hasOwn(data, 'source_at') ? data.source_at : data.at;
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
   const selected = new Set(), selectable = new Map();
@@ -268,7 +271,7 @@
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });
     const detail = shared && (note === shared || note.startsWith(`${shared} · `)) ? note.slice(shared.length + 3) : note;
-    return { key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
+    return { key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${runSource(it)}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });

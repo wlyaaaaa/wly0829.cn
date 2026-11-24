@@ -35,8 +35,10 @@
 .lg-board { position: relative; --text: 560px; --gap: 28px; }
 .lg-head, .lg-item { display: grid; grid-template-columns: var(--text) minmax(0, 1fr); gap: var(--gap); }
 .lg-head { padding-bottom: 6px; border-bottom: 1px solid var(--tp-line); }
-.lg-axis { position: relative; height: 18px; }
+.lg-axis { position: relative; height: 18px; container-type: inline-size; }
 .lg-axis span { position: absolute; top: 0; translate: -50% 0; font-family: var(--mono); font-size: 11.5px; color: #6c6b64; white-space: nowrap; }
+/* 窄窗口（时间轴不到 360px 宽，比如 1024 宽）日期隔一个藏一个，免得挤成一串 */
+@container (max-width: 360px) { .lg-axis span:nth-child(even) { display: none; } }
 .lg-list { margin: 0; padding: 0; list-style: none; }
 .lg-item { margin: 0 -10px; padding: 10px 10px; border-bottom: 1px solid var(--tp-hair); border-radius: 8px; transition: background .2s ease; }
 .lg-item:hover { background: #fafaf7; }
@@ -81,6 +83,9 @@
 .lg-settled li > a.tp-link { grid-column: 2; font-size: 13px; }
 .lg-settled time { grid-column: 3; grid-row: 1; font-family: var(--mono); font-size: 12.5px; color: #6c6b64; white-space: nowrap; }
 .lg-settled li.tp-empty { display: block; }
+/* 首页 AI 账本卡点进来的那几件（?view=）：标题下面一行小字写哪天记下、第几次看 */
+.lg-view__sub { display: block; font-size: 12.5px; line-height: 19px; color: #6c6b64; }
+.lg-view .lg-settled li > span > a { font-weight: 600; }
 .lg-done__foot { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
 .lg-done__foot .lg-more { margin-top: 6px; }
 .lg-detail { position: sticky; top: 84px; border-top: 3px solid var(--tp-green); }

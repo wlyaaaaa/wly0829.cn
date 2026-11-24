@@ -75,42 +75,28 @@
     const change = delta.total > 0 ? '多' : '少';
     return `比上一版${change} ${number(Math.abs(delta.total))} 字（约法 ${signed(delta.charter)}，专题 ${signed(delta.topics)}）`;
   }
-  const hasCorrectionHistory = data => data?.days?.length || data?.hook_days?.length;
   function rulesLength(rules) {
     return rules && [rules.charter, rules.topics, rules.total].every(finite) ? `开工要读的约法 ${number(rules.charter)} 字，专题 ${number(rules.topics)} 字，合计 ${number(rules.total)} 字` : '';
   }
-  function rulesLengthReading(metric, history) {
-    if (metric.id !== 'rules_length' || hasCorrectionHistory(history)) return '';
+  function rulesLengthReading(metric) {
+    if (metric.id !== 'rules_length') return '';
     const length = rulesLength(metric.value), comparison = length && rulesLengthDelta(metric.value.delta);
     return comparison ? `${metric.text || metric.value.text || length} · ${comparison}` : '';
   }
-  function corrections(data, metrics, stamp, viewer) {
-    if (!hasCorrectionHistory(data)) return null;
-    const rules = metrics.find(m => m.id === 'rules_length')?.value, length = rulesLength(rules);
-    const comparison = length && rulesLengthDelta(rules.delta);
-    const messages = data.refresh === 'archive';
+  // 规则仓项目页原来的“技能使用”“今天你跟 AI 说了几句”两块搬到智能体页（本人 11-24 02:45 选 B），这里只留一行链过去，带今天的两个数。
+  // 被拦不提：本人 03:00 取消了“AI 被拦”那块（拦下次数里多少是真违规、多少是检查太宽没人核过）。
+  function agentsMoved(talk, metrics, viewer) {
     const subject = viewer === 'owner' ? '你' : '本人';
-    const beijingDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' });
-    const todayCount = data.date === beijingDate.format(new Date()) && finite(data.total)
-      ? `${data.status === 'partial' ? '至少 ' : ''}${number(data.total)} 句` : '今天的消息数还没读到';
-    const html = (messages ? paragraph(todayCount) : '') + paragraph([length, comparison].filter(Boolean).join(' · '));
-    const dates = [...new Set([...(data.days || []).map(r => r.date), ...(data.hook_days || []).map(r => r.date)])].sort();
-    const daily = (rows, key) => dates.map(date => rows?.find(r => r.date === date)?.[key] ?? null);
-    const releases = date => (data.rule_releases || []).filter(r => r.at && r.basis === 'pointer_activated_at' && beijingDate.format(new Date(r.at)) === date).map(r => r.version).join('、');
-    const labels = dates.map((date, i) => {
-      const version = releases(date);
-      const tick = i === 0 || i === dates.length - 1 || (i % 7 === 0 && i < dates.length - 3);
-      return { text: tick ? date.slice(5) : '', title: `日期 ${date}${version ? ` · 生效 ${version}` : ''}` };
-    });
-    const quality = rows => dates.map(date => rows?.find(r => r.date === date)?.complete === false ? 'partial' : 'ok');
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date());
+    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : `今天${subject}说了几句`;
+    const week = ['claude', 'codex', 'antigravity'].map(host => metrics.find(m => m.id === `${host}_d7`));
+    const known = week.filter(m => finite(m?.value));
+    // Antigravity 只记得到能核实的技能原文件读取，三家合起来一律写“至少”
+    const used = known.length ? `近 7 天三家用技能 <b>${known.length < 3 || week[2] ? '至少 ' : ''}${number(known.reduce((n, m) => n + m.value, 0))}</b> 次` : '近 7 天三家用了多少技能';
     return {
-      key: 'rule-effect', title: messages ? `今天${subject}跟 AI 说了几句` : '规矩管不管用', html,
-      after: paragraph('拦截按记录项次计，同一动作可能记多项。') + paragraph(data.hook_bad_lines ? `有 ${data.hook_bad_lines} 行拦截记录损坏，次数不完整` : '') + paragraph(data.observed_at && `数据截至 ${stamp(data.observed_at)}`),
-      chart: { labels, values: { corrections: daily(data.days, 'total'), hooks: daily(data.hook_days, 'total') }, quality: { corrections: quality(data.days), hooks: quality(data.hook_days) } },
-      series: [
-        { id: 'corrections', label: messages ? '每天说的话（句）' : '本人纠正', unit: messages ? '句' : '次', hue: '#00A650' },
-        { id: 'hooks', label: messages ? '被拦记录（次）' : '被拦记录', hue: '#8b9690' },
-      ], unit: '次', axisUnit: messages ? '' : undefined,
+      key: 'agents-moved', title: '',
+      head: `<a class="pj-moved-head" href="/live/agents/">三家用技能、跟${subject}说了几句，都在智能体页 <span class="more__chev">›</span></a>`,
+      html: `<p class="pj-moved-line"><a href="/live/agents/#talk">${said} <span class="more__chev">›</span></a><span aria-hidden="true">·</span><a href="/live/agents/#skills-used">${used} <span class="more__chev">›</span></a></p>`,
     };
   }
   function external(data, stamp) {
@@ -144,20 +130,6 @@
     return { key: 'software-versions', title: '日用工具现在在用哪一版 · 台式机', html: data.items.map(r => `<p class="knowledge-prose">${e(r.name)} · ${e(r.version ?? '没有记录')}<small>安装或更新：${e(r.installed_or_updated_on ? stamp(r.installed_or_updated_on, 'date') : '没有记录')}</small></p>`).join('') + paragraph(data.at && `数据截至 ${stamp(data.at)}`) + paragraph(data.gap) + paragraph('只采到了台式机，笔记本和手机还没采到') };
   }
   const hasSkillUsage = data => !!data && (['top7', 'top30', 'unrecorded30'].some(key => Object.hasOwn(data, key)) || data.items?.some(row => 'antigravity_d30' in row));
-  function skillUsageSummary(data, href, stamp) {
-    const byName = new Map((data.items || []).map(row => [row.name || row.label, row]));
-    return [7, 30].map(days => {
-      const top = data[`top${days}`] ?? (Array.isArray(data.items) ? [...byName].map(([name, row]) => ({ name, count: row[`d${days}`] })).filter(row => row.count > 0).sort((a, b) => b.count - a.count) : null);
-      const rows = top?.slice(0, 5).map(({ name, count }) => {
-        const row = byName.get(name);
-        const claude = recorded(row?.[`claude_d${days}`], ' 次'), codex = recorded(row?.[`codex_d${days}`], ' 次');
-        const agy = row?.[`antigravity_d${days}`];
-        return `<li class="pj-kv__row"><span class="pj-kv__k">${e(name)}</span><span class="pj-kv__v"><b>${recorded(count, ' 次')}</b><small>Claude ${claude} · Codex ${codex} · Antigravity ${agy == null ? noRecord : `至少 ${recorded(agy, ' 次')}`}</small></span></li>`;
-      });
-      return `<div><p class="pj-skill-period">近 ${days} 天</p>${rows?.length ? `<ul class="pj-kv">${rows.join('')}</ul>` : paragraph(top == null ? noRecord : '0 项')}</div>`;
-    }).join('') + paragraph(`数据截至 ${data.at ? stamp(data.at) : noRecord}`) +
-      `<a class="more more--link" href="${e(href)}">全部技能 <span class="more__chev">›</span></a>`;
-  }
   function batchProgress(data, id, stamp) {
     const items = data?.items?.filter(it => it.project === id) || [], n = value => value == null ? '没有记录' : number(value);
     return items.length ? { key: 'batch-progress', title: '这一批处理到哪了', html: items.map(it => paragraph(`${it.name}：已完成 ${n(it.done)}／共 ${n(it.total)} · 还剩 ${n(it.remaining)} · 每分钟 ${n(it.rate_per_min)} · 预计完成 ${it.eta_at ? stamp(it.eta_at) : '没有记录'} · 正在干 ${it.current ?? '没有记录'}`) + paragraph([it.updated_at && `数据截至 ${stamp(it.updated_at)}`, it.gap].filter(Boolean).join(' · '))).join('') } : null;
@@ -175,24 +147,11 @@
   }
   function render(card, block, html, bars) {
     const options = { unit: card.unit, axisUnit: card.axisUnit, series: card.series, missingText: '—' };
-    if (card.key !== 'rule-effect') {
-      html(block.viz, card.html + (card.chart ? '<div style="overflow-x:auto"><div data-addition-chart style="min-width:0px"></div></div>' : '') + (card.after || ''));
-      if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
-      return;
-    }
-    // LiveUI.html 会递归对照子节点，说明和图分开更新才能保住柱图实例。
-    html(block.viz, '<div data-rule-effect-before></div><div data-addition-chart="rule-effect"></div><div data-rule-effect-after></div>');
-    const host = block.viz.querySelector('[data-addition-chart="rule-effect"]');
-    html(block.viz.querySelector('[data-rule-effect-before]'), card.html);
-    html(block.viz.querySelector('[data-rule-effect-after]'), card.after);
-    if (block.additionChart?.host !== host) block.additionChart = { host, viz: bars(host, options) };
-    const chart = block.additionChart, data = JSON.stringify(card.chart);
-    if (chart.data !== data) {
-      chart.viz.set(card.chart);
-      chart.data = data;
-    }
+    if (card.head) html(block.head, card.head);
+    html(block.viz, card.html + (card.chart ? '<div style="overflow-x:auto"><div data-addition-chart style="min-width:0px"></div></div>' : '') + (card.after || ''));
+    if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
-  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage, skillUsageSummary,
-    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'timeaudit' && beforeAfter(source.beforeAfter, stamp), id === 'career-development' && showcase(proj.showcase, viewer, stamp), id === 'agents' && corrections(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), stamp, viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
+  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
+    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'timeaudit' && beforeAfter(source.beforeAfter, stamp), id === 'career-development' && showcase(proj.showcase, viewer, stamp), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();

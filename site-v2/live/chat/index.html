@@ -26,6 +26,9 @@
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* 对话来自某一轮自动任务时，头卡里写“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，样子跟等你的事一样 */
+.item-source a { color:#00A650; font-weight:600; text-decoration:none; }
+.item-source a:hover { text-decoration:underline; }
 </style>
 <script src="/motion/motion.js"></script>
 <script src="/live/_lib/live-motion.js"></script>
@@ -42,6 +45,7 @@
     <div class="card__body">
       <p class="card__head" data-part="head"></p>
       <p class="row__sub" data-part="privacy" hidden></p>
+      <p class="row__sub item-source" data-part="source" hidden></p>
       <p class="route-head__meta" data-part="meta" hidden></p>
       <div class="route-head__row">
         <div class="route-say"><span class="route-say__icon" aria-hidden="true"></span><p class="route-say__text" data-part="say" data-clip="say" hidden></p><button type="button" class="route-clip__more" data-clip-for="say" hidden>展开</button></div>
@@ -93,6 +97,6 @@
 <script src="/header/topbar.js"></script>
 <script src="/live/_lib/live-light.js"></script>
 <script src="/live/_lib/live-route.js"></script>
-<script src="/live/chats/draw10.js"></script><script src="/live/chats/helper-purpose.js"></script><script src="/live/chat/page.js"></script>
+<script src="/live/_lib/live-runs.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/helper-purpose.js"></script><script src="/live/chat/page.js"></script>
 </body>
 </html>

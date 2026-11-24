@@ -28,9 +28,11 @@
   L.add(hero);
   const back = document.querySelector('[data-back]');
   let from = null;
-  try { const url = new URL(document.referrer); if (url.origin === location.origin && ['/live/', '/live/items/', '/live/ledger/', '/live/project/'].includes(url.pathname)) from = url; } catch {}
+  // 从哪进来就回哪：自动任务页、一轮的详情（“去那张卡 ›”“去账本那件 ›”点进来的）也认，返回回到那一轮
+  const runPage = url => url.pathname.startsWith('/live/automation/') && (url.searchParams.has('run') || /\/run\/$/.test(url.pathname));
+  try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/items/', '/live/ledger/', '/live/project/', '/live/automation/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
   back.href = from ? from.pathname + from.search + from.hash : route(issue ? '/live/ledger/' : '/live/items/');
-  back.textContent = from ? ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 账本', '/live/project/': '项目' })[from.pathname] : issue ? 'AI 账本' : '等你的事';
+  back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 账本' : '等你的事';
   back.addEventListener('click', U.restoreBack);
   const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '这件事' });
   const detailsRead = U.reading($('rec'), { ghost: U.ghost.rows(4), slow: false });
@@ -105,6 +107,9 @@
     const timeSpent = d.closed ? (elapsed >= 0 ? `用了 ${elapsed < 60000 ? '不到 1 分钟' : U.minutes(Math.round(elapsed / 60000))}` : '') : d.kind !== 'know' && d.minutes != null ? `约 ${U.minutes(d.minutes)}` : '';
     const bits = [!dossier && kindLabel, typeof d.project_name === 'string' && d.project_name, issue && d.round != null && `第 ${d.round} 轮`, dossier && issue && d.age_days != null && `跟了 ${d.age_days} 天`, (issue || !dossier) && born && `${when(born)} 开始`, !dossier && d.due && `${when(d.due)} 前`, !issue && timeSpent].filter(Boolean);
     part('meta').hidden = !bits.length; U.html(part('meta'), bits.map(x => `<span>${U.fieldHtml(x)}</span>`).join(''));
+    // 等你的事：多一行“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，点了到那一轮；后台没写明哪一轮的老卡不写（本人 11-24 定的来回的路）
+    const runs = !issue && !privateItem && window.LiveRuns ? window.LiveRuns.sources(d, viewer) : [];
+    if (part('source')) { part('source').hidden = !runs.length; U.html(part('source'), runs.length ? `来源：${runs.map(r => (r.href ? `<a href="${esc(route(r.href))}">${esc(r.label)} ›</a>` : esc(r.label)) + (runs.length > 1 && r.action ? `<small>${esc(r.action)}</small>` : '')).join('、')}` : ''); }
     const check = d.origin?.last_check;
     const oldStamp = [d.stale_text, d.why].map(v => U.fieldText(v, viewer)).join(' ').match(/最近一次记录于\s*((?:\d\d-\d\d\s+)?\d\d:\d\d)/u)?.[1];
     let readout = d.status_subject ? d.why || d.stale_text : oldStamp && `事项状态上次记录于 ${oldStamp}`;
@@ -191,6 +196,7 @@
       $('raw').hidden = !raw.length; U.html($('raw-facts'), raw.join(''));
     }
     const eventBody = e => !e.text || [e.label, d.text, issue ? summary : d.closed?.text].includes(e.text) ? '' : e.text;
+    const runLink = s => { const text = `${esc(s.name)}${s.who ? `（${esc(s.who)}）` : ''}`; return s.href ? `<a class="run-link" href="${esc(route(s.href))}">${text} ›</a>` : text; };
     const eventReadings = new Map();
     const sameEvent = new Set();
     const usefulHistory = historyRows.filter(e => {
@@ -209,7 +215,10 @@
       if (e.private_count) return { key: e.key, cls: 'run', html: U.privateSummary(e.private_count) };
       const { actor = '', extra = '' } = eventReadings.get(e) || {};
       const body = eventBody(e);
-      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"><b>${say(e.label || OUT[e.outcome] || EVENT[e.event] || '进展')}</b>${actor}</span></p>${body ? runOut(body) : ''}${extra}` };
+      // 这一步是哪个 AI、哪一轮：“自动修理第 2 轮（GPT-6.2 Sol xhigh）›”，点了到那一轮（后台在这一步或 automation_runs 里写明了才有）
+      const own = e.automation_run && window.LiveRuns?.sources({ automation_runs: [e.automation_run] }, viewer)[0];
+      const runAt = own ? `<small class="issue-event-actor">${runLink(own)}</small>` : '';
+      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"><b>${e.run ? runLink(e.run) : say(e.label || OUT[e.outcome] || EVENT[e.event] || '进展')}</b>${actor}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
     });
     U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText("经过")}</p>` }], { animate: !first });
     U.list($('events-rest'), events.slice(firstRun), { animate: !first });
@@ -257,6 +266,11 @@
     if (record?.previous && !rows.some(e => e.at === record.previous.at && e.outcome === record.previous.outcome)) rows.push(record.previous);
     if (record?.wait) rows.push({ ...record.wait, id: record.id, state: 'waiting', label: '在等' });
     if (record?.accepted && !rows.some(e => e.at === record.accepted && (e.event === 'Add' || /^(开始|登记)/u.test(e.label)))) rows.push({ at: record.accepted, label: '开始' });
+    // 账本一件事的经过：哪几轮自动任务动过它（后台 automation_runs 写明的），各占一步，写清哪个 AI、哪一轮，点了到那一轮
+    if (issue && window.LiveRuns) for (const run of Array.isArray(record?.automation_runs) ? record.automation_runs : []) {
+      const s = window.LiveRuns.sources({ automation_runs: [run] }, viewer)[0];
+      if (s && run.at && !rows.some(e => e.automation_run?.run_id && e.automation_run.run_id === run.run_id)) rows.push({ at: run.at, event_id: `run:${run.category}:${run.run_id}`, run: s, label: s.name, text: s.action ? `${s.action}这件事` : '' });
+    }
     historyRows = [...new Map(rows.map(e => [e.event_id || `${e.id}:${e.at}:${e.event || e.label || ''}:${e.text}:${e.outcome || ''}`, e])).values()].sort((a, b) => Date.parse(b.at || 0) - Date.parse(a.at || 0));
     const latest = historyRows.find(e => e.id === current?.id && (e.state || e.outcome));
     if (!detail && current && latest?.at && Date.parse(latest.at) >= Date.parse(current.accepted)) record = { ...record, state: latest.state || record.state, ...(latest.outcome ? { outcome: latest.outcome, outcome_text: latest.text } : {}) };

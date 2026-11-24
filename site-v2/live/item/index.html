@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="/live/_lib/live-dossier.css">
 <link rel="stylesheet" href="/motion/motion.css">
 <script src="/motion/motion.js"></script>
-<style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}.rec-meta>span{white-space:normal;overflow-wrap:anywhere}.is-unavailable .head__lead{font-size:14px;line-height:22px;color:var(--muted)}</style>
+<style>.rec-meta>span,.run__when,.trust-note,.btn{white-space:nowrap}.row__title,.rec-fact dt{word-break:keep-all}.rec-acts{gap:10px;flex-wrap:wrap}.rec-meta>span{white-space:normal;overflow-wrap:anywhere}.is-unavailable .head__lead{font-size:14px;line-height:22px;color:var(--muted)}.dossier__hero .rec-source{margin-top:6px}.rec-source a{color:#00A650;font-weight:600;text-decoration:none}.rec-source a:hover{text-decoration:underline}.rec-source small{margin-left:6px}</style>
 </head>
 <body class="page page--live page--l3" data-record="item">
 <header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
@@ -33,6 +33,7 @@
         <div class="dossier__lead" data-part="lead" hidden></div>
         <button class="more dossier__unfold" type="button" id="lead-more" aria-expanded="false" hidden></button>
         <p class="rec-meta" data-part="meta" hidden></p>
+        <p class="rec-meta rec-source" data-part="source" hidden></p>
       </div>
     </div>
   </article>
@@ -91,6 +92,7 @@
 <script src="/header/topbar.js"></script>
 <script src="/live/_lib/live-light.js"></script>
 <script src="/live/_lib/live-dossier.js"></script>
+<script src="/live/_lib/live-runs.js"></script>
 <script src="/live/item/page.js"></script>
 </body>
 </html>
