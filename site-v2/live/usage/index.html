@@ -73,6 +73,8 @@
 .page--usage .use-where :is(.vz-rank__row--private,.vz-rank__row--empty) { display:block; }
 .page--usage .use-windows .vz-rank__row { grid-template-columns: minmax(0,1fr) 88px 42px; }
 .page--usage .use-windows .vz-rank__name { grid-column: 1; }
+/* 窗口标题排行：窗口名整句显示，放不下就换行，不截成“…”（M760） */
+.page--usage .use-windows :is(.vz-rank__name, .vz-rank__label) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .page--usage .use-windows .vz-rank__v { grid-column: 2; }
 .page--usage .use-windows .use-rank-pct { grid-column: 3; }
 .page--usage .use-windows .vz-rank__row--private { min-height: 0; }
