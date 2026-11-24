@@ -12,12 +12,30 @@
   const protection = s => s.protection ?? D.protection(s.g?.retired === true ? { ...s, g: null } : s);
   const hasBackupProblem = state => ['gap', 'local_copy_no_cloud', 'stale'].includes(state);
   const TIER = { success: ['complete', '齐了'], mostly_successful: ['mostly', '大部分成功'], partial_success: ['partial', '部分成功'], failed: ['failed', '备份失败'] };
-  const attention = s => !['complete', 'waiting'].includes(D.protection(s));
+  // 20 类资料按重要性固定排（本人 11-25 选的 A），总表、左栏、右栏都照这个顺序，不再按状态或副本日期挪：
+  // 丢了找不回的 → 自己做的和记下的 → 重装电脑和 AI 时用的 → 旧存档和能重新下载的。后台新加的类排最后，更新网站时照重要性排进来（docs/update.md 第九节）
+  const IMPORTANCE = [
+    'password_center_recovery_sets', 'personal_data', 'personal_media', 'wechat', 'documents_and_local_saves',
+    'g_projects', 'timeaudit', 'ai_usage_ledger', 'codex_conversations', 'clipboard_history',
+    'core_recovery_context', 'recovery-kit', 'devconfig', 'system_images', 'local_toolbox', 'software_environment',
+    'other_ai_memory', 'codex_memory', 'g_software', 'downloads_personal_data',
+  ];
+  const byImportance = (list, key = x => x.id) => list.map((x, i) => [x, IMPORTANCE.indexOf(key(x)), i])
+    .sort((a, b) => (a[1] < 0 ? IMPORTANCE.length : a[1]) - (b[1] < 0 ? IMPORTANCE.length : b[1]) || a[2] - b[2]).map(([x]) => x);
+  // 总表每格最后画成什么（状态、字），左栏“为什么”和右栏“副本旧了”照它说，和总表同一个说法
+  const cells = new Map(), cellOf = (id, key) => cells.get(`${id}:${key}`);
+  const BAD = ['stale', 'gap', 'mostly', 'partial', 'failed'];
+  // 后台恢复说明换成人话；没对上的原样显示
+  const PLAIN = [[/软件没有列出取回了哪些文件/, '没记取回了哪些文件'], [/恢复结果存在选定的还原目录旁，没有集中记录/, '从这里恢复的文件放在你选的目录旁，没有统一记录'],
+    [/现有记录只覆盖文件恢复操作，离线整机还原没有可查的记录/, '离线整机还原不留记录，这里查不到']];
+  const plain = text => typeof text === 'string' ? PLAIN.find(([re]) => re.test(text))?.[1] : undefined;
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
   const bar = U.topbar({ ask: () => `请看实况备份：${headline || U.collectionText()}。请说明现在的情况。` });
   L.add(hero); U.fold($('more'), $('rest-box')); document.querySelector('[data-back]').href = route('/live/#backups');
+  // 右栏每类小标题右边的“展开／收起”：状态记在按钮的 aria-expanded 上，刷新重画时保留
+  $('points').addEventListener('click', e => { const btn = e.target.closest('.backup-toggle'); if (btn) btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true')); });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
@@ -36,25 +54,37 @@
     if (s ? Array.isArray(group?.points) && !D.partial(group, 'points') : !D.partial(d, 'restore')) return '没有恢复点';
     return '已读清单未列出恢复点';
   };
-  function recovery(list) { const restored = list.map(pt => pt.restored_at).filter(Boolean).sort().at(-1), from = list.map(pt => pt.history_from).filter(Boolean).sort()[0]; return restored ? `最近一次恢复 ${stamp(restored)}` : from ? `从 ${U.date(from)} 起没有整机恢复过` : ''; }
   // 后端已确认等待与暂缓互不重叠；相加后只展示一个“在等”数。
   const waiting = cloud => { const values = ['waiting', 'stable'].map(k => cloud?.[k]).filter(n => n != null); return { count: values.length ? values.reduce((sum, n) => sum + n, 0) : null, q: values.length < 2 || D.partial(cloud, 'waiting') || D.partial(cloud, 'stable') ? 'partial' : 'ok' }; };
   const gap = item => offline() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|未读/.test(item?.gap || '') ? '' : item?.q === 'partial' && item.gap ? `<small>${U.fieldHtml(item.gap, { name: '备份说明', place: 'body', kind: viewer })}</small>` : '';
   const actionHtml = s => { const list = s.actions?.length ? s.actions : [{ kind: 'copy', label: '问情况', intent: 'ask' }]; return U.actions(s, list).replace(/<(button|a)\b([^>]*data-(?:act|open)="(\d+)"[^>]*)>/g, (tag, kind, attrs, i) => list[i].kind === 'open' || /^(我办完了|不办了|晚点提醒|在电脑上打开|打开对话|打开汇报|Grafana)/.test(list[i].label || '') ? `<${kind}${attrs} data-needs-pc>` : tag); };
   const emptyWord = value => /^(?:没有记录|未记录|不适用|—)$/.test(sp(U.fieldText?.(value, viewer) ?? value).trim());
-  const bits = list => list.filter(Boolean).map(text => `<span class="backup-bit">${U.fieldHtml(text, { name: '备份说明', place: 'body', kind: viewer })}</span>`).join(' · ');
+  // 左栏只列要留意的几类：总表里有一格标了颜色（副本旧了、这轮没备全或失败），或后台判了有备份问题
+  const noticed = s => !s.private_count && (hasBackupProblem(protection(s)) || ['g', 'h', 'drive', 'photos'].some(k => BAD.includes(cellOf(s.id, k)?.state)));
+  // 一句为什么：先说出问题的去处，再说哪里已备好、哪里没核实；字和总表那一格同一个说法
+  function whyLine(s) {
+    const problems = [], fine = [], unchecked = [];
+    for (const key of ['g', 'h', 'drive', 'photos']) {
+      const c = cellOf(s.id, key); if (!c) continue;
+      const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => Number.isInteger(v);
+      if (c.state === 'stale') problems.push(`${where}副本旧了${copy.content_at ? `，停在 ${stamp(copy.content_at).trim()}` : ''}`);
+      else if (c.state === 'mostly') problems.push(`${where}这轮大部分成功${n(o.failed) ? `，${o.failed} 份没备上` : ''}`);
+      else if (c.state === 'partial') problems.push(`${where}这轮部分成功${n(o.ok) && n(o.failed) ? `，备上 ${o.ok} 份、没备上 ${o.failed} 份` : ''}`);
+      else if (c.state === 'failed') problems.push(`${where}这轮备份失败`);
+      else if (c.state === 'gap') problems.push(`${where}${c.label}`);
+      else if (c.state === 'complete') fine.push(where);
+      else if (c.state === 'unknown' && (key === 'g' || key === 'h')) unchecked.push(where);
+    }
+    const tail = [fine.length && `${fine.join('、')}已备好`, unchecked.length && `${unchecked.join('、')}没核实`].filter(Boolean);
+    return problems.length ? esc(problems.join('；') + (tail.length ? `，${tail.join('；')}` : '')) : '';
+  }
   function setRow(s, d) {
     if (s.private_count) return { key: s.key || s.id, cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.privateSummary(s.private_count, { unit: '类资料' })}</p>` };
-    const destinations = Object.keys(names).filter(k => s[k] != null && s[k].required !== false), copies = destinations.filter(k => s[k]?.content_at).sort((a, b) => Date.parse(s[a].content_at) - Date.parse(s[b].content_at)), latest = copies.at(-1), ps = points(d, s.id);
     const state = U.status(s, { small: true, cover: d }), name = U.fieldHtml(s.name, { name: '备份资料', place: 'title', kind: viewer }), nameNote = U.fieldHtml(s.name, { name: '名称', place: 'body', kind: viewer });
-    const active = s.g?.retired === true ? { ...s, g: null } : s;
-    const status = [D.protection(active) === 'unknown' ? '' : D.backupText(active), s.bytes == null ? '' : D.count(s, 'bytes', U.gb)].filter(Boolean).join(' · ');
-    const where = destinations.length ? destinations.map(k => names[k]).join('、') : offline() ? '' : U.collectionText();
-    const restore = ps.length ? `${ps.length} 个恢复点 · 最近 ${stamp(ps.map(pt => pt.at).filter(Boolean).sort().at(-1))}` : '';
-    const sub = [bits([where ? `去处 ${where}` : '', latest ? `${latest === 'local' ? '本机内容日期' : '已读副本内容日期'} ${stamp(s[latest].content_at)}` : '', restore]), state.note, nameNote !== name ? nameNote : ''].filter(Boolean).join(' · ');
-    const category = protection(s), marks = new Set(attention(s) ? ['is-attention', `attention-${category}`] : []);
+    const sub = [whyLine(s) || state.note, nameNote !== name ? nameNote : ''].filter(Boolean).join(' · ');
+    const category = protection(s), marks = new Set(['is-attention', `attention-${category}`]);
     if (hasBackupProblem(category)) marks.add('attention-gap');
-    return { key: s.id, cls: ['row row--flat', ...marks].join(' '), html: `${state.tone === 'green' ? '' : state.lamp}<div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${name} <span class="more__chev">›</span></a><span class="row__meta">${esc(status)}</span></p>${sub ? `<p class="row__sub">${sub}</p>` : ''}</div><div class="row__acts">${actionHtml(s)}</div>` };
+    return { key: s.id, cls: ['row row--flat', ...marks].join(' '), html: `${state.tone === 'green' ? '' : state.lamp}<div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${name} <span class="more__chev">›</span></a></p>${sub ? `<p class="row__sub">${sub}</p>` : ''}</div><div class="row__acts">${actionHtml(s)}</div>` };
   }
   function mergedTable(d, confirmedH, emptySets) {
     const field = (value, name) => U.fieldHtml(value, { name, place: 'body', kind: viewer });
@@ -103,7 +133,7 @@
       const problem = state => ({
         failed: cloud ? '上传失败' : original ? '原件读取失败' : '备份失败',
         missing: original ? '已确认原件缺失' : '已确认没有副本',
-        stale: original ? '原件记录已过期' : '副本已过期', partial: original ? '只核实部分原件' : '只核实部分副本',
+        stale: original ? '原件记录已过期' : '副本旧了', partial: original ? '只核实部分原件' : '只核实部分副本',
       })[state];
       const anomaly = problem(copy?.failed > 0 && !['missing', 'stale'].includes(current) ? 'failed' : current);
       const refresh = batchFailed ? 'failed' : copy?.refresh_state ?? (s.read_error === true ? 'failed' : '');
@@ -124,10 +154,11 @@
       const waitNote = inQueue && pending.count > 0 ? `${prior ? '上次仍有' : '还有'} ${D.transferCount(pending, 'count', key)}待传` : '';
       const unconfirmed = cloud && copy?.sent != null && copy.total > copy.sent && !copy.failed && current !== 'failed' && !waitNote
         && !D.partial(copy, 'sent') && !D.partial(copy, 'total') ? `尚未确认上传 ${copy.total - copy.sent} ${D.transferUnit(key)}` : '';
-      const hLabel = confirmed ? '上次确认有副本' : copy?.required === true ? '已配置，副本待核实' : '副本待核实';
-      const label = retired ? '已停用，保留旧副本' : anomaly || (original ? (originalConfirmed ? '已确认有原件' : '未核实原件')
+      // 没核实的统一写“没核实”，下面一行写缺的是什么（M781）
+      const hLabel = confirmed ? '上次确认有副本' : '没核实';
+      const label = retired ? '已停用，保留旧副本' : anomaly || (original ? (originalConfirmed ? '已确认有原件' : '没核实原件')
         : cold ? hLabel : (historicalProblem && `上次记录：${historicalProblem}`) || waitNote || uploadNote
-          || ({ complete: '齐了', gap: '有缺', stale: '副本已过期', waiting: '在等', unknown: '副本状态待核实' })[state]);
+          || ({ complete: '齐了', gap: '有缺', stale: '副本旧了', waiting: '在等', unknown: '没核实' })[state]);
       const content = original ? '原件记录日期' : copy?.at_precision === 'h_recovery_set_published' ? '恢复集发布' : cloud ? '副本内容' : '副本内容日期';
       const detailNames = { eligible_at: '可传时间', sent: '已传数', total: '总数' };
       const details = Object.entries(detailNames).flatMap(([k, name]) => {
@@ -145,6 +176,8 @@
         (cold ? confirmed : historical && historical !== 'unknown') && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
+        // G、H 盘没核实又没有副本日期的，写明副本日期没登记（后台补上日期才判得了齐没齐）
+        !cloud && !original && state === 'unknown' && copy?.content_at == null && ({ not_recorded: '副本日期未登记', read_failed: '副本日期这次没读到' })[copy?.missing?.content_at?.reason_code ?? copy?.missing?.content_at],
         cloud && !(batchFailed && refresh === 'failed') && refreshLabels[refresh]];
       // 后台给了这份副本这一轮的状态（如“本轮大部分成功，有文件跳过”）就照它写、不再绿色“齐了”；没给照旧（M607）
       const told = state === 'complete' && copy?.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
@@ -153,11 +186,16 @@
       const tier = (key === 'g' || cold) && (told || anomaly === problem('failed')) && TIER[copy?.outcome?.state];
       if (tier) {
         const o = copy.outcome, counts = ['mostly', 'partial'].includes(tier[0]) && Number.isInteger(o.ok) && Number.isInteger(o.failed) ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
-        return cell(tier[0], tier[1], [told !== tier[1] && told, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+        // 没备全、失败的那一档，后台给的这一轮说明（如“这轮未备份……”）也写上
+        const said = !told && copy.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
+        cells.set(`${s.id}:${key}`, { state: tier[0], label: tier[1] });
+        return cell(tier[0], tier[1], [told !== tier[1] && told, said, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
       }
+      cells.set(`${s.id}:${key}`, { state: told ? 'gap' : state, label: told || label });
       return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
     };
-    const sets = U.mergePrivateRows(U.order((d.sets || []).filter(s => s.name), attention, 'backups'), { value: s => s.name, kind: viewer });
+    cells.clear();
+    const sets = U.mergePrivateRows(byImportance((d.sets || []).filter(s => s.name)), { value: s => s.name, kind: viewer });
     const rows = sets.map(s => {
       if (s.private_count) return `<tr><td colspan="10">${U.privateSummary(s.private_count, { unit: '类资料' })}</td></tr>`;
       const state = U.status(s, { small: true, cover: d }), ps = points(d, s.id).sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
@@ -240,29 +278,47 @@
     if (unavailable) { headline = missing(); U.html($('head'), U.status(d).lamp + U.head(headline, { lamp: false })); U.html($('note'), wrapSummary(U.status(d).note)); $('note').hidden = !U.status(d).note; L.tone(hero, d); if (offline()) homeRead.done(); else homeRead.set({ phase: 'none', data: null }); $('coverage').textContent = ''; return; }
     const emptySets = d.summary?.sets === 0 || d.q === 'ok' && d.sets?.length === 0 && !Object.hasOwn(d.summary || {}, 'sets');
     mergedTable(d, summary(d), emptySets);
-    const sets = U.mergePrivateRows(U.order((d.sets || []).filter(s => s.name), attention, 'backups'), { value: s => s.name, kind: viewer });
-    const rows = sets.length ? sets.slice(0, 5).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('每类资料的副本'));
-    if (d.verification && !sets.some(s => s.id === 'recovery-kit')) rows.push({ key: 'verification', cls: 'row row--flat', html: `<span></span><a class="row__title" href="${esc(route('/live/backup/?id=recovery-kit'))}">恢复材料校验 ›</a>` });
-    U.list($('sets'), rows); U.list($('rest'), sets.slice(5).map(s => setRow(s, d))); $('more').hidden = sets.length <= 5; U.html($('more'), `<span class="more__shut">还有 ${sets.length - 5} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
-    const seen = new Set(), notes = (...parts) => parts.filter(text => text && !seen.has(sp(text)) && seen.add(sp(text))).map(text => U.fieldHtml(text, { name: '恢复说明', kind: viewer })).join(' · ');
-    const restored = (d.restore || []).flatMap(group => {
-      const extra = notes(group.restore_sessions?.text, group.gap);
-      // 标题用和总表、详情页一样的资料名（如“系统盘整盘镜像”）；恢复点自己的范围另写“范围：…”，不拿它当名字。
-      const setName = (d.sets || []).find(s => s.id === group.set)?.name;
+    // 左栏：只列要留意的几类和一句为什么，其余几类一句话带过（本人 11-25 选 A，样子见 B1）
+    const all = byImportance((d.sets || []).filter(s => s.name)), picked = all.filter(noticed);
+    const sets = U.mergePrivateRows(picked, { value: s => s.name, kind: viewer });
+    const others = all.length - picked.length, unchecked = all.filter(s => !noticed(s) && protection(s) === 'unknown').length;
+    const restLine = !all.length ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
+    const tail = restLine ? [{ key: 'backup-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><p class="row__sub">${esc(restLine)}</p>` }] : [];
+    const rows = all.length ? sets.slice(0, 5).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));
+    if (d.verification && !all.some(s => s.id === 'recovery-kit')) rows.push({ key: 'verification', cls: 'row row--flat', html: `<span></span><a class="row__title" href="${esc(route('/live/backup/?id=recovery-kit'))}">恢复材料校验 ›</a>` });
+    U.list($('sets'), sets.length > 5 ? rows : [...rows, ...tail]); U.list($('rest'), sets.length > 5 ? [...sets.slice(5).map(s => setRow(s, d)), ...tail] : []); $('more').hidden = sets.length <= 5; U.html($('more'), `<span class="more__shut">还有 ${Math.max(sets.length - 5, 0)} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
+    // 右栏：最上面写最近一次恢复；每类一个小标题（右边“展开／收起”），下面只列能退回的日期；末尾说其余几类没有恢复点和恢复记录的去向（样子见 B2）
+    const kindText = kind => kind === 'system' ? '整机恢复' : '文件恢复';
+    const groups = byImportance((d.restore || []).filter(g => g.points?.length || g.restore_sessions?.last_at), g => g.set);
+    const lastRestore = g => [[g.restore_sessions?.last_at, g.restore_sessions?.kind || g.kind, g.restore_sessions?.text], ...(g.points || []).map(pt => [pt.restored_at, g.kind])]
+      .filter(([at]) => Number.isFinite(Date.parse(at))).sort((a, b) => Date.parse(b[0]) - Date.parse(a[0]))[0];
+    const latest = groups.map(g => [g, lastRestore(g)]).filter(([, r]) => r).sort((a, b) => Date.parse(b[1][0]) - Date.parse(a[1][0]))[0];
+    const setName = g => (d.sets || []).find(s => s.id === g.set)?.name ?? g.name;
+    const nameHtml = (g, place) => U.fieldHtml(setName(g) || kindText(g.kind) + '点', { name: '备份资料', place, kind: viewer });
+    const restored = [];
+    if (groups.length) {
+      const [g, r] = latest || [], said = r?.[2] && plain(r[2]);
+      const what = r ? `${esc(stamp(r[0]).trim())} · ${nameHtml(g, 'body')} · ${kindText(r[1])}${said ? `（${esc(said)}）` : ''}` : '没有恢复过的记录';
+      const raw = r?.[2] && !said ? `<p class="row__sub">${U.fieldHtml(r[2], { name: '恢复说明', kind: viewer })}</p>` : '';
+      restored.push({ key: 'restore-latest', cls: 'row row--flat backup-latest', html: `<span></span><div class="row__text"><p class="row__main">最近一次恢复：<span class="row__meta">${what}</span></p>${raw}</div>` });
+    }
+    for (const g of groups) {
       // 和详情页一样新的在前（M419）
-      const newest = [...(group.points || [])].sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
-      const rows = U.mergePrivateRows(newest, { value: pt => pt.scope || pt, kind: viewer }).map((pt, i) => {
-        if (pt.private_count) return { key: pt.key, cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.privateSummary(pt.private_count)}</p>` };
-        const title = U.fieldHtml(setName || pt.scope || (group.kind === 'system' ? '整机恢复点' : '文件恢复点'), { name: setName ? '备份资料' : '备份范围', place: 'title', kind: viewer });
-        const scope = setName && pt.scope && sp(U.fieldText(pt.scope, viewer)) !== sp(U.fieldText(setName, viewer)) ? `范围：${U.fieldHtml(pt.scope, { name: '备份范围', place: 'body', kind: viewer })}` : '';
-        return { key: pt.id, cls: 'row row--flat', html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(group.set)}&point=${encodeURIComponent(pt.id)}`))}">${title}</a><span class="row__meta">${group.kind === 'system' ? '整机恢复' : '文件恢复'}</span></p><p class="row__sub">${[`能退回 ${esc(stamp(pt.at))}`, scope, esc(recovery([pt])), notes(pt.gap), pt.id === group.points?.[0]?.id ? extra : ''].filter(Boolean).join(' · ')}</p></div>` };
-      });
-      if (!rows.length && extra) rows.push({ key: `restore-history:${group.set}:${group.kind}`, cls: 'row row--flat', html: `<span></span><p class="row__sub">${extra}</p>` });
-      // 右栏每类先露最近一份（能退回到哪天），更早的收进“展开”，不再比左栏长出一大截（空白扫描 1123）
-      const first = 1;
-      if (rows.length <= first) return rows;
-      return [...rows.slice(0, first), { key: `restore-more:${group.set}:${group.kind}`, cls: 'backup-more', html: `<details><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rows.length - first} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="rows list">${rows.slice(first).map(row => `<li class="${row.cls}">${row.html}</li>`).join('')}</ul></details>` }];
-    });
+      const newest = U.mergePrivateRows([...(g.points || [])].sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0)), { value: pt => pt.scope || pt, kind: viewer });
+      const dates = newest.map((pt, i) => `<li${i ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
+        : `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>`}</li>`).join('');
+      const own = lastRestore(g), from = g.points?.map(pt => pt.history_from).filter(Boolean).sort()[0];
+      const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : '没有恢复过的记录';
+      const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
+      const toggle = newest.length > 1 ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${newest.length - 1} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
+      restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${line ? `<p class="row__sub">${line}</p>` : ''}</div>` });
+    }
+    if (groups.length) {
+      const without = (d.sets || []).filter(s => s.name && !groups.some(g => g.set === s.id && g.points?.length)).length;
+      const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text))
+        .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
+      restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
+    }
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });
     U.html($('coverage'), coverage); $('coverage').hidden = !coverage;
