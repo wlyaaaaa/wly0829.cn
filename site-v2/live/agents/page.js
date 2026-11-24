@@ -159,11 +159,21 @@
   const stats = (d, h) => d.work_stats?.hosts?.[h.id] || {};
   // 有派单却一件开工都没记下，是采集没采上，不是没干活（本人 11-23 08:11：“我最近肯定是和 antigravity 有对话的”）
   const missing = (d, h) => { const w = stats(d, h).work || {}; return !d.work_stats || w.starts === 0 || w.starts == null; };
+  // 最上面一行“全部”：三家合起来准不准，和三家同一种写法、字更大（本人 16:35 照图点头）。件数按各家的件数加起来，比例按件数重算，不是三个百分比取平均
+  function accuracyAll(d) {
+    const rows = HOSTS.filter(h => !missing(d, h)).map(h => stats(d, h).estimate || {}).filter(e => e.samples && known(e.accuracy));
+    const n = rows.reduce((s, e) => s + e.samples, 0);
+    if (!n) return '';
+    const hits = rows.reduce((s, e) => s + Math.round(e.accuracy * e.samples), 0);
+    const timed = rows.every(e => known(e.on_time)) ? rows.reduce((s, e) => s + Math.round(e.on_time * e.samples), 0) / n : null;
+    return `<div class="ag-acc__row ag-acc__row--all${only ? ' ag-dim' : ''}"><span class="tp-hostname">全部</span><div><p class="tp-big">${big(hits / n * 100, 'acc-all')}<small>%</small></p>
+      <p class="tp-small">${known(timed) ? `<span>按时 <b>${pct(timed)}</b></span>` : ''}<span>${int(n)} 件</span></p></div></div>`;
+  }
   function accuracyColumn(d) {
-    return `<div class="ag-acc">${HOSTS.map(h => {
+    return `<div class="ag-acc">${accuracyAll(d)}${HOSTS.map(h => {
       const e = stats(d, h).estimate || {};
       const body = missing(d, h) || !e.samples ? `<p class="tp-mid" data-tone="off">${esc(missing(d, h) ? '还没采上' : '没有完工记录')}</p>`
-        : `<p class="tp-big">${big(e.accuracy * 100, 'acc-' + h.id)}<small>%</small></p><p class="tp-small">按时 <b>${pct(e.on_time)}</b> · ${int(e.samples)} 件</p>`;
+        : `<p class="tp-big">${big(e.accuracy * 100, 'acc-' + h.id)}<small>%</small></p><p class="tp-small"><span>按时 <b>${pct(e.on_time)}</b></span><span>${int(e.samples)} 件</span></p>`;
       return `<div class="ag-acc__row${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
     }).join('')}</div>`;
   }
@@ -209,11 +219,12 @@
     const other = hosts.reduce((s, h) => { const r = stats(d, h).estimate?.overtime_reasons || {}; return s + (r.other || 0) + (r.unknown || 0); }, 0);
     const total = hosts.reduce((s, h) => s + (stats(d, h).estimate?.overtime_reasons?.overdue || 0), 0);
     const max = Math.max(1, ...rows.map(r => r.parts.reduce((s, p) => s + p.n, 0)));
+    // 图例挪到标题下面（照 16:35 点头的图），看得出它管这一整块；柱子行距放宽一点，和右边“三种估法”分量匀一些（本人：“右多左少”）
     return `<p class="tp-sub">超时原因 <small>${only ? `${hosts[0]?.name || ''} ` : ''}超时共 ${int(total)} 件；“中途加需求”可能和别的原因同时算${other ? `，另有 ${int(other)} 件没写或写了别的原因` : ''}</small></p>
-      <div class="tp-bars">${rows.map(r => { const sum = r.parts.reduce((s, p) => s + p.n, 0); return `<div class="tp-bar"><span>${r.label}</span>
+      ${chips()}
+      <div class="tp-bars ag-reasons">${rows.map(r => { const sum = r.parts.reduce((s, p) => s + p.n, 0); return `<div class="tp-bar"><span>${r.label}</span>
         <span class="tp-bar__track"><span class="ag-stack" style="width:${sum / max * 100}%">${r.parts.filter(p => p.n).map(p => `<span class="tp-bar__fill" style="--fill:${p.h.color};flex:${p.n}">${p.n}</span>`).join('')}</span></span>
-        <span class="tp-bar__num">${int(sum)}</span></div>`; }).join('')}</div>
-      ${chips()}`;
+        <span class="tp-bar__num">${int(sum)}</span></div>`; }).join('')}</div>`;
   }
   // 三种估法各对上几件。本人 11-23：先别写“谁更准”；原来的“程序 29%”其实是“全按中等大小算”的对照，不是开工时程序真推荐的。
   // 读后台 work_stats.estimate_baselines：{ scope, samples, rows:[{id, hits, samples, basis}], hosts:{<家>:{rows}} }，
@@ -233,9 +244,22 @@
         <p class="tp-small">后台正在把这三个数分开算，每个带口径和件数；出数以前不比哪种更准。</p>`;
     }
     const share = r => r.hits / r.samples;
-    const bar = ([id, label]) => { const r = find(rows, id);
+    // 三条口径后半句往往一字不差（“与另两种估法同看 N 件，……不计。”）：每条下面只留各自不同的前半句，相同的后半句在底下写一次，
+    // 这一栏短下来，和左边“超时原因”分量匀一些（本人 16:35：“右多左少，看看能不能优化一下”）。不是普通文字或找不到相同的后半句，照原样每条写全
+    const split = (() => {
+      const texts = BASES.map(([id]) => find(rows, id)?.basis);
+      if (!texts.every(t => typeof t === 'string' && t)) return null;
+      let k = 0; const min = Math.min(...texts.map(t => t.length));
+      while (k < min && texts.every(t => t[t.length - 1 - k] === texts[0][texts[0].length - 1 - k])) k++;
+      const tail = texts[0].slice(texts[0].length - k), cut = tail.indexOf('，');
+      if (cut < 0 || tail.length - cut < 8) return null;
+      const heads = texts.map(t => t.slice(0, t.length - k + cut));
+      return heads.every(Boolean) ? { heads, tail: tail.slice(cut + 1) } : null;
+    })();
+    const bar = ([id, label], i) => { const r = find(rows, id);
+      const note = split ? F(split.heads[i], '口径') : r.basis ? F(r.basis, '口径') : '';
       return `<div class="ag-base${id === 'all_medium' ? ' is-ref' : ''}"><div class="tp-bar"><span>${esc(name(label))}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${id === 'all_medium' ? '#cfcdc5' : '#8f8d85'};width:${share(r) * 100}%"></span></span><span class="tp-bar__num">${int(r.hits)}/${int(r.samples)}</span></div>
-        ${r.basis ? `<p class="tp-small">${F(r.basis, '口径')}</p>` : ''}</div>`; };
+        ${note ? `<p class="tp-small">${note}</p>` : ''}</div>`; };
     const p = find(rows, 'program_at_start'), a = find(rows, 'ai_reported'), gap = a.hits - p.hits;
     const same = p.samples === a.samples, close = same && Math.abs(gap) <= Math.max(2, Math.round(p.samples * .03));
     const say = !same ? `两个数算的件数不一样（${int(p.samples)} 件对 ${int(a.samples)} 件），先不放在一起比。`
@@ -247,7 +271,7 @@
       <div class="tp-bars">${BASES.map(bar).join('')}</div>
       <p class="ag-say">${say}</p>
       ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span class="ag-perhost${dim(h.id)}"><span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}</span>`).join('<br>')}</p>` : ''}
-      <p class="tp-small">“全按中等大小算”只是对照：假设每件都按中等估，不是程序开工时真给的数。</p>`;
+      <p class="tp-small">${split ? `三种的口径一样：${F(split.tail, '口径')}<br>` : ''}“全按中等大小算”只是对照：假设每件都按中等估，不是程序开工时真给的数。</p>`;
   }
   function estimateSection(d) {
     const ws = d.work_stats;
@@ -416,23 +440,14 @@
       <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
   }
 
-  // —— 快讯：后台出 feed 就用；没出先拿这页已有的数拼 ——
+  // —— 快讯：只滚三家开工、完工（本人 16:35 照图点头）。“××检查拦下 1 次”这类不上快讯：拦下次数里多少是真违规拿不准，本人 03:00 定了不放；
+  // 钩子表每格的“拦 N 次”照旧。后台出 feed 就从里面挑开工、完工；没出先拿这页已有的“这周开工几件”拼 ——
+  const WORK_KINDS = new Set(['work_start', 'work_finish']);
   function feed(d) {
-    if (Array.isArray(d.feed)) return d.feed.map(r => ({ at: r.at, actor: U.fieldText(r.actor, viewer), text: U.fieldText(r.text, viewer), href: r.href, tone: r.tone }));
-    const rows = [];
-    for (const r of list(d.latest_context)) rows.push({ at: r.at, actor: r.host, text: `${NAMES[r.hook] || r.hook} 往 AI 眼前递了 ${int(String(r.text || '').length)} 字`, href: `#hooks-${STATION_OF[r.hook] || 'other'}`, tone: 'info' });
-    for (const p of list(d.health?.providers)) for (const i of list(p.issues)) rows.push({ actor: p.name, text: `${U.fieldText(i.text, viewer)}${i.handler ? ` · ${U.fieldText(i.handler, viewer)}在修` : ''}`, tone: 'repair', html: '' });
-    const e = HOSTS.filter(h => !missing(d, h)).map(h => ({ h, e: stats(d, h).estimate || {} }));
-    for (const { h, e: x } of e) if (x.samples) rows.push({ actor: h.name, html: `估得准 <em>${pct(x.accuracy)}</em> · 按时 ${pct(x.on_time)} · ${int(x.samples)} 件`, href: '#estimate', tone: x.accuracy >= .5 ? 'ok' : 'repair' });
-    for (const h of HOSTS) {
-      const c = checks(d, h);
-      rows.push({ actor: h.name, html: c.fail.length ? `<em>差 ${c.fail.length} 处</em> · ${esc(c.fail[0].text)}` : `<em>全对上</em> · ${c.total} 项照规矩`, href: '#status', tone: c.fail.length ? 'repair' : 'ok' });
-      const t = d.hook_stats?.totals?.[h.id];
-      if (known(t?.runs)) rows.push({ actor: h.name, text: `钩子近 7 天跑 ${int(t.runs)} 次，中位 ${ms(t.median_ms)}`, href: '#hooks', tone: 'info' });
-    }
+    if (Array.isArray(d.feed)) return d.feed.filter(r => WORK_KINDS.has(r.kind))
+      .map(r => ({ at: r.at, actor: U.fieldText(r.actor, viewer), text: U.fieldText(r.text, viewer), href: r.href, tone: r.tone }));
     const thisWeek = HOSTS.map(h => ({ h, w: list(stats(d, h).weeks).at(-1)?.work })).filter(r => r.w?.starts);
-    for (const { h, w } of thisWeek) rows.push({ actor: h.name, text: `这周开工 ${int(w.starts)} 件，干了 ${hours(w.actual_minutes)} 小时`, href: '#work', tone: 'info' });
-    return rows.sort((a, b) => (T.stamp(b.at) || 0) - (T.stamp(a.at) || 0));
+    return thisWeek.map(({ h, w }) => ({ actor: h.name, text: `这周开工 ${int(w.starts)} 件，干了 ${hours(w.actual_minutes)} 小时`, href: '#work', tone: 'info' }));
   }
 
   function draw() {
