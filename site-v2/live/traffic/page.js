@@ -12,6 +12,7 @@
   document.querySelectorAll('.l2-board .card').forEach(card => Light.add(card));
   let viewer = 'public', traffic = null, today = null, days = params.get('days') === '7' ? '7' : '1', watch = null, lit = false, trafficReads = [];
   let shownDays = days;
+  const rangeStatus = $('traffic-range-status');
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '海外流量' });
   const bytes = (n, lower = false, unit = 'B') => {
     if (!Number.isFinite(n)) return U.offline?.() ? '' : U.collectionText();
@@ -102,7 +103,7 @@
     const separate = U.separateTraffic(table?.separate && { ...table.separate, note: U.separateTrafficNote });
     if (!source.length && !separate) clearPrograms();
     const label = d?.window?.label || '';
-    const week = /近\s*[7七]/.test(label) || !/今天|今日/.test(label) && days === '7';
+    const week = /近\s*[7七]/.test(label) || !/今天|今日/.test(label) && shownDays === '7';
     const cutoff = [table?.cutoff_at, table?.at, d?.window?.to, d?.to, d?.measurement === 'attributed_proxy_counters' && d.at]
       .find(at => typeof at === 'string' && at.length > 10 && Number.isFinite(Date.parse(at)));
     const period = week ? '近 7 个自然日' : dayLabel(d?.to || cutoff);
@@ -185,7 +186,10 @@
     document.querySelectorAll('[data-days]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.days === days)));
     const resource = params.has('fixture') && days === '7' ? 'computer/traffic7' : 'computer/traffic';
     watch = window.Live.watch(resource, { days }, {
-      phase(s) { if (s.data == null && !traffic) { if (s.offline || ['none', 'gone'].includes(s.phase)) render(null); else trafficReads.forEach(r => r.set(s)); } },
+      phase(s) {
+        if (rangeStatus.textContent && ['ready', 'none', 'gone', 'paused'].includes(s.phase)) rangeStatus.textContent = '';
+        if (s.data == null && !traffic) { if (s.offline || ['none', 'gone'].includes(s.phase)) render(null); else trafficReads.forEach(r => r.set(s)); }
+      },
       data(d, meta) {
         if (viewer !== meta.viewer.kind) { clearPrograms(); viewer = meta.viewer.kind; }
         const shown = traffic != null; traffic = d; shownDays = days;
@@ -199,7 +203,13 @@
       },
     });
   }
-  document.querySelectorAll('[data-days]').forEach(b => b.addEventListener('click', () => { if (U.offline?.() || b.dataset.days === days) return; days = b.dataset.days; const url = new URL(location.href); url.searchParams.set('days', days); history.replaceState(null, '', url); read(); }));
+  document.querySelectorAll('[data-days]').forEach(button => button.addEventListener('click', () => {
+    if (U.offline?.() || button.dataset.days === days) return;
+    days = button.dataset.days;
+    rangeStatus.textContent = `正在读${button.textContent.trim()}…`;
+    const url = new URL(location.href); url.searchParams.set('days', days); history.replaceState(null, '', url);
+    read();
+  }));
   U.onBeijingDayChange(() => { if (today) renderHead(today); if (traffic) render(traffic); });
   read(); requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

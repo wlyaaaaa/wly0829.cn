@@ -20,6 +20,7 @@
 .page--traffic .l2-board .grp__chapter { min-width: 0; }
 .page--traffic .l2-board .grp__head { grid-template-columns: 22px minmax(0,1fr) auto; column-gap: 16px; }
 .page--traffic .l2-board .grp__acts { grid-column: 3; }
+.page--traffic .grp__acts .fog__note:not(:empty) { margin-inline-end: 10px; }
 .page--traffic #totals { margin: 0 0 12px; }
 .page--traffic #coverage { --gut: 0px; margin: 0 0 8px; }
 .page--traffic #coverage .row { padding: 0; border: 0; }
@@ -75,7 +76,7 @@
   <p class="pj-note" id="traffic-empty" hidden>这块没存下来，连上后补上。</p><div class="l2-board">
     <section class="card grp grp--quiet l2-col traffic-wide" data-pic="right" data-tone="none" data-mo-rise>
       <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/grp-network.webp" alt="" aria-hidden="true"><div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/grp-network.webp" alt=""></span><div class="card__body grp__body">
-      <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name">上传与下载</b><span class="grp__line panel-window" id="curve-window">近 24 小时 · 小时均值</span></span><span class="grp__acts"><span class="seg" role="group" aria-label="时间段"><button type="button" data-days="1" data-needs-pc aria-pressed="true">今天</button><button type="button" data-days="7" data-needs-pc aria-pressed="false">近 7 天</button></span></span></div>
+      <div class="grp__head"><span class="grp__lamp"></span><span class="grp__title"><b class="grp__name">上传与下载</b><span class="grp__line panel-window" id="curve-window">近 24 小时 · 小时均值</span></span><span class="grp__acts"><span class="fog__note" id="traffic-range-status" role="status"></span><span class="seg" role="group" aria-label="时间段"><button type="button" data-days="1" data-needs-pc aria-pressed="true">今天</button><button type="button" data-days="7" data-needs-pc aria-pressed="false">近 7 天</button></span></span></div>
       <div class="grp__chapter"><ul class="pj-figs" id="totals"><li class="pj-fig"><span class="pj-fig__k">上传</span><span class="pj-fig__v" id="upload-value"></span></li><li class="pj-fig"><span class="pj-fig__k">下载</span><span class="pj-fig__v" id="download-value"></span></li></ul><ul class="rows list" id="coverage" aria-label="读数范围"></ul>
         <div id="traffic-curve"></div><p class="pj-note" id="traffic-gap-note" hidden></p><div id="traffic-days"></div><p class="pj-note" id="days-note" hidden></p>
       </div>
