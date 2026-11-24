@@ -18,6 +18,7 @@
   const part = (name) => hero.querySelector(`[data-part="${name}"]`);
   const notices = $('notices');
   const rangePicker = $('usage-range');
+  const rangeStatus = $('usage-range-status');
   Light.add(hero);
   for (const a of document.querySelectorAll('.stage a[href^="/live/"]')) a.href = route(a.getAttribute('href'));
 
@@ -71,7 +72,7 @@
 
   let viewer = 'public', usage = null, rawUsage = null, at = null, drawnOffline = false;
   let shownRange = '72h';
-  const rangeLabel = () => rangePicker.querySelector('[aria-pressed="true"]').textContent;
+  const rangeLabel = (range = shownRange) => rangePicker.querySelector(`[data-range="${range}"]`).textContent;
   const block = (key, host, view) => V.block(host, view, () => usage, key);
 
   // —— 算几样：某状态每天多久、最长一段、和平常比 ——
@@ -711,6 +712,7 @@
   const usageCallbacks = {
     // 读前各章在雾里写“正在读…”（board 管），读完没数才写“还没读到”
     phase(state) {
+      if (rangeStatus.textContent && ['ready', 'none', 'gone', 'paused'].includes(state.phase)) rangeStatus.textContent = '';
       if (!rawUsage && state.data == null && !['none', 'gone'].includes(state.phase)) { heroRead.set(state); board.phase(state); }
     },
     data(raw, meta) {
@@ -744,7 +746,7 @@
       renderNotices(state);
       if (usage) renderLinks(usage);
       if (!usage && empty) {
-        const text = state.phase === 'gone' || state.meta.status >= 400 ? `${rangeLabel()}的使用时间暂时读不到` : state.text || U.collectionText('使用时间');
+        const text = state.phase === 'gone' || state.meta.status >= 400 ? `${rangeLabel(usageRange)}的使用时间暂时读不到` : state.text || U.collectionText('使用时间');
         U.html(part('head'), U.head(text, { lamp: false }));
         heroRead.done(); board.phase(state);
       }
@@ -883,6 +885,7 @@
     if (!button || button.dataset.range === usageRange) return;
     usageRange = button.dataset.range;
     for (const option of rangePicker.querySelectorAll('[data-range]')) option.setAttribute('aria-pressed', String(option === button));
+    rangeStatus.textContent = `正在读${button.textContent.trim()}…`;
     clearDeferredUsage();
     recoveryUsed = false;
     recovery = null;
