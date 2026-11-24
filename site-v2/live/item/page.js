@@ -285,14 +285,18 @@
       show(closedRound ? pastRound(closedRound, d) : d);
     });
   }
+  // 后台“登记事项”“核对事项”（Add / Review）这类纯流水对这件事没有信息，经过里不列，也不再补一条机械的“开始”“登记事项”顶替；
+  // 重新打开、关闭和真有内容的经过照列，换了一轮的“本轮开始”照补（M691，同等你的事页展开后的经过）
+  const LEDGER_ONLY = /^(?:登记事项|核对事项|事项已加入等你的清单)$/u;
+  const ledgerOnly = e => { const t = String((e.text && typeof e.text === 'object' ? e.text.text : e.text) ?? '').trim(); return !e.outcome && (LEDGER_ONLY.test(t) || !t && ['Add', 'Review'].includes(e.event)); };
   function itemHistory(d) {
     const born = d.episode_at || d.born, closed = d.closed;
     const sameAt = (a, b) => a === b || Date.parse(a) === Date.parse(b);
     const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: e.occurred_at || e.at,
       label: e.label || EVENT[e.event] || (/^(登记事项|重新打开事项|核对事项|关闭事项)$/u.test(e.text) ? e.text : '') }))
-      .filter(e => e.at || e.text !== '事项已加入等你的清单');
+      .filter(e => !ledgerOnly(e));
     const start = e => [e.label, e.text].some(t => /^(开始|本轮开始|登记|生成待办|重新打开|事项已加入等你的清单)/u.test(t));
-    if (born && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: !rows.length && !closed ? '开始' : d.episode_at ? '本轮开始' : '登记事项' });
+    if (born && d.episode_at && (rows.length || closed) && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: '本轮开始' });
     if (closed && !rows.some(e => sameAt(e.at, closed.at) && (e.kind && e.kind === closed.kind || e.event === 'Close' || /关闭|办完|了结|不办/u.test(e.label) || e.text && e.text === closed.text))) {
       rows.push({ at: closed.at, text: closed.text, label: CLOSED[closed.kind] || '已了结' });
     }
