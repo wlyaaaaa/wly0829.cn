@@ -229,13 +229,12 @@
   const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
   const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
-  // 根首页副屏（screen）读到过数以后一直读不到新的：超过这份读数自己的过期时限（后台给的 stale_after，副屏 180 秒）还没读到，
-  // 就和一打开就读不到一样算连不上：小签、按钮上的橙点、四格留着数标“截止”，不再一直当“这次刷新慢了”（M734）。
-  const screenGone = e => e.resource === 'screen' && Number.isFinite(e.freshAt)
-    && Date.now() - e.freshAt >= (Number(e.data?.stale_after) > 0 ? Number(e.data.stale_after) : 180) * 1000;
+  // 读到过数以后又读不到：偶发一两次只标“这次刷新慢了”；本页主数据连续三次读不到，而且这期间别的读口也没读到新的，
+  // 才算连不上（本人 R12；根首页副屏和实况各页同一条，M734、M741）。浏览器断网、心跳停、电脑关机照旧马上算。
+  const lostTouch = e => e.missCount >= 3 && !connectionEntries().some(other => other !== e && other.freshAt >= e.missSince);
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
-    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback' || screenGone(e))) {
+    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback' || lostTouch(e))) {
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
       // 一算连不上就马上取备用包的时刻，不再等失败后 15 秒那一下（M608）。
       const f = e.failure;
@@ -245,7 +244,7 @@
       }
     } else if (isMain(e)) {
       // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
-      // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号（根首页副屏另有上面那条时限）；后台明确撤回照旧立刻清。
+      // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号，或上面那条连续三次读不到；后台明确撤回照旧立刻清。
       if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
@@ -461,10 +460,8 @@
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
-    // 访客确认连不上时清掉已显示的数；根首页副屏（screen）例外：四格本来就是公开数，留着断开前的数、标上是几点的，和本人版一样（M608）。
-    // 已读的备份总表和计划任务名册也保留；备用包提供的名册是在断开时用的（M449、M473）。
-    const keepShown = ['screen', 'backups', 'tasks'].includes(e.resource) || e.source === 'fallback';
-    if (disconnected && fixture === null && (detail || e.viewer.kind === 'public' && !keepShown) && e.data !== null) forgetData(e, true);
+    // 连不上时已经显示的数一律留着、标上是几点的，不清正文：本人版访客版一样，单件详情也一样（本人 R12，M741）。
+    // 后台明确撤回、设备失效、暂停公开照旧清（见 failed、audience、pausePublication）。
     const observed = latestConnection();
     const link = disconnected ? (observed?.state === 'offline' ? observed : { ...e.link, state: 'offline', basis: 'browser' }) : e.link;
     const state = snapshot(e, link);
@@ -562,9 +559,11 @@
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
     if (!body?.link && !reachable && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
       e.missReason = reason; e.missStatus = status;
+      if (!e.missCount) e.missSince = Date.now();
+      e.missCount = (e.missCount || 0) + 1;
       if (globalThis.navigator?.onLine !== false) { awaitFresh(e); return; }
       freshArrived(e); // 浏览器断网时立刻挂；10 秒的等待从重新联网后那一读算起
-    } else freshArrived(e);
+    } else { freshArrived(e); e.missCount = 0; }
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
@@ -776,11 +775,11 @@
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.fallbackNote = '';
+        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.fallbackNote = '';
         observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
-        freshArrived(e); e.freshAt = Date.now();
+        freshArrived(e); e.freshAt = Date.now(); e.missCount = 0;
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
         // 公网回来的是弱标签 W/"live-…"；弱标签也要认出后台实例，否则后台重载后旧标签页停在旧数上
@@ -792,7 +791,6 @@
         observedConnection(e, hostOff ? { ...link, state: 'offline', reason: 'host-off' } : heartbeatStopped(link) ? { ...link, state: 'offline' } : link);
         e.warming = response.status === 202 || body?.q === 'warming';
         if (fixture === null && itemDetail(e) && e.link.state === 'offline' && e.viewer.device !== 'invalid') {
-          if (!wasFallback) forgetData(e, true);
           await retryFailure(e, retryCopy);
           settle(e);
           return emit(e);

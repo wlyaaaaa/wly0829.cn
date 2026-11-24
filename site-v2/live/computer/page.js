@@ -184,10 +184,12 @@
   const METRIC_ALIAS = { cpu: 'cpu-usage_percent', 'cpu-temp': 'cpu-temperature_celsius', memory: 'memory-used_bytes', 'memory-total': 'memory-total_bytes', 'net-down': 'download_bytes_per_second' };
   const stale = m => m?.q === 'stale' || m?.state === 'stale' || m?.stale === true;
   const restricted = m => m?.hidden || m?.hidden_block || m?.visibility === 'owner' || m?.public === 'owner' || m?.visibility === 'pending' || m?.rewrite === 'pending';
+  // 这页读到过、后来连不上：已经显示的即时读数照样留着、标“上次实测”几点，不按“没存下来”收走；冷开用的上次副本照旧（M741）。
+  const liveRead = () => offline() && lastState?.meta?.source === 'net';
   const metric = (id) => {
     const m = computer?.metrics?.find(m => m.id === id || m.id === METRIC_ALIAS[id]);
     const b = V.blockState(m, gfOff);
-    const keep = stale(m) || m?.read_error === true && Number.isFinite(m.value) && !!iso(m.at);
+    const keep = stale(m) || !!m && (m.read_error === true || liveRead()) && Number.isFinite(m.value) && !!iso(m.at);
     return m && { ...m, at: m.sampled_at ?? m.at, value: restricted(m) && (netViewer !== 'owner' || m.visibility === 'pending') ? m : (b?.empty || b?.wait) && !keep ? null : m.value };
   };
   const series = (id) => charts?.series?.find((s) => s.id === id) || null;
@@ -980,6 +982,14 @@
       const body = U.fieldHtml(text || empty, { name: NAME[t.key] }), marker = body.includes('live-mark');
       return `<i class="mach__pt" style="left:${pt[0]}%;top:${pt[1]}%"></i><${marker ? 'span' : 'a'} class="mach__tag${text ? '' : ' is-none'}"${offline() && !text ? ' hidden' : ''}${marker ? '' : ` href="#grp-${go}" data-goto="${go}"`} style="left:${Math.min(94, Math.max(12, at[0]))}%;top:${at[1]}%">${U.status(reading, { small: true }).lamp}${body}</${marker ? 'span' : 'a'}>`;
     }).join(''));
+    // 标签变长（比如连不上时多了“上次”）会往左伸进左栏、压住那边的字：左沿最多到左栏正文右沿外 16px，
+    // 再往左就把标签往右挪，右边不出卡片（留 12px）。在线时现有的标签都够不着这条线，位置不变（M741）。
+    const body = hero.querySelector('.card__body'), edge = body.getBoundingClientRect().right - parseFloat(getComputedStyle(body).paddingRight) + 16;
+    const right = hero.querySelector('.card__glass').getBoundingClientRect().right - 12;
+    for (const tag of part('tags').querySelectorAll('.mach__tag:not([hidden])')) {
+      const r = tag.getBoundingClientRect(), shift = Math.min(edge - r.left, right - r.right);
+      if (r.width && shift > 0) tag.style.left = `calc(${tag.style.left} + ${shift.toFixed(1)}px)`;
+    }
   }
 
   const PC = { main: 'main', secondary: 'sub', secondary_laptop: 'sub' };   // 连接电脑页上的哪一台
@@ -1040,7 +1050,8 @@
     let hardware = '';
     part('devs').classList.toggle('has-hardware', list.some(hasHardware));
     U.html(part('devs'), list.filter(x => !offline() || ['online', 'offline'].includes(x.state) || hasHardware(x) || laptopUnavailable(x)).map((x) => {
-      const state = laptopUnavailable(x) || (offline() && /^(电脑不在线|不在线)$/.test(x.text || '') ? '连不上' : x.text || DEV_STATE[x.state] || '');
+      // 页面连不上时台式机不写“在线”（那是断开前的旧状态，和顶上“连不上电脑”打架），用现成的“连不上”（M741）。
+      const state = laptopUnavailable(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
       const inner = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>${U.fieldHtml(state, { name: '设备状态', place: 'label' })}`;
       const pc = x.pc || PC[x.id];
       const detail = { phone: '/live/phone/', secondary_laptop: '/live/laptop/' }[x.id];
@@ -1332,10 +1343,12 @@
       const ribbonWidth = ribbon.clientWidth || $('weave').clientWidth - parseFloat(ribbonCss.left) - parseFloat(ribbonCss.right);
       return Math.max(V.chartWidth(card?.querySelector('.grp__main')) || heroWidth || 0, g.key === 'long' ? 0 : ribbonWidth || 0);
     };
-    chartsWatch = window.watchComputerChartViewport(wanted, (g, read) => V.watchChart('computer/charts', g.group, g.key === 'long' ? '24h' : span, () => width(g), {
+    const noteHost = g => board.cards().find(card => card.dataset.key === g.key)?.querySelector('.card__body');
+    chartsWatch = window.watchComputerChartViewport(wanted, (g, read) => {
+      const watch = V.watchChart('computer/charts', g.group, g.key === 'long' ? '24h' : span, () => width(g), {
       link(state) {
         read(state.data != null || state.phase === 'none' || state.phase === 'gone');
-        U.blockNote(board.cards().find(card => card.dataset.key === g.key)?.querySelector('.card__body'), state);
+        U.blockNote(noteHost(g), state);
       },
       phase: state => keepWeavePosition(() => {
         if (state.data != null) return;
@@ -1353,7 +1366,10 @@
         renderTags();
         if (computer) renderGrafana();
       }),
-    }));
+      });
+      // 收起订阅时已经连上了：这块上次挂的“旧数”说明一起收走，不留到连上以后（M741）。
+      return { stop() { watch.stop(); if (!window.Live?.offline?.()) U.blockNote(noteHost(g), null); } };
+    });
     updateChartTargets();
   }
   for (const b of rangeButtons) {
