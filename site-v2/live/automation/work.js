@@ -86,6 +86,9 @@
   };
   const readonly = id => id === 'ai-review' || id === 'ai-stalled';
   const readonlyNote = '<p class="aw-readonly">这一类只显示，不派人修</p>';
+  // 已撤的类（M802）：后台不再收它的开关和暂停，点了只回“已撤”，所以旧链接打开时不摆这两个按钮，只写已撤
+  const retired = id => id === 'improvements';
+  const retiredNote = '<p class="aw-readonly">这一类已撤，开关和暂停不再起作用，下面是撤之前的记录</p>';
   // 每类四句：管、比如、关了、不管（本人审定的原句，备份、软件和工具、规则和技能按定稿第六轮⑤改成白话）。
   const descriptions = {
     'computer': ["硬盘空间突然往下掉，内存守护没压住内存上涨，系统记录里的蓝屏、非正常关机、致命硬件和磁盘错误", "内存守护碰到打不开的进程就整轮停摆 → AI 改成跳过它接着查 → 重载后真跑不再报错才算好", "守护照常报警，页面上看得到，只是没人去查谁在狂写盘、吃内存", "电脑卡顿不派人修，只用来让不急的重活错开"],
@@ -185,7 +188,7 @@
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
-    const controls = readOnly ? readonlyNote
+    const controls = readOnly ? readonlyNote : retired(data.id) ? retiredNote
       : settingBar(data);
     const counters = stats([['在修', c.occupied ?? c.running, 'run'], ['等复查', c.followup, 'queue'], [`要${own()}`, c.owner, 'owner'], ['7 天修好', c.repaired, 'done']]);
     const art = ART[data.id] || hero;
