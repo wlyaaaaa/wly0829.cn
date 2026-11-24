@@ -1183,9 +1183,9 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
 .page--live .grp__said { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .page--live .grp__cutoff { flex: 0 1 auto; margin-left: auto; max-width: 65%; color: var(--muted); font-size: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .page--live .grp__cutoff:empty { display: none; }
-/* 本人版组头给全文，不截成“…”（本人 11-22 06:49）；访客版照旧一行 */
-html[data-live-viewer="owner"] .page--live .grp__line { flex-wrap: wrap; }
-html[data-live-viewer="owner"] .page--live :is(.grp__name, .grp__said, .grp__cutoff, .grp__status) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+/* 组头两版都给全文，放不下就折行，不截成“…”（本人 11-22 06:49 本人版；11-24 20:34“标题显示不全的算缺陷，类似的也算”） */
+html .page--live .grp__line { flex-wrap: wrap; }
+html .page--live :is(.grp__name, .grp__said, .grp__cutoff, .grp__status) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .page--live .grp__figs { grid-template-columns: repeat(var(--live-figure-count, 4), minmax(0, 1fr)); width: 548px; gap: 20px; }
 .page--live .grp__fig { width: 100%; grid-template-rows: 18px 30px 30px; }
 .page--live .grp__fig.is-bare { grid-template-rows: 18px 30px; }
