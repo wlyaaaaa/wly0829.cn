@@ -38,7 +38,7 @@
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
 .closed-peek { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 15.5px; line-height: 23px; color: var(--ink); text-decoration: none; }
-.closed-peek span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.closed-peek span { overflow-wrap: anywhere; }   /* 标题整句显示，放不下就换行，不截成“…”（M760） */
 .closed-peek time { color: var(--muted); }
 .trend-last { margin: 4px 0; font-size: 14px; }
 .needs-trend { width: 100%; height: 112px; overflow: visible; }
