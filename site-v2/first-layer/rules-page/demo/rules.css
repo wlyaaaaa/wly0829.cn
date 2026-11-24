@@ -87,6 +87,28 @@ body {
   color: var(--ink);
 }
 
+/* 访客读的是公开版：题目下醒目标“公开版”，有句子只给本人稿时再写一句；本人切回原文时这行收起（rules.js）。 */
+.rules-public-mark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--muted);
+}
+.rules-public-mark[hidden] { display: none; }
+.rules-public-mark__tag {
+  padding: 1px 12px;
+  border: 1px solid #00A650;
+  border-radius: 999px;
+  color: #00A650;
+  font-weight: 600;
+  letter-spacing: .08em;
+}
+
 /* —— 三列：左 4%–19%，中约 31%–68%，右 81%–95%（1920 宽时） —— */
 .rules-layout {
   display: grid;
