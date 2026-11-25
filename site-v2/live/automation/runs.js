@@ -60,7 +60,7 @@
     const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at || r.last_activity_at) : null);
     // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 outcome deferred，status 有时是 incomplete、有时是 completed。
     // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
-    // status 照后台原样，筛选“跑完的”“没做成的”仍按后台分。
+    // status 照后台原样；自动任务页“只看跑完的”“只看没做成的”两个筛选都不含暂缓的轮次（board.js）。
     const deferred = status !== 'running' && str(r.outcome) === 'deferred';
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
@@ -82,6 +82,15 @@
     const reason = F(r.reason, '原因') || '暂时不修', summary = F(r.summary, '结果'), thing = subjectShown && r.subject ? F(r.subject.title, '这件活') : '';
     if (!summary || thing && summary.includes(thing)) return reason;
     return summary.startsWith(reason) ? summary : `${reason}：${summary}`;
+  }
+  // 暂缓那一轮标题只写了原因（summary 里带着那件的名字，上面一条就只留原因）时，summary 里去掉那件名字和打头的“暂时不修”后剩下的说明；
+  // 标题已经照写了 summary 的、或者去掉后什么都不剩的，返回空。一轮页“这一轮做成了什么”拿它写（主控 11-25）
+  function deferredNote(r, F, subjectShown = false) {
+    const summary = F(r.summary, '结果'), thing = subjectShown && r.subject ? F(r.subject.title, '这件活') : '';
+    if (!summary || !thing || !summary.includes(thing)) return '';
+    let note = withoutSubject(summary, thing);
+    for (const lead of [F(r.reason, '原因'), '暂时不修']) if (lead && note.startsWith(lead)) note = note.slice(lead.length).replace(/^\s*[·:：。]\s*/, '');
+    return note;
   }
 
   // 后台的 summary 常把这件活的名字再写一遍（“转给你 · 收拾仓库……”“暂时不修 · 内存守护……。独立复核通过……”）。
@@ -164,5 +173,5 @@
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle, withoutSubject };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle, deferredNote, withoutSubject };
 })();

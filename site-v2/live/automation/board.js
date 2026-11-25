@@ -57,22 +57,56 @@
   let excerptToday, subs = [];
   function watchRuns() {
     for (const s of subs) s.stop();
-    subs = []; pages.clear(); excerptToday = undefined;
+    subs = []; pages.clear(); backPages.clear(); excerptToday = undefined;
     const date = filter.date ? dayOf(filter.date) : null;
     for (const id of IDS.filter(x => x !== 'excerpt')) {
-      subs.push(Live.watch('automation/runs', { category: id, date }, { phase(st) { pages.set(id, st); schedule(); } }));
+      subs.push(Live.watch('automation/runs', { category: id, date }, { phase(st) { pages.set(id, st); readBack(id, st); schedule(); } }));
     }
     subs.push(Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } }));
   }
   let queued = 0;
   const schedule = () => { if (!queued) queued = requestAnimationFrame(() => { queued = 0; draw(); }); };
 
+  // 近 72 小时：一类跑得多、第一页 50 轮没铺到 72 小时的边时，用读口现成的翻页（cursor）接着往后读，读到 72 小时以前那一轮为止（主控 11-25）。
+  // 第一页一换（来了新的一轮、换了本人版／公开版）就从头再翻一遍；某一批没读到就先照已读到的画，等第一页下次刷新再接着读
+  const backPages = new Map();
+  const lastAtOf = x => T.stamp(x?.last_activity_at || x?.finished_at || x?.started_at || x?.queued_at);
+  function readBack(id, st) {
+    const d = st?.data;
+    if (filter.date || !Array.isArray(d?.items)) { backPages.delete(id); return; }
+    const edge = Date.now() - 72 * 3600000, past = items => items.length > 0 && (lastAtOf(items.at(-1)) ?? Infinity) < edge;
+    const sign = `${st.viewer?.kind || ''}|${d.items[0]?.run_id}|${d.items.length}|${d.next ?? ''}`;
+    if (backPages.get(id)?.sign === sign) return;
+    const job = { sign, rows: [], done: d.next == null || past(d.items) };
+    backPages.set(id, job);
+    if (job.done) return;
+    (async () => {
+      const seen = new Set();
+      for (let next = d.next; next != null && !seen.has(String(next));) {
+        seen.add(String(next));
+        const s = await Live.get('automation/runs', { category: id, cursor: next }).catch(() => null);
+        if (backPages.get(id) !== job || !Array.isArray(s?.data?.items)) break;
+        job.rows.push(...s.data.items);
+        next = s.data.next;
+        if (next == null || past(s.data.items)) { job.done = true; break; }
+      }
+      if (backPages.get(id) === job) schedule();
+    })();
+  }
+
   // 七类的读数拼成一份：rows 是有的行；legacy=true 表示读口没装上、用的是老读数拼的
   function collect(d) {
-    const states = IDS.filter(x => x !== 'excerpt').map(id => pages.get(id));
+    const ids = IDS.filter(x => x !== 'excerpt'), states = ids.map(id => pages.get(id));
     const answered = states.filter(s => s && (s.data || s.meta?.status >= 400 || s.phase === 'none' || s.phase === 'gone'));
-    const got = states.map(s => R.page(s?.data, viewer)).filter(Boolean);
-    if (got.length) return { rows: got.flatMap(p => p.rows), legacy: false, waiting: answered.length < states.length, capped: got.some(p => p.more) };
+    const got = ids.map((id, i) => ({ id, p: R.page(states[i]?.data, viewer) })).filter(x => x.p);
+    if (got.length) {
+      // 第一页的行，接上往后翻到的行（同一轮只留一份）
+      const rows = [], keys = new Set();
+      for (const { id, p } of got) for (const r of [...p.rows, ...(filter.date ? [] : list(backPages.get(id)?.rows).map(x => R.run(x, viewer)))]) {
+        if (r.category && r.id && !keys.has(r.key)) { keys.add(r.key); rows.push(r); }
+      }
+      return { rows, legacy: false, waiting: answered.length < states.length, capped: got.some(({ id, p }) => p.more && (filter.date || !backPages.get(id)?.done)) };
+    }
     if (answered.length < states.length) return { rows: [], legacy: false, waiting: true };
     return { rows: R.fallback(d, viewer), legacy: true, waiting: false };
   }
@@ -100,7 +134,8 @@
   function view(d) {
     const got = collect(d);
     const rows = got.rows.filter(r => r.category !== 'excerpt' && inWindow(r)
-      && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status));
+      // 暂缓的轮次照暂缓显示，不算“跑完的”也不算“没做成的”（没有单独的“暂时不修”筛选，主控 11-25）
+      && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status && !r.deferred));
     const all = cards(rows), mine = c => !filter.category || c.category === filter.category;
     const live = all.filter(c => c.status === 'running');
     const problems = filter.family || filter.date || (filter.status && filter.status !== 'incomplete') ? [] : problemsOf(d, live);

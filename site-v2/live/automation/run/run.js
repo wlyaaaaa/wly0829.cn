@@ -34,7 +34,8 @@
     const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : R.withoutSubject(F(r.summary, '这一轮做了什么'), thing) || '跑完了';
-    return lead && tail ? `${lead}：${tail}` : lead || tail;
+    // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
+    return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
   }
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
@@ -73,7 +74,9 @@
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
-    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。' : r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
+    // 暂缓那一轮：标题只写了“暂时不修”时，summary 里剩下的说明写在这里，不说成“没做出东西”（主控 11-25）
+    const note = r.deferred ? R.deferredNote(r, F, !!r.subject) : '';
+    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? (note ? `暂时不修，等下一次检查再看。${note}` : '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。') :r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
       : r.outputCount > 0 ? `做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。` : '这一轮没做出要记下的东西。';
     return `${rows ? `<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
   }
