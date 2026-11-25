@@ -110,6 +110,10 @@
     if (reportsData) renderReports(reportsData);
     if (saved?.length) { drawClosed(); followLanded(); }
   });
+  // 还没确认的那几次（M945，主持 11-26 01:24）：读回来的退出记录里有这件、时刻不早于点的时候（留两分钟钟差），或晚点提醒的这件换了新版本到了“你放着”，就是办成了
+  const foundWrite = (item, intent, since) => intent === 'later'
+    ? collections.get('later')?.items?.find(it => it.id === item.id && !it._landed && it.item_version !== item.item_version)
+    : closedItems.find(it => it.id === (intent === 'close_report' ? item.owner_item || item.item_id || item.item || item.id : item.id) && Date.parse(it.closed?.at) >= since - 120000);
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -332,6 +336,7 @@
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });
+    if (viewer === 'owner' && (key === 'closed' || key === 'later')) U.settleItemWrites?.(foundWrite);
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
     if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);

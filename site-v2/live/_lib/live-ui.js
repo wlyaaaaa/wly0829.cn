@@ -737,6 +737,27 @@
   function keepWriting(rows, entry) {
     try { const all = writingItems(); for (const item of rows) { if (entry) all[item.id] = { ...entry, row: item }; else delete all[item.id]; } localStorage.setItem(WRITING_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
   }
+  // “还没确认”的那几次：页面读回来的清单里看到这件的退出记录（晚点提醒是这件换了新版本到了“你放着”），就照后台读数把回执改成办成了。
+  // 用的是后台读数，不是先当成功（主持 11-26 01:24）。页面传 found(件, 办法, 点的时刻) 进来，找到就回读到的那条
+  const watching = new Set();
+  let lastFound = null;   // 页面上回传进来的 found：刚记下“还没确认”时，清单可能早已读回来了，先拿它对一遍
+  function settleItemWrites(found = lastFound) {
+    if (!found) return;
+    lastFound = found;
+    for (const watch of [...watching]) {
+      if (Date.now() - watch.since > WRITING_KEEP) { watching.delete(watch); continue; }
+      const hits = watch.unsure.map(item => [item, found(item, watch.intent, watch.since)]).filter(([, row]) => row);
+      if (hits.length) watch.settle(hits);
+    }
+  }
+  // 还在等的这几次照办理回查的节奏接着重读清单（前一分钟每 3 秒，之后每 15 秒，最多两分半），每读回来一次 settleItemWrites 对一遍；之后跟着页面平常的重读
+  let followTimer = 0;
+  function followWatching() {
+    clearTimeout(followTimer);
+    const now = Date.now(), noted = [...watching].map(w => w.noted).filter(at => now - at < 150000);
+    if (!noted.length || !lastFound) return;
+    followTimer = setTimeout(() => window.Live.refresh().finally(followWatching), now - Math.min(...noted) < 60000 ? 3000 : 15000);
+  }
   // 写回、跟查到真结果、弹回执。resume：回到页面接着查上回那一次，只按那次的提交编号查，不另起一笔。
   async function saveItems(rows, intent, { trigger = null, extra = '', complete = () => {}, resume = null } = {}) {
     const wording = CONFIRM_ITEM[intent], live = window.Live, lane = document.getElementById('item-action-receipts'), started = resume?.at ?? Date.now();
@@ -768,7 +789,7 @@
         saved.push(...result.saved); failed.push(...result.failed); Object.assign(receipts, result.receipts);
         pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
       }
-      const left = rows.filter(item => !saved.includes(item.id)), unsure = left.filter(item => !failed.some(f => f.item === item));
+      const unsure = rows.filter(item => !saved.includes(item.id) && !failed.some(f => f.item === item));
       // 结果不明的留着，下回打开这页接着按同一次操作查；保存上和没保存上的不再记。回到页面查过一回的也不再记：再查也查不到新东西，每次打开都弹同一句就成了打扰
       keepWriting(resume ? rows : rows.filter(item => !unsure.includes(item)), null);
       rememberSaved(rows.filter(item => saved.includes(item.id)));
@@ -776,19 +797,36 @@
       const detail = saved.length === 1 && rows.length === 1 && trigger?.closest('.dossier-card');
       const state = detail && detail.querySelector('[data-part="state"]');
       if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
+      // 回执照现在知道的结果写；清单读回来看到“还没确认”那几件办成了，再照读数改写一遍（settleItemWrites）
+      const show = () => {
+      const left = rows.filter(item => !saved.includes(item.id));
       // 晚点提醒几点再提醒照后台回执说（回执的 until，没有就用后台回话里的“X月X日 10:00 再提醒”），后台没说就不写几点
       const remind = intent === 'later' && [...new Set(saved.map(id => receipts[id]).map(r => r?.until ? `${date(r.until).split('-').map(Number).join('月')}日 ${time(r.until)}` : String(r?.message || '').match(/(\d{1,2}月\d{1,2}日 \d{1,2}:\d{2}) 再提醒/)?.[1] || ''))];
       const savedText = remind ? '已放到你放着' + (remind.length === 1 && remind[0] ? `，${remind[0]} 再提醒` : '') : wording.saved;
-      if (!left.length) receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
+      if (!left.length) { watching.delete(watch); receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) }); }
       else {
         // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”
         const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
           unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + (resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：' + (rows.length > 1 ? '不见了的就是办成了，还在的可以再点一次。' : '这件不见了就是办成了，还在可以再点一次。') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
         const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
         receipt.set('fail', head,
-          { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
+          { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => { watching.delete(watch); saveItems(left.map(latestItem), intent, { trigger, complete }); } });
       }
+      };
+      // “还没确认”只是还不知道，不是没保存上；读到这件已经办成，就算保存上，回执跟着改（晚点提醒用读到的提醒时刻）
+      const watch = { intent, since: started, noted: Date.now(), unsure, settle(hits) {
+        for (const [item, row] of hits) {
+          unsure.splice(unsure.indexOf(item), 1); saved.push(item.id);
+          if (intent === 'later' && row.act_from) receipts[item.id] = { until: row.act_from };
+        }
+        keepWriting(hits.map(([item]) => item), null);
+        show(); complete(hits.map(([item]) => item.id));
+        if (!unsure.length) watching.delete(watch);
+      } };
+      if (unsure.length) watching.add(watch);
+      show();
       complete(saved);
+      if (unsure.length) { settleItemWrites(); followWatching(); }
       await live.refresh();
     } finally {
       rows.forEach(item => itemWrites.delete(item.id));
@@ -1743,5 +1781,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();
