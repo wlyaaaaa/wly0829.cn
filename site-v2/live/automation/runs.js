@@ -58,9 +58,10 @@
     const r = raw || {}, category = str(r.category), status = ['running', 'completed', 'incomplete'].includes(r.status) ? r.status : 'unknown';
     const who = whoOf(r.worker), started = r.started_at || r.queued_at;
     const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at || r.last_activity_at) : null);
-    // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 incomplete + outcome deferred。
-    // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。status 照后台原样，筛选“没做成的”仍按后台分。
-    const deferred = status === 'incomplete' && str(r.outcome) === 'deferred';
+    // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 outcome deferred，status 有时是 incomplete、有时是 completed。
+    // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
+    // status 照后台原样，筛选“跑完的”“没做成的”仍按后台分。
+    const deferred = status !== 'running' && str(r.outcome) === 'deferred';
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
       key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
@@ -111,7 +112,8 @@
     const site = h => typeof h === 'string' && h.startsWith('/live/') ? T.path(h) : '';
     return { ...base,
       why: d.why_text,
-      timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
+      // 暂缓那一轮的“暂时不修”一步是灰点：后台对记成没做成的给 warn（这里落成灰），记成跑完的却给 ok（绿），这里一律落成灰（主控 11-25）
+      timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
       receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
@@ -145,7 +147,7 @@
         if (r.category === 'excerpt' || r.legacy) continue;
         const actor = title(r.category), what = r.subject ? `${text(r.subject.title)}${r.subject.round ? ` 第 ${r.subject.round} 轮` : ''}` : text(r.summary);
         if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(what || '这一轮')}</span>`, href: r.href, tone: 'ok' });
-        if (r.status === 'completed' && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
+        if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
         if (r.deferred && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>暂时不修</em>：${U.esc(text(r.summary).replace(/^暂时不修\s*[·:：]\s*/, '') || '等下一次检查')}</span>`, href: r.href, tone: 'info' });
         else if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
       }

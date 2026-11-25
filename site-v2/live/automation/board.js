@@ -158,11 +158,11 @@
       if (r.status === 'running') title = what;
       else {
         head = `<p class="au-card__cat">${catLabel(d, c.category)} · ${what}</p>`;
-        title = r.status === 'incomplete' ? endText(r, true) : result(r);
+        title = r.status === 'incomplete' || r.deferred ? endText(r, true) : result(r);
       }
       const earlier = c.rounds.filter(x => x !== r);
       if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮 · ` : ''}${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : result(x)} ›</a>`).join('')}</p>`;
-    } else if (r.status === 'incomplete') title = endText(r);
+    } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = F(r.activity, '正在干什么');

@@ -88,7 +88,7 @@
       if (T.stamp(r.queuedAt) && T.stamp(r.startedAt) && T.stamp(r.startedAt) - T.stamp(r.queuedAt) > 60000) steps.push({ at: r.queuedAt, text: `${T.clock(r.queuedAt)} 排上`, tone: 'info' });
       if (T.stamp(r.startedAt)) steps.push({ at: r.startedAt, text: `${T.clock(r.startedAt)} ${r.resumes ? '接着做' : '开始'}`, tone: 'ok' });
       if (r.status === 'running') steps.push({ at: r.lastAt, text: `正在${U.fieldText(r.activity, viewer).replace(/^正在/, '') || '跑'}`, tone: 'live' });
-      if (r.status === 'completed' && T.stamp(r.finishedAt)) steps.push({ at: r.finishedAt, text: `${T.clock(r.finishedAt)} 交回：${U.fieldText(r.summary, viewer) || '跑完了'}`, tone: 'ok' });
+      if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) steps.push({ at: r.finishedAt, text: `${T.clock(r.finishedAt)} 交回：${U.fieldText(r.summary, viewer) || '跑完了'}`, tone: 'ok' });
       if (r.deferred) steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 交回：${U.fieldText(r.summary, viewer) || '暂时不修'}`, tone: 'info' });
       else if (r.status === 'incomplete') steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 没做成${r.reason ? `：${U.fieldText(r.reason, viewer)}` : ''}`, tone: 'bad' });
       const n = r.resumedBy && other(r.resumedBy);
