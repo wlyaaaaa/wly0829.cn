@@ -187,7 +187,9 @@
       : windowDate && !windowed ? `数据截至 ${windowDate}${isStale(m) ? '，此后未更新' : ''}` : note;
     const gap = m.value?.gap || m.gap;
     const pieces = [m.checked_at && `最近检查成功 ${stamp(m.checked_at)}`, typeof m.scope === 'string' && metricNote(m.scope), note, id === 'agents' && m.id === 'release' && m.at && `${stamp(m.at)} 生效`, gap && (!windowDate || !metricNote(gap).includes(windowDate)) && gap, !windowAt && staleText(m, m.at), !windowAt && m.mode === 'static' && !isStale(m) && !U.offline?.() && m.at && `${shortDate(m.at)} 取的`];
-    return { mark: (!isPrivate(m) && marker(m, projectViewer, m.hidden_what || '这项读数')) || '', lead: lead ? html(lead) : '', all: [...new Set(pieces.filter(Boolean).map(html))] };
+    // 后台在这一项上标了 visitor_labels（整项 '$' 或读数字段）的，本人版在读数下面挂“访客看不到／对外换了说法”，访客版只挂后一种（M930）
+    const labeled = U.visitorLabel(m, ['$', 'text', 'value'], m.hidden_what || '这项读数', projectViewer);
+    return { mark: (!isPrivate(m) && marker(m, projectViewer, m.hidden_what || '这项读数')) || labeled || '', lead: lead ? html(lead) : '', all: [...new Set(pieces.filter(Boolean).map(html))] };
   }
   function sub(m) {
     const p = subPieces(m);
@@ -373,7 +375,8 @@
   function arrayBlock(m) {
     const b = block(`records-${m.section || m.id}`, 'rows');
     b.el.classList.add('pj-sec--array'); b.array = true; b.metric = m;
-    const href = m.section ? records(m.section) : '', { line, extra } = lineOf({ ...m, moment_shared: true });
+    // 签已挂在类名后（ownerTag），收起的“说明”里不再挂第二个
+    const href = m.section ? records(m.section) : '', { line, extra } = lineOf({ ...m, moment_shared: true, visitor_labels: null });
     const name = U.fieldHtml(m.label, { name: '逐项明细名称', place: 'label', kind: projectViewer });
     const count = m.count == null ? '' : `${lower(m, 'count') ? '至少 ' : ''}${num(m.count)} 条`;
     const at = m.at && stamp(m.at, m.at_precision);
@@ -984,7 +987,9 @@
         href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
       const v = value(m), { line: said, moment, cadence } = lineOf(m, v), line = [said, moment].filter(Boolean).join(' · ');
-      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
+      // 读数是一句字、超过 11 个字的（“10-04（52 天前）”，项目页卡 is-long 也从 11 个字起）：和整句读数一样占两格、一行写全，不截成“10-04（5…”
+      const words = v.long || /class="pj-text"/.test(v.html) && [...v.plain].length > 11;
+      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
       const cutoff = d.changes7_stale && d.changes7_at && esc(`上次记录截至 ${stamp(d.changes7_at)}`);
