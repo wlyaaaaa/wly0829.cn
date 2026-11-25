@@ -154,7 +154,10 @@
     } };
   }
   // 命令环境改成三句结论（本人 11-26 选 ENV4 的 A，照图 ENV-3）：AI 用的 PowerShell 7 中文正不正常；AI 常用的命令工具在不在；系统自带的旧版 PowerShell 影不影响。
-  // 第三句“影不影响”要后台给 windows_powershell.used_by = { tasks: 用它的计划任务数, passes_chinese: 经不经它传中文 }；没给时照实说还没读到，灯不降灰。
+  // 第三句“影不影响”：后台 11-26 核过，旧版 PowerShell 只有“固定默认扬声器”计划任务用它（隐藏窗口跑 Set-DefaultAudio.ps1），不把中文经管道交给别的程序；
+  // 这句没有独立字段，照后台核过的原文写。按需更新快核（M928）核法：Get-ScheduledTask 里启用的、Actions.Execute 是 powershell.exe 的只有 PinDefaultAudio-Speaker，多了或它改传中文就改这句。
+  // 后台以后给 windows_powershell.used_by = { tasks: 用它的计划任务数, passes_chinese: 经不经它传中文 } 时优先用它。
+  const OLD_SHELL_USE = '只用在“固定默认扬声器”计划任务，不经管道传中文，不影响';
   const BASIC_TOOLS = ['pwsh7', 'node', 'python', 'git', 'go'];
   function commandLines(r) {
     const lines = [], core = r.powershell_core, win = r.windows_powershell, tools = list(data.software);
@@ -172,8 +175,9 @@
     if (win) {
       const garbled = fields.some(k => Number(win[k]) === 20127), use = win.used_by, n = Number(use?.tasks);
       const who = !Number.isFinite(n) ? '' : n === 0 ? '没有计划任务在用它' : `${n === 1 ? '只有 1 个' : `${n} 个`}计划任务在用它`;
-      const effect = !garbled ? '' : use?.passes_chinese === false && who ? ` · ${who}，不传中文，不影响` : use?.passes_chinese === true && who ? ` · ${who}，会经它传中文` : !use ? ' · 谁在用它、传不传中文还没读到' : ` · ${who || '用它的计划任务还没读到'}`;
-      lines.push({ level: !garbled ? 'green' : use?.passes_chinese === false && who ? 'gray' : 'yellow', quiet: garbled && use?.passes_chinese === false, text: `系统自带的旧版 PowerShell：${garbled ? (Number(win.pipeline_output_code_page) === 20127 ? '管道里中文会乱码' : '有中文会乱码的编码设置') : '中文正常'}${effect}` });
+      const effect = !garbled ? '' : !use ? ` · ${OLD_SHELL_USE}` : use.passes_chinese === false && who ? ` · ${who}，不传中文，不影响` : use.passes_chinese === true && who ? ` · ${who}，会经它传中文` : ` · ${who || '用它的计划任务还没读到'}`;
+      const harmless = garbled && (!use || use.passes_chinese === false && !!who);
+      lines.push({ level: !garbled ? 'green' : harmless ? 'gray' : 'yellow', quiet: harmless, text: `系统自带的旧版 PowerShell：${garbled ? (Number(win.pipeline_output_code_page) === 20127 ? '管道里中文会乱码' : '有中文会乱码的编码设置') : '中文正常'}${effect}` });
     }
     return lines;
   }

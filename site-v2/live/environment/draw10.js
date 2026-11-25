@@ -76,7 +76,9 @@
   }
   function changes(d, viewer, limit = Infinity) {
     if (!Array.isArray(d?.items) || d.visibility === 'owner' && viewer !== 'owner') return '';
-    const sub = [Number(d.refresh_seconds) === 86400 ? '每天零点后记一次' : '', d.text && !coverage(d).late ? dateText(d.text) : ''].filter(Boolean).join(' · ');
+    // 从哪天开始有：后台窗口是近 90 天，实际只留到 coverage.from 那份（11-19，最早一次 11-18 那份已滚出），照它写，不补造更早的日子
+    const cover = coverage(d);
+    const sub = [Number(d.refresh_seconds) === 86400 ? '每天零点后记一次' : '', cover.late ? `从 ${U.date(d.coverage.from)} 开始有记录` : d.text ? dateText(d.text) : ''].filter(Boolean).join(' · ');
     const title = `<p class="env-ch-title"><b>近 ${span(d)} 天变化</b>${sub ? `<span>${U.esc(sub)}</span>` : ''}</p>`;
     if (!d.items.length) return d.gap ? `${title}<p class="env-note">${U.fieldHtml(typeof d.gap === 'string' ? dateText(d.gap) : d.gap, { name: '软件变化记录', kind: viewer })}</p>` : '';
     const list = entries(d, viewer);
@@ -86,10 +88,9 @@
     const left = list.length - head.length + (unloaded || 0), fetch = head.length >= list.length && unloaded !== 0;
     const label = paging ? '正在读…' : pageFailed ? '下一页暂时读不到，再试一次 ›' : left > STEP ? `再看 ${STEP} 条（还有 ${left} 条） ›` : left > 0 ? `再看剩下 ${left} 条 ›` : '继续看 ›';
     const more = left > 0 || fetch ? `<p class="env-ch-more"><button type="button" class="more" data-change-more${fetch ? ' data-needs-pc' : ''}${paging ? ' disabled' : ''}>${label}</button></p>` : '';
-    const cover = coverage(d);
     // 起点之前没记录造成的“快照缺口”已由上一句说清；起点之后真缺了日子才照后台原话说
     const gap = d.gap && !(d.q === 'partial' && cover.late && !cover.inner) ? d.gap : '';
-    const foot = [cover.late && cover.note, d.q === 'stale' && '旧读数', cover.inner, gap].filter(Boolean).join(' · ');
+    const foot = [d.q === 'stale' && '旧读数', cover.inner, gap].filter(Boolean).join(' · ');
     return `${title}<ul class="env-chs">${head.map(x => x.quiet ? quiet(x, viewer) : row(x, viewer)).join('')}</ul>${more}${foot ? `<p class="env-note">${U.esc(dateText(foot))}</p>` : ''}`;
   }
   // 放在软件版本和命令环境两张卡后面（本人选的 ENV1：版本表挪到变化列表上面）
