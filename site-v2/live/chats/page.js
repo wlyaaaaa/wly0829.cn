@@ -657,6 +657,15 @@
     const words = [n > 0 && `后台另有 ${n} 个在跑`, paused > 0 && `${paused} 个额度用完停等`].filter(Boolean).join(' · ');
     $('chat-background').hidden = !words; U.html($('chat-background'), words ? `<a class="chat-background" href="${esc(route(typeof own?.href === 'string' && own.href.startsWith('/live/') ? own.href : '/live/automation/'))}">${esc(words)} ›</a>` : '');
   }
+  // M915 设计第 10 节：整页只有一个时刻。四栏在时，顶栏“HH:MM 读到”和页头“截至”都用四栏那一次读到的时刻（board.as_of）；
+  // 断线、暂停公开时照旧由顶栏自己说“最后一份”
+  let headerState = null;
+  const setBar = (s = headerState) => {
+    if (!s) return;
+    headerState = s;
+    const asOf = boardOf()?.as_of;
+    bar?.set(!s.offline && !s.publicPaused && s.shownAt && Number.isFinite(Date.parse(asOf)) ? { ...s, shownAt: asOf } : s);
+  };
   window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {
       homeChats = d?.chats || null; homeSources = { data: homeChats, viewer }; drawSources(); homeAt = meta.at;
@@ -667,7 +676,7 @@
   }, link(s) {
     const minute = Math.floor(Date.parse(s.now) / 60000), offlineChanged = homeOffline !== !!s.offline; homeOffline = !!s.offline;
     if (homeChats && (offlineChanged || !s.offline && minute !== activityMinute)) { activityMinute = minute; U.anchor(() => render(homeChats, s.now)); }
-    bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
+    setBar(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
     if (!s.data && !activeChats) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
@@ -678,6 +687,7 @@
     const nextBoard = d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
     baseBoard = nextBoard;
+    setBar();
     if (homeChats || activeChats) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
   }, link(s) { U.blockNote($('active'), s); } });
