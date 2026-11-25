@@ -78,9 +78,29 @@
 .items-selection__count { margin:0; font-size:14px; font-weight:600; letter-spacing:.02em; white-space:nowrap; color:var(--ink); }
 .items-selection__count b { display:inline-grid; place-items:center; min-width:22px; height:22px; margin:0 5px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#00A650; color:#fff; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 .items-selection__sep { width:1px; height:20px; background:rgb(20 20 19 / .12); }
-#item-selection-actions { display:flex; gap:8px; }
+#item-selection-actions { display:flex; align-items:center; gap:10px; }
+/* 多选按类选办法（本人 11-26 02:12）：类名在前，点了的办法绿字绿边，可改选；每类都选好了“确认”才能点，没选好时灰着、旁边琥珀色写还差哪一类 */
+.items-plan { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+.items-plan__kind { font-size:13px; letter-spacing:.02em; color:var(--muted); }
+.items-selection [data-intent][aria-pressed="true"] { color:#00A650; background:rgb(0 166 80 / .07); box-shadow:inset 0 0 0 1.5px #00A650; }
+.items-plan__missing { font-size:13px; font-weight:600; white-space:nowrap; color:color-mix(in srgb, rgb(var(--glow-amber)) 82%, #5a2d00); }
+.items-selection .items-plan__go { background:#00A650; color:#fff; box-shadow:none; }
+.items-selection .items-plan__go:disabled { background:rgb(20 20 19 / .07); color:rgb(20 20 19 / .38); box-shadow:none; cursor:default; }
+/* 核对框：一件一行“类 · 这件 → 办法”，类的颜色同页上那一组；框底一句去向说明和两个按钮 */
+.live-item-confirm--plan .live-item-confirm__card { width:min(900px, calc(var(--item-confirm-width, 100vw) - 28px)); }
+.live-item-confirm--plan .live-item-confirm__card h2 { margin-bottom:34px; }
+.item-plan { display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px 16px; margin:0; padding:0; list-style:none; }
+.item-plan li { display:grid; grid-column:1 / -1; grid-template-columns:subgrid; align-items:center; padding:14px 16px; border-radius:14px; background:rgb(25 35 28 / .05); font-size:17px; line-height:1.5; }
+.item-plan__kind { justify-self:start; padding:4px 14px; border-radius:999px; font-size:15px; font-weight:700; white-space:nowrap; background:rgb(var(--plan-tint) / .2); color:color-mix(in srgb, rgb(var(--plan-tint)) 62%, #1d1d1b); }
+.item-plan__kind[data-kind="do"] { --plan-tint:var(--glow-peach); } .item-plan__kind[data-kind="choose"] { --plan-tint:var(--glow-lilac); } .item-plan__kind[data-kind="later"] { --plan-tint:var(--glow-cyan); }
+.item-plan__kind[data-kind="know"] { --plan-tint:var(--glow-blue); } .item-plan__kind[data-kind="reports"] { --plan-tint:var(--glow-pink); } .item-plan__kind { --plan-tint:var(--glow-sage); }
+.item-plan__name { overflow-wrap:anywhere; font-weight:600; }
+.item-plan__to { white-space:nowrap; color:var(--muted); } .item-plan__to b { color:var(--ink); font-weight:750; }
+.item-plan__foot { display:flex; align-items:center; gap:16px; margin-top:18px; }
+.live-item-confirm__card .item-plan__foot p { flex:1; margin:0; font-size:14px; color:var(--muted); }
+.item-plan__foot .live-item-confirm__buttons { flex-wrap:nowrap; margin-top:0; }
 .items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
-.items-selection [data-batch-action]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.items-selection [data-intent]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
 .items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
 body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
@@ -106,6 +126,6 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 <div class="card__body"><p class="card__head" id="head"></p>
 <p class="hero__note" id="note"></p><div class="lbp-stats" id="stats"></div></div></div>
 </article><section class="lbp-side glass" data-mo-rise><p class="part">近 7 天的变化</p><div class="lbp-side__list"><div id="side-body">正在读关闭记录</div><a class="more" href="#closed">近 7 天下去的 ›</a><a class="more" href="#reports">等答的汇报 ›</a></div></section></div>
-<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消选择</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
+<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/_lib/live-runs.js"></script><script src="/live/items/page.js"></script>
 </body></html>
