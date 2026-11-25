@@ -272,14 +272,20 @@
   // 确认关机：副屏那格回 on: false，或回包头 X-Live-Connection 说 host-off（两路都是原有的；后台现在都还不发）。
   // 没确认关机就只重试、留着手里那份，不用云端、随站那两份（本人 11-24 20:34）。
   const confirmedOff = () => !publicPaused && offline() && hostOffline(latestConnection());
-  // 没确认关机时页顶写“自几点起连不上”：几点是这个窗口第一次确认连续读不到的时刻（M918）。
+  // 没确认关机时页顶写“自几点起连不上”（M918）：只有这个窗口亲眼见过从读得到变成读不到才写，几点取最后一次读到之后第一次读不到的那会儿；
+  // 首访、新开标签页一开就断的，没见过读得到，不写（不然像是电脑从他打开页面那会儿才断）。
   // 同一个标签页里换到别的实况页、断开一直没好（2 分钟内还记着断开）就接着用这个时刻；读到在线就清。
   const LOST_AT = 'wly-live-lost-at';
   let lostAt = (() => { try { const v = JSON.parse(sessionStorage.getItem(LOST_AT)); return Number.isFinite(Date.parse(v?.at)) && Date.now() - v.seen < 120000 ? v.at : null; } catch { return null; } })();
   function noteLost() {
     if (publicPaused) return;
     try {
-      if (offline()) { lostAt ||= clock(); sessionStorage.setItem(LOST_AT, JSON.stringify({ at: lostAt, seen: Date.now() })); }
+      if (offline()) {
+        // 本页主数据这一页里读到过（freshAt），这一串读不到从 missSince 开始
+        const seen = !lostAt && connectionEntries().filter(e => isMain(e) && e.freshAt && e.missSince > e.freshAt).sort((a, b) => b.freshAt - a.freshAt)[0];
+        if (seen) lostAt = new Date(seen.missSince + clockOffset).toISOString();
+        if (lostAt) sessionStorage.setItem(LOST_AT, JSON.stringify({ at: lostAt, seen: Date.now() }));
+      }
       else if (latestConnection()?.state === 'online' && lostAt) { lostAt = null; sessionStorage.removeItem(LOST_AT); }
     } catch { /* 存不下就只记在这一页 */ }
   }
