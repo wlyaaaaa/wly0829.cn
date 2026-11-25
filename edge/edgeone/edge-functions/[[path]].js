@@ -57,9 +57,7 @@ async function cloudSnapshot(resource) {
   const packet = value.metadata_only === false && at && block.seq === value.seq && block.viewer?.kind === 'public' &&
     block.data && typeof block.data === 'object' && !Array.isArray(block.data) && Object.keys(block.data).length
     ? {v: 1, seq: block.seq, at, viewer: {kind: 'public'}, data: block.data} : null;
-  // 关机标记（前端提议、等后台定）：电脑关机时最后写一次 host: {on: false, at}，读到才算“确认关机”。
-  const off = value.host?.on === false ? stamp(value.host.at) : null;
-  return {at, audience: proof.audience, packet, off};
+  return {at, audience: proof.audience, packet};
 }
 export default async function onRequest({request, env = {}}) {
   const url = new URL(request.url), old = url.pathname === '/computer-access/state';
@@ -67,7 +65,7 @@ export default async function onRequest({request, env = {}}) {
   const validDevice = /^[A-Za-z0-9_-]{43}$/.test(device);
   const headers = new Headers({'Cache-Control': 'no-store', Vary: old ? 'Origin, Accept-Encoding, X-Cockpit-Device' : 'X-Cockpit-Device, Origin, Accept-Encoding', Date: new Date(instant).toUTCString()});
   headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS'); headers.set('Access-Control-Allow-Headers', 'X-Cockpit-Device, If-None-Match');
-  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Fallback-At, X-Live-Connection, X-Live-Host-Off-At'); headers.set('Access-Control-Max-Age', '86400');
+  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Fallback-At, X-Live-Connection'); headers.set('Access-Control-Max-Age', '86400');
   if (origins.has(request.headers.get('Origin'))) { headers.set('Access-Control-Allow-Origin', request.headers.get('Origin')); headers.set('Access-Control-Allow-Credentials', 'true'); }
   const reply = (value, status = 200) => { headers.set('Content-Type', 'application/json; charset=utf-8'); return new Response(request.method === 'HEAD' || status === 304 ? null : JSON.stringify(value), {status, headers}); };
   const fail = (error, text, status = 503) => reply({error, text, now}, status);
@@ -136,13 +134,11 @@ export default async function onRequest({request, env = {}}) {
     query.sort(); // 包里的资源键和浏览器一样按参数名排好
     const variant = String(query);
     const resource = url.pathname.slice(prefix.length) + (variant ? '?' + variant : '');
-    const {at, audience, packet, off} = await cloudSnapshot(resource);
+    const {at, audience, packet} = await cloudSnapshot(resource);
     headers.set('X-Live-Source', 'oss');
     headers.set('X-Live-Fallback-Policy', FALLBACK_POLICY);
     headers.set('X-Live-Fallback-Audience', audience);
     headers.set('ETag', `"live-fallback-${audience}"`);
-    // 电脑那头连不上、云端那份记着已关机：告诉浏览器这是确认关机（源站答了 500/503 说明电脑开着，不改）。
-    if (off && connection === 'unreachable') { headers.set('X-Live-Connection', 'host-off'); headers.set('X-Live-Host-Off-At', off); }
     // 浏览器只在确认关机时才用这份正文（本人 11-24 20:34）；这里照样回 503，不当在线读数。
     if (packet) { headers.set('X-Live-Fallback-At', packet.at); return reply({error: 'snapshot_content', ...packet, now}, 503); }
     return reply({error: 'snapshot_metadata_only', at, now}, 503);

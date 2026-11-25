@@ -268,7 +268,7 @@
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
   const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
-  // 确认关机：副屏那格回 on: false，或边缘读到云端那份记着已关机（X-Live-Connection: host-off）。
+  // 确认关机：副屏那格回 on: false，或回包头 X-Live-Connection 说 host-off（两路都是原有的；后台现在都还不发）。
   // 没确认关机就只重试、留着手里那份，不用云端、随站那两份（本人 11-24 20:34）。
   const confirmedOff = () => !publicPaused && offline() && hostOffline(latestConnection());
   // 正在用云端或随站那份的正文（只有时刻的旧包不算）。
@@ -484,7 +484,7 @@
     if (!hostOffline(link)) return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at: atLine(upTo),
       wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
         : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
-    const say = Number.isFinite(Date.parse(link.off_at)) ? `电脑 ${shortStamp(link.off_at)} 关机了` : '电脑关机了';
+    const say = '电脑关机了';
     // 说的是本页主数据那一份；主数据一样都没有、别的块有（比如旧随站包里的计划任务名册），说页上最新的那一块，和页眉按钮的时刻对得上
     const shown = connectionEntries().filter(e => e.data !== null && Number.isFinite(Date.parse(e.at)));
     const main = shown.find(e => isMain(e) && e.listeners.size) || shown.sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0]
@@ -584,7 +584,7 @@
       }
     }
   }
-  function failed(e, status, body, via, offAt) {
+  function failed(e, status, body, via) {
     e.status = status; e.warming = false;
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
@@ -599,7 +599,7 @@
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
-    // 确认关机（边缘读到云端那份记着已关机）和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
+    // 确认关机和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
     const off = !reachable && (reason === 'host-off' || hostOffline(e.validatedLink));
     if (reachable) e.lagging = false;
     if (!body?.link && !reachable && !off && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
@@ -612,7 +612,7 @@
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
-      : off ? { state: 'offline', basis: 'response', reason: 'host-off', off_at: offAt || e.validatedLink?.off_at || null }
+      : off ? { state: 'offline', basis: 'response', reason: 'host-off' }
       : { state: 'offline', basis: status ? 'response' : 'browser', reason }));
   }
   function clearFailure(e) {
@@ -827,7 +827,7 @@
       if (Number.isFinite(Date.parse(responseNow))) { e.now = new Date(responseNow).toISOString(); clockOffset = Date.parse(responseNow) - Date.now(); }
       const via = response.headers.get('X-Live-Connection');
       if (oss) {
-        failed(e, 503, null, via || 'unreachable', response.headers.get('X-Live-Host-Off-At'));
+        failed(e, 503, null, via || 'unreachable');
         restoreBrowserCopy(e);
         // 云端那份：记下来，确认关机才用（带正文的是这一块的访客回包，旧包只有时刻）
         e.cloud = fixture !== null ? null : { at: body?.at, packet: body?.error === 'snapshot_content' ? body : null,
