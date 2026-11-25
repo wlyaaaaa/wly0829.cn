@@ -342,6 +342,6 @@
       if (publicNow) for (const id of ['sets', 'rest', 'points']) $(id).replaceChildren();
       if (data && !publicNow) U.anchor(() => render(d)); else render(d);
       if (d) detailReads.forEach(r => r.done());
-    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (!s.offline && [404, 503].includes(s.meta?.status) || s.data == null && s.phase === 'none') { detailReads.forEach(r => r.set(s)); render(null); } else if (s.data && (changed || data == null)) render(s.data); } });
+    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (s.data == null && (!s.offline && [404, 503].includes(s.meta?.status) || s.phase === 'none')) { detailReads.forEach(r => r.set(s)); render(null); } else if (s.data && (changed || data == null)) render(s.data); } });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

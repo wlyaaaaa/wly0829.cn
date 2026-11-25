@@ -328,7 +328,8 @@
   }
   const filesResource = () => `backups/${encodeURIComponent(id)}/files${params.has('fixture') && filesTarget === 'photos' ? '-photos' : ''}`;
   const filesQuery = cursor => ({ target: filesTarget === 'photos' ? 'photos' : null, cursor });
-  const filesUnavailable = state => state.data == null || !offline() && [404, 503].includes(state.meta?.status)
+  // 后台这次回 503（重启后首轮发布没齐这类）时手上有数就留着、由共用那句标几点的；只有真没数或 404 才写读不到（D6）
+  const filesUnavailable = state => state.data == null || !offline() && state.meta?.status === 404
     || state.viewer?.kind === 'owner' && viewer !== 'owner';
   function watchFiles() {
     if (!set || !filesOpen() || notApplicable(set.transfer_summary) || notApplicable(set[filesTarget])) return false;
@@ -428,7 +429,7 @@
       link(state) {
         bundleSource = state.meta?.source; disconnected = state.offline; bar?.set(state); Light.offline(state.offline);
         U.list($('notices'), state.offline ? [{ key: 'link', cls: 'notice glass', html: esc(state.text) }] : []);
-        if (!state.offline && [404, 503].includes(state.meta?.status)) showUnavailable();
+        if (!state.offline && [404, 503].includes(state.meta?.status) && state.data == null) showUnavailable();
         else if (set) renderSet();
         else if (bundle || state.phase === 'none') {
           showUnavailable();
@@ -444,7 +445,7 @@
         phase(state) { if (!verification) read.set(state); },
         data(data, meta) { viewer = meta.viewer.kind; verification = data; verificationAt = meta.at; },
         link(state) {
-          if (!state.offline && [404, 503].includes(state.meta?.status)) read.set({ ...state, data: null, phase: 'none' });
+          if (!state.offline && [404, 503].includes(state.meta?.status) && !verification) read.set({ ...state, data: null, phase: 'none' });
           else if (verification) { renderVerification(); read.done(); }
           else { read.set(state); if (state.phase === 'none') U.html($('verified'), `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`); }
           U.blockNote($('verification'), state);
