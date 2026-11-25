@@ -20,7 +20,7 @@
   }
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
   const { list, known, int, dec, link, when, big, clock } = T;
-  let state, viewer = 'public', open = typeParam, busy = false, feedback = null, landed = false, pausing = null, flipping = null, olderOpen = false;
+  let state, viewer = 'public', open = typeParam, busy = false, feedback = null, landed = false, pausing = null, olderOpen = false;
   const F = (v, name) => T.field(v, viewer, name);
   // 类名是后台给的，“替你看新消息”在公开版改成“替本人”
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
@@ -219,7 +219,9 @@
     const showLive = !filter.status || filter.status === 'running', showDone = filter.status !== 'running';
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
     const doneName = filter.date ? `${day}${filter.status === 'incomplete' ? '没做成的' : '跑完的'}` : '近 72 小时跑完的';
-    const legacy = v.legacy ? '<p class="tp-note" data-tone="off">每一轮的记录后台还没接上：下面先用八类各自最近几次拼出来，点不开经过。</p>' : '';
+    // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
+    // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
+    const legacy = v.legacy ? '<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用八类各自最近几次拼出来，点不开经过。</p>' : '';
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     return `${catButtons(d, v)}${legacy}
       ${showLive ? sec('running', '在干', v.live.length, v.live.length ? v.live.map(c => card(d, v, c)).join('') : v.waiting ? waiting : idle) : ''}
@@ -317,13 +319,17 @@
   // —— 八行总表 ——
   // 只有本人能点的按钮：访客版加 data-need-trusted，现成的可信设备弹框（trust-modal.js）在捕获阶段拦下、弹“这一步只有可信设备能做”；本人版不加，照常
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
+  // 开关旁边那行小字：正在保存…／已保存／没存上：原因／还没确认存上（feedback 按开关的 id 记）
+  const noteFor = id => feedback?.id === id ? `<small role="status" data-tone="${feedback.tone || ''}">${esc(feedback.text)}</small>` : '';
+  const waitingOn = id => feedback?.id === id && feedback.pending ? ' aria-busy="true"' : '';
   function switchCell(c, offline) {
-    const m = flipping?.id === c.id ? flipping.mode : mode(c), until = c.setting?.until_at;
+    // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，旁边写“正在保存…”
+    const m = mode(c), until = c.setting?.until_at;
     const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? `暂停到 ${esc(when(until))}` : '没读到';
     if (offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
-    const fb = feedback?.id === c.id ? `<small role="status" data-tone="${feedback.tone || ''}">${esc(feedback.text)}</small>` : `<small role="status"></small>`;
+    const fb = noteFor(c.id) || '<small role="status"></small>';
     // 访客版照样摆同一套开关和“暂停到…”（M716，定稿：公开版保留已定按钮）；点了由现成的可信设备弹框拦下，只提示本人才能操作，什么都不改
-    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
+    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
       <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? `暂停到 ${esc(when(until))}` : '暂停到…'}</button>${fb}`;
   }
   // AI 约好的事在等几件、下一件几点：从账本数。后台把自动修理的活记成“自动修理”记的，其余还没了结的就是约好的；在办的不算在等
@@ -408,7 +414,7 @@
     const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
     const extra = [];
     if (c.id === 'auto-repair' && list(c.subcategories).length) extra.push(`<div class="au-extra"><p class="tp-sub">各小类 <small>${viewer === 'owner' ? '能单独关' : '本人能单独关'}</small></p><p class="au-subs">${list(c.subcategories).map(sub =>
-      `<span class="tp-pill" data-mode="${esc(mode(sub) || '')}">${F(sub.title)} · ${mode(sub) === 'on' ? '开' : mode(sub) === 'off' ? '关' : mode(sub) === 'paused' ? '暂停' : '没读到'}${!state?.offline && mode(sub) ? ` <button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(mode(sub))}"${ownerOnly('开关自动修理小类')}>${mode(sub) === 'on' ? '关掉' : '打开'}</button>` : ''}</span>`).join('')}</p></div>`);
+      `<span class="tp-pill" data-mode="${esc(mode(sub) || '')}">${F(sub.title)} · ${mode(sub) === 'on' ? '开' : mode(sub) === 'off' ? '关' : mode(sub) === 'paused' ? '暂停' : '没读到'}${!state?.offline && mode(sub) ? ` <button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(mode(sub))}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${mode(sub) === 'on' ? '关掉' : '打开'}</button>${noteFor(sub.id)}` : ''}</span>`).join('')}</p></div>`);
     if (c.id === 'translator' && list(c.projects).length) extra.push(`<div class="au-extra"><p class="tp-sub">各工程的《他要什么》</p><table class="tp-table au-mini-table"><tbody>${list(c.projects).map(p =>
       `<tr><th scope="row">${F(p.name)}</th><td>第 ${int(p.version)} 版 · ${esc(when(p.published_at))}</td><td>${p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的'}</td></tr>`).join('')}</tbody></table></div>`);
     if (list(c.weekly_runs).length) extra.push(`<div class="au-extra"><p class="tp-sub">每周一行</p><table class="tp-table au-mini-table"><tbody>${list(c.weekly_runs).map(w =>
@@ -451,17 +457,31 @@
     busy = true;
     try { return await Live.automationSetting({ operation: 'type-mode', id, value }); } finally { busy = false; }
   }
-  // 没存上时写原因：后台给了中文就照写
+  // 没存上时写原因：后台给了中文就照写；超时、断线、电脑回不了话（status unknown）只说还没确认，不说没存上
   function failText(reply) {
     if (reply?.error === 'cockpit_owner_required') return '没存上：这台设备还没配对成本人设备';
+    if (!reply || reply.status === 'unknown') return '还没确认存上';
     if (typeof reply?.message === 'string' && /[一-鿿]/.test(reply.message)) return `没存上：${reply.message}`;
-    if (!reply || reply.status === 'unknown') return '没确认存上：电脑没回话，刷新看看';
     return '没存上：电脑没写进去，再点一次';
   }
-  function saved(id, reply) {
-    feedback = reply.status === 'saved' ? { id, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id, text: reply.message || '已撤' } : { id, text: failText(reply), tone: 'bad' };
-    if (reply.status === 'saved' && reply.current) {
-      for (const c of list(state?.data?.categories)) for (const row of [c, ...list(c.subcategories)]) if (row.id === id) row.setting = { ...row.setting, ...reply.current };
+  const rowOf = id => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
+  // 后台回包里的 until_at 是秒数，读数里是时刻字符串：并进来时换成时刻字符串，页面照常写“暂停到 几点”
+  const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: new Date(cur.until_at * 1000).toISOString() } : {}) });
+  // 回包到了才动开关：存上了照回包里的 current 滑过去；没存上但后台带回了电脑上读到的 current（读回和请求不一致），照它显示；
+  // 别的没存上、还没确认的，开关留在原档，之后照新读数显示
+  async function saved(id, reply) {
+    feedback = reply.status === 'saved' ? { id, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id, text: reply.message || '已撤' }
+      : { id, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad' };
+    const row = rowOf(id);
+    if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
+    // 主开关在原地滑到新档（圆钮滑、底色跟着变），滑完再整块重画
+    const el = page.root.querySelector(`.au-switch[data-toggle="${CSS.escape(id)}"]`), m = row && mode(row);
+    if (el && m && el.dataset.mode !== m) {
+      el.dataset.mode = m; el.setAttribute('aria-checked', String(m === 'on')); el.removeAttribute('aria-busy');
+      el.querySelector('span').textContent = m === 'on' ? '开' : '关';
+      const note = el.parentElement.querySelector('small[role="status"]');
+      if (note) { note.textContent = feedback.text; note.dataset.tone = feedback.tone || ''; }
+      await new Promise(r => setTimeout(r, 320));
     }
     draw();
     void Live.refresh();
@@ -483,15 +503,20 @@
   }
   form.addEventListener('submit', async e => {
     e.preventDefault();
-    if (!pausing) return;
+    if (!pausing || busy) return;
+    const id = pausing, result = form.querySelector('[data-result]');
     const until = `${form.elements.day.value}T${form.elements.hour.value}:${form.elements.minute.value}:00+08:00`;
-    if (!(Date.parse(until) > Date.now())) { form.querySelector('[data-result]').textContent = '要选比现在晚的时间'; return; }
-    form.querySelector('[data-result]').textContent = '正在保存…';
-    const reply = await save(pausing, { mode: 'paused', until_at: until });
+    if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
+    // 等后台回话：框里和开关旁边都写“正在保存…”，开关和原来的暂停时间留着
+    result.textContent = '正在保存…';
+    feedback = { id, text: '正在保存…', pending: true };
+    draw();
+    const reply = await save(id, { mode: 'paused', until_at: until });
     if (!reply) return;
+    // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
-    else form.querySelector('[data-result]').textContent = failText(reply);
-    saved(pausing, reply);
+    else result.textContent = failText(reply);
+    saved(id, reply);
   });
 
   let page;
@@ -522,26 +547,18 @@
       return;
     }
     if (toggle) {
-      const id = toggle.dataset.toggle, before = toggle.dataset.mode, next = before === 'on' ? 'off' : 'on';
+      const id = toggle.dataset.toggle, next = toggle.dataset.mode === 'on' ? 'off' : 'on';
       if (busy) return;
-      // 开关先在原地滑过去（圆钮滑、底色跟着变），写“正在保存”；存好写“已保存”，没存上滑回来并写原因
-      const slide = value => {
-        const el = page.root.querySelector(`.au-switch[data-toggle="${CSS.escape(id)}"]`);
-        if (!el) return;
-        el.dataset.mode = value; el.setAttribute('aria-checked', String(value === 'on'));
-        el.querySelector('span').textContent = value === 'on' ? '开' : '关';
-        const note = el.parentElement.querySelector('small[role="status"]');
-        if (note) { note.textContent = '正在保存…'; note.dataset.tone = ''; }
-      };
-      if (toggle.classList.contains('au-switch')) { flipping = { id, mode: next }; feedback = { id, text: '正在保存…' }; slide(next); }
-      const [reply] = await Promise.all([save(id, { mode: next }), new Promise(r => setTimeout(r, 320))]);
-      if (flipping?.id === id && reply?.status !== 'saved') { slide(before); await new Promise(r => setTimeout(r, 320)); }
-      if (flipping?.id === id) flipping = null;
-      saved(id, reply || { status: 'unknown' });
+      // 后台回之前开关留在原档，旁边只写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
+      feedback = { id, text: '正在保存…', pending: true };
+      T.keep(page.root, `[data-toggle="${CSS.escape(id)}"]`, draw);
+      saved(id, await save(id, { mode: next }) || { status: 'unknown' });
       return;
     }
     if (pause) {
       const access = await Live.automationSetting({ operation: 'access' });
+      // 只是先问一声能不能操作，还没保存什么：电脑没回话就照实说，不写“还没确认存上”
+      if (access.status === 'unknown') { feedback = { id: pause.dataset.pause, text: '电脑没回话，再点一次' }; draw(); return; }
       if (access.status !== 'pass') { saved(pause.dataset.pause, access); return; }
       pausing = pause.dataset.pause;
       fillWhen(list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(c => c.id === pausing)?.setting?.until_at);
