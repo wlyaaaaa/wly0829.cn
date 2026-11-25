@@ -201,6 +201,18 @@
     }
     const eventBody = e => !e.text || [e.label, d.text, issue ? summary : d.closed?.text].includes(e.text) ? '' : e.text;
     const runLink = s => { const text = `${esc(s.name)}${s.who ? `（${esc(s.who)}）` : ''}`; return s.href ? `<a class="run-link" href="${esc(route(s.href))}">${text} ›</a>` : text; };
+    // 账本一件：经过里每一步，后台给了做这一步的那场对话或那一轮（source_href）就挂“Codex 那场对话 ›”“自动修理那一轮 ›”；
+    // 没有地址（对话已删、那一轮没留记录、访客看不到）照原样写字，后台写的原因（source_unavailable_reason）放在这一步的悬停说明里
+    const source = e => {
+      if (!issue || typeof e.source_href !== 'string' || !e.source_href.startsWith('/live/')) return null;
+      const href = window.LiveRuns?.runPage(e.source_href) || e.source_href, url = new URL(href, location.origin);
+      const host = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' }[(url.searchParams.get('id') || '').split(':')[0].toLowerCase()];
+      const name = url.pathname === '/live/chat/' ? `${host ? `${host} ` : ''}那场对话` : url.pathname.startsWith('/live/automation/') ? `${window.LiveRuns?.categoryName(url.searchParams.get('type'), viewer) || ''}那一轮` : '来源';
+      return `<small class="issue-event-actor"><a class="run-link" href="${esc(route(href))}">${esc(name)} ›</a></small>`;
+    };
+    const sourceWhy = e => issue ? U.fieldText(e.source_unavailable_reason ?? '', viewer).trim() : '';
+    // 有了“Codex 那场对话 ›”，原来那行“由谁处理：codex:一串编号”就是同一件事，不再写；写的是人名、型号这类的照旧写
+    const rawActor = e => /^(claude|codex|antigravity):[\w-]{8,}$/i.test(U.fieldText(e.actor ?? '', viewer).trim());
     const eventReadings = new Map();
     const sameEvent = new Set();
     const usefulHistory = historyRows.filter(e => {
@@ -222,7 +234,10 @@
       // 这一步是哪个 AI、哪一轮：“自动修理第 2 轮（GPT-6.2 Sol xhigh）›”，点了到那一轮（后台在这一步或 automation_runs 里写明了才有）
       const own = e.automation_run && window.LiveRuns?.sources({ automation_runs: [e.automation_run] }, viewer)[0];
       const runAt = own ? `<small class="issue-event-actor">${runLink(own)}</small>` : '';
-      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"><b>${e.run ? runLink(e.run) : say(e.label || OUT[e.outcome] || EVENT[e.event] || '进展')}</b>${actor}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
+      // 这一步已经挂了“哪一轮 ›”或本身就是那一轮的，不再挂来源
+      const src = own || e.run ? '' : source(e) || '', why = src ? '' : sourceWhy(e);
+      const who = src && rawActor(e) ? '' : actor;
+      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"${why ? ` title="${esc(why)}"` : ''}><b>${e.run ? runLink(e.run) : say(e.label || OUT[e.outcome] || EVENT[e.event] || '进展')}</b>${who}${src}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
     });
     U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText("经过")}</p>` }], { animate: !first });
     U.list($('events-rest'), events.slice(firstRun), { animate: !first });
@@ -269,7 +284,8 @@
     const rows = past.map(e => ({ ...e, text: e.outcome_text || e.text }));
     if (record?.previous && !rows.some(e => e.at === record.previous.at && e.outcome === record.previous.outcome)) rows.push(record.previous);
     if (record?.wait) rows.push({ ...record.wait, id: record.id, state: 'waiting', label: '在等' });
-    if (record?.accepted && !rows.some(e => e.at === record.accepted && (e.event === 'Add' || /^(开始|登记)/u.test(e.label)))) rows.push({ at: record.accepted, label: '开始' });
+    // “开始”这一步是记下这件事的那场对话或那一轮做的：后台给了记下的人的地址（registered_by_href）就照样挂上
+    if (record?.accepted && !rows.some(e => e.at === record.accepted && (e.event === 'Add' || /^(开始|登记)/u.test(e.label)))) rows.push({ at: record.accepted, label: '开始', source_href: record.registered_by_href, source_unavailable_reason: record.registered_by_unavailable_reason });
     // 账本一件事的经过：哪几轮自动任务动过它（后台 automation_runs 写明的），各占一步，写清哪个 AI、哪一轮，点了到那一轮
     if (issue && window.LiveRuns) for (const run of Array.isArray(record?.automation_runs) ? record.automation_runs : []) {
       const s = window.LiveRuns.sources({ automation_runs: [run] }, viewer)[0];

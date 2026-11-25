@@ -11,7 +11,7 @@
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
-  let state, viewer = 'public', filter = params.get('outcome') || '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
+  let state, viewer = 'public', filter = params.get('outcome') || '', kind = '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
   let older = [], olderNext, olderBusy = false;
   // 首页 AI 账本卡点进来的那几件：?view=open|opened|closed|due|overdue|opened_7d|closed_7d（数据约定-前端升级 §11）。读 ledger?view=…，
   // 后台返回 {view, started_at, items, total, next}，件数和卡上那个数是同一份；续页把 next 当 cursor，保留 view
@@ -75,9 +75,29 @@
     return `<svg class="tp-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="近 7 天每天新进和了结">${out}</svg>`;
   }
 
+  // —— 筛选按钮：全部｜约好再查的｜修理暂缓的。点了下面“欠着”“放着”两块只列这一种，只在页面里筛、不调后台 ——
+  // 自动修理记下、暂时放着的是“修理暂缓的”，其余是 AI 答应了再查的（和自动任务页“AI 约好的事 N 件在等”同一种分法）
+  const KINDS = [['', '全部'], ['promised', '约好再查的'], ['repair', '修理暂缓的']];
+  const kindOf = it => [it.registered_by, it.registered_by_text].some(v => U.fieldText(v ?? '', viewer).trim() === '自动修理') ? 'repair' : 'promised';
+  function kinds(d) {
+    const all = owed(d), n = k => k ? all.filter(it => kindOf(it) === k).length : all.length;
+    return `<nav class="lg-kinds" aria-label="只看一种">${KINDS.map(([k, label]) =>
+      `<button type="button" class="lg-kind" data-kind="${k}" aria-pressed="${kind === k}">${label} <b>${int(n(k))}</b></button>`).join('')}</nav>`;
+  }
+
   // —— 还欠着的每一件：时间轨道。分“欠着”（在修的、到点还没了结的）和“放着”（等约好的时间或条件的、暂时不修的），按后台给的 group 分 ——
   function nextOf(it) { return it.next_at || it.wait?.at || null; }
   const groupOf = it => it.group === 'owed' || it.group === 'parked' ? it.group : it.running || it.state === 'working' || it.overdue ? 'owed' : 'parked';
+  // 谁记的：后台给了记下这件事的那场对话或那一轮的地址（registered_by_href）就做成链接；没有地址照原样写字，打不开的原因放在悬停说明里。
+  // 没记下是谁登记的（registered_by 空，后台 registered_by_text 写“登记人未记下”）照现在的样子不写这一段
+  function recorder(it) {
+    const name = it.registered_by_text ?? it.registered_by;
+    if (!U.fieldText(name ?? '', viewer).trim() || !U.fieldText(it.registered_by ?? '', viewer).trim() && !T.path(it.registered_by_href)) return '';
+    const label = `${typeof name === 'string' ? esc(name) : F(name, '谁记的')} 记的`;
+    if (T.path(it.registered_by_href)) return link(it.registered_by_href, `${label} ›`);
+    const why = U.fieldText(it.registered_by_unavailable_reason ?? '', viewer).trim();
+    return why ? `<span title="${esc(why)}">${label}</span>` : label;
+  }
   // 第二行：谁记的 · 为什么放着／在等什么（后台原句）· 下次几点看（到点没看的写后台那句“约好几点再看，到点还没了结”）· 第几次、最多几次
   function itemMeta(it, group, now) {
     const nx = stamp(nextOf(it)), over = it.overdue || (nx && nx < now), limit = int(it.check_limit || 3);
@@ -88,12 +108,12 @@
     const time = full(it) ? `<b class="lg-over">${limit} 次看满了，AI 停手</b>` : late ? F(it.fixer.text, '到点还没了结')
       : nx ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`) : '';
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
-    return [it.registered_by ? `${esc(it.registered_by)} 记的` : '', why, time, count].map(s => s.replace(/。$/, '')).filter(Boolean).join(' · ');
+    return [recorder(it), why, time, count].map(s => s.replace(/。$/, '')).filter(Boolean).join(' · ');
   }
   function track(d) {
-    const all = owed(d);
+    const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
     const sort = rows => rows.sort((a, b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue)) || (stamp(nextOf(a)) ?? 9e15) - (stamp(nextOf(b)) ?? 9e15));
-    const blocks = { owed: sort(all.filter(it => groupOf(it) === 'owed')), parked: sort(all.filter(it => groupOf(it) === 'parked')) };
+    const blocks = { owed: sort(shown.filter(it => groupOf(it) === 'owed')), parked: sort(shown.filter(it => groupOf(it) === 'parked')) };
     const now = Date.now(), today = Math.floor((now + 8 * 3600000) / DAY) * DAY - 8 * 3600000;
     const first = Math.min(...all.map(it => stamp(it.accepted)).filter(Boolean), today - 7 * DAY);
     const from = Math.max(first - DAY, today - 21 * DAY), to = today + 5 * DAY;
@@ -119,7 +139,7 @@
       const items = blocks[group], shown = showAll[group] ? items : items.slice(0, 10);
       const more = items.length > 10 ? `<button type="button" class="lg-more" data-more="${group}" aria-expanded="${showAll[group]}"><span class="tp-chev">${showAll[group] ? '收起' : `再看 ${items.length - 10} 件`}</span></button>` : '';
       return items.length ? `<div class="lg-board"><div class="lg-head"><span></span>${axis}</div><ul class="lg-list">${shown.map(it => row(it, group)).join('')}</ul><div class="lg-now" style="--x:${x(now)}" data-from="${from}" data-span="${span}"><span>现在</span></div></div>${more}${keyIn === group ? legend : ''}`
-        : `<p class="tp-empty">AI 手上${empty}</p>`;
+        : `<p class="tp-empty">${kind ? `“${KINDS.find(([k]) => k === kind)[1]}”里` : 'AI 手上'}${empty}</p>`;
     };
     return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件<span class="lg-live">实时</span><small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
       ${board('owed', '没有在修的事。')}</section>
@@ -289,7 +309,7 @@
     }
     T.paint(page.root, `<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}<span>截至 ${esc(when(d.at))}</span></p></div>
-      ${T.stateNote(state)}${top(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`);
+      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`);
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && (location.hash || asked)) landed = T.reveal(location.hash.slice(1) || 'detail');
@@ -330,6 +350,8 @@
     const p = e.target.closest('button[data-pick]'), f = e.target.closest('[data-filter]');
     if (p) { autoPick = false; pick(p.dataset.pick); return; }
     if (f) { filter = f.dataset.filter; T.keep(page.root, `[data-filter="${filter}"]`, draw); return; }
+    const k = e.target.closest('[data-kind]');
+    if (k) { kind = k.dataset.kind; T.keep(page.root, `[data-kind="${kind}"]`, draw); return; }
     const more = e.target.closest('[data-more]');
     if (more) { showAll[more.dataset.more] = !showAll[more.dataset.more]; T.keep(page.root, `[data-more="${more.dataset.more}"]`, draw); return; }
     if (e.target.closest('[data-older]')) readOlder();

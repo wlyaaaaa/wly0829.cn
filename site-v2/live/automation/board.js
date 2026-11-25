@@ -281,16 +281,19 @@
     return `<p class="tp-small au-why-missing">${since && (!from || since > from) ? `派活记录从 ${esc(when(new Date(since).toISOString()))} 才有，不满一整周，后台先不给这周的合计。` : '这周的合计后台还没给。'}</p>`;
   }
   // 几秒、几分钟、几小时几分
+  const WEEK_HOURS = '/live/agents/?hours=d7#hours';
   const spent = s => s < 60 ? [Math.round(s), '秒'] : s < 3600 ? [Math.round(s / 60), '分钟'] : null;
   function usage(d) {
     const seconds = d.results_7d?.ai_seconds ?? d.ai_usage?.total?.seven_day_seconds;
     const days = list(d.ai_usage?.total?.days_7);
     const u = d.ai_usage || {}, since = T.stamp(u.covered_since), weekStart = T.stamp(d.results_7d?.from) || Date.now() - 7 * 86400000;
     const short = known(seconds) && spent(seconds);
-    const label = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
+    const number = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
       : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
       : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
-    const covered = known(seconds) && since && since > weekStart ? `<small class="au-use__since">从 ${esc(when(u.covered_since))} 起记，更早的没有记录</small>` : '';
+    // 合计和“三家各干了多少”点了都到智能体页“三家干了多少”那块，先选好“近 7 天”
+    const label = known(seconds) ? `<a class="au-use__go" href="${esc(T.path(WEEK_HOURS))}">${number}<span class="au-use__chev" aria-hidden="true">›</span></a>` : number;
+    const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的没有记录</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
     // 星期照上面日期格子的取法，按北京日期本身算，不用浏览器本机时区
     const names = ['日', '一', '二', '三', '四', '五', '六'];
     const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00Z').getUTCDay()],
@@ -385,6 +388,12 @@
     const why = basis(s.basis, late);
     return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(when(s.recorded_since))} 起记</small>` : ''}</span></div>${why ? `<small class="au-basis">${why}</small>` : ''}`;
   }
+  // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
+  function modelCell(c) {
+    const text = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
+    const family = text && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
+    return !text ? '没读到' : family ? link(family, `${text} ›`) : text;
+  }
   function table(d) {
     const cats = shownCats(d);
     if (!cats.length) return `<section class="tp-panel" id="types"><div class="tp-panel__head"><h2>各类自动任务</h2></div><p class="tp-empty">${d.types ? '这一版后台还没给各类的读数。' : '各类自动任务没读到。'}</p></section>`;
@@ -395,7 +404,7 @@
         const g = G[c.id] || {}, expanded = open === c.id, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${expanded ? ' is-open' : ''}${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
           <th scope="row"><button type="button" class="au-name" data-open="${c.id}" aria-expanded="${expanded}" aria-controls="mech-${c.id}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span><i class="tp-chev" aria-hidden="true">${expanded ? '收起' : '怎么干'}</i></button></th>
-          <td>${whenCell(d, c)}</td><td class="au-model">${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到'}</td>
+          <td>${whenCell(d, c)}</td><td class="au-model">${modelCell(c)}</td>
           <td>${lastCell(c)}</td><td>${trendCell(c)}</td><td class="au-switchcell">${switchCell(c, offline)}</td></tr>
           ${expanded ? `<tr id="mech-${c.id}" class="au-mechrow"><td colspan="6">${mechanism(d, c)}</td></tr>` : ''}`;
       }).join('')}</tbody></table>${scheduled(d)}
