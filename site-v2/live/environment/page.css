@@ -70,9 +70,10 @@
 .env-table.env-table--versions th:last-child { width: auto; }
 .env-table--versions td:last-child { white-space: normal; overflow: visible; }
 .env-nw { white-space: nowrap; }
-.env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 9px 16px; font-size: 15px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 4px 0 0 rgb(0 166 80 / .45); border-top: 6px solid transparent; background-clip: padding-box; }
+.env-missing { color: var(--muted); }
+.env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 10px 18px; font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 5px 0 0 rgb(0 166 80 / .5); border-top: 6px solid transparent; background-clip: padding-box; }
 .env-table .env-group__head th span { letter-spacing: .02em; }
-.env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .12); box-shadow: inset 4px 0 0 #00A650; }
+.env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .13); box-shadow: inset 5px 0 0 #00A650; }
 .env-group[data-group="behind"] .env-group__head th { background-color: rgb(236 150 40 / .1); box-shadow: inset 4px 0 0 rgb(226 140 30 / .8); }
 .env-group[data-group="other"] .env-group__head th { background-color: rgb(95 103 96 / .07); box-shadow: inset 4px 0 0 rgb(95 103 96 / .35); }
 .env-table--versions tbody tr:nth-child(even) { background: transparent; }
@@ -112,7 +113,7 @@
 .env-ch__fold[open] > summary::after { transform: translateY(-55%) rotate(90deg); }
 .env-ch__fold > summary:hover { background: rgb(95 103 96 / .11); }
 .env-ch__fold > ul { list-style: none; margin: 6px 0 2px; padding: 0; }
-.env-ch--sub { grid-template-columns: 0 66px max-content minmax(0, 1fr); padding: 3px 0 3px 18px; font-size: 14px; }
+.env-ch--sub { grid-template-columns: 0 66px max-content minmax(0, 1fr); padding: 4px 0 4px 18px; font-size: 15px; }
 .env-ch--sub .env-ch__tag { padding: 0 12px; font-size: 13px; }
 .env-ch--sub .env-ch__name { font-weight: 400; color: var(--ink-soft); }
 .env-ch-more { margin: 18px 0 6px; text-align: center; }

@@ -96,12 +96,12 @@
   }
   function versionRow(r) {
     const now = nowState(r);
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${updateWay(r) === '还没读到' ? '<span class="env-missing">还没读到</span>' : esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
     const body = versionGroups(rows).map(g => {
       const list = g.key === 'latest' && g.rows.length > LATEST_FIRST + 1 ? g.rows.slice(0, latestShown) : g.rows, left = g.rows.length - list.length;
-      const more = left > 0 ? `<tr class="env-more-row"><td colspan="5"><button type="button" class="more" data-latest-more>再看 ${Math.min(LATEST_STEP, left)} 个（还有 ${left} 个） ›</button></td></tr>` : '';
+      const more = left > 0 ? `<tr class="env-more-row"><td colspan="5"><button type="button" class="more" data-latest-more>${left > LATEST_STEP ? `再看 ${LATEST_STEP} 个（还有 ${left} 个）` : `再看剩下 ${left} 个`} ›</button></td></tr>` : '';
       return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span> · ${count(g.rows.length, '个', data.software)}</th></tr>${list.map(versionRow).join('')}${more}</tbody>`;
     }).join('');
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
@@ -219,11 +219,11 @@
     const w = weekly(list(data.software)), next = list(data.software)?.find(x => validAt(x.target_next_run_at))?.target_next_run_at;
     if (key === 'software' && rows) {
       line = w && rows.some(x => Number(x.current_refresh_seconds) === 86400)
-        ? [U.isStale(d) ? snapshot(checkedAt('software'), 'software') : '', `装的版本每天夜里查 · 最新版每周${w}查，${targetAt(rows) ? `上次 ${U.date(targetAt(rows))}，` : ''}下次 ${U.date(next)}`].filter(Boolean).join(' · ')
+        ? [U.isStale(d) ? snapshot(checkedAt('software'), 'software') : '', `装的版本每天夜里查 · 最新版每周${w}查（错过了开机补查），${targetAt(rows) ? `上次 ${U.date(targetAt(rows))}，` : ''}下次 ${U.date(next)}`].filter(Boolean).join(' · ')
         : [snapshot(checkedAt('software'), 'software'), softwareEvery(rows)].filter(Boolean).join(' · ');
       figures = [];
     }
-    if (key === 'runtime' && r) { const at = checkedAt('runtime'); line = w && at ? `每周${w}查 · 上次 ${U.date(at)} ${U.time(at)}` : snapshot(at, 'runtime'); figures = []; }
+    if (key === 'runtime' && r) { const at = checkedAt('runtime'); line = w && at ? `每周${w}查（错过了开机补查） · 上次 ${U.date(at)} ${U.time(at)}` : snapshot(at, 'runtime'); figures = []; }
     if (!d && !waiting) figures = [];
     return { ...d, key, name: names[key], pic: pictures[key], wait: waiting, level: d?.level, reason: '', line: sp(line), palette: ['apricot', 'pink'], figures, build: el => { const chapter = chapters[key](el); return { set() { chapter.set(); moreRecords(el, key); } }; } };
   }
