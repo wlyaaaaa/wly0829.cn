@@ -55,7 +55,7 @@
   const hiddenWhileWriting = new Map();
   const hiddenByWrite = item => {
     const entry = hiddenWhileWriting.get(item.id);
-    return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
+    return viewer === 'owner' && entry && entry.version === item.item_version;
   };
   // 办成后马上跟上（M903）：后台从登记到写成要几秒，办成那一刻重读的退出列表和清单可能还是旧的。
   // 回执已确认写成的，先照办成的结果摆上：“我知道了”“不办了”“关掉汇报”放进“近 7 天下去的”，“晚点提醒”放进“你放着”；
@@ -98,8 +98,9 @@
   $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent, at } }) => {
     for (const item of items) {
       if (saved === null) writeStarted.set(item.id, at ?? Date.now());   // 回到页面接着查的（M945）按当初点的时刻算
-      if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
-      else hiddenWhileWriting.delete(item.id);
+      // 本人 11-26 00:13：页面上显示的结果必须是后台真回的。后台还没回之前这件照旧摆在原处（按钮写“正在办…”，回执写“正在保存…”），回了“已写成”才撤下；没写上、没回结果的留在原处
+      if (saved?.includes(item.id)) hiddenWhileWriting.set(item.id, { version: item.item_version });
+      else if (saved) hiddenWhileWriting.delete(item.id);
       if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent);
     }
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。

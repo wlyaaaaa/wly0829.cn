@@ -739,7 +739,7 @@
   // 写回、跟查到真结果、弹回执。resume：回到页面接着查上回那一次，只按那次的提交编号查，不另起一笔。
   async function saveItems(rows, intent, { trigger = null, extra = '', complete = () => {}, resume = null } = {}) {
     const wording = CONFIRM_ITEM[intent], live = window.Live, lane = document.getElementById('item-action-receipts'), started = resume?.at ?? Date.now();
-    // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
+    // 等你的事页：后台回了“已写成”的从清单撤下；没回、没写上的留在原处（本人 11-26 00:13：显示的结果必须是后台真回的）。
     const project = saved => {
       if (wording.action && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent, at: started } }));
     };
