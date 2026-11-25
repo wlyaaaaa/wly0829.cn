@@ -214,7 +214,7 @@ function cellView(id, facts, owner, pending, down) {
   if (id === 'computer') {
     if (down.hostOff) return { title: '电脑', num: '', unit: '', sub: '', note: '没开机', off: true, label: '电脑没开机' };
     const cpu = Number.isFinite(facts.cpu) ? String(Math.round(facts.cpu)) : '';
-    // 心跳停了但没确认关机：有上一份读数就照写（带“截止”），没有就照实说没回应，不说没开机。
+    // 心跳停了但没确认关机：有上一份读数就照写（带“截至”），没有就照实说没回应，不说没开机。
     if (down.silent && !cpu && !pending) return { title: 'CPU', num: '', unit: '', sub: '', note: '没回应', label: '电脑没回应' };
     const sub = Number.isFinite(facts.uptime) ? `开机 ${uptimeText(facts.uptime)}` : facts.on && !pending && !down.offline ? '开机时长还没读到' : '';
     return { title: 'CPU', num: cpu, unit: cpu && '℃', sub, note: cpu ? '' : missing, wait: pending && !cpu,
@@ -278,7 +278,7 @@ function cutoffText(at, now, prefix) {
   try {
     const part = (value, options) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', hourCycle: 'h23', ...options }).format(new Date(value));
     const day = (value) => part(value, { month: '2-digit', day: '2-digit' }).replace('/', '-'), time = part(at, { hour: '2-digit', minute: '2-digit' });
-    return day(at) === day(now || Date.now()) ? `${prefix ?? '以上截止'} ${time}` : `${prefix ?? '截止'} ${day(at)} ${time}`;
+    return day(at) === day(now || Date.now()) ? `${prefix ?? '以上截至'} ${time}` : `${prefix ?? '截至'} ${day(at)} ${time}`;
   } catch { return ''; }
 }
 function aiCellView(source, meta, owner, pending, now) {
@@ -295,7 +295,7 @@ function aiCellView(source, meta, owner, pending, now) {
     view.label = `AI 在干活，至少 ${view.num} 个`;
   }
   const old = isOldReading(source, meta, age);
-  view.sub = Number.isFinite(stamp) ? cutoffText(at, now, old ? '截止' : '记录于') : '上次读数';
+  view.sub = Number.isFinite(stamp) ? cutoffText(at, now, old ? '截至' : '记录于') : '上次读数';
   if (view.sub) view.label += `，${view.sub}`;
   return view;
 }
@@ -334,7 +334,7 @@ function renderScreen(data, meta, pending = false, now) {
     }
     const age = (Date.parse(now) || Date.now()) - Date.parse(at);
     if (id !== 'ai' && !view.off && (view.num || view.sub) && (retain || isOldReading(source, meta, age))) {
-      const stamp = cutoffText(at, now, '截止');
+      const stamp = cutoffText(at, now, '截至');
       if (stamp) { view.cutoff = true; view.sub = [view.sub, stamp].filter(Boolean).join('\n'); view.label += `，${stamp}`; }
     }
     let ring = -1;
