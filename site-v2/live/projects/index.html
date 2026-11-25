@@ -80,7 +80,7 @@
 #active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
 /* 窗口不到 1280 宽时，整句读数不再两行截断，按正文字号写、不加粗；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 14px; font-weight: 400; line-height: 21px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
-/* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
+/* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
 .pj-extra { margin-top: 44px; }
 .pj-extra > .part, #activity .card__body > .part { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
 .pj-extra > .part::before, #activity .card__body > .part::before { content: ""; flex: none; width: 5px; height: 22px; border-radius: 3px; background: #00A650; }
@@ -127,6 +127,14 @@
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
 #changes .pj-changes-actions .more { margin: 0; translate: none; }
+/* 冻结入口在偶用那组下面、同一行的右边（本人 11-24 20:34，图5 那处）：“冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；
+   和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
+#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-end; width: max-content; max-width: 100%; margin-left: auto; }
+#frozen-head > .more { height: auto; margin: 0; translate: 10px 0; }
+#frozen-head > .row__sub { margin: 2px 0 0; }
+#frozen-rest { padding-top: 24px; }
+/* 全部变化、成品现在只列近 7 天：标题旁一行灰色小字写明（照首页入口“全部变化 · 近 7 天 ›”的说法，字号颜色同这一块的说明小字）；“近 7 天｜近 30 天｜全部”切换上线时由切换代替 */
+.pj-part-span { font-size: 13.5px; line-height: 20px; font-weight: 400; letter-spacing: .02em; color: #6b6a64; }
 #changes-more .more__chev { rotate: 90deg; }
 #changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style></head>
@@ -144,10 +152,10 @@
     <button class="more" id="active-more" type="button" hidden></button><div class="fold" id="active-box"><div><ul class="pj-figs" id="active-rest"></ul></div></div>
 </div></section>
 </div>
+<div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><div class="pj-frozen-head" id="frozen-head"><button class="more" id="frozen-more" type="button" hidden></button></div><ul class="pj-figs" id="frozen-list"></ul>
+    <div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
 <section class="pj-sec card" id="activity"><div class="card__glass glass"><div class="card__body"><p class="part">近 30 天项目活跃</p><div id="activity-chart"></div></div></div></section>
-<div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><ul class="pj-figs" id="frozen-list"></ul>
-    <button class="more" id="frozen-more" type="button" hidden></button><div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
-<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>近 7 天全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
+<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>全部变化<small class="pj-part-span">近 7 天</small></p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
   <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
   <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
