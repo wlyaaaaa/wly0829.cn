@@ -97,6 +97,9 @@
 .item-plan__foot { display:flex; align-items:center; gap:16px; margin-top:18px; }
 .live-item-confirm__card .item-plan__foot p { flex:1; margin:0; font-size:14px; color:var(--muted); }
 .item-plan__foot .live-item-confirm__buttons { flex-wrap:nowrap; margin-top:0; }
+/* 手机上（整页缩小以后框只有三百多像素宽）：这件占一行、怎么办写在它下面，说明和按钮上下排，不把字挤成一列 */
+.live-item-confirm--plan .live-item-confirm__card { container-type:inline-size; }
+@container (max-width: 600px) { .item-plan { grid-template-columns:auto minmax(0, 1fr); } .item-plan__to { grid-column:2; white-space:normal; } .item-plan__foot { flex-direction:column; align-items:stretch; } .item-plan__foot .live-item-confirm__buttons { justify-content:end; flex-wrap:wrap; } }
 .items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
 .items-selection .items-plan__go:not(:disabled):hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
