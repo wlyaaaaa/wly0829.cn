@@ -110,14 +110,16 @@
     const receipt = r.receipt || {}, recorded = list(receipt.recorded);
     // 自动修理的业务回执就是“这件修理的全部几轮”那一页，右栏已经有，这里不再放一遍
     const ownHref = receipt.href && receipt.href !== r.subject?.href;
-    // 本人版写真内容；后台给本人的也只是“仅本人可见的事项”这类占位话，就不放这一行（主控 11-26：本人看了像打哑谜）。访客版照私事定稿写“仅本人可见”
-    const mine = viewer !== 'owner' ? recorded : recorded.filter(x => !/^仅本人可见的?(事项?|事)?$/.test(plainOf(x?.title ?? x?.text ?? x)));
+    // 本人版什么都给全：后台给本人的也只是“仅本人可见……”这类占位话（后台缺数）时，这一行照样在，写清后台没给原文，
+    // 不悄悄少一行、不让本人看到的比访客少（私事线 11-26 04:43）。访客版照后台给的字
+    const noOriginal = x => viewer === 'owner' && /^仅本人可见/.test(plainOf(x?.title ?? x?.text ?? x));
+    const mine = recorded;
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
     // 访客打不开的链接（私有仓库的提交）：访客版不给链接，字照给、不另加说明；本人版照给链接、挂“访客看不到”（本人 11-26 04:39）
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
       ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
         : o.github ? '' : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
-    const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
+    const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       ownHref && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
     const count = !rows && r.outputCount > 0 ? `<p class="ar-none">做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。</p>` : '';
