@@ -610,7 +610,9 @@
     }
     e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
     if (paged(e)) return;
-    const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
+    // 智能体页、开场页那两个读口算不出时回 503 带 agent_hooks_source_unavailable／agents_startup_unavailable：实况服务答了话，电脑是通的，
+    // 只是这一块这会儿没算出来（后台重启后要算十来分钟）；不能等 10 秒就把整页报成“电脑连不上”（M909），照常重读
+    const reachable = status >= 400 && status < 500 || /^(live_((source|variant|detail)_unavailable|publication_revoked)|agent_hooks_source_unavailable|agents_startup_unavailable)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
     // 确认关机和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
