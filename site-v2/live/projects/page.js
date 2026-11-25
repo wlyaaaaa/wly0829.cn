@@ -328,7 +328,8 @@
       if (!box) {
         box = document.createElement('section'); box.id = id; box.className = `pj-sec pj-extra pj-extra--${id}`;
         box.innerHTML = '<p class="part"><span></span></p><p class="pj-extra__note" data-extra-note></p><ul class="pj-extra__list"></ul><details class="pj-extra__more"><summary class="live-disclosure"><span class="disclosure-closed"></span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-extra__list" data-extra-rest></ul></details>';
-        if (id === 'recent-artifacts') box.syncDisclosure = recentDisclosure(box);
+        // 成品现在只列近 7 天：标题旁灰色小字写明（切换上线时由切换代替）
+        if (id === 'recent-artifacts') { box.querySelector('.part > span').insertAdjacentHTML('afterend', '<small class="pj-part-span">近 7 天</small>'); box.syncDisclosure = recentDisclosure(box); }
         // 顺序：近 30 天项目活跃 → 全部变化 → 本地还没推的改动 → 成品（本人 11-24 20:34，汇报页选 A）
         (id === 'recent-artifacts' && $('unpushed') || $('changes')).after(box);
       }
