@@ -319,7 +319,7 @@
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
   }
 
-  // —— 三、三家各干了多少活（和工期放一起） ——
+  // —— 三、报了估时的活（原名“三家各干了多少活”，本人 11-26 04:27 选 A 改名；和工期放一起） ——
   const MODEL = id => {
     const m = /^(claude|gpt|gemini)-(.+)$/.exec(String(id || ''));
     if (!m) return String(id || '');
@@ -344,9 +344,9 @@
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
-      ${cell('开工', w?.starts, '件', 'starts')}${cell('总工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
+      ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
-      ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
+      ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
     const ws = d.work_stats;
@@ -357,9 +357,9 @@
     const first = period !== 'all' && Date.parse(start) < Date.parse(earliest) ? earliest : null;
     // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
-    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
+    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>报了估时的活<small>派活时报过估时的活；登记工时是完工时记下的用时，和上面实际在干的总时间不是一回事</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
+      <div><p class="tp-sub">按周比 · 登记工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 
