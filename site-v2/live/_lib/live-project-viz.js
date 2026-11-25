@@ -91,7 +91,8 @@
       if (!data) { host.innerHTML = `<p class="pj-note">${emptyText(U.collectionText('发布、退回', data))}</p>`; return; }
       const all = data.weeks || [], first = all.findIndex(w => finite(w.published) || finite(w.rolled_back));
       if (first < 0) { host.innerHTML = `<p class="pj-note">${emptyText(esc(U.collectionText('发布、退回', data)))}</p>`; return; }
-      const weeks = all.slice(first), caption = `${data.first_version} → ${data.current_version}${data.observed_from ? ` · ${data.observed_from.slice(5, 10)} 起有记录` : ''}`;
+      // 柱子从有记录的第一周画起，图里没有缺记录的一段，不再写“几号起有记录”（M911）；观察开始前的流水不全由卡头照后台的说明写
+      const weeks = all.slice(first), caption = `${data.first_version} → ${data.current_version}`;
       host.classList.toggle('pj-rule-single', weeks.length === 1);
       host.innerHTML = `<p class="pj-week-range pj-note">${esc(caption)}</p><div class="pj-week-scroll" tabindex="0" aria-label="规则每周发布，左右滑动查看"><div class="pj-week-bars"></div></div>`;
       if (weeks.length === 1) {

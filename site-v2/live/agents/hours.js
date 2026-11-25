@@ -79,7 +79,9 @@
     const title = `${lead}${who}干了多少`.replace(/\s+干/, ' 干');
     const seg = `<div class="tp-seg ag-hseg-pick" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) =>
       `<button type="button" data-hperiod="${id}" aria-pressed="${period === id}">${label}</button>`).join('')}</div>`;
-    const asof = [p?.as_of && `截至 ${T.when(p.as_of)}`, m?.earliest && `${md(m.earliest)} 起有记录`].filter(Boolean).join(' · ');
+    // “几号起才有记录”只在选的这一段起点早于最早一条记录时写；“全部”标题里已写从哪天起，记录全了、判断不了都不写（本人 11-25 16:30，M911）
+    const first = p?.earliest_record_at || m?.earliest, gap = period !== 'all' && Date.parse(p?.window_start) < Date.parse(first);
+    const asof = [p?.as_of && `截至 ${T.when(p.as_of)}`, gap && `${md(first)} 起才有记录`].filter(Boolean).join(' · ');
     const head = `<div class="tp-panel__head ag-hhead"><h2>${esc(title)}<small>按实际干活的时间算，同时在干的分别计，没做完的也算</small></h2>
       <div class="ag-hside">${seg}${asof ? `<span class="tp-asof">${esc(asof)}</span>` : ''}</div></div>`;
     grow = grow && !!p;

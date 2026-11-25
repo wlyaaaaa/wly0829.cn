@@ -491,8 +491,11 @@
     // 更新看近 7 天；新装、卸载很少，看近 90 天（本人 11-24 00:39）。近 90 天的覆盖不全写清从哪天起有，旧后台没有 changes90 按“未读到”（M642）。
     const changeRows = rows => shortList([...rows].sort((a, b) => Date.parse(b.at) - Date.parse(a.at)), a => `<p class="use-note">${stampHtml(a.at)} · ${listName(a)}</p>`, '条');
     const updated = Array.isArray(d?.changes7) ? d.changes7.filter(a => a.kind === 'updated') : null;
-    const c90 = d?.changes90, items90 = Array.isArray(c90?.items) && c90.q !== 'unknown' ? c90.items : null, partial90 = !!items90 && c90.q === 'partial';
-    const from90 = partial90 && Number.isFinite(Date.parse(c90.coverage?.from)) ? U.date(c90.coverage.from) : '';
+    // 只有近 90 天的起点真的早于最早一条记录，才写哪几天没记录；记录全了、或者后台没给起点判断不了，就不写（本人 11-25 16:30，M911）
+    const c90 = d?.changes90, items90 = Array.isArray(c90?.items) && c90.q !== 'unknown' ? c90.items : null;
+    const start90 = Date.parse(c90?.window?.from), first90 = Date.parse(c90?.coverage?.from);
+    const partial90 = !!items90 && Number.isFinite(start90) && Number.isFinite(first90) && first90 - start90 >= 86400000;
+    const from90 = partial90 ? U.date(c90.coverage.from) : '';
     const recent = (kind, word) => {
       if (!items90) return paragraph(`近 90 天的${word}记录未读到`);
       const rows = items90.filter(a => a.kind === kind);
@@ -500,7 +503,7 @@
     };
     const section = (title, body) => `<section><h3 class="use-two__k">${title}</h3>${body}</section>`;
     const changes = section('更新 · 近 7 天', updated == null ? paragraph(null) : updated.length ? changeRows(updated) : paragraph('近 7 天没有更新'))
-      + `<div class="phone-changes__side">${partial90 ? paragraph(`近 90 天记录不全${from90 ? `，从 ${from90} 起才有` : ''}`) : ''}${section('新装 · 近 90 天', recent('added', '新装'))}${section('卸载 · 近 90 天', recent('removed', '卸载'))}</div>`;
+      + `<div class="phone-changes__side">${partial90 ? paragraph(`装卸记录从 ${from90} 起才有，近 90 天里 ${U.date(c90.window.from)} 到 ${from90} 没有记录`) : ''}${section('新装 · 近 90 天', recent('added', '新装'))}${section('卸载 · 近 90 天', recent('removed', '卸载'))}</div>`;
     return `<h3 class="use-two__k">应用装卸和更新</h3>${markNote('应用变化名称', [...(d?.changes7 || []), ...(items90 || [])].map(a => a.name ?? a))}<div class="phone-changes">${changes}</div>
       <dl class="phone-details">${[['model', '型号'], ['android', 'Android'], ['build', '系统版本']]
         .map(([k, label]) => detail(label, s?.[k])).join('')}${detail('开机多久', s?.uptime_s && typeof s.uptime_s === 'object' ? s.uptime_s : V.dur(s?.uptime_s))}

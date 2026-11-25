@@ -336,10 +336,13 @@
   function workSection(d) {
     const ws = d.work_stats;
     if (!ws || ws.unavailable_reason) return '';
-    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d), first = weeks[0]?.week_start;
+    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d);
+    // “几号起才有记录”只在选的这一段（近 7／30 天）起点早于最早一条记录时写；“全部”和记录全了的不写，后台没给起点判断不了也不写（M911）
+    const earliest = ws.periods?.all?.from, start = ws.periods?.[period]?.from;
+    const first = period !== 'all' && Date.parse(start) < Date.parse(earliest) ? earliest : null;
     // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
-    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first + 'T00:00:00+08:00'))} 起有记录</span>` : ''}</div></div>
+    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
       <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
   }
