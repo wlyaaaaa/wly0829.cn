@@ -152,8 +152,9 @@
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
+  // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
-    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2></div>
       <div class="tp-grid ag-scores">${HOSTS.map(h => scoreCard(d, h)).join('')}</div></section>`;
   }
 
@@ -481,8 +482,11 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
+    // 顶栏已写同一分钟的“读到／最后一份”，大标题区就不再写“截至”；分钟不一样才写（M746）
+    const bar = T.stamp(state.offline ? state.cutoffAt : state.shownAt), at = T.stamp(d.at);
+    const asof = at != null && (bar == null || Math.floor(bar / 60000) !== Math.floor(at / 60000)) ? `<span>截至 ${esc(when(d.at))}</span>` : '';
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
-        <div class="tp-head__side ag-headside"><span>截至 ${esc(when(d.at))}</span>${picker()}</div></div>
+        <div class="tp-head__side ag-headside">${asof}${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });

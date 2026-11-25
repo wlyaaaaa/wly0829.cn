@@ -47,7 +47,8 @@
     const n = size?.code_chars;
     if (!finite(n)) return '';
     const bounded = lower(size, 'code_chars'), tens = bounded ? Math.floor(n / 1000) / 10 : n / 10000;
-    return `${bounded ? '至少' : '约'} ${tens.toFixed(1)} 万字符`;
+    // 单位和项目总览、文档一样写“万字”（本人说的是“代码字数”；全站只这一处原来写“万字符”）
+    return `${bounded ? '至少' : '约'} ${tens.toFixed(1)} 万字`;
   }
   function metricCadence(m) {
     const cadence = m?.cadence;

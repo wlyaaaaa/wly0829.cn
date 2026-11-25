@@ -293,7 +293,8 @@
       U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
       const current = (key, label) => {
         const listed = peopleIn(d.active?.filter(c => c.state === key));
-        if (Number.isFinite(d[key]) && d[key] < listed) return `${label}（汇总 ${d[key]} 场，列表列出 ${listed} 场）`;
+        // 后台的件数只算最近一次快读又确认过的（离最新一次 2 分钟内），列表还留着早先读到、这次没再读到的那几场；两个数差在哪用一句话说清
+        if (Number.isFinite(d[key]) && d[key] < listed) return `${d[key]} 个${label}（列表里另 ${listed - d[key]} 个是早先读到的）`;
         const count = chatCount(d, key, listed);
         return count && count + label;
       };
