@@ -163,6 +163,7 @@
 
 ## 七、公开词（三选一）
 
+- 私事（访客能看到什么）全站只认一份私事定稿卡，只在本机：`上线收尾\定稿卡-私事.md`。按需更新和别的施工都照它，不按单页、单个对话另判；默认原样，拿不准也原样，往保守里换算错。
 - 给访客看的每一句都过公开词表：出图前扫稿子，拼站时再扫全站（扫描命令见 [发布与扫描](publish-and-scan.md) 的“扫描与公开词检查”）。
 - 命中的句子由 AI 看整句判断，三选一：
   - **换说法：** 把事讲清，但不露。
@@ -184,8 +185,8 @@
 
 在公网的正式实况页面以本人身份读第 3–6 条。需要核接口时用页面同一数据源 `/computer-access/live/v1/`，配对和本人可见范围沿用当前入口。
 
-1. 按 `E:/PCConfig/registries/live_refresh_policy.json` 的设备字段 `on_demand` 重取这轮静态数，更新取数日期。顺带核 `manual_fields` 的型号和项目资料，当前项目的实际项目介绍有变化时回登记原处。正式成功回执登记后，再从原实况来源核一次值和采集时刻，数据还未刷新就把缺项记进本轮记录。
-2. 更新 `site-v2/live/project/weekly-new.json` 的百工谱“本周新会”和日期范围。电脑心电图有新一批前后对比时更新同目录 `before-after.json`。两份由正常构建带入实况。
+1. 做更新的 AI 每轮直接读 PCConfig 现役的 `E:/PCConfig/registries/live_refresh_policy.json`，按 `fields` 指向 `on_demand` 的字段、`manual_fields` 和 `backup_top_table.on_demand` 回原来源核数及时间。有变化就改原登记或原回执，备份大小取原测量时间，副本内容日期和确认时间各取原记录。台式机手填配置读 PCConfig 的 `registries/machine.json` 中 `hardware.configuration`，型号和核实时间读同组的型号字段和 `hardware.observed_at`。副机读 `registries/remote_computer_mcp.secondary_laptop.json` 的 `hardware` 和 `hardware.observed_at`，手机型号回退读 `docs/design/phone-switch-arrival.md` 的机型和原核实记录。正式发布成功后回读实况的值和来源时刻，缺证据或回读仍旧的写进本轮记录。
+2. 同一份登记的 `blocks` 中，按 `projects/agents/weekly-new` 的 `on_demand` 项更新 `site-v2/live/project/weekly-new.json` 的百工谱“本周新会”和实际周区间。按 `projects/timeaudit/before-after` 的 `on_demand` 项，在电脑心电图有新一批完整日对比时，从 `projects/timeaudit/records?section=days` 的原读数更新同目录 `before-after.json`，保留实际截止日。两份由正常构建带入实况。
 3. 实况「手机 → 应用」和「电脑 → 使用时间」看“其他”。对应接口 `phone/apps`、`computer/usage`。能按实际用途确定的分类交数据来源登记处，其余留在“其他”。
 4. 用当轮源码的打开记录名单读本周本人打开数和每日缺项，供删改判断。核足七天样本再认定“整周没有记录”。只在本轮留下结论。
 5. 从预览点新技能的“看实况”，核到目标项目及段落。以 `computer` 的电脑和设备、`projects/agents` 的型号相关源、`tasks?scope=automation` 的自动任务对照页面；按 `live_refresh_policy.json` 核后端供应而页面暂未展示的字段。
