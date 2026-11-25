@@ -232,18 +232,55 @@
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
     html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
+  // 全部变化、成品两块标题右边一排“近 7 天｜近 30 天｜全部”，默认近 7 天（本人 11-24 20:34）；样子和智能体页工期、工作量、钩子那三排一样（index.html 的 .pj-tseg）。
+  // 近 7 天照旧用变化接口和名册送来的那份；近 30 天、全部点了才读 projects/changes?range=、projects/artifacts?range=（翻页同样带 cursor）。
+  // 回包里 range 和点的那档对得上才用；后台还没给就写“后台还没送来”，不拿近 7 天的数顶上。
+  const RANGES = [['7d', '近 7 天'], ['30d', '近 30 天'], ['all', '全部']], rangeLabel = id => RANGES.find(r => r[0] === id)?.[1] || '';
+  const rangeSeg = key => `<span class="tp-seg pj-tseg" role="group" aria-label="看哪一段">${RANGES.map(([id, label]) => `<button type="button" data-range-of="${key}" data-range="${id}" aria-pressed="${id === '7d'}">${label}</button>`).join('')}</span>`;
+  const pick = { changes: '7d', artifacts: '7d' }, ranged = { changes: {}, artifacts: {} };
+  const rangeWord = (key, range, state) => { const what = `${range === 'all' ? '全部时间' : rangeLabel(range)}的${key === 'changes' ? '变化' : '成品'}`;
+    return state === 'loading' ? `正在读${what}…` : `${what}后台还没送来，先看“近 7 天”。`; };
+  async function loadRange(key, range) {
+    const had = ranged[key][range]?.state;
+    if (had !== 'loading') ranged[key][range] = { state: 'loading' };
+    drawRange(key);
+    if (had === 'loading') return;
+    let s = null;
+    try { s = await window.Live.get(key === 'changes' ? 'projects/changes' : 'projects/artifacts', { range }); } catch { /* 读不到按还没送来写 */ }
+    const d = s?.data;
+    ranged[key][range] = d && Array.isArray(d.items) && d.range === range ? { state: 'ok', data: d, rows: d.items, next: d.next || null } : { state: 'missing' };
+    if (pick[key] === range) drawRange(key);
+  }
+  let lastOverview = null;
+  function drawRange(key) { if (key === 'changes') renderChanges(); else drawProjectExtras(lastOverview); }
+  $('changes').querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('changes'));
+  document.addEventListener('click', e => {
+    const button = e.target.closest('[data-range-of]');
+    if (!button) return;
+    const key = button.dataset.rangeOf, range = button.dataset.range;
+    for (const b of document.querySelectorAll(`[data-range-of="${key}"]`)) b.setAttribute('aria-pressed', String(b === button));
+    if (pick[key] === range) return;
+    pick[key] = range;
+    if (range === '7d' || ranged[key][range]?.state === 'ok') drawRange(key); else loadRange(key, range);
+  });
   function renderChanges() {
+    const range = pick.changes, own = range === '7d' ? { data: changes, rows: changeRows, next } : ranged.changes[range] || { state: 'loading' };
     const roster = p.has('fixture') ? home?.items || [] : ['active', 'frozen'].flatMap(key => {
       const state = states.get(key);
       return state?.viewer?.kind === changeViewer ? state.data?.items || [] : [];
     });
     const projects = new Map(roster.map(it => [it.id, it]));
-    const rows = changeRows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
-    const gap = changes?.gap && (changes.q === 'partial' || isStale(changes)) ? U.fieldHtml(changes.gap, { kind: changeViewer }) : '';
-    const hidden = changes?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
-    fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : '近 7 天没有实质变化');
-    $('next').hidden = !next;
-    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(changes.hidden_what || '项目变化')}没列在这里`].filter(Boolean).join(' · ');
+    const rows = own.rows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
+    const data = own.data, gap = data?.gap && (data.q === 'partial' || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const hidden = data?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
+    const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
+    if (['loading', 'missing'].includes(own.state)) fill('changes', [], rangeWord('changes', range, own.state));
+    else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : quiet);
+    $('next').hidden = !own.next;
+    // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
+    const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
+      ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
+    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
     changesNote.hidden = !note; U.html(changesNote, note);
   }
   function link(key, s) {
@@ -281,7 +318,7 @@
   let extraLanded = false;
   function renderOverview(d) {
     if (frozenOnly) return;
-    drawProjectExtras(d);
+    lastOverview = d; drawProjectExtras(d);
     const target = /^#(?:unpushed|recent-artifacts)$/.test(location.hash) && $(location.hash.slice(1));
     if (!extraLanded && target && !target.hidden) {
       extraLanded = true;
@@ -333,8 +370,14 @@
       if (!box) {
         box = document.createElement('section'); box.id = id; box.className = `pj-sec pj-extra pj-extra--${id}`;
         box.innerHTML = '<p class="part"><span></span></p><p class="pj-extra__note" data-extra-note></p><ul class="pj-extra__list"></ul><details class="pj-extra__more"><summary class="live-disclosure"><span class="disclosure-closed"></span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-extra__list" data-extra-rest></ul></details>';
-        // 成品现在只列近 7 天：标题旁灰色小字写明（切换上线时由切换代替）
-        if (id === 'recent-artifacts') { box.querySelector('.part > span').insertAdjacentHTML('afterend', '<small class="pj-part-span">近 7 天</small>'); box.syncDisclosure = recentDisclosure(box); }
+        if (id === 'recent-artifacts') {
+          box.syncDisclosure = recentDisclosure(box);
+          box.querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('artifacts'));
+          for (const b of box.querySelectorAll('[data-range-of]')) b.setAttribute('aria-pressed', String(b.dataset.range === pick.artifacts));
+          // 近 30 天、全部一页读不完时接着翻（和全部变化的“更多变化 ›”一样）
+          box.insertAdjacentHTML('beforeend', '<button class="more pj-extra__next" id="artifacts-next" type="button" hidden>更多成品 ›</button>');
+          box.querySelector('#artifacts-next').addEventListener('click', e => moreArtifacts(e.currentTarget));
+        }
         // 顺序：近 30 天项目活跃 → 全部变化 → 本地还没推的改动 → 成品（本人 11-24 20:34，汇报页选 A）
         (id === 'recent-artifacts' && $('unpushed') || $('changes')).after(box);
       }
@@ -348,7 +391,22 @@
       box.syncDisclosure?.();
       watchBands(box);
     };
-    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(d?.recent_artifacts, section, field, viewer, d?.items);
+    const range = pick.artifacts, own = ranged.artifacts[range] || { state: 'loading' };
+    const recent = range === '7d' ? d?.recent_artifacts : own.state === 'ok' ? { ...own.data, items: own.rows, next: own.next, page_gap: own.pageGap } : { state: own.state };
+    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(recent && { ...recent, range }, section, field, viewer, d?.items);
+  }
+  async function moreArtifacts(button) {
+    const range = pick.artifacts, own = ranged.artifacts[range];
+    if (!own?.next) return;
+    const label = button.textContent;
+    button.disabled = true; button.textContent = '正在读…';
+    try {
+      const cursor = own.next, s = await window.Live.get('projects/artifacts', { range, cursor });
+      if (cursor !== own.next || ranged.artifacts[range] !== own) return;
+      if (s.data?.items && s.data.range === range && s.data.next !== cursor) { own.rows = [...own.rows, ...s.data.items]; own.next = s.data.next || null; own.pageGap = ''; }
+      else own.pageGap = '下一页暂时读不到，已读到的留在这里。';
+      if (pick.artifacts === range) U.anchor(() => drawProjectExtras(lastOverview));
+    } finally { button.disabled = false; button.textContent = label; }
   }
   function drawUnpushed(unpushed, section, field) {
     // 有没推提交的排前面、放大；零值不写，只写有的。
@@ -437,13 +495,21 @@
       const header = g.secret && audience === 'public' ? '' : `<div class="pj-art__head">${g.secret ? miniPic('', null) : miniPic(p?.id, p?.name)}${head}</div>`;
       return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW).map(rowHtml).join('')}</ul>${rest.length ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-art__rows">${rest.map(rowHtml).join('')}</ul></details>` : ''}` };
     });
-    const missing = Number.isInteger(recent?.count_7d) && recent.count_7d > items.length
-      ? `近 7 天登记 ${recent.count_7d} 件，还有至少 ${recent.count_7d - items.length} 件未读到`
+    const range = recent?.range || '7d', count = range === '7d' ? recent?.count_7d : recent?.count;
+    // 还能往下翻的不算“未读到”；翻完了还比登记的少才写
+    const missing = !recent?.next && Number.isInteger(count) && count > items.length
+      ? `${rangeLabel(range)}登记 ${count} 件，还有至少 ${count - items.length} 件未读到`
       : '';
-    const note = items.length || recent?.hidden || missing ? [
-      recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品',
+    // 这一档一件都没有、但别的档有（或是近 30 天、全部）时照样留着这块，写一句没有，切换还点得到
+    const quiet = !items.length && !recent?.hidden && !missing && (range !== '7d' || recent?.total > 0)
+      ? range === 'all' ? '还没有登记过成品' : `${rangeLabel(range)}没有新登记的成品` : '';
+    const note = ['loading', 'missing'].includes(recent?.state) ? rangeWord('artifacts', range, recent.state) : items.length || recent?.hidden || missing || quiet ? [
+      recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品', quiet,
+      // 近 30 天、全部一页没列完：写清列了几件、这一档一共几件，下面“更多成品 ›”接着翻
+      recent.next && Number.isInteger(count) && `已列出 ${items.length} 件，${rangeLabel(range)}共 ${count} 件`, recent.page_gap,
     ].filter(Boolean).join(' · ') : '';
     section('recent-artifacts', '成品', cards.slice(0, 9), note, cards.slice(9));
+    if ($('artifacts-next')) $('artifacts-next').hidden = !recent?.next;
   }
   window.LiveHeader.watch(null, {
     phase: s => phase('home', s),
@@ -512,14 +578,25 @@
   });
   addEventListener('popstate', switchRoster);
   $('next').addEventListener('click', async (event) => {
-    if (!next) return;
+    const range = pick.changes, own = range === '7d' ? null : ranged.changes[range];
+    if (!(own ? own.next : next)) return;
     const button = event.currentTarget, label = button.textContent;
     button.disabled = true; button.textContent = '正在读…';
     try {
+      if (own) {
+        // 近 30 天、全部：同一份回包接着翻，翻到的并进这一档
+        const cursor = own.next, source = changeAt(own.data), s = await window.Live.get('projects/changes', { range, cursor });
+        if (cursor !== own.next || ranged.changes[range] !== own) return;
+        if (s.data?.items && s.data.range === range && source === changeAt(s.data) && s.data.next !== cursor) {
+          own.rows = [...new Map([...own.rows, ...s.data.items].map(it => [it.id, it])).values()]; own.next = s.data.next;
+          if (pick.changes === range) U.anchor(renderChanges);
+        } else { changesNote.hidden = false; U.html(changesNote, '下一页暂时读不到，已读到的留在这里。'); }
+        return;
+      }
       const cursor = next, source = changeAt(changes), s = await window.Live.get('projects/changes', { cursor });
       if (cursor !== next || source !== changeAt(changes)) return;
       if (s.data?.items && (s.meta.viewer?.kind || 'public') === changeViewer && source === changeAt(s.data) && s.data.next !== cursor) {
-        U.anchor(() => { changeRows = [...new Map([...changeRows, ...s.data.items].map(it => [it.id, it])).values()]; next = s.data.next; renderChanges(); });
+        U.anchor(() => { changeRows = [...new Map([...changeRows, ...s.data.items].map(it => [it.id, it])).values()]; next = s.data.next; if (pick.changes === '7d') renderChanges(); });
       } else { changesNote.hidden = false; U.html(changesNote, '下一页暂时读不到，已读到的留在这里。'); }
     } finally { button.disabled = false; button.textContent = label; }
   });
