@@ -79,7 +79,8 @@
     const title = `${lead}${who}干了多少`.replace(/\s+干/, ' 干');
     const seg = `<div class="tp-seg ag-hseg-pick" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) =>
       `<button type="button" data-hperiod="${id}" aria-pressed="${period === id}">${label}</button>`).join('')}</div>`;
-    const asof = [p?.as_of && `截至 ${T.when(p.as_of)}`, m?.earliest && `${md(m.earliest)} 起有记录`].filter(Boolean).join(' · ');
+    // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
+    const asof = [p?.as_of && (last?.asof ? last.asof(p.as_of) : `截至 ${T.when(p.as_of)}`), m?.earliest && `${md(m.earliest)} 起有记录`].filter(Boolean).join(' · ');
     const head = `<div class="tp-panel__head ag-hhead"><h2>${esc(title)}<small>按实际干活的时间算，同时在干的分别计，没做完的也算</small></h2>
       <div class="ag-hside">${seg}${asof ? `<span class="tp-asof">${esc(asof)}</span>` : ''}</div></div>`;
     grow = grow && !!p;
@@ -107,7 +108,7 @@
   }
 
   window.AgentsHours = {
-    html(d, viewer, opts = {}) { last = { d, viewer, only: opts.only || null }; return render(d, viewer, last.only); },
+    html(d, viewer, opts = {}) { last = { d, viewer, only: opts.only || null, asof: opts.asof || null }; return render(d, viewer, last.only); },
   };
   // 切时间段只重画这一块；页面每轮读数整页重画时照记着的时间段画
   document.addEventListener('click', e => {

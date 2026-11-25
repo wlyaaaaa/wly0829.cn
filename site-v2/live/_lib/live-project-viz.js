@@ -18,13 +18,16 @@
   const gap = m => m?.gap || '';
   function summary(host, data, viewer) {
     const wan = n => esc((n / 1e4).toLocaleString('zh-CN', { maximumFractionDigits: 1 }));
-    // 代码多少字跟在代码行数后面（名册 code_size：全覆盖给 code_chars，没数全给 observed_code_chars 和数到几个）
-    const chars = finite(data?.code_chars) ? `<small>、</small><b>${wan(data.code_chars)}</b><small>万字</small>`
-      : finite(data?.observed_code_chars) ? `<small>、</small><b>至少 ${wan(data.observed_code_chars)}</b><small>万字${finite(data.covered) && finite(data.active) ? `（数到 ${data.covered}／${data.active} 个）` : ''}</small>` : '';
+    // 代码：字数是主数，行数用小字放在它下面（本人 11-25 06:39，M846）。名册 code_size：全覆盖给 code_chars，没数全给 observed_code_chars 和数到几个；
+    // 字数一样没有时照旧只写行数。文档行数后台还没有（code_size 只有 docs_chars、code_chars、code_lines），文档下面暂不放行数。
+    const chars = finite(data?.code_chars) ? `<b>${wan(data.code_chars)}</b><small>万字</small>`
+      : finite(data?.observed_code_chars) ? `<b>至少 ${wan(data.observed_code_chars)}</b><small>万字${finite(data.covered) && finite(data.active) ? `（数到 ${data.covered}／${data.active} 个）` : ''}</small>` : '';
     const missing = [], parts = [['changed_7d', '近 7 天', '个项目动过', 1], ['docs_chars', '文档', '万字', 1e4], ['code_lines', '代码', '万行', 1e4]].map(([key, name, unit, scale]) => {
       if (data?.[`${key}_visibility`] === 'owner' && viewer === 'public') return `<span><small>${name}</small>${U.visibilityNote({ visibility: 'owner', hidden_what: data.hidden_what }, viewer, `${name}统计`)}</span>`;
       if (!finite(data?.[key])) { missing.push(name); return ''; }
-      return `<span><small>${name}</small><b>${lower(data, key) ? '至少 ' : ''}${esc((data[key] / scale).toLocaleString('zh-CN', { maximumFractionDigits: 1 }))}</b><small>${unit}</small>${key === 'code_lines' ? chars : ''}</span>`;
+      const value = `${lower(data, key) ? '至少 ' : ''}${esc((data[key] / scale).toLocaleString('zh-CN', { maximumFractionDigits: 1 }))}`;
+      if (key === 'code_lines' && chars) return `<span><small>${name}</small><span class="pj-summary-stack"><span>${chars}</span><small class="pj-summary-lines">${value} ${unit}</small></span></span>`;
+      return `<span><small>${name}</small><b>${value}</b><small>${unit}</small></span>`;
     });
     host.innerHTML = parts.join('') + (data?.q === 'partial' && gap(data) ? `<small>${esc(gap(data))}</small>` : '') + (missing.length ? `<span class="pj-summary-none">${U.offline?.() ? parts.some(Boolean) ? '' : emptyText('') : esc(U.collectionText(missing.join('、'), data))}</span>` : '');
   }

@@ -92,6 +92,10 @@
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
+  // 同一时刻只说一次（M746）：顶栏固定在屏幕顶上，已写“HH:MM 读到”；卡里的“截至”跟它（或这张卡已写的）同一分钟就不写，不一样才写这张卡自己的时刻
+  let barAt = null;
+  const minuteOf = at => { const t = T.stamp(at); return t == null ? null : Math.floor(t / 60000); };
+  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [barAt, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
   const ruleVer = (v, label = esc(v), cls) => v ? link('/rules/', label, cls) : '';   // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”）
   // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
   const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
@@ -152,8 +156,9 @@
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
+  // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
-    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2></div>
       <div class="tp-grid ag-scores">${HOSTS.map(h => scoreCard(d, h)).join('')}</div></section>`;
   }
 
@@ -281,7 +286,7 @@
       : `同一批 ${int(p.samples)} 件里，实际报的比程序推荐的${gap > 0 ? '多' : '少'}对上 ${int(Math.abs(gap))} 件（${int(a.hits)} 对 ${int(p.hits)}）。`;
     const per = HOSTS.map(h => ({ h, r: b.hosts?.[h.id]?.rows })).filter(x => BASES.every(([id]) => known(find(x.r, id)?.hits)));
     const scope = mine ? `${HOSTS.find(h => h.id === only).name} 的 ${int(p.samples)} 件` : only ? `${HOSTS.find(h => h.id === only).name} 单独的数还没出，这里是三家合起来的` : b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`;
-    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${b.at ? ` · 截至 ${esc(when(b.at))}` : ''}</small></p>
+    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${asof(b.at, d.work_stats?.as_of) ? ` · ${esc(asof(b.at, d.work_stats?.as_of))}` : ''}</small></p>
       <div class="tp-bars">${BASES.map(bar).join('')}</div>
       <p class="ag-say">${say}</p>
       ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span class="ag-perhost${dim(h.id)}"><span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}</span>`).join('<br>')}</p>` : ''}
@@ -292,7 +297,7 @@
     if (!ws) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">工期账这一轮没读到。</p></section>`;
     if (ws.unavailable_reason) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">${esc(ws.unavailable_reason)}</p></section>`;
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}<span class="tp-asof">截至 ${esc(when(ws.as_of))}</span></div></div>`;
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${asof(ws.as_of) ? `<span class="tp-asof">${esc(asof(ws.as_of))}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
@@ -380,7 +385,7 @@
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
-    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
@@ -438,7 +443,7 @@
   function hooksSection(d) {
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p><span class="tp-asof">截至 ${esc(when(hv?.at || hs.at || d.at))}</span></div>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
@@ -481,9 +486,12 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
+    // 顶栏已写同一分钟的“读到／最后一份”，大标题区和各卡就不再写同一分钟的“截至”；分钟不一样才写（M746）
+    barAt = state.offline ? state.cutoffAt : state.shownAt;
+    const headAt = asof(d.at);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
-        <div class="tp-head__side ag-headside"><span>截至 ${esc(when(d.at))}</span>${picker()}</div></div>
-      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips }) || ''}${configSection(d)}${hooksSection(d)}`;
+        <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
+      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));

@@ -14,7 +14,7 @@
   const PERIODS = [['all', '全部'], ['d7', '近 7 天'], ['d30', '近 30 天']], TOP = 5;
   const period = { talk: 'all', skills: 'all' };
   const drawn = new Set();
-  let viewer = 'public', only = null, chips = () => '', skillsOpen = false;
+  let viewer = 'public', only = null, chips = () => '', skillsOpen = false, asof = at => `截至 ${T.when(at)}`;
   const fam = id => HOSTS.find(h => h.id === id);
   const hostOf = v => HOSTS.find(h => h.id === String(v || '').toLowerCase() || h.name === v);
   const num = v => known(v) ? v : null;
@@ -87,7 +87,8 @@
   function seg(key, start) {
     return `<div class="tp-seg" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) => `<button type="button" data-mperiod="${key}:${id}" aria-pressed="${period[key] === id}">${esc(id === 'all' && start ? `${label} · ${sinceWord(start)}` : label)}</button>`).join('')}</div>`;
   }
-  const head = (key, title, start, at) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${at ? `<span class="tp-asof">截至 ${esc(T.when(at))}</span>` : ''}</div></div>`;
+  // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
+  const head = (key, title, start, at) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${at && asof(at) ? `<span class="tp-asof">${esc(asof(at))}</span>` : ''}</div></div>`;
   const tone = id => only === id ? ' is-on' : only ? ' is-off' : '';
   // 三家各一行：点了这一家高亮
   function famRows(key, keys, v, unit, { lower = {}, last = {}, starts = {}, start = null } = {}) {
@@ -183,7 +184,7 @@
   }
   window.AgentsMoved = {
     html(d, kind, opts = {}) {
-      viewer = kind; only = opts.only || null; chips = opts.chips || (() => '');
+      viewer = kind; only = opts.only || null; chips = opts.chips || (() => ''); if (opts.asof) asof = opts.asof;
       return [d.message_stats && talkSection(talkModel(d.message_stats)), d.skill_stats && skillSection(skillModel(d.skill_stats))].filter(Boolean).join('');
     },
     // 点了切换时段或技能展开：返回要停住的位置；不是这两块的点击返回 null（点哪一家归 page.js）
