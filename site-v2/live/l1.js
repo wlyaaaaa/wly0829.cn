@@ -605,7 +605,7 @@
     const extra = !focus?.closed && ['choose', 'do'].includes(focus?.item?.kind) && !scoped.some(it => it.id === focus.id) ? focus.item : null;
     const by = k => scoped.filter(it => it.kind === k);
     const { count, exact, text } = waitingCount(d.counts, extra ? [...scoped, extra] : scoped);
-    U.html(p.head, U.head(addressed(text), { href: href('needs') }) + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
+    U.html(p.head, U.head(addressed(text), { href: href('needs') }).replace(/(<span class="live-unit">(?:至少 )?)(\d+)/, '$1<span class="needs-num">$2</span>') + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
     // 刚在本页点过、已经办成的，后台读数跟上前先不显示
     const all = [...by('choose').sort(newest), ...by('do').sort(newest)].filter(it => !U.justSaved(it));
@@ -930,7 +930,7 @@
     const rows = [
       // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页“CPU 和显卡”“内存”那一组（M708）
       ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/#grp-cpu'],
-      ['显卡', withReadings(pair(m.gpu, val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))), ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
+      ['显卡', withReadings(join([val(m.gpu, x => (text => Number(x?.value) < 90 ? `<span class="kv-good">${text}</span>` : text)(quantity(x, 'value', n => `${Math.round(n)}%`))), val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))]) || null, ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
       ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
