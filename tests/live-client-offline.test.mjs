@@ -280,15 +280,8 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const slow = await client.get('home');
   assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
   // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；
-  // 没确认关机就不取云端、随站那两份（本人 11-24 20:34）
+  // 没确认关机时，浏览器里没有上次数据的块照 r80 退到随站那份（只用元数据），有数的块留着手里那份
   sandbox.navigator = {onLine: false};
-  await client.get('home');
-  assert.equal((await client.get('projects')).data, null);
-  await fallbackRead();
-  assert.equal((await client.get('projects')).meta.rev, null);
-  assert.equal(requested.some(url => url === '/release-identity.json' || url.startsWith('https://assets.example.test/')), false);
-  // 确认关机（边缘读到云端那份记着已关机）才取随站那份；没读到过的只用备用包的元数据
-  delete sandbox.navigator; hostOff = true;
   await client.get('home');
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
@@ -304,7 +297,11 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const edge = await client.get('home');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);
-  assert.equal(edge.conn.stage, 'off'); assert.match(edge.conn.at, /下面是这台浏览器存的最后一份/);
+  assert.equal(edge.conn.stage, 'lost'); assert.match(edge.conn.at, /下面是 .+ 的数据/);
+  // 确认关机后，手里那份比备用包新就留着，写明是这台浏览器存的
+  delete sandbox.navigator; hostOff = true;
+  const off = await client.get('home');
+  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.match(off.conn.at, /下面是这台浏览器存的最后一份/);
   assert.deepEqual(shown, ['safe']);
   paused = true;
   assert.equal((await client.get('home')).publicPaused, true);

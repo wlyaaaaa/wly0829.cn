@@ -484,9 +484,16 @@
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
       ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
-    if (!hostOffline(link)) return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at: atLine,
-      wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
-        : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
+    if (!hostOffline(link)) {
+      // 这台浏览器没存过、先退到了上线时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”
+      const release = connectionEntries().some(x => x.backupFrom === 'release' && onBackup(x) || x.backupMeta?.from === 'release');
+      const at = main && onBackup(main) ? ` · 下面是上线时带的那份（${stamp(main.at)}）`
+        : !mainAt && !shownUpTo() && main?.backupMeta ? ` · 上线时带的那份只记了 ${stamp(main.backupMeta.at)}，没存内容` : atLine;
+      return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at,
+        wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
+          : release ? '电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示上线时带的那份'
+          : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
+    }
     const say = '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
@@ -705,11 +712,13 @@
     if ((retryCopy || offline()) && !onBackup(e)) { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
   // 确认关机后才用备用数据（本人 11-24 20:34）：先云端那份（经边缘），云端读不到再随站那份；浏览器手里那份更新就留着手里的。
+  // 例外：这一块浏览器里没有上次的数据时，没确认关机也照 r80 退到随站那份，第一次来的访客在电脑关着时不看到空页
+  // （主控 11-25 12:24：本人定离线怎么判之前保留现在线上的这条退路）；云端那份仍只在确认关机后用。
   // 包的代号都是 policy-11，有没有正文看 metadata_only（后台 11-25 06:56）：带正文的每块就是访客回包——本人页面照样是本人连接状态，
   // 只在这一块写明“访客备用数据”、哪一份、北京时间；这份不存进浏览器副本，也不算在线读数。旧包只有时刻，只记下几点，不清手上的数；
   // 旧随站包里的访客计划任务名册照旧能画（M473）。
   function useBackup(e, from, at, proof, packet) {
-    if (!backupPages || fixture !== null || e.withdrawn || itemDetail(e) || !confirmedOff() ||
+    if (!backupPages || fixture !== null || e.withdrawn || itemDetail(e) || !(confirmedOff() || from === 'release' && e.data === null) ||
         proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
     const block = packet?.viewer?.kind === 'public' && packet.data && typeof packet.data === 'object' && !Array.isArray(packet.data) &&
       Object.keys(packet.data).length && Number.isFinite(Date.parse(packet.at)) ? packet : null;
@@ -727,7 +736,7 @@
   }
   const useCloud = e => e.cloud && useBackup(e, 'cloud', e.cloud.at, e.cloud.proof, e.cloud.packet);
   async function usePackagedCopy(e) {
-    if (fixture !== null || publicPaused || !backupPages || !confirmedOff() || e.withdrawn || e.link.reason === 'owner-read' || onBackup(e)) return;
+    if (fixture !== null || publicPaused || !backupPages || !(confirmedOff() || e.data === null) || e.withdrawn || e.link.reason === 'owner-read' || onBackup(e)) return;
     const failure = e.failure;
     if (!fallback) {
       // 发布时只换同版成品登记中的数据地址，页面脚本不随备用包换版。
