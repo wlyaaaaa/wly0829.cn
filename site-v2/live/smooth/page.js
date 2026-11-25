@@ -5,6 +5,11 @@
   const sync = C.sync(), L = (id, label, hue) => ({ id, label, hue });
   let data = null, summary = null;
   const measured = line => line?.points?.some(([, value]) => Number.isFinite(value));
+  function desktopFrame(d) {
+    const fps = d?.fps, block = d?.blocks?.fps || fps;
+    if (!U.offline?.() && fps?.state === 'ok' && block?.state === 'ok'
+        && !block.stale && block.q !== 'stale' && !block.error && !block.read_error) return fps.frame_capture?.detail;
+  }
   function appLabel(label) {
     if (typeof label !== 'string') return label;
     const ranked = label.replace(/^\s*\d+\s*[·.)]\s*/, '');
@@ -25,7 +30,8 @@
     return { ...clean(d), missing_readings: names, ...(names.length ? { partial: d.partial?.length ? d.partial : ['readings'] } : {}),
       jitter, stutterGap: gap, note: [].concat(d.note || []).filter(n => !gap || U.sp(n) !== U.sp(gap)),
       summary: clean(d.summary), stutters: clean(d.stutters), usage: clean(d.usage),
-      groups: d.groups?.map(clean), blocks: d.blocks && Object.fromEntries(Object.entries(d.blocks).map(([k, v]) => [k, clean(v)])) };
+      groups: d.groups?.map(g => clean(g.key === 'fps' && ['画面没变', '桌面实际更新率'].includes(g.reason) ? { ...g, reason: '' } : g)),
+      blocks: d.blocks && Object.fromEntries(Object.entries(d.blocks).map(([k, v]) => [k, clean(v)])) };
   }
   const cutoff = (at) => at && Number.isFinite(Date.parse(at)) ? [U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
   const bounds = (row) => [Date.parse(row?.from) / 1000, Date.parse(row?.to) / 1000];
@@ -202,7 +208,7 @@
       const pack = data?.foreground, row = pack?.rows?.day;
       const covered = coveredSeconds(pack, s => !unrecorded(s));
       const noCurves = !!data && ![data.fps, data.frametime, data.jitter].some(p => p?.series?.some(measured));
-      fpsNote.hidden = !noCurves;
+      fpsNote.hidden = !noCurves || desktopFrame(data) === 'desktop_duplication_still';
       el.closest('.grp').classList.toggle('fps-no-curves', noCurves);
       const names = timelinePack(pack, 'foreground')?.states?.filter(s => !unrecorded(s)).map(s => U.fieldText(s.label)).filter(Boolean);
       const seconds = Math.round(covered), h = Math.floor(seconds / 3600), m = Math.floor(seconds / 60) % 60, s = seconds % 60;
@@ -280,11 +286,17 @@
   function groups() {
     const s = data?.summary, app = data?.apps?.[0], appName = appLabel(app?.display_label ?? app?.app);
     const usage = data?.usage, active = coveredSeconds(usage, s => s.id === 'active' || /^(?:在用|正常使用|正常工作)$/.test(U.sp(s.label)));
+    const desktop = desktopFrame(data), desktopRate = desktop === 'desktop_duplication_frame';
+    const desktopStill = desktop === 'desktop_duplication_still';
+    const fpsCutoff = (desktopRate || desktopStill && data.fps.series?.some(measured)) && cutoff(data.fps.at);
+    const fpsLine = desktopRate ? '桌面实测帧率' : desktopStill ? '画面没变 · 本次采集正常，没有新画面' : '';
+    const fpsTime = fpsCutoff && `${desktopStill ? '历史帧率截至' : '截至'} ${fpsCutoff}`;
     const out = [
       { key: 'stutters', name: '卡顿明细', palette: ['pink', 'violet'], pic: '/live/img/head-smooth.webp',
         line: '',
         figures: [{ key: 'active', label: '在用电脑', value: s?.active, unit: '秒' }, { key: 'clear', label: '流畅时段', value: s?.clear, unit: '秒' }, { key: 'stutter', label: '卡顿时长', value: s?.stutter, unit: '秒' }, { key: 'events', label: '近 24 小时卡顿', value: s?.events, unit: '次' }].map((f) => S.figure(f, s, f.key)), build: stutterChapter },
-      { key: 'fps', name: '帧率与手感', palette: ['teal', 'blue', 'pink'], line: '',
+      { key: 'fps', name: '帧率与手感', palette: ['teal', 'blue', 'pink'],
+        line: [fpsLine, fpsTime].filter(Boolean).join(' · '), sourceNotes: !(desktopRate || desktopStill),
         figures: [{ key: 'now', label: '帧率', line: 'current', hue: 'teal' }, { key: 'avg', label: '时点平均帧率', line: 'average', hue: 'apricot' }, { key: 'low', label: '最低 1%', line: 'low', hue: 'pink' }],
         say: (c, sums) => c.key === 'fps' && sums[0]?.max != null ? `最高 ${num(sums[0].max, 'FPS')}${sums[0].maxAt == null ? '' : `（北京时间 ${cutoff(new Date(sums[0].maxAt * 1000).toISOString())}）`}，记录中的平均帧率 ${num(sums[0].avg, 'FPS')}` : '',
         chips: [{ key: 'fps', label: '帧率', lines: [L('current', '帧率', 'teal')], unit: 'FPS' }, { key: 'average', label: '时点平均帧率', lines: [L('average', '时点平均帧率', 'apricot')], unit: 'FPS' }, { key: 'low', label: '最低 1%', lines: [L('low', '最低 1%', 'pink')], unit: 'FPS' }, { key: 'frametime', label: '单帧耗时', lines: [L('frametime', '单帧耗时', 'blue')], unit: 'ms' }, { key: 'jitter', label: '帧时抖动', lines: [L('jitter', '帧时抖动', 'violet')], unit: 'ms' }], build: foregroundChapter },
