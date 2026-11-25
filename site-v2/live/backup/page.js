@@ -60,7 +60,8 @@
       : !published && ['ready', 'complete', 'completed'].includes(current) && !!copy?.content_at;
     const problems = original ? { failed: '原件读取失败', missing: '原件缺失', stale: '原件记录已过期', partial: '只核实部分原件' } : PROTECTION;
     // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state）：少数没备上写“大部分成功”，较多没备上写“部分成功”，和备份总表一个说法（M780）
-    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功', partial_success: '部分成功' })[copy?.outcome?.state];
+    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功（没备上的不超过一半）', partial_success: '部分成功（没备上的超过一半）' })[copy?.outcome?.state];
+    // 括号里的分界。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     const anomaly = tier || (copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
       : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : ''));
     const status = retired ? '已停用，保留旧副本' : copy?.status_text ? (U.fieldText?.(copy.status_text, viewer) ?? sp(copy.status_text))
@@ -282,7 +283,7 @@
     const kitName = row => { const raw = U.fieldText(row.name, viewer).trim(); return Object.hasOwn(KIT_NAMES, raw) ? KIT_NAMES[raw] : raw.replace(/CoreRecovery/g, '电脑恢复包'); };
     const kitOrigin = row => { const raw = U.fieldText(row.name, viewer).trim(), paths = (row.conclusions || []).filter(c => c.path), renamed = raw && kitName(row) !== raw;
       // 本人版：恢复材料的位置不给访客的，后台在这条结论的 visitor_labels.path 上标 hidden，位置旁挂签
-      const pathTag = c => { const tag = viewer === 'owner' ? U.visitorLabel(c, 'path', '这个位置', viewer) : ''; return tag ? ` ${tag}` : ''; };
+      const pathTag = c => { const tag = U.visitorLabel(c, 'path', '这个位置', viewer); return tag ? ` ${tag}` : ''; };
       return renamed || paths.length ? `<details class="backup-path"><summary>原名和位置</summary><div>${[renamed && said(row.name, '资产名称'), ...paths.map(c => pathHtml(c.path, '恢复材料路径') + pathTag(c))].filter(Boolean).join('<br>')}</div></details>` : ''; };
     const assets = d.rows?.length ? table(['哪一类', '是什么', '核对结果', '几份文件', ...(timed ? ['核对时间'] : [])], d.rows.slice(0, assetLimit).map(row => [said(ASSET_CATEGORY[row.category] || row.category, '资产类别'), `${esc(kitName(row))}${(row.groups || []).length ? `<small>${(row.groups || []).map(group => said(MATERIAL[group] || group, '材料分组')).join('、')}</small>` : ''}${kitOrigin(row)}`, (row.conclusions || []).map(c => said(VERIFIED[c.status] || c.status, '校验结论')).join('<br>'), count(row, 'count'), ...(timed ? [verificationTime(row)] : [])]), '每样恢复材料核对得怎样', completed) : '';
     U.html($('verified'), summary + assets);
@@ -295,7 +296,7 @@
   const ownerFile = value => value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner';
   const fileName = value => viewer === 'public' && ownerFile(value) ? '—' : pathHtml(value, '文件名');
   // 本人版：后台在这一条文件的 visitor_labels 里标了文件名（name；旧条目用 file_name、filename、relative_path 同名键）的，文件名旁挂签，一条只挂一个；没标的不挂
-  const fileTag = item => { const tag = viewer === 'owner' ? U.visitorLabel(item, ['$', 'name', 'file_name', 'filename', 'relative_path'], '这个文件名', viewer) : ''; return tag ? ` ${tag}` : ''; };
+  const fileTag = item => { const tag = U.visitorLabel(item, ['$', 'name', 'file_name', 'filename', 'relative_path'], '这个文件名', viewer); return tag ? ` ${tag}` : ''; };
   const privateNames = d => /^文件名(?:仅本人|可信设备)可见[。.]?$/u.test(typeof d?.text === 'string' ? d.text : '');
   // 新私事规则（本人 11-24 02:56）：备份文件名访客版不给，原位按后台给的 file_name_count 拼一句普通字，说清有多少个、本人版能看到全部；
   // 0 是已读且空（不写），null 是没读到或来源本来没有清单（不编数）。

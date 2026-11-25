@@ -91,7 +91,7 @@
     document.title = `${cut.rest ? sp(cut.title) : hasDistinctShort ? title : text(d)} · 实况`;
     const head = part('head');
     // M688：本人版标题旁挂签，按后台给在这件事上的 visitor_labels（标题键 text，'$' 是整件）；没有差异键的普通原文不挂
-    const visitorMark = !issue && viewer === 'owner' ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
+    const visitorMark = !issue ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
     U.html(head, (dossier ? '' : status.lamp) + U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false }) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
     issueReadings?.breakHeading(head.querySelector('.head__lead'));
     if (dossier) {
@@ -132,7 +132,7 @@
     const bodyValues = [explanation?.visibility || explanation?.rewrite ? explanation : explanation?.text ?? explanation, lead.rest, d.detail_text], bodyShown = [cut.title, lead.head, ...historyRows.map(e => e.text)];
     const bodyFields = !issue && newBody(bodyValues, bodyShown);
     // M688：展开说明里真写出了 detail_text（排在最后一段）的，后台标了 detail_text 就在说明后挂签；和标题的签各在各处，一处只挂一个
-    const detailTag = !issue && viewer === 'owner' && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
+    const detailTag = !issue && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
     const issueSay = value => issueReadings ? issueReadings.conclusion(say(value)) : say(value);
     const sayHead = issue ? (summary ? (reason.rest ? `<details class="dossier-text"><summary>${issueSay(reason.head)}</summary><p>${issueSay(reason.rest)}</p></details>` : issueSay(summary)) : '')
       : bodyFields.map(value => say(value).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
@@ -150,6 +150,7 @@
     L.tone(hero, status.tone);
     const field = value => say(value);
     const closedSay = d.closed && (d.closed.kind === 'unknown' || d.closed.text === '本人关掉了这份汇报' ? d.closed.text || CLOSED.unknown : CLOSED[d.closed.kind] || CLOSED.unknown);
+    const monthly = !issue && Number.isInteger(d.monthly_day) && d.monthly_day >= 1 && d.monthly_day <= 31 ? `每月 ${d.monthly_day} 日` : '';
     const facts = issue ? [
       // 档案卡里结局就是状态卡的大字，了结说明在“结论”卡（能展开），这里不再重复。
       !dossier && d.outcome && fact('结局', say(OUT[d.outcome])),
@@ -162,7 +163,8 @@
       ...(!privateItem && issueReadings?.detail(!d.outcome_text && progress ? { ...d, progress_summary: null, owner_detail: null } : d, viewer, (name, value) => fact(name, value, ' issue-reading')) || []),
     ] : [
       d.due && fact('什么时候要', when(d.due)),
-      d.act_from && fact('从什么时候办', when(d.act_from)),
+      // M947：每月循环的提醒（后台给整数 monthly_day）这一行写“每月 6 日”，不另加行
+      (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
       d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
       d.closed && fact('了结说明', say(d.closed.text)), d.closed?.at && fact('了结时刻', when(d.closed.at)),

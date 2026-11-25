@@ -72,6 +72,10 @@ sys.path.insert(0, str(PIPE / '工具'))
 from consistency_scan import load_public_policy, public_word_pattern, load_formal_public_policy, formal_public_word_pattern
 from consistency_scan import _policy as word_policy
 TABLE = PIPE / '表' / '归属表.md'
+# 项目名册里 website.visibility 标 hidden 的项目不给访客看：静态站整项不发布（列表、讲解页、技能、链接名、旧地址跳转）。
+# 网站项目 ID 和名册不同名的，照实况的封面对照表（网站项目 ID → 名册项目 ID）认。可用 WLY_WEBSITE_PROJECTS 指向别的名册副本。
+WEBSITE_PROJECTS = Path(os.environ.get('WLY_WEBSITE_PROJECTS') or 'E:/PCConfig/registries/website-projects.json')
+COVER_LINKS = S / 'live' / 'project' / 'cover-links.json'
 MATERIAL = HERE / '素材'
 PRIOR_ART = json.loads((MATERIAL / '派生/清单.json').read_text(encoding='utf-8'))
 PRIOR_SOURCES = json.loads((MATERIAL / '派生/来源.json').read_text(encoding='utf-8'))
@@ -192,10 +196,34 @@ def read_table(text, title):
     return [dict(zip(rows[0], r)) for r in rows[2:]]
 
 
+def hidden_ids():
+    """名册里不给访客看的项目：返回（项目 ID，技能 ID）两组小写 ID。项目 ID 含名册和网站两种叫法，技能是这些项目名下的。"""
+    entries = json.loads(WEBSITE_PROJECTS.read_text(encoding='utf-8-sig'))['entries']
+    hidden = [e for e in entries if e.get('website', {}).get('visibility') == 'hidden']
+    keys = {e['repo'].rsplit('/', 1)[-1].lower() for e in hidden}
+    names = {e['website'].get('display_name') for e in hidden} - {None, ''}
+    links = json.loads(COVER_LINKS.read_text(encoding='utf-8'))
+    text = TABLE.read_text(encoding='utf-8-sig')
+    projects = keys | {r['项目ID'].lower() for r in read_table(text, '项目表')
+                       if r['项目ID'].lower() in keys or links.get(r['项目ID'], '').lower() in keys or r['中文名'] in names}
+    skills = {r['技能ID'].lower() for r in read_table(text, '技能表')
+              if r['归属项目ID'].lower() in projects or r['技能ID'].lower() in projects}
+    return projects, skills
+
+
+def hidden_route(route, hidden):
+    """站内地址是不是不给访客看的项目的：/<项目>/…、/projects/<项目>/…、/skills/<技能或项目>/。"""
+    projects, skills = hidden
+    parts = (route or '').strip('/').lower().split('/')
+    return bool(route) and (parts[0] in projects or len(parts) > 1 and (
+        parts[0] == 'projects' and parts[1] in projects or parts[0] == 'skills' and parts[1] in projects | skills))
+
+
 def load_catalog():
     text = TABLE.read_text(encoding='utf-8-sig')
-    projects = [r for r in read_table(text, '项目表') if r['状态'] in LIVE]
-    skills = [r for r in read_table(text, '技能表') if r['状态'] in LIVE]
+    hidden_projects, hidden_skills = hidden_ids()
+    projects = [r for r in read_table(text, '项目表') if r['状态'] in LIVE and r['项目ID'].lower() not in hidden_projects]
+    skills = [r for r in read_table(text, '技能表') if r['状态'] in LIVE and r['技能ID'].lower() not in hidden_skills]
     core = SETTINGS['核心项目']
     order = {pid: i for i, pid in enumerate(core)}
     projects.sort(key=lambda r: order.get(r['项目ID'], len(core)))   # 核心六个在前，其余照归属表的先后；两张列表页另照“项目先后”“技能先后”排，这里只是兜底
@@ -824,8 +852,8 @@ def build_trust_modal():
 
 
 def external_inputs():
-    """仓库外、这台电脑上实际读到的构建输入（连接电脑页的固定接法），进构建指纹。"""
-    return [path for path in (CONNECT_VIEWS, *CONNECT_REGISTRIES) if path.is_file()]
+    """仓库外、这台电脑上实际读到的构建输入（连接电脑页的固定接法、项目名册），进构建指纹。"""
+    return [path for path in (CONNECT_VIEWS, *CONNECT_REGISTRIES, WEBSITE_PROJECTS) if path.is_file()]
 
 
 def connect_fixed():
@@ -903,13 +931,32 @@ def button_thumbnail(folder, value):
             shutil.copy2(cached, folder / cached.name)
             value[0] = cached.name
 
+
+def unmention(line, names, where):
+    """不给访客看的项目在别的项目正文里被点名：只出现在列表项里的，整条列表项拿掉；别处还点名就停下，改那句正文。"""
+    for name in names:
+        changed = re.sub(r'(?m)^[ \t]*[-*] [^\n]*〔' + re.escape(name) + r'〕[^\n]*\n?', '', line)
+        if changed != line:
+            line = changed.rstrip('\n')
+        if f'〔{name}〕' in line:
+            raise ValueError(f'{where} 的正文还点名不给访客看的〔{name}〕，改这句正文')
+    return line
+
+
 def build_project_pages(real_pages):
+    hidden = hidden_ids()
     withdrawn = [r for r in read_table(TABLE.read_text(encoding='utf-8-sig'), '技能表') if r['状态'] == '下线']
     withdrawn_names = {r['中文名'] for r in withdrawn}
     withdrawn_routes = {route for r in withdrawn for route in (
         f"/{r['归属项目ID']}/{r['技能ID']}.html", f"/skills/{r['技能ID']}")}
     ignore = shutil.ignore_patterns('*.py', '*.md', '__pycache__', '*旧*', '*方针前*', '验证-*.json', '验收', 'tmp', 'motion', 'page-loader.js')  # 验收、tmp 是流水线自查的截图和浏览器临时目录，不上站；主持正在截图时整站拼也不会撞上
     shutil.copytree(WEB / '公用', SITE / '公用', ignore=ignore)
+    route_names = SITE / '公用' / '页名到地址.json'
+    if route_names.is_file():
+        names = json.loads(route_names.read_text(encoding='utf-8'))
+        shown = {name: href for name, href in names.items() if not hidden_route(href, hidden)}
+        if shown != names:
+            route_names.write_text(json.dumps(shown, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     shutil.copy2(MATERIAL / '项目页配页眉.css', SITE / '公用' / '配页眉.css')
     loader = (WEB / '公用' / 'page-loader.js').read_text(encoding='utf-8')
     scripts = re.compile(r'<script src="(content\.js|\.\./公用/(?:page|button-art)\.js)" defer></script>')
@@ -948,16 +995,19 @@ def build_project_pages(real_pages):
         gone_routes = old_routes | withdrawn_routes
         gone = withdrawn_names | {name for name, href in references.items() if project_route(href) in gone_routes}
         removed_refs = set(references) & gone
-        if gone_routes:
+        unlisted = {name for name, href in references.items() if hidden_route(project_route(href), hidden)}
+        if gone_routes or unlisted:
             for cards in data.values():
                 for card in cards:
-                    buttons = [button for button in card['buttons'] if project_route(button.get('href')) not in gone_routes]
+                    buttons = [button for button in card['buttons'] if project_route(button.get('href')) not in gone_routes
+                               and not hidden_route(project_route(button.get('href')), hidden)]
                     detail = card['detail']
                     for name in gone:
                         detail = [line.replace(f'〔{name}〕', f'{name}（说明页已撤下）') for line in detail]
+                    detail = [line for line in (unmention(line, unlisted, f'{pid}/{card.get("id", "")}') for line in detail) if line]
                     data_changed |= buttons != card['buttons'] or detail != card['detail']
                     card.update(buttons=buttons, detail=detail)
-            for name in removed_refs: references.pop(name)
+            for name in removed_refs | unlisted: references.pop(name)
         if data_changed:
             tail = tail[:data_start] + json.dumps(data, ensure_ascii=False, indent=2) + tail[data_start+data_end:]
         buttons = list(config.get('buttonArt', {}).values())
@@ -1094,6 +1144,7 @@ def report(label, files):
 
 def check_links():
     bad = []
+    page_warnings = []
     unfinished = set()
     files = {p.relative_to(OUT).as_posix() for p in OUT.rglob('*') if p.is_file()}
     folded = {p.casefold(): p for p in files}
@@ -1135,14 +1186,22 @@ def check_links():
             relative = f.relative_to(OUT).as_posix()
             if ref in RUNTIME_REFS.get(relative, set()):
                 continue
-            if re.match(r'(?:[a-z][a-z\d+.-]*:|//|#|%23)', ref, re.I) or ' + ' in ref:
+            if ref.startswith(('#', '%23')) or ' + ' in ref:
+                continue
+            absolute = re.match(r'(?:[a-z][a-z\d+.-]*:|//)', ref, re.I)
+            if absolute and not re.match(r'(?:https?:)?//wly0829\.cn(?::\d+)?(?=[/?#]|$)', ref, re.I):
                 continue
             try:
-                path = unquote(urlsplit(html.unescape(ref)).path, encoding='utf-8', errors='strict')
+                path = unquote(urlsplit(html.unescape(ref)).path or ('/' if absolute else ''),
+                               encoding='utf-8', errors='strict')
             except (UnicodeDecodeError, ValueError):
-                bad.append((f.relative_to(OUT).as_posix(), ref + '（URL 编码有误）'))
+                (page_warnings if absolute else bad).append((relative, ref + '（URL 编码有误）'))
                 continue
             if not path or '${' in path:
+                continue
+            extension = posixpath.splitext(path.rstrip('/'))[1].lower()
+            is_page = path.endswith('/') or extension in ('', '.html', '.htm')
+            if absolute and not is_page:
                 continue
             for base in bases:
                 key = posixpath.normpath(path if path.startswith('/') else base + '/' + path).lstrip('/')
@@ -1154,7 +1213,8 @@ def check_links():
                         unfinished.add((relative, '/' + key.rstrip('/') + '/'))
                         continue
                     actual = folded.get(key.casefold())
-                    bad.append((f.relative_to(OUT).as_posix(), ref + (f'（大小写不符，实际 /{actual}）' if actual else '（文件不存在）')))
+                    findings = page_warnings if is_page else bad
+                    findings.append((relative, ref + (f'（大小写不符，实际 /{actual}）' if actual else '（文件不存在）')))
     # 构建把写全的站内图址换成云端地址、图只放云端；脚本、样式、JSON 里漏换的站内图址上线后在网站上取不到（预览直接读产物看不出）。
     github = set(json.loads(manifest.read_text(encoding='utf-8')).get('files', {})) if manifest.is_file() else set()
     image_ref = re.compile(r'''["'`(](/[^"'`()\s<>?#]+\.(?:webp|png|jpe?g|gif|svg|avif))["'`)?#]''', re.I)
@@ -1183,7 +1243,13 @@ def check_links():
                         bad.append((f.relative_to(OUT).as_posix()+'#'+card['id'], f'灰按钮「{label}」已有目标 {href}'))
     for page, route in sorted(unfinished):
         print(f'实况施工中：{page} → {route}')
-    return sorted(set(bad))
+    return sorted(set(bad)), sorted(set(page_warnings))
+
+
+def report_page_links(warnings):
+    print(f'站内页面链接异常 {len(warnings)} 处（仅提示）')
+    for page, ref in warnings:
+        print(f'  {page} → {ref}')
 
 
 SITE_ICONS = ('favicon.ico', 'icon-192.png', 'apple-touch-icon.png')
@@ -1377,7 +1443,7 @@ def main():
         step(font_sources)
         if SITE.exists():
             shutil.rmtree(SITE)
-        inputs = [*source_files(), *rule_inputs(), HERE.parents[1] / 'app/computer-access-model.js']
+        inputs = [*source_files(), *rule_inputs(), HERE.parents[1] / 'app/computer-access-model.js', WEBSITE_PROJECTS]
         dependencies = '|'.join(version(name) for name in ('Pillow', 'fonttools', 'brotli', 'beautifulsoup4', 'markdown', 'markdown-it-py', 'mistune', 'Pygments'))
         key = hashlib.sha256((step(input_key, inputs) + dependencies).encode()).hexdigest()
         def create():
@@ -1415,7 +1481,8 @@ def main():
         for page, word, sentence in hits:
             print(f'{label}命中（只是提示，不拦）：{page} → {word} → {sentence}')
         print(f'{label}检查命中 {len(hits)} 处（{count} 词，只是提示，不拦{note}）')
-    bad = check_links()
+    bad, page_warnings = check_links()
+    report_page_links(page_warnings)
     old_bad = [(page, ref) for page, ref in bad if page.split('#', 1)[0] in preserved]
     bad = [(page, ref) for page, ref in bad if page.split('#', 1)[0] not in preserved]
     print(f'保留旧实况站内链接或按钮异常 {len(old_bad)} 处（仅记录）')
@@ -1426,7 +1493,7 @@ def main():
         for page, ref in bad:
             print(f'  {page} → {ref}')
     else:
-        print('新站站内链接都找得到')
+        print('站内资源和按钮检查通过')
     if bad:
         sys.exit(1)
 

@@ -90,7 +90,6 @@
 .page--live #automation .auto-state-row .row__meta { margin-inline-start: 8px; white-space: normal; }
 .page--live #automation .auto-state-recent .row__meta { display: block; margin-inline-start: 0; }
 .page--live #automation .auto-state-footer { padding-top: 12px; border-top: 1px solid var(--hair); }
-.page--live #automation[data-auto-state="idle"] .card__pic img { object-fit: contain; object-position: right bottom; }
 .page--live #automation[data-auto-state] [data-part="status"] { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
 .page--live #automation .auto-why { display: block; margin-top: 2px; }
 .page--live #automation .auto-seg { white-space: nowrap; }
@@ -189,18 +188,28 @@
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
 /* 等你的事卡每件事三行（M752，本人 11-24 16:09 点头的样子）：第一行“要本人做 ·”加标题占满整行，长了照原样折行；
-   第二行按钮从左排，种类、顺序、样子照旧；第三行原来的灰字。卡窄到一行放不下这些按钮时，按钮自己折行。
-   以后要“标题短、放得下就和按钮同一行”，把下面标题的 flex 从 1 0 100% 改成 0 1 auto 即可（按钮会靠右） */
-.page--live #needs [data-part="main"] { container-type: inline-size; }
-.page--live #needs [data-part="main"] > .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 10px; position: relative; padding-left: var(--gut); }
+   第二行按钮从左排，种类、顺序照旧；第三行原来的灰字。卡窄到一行放不下这些按钮时，按钮自己折行。
+   按钮那一行（M998，本人 11-26 圈的“间距不匀、各行起点不齐”）：整张卡的几行共用一套列（去办／问情况／关掉类／晚点提醒），
+   每列按这一列最宽的那颗按钮定宽，按钮之间一样留 8px；哪行没有“去办”，后面几颗照旧和别的行对成一列；整张卡都没有“去办”时那一列不占地方。
+   按钮照旧是首页各卡那种白底按钮（本人 11-26 04:2x：浅灰描边在首页不明显），去办照旧绿底。 */
+.page--live #needs [data-part="main"] { container-type: inline-size; display: grid; grid-template-columns: [go] auto [ask] auto [close] auto [later] auto [end] minmax(0, 1fr); }
+.page--live #needs [data-part="main"] > .row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
 .page--live #needs [data-part="main"] > .row > .lamp { position: absolute; left: 2px; top: 14px; margin: 0; }
-.page--live #needs [data-part="main"] > .row .row__main { order: 1; flex: 1 0 100%; min-width: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts, .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { order: 2; flex: none; padding-left: 0; }
-.page--live #needs [data-part="main"] > .row .row__text > :not(.row__main) { order: 3; flex: 1 0 100%; margin-top: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts > :first-child { justify-self: start; }
-@container (max-width: 390px) {
+.page--live #needs [data-part="main"] > .row .row__main { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts, .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { grid-column: 1 / -1; grid-row: 2; padding-left: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: grid; grid-template-columns: subgrid; justify-content: start; justify-items: start; align-items: center; column-gap: 0; row-gap: 6px; max-width: none; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot] { grid-row: 1; margin: 0 8px 0 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="go"] { grid-column: go; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="ask"] { grid-column: ask; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="close"] { grid-column: close; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="later"] { grid-column: later; margin-right: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="pick"] { grid-column: end; }
+.page--live #needs [data-part="main"] > .row > .row__acts > :not([data-slot]) { grid-column: 1 / -1; grid-row: 2; }
+.page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
+/* 卡窄到四颗按钮一行摆不下（约 320px，如 1100 宽以下的窗口）：按钮从左排、自己折行，不再对列 */
+@container (max-width: 319px) {
  .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; gap: 6px 8px; max-width: 100%; }
- .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="go"] { margin-right: 0; }
+ .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot] { margin: 0; }
 }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
@@ -270,8 +279,9 @@
  .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
 }
 .page--live .b6-card .card__glass { min-height: 195px; }
-.page--live .b6-card .card__pic { width: min(41%, 285px); inset-block: auto 0; height: 100%; }
-.page--live .b6-card .card__pic img { object-fit: contain; object-position: right bottom; }
+/* 智能体、自动任务、AI 账本三张卡的画和别的卡同一种（H2，本人 11-26：首页混着两种插图）：整幅场景画贴卡片右边、铺满整张卡的高度，
+   卡变高变矮跟着铺满，朝字那一侧淡进玻璃，玻璃后面垫同一张画的虚影；画的宽度、淡出和别的卡共用 live.css 的 .card[data-pic]。字让开的宽度照旧 */
+.page--live #automation { --pic-x: 44%; }
 .page--live .b6-card .card__body { padding-right: min(33%, 213px); }
 .page--live .b6-card .card__head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .page--live .b6-card .head__link { display: inline-flex !important; }
@@ -327,7 +337,6 @@
 .page--live:not(.live-unreadable) .b6-card .b6-body > p:not(.b6-checks) > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 /* 电脑窗口窄（如 1024 宽）：右栏只剩三百来像素，画缩小、字让开得少一点，标题和三个数不被挤成一字一行 */
 @media (max-width: 1279px) {
- .page--live .board .b6-card .card__pic { width: min(30%, 285px); }
  .page--live .board :is(#agents,#automation,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(24%, 213px); }
  .b6-metrics > div { padding: 0 9px; }
  .b6-metrics small { word-break: keep-all; }
@@ -364,8 +373,7 @@
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
-/* 这两张卡每家一行、跟得最久一整句要宽一点：画缩小一些、字让开得少一点（v3 图上没有画；画照旧留着） */
-.page--live .board :is(#agents,#ledger).b6-card .card__pic { width: min(27%, 200px); }
+/* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }
 @media (max-width: 1279px) { .b6-metrics > a { padding: 0 9px; } }
 </style>
@@ -414,16 +422,18 @@
 
       <article class="card b6-card" id="agents" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/home-agents-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-agents-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/home-agents-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head"><span class="head__lead">智能体</span></p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
 
       <article class="card b6-card" id="ledger" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/ledger.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-ledger-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/ledger.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
             <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 自动任务账本</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
@@ -443,8 +453,9 @@
 
       <article class="card b6-card" id="automation" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/home-automation-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-automation-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/home-automation-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
             <a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>

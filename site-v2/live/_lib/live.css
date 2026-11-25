@@ -378,6 +378,12 @@ body.page--live .btn.btn--go:active { background: #007639; }
   box-shadow: 0 0 0 4px rgb(242 165 22 / .16), 0 0 14px rgb(242 165 22 / .7);
   animation: live-conn-breathe 2.8s ease-in-out infinite; transition: background .45s ease, box-shadow .45s ease; }
 .live-conn__row.is-back .live-conn__lamp { background: #00A650; box-shadow: 0 0 0 4px rgb(0 166 80 / .16), 0 0 14px rgb(0 166 80 / .6); }
+/* 电脑页：确认离线时页顶那张卡整张换成淡琥珀底、细橙边（本人 11-25 23:19 选 A，照 OFF-电脑页首访-v1）。
+   灯照旧灰；高度、字号、右边的画都不变。实况首页不这样（本人说那半不做），别的页等各页离线那张单。 */
+body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="off"]) {
+  background: linear-gradient(180deg, rgb(255 239 210 / .92) 0%, rgb(255 244 226 / .86) 100%);
+  box-shadow: inset 0 0 0 1px rgb(236 160 76 / .72), inset 0 1px 0 rgb(255 255 255 / .7), 0 1px 1px rgb(20 20 19 / .04),
+    0 4px 10px -6px rgb(20 28 36 / .1), 0 22px 44px -28px rgb(20 28 36 / .32); }
 .live-conn__row[data-stage="off"] .live-conn__lamp { background: #9aa1aa; box-shadow: 0 0 0 4px rgb(140 148 158 / .18), 0 0 12px rgb(140 148 158 / .5); }
 .live-conn__say { flex: 1 1 0; min-width: 0; }
 .live-conn__say b { font-family: var(--black); font-weight: 900; font-size: 26px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }

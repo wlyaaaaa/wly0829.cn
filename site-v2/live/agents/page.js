@@ -319,7 +319,7 @@
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
   }
 
-  // —— 三、三家各干了多少活（和工期放一起） ——
+  // —— 三、报了估时的活（原名“三家各干了多少活”，本人 11-26 04:27 选 A 改名；和工期放一起） ——
   const MODEL = id => {
     const m = /^(claude|gpt|gemini)-(.+)$/.exec(String(id || ''));
     if (!m) return String(id || '');
@@ -344,9 +344,9 @@
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
-      ${cell('开工', w?.starts, '件', 'starts')}${cell('总工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
+      ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
-      ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
+      ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
     const ws = d.work_stats;
@@ -357,9 +357,9 @@
     const first = period !== 'all' && Date.parse(start) < Date.parse(earliest) ? earliest : null;
     // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
-    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
+    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>报了估时的活<small>派活时报过估时的活；登记工时是完工时记下的用时，和上面实际在干的总时间不是一回事</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
+      <div><p class="tp-sub">按周比 · 登记工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 
@@ -510,7 +510,8 @@
     if (!d) {
       // 后台一直回“正在准备”（202）时读数层会一直重问、阶段停在“读得慢”：过了 10 秒照全站读不到的说法写，不一直写“正在读”（M909）。
       // 还在读的头 10 秒，快讯和正文一样说“正在读”，不先说没读到；读不到了两处一起说没读到
-      const stuck = state?.warming && state.phase === 'slow';
+      // 后台这一块算失败回 503（服务通着，下一轮重算）也照这句写，不写成“电脑连不上”（M909，live-client 把它算作服务答了话）
+      const stuck = state?.warming && state.phase === 'slow' || !state?.offline && state?.meta?.status === 503;
       const reading = !stuck && !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase) && !(state?.meta?.status >= 400);
       T.paint(page.root, stuck ? '<p class="tp-placeholder" role="status">智能体暂时没读到：后台还在准备这一页的数，准备好了这里会自己换上。</p>' : T.placeholder(state, '智能体'));
       page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });

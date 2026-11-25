@@ -38,7 +38,9 @@
     while (!aligned && days.length && rows.length && rows.every(r => !finite(r.commits?.[0]))) { days = days.slice(1); rows = rows.map(r => ({ ...r, commits: r.commits?.slice(1) })); }
     const name = r => { const label = U.fieldHtml?.(r.name, { name: '项目', place: 'label', kind: viewer }) ?? esc(r.name), moved = label !== esc(r.name), note = moved ? U.fieldHtml(r.name, { name: '项目', kind: viewer, marker: true }) : U.visibilityNote(r, viewer, '项目名');
       // M767：本人版里访客看不到的项目（后台在这一行标 visitor_labels.name=hidden），名字后同一行挂“访客看不到”（不换行，免得这一行比格子高）
-      const tag = !(note && (moved || viewer === 'public')) && viewer === 'owner' && U.visitorLabel?.(r, ['$', 'name'], '这个项目', viewer) || '';
+      // 活跃表这一行后台只带 visibility（整项只给本人的是 owner），没带 visitor_labels 时照它挂同一个签
+      const tag = !(note && (moved || viewer === 'public')) && (U.visitorLabel?.(r, ['$', 'name'], '这个项目', viewer)
+        || viewer === 'owner' && (r.visibility === 'owner' || r.public === 'owner') && U.visitorHiddenTag?.('这个项目', '', viewer)) || '';
       return `<span class="pj-heat-name" title="${esc(r.name)}"><span class="pj-heat-label">${r.href ? `<a href="${esc(route(r.href))}">${label}</a>` : label}</span>${note && (moved || viewer === 'public') ? `<small class="pj-heat-private${viewer === 'public' ? ' has-note' : ''}">${note}</small>` : tag}</span>`; };
     host.innerHTML = `<div class="pj-heat-scroll"><div class="pj-heat" style="--days:${days.length}"><span></span>${days.map((d, i) => `<small class="${i === days.length - 1 ? 'is-last' : ''}">${(i % 7 === 0 && i < days.length - 4) || i === days.length - 1 ? esc(d.slice(5)) : ''}</small>`).join('')}${rows.map(r => `${name(r)}${days.map((d, i) => {
       const n = r.commits?.[i], label = `${U.fieldText?.(r.name) ?? r.name} · ${d.slice(5)} · ${finite(n) ? `${lower(r, 'commits') ? '至少 ' : ''}${n} 次提交` : U.collectionText('提交数', r)}`;
