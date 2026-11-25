@@ -106,7 +106,8 @@
     'improvements': ["AI 和程序递来的毛病、可改进处，别的类不收的都落在这", "网站后台改写程序几次没生成公开说明 → 汇总成一条递来 → AI 核实后并成一件跟进", "递来的照样记下，只是没人判断、没人做", "只是记一笔的、已经恢复的、过期的，不进这里"],
   };
   function control(action, id, label, config = {}) {
-    const attrs = config.checked == null ? '' : ` role="switch" aria-checked="${config.checked}"`;
+    // 后台回话之前开关留在原档，标上 aria-busy；旁边那行写“正在保存…”（message）
+    const attrs = (config.checked == null ? '' : ` role="switch" aria-checked="${config.checked}"`) + (feedback?.pending && feedback.id === id ? ' aria-busy="true"' : '');
     const value = config.value == null ? '' : ` data-value="${esc(config.value)}"`;
     return `<button type="button" class="more aw-control ${config.checked == null ? '' : 'aw-switch'}" data-setting="${action}" data-id="${esc(id)}"${attrs}${value}${config.name ? ` aria-label="${esc(config.name)}"` : ''}>${label}</button>`;
   }
@@ -151,7 +152,14 @@
     error: ['出错', 'bad'], no_conclusion: ['没结论', 'off'], launched: ['已启动', 'run'], running: ['正在跑', 'run'] };
   const result = status => pill(...(resultPill[status] || []));
   function message(id) {
-    const text = feedback?.id === id ? feedback.text : '';
+    let text = feedback?.id === id ? feedback.text : '';
+    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
+    if (text && feedback.want && feedback.reread) {
+      const s = configFor(targetOf(id) || {}), want = feedback.want;
+      const same = s.mode === want.mode && (!want.until || instant(s.until_at) === instant(want.until));
+      text = same ? '已保存' : `最新读数还是${s.mode === 'paused' ? `暂停到 ${when(s.until_at)}` : { on: '开着', off: '关着' }[s.mode] || '没读到'}`;
+    }
     return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
   }
   function sourceRow(row) {
@@ -323,17 +331,27 @@
       }
     }
   }
-  const feedbackFor = (id, reply) => {
+  // 结果写在开关旁边那行：已保存／没存上：后台给的原因／还没确认存上（超时、断线、电脑回不了话）
+  const feedbackFor = (id, reply, want) => {
     if (reply.status === 'saved') feedback = { id, text: '已保存' };
     // 后台回“已撤”时照写它给的说明，不说“没存上”
     else if (reply.status === 'retired') feedback = { id, text: reply.message || '已撤' };
-    else if (reply.error !== 'cockpit_owner_required') feedback = { id, text: reply.status === 'unknown' ? '没确认是否保存，请刷新后查看' : '没存上，再试一次' };
+    // 不是本人设备：可信设备弹框已经弹了，旁边不另写
+    else if (reply.error === 'cockpit_owner_required') feedback = null;
+    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上', want };
+    else feedback = { id, text: typeof reply.message === 'string' && /[一-鿿]/.test(reply.message) ? `没存上：${reply.message}` : '没存上，再试一次' };
   };
+  // 回包到了才动开关：存上了照回包里的 current 显示；没存上但后台带回了电脑上读到的 current（读回和请求不一致），也照它显示；
+  // 别的没存上、还没确认的留在原档，再读一次照新读数显示
+  const targetOf = id => { const data = state?.data; return work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id); };
   function applySaved(id, reply) {
-    const data = state?.data, t = work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id);
-    if (t && reply.current) t.setting = { ...t.setting, ...reply.current };
+    const t = targetOf(id);
+    if (t && reply.current && typeof reply.current === 'object') t.setting = { ...t.setting, ...reply.current };
     paint();
-    void Live.refresh();
+    if (reply.error === 'cockpit_owner_required') return;
+    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
+    const fb = feedback;
+    Live.refresh().then(() => { if (feedback === fb && fb?.want) { fb.reread = true; paint(); } });
   }
   async function save(operation, id, value) {
     if (busy) return;
@@ -346,9 +364,12 @@
     if (busy) return;
     feedback = null;
     if (op === 'toggle') {
-      const reply = await save('type-mode', id, { mode: value === 'on' ? 'off' : 'on' });
-      feedbackFor(id, reply);
-      if (reply.status === 'saved') applySaved(id, reply); else paint();
+      // 后台回之前开关留在原档，旁边写“正在保存…”；访客点了由可信设备弹框说明，不写这句
+      if (audience === 'owner') { feedback = { id, text: '正在保存…', pending: true }; paint(); }
+      const want = value === 'on' ? 'off' : 'on';
+      const reply = await save('type-mode', id, { mode: want }) || { status: 'unknown' };
+      feedbackFor(id, reply, { mode: want });
+      applySaved(id, reply);
       if (reply.error === 'cockpit_owner_required') return;
       const current = [...root.querySelectorAll('[data-setting=toggle]')].find(el => el.dataset.id === id);
       current?.focus({ preventScroll: true });
@@ -357,6 +378,8 @@
     busy = true;
     const access = await Live.automationSetting({ operation: 'access' });
     busy = false;
+    // 只是先问一声能不能操作，还没保存什么：电脑没回话就照实说，不写“还没确认存上”
+    if (access.status === 'unknown') { feedback = { id, text: '电脑没回话，再点一次' }; paint(); return; }
     if (access.status !== 'pass') { feedbackFor(id, access); paint(); return; }
     configuration = { op, id };
     $('automation-setting-title').textContent = '暂停到几点';
@@ -368,14 +391,18 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !configuration) return;
-    const { id } = configuration, value = form.elements.value.value;
-    const reply = await save('type-mode', id, { mode: 'paused', until_at: `${value}:00+08:00` });
-    feedbackFor(id, reply);
-    if (reply.status === 'saved') {
-      settings.close();
-      applySaved(id, reply);
-    } else if (reply.error === 'cockpit_owner_required') settings.close();
-    else form.querySelector('[data-dialog-result]').textContent = feedback?.text || '';
+    const { id } = configuration, value = form.elements.value.value, result = form.querySelector('[data-dialog-result]');
+    // 等后台回话：框里和开关旁边都写“正在保存…”，原来的状态和暂停时刻留着
+    result.textContent = '正在保存…';
+    feedback = { id, text: '正在保存…', pending: true };
+    paint();
+    const until = `${value}:00+08:00`;
+    const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
+    feedbackFor(id, reply, { mode: 'paused', until });
+    // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
+    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') settings.close();
+    else result.textContent = feedback?.text || '';
+    applySaved(id, reply);
   });
   root.addEventListener('click', async event => {
     const button = event.target.closest('button');
