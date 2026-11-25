@@ -113,9 +113,10 @@
     // 本人版写真内容；后台给本人的也只是“仅本人可见的事项”这类占位话，就不放这一行（主控 11-26：本人看了像打哑谜）。访客版照私事定稿写“仅本人可见”
     const mine = viewer !== 'owner' ? recorded : recorded.filter(x => !/^仅本人可见的?(事项?|事)?$/.test(plainOf(x?.title ?? x?.text ?? x)));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
+    // 访客打不开的链接（私有仓库的提交）：访客版不给链接，字照给、不另加说明；本人版照给链接、挂“访客看不到”（本人 11-26 04:39）
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
       ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
-        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
+        : o.github ? '' : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       ownHref && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
