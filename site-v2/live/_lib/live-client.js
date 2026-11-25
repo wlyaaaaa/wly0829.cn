@@ -288,7 +288,7 @@
   const returning = (() => { try { return performance.getEntriesByType('navigation')[0]?.type === 'back_forward'; } catch { return false; } })();
   const fromLive = document.referrer?.startsWith(location.origin + '/live/');
   const returningHome = /^\/live\/(?:index\.html)?$/.test(location.pathname) && (returning || !!fromLive);
-  let timer, fallback, clockOffset = 0, viewerToken = '', viewerKind = 'public', rejectedToken = '';
+  let timer, fallback, releaseMade = null, clockOffset = 0, viewerToken = '', viewerKind = 'public', rejectedToken = '';
   const clock = () => new Date(Date.now() + clockOffset).toISOString();
   const time = (() => {
     const formatter = new Intl.DateTimeFormat('zh-CN', {
@@ -300,6 +300,8 @@
     timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit'
   });
   const stamp = at => dateFormat.format(new Date(at)).slice(5) + ' ' + time(at);
+  // 随站那份是最近一次更新网站时一起发上去的（本人 11-25 17:00：说的是最近一次更新网站，不是第一次上线），包里有生成时刻就写上
+  const releaseName = () => `最近一次更新网站${Number.isFinite(Date.parse(releaseMade)) ? `（${stamp(releaseMade)}）` : ''}时带的那份`;
   const shortStamp = at => dateFormat.format(new Date(at)) === dateFormat.format(new Date(clock())) ? time(at) : stamp(at);
   const itemDetail = e => e.resource.startsWith('items/') && e.resource !== 'items/closed';
   function storage(key, value) {
@@ -474,7 +476,7 @@
   }
   // 实况页页顶那张状态卡和页眉按钮怎么说（本人 11-24 20:34，选的 B，图 S1 五种）。根首页不看这一段。
   //   retrying 刚读不到：先说正在刷新；lost 一直读不到但没确认关机：写正在重试，页上留着手里那份；
-  //   off 确认关机：写关机了，下面是哪一份（这台浏览器存的、云端存的、上线时带的），三样都没有才写没有可显示的。
+  //   off 确认关机：写关机了，下面是哪一份（这台浏览器存的、云端存的、最近一次更新网站时带的），三样都没有才写没有可显示的。
   function connInfo() {
     if (publicPaused) return { stage: 'paused' };
     // 下面是几点的数，说本页主数据那一份；主数据没存下来、只有别的块有数时，不拿别的块的时刻说整页（不然横幅说“下面是几点的数据”，卡上却写没存下来）
@@ -485,26 +487,26 @@
       ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
     if (!hostOffline(link)) {
-      // 这台浏览器没存过、先退到了上线时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”
+      // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”
       const release = connectionEntries().some(x => x.backupFrom === 'release' && onBackup(x) || x.backupMeta?.from === 'release');
-      const at = main && onBackup(main) ? ` · 下面是上线时带的那份（${stamp(main.at)}）`
-        : !mainAt && !shownUpTo() && main?.backupMeta ? ` · 上线时带的那份只记了 ${stamp(main.backupMeta.at)}，没存内容` : atLine;
+      const at = main && onBackup(main) ? ` · 下面是${releaseName()}`
+        : !mainAt && !shownUpTo() && main?.backupMeta ? ` · ${releaseName()}只记了时刻，没存内容` : atLine;
       return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at,
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
-          : release ? '电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示上线时带的那份'
-          : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
+          : release ? `电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示${releaseName()}`
+          : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份' };
     }
     const say = '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
-        at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是上线时带的那份（${stamp(main.at)}）`
+        at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
           : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
         wait: from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
     }
     const meta = main?.backupMeta;
     return { stage: 'off', say, from: null, at: rest, wait: meta
-      ? `${meta.from === 'cloud' ? '云端' : '上线时带的那份'}只记了最后一份是 ${shortStamp(meta.at)}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
+      ? `${meta.from === 'cloud' ? `云端只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
@@ -726,13 +728,13 @@
       if (e.data !== null && Date.parse(e.at) >= Date.parse(block.at)) return;   // 手上那份不比它旧，接着用手上的
       Object.assign(e, { data: siteVisitScope(e, block.data), at: new Date(block.at).toISOString(), etag: null,
         rev: `fallback-${from}-${proof.audience}:${block.seq}`, source: 'fallback', backupFrom: from, backupMeta: null,
-        fallbackNote: `${e.viewer.kind === 'owner' ? '访客备用数据 · ' : ''}${from === 'cloud' ? '云端存的最后一份' : '上线时带的那份'} · 北京时间 ${stamp(block.at)}` });
+        fallbackNote: `${e.viewer.kind === 'owner' ? '访客备用数据 · ' : ''}${from === 'cloud' ? '云端存的最后一份' : '最近一次更新网站时带的那份'} · 北京时间 ${stamp(block.at)}` });
       return;
     }
     if (e.data !== null || !Number.isFinite(Date.parse(at)) || e.backupMeta?.from === 'cloud') return;
     e.backupMeta = { from, at: new Date(at).toISOString() };
     Object.assign(e, { at: e.backupMeta.at, rev: 'metadata-' + proof.audience, source: 'fallback',
-      fallbackNote: `${from === 'cloud' ? '云端' : '上线时带的那份'}只记了最后一份是北京时间 ${stamp(at)}，没存内容。` });
+      fallbackNote: from === 'cloud' ? `云端只记了最后一份是北京时间 ${stamp(at)}，没存内容。` : `${releaseName()}只记了时刻，没存内容。` });
   }
   const useCloud = e => e.cloud && useBackup(e, 'cloud', e.cloud.at, e.cloud.proof, e.cloud.packet);
   async function usePackagedCopy(e) {
@@ -759,6 +761,7 @@
       fallback = request;
     }
     const file = await fallback;
+    if (file) releaseMade = file.at;
     if (publicPaused || !failure || e.failure !== failure || !file) return;
     // 按规范资源键取块，块要和整包同一代；旧包只有访客的计划任务名册带正文
     const block = file.resources[e.path] || null;
