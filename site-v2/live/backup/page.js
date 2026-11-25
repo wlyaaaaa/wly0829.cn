@@ -41,7 +41,7 @@
     return `<table class="fe-l3b-table">${note ? `<caption>${esc(note)}</caption>` : ''}<thead><tr>${indices.map(i => `<th>${heads[i]}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${indices.map(i => `<td>${absent(row[i]) ? `<span class="row__sub">${row[i]}</span>` : row[i]}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   };
 
-  const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本已过期', partial: '副本不齐' };
+  const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本旧了', partial: '副本不齐' };
   const PLACES = [['local', '本机'], ['g', 'G 盘'], ['h', 'H 盘']], CLOUDS = { drive: 'Drive', photos: '照片云' };
   const notApplicable = copy => copy?.state === 'not_applicable' || (Object.hasOwn(copy || {}, 'applicable') ? copy.applicable === false : copy?.required === false);
   const absentReason = (data, key) => {

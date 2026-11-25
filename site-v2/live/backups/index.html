@@ -1,23 +1,20 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>备份 · 实况</title>
 <link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script><style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; } .backup-bit { display: inline-block; white-space: nowrap; }</style></head>
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script><style>.page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }</style></head>
 <body class="page page--live page--l2 page--backups"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#backups" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
 <article class="card card--hero" id="hero" data-pic="right" data-mo-rise><div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/backups.webp" alt="" aria-hidden="true">
 <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/backups.webp" width="1000" height="1000" alt=""></span><div class="card__body">
 <p class="card__head" id="head"></p><p class="hero__note" id="note"></p><div class="hero__links"><a class="more" href="#restore">能退回哪一天 ›</a></div></div></div></article>
 <div class="backup-summary" id="backup-summary"></div><div class="backup-matrix" id="backup-matrix" aria-label="各类资料在各去处的副本"></div>
-<div class="l2-board"><section class="l2-col" data-mo-rise><p class="part" data-keep>每类资料的副本</p><ul class="rows list" id="sets"></ul>
+<div class="l2-board"><section class="l2-col" data-mo-rise><p class="part" data-keep>要留意的几类</p><ul class="rows list" id="sets"></ul>
 <div class="fold" id="rest-box"><div><ul class="rows list" id="rest"></ul></div></div><button class="more" type="button" id="more" hidden></button><p class="pj-note" id="coverage"></p></section>
 <section class="l2-col" id="restore" data-mo-rise><p class="part" data-keep>恢复点与最近一次恢复</p><ul class="rows list" id="points"></ul></section></div></main>
 <style>
 .page--backups :is(#sets, #rest) > .notice-target { outline: none; box-shadow: inset 2px 0 0 #00a650; }
 .page--backups #more[aria-expanded="true"] .more__shut, .page--backups #more:not([aria-expanded="true"]) .more__open { display: none; }
-.page--backups #more[aria-expanded="true"] .more__chev,
-.page--backups .backup-more details[open] > summary .more__chev { rotate: -90deg; }
-.page--backups .backup-more details[open] { display: flex; flex-direction: column; }
-.page--backups .backup-more details[open] > summary { order: 1; align-self: flex-start; }
+.page--backups #more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 .page--backups .hero__note:not([hidden]) { display: block; }
 .page--backups .backup-grid td[data-state] { background: transparent; color: var(--ink); border-radius: 0; }
 .page--backups .backup-grid td[data-state="gap"] { color: #a14b3a; box-shadow: inset 0 -1px #d8aa91; }
@@ -35,6 +32,11 @@
 .page--backups .backup-grid td[data-copy][data-state="complete"] { color: #176b4c; }
 .page--backups .backup-grid td[data-copy][data-state="waiting"] { color: #536896; }
 .page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
+/* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
+.page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
+.page--backups .backup-at > span { white-space: nowrap; }
+/* 窗口不到 1440 宽：大小列放不下整个时刻（“11-16 07:38”伸出灰底），日期和钟点分两行；1440 宽不变（M781） */
+@media (max-width: 1439px) { .page--backups .backup-grid td:nth-child(3) .backup-at { white-space: normal; } }
 .page--backups .backup-grid b { font-weight: 400; }
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
 /* G、H 盘这一轮按备上多少分档，和计划任务同一套颜色（M780、M806）：大部分成功黄、部分成功橙、备份失败红；字用深一点的同色，格底一条粗色线 */
@@ -67,7 +69,20 @@
 .page--backups .backup-drive .drive-numbers { display: block; font-size: 18px; line-height: 1.4; }
 .page--backups .backup-drive .drive-count { display: inline-block; white-space: nowrap; }
 .page--backups .backup-summary .backup-wait { color: #536896; font-weight: 600; }
-.page--backups .backup-bit { white-space: normal; }
+/* 右栏每类一个小标题，“展开／收起”在小标题右边，下面只列能退回的日期（M781，样子 B2）；收起按钮和左栏“还有 N 条”同一个样子 */
+.page--backups .backup-group .row__text { grid-column: 2 / 4; }
+.page--backups .backup-group__head { display: flex; align-items: center; }
+.page--backups .backup-toggle { flex: none; height: 26px; margin: 0 0 0 auto; translate: none; white-space: nowrap; }
+.page--backups .backup-toggle[aria-expanded="true"] .more__shut, .page--backups .backup-toggle:not([aria-expanded="true"]) .more__open { display: none; }
+.page--backups .backup-toggle[aria-expanded="true"] .more__chev { rotate: -90deg; }
+.page--backups .backup-dates { list-style: none; margin: 4px 0 0; padding: 0; }
+.page--backups .backup-dates > li { padding: 5px 0; border-top: 1px solid var(--hair); font-size: 14.5px; line-height: 22px; letter-spacing: .03em; color: #4a4944; font-variant-numeric: tabular-nums; }
+.page--backups .backup-dates > li:first-child { border-top: 0; }
+.page--backups .backup-dates a { color: inherit; text-decoration: none; }
+.page--backups .backup-dates a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.page--backups .backup-group:has(.backup-toggle:not([aria-expanded="true"])) .backup-dates > li[data-more] { display: none; }
+.page--backups .backup-latest .row__meta { white-space: normal; margin-left: 0; }
+.page--backups .backup-tag-stale { margin-left: 8px; color: #94631e; background: #fff0d6; box-shadow: none; }
 </style>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>
 
