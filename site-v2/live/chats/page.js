@@ -79,6 +79,9 @@
     return [hours && `${hours} 小时`, mins && `${mins} 分`, (secs || !seconds) && `${secs} 秒`].filter(Boolean).join(' ');
   }
   const knownCount = v => Number.isInteger(v) && v >= 0;
+  // 加绿（GREENIMG1126）：历时、帮手数、第几步的数字套一层 chat-green，只在在干、等你两栏里变绿（样式在 index.html）
+  // 小药丸是 inline-flex，数字前后的普通空格会被吞掉（“帮手53个”），换成不断行空格
+  const greenNum = s => s.replace(/(\s?)(\d+)(\s?)/, (m, a, n, b) => `${a ? '&nbsp;' : ''}<span class="chat-green">${n}</span>${b ? '&nbsp;' : ''}`);
   const helperPeople = helpers => helpers.reduce((sum, h) => sum + (h.private_count || 1), 0);
   function helperLabel(c, helpers) {
     const exact = c.helper_counts?.total ?? c.helpers?.total;
@@ -155,7 +158,7 @@
     const helpers = helperList(c);
     const { label, count, plan, current } = planInfo(c);
     const progress = locked ? (label || count) && `<span class="chat-pill">${esc(label || count)}</span>`
-      : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${label} ›</a>` : '';
+      : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${greenNum(label)} ›</a>` : '';
     const steps = !locked && progress ? `<span class="chat-steps" aria-hidden="true">${plan.map(p => `<i data-status="${esc(stepState(p) || '')}"></i>`).join('')}</span>` : '';
     const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true);
     const thoughtShort = thoughtFull;   // 两版同一套（本人禁令 11-24 14:16）：两版思考摘要都给全文
@@ -171,7 +174,7 @@
     const source = origin ? `<span class="chat-tag">${esc(origin)}</span>` : '';
     const attribution = [U.chatFields.appTag(c), who(c, 'body', true), source].filter(Boolean).join(' ');
     const modelLine = attribution ? `<span class="chat-model">${attribution}</span>` : '';
-    const context = [modelLine, titleMark, timing && `<span data-steady>${esc(timing)}</span>`].filter(Boolean).join('');
+    const context = [modelLine, titleMark, timing && `<span data-steady>${esc(timing).replace(/^历时 (.+?)(?= · |$)/, '历时 <span class="chat-green">$1</span>')}</span>`].filter(Boolean).join('');
     const runningPreview = !Array.isArray(c.helpers) && !Array.isArray(c.helpers?.items);
     const groupedPreview = runningPreview && helpers.length === 1 && helpers[0].private_count;
     const busyCount = helperPeople(helpers), allCount = c.helper_counts?.total ?? c.helpers?.total;
@@ -185,7 +188,7 @@
     const lockedMeta = [stage, project && `所属项目 ${project}`].filter(Boolean).join(' · ');
     const meta = lockedMeta ? `<p class="row__sub">${esc(lockedMeta)}</p>` : '';
     const reason = column ? statusReason(c) : '';
-    return { key: c.id, cls: `row row--chat lb-item${column ? ' row--board' : ''}${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${column ? whenCell(c) : lamp(c)}<p class="row__main">${column ? statusPill(c) : ''}${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${helperCount}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${reason}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
+    return { key: c.id, cls: `row row--chat lb-item${column ? ' row--board' : ''}${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${column ? whenCell(c) : lamp(c)}<p class="row__main">${column ? statusPill(c) : ''}${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${greenNum(helperCount)}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${reason}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
   }
   const stamp = at => `${U.date(at)} ${U.time(at)}`.trim();
   function readAt(at) {
