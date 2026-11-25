@@ -1,14 +1,14 @@
-// 实况 · 自动任务：后台 AI 替本人干的八类活。上半部照 AI 对话页的用法（本人 11-24 01:36 FEDQ1 选 A）：
+// 实况 · 自动任务：后台 AI 替本人干的各类活（现在七类，页上的类数照后台给的列表数）。上半部照 AI 对话页的用法（本人 11-24 01:36 FEDQ1 选 A）：
 // 页头、一排分类按钮、在干、出毛病的、近 72 小时跑完的（一轮一张卡，自动修理一件一张卡）、更早的按天看；
-// 下半部是这周做成了多少、八类总表（开关、几点跑、用谁、上次结果、近 30 天，点一行原地展开怎么干）。
+// 下半部是这周做成了多少、各类总表（开关、几点跑、用谁、上次结果、近 30 天，点一行原地展开怎么干）。
 // 读 /computer-access/live/v1/automation 和每一轮的列表 automation/runs（取数和转换在 runs.js）。
 // 网址：?category=<类> 只看一类；?family=claude|codex|antigravity 只看一家（旧链接的 ?host= 也认）；?date=today|YYYY-MM-DD 只看那天；?status=running|completed|incomplete 只看一种结局；
-// ?type=<类> 照旧展开八类表里那一行。一轮的详情在 /live/automation/run/?type=<类>&run=<轮号>（后台给的 ?type=…&run=… 转过去）。
+// ?type=<类> 照旧展开总表里那一行。一轮的详情在 /live/automation/run/?type=<类>&run=<轮号>（后台给的 ?type=…&run=… 转过去）。
 // 单件活（?work=）、修理的小类（?type=backup 这类）、按项目看（?project=）仍走原来的页 /live/automation/work/。
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-laptop', 'weekly-live', 'excerpt', 'ai-commitments'];
+  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
   const typeParam = params.get('type');
   if (params.has('run')) {
     location.replace('/live/automation/run/' + location.search + location.hash);
@@ -26,6 +26,10 @@
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
+  // 总表里的类：后台列表里有、页面也认的那几类（笔记本每周巡检已取消，后台删掉之前列表里还有它也不显示）
+  const shownCats = d => IDS.map(id => list(d?.categories).find(c => c.id === id)).filter(Boolean);
+  // 写在字里的类数照总表实际几行：七类；一行也没有时不写数
+  const kinds = d => { const n = shownCats(d).length; return n ? `${n <= 10 ? '一二三四五六七八九十'[n - 1] : n}类` : '各类'; };
   const pauseOf = (d, id) => list(d.provider_pauses).find(p => list(p.categories).includes(id));
   const minutes = s => known(s) ? (s < 3600 ? `${Math.max(1, Math.round(s / 60))} 分钟` : `${Math.floor(s / 3600)} 小时 ${Math.round(s % 3600 / 60)} 分`) : '';
 
@@ -99,7 +103,7 @@
   }
   function view(d) {
     const got = collect(d);
-    const rows = got.rows.filter(r => r.category !== 'excerpt' && inWindow(r)
+    const rows = got.rows.filter(r => r.category !== 'excerpt' && IDS.includes(r.category) && inWindow(r)
       && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status));
     const all = cards(rows), mine = c => !filter.category || c.category === filter.category;
     const live = all.filter(c => c.status === 'running');
@@ -214,14 +218,14 @@
   const sec = (id, name, n, html, extra = '') => `<section class="au-sec" id="${id}"><h2 class="au-sec__head">${name}<b> · ${int(n)}</b>${extra}</h2>${html}</section>`;
   function upper(d) {
     const v = view(d), waiting = '<p class="au-empty">正在读…</p>';
-    const next = list(d.categories).filter(c => c.next_at && (!filter.category || c.id === filter.category)).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
+    const next = shownCats(d).filter(c => c.next_at && (!filter.category || c.id === filter.category)).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
     const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
     const showLive = !filter.status || filter.status === 'running', showDone = filter.status !== 'running';
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
     const doneName = filter.date ? `${day}${filter.status === 'incomplete' ? '没做成的' : '跑完的'}` : '近 72 小时跑完的';
     // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
     // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
-    const legacy = v.legacy ? '<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用八类各自最近几次拼出来，点不开经过。</p>' : '';
+    const legacy = v.legacy ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     return `${catButtons(d, v)}${legacy}
       ${showLive ? sec('running', '在干', v.live.length, v.live.length ? v.live.map(c => card(d, v, c)).join('') : v.waiting ? waiting : idle) : ''}
@@ -230,10 +234,10 @@
         filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') : ''}${capped}
       ${older(d)}`;
   }
-  // 更早的：近 30 天每天跑了几轮（八类表里的 30 天成坏加起来，摘一句不算），点一天只看那天
+  // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
   function older(d) {
     const days = new Map();
-    for (const c of list(d.categories)) if (c.id !== 'excerpt' && (!filter.category || c.id === filter.category)) for (const x of list(c.daily_30d)) {
+    for (const c of shownCats(d)) if (c.id !== 'excerpt' && (!filter.category || c.id === filter.category)) for (const x of list(c.daily_30d)) {
       if (!DAY.test(x.date || '')) continue;
       const n = (x.success || 0) + (x.failed || 0), had = x.success != null || x.failed != null;
       const prev = days.get(x.date) || { n: 0, bad: 0, had: false };
@@ -371,10 +375,10 @@
     return `<div class="au-trend">${T.posneg(days, { width: 150, height: 34 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(when(s.recorded_since))} 起记</small>` : ''}</span></div>${why ? `<small class="au-basis">${why}</small>` : ''}`;
   }
   function table(d) {
-    const cats = IDS.map(id => list(d.categories).find(c => c.id === id)).filter(Boolean);
-    if (!cats.length) return `<section class="tp-panel" id="types"><div class="tp-panel__head"><h2>八类自动任务</h2></div><p class="tp-empty">${d.types ? '这一版后台还没给八类的读数。' : '八类自动任务没读到。'}</p></section>`;
+    const cats = shownCats(d);
+    if (!cats.length) return `<section class="tp-panel" id="types"><div class="tp-panel__head"><h2>各类自动任务</h2></div><p class="tp-empty">${d.types ? '这一版后台还没给各类的读数。' : '各类自动任务没读到。'}</p></section>`;
     const offline = state?.offline;
-    return `<section class="tp-panel" id="types"><div class="tp-panel__head"><h2>八类自动任务<small>点一行看这一类怎么干</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="types"><div class="tp-panel__head"><h2>${kinds(d)}自动任务<small>点一行看这一类怎么干</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
       <table class="tp-table au-table"><thead><tr><th scope="col">任务</th><th scope="col">什么时候跑</th><th scope="col">用谁</th><th scope="col">上次结果</th><th scope="col">近 30 天</th><th scope="col">开关</th></tr></thead>
       <tbody>${cats.map(c => {
         const g = G[c.id] || {}, expanded = open === c.id, p = pauseOf(d, c.id);
@@ -387,7 +391,7 @@
       <p class="tp-small au-foot">不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。</p></section>`;
   }
 
-  // —— 各家自带的定时（M183）：定稿只许拿来叫醒当前对话接着干，反复跑的活在上面八类里。三家都列，没有就写没有 ——
+  // —— 各家自带的定时（M183）：定稿只许拿来叫醒当前对话接着干，反复跑的活在上面总表里。三家都列，没有就写没有 ——
   function scheduled(d) {
     if (!Array.isArray(d.scheduled_activities)) return '';
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
@@ -400,7 +404,7 @@
       return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : '没有'}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
-    return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>只用来叫醒当前对话接着干，反复跑的活都在上面八类里</small></p>
+    return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>只用来叫醒当前对话接着干，反复跑的活都在上面${kinds(d)}里</small></p>
       <table class="tp-table au-mini-table"><tbody>${body}</tbody></table>${rest}</div>`;
   }
 
@@ -428,7 +432,7 @@
       ${basis(s.basis) ? `<p class="tp-small au-basis">成和坏：${basis(s.basis)}</p>` : ''}
       ${extra.join('')}
       <div class="au-more">
-        <details class="tp-details" id="prompt-${c.id}"><summary class="live-disclosure">提示词原文</summary><pre>${c.prompt_template ? F(c.prompt_template, '提示词') : '这一类没有固定的提示词：' + esc(c.id === 'weekly-laptop' ? '按巡检清单跑程序，坏了才叫 AI。' : '后台这版没给原文。')}</pre></details>
+        <details class="tp-details" id="prompt-${c.id}"><summary class="live-disclosure">提示词原文</summary><pre>${c.prompt_template ? F(c.prompt_template, '提示词') : '这一类没有固定的提示词：后台这版没给原文。'}</pre></details>
         <section class="au-block" id="why-${c.id}"><p class="au-block__title">为什么这样做、为什么这个钟点和型号</p><div class="au-why"><p><b>用谁</b>${esc(g.who || '')}现在是 ${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ')}，换代跟着模型清单走。</p>${why}</div></section>
         <section class="au-block" id="fail-${c.id}"><p class="au-block__title">坏了怎么办、怎么关、结果去哪</p><div class="au-why"><p><b>坏了怎么办</b>${esc(g.failure || '')}</p><p><b>关了会怎样</b>${esc(g.off || '')}</p><p><b>花多少时间</b>${esc(g.cost || '')}</p><p><b>结果去哪</b>${esc(g.result || '')}</p></div></section>
       </div></div>`;
@@ -443,7 +447,7 @@
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, '自动任务')); page.tick.set([], { off: true }); return; }
     const side = [`截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ');
-    T.paint(page.root, `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的八类活：在干什么、刚干完什么、几点跑、用谁、开没开。</p></div><p class="tp-head__side"><span>${side}</span></p></div>
+    T.paint(page.root, `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活：在干什么、刚干完什么、几点跑、用谁、开没开。</p></div><p class="tp-head__side"><span>${side}</span></p></div>
       ${T.stateNote(state)}${upper(d)}
       <div class="au-lower"><div class="tp-grid au-top">${results(d)}${usage(d)}</div>${pauses(d)}${table(d)}</div>`);
     drawn = true;
@@ -524,7 +528,7 @@
     ask: () => '请看实况自动任务页：后台 AI 现在在干什么、刚跑完什么、哪类坏了或停着、要不要我出面。先用大白话说，别动手。',
     onState(next) { state = next; schedule(); } });
   watchRuns();
-  // 八类表里“AI 约好的事”那一行的在等几件、下一件几点从账本数
+  // 总表里“AI 约好的事”那一行的在等几件、下一件几点从账本数
   Live.watch('ledger', {}, { phase(st) { ledger = st; schedule(); } });
   page.root.addEventListener('click', async e => {
     const toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
