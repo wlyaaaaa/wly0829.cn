@@ -246,7 +246,9 @@
       const id = box.dataset.selectItem, item = selectable.get(id);
       if (item) available.set(id, item);
     }
-    for (const id of selected) if (!available.has(id)) selected.delete(id);
+    // M972：清单一时没读到（后台正在准备、读不到时整块换成一句话）时，勾上的不丢，栏也不收，读回来照样勾着；读回来了还找不到（办掉了、被筛掉了）才去掉
+    const unread = Object.keys(KIND).some(key => collections.has(key) && collections.get(key).items == null) || reportCount === null && !!reportsData;
+    for (const id of selected) if (!available.has(id)) { if (unread && selectable.has(id)) available.set(id, selectable.get(id)); else selected.delete(id); }
     const operations = new Map();
     for (const id of selected) {
       const item = available.get(id);
@@ -263,9 +265,15 @@
     const ordered = [...operations].sort(([a], [b]) => ORDER.indexOf(a) - ORDER.indexOf(b));
     operations.clear(); ordered.forEach(([intent, rows]) => operations.set(intent, rows));
     const signature = [...operations].map(([intent, rows]) => intent + ':' + rows.length + ':' + rows.filter(item => item.decline_followup).length).join('|');
+    const label = (intent, rows) => U.itemLabels[intent === 'decline' && rows.every(item => item.decline_followup) ? 'decline_copy' : intent];
+    // M972（本人 11-25 23:49）：勾上的几件只有一种办法时，栏里只摆“确认”“取消”，确认就是那一种办法（要你知道：我知道了；你放着、要你选：不办了；汇报：关掉），点了照旧先弹确认框写清办什么。
+    // 能有几种办法的（要你做：晚点提醒或不办了；混选了不同的事）照旧分开摆，等本人定。两版同一套。
+    const only = operations.size === 1 && [...operations.values()][0].length === selected.size ? [...operations.keys()][0] : '';
     if (selectionActions.dataset.signature !== signature) {
       selectionActions.dataset.signature = signature;
-      U.html(selectionActions, [...operations].map(([intent, rows]) => '<button class="btn btn--sm" type="button" data-batch-action="' + esc(intent) + '" aria-haspopup="dialog">' + esc(U.itemLabels[intent === 'decline' && rows.every(item => item.decline_followup) ? 'decline_copy' : intent]) + (rows.length === selected.size ? '' : ' · ' + rows.length + ' 件') + '</button>').join(' '));
+      U.html(selectionActions, only ? '<button class="btn btn--sm" type="button" data-batch-action="' + esc(only) + '" aria-haspopup="dialog" aria-label="确认：' + esc(label(only, operations.get(only))) + '">确认</button>'
+        : [...operations].map(([intent, rows]) => '<button class="btn btn--sm" type="button" data-batch-action="' + esc(intent) + '" aria-haspopup="dialog">' + esc(label(intent, rows)) + (rows.length === selected.size ? '' : ' · ' + rows.length + ' 件') + '</button>').join(' '));
+      selection.querySelector('[data-clear]').textContent = only ? '取消' : '取消选择';
     }
     for (const button of selectionActions.querySelectorAll('[data-batch-action]')) {
       button.onclick = () => U.confirmItems(button, operations.get(button.dataset.batchAction), button.dataset.batchAction, ids => {
