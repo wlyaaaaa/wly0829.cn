@@ -301,7 +301,9 @@
     const name = nameHidden ? '成品名称仅本人可见' : titleVisible ? [proj?.name && text(proj.name), text(it.recent_title || '已登记的成品')].filter(Boolean).join(' · ') : '';
     // M684：本人版成品名称旁按后台 visitor_labels.title 挂签；后台还没标、但访客版另有名字（public_title 和本人版的名字不一样）的，就是成品改了名字，挂第二种签。
     const renamed = projectViewer === 'owner' && typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(it.recent_title || it.title, projectViewer).trim();
-    const nameTag = !name ? '' : U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
+    // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：本人版名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
+    const wholeTag = projectViewer === 'owner' && U.visitorWholeHidden(it, ['$']) ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
+    const nameTag = !name ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
     const changes = canShorten && Array.isArray(it.changes) && it.changes.length ? it.changes : display !== title ? [typeof title === 'string' ? title.replace(/([。！？])\s*；/g, '$1') : title] : [];
     const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${text(change)}</p>`).join('')}</details>` : '';
     const publicLink = projectViewer === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
@@ -379,10 +381,16 @@
     // 同一张卡的卡底已经是这一句时，卡里这一行不再重复（cardTail 里收起）
     const meta = [count, !m.moment && at && `截至 ${at}`].filter(Boolean).join(' · '); b.moment = m.moment || '';
     const linkLabel = U.fieldText(m.label, projectViewer) + '明细';
-    U.html(b.head, `<b>${name}</b>${meta || b.moment ? `<span class="pj-record-meta">${esc(meta)}${b.moment ? `<span class="pj-record-moment">${meta ? ' · ' : ''}${esc(b.moment)}</span>` : ''}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
-    // 两版同一套：说明书各组不再由前端替访客写“不予公开”，明细照回包画；只有后台把这一项标成只给本人的才写那句
+    // 说明书各类（资料速查 group-4 除外）：后台给访客的明细只有一句“这里是 N 条……所以不予展示”（两条以内的只给每条标题，cockpit_projects 里 group 那段）。
+    // 本人版在类名后挂“访客看不到”；访客版在卡上照定稿卡第 3 种写法写清几条、哪一类。后台在这一项上标了 visitor_labels 的照后台。
+    const knowledgeHidden = id === 'daily-preferences' && /^group-[0-5]$/.test(m.section || '') && m.section !== 'group-4';
+    const ownerTag = projectViewer !== 'owner' ? '' : U.visitorLabel(m, ['$', 'label'], '这一类', projectViewer)
+      || (knowledgeHidden ? U.visitorHiddenTag(`这一类的认识原文，只看到${m.count > 2 ? '一句说明' : '每条的标题'}`, '', projectViewer) : '');
+    U.html(b.head, `<b>${name}${ownerTag ? ` ${ownerTag}` : ''}</b>${meta || b.moment ? `<span class="pj-record-meta">${esc(meta)}${b.moment ? `<span class="pj-record-moment">${meta ? ' · ' : ''}${esc(b.moment)}</span>` : ''}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
     const hidden = m.value?.hidden_block || m.hidden_block || (isPrivate(m) ? m.value?.hidden_what || m.hidden_what : '');
-    const notice = projectViewer !== 'public' || !hidden ? '' : U.visibilityNote({ visibility: 'owner', hidden_block: hidden }, 'public', U.fieldText(m.label));
+    const knowledgeLine = projectViewer === 'public' && knowledgeHidden && !hidden
+      ? esc(`这里是${m.count == null ? '' : ` ${num(m.count)} 条`}关于${U.fieldText(m.label, projectViewer)}的认识，本人版能看到全部，所以不予展示`) : '';
+    const notice = knowledgeLine || (projectViewer !== 'public' || !hidden ? '' : U.visibilityNote({ visibility: 'owner', hidden_block: hidden }, 'public', U.fieldText(m.label)));
     b.reading.hidden = !notice;
     U.html(b.reading, notice);
     b.main.hidden = b.foot.hidden = b.more.hidden = b.link.hidden = b.note.hidden = b.cut.hidden = true;
@@ -1183,6 +1191,9 @@
       }
       projectViewer = viewer;
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
+      // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
+      if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m
+        : { ...m, label: '整理成主题卡的认识', unit: '张', scope: '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“根据什么”“材料攒了多少”。' }) }) };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
       if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
       // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”

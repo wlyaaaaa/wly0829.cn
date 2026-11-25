@@ -348,7 +348,7 @@
       box.syncDisclosure?.();
       watchBands(box);
     };
-    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(d?.recent_artifacts, section, field, viewer);
+    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(d?.recent_artifacts, section, field, viewer, d?.items);
   }
   function drawUnpushed(unpushed, section, field) {
     // 有没推提交的排前面、放大；零值不写，只写有的。
@@ -363,7 +363,7 @@
       return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
     }), unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '');
   }
-  function drawRecentArtifacts(recent, section, field, audience = 'public') {
+  function drawRecentArtifacts(recent, section, field, audience = 'public', roster = []) {
     const concealed = v => v?.visibility === 'pending' || v?.rewrite === 'pending' || audience === 'public' && (v?.hidden || v?.hidden_block || v?.visibility === 'owner' || v?.public === 'owner');
     // 按项目一张卡；同一项目里标题和说明都一样的几件合成一行写“×N”，每件的时刻各是一个按钮，去向和原来一样。不公开的成品单独一张、不带项目和图。
     const groups = new Map(), items = recent?.items || [];
@@ -397,7 +397,9 @@
           const ownerNote = U.visitorLabel(it, 'open', '这份成品的正文', audience) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) : '');
           if (ownerNote) item = { ...item, ownerNote };
           const renamed = typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(raw, audience).trim();
-          const nameTag = U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', audience) : '');
+          // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
+          const wholeTag = U.visitorWholeHidden(it, ['$']) ? U.visitorHiddenMark(it, '这份成品', audience, { keys: ['$'] }) : '';
+          const nameTag = wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', audience) : '');
           if (nameTag) title += nameTag;
         }
         if (audience !== 'owner') {
@@ -427,7 +429,10 @@
     const SHOW = 3;
     const cards = [...groups.values()].map(g => {
       const p = g.project, name = g.secret ? '不公开的成品' : field(p?.name || '项目');
-      const head = g.secret ? `<span class="row__title">${name}</span>` : p?.href ? `<a class="row__title" href="${esc(route(p.href))}">${name} <span class="more__chev">›</span></a>` : `<span class="row__title">${name}</span>`;
+      // 本人版：整项不给访客看的项目（名册里标 visitor_labels.name=hidden 或 visibility: 'owner'），卡头项目名后挂“访客看不到”；成品行里的项目只带 id 和名字，标记到名册里找
+      const listed = audience === 'owner' && !g.secret && p?.id ? [...(Array.isArray(roster) ? roster : []), ...['active', 'frozen'].flatMap(key => states.get(key)?.data?.items || [])].find(r => r?.id === p.id) || p : null;
+      const headTag = !listed ? '' : projectTag(listed, audience) || (listed.visibility === 'owner' || listed.public === 'owner' ? U.visitorHiddenTag('这个项目', '', audience) : '');
+      const head = (g.secret ? `<span class="row__title">${name}</span>` : p?.href ? `<a class="row__title" href="${esc(route(p.href))}">${name} <span class="more__chev">›</span></a>` : `<span class="row__title">${name}</span>`) + (headTag ? ` ${headTag}` : '');
       const rest = g.rows.slice(SHOW);
       const header = g.secret && audience === 'public' ? '' : `<div class="pj-art__head">${g.secret ? miniPic('', null) : miniPic(p?.id, p?.name)}${head}</div>`;
       return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW).map(rowHtml).join('')}</ul>${rest.length ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-art__rows">${rest.map(rowHtml).join('')}</ul></details>` : ''}` };
