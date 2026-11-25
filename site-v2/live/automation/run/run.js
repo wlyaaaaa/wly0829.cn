@@ -98,7 +98,7 @@
       const words = plainOf(v);
       if (typeof v === 'string' && /^没有记下/.test(words)) return false;
       // 大标题退回长标题时，标题就是 summary 的第一句；后台的“发生了什么”是同一句（只差标点）就不再写一遍
-      return !(key === '发生了什么' && ((head && words === head) || (shown && loose(words) === shown)));
+      return !(key === '发生了什么' && ((head && loose(words) === loose(head)) || (shown && loose(words) === shown)));
     }).map(([h, v]) => [h, F(v, h)]).filter(([, html]) => html.trim());   // 画出来是空的（本人版里没给原字的占位）不画
     return cells.length ? `<div class="ar-three" style="--cells:${cells.length}">${cells.map(([h, html]) => `<section class="tp-panel ar-cell"><h2>${h}</h2><p>${html}</p></section>`).join('')}</div>` : '';
   }
@@ -211,7 +211,8 @@
       body = `收到结论：暂时不修，等下一次检查再看。${hasWhy ? `<br>为什么先放着：${why}` : ''}${note && !dupNote ? `<br>${hasWhy ? '这一轮做了：' : ''}${note}` : ''}`; tone = 'off';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
-      const step = r.stop?.step ? `停在：${F(r.stop.step, '这一步')}。` : '', until = T.stamp(r.stop?.until) ? `${esc(T.when(r.stop.until))} 再接着做。` : '';
+      // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
+      const stepWords = plainOf(r.stop?.step), step = stepWords && !plainOf(r.stop?.text || r.reason).includes(stepWords) ? `停在：${F(r.stop.step, '这一步')}。` : '', until = T.stamp(r.stop?.until) ? `${esc(T.when(r.stop.until))} 再接着做。` : '';
       body = `没收到结论：${why}${/[。！？]$/.test(why) ? '' : '。'}${step}${until}`; tone = 'bad';
     } else {
       // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
