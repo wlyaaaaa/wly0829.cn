@@ -1021,6 +1021,13 @@
     } catch { return { status: 'unknown' }; }
   }
   const ownerWrites = new Map();
+  // 提交编号也记在本机（30 分钟）：点完马上刷新、离开再回来，回到页面按同一次操作接着查；回过的结果一并记下，多选时先回来的几件不用再问（M945）
+  const KEPT_WRITES = 'wly-live-owner-writes', KEEP_WRITES_MS = 1800000;
+  function keptWrites() {
+    try { const all = JSON.parse(localStorage.getItem(KEPT_WRITES) || '{}'), now = Date.now(); for (const [key, v] of Object.entries(all)) if (!(now - v?.at < KEEP_WRITES_MS)) delete all[key]; return all; }
+    catch { return {}; }
+  }
+  function keepWrite(key, value) { try { const all = keptWrites(); all[key] = value; localStorage.setItem(KEPT_WRITES, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ } }
   async function sendOwnerAction(token, data) {
     const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions' : '/__computer/cockpit/actions';
     try {
@@ -1082,11 +1089,11 @@
       return (site || Boolean(lanBase)) && fixture === null && !publicView && !offline() &&
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
-    async applyOwnerItems(items, action, followReceipt = false) {
+    async applyOwnerItems(items, action, followReceipt = false, resume = false) {
       const saved = [];
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
-        const result = await window.Live.ownerAction(item, action, followReceipt);
+        const result = await window.Live.ownerAction(item, action, followReceipt, resume);
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
@@ -1095,17 +1102,25 @@
       }
       return { saved, pending, unconfirmed, message, error };
     },
-    async ownerAction(item, action, followReceipt = false) {
+    async ownerAction(item, action, followReceipt = false, resume = false) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
       const token = device();
       const key = JSON.stringify([token, item.id, item.item_version, action]);
       let write = ownerWrites.get(key);
       if (!write) {
+        // 本页没有这一笔时，先接上刷新、离开前那一次还没回结果的编号；回到页面接着查（resume）只认那一次：回过结果的直接用那次结果，找不到就算没确认，不另起一笔
+        const kept = keptWrites()[key];
+        if (resume && kept?.result) return kept.result;
+        if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
+        else if (resume) return { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+      }
+      if (!write) {
         const data = { item_id: item.id, item_version: item.item_version, action, direct: true,
           idempotency_key: Array.from(crypto.getRandomValues(new Uint8Array(16)), n => n.toString(16).padStart(2, '0')).join('') };
         if (action === 'snooze') data.until = 'tomorrow_10';
-        write = { data, request: null };
+        write = { data, at: Date.now(), request: null };
         ownerWrites.set(key, write);
+        keepWrite(key, { data, at: write.at });
       }
       write.request ||= (async () => {
         let result = await sendOwnerAction(token, write.data);
@@ -1125,7 +1140,7 @@
           result = await sendOwnerAction(token, write.data);
         }
         write.request = null;
-        if (result && result.status !== 'waiting_undo') ownerWrites.delete(key);
+        if (result && result.status !== 'waiting_undo') { ownerWrites.delete(key); keepWrite(key, { data: write.data, at: write.at, result }); }
         return result || { status: 'unknown', message: followReceipt
           ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' };
       })();

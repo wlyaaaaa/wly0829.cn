@@ -691,11 +691,11 @@
   }
 
   // 一件一件写回，各记各的结果：没生效的写清是哪件、为什么；写回接口说“还没确认”的（unconfirmed）单算，不当失败。
-  async function writeItems(live, items, action, followReceipt = false) {
+  async function writeItems(live, items, action, followReceipt = false, resume = false) {
     const saved = [], failed = [];
     let pending = 0, unconfirmed = 0;
     // 每件各发一笔；后台慢、没回的，按同一提交编号接着查到真结果（定稿：异步的成功失败回执）。
-    const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt));
+    const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt, resume));
     for (const [index, result] of (await Promise.all(requests)).entries()) {
       const item = items[index];
       if (result.saved?.length) saved.push(...result.saved);
@@ -727,6 +727,81 @@
   function itemFeedback(trigger, message) { itemReceipt().set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
   // 再点一次用页面上最新的那份（版本变了的卡，重读后按新版本提交）。
   const latestItem = item => [...actionSets.values()].reverse().find(it => it.id === item.id && it.item_version) || item;
+  // 点了确认、还没回结果就刷新或离开：记下这次办的是哪几件（30 分钟），回到同一页按同一次操作接着查、照常弹回执；有了结果的就不再记（M945）
+  const WRITING_KEY = 'wly-live-item-writing', WRITING_KEEP = 1800000;
+  function writingItems() {
+    try { const all = JSON.parse(localStorage.getItem(WRITING_KEY) || '{}'), now = Date.now(); for (const [id, v] of Object.entries(all)) if (!(now - v?.at < WRITING_KEEP)) delete all[id]; return all; }
+    catch { return {}; }
+  }
+  function keepWriting(rows, entry) {
+    try { const all = writingItems(); for (const item of rows) { if (entry) all[item.id] = { ...entry, row: item }; else delete all[item.id]; } localStorage.setItem(WRITING_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
+  }
+  // 写回、跟查到真结果、弹回执。resume：回到页面接着查上回那一次，只按那次的提交编号查，不另起一笔。
+  async function saveItems(rows, intent, { trigger = null, extra = '', complete = () => {}, resume = null } = {}) {
+    const wording = CONFIRM_ITEM[intent], live = window.Live, lane = document.getElementById('item-action-receipts'), started = resume?.at ?? Date.now();
+    // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
+    const project = saved => {
+      if (wording.action && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent, at: started } }));
+    };
+    const nameOf = item => fieldText(item.text || item.title, 'owner');
+    // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。
+    const busy = on => {
+      if (!trigger) return;
+      if (on) { trigger.dataset.busyLabel ??= trigger.textContent; trigger.textContent = '正在办…'; trigger.disabled = true; trigger.classList.add('is-busy'); return; }
+      if (trigger.dataset.busyLabel != null) trigger.textContent = trigger.dataset.busyLabel;
+      delete trigger.dataset.busyLabel; trigger.disabled = false; trigger.classList.remove('is-busy');
+    };
+    rows.forEach(item => itemWrites.add(item.id));
+    if (!resume) keepWriting(rows, { batch: started + '-' + Math.random().toString(36).slice(2, 8), at: started, intent, page: location.pathname });
+    busy(true); project(null);
+    const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
+    try {
+      // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
+      const saved = [], failed = [];
+      let pending = rows;
+      for (let round = 0; pending.length && round < 4; round++) {
+        if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
+        const result = await writeItems(live, pending, wording.action, true, !!resume);
+        saved.push(...result.saved); failed.push(...result.failed);
+        pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
+      }
+      const left = rows.filter(item => !saved.includes(item.id)), unsure = left.filter(item => !failed.some(f => f.item === item));
+      // 结果不明的留着，下回打开这页接着按同一次操作查；保存上和没保存上的不再记
+      keepWriting(rows.filter(item => !unsure.includes(item)), null);
+      rememberSaved(rows.filter(item => saved.includes(item.id)));
+      project(saved);
+      const detail = saved.length === 1 && rows.length === 1 && trigger?.closest('.dossier-card');
+      const state = detail && detail.querySelector('[data-part="state"]');
+      if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
+      if (!left.length) receipt.set('ok', wording.saved + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
+      else {
+        // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”
+        const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
+          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + '电脑在忙，还没回结果；稍后刷新看，或者再点一次。'].filter(Boolean).join('\n');
+        const head = rows.length > 1 ? [`保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
+        receipt.set('fail', head,
+          { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
+      }
+      complete(saved);
+      await live.refresh();
+    } finally {
+      rows.forEach(item => itemWrites.delete(item.id));
+      busy(false);
+    }
+  }
+  // 回到页面时（本人设备、读到本人份以后）把这一页上回没回结果的那几次接着查完，一页只查一回
+  let resumeChecked = false;
+  function resumeItemWrites() {
+    if (resumeChecked || viewer !== 'owner' || !window.Live?.canOwnerAct?.()) return;
+    resumeChecked = true;
+    const batches = new Map();
+    for (const entry of Object.values(writingItems())) {
+      if (entry?.page !== location.pathname || !entry.row?.id || !CONFIRM_ITEM[entry.intent]?.action || itemWrites.has(entry.row.id)) continue;
+      if (!batches.has(entry.batch)) batches.set(entry.batch, { at: entry.at, intent: entry.intent, rows: [] });
+      batches.get(entry.batch).rows.push(entry.row);
+    }
+    for (const batch of batches.values()) saveItems(batch.rows, batch.intent, { resume: batch });
+  }
 
   function confirmItems(trigger, items, intent, complete = () => {}) {
     // “不办了”一次选进普通卡和有后续的卡：同一个确认框分两组，普通卡按原编号撤下，有后续的复制给 AI。
@@ -740,52 +815,6 @@
     if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else itemFeedback(trigger, '不是可信设备'); return; }
     if (wording.action && writes.some(item => !item.item_version || !item.owner_actions?.includes(wording.action))) {
       itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
-    }
-    const lane = document.getElementById('item-action-receipts');
-    const followReceipt = !!wording.action;
-    // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
-    const project = (saved, rows = writes) => {
-      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent } }));
-    };
-    const nameOf = item => fieldText(item.text || item.title, 'owner');
-    // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。
-    const busy = on => {
-      if (on) { trigger.dataset.busyLabel ??= trigger.textContent; trigger.textContent = '正在办…'; trigger.disabled = true; trigger.classList.add('is-busy'); return; }
-      if (trigger.dataset.busyLabel != null) trigger.textContent = trigger.dataset.busyLabel;
-      delete trigger.dataset.busyLabel; trigger.disabled = false; trigger.classList.remove('is-busy');
-    };
-    async function save(rows, extra = '') {
-      rows.forEach(item => itemWrites.add(item.id));
-      busy(true); project(null, rows);
-      const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
-      try {
-        // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
-        const saved = [], failed = [];
-        let pending = rows;
-        for (let round = 0; pending.length && round < 4; round++) {
-          if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
-          const result = await writeItems(live, pending, wording.action, true);
-          saved.push(...result.saved); failed.push(...result.failed);
-          pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
-        }
-        rememberSaved(rows.filter(item => saved.includes(item.id)));
-        project(saved, rows);
-        const detail = saved.length === 1 && rows.length === 1 && trigger.closest('.dossier-card');
-        const state = detail && detail.querySelector('[data-part="state"]');
-        if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
-        const left = rows.filter(item => !saved.includes(item.id));
-        if (!left.length) receipt.set('ok', wording.saved + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
-        else {
-          const why = failed.length ? failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)).join('\n') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。';
-          receipt.set('fail', rows.length > 1 ? `保存上 ${saved.length} 件，没保存上 ${left.length} 件` : failed.length ? '没保存上' : '还没确认保存上',
-            { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => save(left.map(latestItem)) });
-        }
-        complete(saved);
-        await live.refresh();
-      } finally {
-        rows.forEach(item => itemWrites.delete(item.id));
-        busy(false);
-      }
     }
     // 本人版列全：选了几件就列几件。
     const names = (rows, id = '') => `<ul${id ? ` id="${id}"` : ''} class="live-item-confirm__name live-item-confirm__list">${rows.map(item => `<li>${esc(fieldText(item.text || item.title, 'owner'))}</li>`).join('')}</ul>`;
@@ -825,7 +854,7 @@
         // 先复制（要趁这次点按），再按各卡原编号写回；两组结果在同一张回执里报。
         const ok = await copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
         if (ok) complete(follow.map(item => item.id));
-        await save(direct, `有后续的 ${follow.length} 件` + (ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。'));
+        await saveItems(direct, intent, { trigger, complete, extra: `有后续的 ${follow.length} 件` + (ok ? '已复制，粘贴到 AI 对话发送。' : '没复制成，请再试。') });
         return;
       }
       if (!wording.action) {
@@ -835,7 +864,7 @@
         if (ok) complete(items.map(item => item.id));
         return;
       }
-      await save(items);
+      await saveItems(items, intent, { trigger, complete });
     }, { once: true });
     size();
     viewport?.addEventListener('resize', size);
@@ -1273,6 +1302,7 @@
           viewer = nextViewer;
           queueReceipts();
         }
+        if (viewer === 'owner') queueMicrotask(resumeItemWrites);   // M945：回到页面接着查上回没回结果的办理
         root.dataset.liveViewer = viewer;
         if (paused && !state.publicPaused) {
           label = '';

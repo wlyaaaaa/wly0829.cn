@@ -95,9 +95,9 @@
     const first = Math.min(...[...landed.values()].map(w => w.saved));
     landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
   }
-  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent } }) => {
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent, at } }) => {
     for (const item of items) {
-      if (saved === null) writeStarted.set(item.id, Date.now());
+      if (saved === null) writeStarted.set(item.id, at ?? Date.now());   // 回到页面接着查的（M945）按当初点的时刻算
       if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
       else hiddenWhileWriting.delete(item.id);
       if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent);
