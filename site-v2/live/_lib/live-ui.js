@@ -1109,10 +1109,13 @@
   // 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽、同一个样子（玻璃、右边一整幅画），一件事一行，
   // 什么事都没有时整张不出现；出现时从 0 撑开、收起时合拢，下面的卡跟着滑，不跳。
   // 连接那一行：琥珀小灯一直慢慢呼吸、循环箭头一直慢慢转；画在样式表里，卡出现才下载。
-  // 原因变了只换粗字。连上后灯变绿、写“已连上”，约 2 秒后收走这一行；卡里没别的事就整张收起。
+  // 写什么照本人 11-24 20:34 选的 B（图 S1 五种）：刚读不到先写“正在刷新”，一直读不到没确认关机写“……，正在重试”，
+  // 确认关机灯变灰、写“电脑几点关机了”和下面是哪一份；字由 live-client 的 conn 给，全站同一个部件。
+  // 连上后灯变绿、写“已连上”，右边的画照样在，约 2 秒后收走这一行；卡里没别的事就整张收起。
   // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
   const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
-  let connBack = 0;
+  let connBack = 0, connNow = 'online';
+  const pillHooks = new Set();   // 页眉“几点读到”按钮跟着卡一起换成“正在重试”
   const connStage = () => document.querySelector?.('body.page--live main.stage');
   const connFit = card => {
     const was = card.hidden;
@@ -1158,19 +1161,24 @@
       }, 520);
     };
     let link = rows.querySelector('.live-conn__row[data-key="link"]');
-    if (state.offline && !state.publicPaused) {
+    const c = state.conn || { stage: 'online' };
+    if (c.stage !== connNow) { connNow = c.stage; for (const hook of pillHooks) hook(c); }
+    if (['retrying', 'lost', 'off'].includes(c.stage)) {
       clearTimeout(connBack); connBack = 0;
       if (!link) {
         link = row('link');
-        link.innerHTML = `<span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span>连上后会自动换成最新的</span>`;
+        link.innerHTML = `<span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span><span class="live-conn__why"></span></span>`;
         rows.prepend(link);
       }
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
       link.classList.remove('is-back');
-      put(link.querySelector('b'), state.reason || '连不上实况服务');
-      put(link.querySelector('.live-conn__at'), state.pageAtText ? ` · 下面是 ${state.pageAtText} 的数据` : ' · 这页没有可显示的上次数据');
+      link.dataset.stage = c.stage;
+      put(link.querySelector('b'), c.say);
+      put(link.querySelector('.live-conn__at'), c.at);
+      put(link.querySelector('.live-conn__why'), c.wait);
     } else if (link && !link.classList.contains('is-back')) {
       link.classList.add('is-back');
+      link.dataset.stage = 'back';
       const upTo = window.Live?.upTo?.() || state.shownAt;
       put(link.querySelector('b'), '已连上');
       put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
@@ -1222,7 +1230,7 @@
     const at = group.querySelector('.live-at');
     const askBtn = group.querySelector('.live-ask');
     const pageTitle = document.title || '实况';
-    let label = '', busy = false, paused = false;
+    let label = '', busy = false, paused = false, last = null;
     // 刷新图标用画好的 SVG：一段顺时针 300° 的圆弧，右上偏上一个实心三角箭头（字体里的 ↻ 在不同字体里样子怪）。
     // 不用“直角折线”箭头（转到缺口朝上像电源键）；箭头小了、线细了又像字母 C。线宽 2.25（显示约 1.5px，和 14px 字的笔画一样重），
     // 箭头尖离圆弧起点约 2px，转到哪个角度都像一个圆在转。
@@ -1262,9 +1270,10 @@
       const text = ask();
       if (text) flash(askBtn, (await copy(text)) ? '已复制' : '没复制成');
     });
-    return {
-      // 用假数据写“示意数”；真数写“04:12 读到”
+    const api = {
+      // 用假数据写“示意数”；真数写“04:12 读到”；读不到正在重试写“正在重试”（本人 11-24 20:34：不写连不上）
       set(state) {
+        last = state;
         const nextViewer = state.viewer?.kind === 'public' ? 'public' : 'owner';
         if (viewer !== nextViewer) {
           viewer = nextViewer;
@@ -1285,12 +1294,17 @@
           show(label);
           return;
         }
-        const stamp = state.offline ? state.cutoffAt : state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
-        if (stamp || state.offline || state.phase === 'none') { clearTimeout(waiting); readDone(); }
-        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : atText || (state.offline ? '连不上' : state.phase === 'none' ? collectionText() : label);
+        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
+        const retry = state.meta?.source !== 'fixture' && ['retrying', 'lost'].includes(state.conn?.stage);
+        if (stamp || state.offline || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
+        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : retry ? '正在重试'
+          : atText || (state.offline ? '电脑关机了' : state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
+        at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
       },
     };
+    pillHooks.add(c => { if (last && !paused) api.set({ ...last, conn: c }); });
+    return api;
   }
 
   // —— 动 ——
