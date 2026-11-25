@@ -226,7 +226,8 @@
     const target = id && document.getElementById(id);
     if (!target) return false;
     if (target.matches('details')) target.open = true;
-    requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+    // 下一帧再按 id 找一次：进页时读数一来常常连画两遍，先找到的那个已经被换掉了
+    requestAnimationFrame(() => (document.getElementById(id) || target).scrollIntoView({ block: 'start' }));
     return true;
   };
 
