@@ -912,9 +912,8 @@ span.fog__slow { margin: 0 0 0 8px; }
   white-space: normal;
   overflow-wrap: anywhere;
 }
-/* 离线复用各页现有横条，不另外叠一条；状态动画停，装饰光色照旧。 */
+/* 离线复用各页现有横条，不另外叠一条；动效照常播（本人禁令：连不上时也不停）。 */
 .live-offline #notices > :is(.notice, .l1-unreadable-note) { padding: 14px 20px; border: 1px solid #d5d6d0; border-radius: 12px; background: #eeefeb; color: #4d5149; font-size: 16px; font-weight: 600; line-height: 1.6; }
-.live-offline .lamp::after, .live-offline .live-mark--pending::before { animation: none !important; }
 
 /* 暂停公开时，卡框留着，数、正文和控件一起收起。 */
 .live-public-paused .page--live .stage * { visibility: hidden !important; }

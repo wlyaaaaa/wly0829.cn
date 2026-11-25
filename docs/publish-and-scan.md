@@ -61,7 +61,7 @@ python -B -X utf8 -I site-v2/first-layer/rules-page/demo/build.py --release E:/.
 
 ```powershell
 $env:WLY_LIVE_PCCONFIG_ROOT = 'E:\PCConfig'
-$env:WLY_LIVE_FALLBACK_CMD = 'python -B -X utf8 E:\PCConfig\tools\remote-computer-mcp\export_public_fallback.py --strict --with-content --out "{out}"'
+$env:WLY_LIVE_FALLBACK_CMD = 'python -B -X utf8 E:\PCConfig\tools\remote-computer-mcp\export_public_fallback.py --strict --out "{out}"'
 npm run build
 ```
 
@@ -115,7 +115,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 ## EdgeOne live 函数单独发布
 
-实况先读电脑。EdgeOne 读不到时会从 OSS 取 `policy-11` 云端备用包：`metadata_only: true` 的旧包只回这一块的时刻（`snapshot_metadata_only`），`metadata_only: false` 的带正文包把这一块当访客回包回给浏览器（`snapshot_content`，带 `X-Live-Fallback-At`），都是 503、`no-store`。浏览器只在确认关机后才用备用数据：先用云端那份，云端没有这一块的正文再通过同版 `release-identity.json` 读随站 `live/_fallback.json`（公网用 OSS 地址、家网预览用本地路径），手里那份更新就留着手里的；没确认关机只重试、留着手里那份。随站包由导出器加 `--with-content` 生成，只绑它那一版发布，不要求和云端包的受众代相同。
+实况先读电脑。EdgeOne 读不到时会从 OSS 取 `policy-11` 云端备用包：`metadata_only: true` 的旧包只回这一块的时刻（`snapshot_metadata_only`），`metadata_only: false` 的带正文包把这一块当访客回包回给浏览器（`snapshot_content`，带 `X-Live-Fallback-At`），都是 503、`no-store`。浏览器只在确认关机后才用备用数据：先用云端那份，云端没有这一块的正文再通过同版 `release-identity.json` 读随站 `live/_fallback.json`（公网用 OSS 地址、家网预览用本地路径），手里那份更新就留着手里的；没确认关机只重试、留着手里那份。随站包现在用只有时刻的那种（上面的导出命令不加 `--with-content`）；等后台发出关机信号、带正文导出也提速到组装程序限时以内，再在导出命令里加 `--with-content` 让随站包带正文。随站包只绑它那一版发布，不要求和云端包的受众代相同。
 
 `live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。
 
