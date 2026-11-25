@@ -50,7 +50,7 @@
   function addBoard(key) {
     const host = document.createElement('section');
     host.dataset.section = key; hosts[key] = host; $('board').append(host);
-    boards[key] = V.board(host, { key: `environment-${key}`, collapsible: Object.hasOwn(resources, key), onToggle: syncAll });
+    boards[key] = V.board(host, { key: `environment-${key}`, collapsible: Object.hasOwn(resources, key) });
   }
   function readingRows() {
     const ghost = hosts.software.querySelector('.grp__ghost .fog__chart');
@@ -65,15 +65,9 @@
     return `<table class="env-table"><thead><tr><th>软件</th><th>装的版本</th><th>上次查到的版本</th><th>渠道</th><th>比较结果</th></tr></thead><tbody>${body}</tbody></table>`;
   }
   const envFolds = new Map();
-  let defaultFoldOpen = false;
-  const foldAttrs = key => ` data-env-fold="${esc(key)}"${(envFolds.get(key) ?? defaultFoldOpen) ? ' open' : ''}`;
+  const foldAttrs = key => ` data-env-fold="${esc(key)}"${envFolds.get(key) ? ' open' : ''}`;
   const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open);
   const details = () => [...$('board').querySelectorAll('details[data-env-fold]')].filter(d => !d.closest('.grp--private,.is-unread'));
-  function allOpen() {
-    const folds = details();
-    return (folds.length ? folds.every(d => d.open) : defaultFoldOpen) && Object.keys(resources).every(key => boards[key]?.allOpen());
-  }
-  function syncAll() { $('all').textContent = allOpen() ? '全部收起' : '全部展开'; }
   function limitedRows(rows, render, key) {
     return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
   }
@@ -141,7 +135,7 @@
   $('board').addEventListener('toggle', e => {
     const detail = e.target;
     if (!detail.matches('details[data-env-fold]')) return;
-    rememberFold(detail); syncAll();
+    rememberFold(detail);
     if (!detail.matches('.env-normal > details')) return;
     const click = softwareClicks.get(detail);
     softwareClicks.delete(detail);
@@ -213,12 +207,6 @@
     else if (Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
     if (!lit && Object.keys(data).length) { lit = true; L.lightUp([hero, ...Object.values(boards).flatMap(b => b.cards())]); }
   }
-  $('all').addEventListener('click', () => {
-    defaultFoldOpen = !allOpen();
-    for (const key of Object.keys(resources)) boards[key].all(defaultFoldOpen);
-    for (const d of details()) { d.open = defaultFoldOpen; rememberFold(d); }
-    syncAll();
-  });
   const packNote = document.createElement('p');
   packNote.className = 'hero__note'; packNote.hidden = true; $('note').after(packNote);
   const isCutoff = text => /^数据截止\s+(?:(?:\d{4}-)?\d\d-\d\d(?:[ T]\d\d:\d\d(?::\d\d)?)?|\d\d:\d\d(?::\d\d)?)。?$/.test(String(text || '').trim());
@@ -237,7 +225,7 @@
       boards[key].cards().forEach(el => U.blockNote(el, state));
     }
   }
-  function repaint() { details().forEach(rememberFold); paint(); updateNotes(); syncAll(); }
+  function repaint() { details().forEach(rememberFold); paint(); updateNotes(); }
   repaint();
   readingRows();
   for (const [key, resource] of Object.entries(resources)) window.Live.watch(recordResource(key), { section: resource }, {
