@@ -529,8 +529,9 @@
       ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试` : '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
     if (!hostOffline(link)) {
-      // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”
-      const release = connectionEntries().some(x => x.backupFrom === 'release' && onBackup(x) || x.backupMeta?.from === 'release');
+      // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”。
+      // 只看本页主数据：别的块退到那份、主数据手上是这个窗口刚读到的时，不说“这台浏览器没存过”（D6，项目总表页顶前后打架）
+      const release = !!main && (main.backupFrom === 'release' && onBackup(main) || main.backupMeta?.from === 'release');
       const at = main && onBackup(main) ? ` · 下面是${releaseName()}`
         : !mainAt && !shownUpTo() && main?.backupMeta ? ` · ${releaseName()}只记了时刻，没存内容` : atLine;
       // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
