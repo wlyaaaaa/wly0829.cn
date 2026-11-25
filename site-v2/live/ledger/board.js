@@ -229,7 +229,11 @@
       const every = even ? (even % 3600000 === 0 ? (even === 3600000 ? '每小时' : `每 ${even / 3600000} 小时`) : `每 ${Math.round(even / 60000)} 分钟`) : '';
       const head = esc(n > 1 ? span(a.at, z.at) : when(a.at));
       const body = n > 1 ? `${every ? every + '一次，' : ''}${a.event === 'attempt' && !SETTLED[out] && !ROUND[out] ? `处理了 ${n} 轮` : `${label}，共 ${n} 次`}${g.text ? `，都是：${esc(g.text)}` : ''}` : `${label}${g.text ? `：${esc(g.text)}` : ''}`;
-      return `<li><b>${head}</b>${body}</li>`;
+      // 这一步是哪一轮、哪场对话做的：后台给了地址（source_href）就挂“那一轮 ›”“那场对话 ›”；没地址照后台给的原因写一句小字（M722“点不进对话”）
+      const src = [...g.rows].reverse().map(r => r.source_href || r.automation_run?.href).find(h => T.path(h));
+      const why = !src && g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
+      const go = src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : why ? ` <small class="lg-why">${esc(why)}</small>` : '';
+      return `<li><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it);
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
@@ -243,16 +247,22 @@
   }
 
   // —— 反复出现 ——（“30 天内第三次坏就停手转给本人”照后台 automation/core.py 的 FAULT_WINDOW=30 天、LOOK_LIMIT=3 写死，改了那边要跟着改）
+  // 每件写“近 30 天坏了几次”（后台 broken_30d，点是 broken_at 每次坏的时刻），本人 11-24 选的规矩按坏了几次数；
+  // 以前写的是“又发生几次”（reopen_count，修好后又重开的次数，大半是 0，满屏红字“又发生 0 次”）。后台没给坏了几次的旧包照旧写重开几次。
   function repeats(d) {
-    const r = d.repeat_fixes || {}, rows = list(r.items);
+    const r = d.repeat_fixes || {}, now = Date.now(), from = now - 30 * DAY, x = t => (t - from) / (30 * DAY) * 100;
+    const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
+    const rows = list(r.items).slice().sort((a, b) => (broke(b) ?? -1) - (broke(a) ?? -1) || (stamp(b.last_at) || 0) - (stamp(a.last_at) || 0));
     if (!rows.length) return '';
-    const now = Date.now(), from = now - 30 * DAY, x = t => (t - from) / (30 * DAY) * 100;
-    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>修好了又出现的同一件，近 30 天；30 天内第三次坏，自动修理停手、转给${you()}</small></h2></div>
+    const said = it => broke(it) != null ? `近 30 天坏了 ${int(broke(it))} 次` : known(it.reopen_count) ? `修好后又出现 ${int(it.reopen_count)} 次` : '';
+    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 30 天坏了不止一次的；30 天内第三次坏，自动修理停手、转给${you()}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
-        const times = (list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at]).map(stamp).filter(t => t && t >= from);
-        return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">又发生 ${int(it.reopen_count)} 次</span>
-          <div class="lg-rep__axis">${[0, 5, 10, 15, 20, 25, 30].map(n => `<span style="left:${n / 30 * 100}%"${n === 0 ? ' data-edge="start"' : n === 30 ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${times.map(t => `<i style="left:${x(t)}%" title="${esc(when(new Date(t).toISOString()))}"></i>`).join('')}</div></li>`;
-      }).join('')}</ul>${list(rows[0]?.reopen_at).length ? '' : '<p class="tp-small">每次又出现的日子还没采上，先画第一次和最近一次。</p>'}</section>`;
+        const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
+        const times = at.map(stamp).filter(t => t && t >= from);
+        const handed = it.handed_to_owner ? ` ${it.owner_href ? link(it.owner_href, `已转给${you()} ›`) : `已转给${you()}`}` : '';
+        return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">${said(it)}${handed}</span>
+          <div class="lg-rep__axis">${[0, 5, 10, 15, 20, 25, 30].map(n => `<span style="left:${n / 30 * 100}%"${n === 0 ? ' data-edge="start"' : n === 30 ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${times.map(t => `<i style="left:${x(t)}%" title="${esc(when(new Date(t).toISOString()))} 坏了一次"></i>`).join('')}</div></li>`;
+      }).join('')}</ul>${rows.some(it => list(it.broken_at).length || list(it.reopen_at).length) ? '' : '<p class="tp-small">每次坏的日子还没采上，先画第一次和最近一次。</p>'}</section>`;
   }
 
   // —— 快讯 ——
