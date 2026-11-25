@@ -151,11 +151,11 @@
   };
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
   const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${U.fieldHtml(part, { name: '项目读数', kind: viewer })}</span>`).join('');
-  function newProjectLabel(it) { return viewer === 'owner' && it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
+  function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
   function renderActive(items) {
     fill('active', items?.filter(it => it.name || it.label).sort((a, b) => (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
-      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = (it.new === true && viewer === 'owner' ? newProjectLabel(it) : '') + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
+      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
       const hasText = !!(text || marked), valueHtml = marked || remote ? U.fieldHtml(marked || text, { name: '项目读数', kind: viewer }) : rosterStat(text);
@@ -217,7 +217,7 @@
     const projects = new Map(roster.map(it => [it.id, it]));
     const rows = changeRows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
     const gap = changes?.gap && (changes.q === 'partial' || isStale(changes)) ? U.fieldHtml(changes.gap, { kind: changeViewer }) : '';
-    const hidden = changeViewer === 'owner' && changes?.hidden;
+    const hidden = changes?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
     fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : '近 7 天没有实质变化');
     $('next').hidden = !next;
     const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(changes.hidden_what || '项目变化')}没列在这里`].filter(Boolean).join(' · ');
@@ -360,13 +360,14 @@
         const prefix = typeof project === 'string' ? `${project} · ` : '';
         title = audience === 'public' && [it.recent_title, it.title].some(v => concealed(v) || typeof v === 'string' && /(?:仅本人可见|可信设备可见)$/.test(v)) ? '成品名称仅本人可见'
           : field(typeof raw === 'string' && prefix && raw.startsWith(prefix) ? raw.slice(prefix.length) : raw);
-        sub = field(it.recent_detail || '这项成品已有登记，内容说明待补充。');
+        sub = it.recent_detail ? field(it.recent_detail) : '';   // 没写说明就不写这一行，不再补兜底句
         const publicLink = audience === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
         open = U.artifactAction({ ...it, web_open: publicLink }, audience, route);
         // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂签。
         // M684：访客那边正文看不到，挂“访客看不到”；后台给了 visitor_labels.open 时照它挂哪种。成品名称按 visitor_labels.title 挂在名称后面，改了名字的挂“对外换了说法”。
         const openNote = U.fieldText(it.open_note, audience).trim();
-        if (openNote && audience === 'public') { open = null; item = { ...item, openNote }; }
+        // 两版同一套：访客版正文那句照写，打开按钮也照摆，不再让那句把按钮压掉
+        if (openNote && audience === 'public') item = { ...item, openNote };
         else if (audience === 'owner') {
           const ownerNote = U.visitorLabel(it, 'open', '这份成品的正文', audience) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) : '');
           if (ownerNote) item = { ...item, ownerNote };
@@ -380,14 +381,14 @@
       if (!row) group.rows.push(row = { sig, title, sub, members: [] });
       row.members.push({ item, open, at: it.at });
     });
-    const openAction = (item, action) => audience === 'public'
+    const openAction = (item, action) => audience === 'public' && typeof action.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(action.href)}"${/^https?:/i.test(action.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(action.label)}</a>`
       : U.actions(item, [action]);
     const rowHtml = r => {
       const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '';
-      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${m.item.ownerNote || ''}</div>` : m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : m.item.ownerNote ? `<div class="acts">${m.item.ownerNote}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
+      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${m.item.ownerNote || ''}</div>` : m.item.ownerNote ? `<div class="acts">${m.item.ownerNote}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
-      const times = r.members.map(x => x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (x.item.ownerNote || '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`).join('');
+      const times = r.members.map(x => x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (x.item.ownerNote || '') + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`).join('');
       return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${r.title} <span class="pj-art__count">×${r.members.length}</span></p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;

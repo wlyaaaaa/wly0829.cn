@@ -605,7 +605,7 @@
     };
     const short = value => {
       const line = visible(value).split(/[\n。！？]/, 1)[0];
-      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : kind !== 'owner' && line.length > 32 ? line.slice(0, 31) + '…' : line;
+      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : line;
     };
     const name = [c.doing, c.progress, c.latest_reply, c.text, c.project_name, ...extra].map(short).find(Boolean);
     if (name) return name;
@@ -898,6 +898,8 @@
       return { kind: 'open', label: web.label || '看这次记录', href: route(web.href) };
     if (kind === 'owner' && typeof local?.item_id === 'string' && local.item_id && typeof local.target === 'string' && local.target)
       return { kind: 'open', label: local.label || '在电脑上打开', href: local };
+    // 两版同一套（本人禁令 11-24 14:16）：后台在访客回包里也给这个动作（不带私有路径），访客照样摆这颗按钮，点了由共用拦截弹可信设备说明框
+    if (kind !== 'owner' && local && typeof local === 'object' && !Array.isArray(local)) return { kind: 'open', label: local.label || '在电脑上打开', href: local };
     return null;
   }
 
