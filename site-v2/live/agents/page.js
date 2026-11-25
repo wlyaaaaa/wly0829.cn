@@ -39,31 +39,25 @@
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
   };
-  // 压缩线写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
-  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。窗口和留量是写死的，按需更新时快核：
-  // 看 Claude 对话记录里最近几次自动压缩前装了多少词元（11-26 核时近 7 天 220 次，中位 491K）
+  // 设置表“对话装多满会压缩”写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
+  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。钩子卡里的数由规则仓给，见下面 hookDetail 里的快核。
+  // Claude 上下文窗口 1,000K 和先留给回复的 20K（设置表小字直接显示，也用来算约 490K）。按需更新快核（M928）核法：Claude 对话记录
+  // E:/Data/AppData/Claude/profiles/pro/projects/**/*.jsonl 里每次自动压缩的 compactMetadata.preTokens，近 7 天中位数应≈(窗口−留量)×回包百分比，
+  // 现 1,000K 窗口、先留 20K（11-26 核：220 次，中位 491K，十分位 490,000；窗口也可对钩子程序 claude_root_runtime_module.py 里登记的型号窗口）；变了改这句
   const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
   const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
   const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
     : h.id === 'codex' && known(hostData(d, h).compact_tokens) ? hostData(d, h).compact_tokens : null;
-  // “快压缩了”那一次提醒：工具用完那条钩子按压缩线的 94% 提醒（钩子程序 claude_root_runtime_module.py 的 precompact_warning_context，
-  // 它算 Claude 的压缩线不减 20K），所以两家现在都是 470K
-  const warnAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? CLAUDE_WINDOW * pctOf(d, h) / 100 * .94 : null) : compactAt(d, h) && compactAt(d, h) * .94;
   const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
-  const hostById = id => HOSTS.find(h => h.id === id);
-  const compactWhy = id => d => { const n = d && compactAt(d, hostById(id));
-    return n ? `${hostById(id).name} 对话装到${id === 'claude' ? '约 ' : ' '}${kTok(n)}会自动压缩（你手动压缩也算）。${SAME.compact}` : SAME.compact; };
-  const warnText = (id, d) => { const n = d && warnAt(d, hostById(id)); return n ? `对话用到 ${kTok(n)}时` : '对话快到压缩线时'; };
   const WHY = {
     C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
     C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
     C03: SAME.prompt,
     C04: '有些动作照规矩不该这样做（用错浏览器、派活走错路、反复读同一张图这类）；这条在动手前拦下，当场改对，不用事后返工。',
-    C05: d => `AI 埋头干活时容易忘了登记工程、报估时、该查网时查网、长等时盯着；这条在工具用完时顺手提一句，不拦它。${warnText('claude', d)}还会提醒一次快压缩了。`,
-    C06: compactWhy('claude'),
+    C05: 'AI 埋头干活时容易忘了登记工程、报估时、该查网时查网、长等时盯着；这条在工具用完时顺手提一句，不拦它。',
+    C06: SAME.compact,
     C09: SAME.stop,
-    // 55 分钟：钩子程序 claude_root_runtime_module.py 的 cache_keepalive_minutes 默认值，按需更新时快核
-    C10: 'AI 收工后后台还有活在跑、却没人等结果，结果就没人收；主对话 55 分钟没收到消息、没动工具，派出去的单还在跑又没人等，就叫醒原对话一次去收，每单只叫一次。',
+    C10: 'AI 收工后后台还有活在跑、却没人等结果，结果就没人收；这条等主对话空着够久还没人管，就叫醒原对话一次去收，每件只叫一次。',
     C11: SAME.helper,
     C12: '记下帮手干完没有，“空等时叫醒”靠它判断后台还有没有活，免得白叫醒或该叫的没叫。',
     C13: '让 Claude 桌面版里的花费面板跟着对话一起出来，不用自己去找就看得到这次花了多少。',
@@ -76,8 +70,8 @@
     X02: SAME.prompt,
     X03: SAME.helper,
     X04: '有些调用照规矩不该这样做（走错浏览器入口、派帮手走错路、查订阅、用过时的型号）；这条在动手前拦下，当场改对。',
-    X05: d => `工具用完时顺手提醒该查网、该报估时，${warnText('codex', d)}提醒快压缩了，并认出你已经答过的弹题和处理过的审批，免得同一件事反复问你。`,
-    X06: compactWhy('codex'),
+    X05: '工具用完时顺手提醒该查网、该报估时、该压缩了，并认出你已经答过的弹题和处理过的审批，免得同一件事反复问你。',
+    X06: SAME.compact,
     X08: 'Codex 停下来等批准时，你不在电脑前它就一直卡着；这条把要你批准的事推到手机。',
     X09: SAME.stop,
     X11: 'Codex 碰到要批准的动作，由它自带的审核模型代批，不用每次停下来等你；它看着不妥的照样拦下。',
@@ -91,7 +85,7 @@
     A05: '工具报错了模型自己未必注意到；这条把错误递给下一次叫模型，并登记你已经答过的弹题。',
     A06: SAME.stop,
   };
-  const whyOf = (hook, d) => F(hook.why, '为什么要它') || esc((typeof WHY[hook.id] === 'function' ? WHY[hook.id](d) : WHY[hook.id]) || '');
+  const whyOf = hook => F(hook.why, '为什么要它') || esc(WHY[hook.id] || '');
   const REASONS = [['larger_orders', '单子比想的大'], ['rework', '返工'], ['missed_follow_up', '漏想的后续活'], ['long_tests', '长测试'], ['scope_added', '中途加需求']];
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
@@ -436,6 +430,14 @@
     const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
+    // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
+    // 页面不另算、也不在“为什么要它”里再写一遍。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
+    // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
+    // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
+    // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
+    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；上面 WHY.C18 前端句也写了 10 分钟，变了一起改；
+    // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
+    //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
     const facts = [['什么时候跑', F(hook.when)], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
@@ -445,7 +447,7 @@
       : (state => state && (p === '7d' || !state.includes('近 7 天')) ? state : `${p === 'all' ? '一直' : timeLabel(p)}没有运行记录`)(F(hook.metrics_state));
     const tag = hook.id ? (hook.installed ? (hook.enabled === false ? '<span class="tp-tag" data-tone="soft">装着，平时不跑</span>' : '<span class="tp-tag" data-tone="ok">装着</span>')
       : '<span class="tp-tag" data-tone="repair">定稿要装，还没装上</span>') : '<span class="tp-tag" data-tone="repair">装着，说明表里没写</span>';
-    const why = whyOf(hook, d);
+    const why = whyOf(hook);
     return `<article class="ag-hook" data-host="${String(hook.host || '').toLowerCase()}"><h3>${nameOf(hook)} ${tag}</h3>
       ${why ? `<p class="ag-why"><b>为什么要它</b>${why}</p>` : ''}
       <dl>${facts.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
