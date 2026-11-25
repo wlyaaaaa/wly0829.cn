@@ -10,6 +10,7 @@
   const hero = $('hero'), part = name => hero.querySelector(`[data-part="${name}"]`);
   const SETTLED = { fixed: '修好了', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
   const STEP = { not_fixed: '没修好', deferred: '先放着', superseded: '并进了别的一件', not_done: '没办成' };
+  const KIND = { repair: '修理', verify: '验收' };
   const HOST = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
   let viewer = 'public', item = null, history = [], at = null, repeat, repeatAsked = false, first = true;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
@@ -46,27 +47,38 @@
     return { group: owed ? 'owed' : 'parked', late, label: owed ? '欠着' : '放着', level: late ? 'blue' : owed ? 'green' : 'gray' };
   }
 
-  // 每看一次：照定稿图只列“看”（看过 2 次就是两行）；修理、验收那几轮不单列，待本人定。
-  // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻没有那一次看的才补上。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
-  // 这次看是在哪一轮里做的：那一轮开始以后、结束后 10 分钟内记下的就是那一轮（AI 约好的事是那一轮结束后几分钟才记下这次看），取结束得最近的；
-  // 型号档位先用这次看自己的，没有再用那一轮的；“那一轮 ›”和“那场对话 ›”都给。
+  // 每看一次（待本人定的 A：每一轮都列一行）：自动修理那几件按每一轮列（修理、验收各一行，写型号档位，点进那一轮）；AI 约好的事每一轮就是到点去看一次。
+  // 这次看记在哪一轮里（那一轮开始以后、结束后 10 分钟内记下的，取结束得最近的）就并进那一轮那一行，不另起一行；那一轮缺的型号档位、地址拿这次看的补上，那场对话另挂一个链接。
+  // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻有那一轮的，挂在那一轮的“修理”“验收”后面；没有的才另补一行。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
   // 对话被藏的那一轮（visitor_labels.conversation 是 hidden）：本人版挂“访客看不到”；访客版时刻、型号档位照给，那一轮的页后台给了链接就照给，原位写后台给的原因。
-  function steps(d) {
+  function steps(d, repair) {
     const rows = [];
     const rounds = (Array.isArray(d.rounds) ? d.rounds : []).filter(r => r && (timed(r.end_at) || timed(r.at)));
-    const roundOf = t => rounds.filter(r => ms(t) >= ms(r.at || r.end_at) - 2000 && ms(t) <= ms(r.end_at || r.at) + 600000)
-      .sort((a, b) => Math.abs(ms(a.end_at || a.at) - ms(t)) - Math.abs(ms(b.end_at || b.at) - ms(t)))[0];
+    // 修理、验收的小签只给自动修理那几件；AI 约好的事每一轮都是到点去看一次，不写“修理”。访客版那一轮的字被藏（只剩“仅本人可见”）就不写字，原因写在下面
+    for (const r of rounds) rows.push({ at: r.end_at || r.at, start: r.at || r.end_at, round: true, kind: repair ? KIND[r.kind] || '' : '', live: !r.end_at,
+      text: (t => /^仅本人可见[。.]?$/.test(T(t)) ? null : t)(r.deliverable ?? r.summary),
+      who: [r.actual_model || r.executor, r.actual_effort || r.requested_effort].filter(Boolean).join(' · '), href: site(r.source_href), why: r.source_unavailable_reason, tag: hiddenTag(r) });
+    const roundOf = t => rows.filter(r => r.round && ms(t) >= ms(r.start) - 2000 && ms(t) <= ms(r.at) + 600000)
+      .sort((a, b) => Math.abs(ms(a.at) - ms(t)) - Math.abs(ms(b.at) - ms(t)))[0];
     for (const c of Array.isArray(d.checks) ? d.checks : []) if (c && timed(c.at)) {
-      const r = roundOf(c.at) || {}, chat = site(c.source_href), own = site(c.run_href), run = own || site(r.source_href);
-      // 原因跟着链接走：这次看自己有链接（或什么链接都没有）写这次看给的原因；链接是从那一轮借来的，写那一轮给的原因（本人版那一轮没有原因就不写）
-      const why = own || chat || !run ? c.source_unavailable_reason ?? r.source_unavailable_reason : r.source_unavailable_reason;
-      rows.push({ at: c.at, text: c.text, kind: '', who: [c.model || r.actual_model || r.executor, c.effort || r.actual_effort || r.requested_effort].filter(Boolean).join(' · '),
-        href: run || chat, chat: run && chat !== run ? chat : '', why, tag: hiddenTag(r) });
+      const chat = site(c.source_href), own = site(c.run_href), who = [c.model, c.effort].filter(Boolean).join(' · '), hit = roundOf(c.at);
+      if (hit) {
+        hit.who ||= who;
+        if (!hit.href && (own || chat)) Object.assign(hit, { href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
+        else if (chat && chat !== hit.href) hit.chat = chat;
+        hit.checkAt = c.at;
+        continue;
+      }
+      rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
     }
-    const near = t => rows.some(r => Math.abs(ms(r.at) - ms(t)) < 2000);
-    for (const e of history) if (e && timed(e.at) && !near(e.at)) {
-      const out = e.resolution === 'recovered' ? 'recovered' : e.outcome;
-      rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind: SETTLED[out] ? (out === 'to_owner' ? `转给${you()}` : SETTLED[out]) : STEP[out] || '',
+    const hits = t => x => x && Math.abs(ms(x) - ms(t)) < 2000, near = t => rows.some(r => [r.at, r.checkAt].some(hits(t)));
+    for (const e of history) if (e && timed(e.at)) {
+      const out = e.resolution === 'recovered' ? 'recovered' : e.outcome, kind = SETTLED[out] ? (out === 'to_owner' ? `转给${you()}` : SETTLED[out]) : STEP[out] || '';
+      // 同一时刻那一轮已经有一行：不另起一行，这一步的结果（先放着、修好了……）挂在那一轮“修理”“验收”后面
+      const own = rows.find(r => r.round && [r.at, r.checkAt].some(hits(e.at)));
+      if (own) { if (kind && kind !== own.kind) own.step ||= kind; continue; }
+      if (near(e.at)) continue;
+      rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind,
         who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
     }
     return rows.sort((a, b) => ms(a.at) - ms(b.at));
@@ -124,10 +136,10 @@
     put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
-    const rows = steps(d), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
+    const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = (r, dotKind) => {
       const meta = [r.who && esc(r.who), r.href && go(r.href, goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
-      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
+      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
