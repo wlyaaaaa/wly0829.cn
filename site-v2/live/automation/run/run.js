@@ -390,14 +390,18 @@
     onState(next) { state = next; draw(); } });
   // 从实况首页、等你的事、账本、AI 对话、智能体点进来的，返回回那一页（首页落回那张卡）；别的照旧回这一类（live-runs.js 的来回的路）
   fromReferrer = !!window.LiveRuns?.backToReferrer(document.querySelector('[data-back]'));
-  if (category) Live.watch('automation/runs', { category }, { phase(st) { siblings = R.page(st.data, viewer); if (state) draw(); } });
-  // 全部几类（不含摘一句）一次读：数据约定写了列表可带 exclude=excerpt。后台还不认这个参数（回 4xx）时停掉这一份，快讯条退回只排这一类
+  // 等 T.boot 先订上这一轮本身再订同类列表、全部几类和总览：页顶那条“下面是……最后一份（几点）”说的是本页主数据（第一个订的那份）。
+  // 原来同类列表先订、成了主数据，关机重开时页顶写列表的时刻、页眉写这一轮的时刻，一页两个“最后一份”（和自动任务页 M960 同一回事）
   let allRuns = null;
-  allRuns = Live.watch('automation/runs', { exclude: 'excerpt' }, { phase(st) {
-    const status = st.meta?.status;
-    if (status >= 400 && status < 500) { setTimeout(() => allRuns?.stop()); others = null; }
-    else others = R.page(st.data, viewer);
-    if (state) draw();
-  } });
-  Live.watch('automation', {}, { phase(st) { board = st; if (state) draw(); } });
+  queueMicrotask(() => {
+    if (category) Live.watch('automation/runs', { category }, { phase(st) { siblings = R.page(st.data, viewer); if (state) draw(); } });
+    // 全部几类（不含摘一句）一次读：数据约定写了列表可带 exclude=excerpt。后台还不认这个参数（回 4xx）时停掉这一份，快讯条退回只排这一类
+    allRuns = Live.watch('automation/runs', { exclude: 'excerpt' }, { phase(st) {
+      const status = st.meta?.status;
+      if (status >= 400 && status < 500) { setTimeout(() => allRuns?.stop()); others = null; }
+      else others = R.page(st.data, viewer);
+      if (state) draw();
+    } });
+    Live.watch('automation', {}, { phase(st) { board = st; if (state) draw(); } });
+  });
 })();
