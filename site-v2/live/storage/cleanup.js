@@ -55,9 +55,12 @@
     const hours = num(c.interval_hours) || 6;
     let next = at(c.next_run_at), estimated = false;
     if (!next && last) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
-    const overdue = !!last && now - at(last.finished_at) > (hours * 2 + 1) * 3600000;
+    const overdue = !!last && now - at(last.finished_at) > lateHours(hours) * 3600000;
     return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running: runs[0]?.result === 'running' ? runs[0] : null };
   }
+
+  // 多久没跑完一轮算“没按时跑”：两轮间隔再加 1 小时（M928 机制说明写在“下次”那格）。间隔读回包 interval_hours，不用按需更新快核
+  function lateHours(hours) { return hours * 2 + 1; }
 
   // 给页首用：保护名单被删 > 出错或没按时跑；都没有返回 null（再看盘会不会满）。
   function alarm(d) {
@@ -201,7 +204,8 @@
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
-      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`].filter(Boolean).map(esc).join('<br>');
+      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
+      g.last && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     const kept = num(g.last?.skipped_unsaved_conversations);
     const firstTile = g.last ? first : `<li data-tone="gray">${ICON.ok}<div><b>出错</b><span class="cl-dash">—</span></div></li>`;
