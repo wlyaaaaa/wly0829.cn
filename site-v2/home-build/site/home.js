@@ -273,6 +273,10 @@ function paintCell(cell, view, href, sample, quiet) {
 const down = { offline: false, hostOff: false, silent: false, paused: false };
 const lastReadings = new Map();
 let lastViewer;
+// 北京时间的哪一天（YYYY-MM-DD）；读不出时间回空字符串。
+function beijingDay(value) {
+  try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date(value)); } catch { return ''; }
+}
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
 function cutoffText(at, now, prefix) {
   try {
@@ -315,11 +319,17 @@ function renderScreen(data, meta, pending = false, now) {
   lastViewer = viewer;
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
+  const today = beijingDay(now || Date.now());
   cellTargets.forEach(([id, fallback], index) => {
     let source = data?.cells?.find((item) => item.id === id);
     let at = source?.source_at ?? source?.at ?? meta?.at;
     const waiting = source?.q === 'warming';
-    const facts = cellFacts(id, waiting || source?.q === 'unknown' ? null : source);
+    let facts = cellFacts(id, waiting || source?.q === 'unknown' ? null : source);
+    // “今天 AI 后台自动维护”只算北京时间今天：过了零点，昨天（更早）的数不能占这一格，
+    // 收到的、手上留着的都一样，照“还没读到”（断线时“—”）写，不拿上一份顶（M841）。
+    const earlier = (value) => id === 'maintenance' && Number.isFinite(Date.parse(value)) && beijingDay(value) !== today;
+    if (earlier(at)) facts = { n: null };
+    if (earlier(lastReadings.get(id)?.at)) lastReadings.delete(id);
     const read = (entry, values, info) => id === 'ai' ? aiCellView(entry, info, owner, pending, now)
       : cellView(id, values, owner, pending || waiting, down);
     let view = read(source, facts, meta);
