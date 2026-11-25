@@ -114,7 +114,7 @@
     const mine = viewer !== 'owner' ? recorded : recorded.filter(x => !/^仅本人可见的?(事项?|事)?$/.test(plainOf(x?.title ?? x?.text ?? x)));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
-      ${o.href ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
+      ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
         : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
