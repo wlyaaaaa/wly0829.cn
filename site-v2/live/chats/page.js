@@ -317,7 +317,9 @@
       const firstGap = models?.[0]?.gap;
       const modelGap = typeof firstGap === 'string' && models.every(m => m.gap === firstGap) ? firstGap : '';
       const modelRow = m => {
-        const model = U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' });
+        // 别家的型号在 Antigravity 里跑的那行（例：Claude Opus 5.5）后面写“（Antigravity 里用）”，和本家那行分得清（主持 11-26 06:4x 定，照交回第 2 题 A）
+        const viaAg = m.vendor === 'antigravity' && !/^Gemini/i.test(String(U.draw10?.modelName?.(m) ?? m.model ?? '')) ? '（Antigravity 里用）' : '';
+        const model = (U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' })) + (viaAg && (m.model || m.model_text) ? viaAg : '');
         const counts = `${n(m.opened, m, 'opened', '对话')} · ${n(m.helpers, m, 'helpers', '帮手')}`;
         return `<p class="chat-model-row"><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
       };
