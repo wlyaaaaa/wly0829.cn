@@ -235,9 +235,11 @@
     document.querySelectorAll('#chat-counts [data-links]').forEach(host => {
       const key = host.dataset.links === 'today' ? 'today' : 'd7';
       const by = homeFull?.agents?.today?.activity?.periods?.[key]?.total?.by_activity;
-      const mins = ['conversation', 'subagent'].map(k => by?.[k]?.actual_minutes).filter(Number.isFinite);
+      const parts = ['conversation', 'subagent'].map(k => by?.[k]?.actual_minutes), mins = parts.filter(Number.isFinite);
+      // 对话、帮手两项只读到一项时不当成完整的“干了 X 小时”：写“至少”，并说哪一项没读到（缺数指出哪组）
+      const short = mins.length === 1 ? `<small>（${Number.isFinite(parts[0]) ? '帮手' : '对话'}的没读到）</small>` : '';
       const runs = homeFull?.automation?.results_today?.finished_runs;
-      const links = [mins.length && `<a class="chat-stat-link" href="${esc(route(`/live/agents/?hours=${key}#hours`))}">干了 <strong>${hoursText(mins.reduce((a, b) => a + b, 0))}</strong><small>小时</small> ›</a>`,
+      const links = [mins.length && `<a class="chat-stat-link" href="${esc(route(`/live/agents/?hours=${key}#hours`))}">干了 ${short ? '至少 ' : ''}<strong>${hoursText(mins.reduce((a, b) => a + b, 0))}</strong><small>小时</small>${short} ›</a>`,
         key === 'today' && Number.isInteger(runs) && runs >= 0 && `<a class="chat-stat-link" href="${esc(route('/live/automation/?date=today'))}">自动任务另跑了 <strong>${runs}</strong><small>轮</small> ›</a>`].filter(Boolean);
       U.html(host, links.map(link => ` <span class="chat-stat-piece">· ${link}</span>`).join(''), false);
     });
