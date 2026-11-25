@@ -253,8 +253,8 @@
     const bar = timebar(c.today.map(r => ({ at: r.next_at, kind: c.late(r) ? 'late' : 'next', href: r.href,
       tip: `${U.fieldText(r.title, viewer)} · ${c.late(r) ? `到点没看，原定 ${clock(r.next_at)}` : `${clock(r.next_at)} 看`}` })), now, route, '今天要看的');
     // 列出来的每一件：标题点了到那件；到点没看的橙点、写“到点没看，原定几点”，还没到的绿点、写“几点看”
-    // 本人版：这件对外换了说法的，标题后面挂“对外换了说法”（访客版不挂）
-    const titleTag = r => { const t = viewer === 'owner' ? U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer) : ''; return t ? ` ${t}` : ''; };
+    // 这件对外换了说法的，标题后面挂“对外换了说法”（两版都挂，M930；本人版访客看不到的另挂“访客看不到”）
+    const titleTag = r => { const t = U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer); return t ? ` ${t}` : ''; };
     const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, field(r.title, '事项标题'))}${titleTag(r)}</p>`
       + `<small class="b6-muted">· ${c.late(r) ? `到点没看，原定 ${esc(clock(r.next_at))}` : `${esc(clock(r.next_at))} 看`}</small></div>`;
     const list = c.today.length ? c.today.slice(0, 3).map(dueItem).join('')

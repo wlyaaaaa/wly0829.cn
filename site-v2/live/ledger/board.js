@@ -22,8 +22,8 @@
   const you = () => T.you(viewer);
   // 访客版称呼：本页上“你”都写“本人”，后台写进句子里的也算（“你们”不动）；本人版原样
   const say = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
-  // 本人版的两种签（访客看不到、对外换了说法），照后台 visitor_labels 挂在原位；访客版不挂
-  const vtag = (obj, keys, what) => { const t = viewer === 'owner' && obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
+  // 照后台 visitor_labels 在原位挂签：本人版两种（访客看不到、对外换了说法），访客版只挂“对外换了说法”（M930，全站共用的签自己分）
+  const vtag = (obj, keys, what) => { const t = obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
   // 还欠着的只算在做、在等、暂时不修这三种（后台 summary.open 也这样算）；本人定了不修的不算欠着，放进“最近了结的”
   const owed = d => list(d.items).filter(it => it.state);

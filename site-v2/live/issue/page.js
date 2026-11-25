@@ -87,7 +87,7 @@
     const title = titleOf(d);
     document.title = `${T(title) || '账本一件'} · 实况`;
     const head = part('head');
-    // 本人版：这件事对外换了说法或访客看不到，标题后面挂签
+    // 这件事对外换了说法的标题后面挂“对外换了说法”（两版都挂，M930）；本人版访客看不到的挂“访客看不到”
     put(head, `<span class="head__lead">${F(title, '这件事')}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
@@ -95,7 +95,7 @@
     const limit = d.check_limit || 3, looked = Number.isInteger(d.check_count) ? d.check_count : null, full = looked != null && looked >= limit;
     const waitOf = s.group === 'parked' ? d.park?.text != null ? d.park : d.wait : s.group === 'owed' && !s.late ? d.fixer?.text != null ? d.fixer : d.wait : null;
     const wait = waitOf?.text ?? null;
-    // 本人版：在等什么这句对外换了说法的，原位挂“对外换了说法”（“接下来”那格是同一句时也挂）
+    // 在等什么这句对外换了说法的，原位挂“对外换了说法”（两版都挂，M930；“接下来”那格是同一句时也挂）
     const waitTag = (t => t ? ` ${t}` : '')(waitOf ? U.visitorLabel(waitOf, 'text', '在等什么这句', viewer) : '');
     const next = s.closed ? null : d.story?.next ?? wait;
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
