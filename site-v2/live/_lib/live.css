@@ -842,8 +842,11 @@ span.fog__slow { margin: 0 0 0 8px; }
 .page--live .board .card[data-tone="off"] .lamp::after { opacity: 0 !important; animation: none; }
 .card--warming .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none; }
 .live-offline .lamp:not([data-tone])::before { opacity: 1 !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; }
-.live-offline .lamp:not([data-tone])::after { opacity: 0 !important; animation: none !important; box-shadow: none !important; }
-.live-offline .topbar .brand__lamp { background: transparent !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; animation: none !important; }
+/* 连不上：各卡小灯（没上色的、页面连不上时标成灰的）和页眉灯换成灰色，照常呼吸（本人禁令：动效一直开着，连不上也不停；压过上面 .live-off 和灰灯那几条“熄灯不呼吸”） */
+.live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"])) { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); }
+.live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { opacity: 1 !important; transform: none !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
+.live-offline :is(.lamp--sm:not([data-tone]), .lamp--sm:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { animation-name: lamp-breathe-sm !important; }
+.live-offline .topbar .brand__lamp { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); background: radial-gradient(circle at 34% 30%, #f3f4f6 0%, #c9cdd3 26%, #9aa1aa 60%, #7b828b 100%) !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
 .live-offline .notices .notice { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; font-size: 17px; line-height: 27px; color: var(--ink); }
 .live-offline .notices .notice::before, .live-offline .notices .notice > .lamp { display: none; }
 .live-offline [data-read="gone"], .live-offline .card__glass:has(> [data-read="gone"]) { min-height: 0 !important; height: auto !important; }
