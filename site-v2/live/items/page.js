@@ -91,7 +91,7 @@
     clearTimeout(landedTimer);
     const now = Date.now(), before = landed.size;
     for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
-    if (landed.size !== before) { redrawItems(); drawClosed(); }
+    if (landed.size !== before) { redrawItems(); drawClosed(); if (lastHome) renderHome(...lastHome); }
     if (!landed.size) return;
     const first = Math.min(...[...landed.values()].map(w => w.saved));
     landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
@@ -107,6 +107,8 @@
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
     redrawItems();
+    // 页头总数和四个数跟着撤下、挪走的卡一起变（M981、M903），不等清单统计重读
+    if (saved && lastHome) renderHome(...lastHome);
     if (reportsData) renderReports(reportsData);
     if (saved?.length) { drawClosed(); followLanded(); }
   });
@@ -534,7 +536,18 @@
     } });
   }
   const missingHome = text => { U.html($('stats'), ''); U.html($('note'), U.fieldHtml(text, { kind: viewer })); L.tone($('hero'), 'off'); for (const key of Object.keys(KIND)) list(key, null, text); showOpenMore(); };
-  watch('home', (d, meta) => {
+  // M981、M903：回执到了、卡已撤下（或挪进“你放着”）而清单统计还没跟上时，页头“等你 N 件”和四个数照页面上实际摆着的算；
+  // 后台读数跟上以后（这件不在清单里了、或换成新版本）就照后台的数，不再另减另加
+  function movedCounts(rows) {
+    const moved = Object.fromEntries(Object.keys(KIND).map(key => [key, 0]));
+    for (const it of rows || []) if (Object.hasOwn(moved, it.kind) && (hiddenByWrite(it) || U.justSaved(it))) moved[it.kind]--;
+    for (const [id, w] of landed) if (w.key === 'later' && !(rows || []).some(it => it.id === id && it.item_version !== w.version)) moved.later++;
+    return moved;
+  }
+  let lastHome = null;
+  watch('home', renderHome, missingHome);
+  function renderHome(d, meta) {
+    lastHome = [d, meta];
     viewer = meta.viewer?.kind || 'public';
     document.body.dataset.viewer = viewer;   // 本人版标题不收行
     pageTitle(); for (const [kind, c] of cards) c.sub.textContent = hintText(kind);
@@ -557,12 +570,14 @@
         if (partial) counts.q = 'partial';
       }
     }
-    const lower = key => counts?.q === 'partial' && (!Array.isArray(counts.partial) || counts.partial.includes(key));
+    const moved = movedCounts(rows);
+    if (counts && Object.values(moved).some(Boolean)) counts = { ...counts, ...Object.fromEntries(Object.keys(KIND).filter(key => Number.isFinite(counts[key])).map(key => [key, Math.max(0, counts[key] + moved[key])])) };
+    const lower = key =>counts?.q === 'partial' && (!Array.isArray(counts.partial) || counts.partial.includes(key));
     const waiting = (counts?.choose ?? 0) + (counts?.do ?? 0), waitingLower = ['choose', 'do'].some(lower);
     const total = waitingLower ? waiting || null : counts?.choose != null && counts?.do != null ? waiting : null;
     const head = `等${viewer === 'public' ? '本人' : '你'} ${total == null ? U.collectionText() : `${waitingLower ? '至少 ' : ''}${total} 件`}`;
     U.html($('head'), U.status({ ...needs, level: needs.header_level ?? needs.level }).lamp + U.head(head?.replace(/(等你|等本人)\s*·\s*(\d+\s*件)/, '$1 $2'), { lamp: false }));
-    const waits = (rows || []).filter(it => ['choose', 'do'].includes(it.kind)).map(waitingMs).filter(Number.isFinite);
+    const waits = (rows || []).filter(it => ['choose', 'do'].includes(it.kind) && !hiddenByWrite(it) && !U.justSaved(it)).map(waitingMs).filter(Number.isFinite);
     const phone = needs.phone;
     const status = U.status({ ...needs, level: needs.header_level ?? needs.level });
     const listCutoff = page?.items && page.at && Date.parse(page.at) !== Date.parse(sourceAt(needs)) && `名单和统计截至 ${U.date(page.at)} ${U.time(page.at)}`;
@@ -600,7 +615,7 @@
       list(key, rows?.filter(it => it.kind === key).sort(itemOrder), empty, it => row(it, false, shared.get(it)), !meta.firstOpen, partial);
     }
     showOpenMore(); renderSelection();
-  }, missingHome);
+  }
   let closedItems = [], next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
