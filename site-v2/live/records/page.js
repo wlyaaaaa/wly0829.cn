@@ -504,14 +504,15 @@
     const candidate = [r.title, r.name, r.label, businessName, r.component_id, r.id].find(value => plain(value) && !/^(?:没有记录|未记录|未知)$/.test(plain(value)));
     const captured = section === 'freeze_records' && r.at ? `诊断现场 · ${U.date(r.at)} ${U.time(r.at)}` : '';
     const name = candidate || plain(r.text).split(/[。！？\n]/, 1)[0].slice(0, 48) || captured || `第 ${i + 1} 条 · 名称还没读到`;
-    const mark = marker(r, recordViewer, '这项记录的内容'), small = mark ? `<small>${mark}</small>` : '';
+    // M767：本人版里后台在这一行标了 visitor_labels（技能用量明细是 label、名册是 name）的，名字下挂签；访客版和没标的不挂
+    const mark = marker(r, recordViewer, '这项记录的内容') || (recordViewer === 'owner' ? U.visitorLabel(r, ['$', 'label', 'name', 'title'], skills ? '这个技能名' : '这一项的名称', recordViewer) : ''), small = mark ? `<small>${mark}</small>` : '';
     const label = `<span>${text(name)}</span>`;
     const gap = (k, fallback) => r[k] == null && r[`${k}_gap`] ? text(r[`${k}_gap`]) : fallback();
     const owns = keys => keys.some(k => k in r);
     const prose = [r.text, r.detail].filter((value, index, all) => plain(value) && plain(value) !== plain(name) && all.findIndex(v => plain(v) === plain(value)) === index);
     const knowledgeParts = knowledge ? knowledgeCells(r) : null;
     const proseLength = (knowledge ? [r.text, r.detail, ...(r.statements || []).map(s => s.text)] : prose).reduce((length, value) => length + plain(value).length, 0);
-    const long = recordViewer !== 'owner' && proseLength > 128;   // 本人版给全文，不截成“…”
+    const long = false;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，不截成“…”
     const summary = prose.length ? long ? `<p>${esc(plain(prose[0]).slice(0, 90))}…</p>` : prose.map(value => `<p>${text(value)}</p>`).join('') : '';
     const detail = long ? (knowledge ? knowledgeParts[3] : prose.map(value => `<p>${text(value)}</p>`).join('')) : '';
     const cells = knowledge ? [knowledgeParts[0], [knowledgeParts[1], !long && knowledgeParts[3], knowledgeParts[4]].filter(Boolean).join(''), knowledgeParts[2]] : skills ? [

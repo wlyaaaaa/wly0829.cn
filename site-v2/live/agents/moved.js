@@ -50,8 +50,10 @@
       last: Object.fromEntries(providers.map(p => [p.fam.id, p.last_at || null])), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       gaps: providers.filter(p => list(p.missing_months).length || list(p.unreadable_months).length).map(p => p.fam.name) };
   }
+  // M767：后台在技能名上带 visitor_labels.label（hidden／rewritten），三家各段的 skills、top 和清单 catalog 里同一个名字合成一个，访客看不到的优先
+  const keepLabel = (labels, row) => { const kind = row && typeof row === 'object' ? row.visitor_labels?.label : null; if (typeof row?.label === 'string' && ['hidden', 'rewritten'].includes(kind) && labels.get(row.label) !== 'hidden') labels.set(row.label, kind); };
   function skillModel(s) {
-    const providers = providersOf(s), win = {};
+    const providers = providersOf(s), win = {}, labels = new Map();
     for (const [id] of PERIODS) {
       const rows = new Map(), v = {}, own = {}, onlyTop = [];
       for (const p of providers) {
@@ -61,14 +63,16 @@
         const full = Array.isArray(w?.skills), items = list(full ? w.skills : w?.top).filter(t => t?.label);
         if (!full && items.length) onlyTop.push(p.fam.name);
         own[p.fam.id] = [...items].sort((a, b) => (num(b.count) || 0) - (num(a.count) || 0)).map(t => t.label);
-        for (const t of items) (rows.get(t.label) || rows.set(t.label, { name: t.label, v: {} }).get(t.label)).v[p.fam.id] = num(t.count);
+        for (const t of items) { (rows.get(t.label) || rows.set(t.label, { name: t.label, v: {} }).get(t.label)).v[p.fam.id] = num(t.count); keepLabel(labels, t); }
+        if (full) list(w?.top).forEach(t => keepLabel(labels, t));
       }
       win[id] = { start: earliest(providers.map(p => dateKey(p.windows?.[id]?.start))), v, own, rows, onlyTop, starts: startsOf(providers, id) };
     }
     // 全部技能清单：[{label}] 或 [名字]；没给是 null（这时不列没用过的）
     const cat = Array.isArray(s.catalog) ? s.catalog : Array.isArray(s.catalog?.skills) ? s.catalog.skills : null;
     const catalog = cat && [...new Set(cat.map(c => typeof c === 'string' ? c : c?.label).filter(c => typeof c === 'string' && c))];
-    return { at: s.as_of || s.observed_at, win, catalog, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
+    cat?.forEach(c => keepLabel(labels, c));
+    return { at: s.as_of || s.observed_at, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
       missing: HOSTS.filter(h => !providers.some(p => p.fam === h)), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows' };
   }
@@ -120,14 +124,17 @@
     out += `<line class="tp-axis" x1="${pad.l}" x2="${pad.l + w}" y1="${pad.t + h}" y2="${pad.t + h}"/>`;
     return `<svg class="tp-chart ag-cols" viewBox="0 0 ${W} ${H}" role="img" aria-label="按天">${out}</svg>`;
   }
+  // 本人版技能名旁的小签（访客看不到／对外换了说法），访客版和没标的不挂；名字太长时名字省略、签留着
+  const skillName = (name, labels) => { const tag = viewer === 'owner' && labels?.get(name) ? U.visitorLabel({ visitor_labels: { label: labels.get(name) } }, 'label', '这个技能名', viewer) : '';
+    return `<span class="ag-hrow__name" title="${esc(name)}">${tag ? `<span class="ag-hrow__label">${esc(name)}</span>${tag}` : esc(name)}</span>`; };
   // 横条（技能）：每家一段，能点。点了一家，横条只画这一家、按它自己用得最多的那个定长，右边写这一家的数
-  function bars(key, rows, every, unit, { lower = {} } = {}) {
+  function bars(key, rows, every, unit, { lower = {}, labels = null } = {}) {
     const f = only, keys = f ? every.filter(k => k.id === f) : every, max = Math.max(1, ...rows.map(r => sum(r.v, keys)));
     return `<div class="ag-hrows">${rows.map(r => {
       const all = sum(r.v, keys), mine = f ? r.v?.[f] : null;
       const right = f ? `<b style="color:${fam(f).color}">${known(mine) ? `${lower[f] ? '至少 ' : ''}${int(mine)}` : '—'}</b><small>${unit}</small>` : `<b>${int(all)}</b>`;
       const segs = keys.filter(k => known(r.v?.[k.id]) && r.v[k.id] > 0).map(k => `<button type="button" class="ag-hseg${lower[k.id] ? ' is-lower' : ''}" data-pick="${k.id}" style="flex:${r.v[k.id]};--fill:${k.color}" title="${esc(`${k.name} ${lower[k.id] ? '至少 ' : ''}${int(r.v[k.id])} ${unit}`)}" aria-label="${esc(`${r.name} · ${k.name} ${int(r.v[k.id])} ${unit}`)}"></button>`).join('');
-      return `<div class="ag-hrow"><span class="ag-hrow__name" title="${esc(r.name)}">${esc(r.name)}</span>
+      return `<div class="ag-hrow">${skillName(r.name, labels)}
         <span class="ag-hrow__track"><span class="ag-hrow__fill" style="width:${all / max * 100}%">${segs}</span></span><span class="ag-hrow__num">${right}</span></div>`;
     }).join('')}</div>`;
   }
@@ -164,14 +171,14 @@
     const hidden = Math.max(0, every.length - TOP) + unused.length;
     const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
-      `<div class="ag-hrow is-unused"><span class="ag-hrow__name" title="${esc(n)}">${esc(n)}</span><span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
+      `<div class="ag-hrow is-unused">${skillName(n, s.labels)}<span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const notes = [line, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at)}
       ${chips()}
-      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower }) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
+      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels }) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {

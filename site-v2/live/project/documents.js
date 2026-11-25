@@ -63,6 +63,7 @@ export function mount(project, anchor, state) {
         size?.disconnect();
         size = new ResizeObserver(() => { if (frame?.contentDocument === doc) frame.style.height = doc.body.offsetHeight + 'px'; });
         size.observe(doc.body);
+        // 文档区只读（M805：来访人备注功能废除，本人 11-24 21:57）：表单只用来筛选、翻页和返回，一律按 GET 重读，不写回后台
         doc.addEventListener('submit', event => {
           event.preventDefault();
           const form = event.target, button = event.submitter;
@@ -75,10 +76,8 @@ export function mount(project, anchor, state) {
             return;
           }
           const action = button?.getAttribute('formaction') || form.getAttribute('action');
-          const method = (button?.getAttribute('formmethod') || form.method).toUpperCase();
           const fields = new FormData(form, button);
           if (form.hasAttribute('data-document-back') && list) return void read(list);
-          if (method === 'POST') return void read(action, fields);
           const target = connection();
           if (!target) return clear();
           const url = address(action, target);
@@ -97,7 +96,7 @@ export function mount(project, anchor, state) {
     frame.srcdoc = policy + ownerTag(html.replace(/^\s*<!doctype html>/i, ''));
   }
 
-  async function read(url, fields) {
+  async function read(url) {
     if (!active()) return clear();
     const target = connection();
     if (!target) return clear();
@@ -105,11 +104,10 @@ export function mount(project, anchor, state) {
     const request = waiting = new AbortController();
     clearTimeout(timer);
     try {
-      const fetchDoc = async (raw, body) => {
+      const fetchDoc = async raw => {
         const headers = target.token ? { 'X-Cockpit-Device': target.token } : {};
-        if (body) headers['Content-Type'] = 'application/json';
         const result = await fetch(address(raw, target), {
-          method: body ? 'POST' : 'GET', headers, body, cache: 'no-store', credentials: 'omit',
+          method: 'GET', headers, cache: 'no-store', credentials: 'omit',
           redirect: 'error', referrerPolicy: 'no-referrer',
           signal: AbortSignal.any([request.signal, AbortSignal.timeout(12000)])
         });
@@ -125,7 +123,7 @@ export function mount(project, anchor, state) {
         if (frame?.contentDocument?.querySelector('details[open],input:focus,textarea:focus,select:focus')) return;
         url = current || route;
       }
-      const { html } = await fetchDoc(url, fields && JSON.stringify(Object.fromEntries(fields)));
+      const { html } = await fetchDoc(url);
       if (request === waiting && active() && target.token === connection()?.token) {
         if (typeof html !== 'string') throw new Error('Invalid document');
         note?.remove(); note = null;

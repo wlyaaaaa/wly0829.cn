@@ -189,7 +189,7 @@
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
   const selected = new Set(), selectable = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
-  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了只提示“不是可信设备”，什么都不改（定稿卡-等你的事 第一节第 4 条）。
+  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了弹全站共用的可信设备说明框（M803），什么都不改（定稿卡-等你的事 第一节第 4 条）。
   const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
   const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
   function checkbox(it) {
@@ -253,11 +253,7 @@
   }
   function row(it, closed = false, shared = '') {
     function brief(html) {
-    if (viewer === 'owner') return html;   // 本人版给全文，不收成一句
-    // 收起时那一句是纯文字，各小段之间补上和展开后一样的“ · ”，不挤成一串（M670）
-    const text = html.replace(/<\/span>(?=<span class="item-bit[\s"])/g, '</span> · ').replace(/<[^>]*>/g, '');
-    const first = text.match(/^.*?[。！？\n]/)?.[0] || text.slice(0, 100);
-    return text.length > first.length ? `<details class="brief"><summary><span class="brief__text">${first}</span> <span class="more__chev">›</span></summary><div>${html}</div></details>` : html;
+    return html;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，访客版不再先收成一句
     }
     const flags = it.text && typeof it.text === 'object' ? it.text : it, hidden = viewer === 'public' && (it.visibility === 'owner' || it.public === 'owner' || flags.visibility === 'owner' || flags.public === 'owner');
     const placeholder = hidden || viewer === 'public' && (flags.hidden || flags.rewrite === 'pending' && !flags.text && !flags.value);
@@ -265,7 +261,7 @@
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
@@ -298,7 +294,7 @@
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     const groupName = kind => KIND[kind] ? viewer === 'public' ? KIND[kind].replaceAll('你', '本人') : KIND[kind] : '没写类别';
     // 本人版列表默认给全；访客照旧先摆 5 条。
-    const ul = $(key + '-list'), limit = viewer === 'owner' ? Infinity : 5, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
+    const ul = $(key + '-list'), limit = Infinity, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
     const draw = (group, previous) => group.flatMap(it => {
       if (!grouped) return [renderer(it)];
@@ -510,7 +506,7 @@
   // 同一份汇报关掉后又重新弹出（编号不变，M567）时，按弹出时刻比：关掉的时刻不早于这次弹出，才算已经关了。
   const closedAt = () => new Map(closedItems.map(it => [it.id, Date.parse(it.closed?.at) || 0]));
   const closedSince = (gone, id, opened) => gone.has(id) && gone.get(id) >= (Date.parse(opened) || 0);
-  // M663：访客版也摆“关掉”，点了只提示“不是可信设备”。
+  // M663：访客版也摆“关掉”，点了弹全站共用的可信设备说明框（M803）。
   const reportActions = it => viewer === 'owner' || (it.actions || []).some(a => a.intent === 'close_report') ? it : { ...it, actions: [...(it.actions || []), { kind: 'direct', intent: 'close_report', label: '关掉' }] };
   function renderReports(d) {
     reportsData = d;
@@ -519,7 +515,7 @@
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length; filterBoard();
     U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);
-    const shown = viewer === 'owner' ? drawn.length : 5;   // 本人版列全
+    const shown = drawn.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
     U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }
   watch('reports', renderReports, text => { reportCount = null; filterBoard(); U.html(cards.get('reports').title, viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'); U.list($('reports-list'), wait(text)); U.list($('reports-rest'), []); $('reports-more').hidden = true; });

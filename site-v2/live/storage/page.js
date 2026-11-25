@@ -58,12 +58,12 @@
     const written = '累计写入 (GB)';
     const amounts = rows.map(row => fieldValue(row[written], columnLabel(written), n => n)).map(n => Number.isFinite(n) ? n : 0);
     const max = Math.max(1, ...amounts);
-    const ranked = (viewer === 'owner' ? rows : rows.slice(0, 5)).map((row, i) => {
+    const ranked = rows.map((row, i) => {   // 两版同一套（本人禁令 11-24 14:16）：两版排行一样长
       const name = field(row['进程'], '进程名称') || (U.offline?.() ? '程序' : U.collectionText()), shown = value(row, written);
       const color = window.LiveViz.hues[['teal', 'violet', 'pink', 'blue'][i % 4]];
       return { key: `${name}:${i}`, cls: 'vz-rank__row', html: `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${color};--v:${Math.max(amounts[i] / max, 0)}"></i></span><span class="vz-rank__name"><span class="vz-rank__label">${esc(name)}</span></span><span class="vz-rank__v">${esc(shown)}</span>` };
     });
-    const limit = viewer === 'owner' ? 4 : 5;
+    const limit = 4;
     const rest = ranked.slice(limit);
     rankMore.hidden = !rest.length;
     if (rankMore.hidden) rankMore.open = false;

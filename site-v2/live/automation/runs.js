@@ -50,7 +50,7 @@
     // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
     return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version,
-      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
+      href: T.path(o?.href) || (github ? o.href : ''), github, go: meta.go };
   }
 
   // 列表一行

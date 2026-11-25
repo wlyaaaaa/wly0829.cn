@@ -69,7 +69,7 @@
   }
 
   function visitors(host, section, viewer, stamp) {
-    const details = viewer === 'owner' ? section.owner_details : null;
+    const details = section.owner_details ?? null;   // 两版同一套（本人禁令 11-24 14:16）：后台给了就照画
     const signature = JSON.stringify([section.metrics, details, viewer]);
     if (host.dataset.readings === signature) return;
     host.dataset.readings = signature;
