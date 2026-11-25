@@ -31,6 +31,16 @@
 .page--items .brief > summary::-webkit-details-marker { display: none; }
 .page--items .lb-item > .row__acts .btn { width: auto; padding: 0 10px; gap: 4px; font-size: 12.5px; letter-spacing: .03em; }
 .page--items .lb-item > .row__acts .btn::before { display: none; }
+/* 电脑窗口窄、卡跟着窄到标题挤成几个字一行时：这一行的按钮折到标题下面一行，从左排、各列照旧对齐，标题照常横排；宽窗口（1440 及以上）不变（M853）。
+   折不折看这张卡的按钮有多宽：有“去办”链接又有“晚点提醒”的卡一排窄于 600 就折，有“晚点提醒”的 520，别的 420（只剩“近 7 天下去的”一张占整宽、两列排时按 860）。
+   折下来一排还摆不下这些按钮时，按钮自己换行。 */
+.page--items .lb-card--items .lb-rows { container-type: inline-size; }
+@container (max-width: 419px) { .page--items #groups .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 519px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 599px) { .page--items #groups .lb-card:has([data-slot="later"]):has([data-slot="go"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 439px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
+@container (max-width: 259px) { .page--items #groups .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
 .page--items #hero .card__glass { min-height: 0; padding: 20px 26px; }
 .page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
 .page--items .lb-card__title { display: block; letter-spacing: 0; }
