@@ -63,10 +63,11 @@
 
 #board .grp.is-open .grp__head { min-height: 76px; padding-block: 12px; }
 /* 软件版本表按“要不要你管”分组（照图 ENV-1）：组名一行带竖条，要你点头的那组用正绿 */
-.env-table--versions th:first-child, .env-table--versions td:first-child { width: 17%; }
-.env-table--versions th:nth-child(2), .env-table--versions th:nth-child(3) { width: 13%; }
-.env-table--versions th:nth-child(4) { width: 16%; }
-.env-table--versions th:last-child { width: auto; }
+.env-table.env-table--versions th:first-child { width: 18%; }
+.env-table.env-table--versions th:nth-child(2), .env-table.env-table--versions th:nth-child(3) { width: 15%; }
+.env-table.env-table--versions th:nth-child(4) { width: 18%; }
+.env-table--versions td:nth-child(4) { white-space: normal; overflow: visible; }
+.env-table.env-table--versions th:last-child { width: auto; }
 .env-table--versions td:last-child { white-space: normal; overflow: visible; }
 .env-nw { white-space: nowrap; }
 .env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 9px 16px; font-size: 15px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 4px 0 0 rgb(0 166 80 / .45); border-top: 6px solid transparent; background-clip: padding-box; }
@@ -92,10 +93,10 @@
 /* 近 N 天变化（照图 ENV-4）：日期、彩色小标签、人话名、版本；系统组件和驱动零件每天合成一行灰字 */
 .env-changes { margin-top: 18px; }
 .env-ch-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 22px; margin: 4px 0 14px; }
-.env-ch-title b { font-size: 25px; font-weight: 700; color: var(--ink); }
+.env-ch-title b { font-size: 27px; font-weight: 700; color: var(--ink); }
 .env-ch-title span { font-size: 15px; color: var(--muted); }
 .env-chs { list-style: none; margin: 0; padding: 0; }
-.env-ch { display: grid; grid-template-columns: 70px 64px max-content minmax(0, 1fr); align-items: center; column-gap: 18px; padding: 7px 0; font-size: 16px; line-height: 1.6; }
+.env-ch { display: grid; grid-template-columns: 74px 66px max-content minmax(0, 1fr); align-items: center; column-gap: 20px; padding: 9px 0; font-size: 17px; line-height: 1.6; }
 .env-ch__date { color: var(--muted); font-variant-numeric: tabular-nums; }
 .env-ch__tag { justify-self: start; padding: 2px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; line-height: 22px; letter-spacing: .04em; background: rgb(95 103 96 / .12); color: var(--ink-soft); }
 .env-ch__tag[data-kind="up"] { background: rgb(0 166 80 / .14); color: #00843f; }
@@ -103,15 +104,15 @@
 .env-ch__tag[data-kind="down"] { background: rgb(236 150 40 / .16); color: #a8620c; }
 .env-ch__name { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
 .env-ch__ver { color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.env-ch--quiet { grid-template-columns: 70px minmax(0, 1fr); align-items: start; }
-.env-ch--quiet > .env-ch__date { padding-top: 6px; }
-.env-ch__fold > summary { display: flex; align-items: center; padding: 7px 18px; border-radius: 12px; background: rgb(95 103 96 / .07); color: var(--muted); cursor: pointer; list-style: none; transition: background .2s ease; }
+.env-ch--quiet { grid-template-columns: 74px minmax(0, 1fr); align-items: start; }
+.env-ch--quiet > .env-ch__date { padding-top: 8px; }
+.env-ch__fold > summary { position: relative; display: block; padding: 8px 48px 8px 18px; border-radius: 12px; background: rgb(95 103 96 / .07); color: var(--muted); cursor: pointer; list-style: none; transition: background .2s ease; }
 .env-ch__fold > summary::-webkit-details-marker { display: none; }
-.env-ch__fold > summary::after { content: "›"; display: inline-block; margin-left: auto; padding-left: 12px; transition: transform .2s ease; }
-.env-ch__fold[open] > summary::after { transform: rotate(90deg); }
+.env-ch__fold > summary::after { content: "›"; position: absolute; right: 20px; top: 50%; font-size: 18px; line-height: 1; transform: translateY(-55%); transition: transform .2s ease; }
+.env-ch__fold[open] > summary::after { transform: translateY(-55%) rotate(90deg); }
 .env-ch__fold > summary:hover { background: rgb(95 103 96 / .11); }
 .env-ch__fold > ul { list-style: none; margin: 6px 0 2px; padding: 0; }
-.env-ch--sub { grid-template-columns: 0 64px max-content minmax(0, 1fr); padding: 3px 0 3px 18px; font-size: 14px; }
+.env-ch--sub { grid-template-columns: 0 66px max-content minmax(0, 1fr); padding: 3px 0 3px 18px; font-size: 14px; }
 .env-ch--sub .env-ch__tag { padding: 0 12px; font-size: 13px; }
 .env-ch--sub .env-ch__name { font-weight: 400; color: var(--ink-soft); }
 .env-ch-more { margin: 18px 0 6px; text-align: center; }

@@ -81,21 +81,22 @@
   }
   function updateWay(r) {
     if (r.update_mode === 'owner_approval') return '你说一声，AI 来更新';
-    if (r.update_mode === 'automatic') { const w = weekday(r.target_next_run_at); return w ? `每周${w}自动` : '自动更新'; }
+    // 还落后的自动项顺带写下次几号再试（放这列，“现在”那列就能一行写完上次的结果）
+    if (r.update_mode === 'automatic') { const w = weekday(r.target_next_run_at); return `${w ? `每周${w}自动` : '自动更新'}${isBehind(r) && w ? `，下次 ${U.date(r.target_next_run_at)}` : ''}`; }
     return '还没读到';
   }
-  // “现在”：落后的自动项写上次自动更新的结果和原因（后台 last_update），再写下次几号再试
+  // “现在”：落后的自动项写上次自动更新的结果和原因（后台 last_update）
   function nowState(r) {
     if (isLatest(r)) return { level: 'green', text: r.relation === 'ahead' ? '已是最新（比上次查到的还新）' : '已是最新' };
     if (!compared(r)) return { level: null, text: [relations[r.relation] || r.state_text || relations.unknown, r.unknown_text].filter(Boolean).map(sp).join(' · ') };
     if (r.update_mode !== 'automatic') return { level: 'yellow', text: '落后' };
     const u = r.last_update || {}, when = validAt(u.at) ? `${U.date(u.at)} ` : '';
     const what = u.status === 'unknown' || !u.status ? '还没有自动更新的记录' : `${when}${({ deferred: '被推迟：', failed: '没更新成功：' })[u.status] || ''}${sp(u.reason || '')}`;
-    return { level: 'yellow', text: [what, validAt(r.target_next_run_at) ? `下次 ${U.date(r.target_next_run_at)} 再试` : ''].filter(Boolean).join(' · ') };
+    return { level: 'yellow', text: what };
   }
   function versionRow(r) {
     const now = nowState(r);
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.level ? indicator({}, now.level) : ''}${now.text.split(' · ').map(s => `<span class="env-nw">${esc(s)}</span>`).join(' · ')}</td></tr>`;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
     const body = versionGroups(rows).map(g => {
