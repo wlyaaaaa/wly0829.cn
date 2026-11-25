@@ -29,9 +29,11 @@
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   function title(r) {
     // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
-    const lead = r.subject ? `${F(r.subject.title, '这件活')}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
+    // 这件活的名字写在前半，后台 summary 里又带着它的就去掉，同一句不写两遍（前端 QA 11-25）
+    const thing = r.subject ? F(r.subject.title, '这件活') : '';
+    const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
-      : F(r.summary, '这一轮做了什么') || '跑完了';
+      : R.withoutSubject(F(r.summary, '这一轮做了什么'), thing) || '跑完了';
     return lead && tail ? `${lead}：${tail}` : lead || tail;
   }
   function tags(r) {

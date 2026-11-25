@@ -83,6 +83,18 @@
     return summary.startsWith(reason) ? summary : `${reason}：${summary}`;
   }
 
+  // 后台的 summary 常把这件活的名字再写一遍（“转给你 · 收拾仓库……”“暂时不修 · 内存守护……。独立复核通过……”）。
+  // 那件已经写在前面（标题前半、卡片上面那行）时，summary 里那件的名字去掉，留下前面的结论和后面的交代；
+  // 只在那件的名字单独成段（前后是开头结尾、“ · ”、冒号、句号）时去，夹在句子中间的不动。都是 F 转义过的字
+  function withoutSubject(summary, thing) {
+    const at = summary && thing ? summary.indexOf(thing) : -1;
+    if (at < 0) return summary;
+    const before = summary.slice(0, at), after = summary.slice(at + thing.length);
+    if (before && !/(\s*[·:：]\s*|[。！？；])$/.test(before) || after && !/^(\s*[·:：]|[。！？；])/.test(after)) return summary;
+    const head = before.replace(/\s*[·:：]\s*$/, ''), tail = after.replace(/^(\s*[·:：]\s*|[。！？；]\s*)/, '');
+    return head && tail ? `${head}${/[。！？；]$/.test(head) ? '' : ' · '}${tail}` : head || tail;
+  }
+
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
   function chatOf(conv) {
     const href = str(conv?.href);
@@ -150,5 +162,5 @@
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle, withoutSubject };
 })();
