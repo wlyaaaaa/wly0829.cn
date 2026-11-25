@@ -32,14 +32,16 @@
 
   // 首页自动任务卡（照“首页自动任务卡-v2”，本人 11-25 定内容、大字是今天跑完几轮，11-26 01:04 批照图施工）：
   // 大字今天跑完几轮、其中几轮没做成，0–24 点时间条每轮一个点，三行（在干或下一个、出毛病几处、近 7 天替你做成的），底行今天用时和开着几类。
-  // 今天没做成几轮（results_today.failed_runs，和 finished_runs 同一个数法）、今天每一轮的点（results_today.runs=[{at, ok, href}]）后台还没给：
-  // 没给时这一行和时间条都不画（不画一条空的时间条）。
+  // 今天没做成几轮（results_today.failed_runs，和 finished_runs 同一个数法：每轮真实结束记录算一轮，跨夜那轮归结束那天）、
+  // 今天每一轮的点（results_today.runs_today=[{finished_at, ok, href}]）：读到了但今天还没跑完一轮给 0 和空列表，照画（空时间条只有“现在”）；
+  // 读不到轮次给 null，这一行和时间条都不画。
   function automationView(d, { viewer }) {
     const today = d.results_today && typeof d.results_today === 'object' ? d.results_today : {};
     // 今天跑完了几轮：后台 results_today.finished_runs，和自动任务页“今天跑完的”同一口径
     const finished = count(today.finished_runs) ? today.finished_runs : null;
     const failed = count(today.failed_runs) ? today.failed_runs : null;
-    const runs = Array.isArray(today.runs) ? today.runs.filter(r => r && typeof r === 'object' && R.timed(r.at)) : null;
+    const runs = Array.isArray(today.runs_today)
+      ? today.runs_today.filter(r => r && typeof r === 'object' && R.timed(r.finished_at)).map(r => ({ ...r, at: r.finished_at })) : null;
     const week = d.results_7d && typeof d.results_7d === 'object' ? d.results_7d : null;
     const running = items(d.running).map(r => ({
       what: [R.categoryName(r.category, viewer), r.title || r.summary].filter(Boolean),
@@ -149,6 +151,8 @@
       return { tone: 'off', head: cardTitle(name, href, 'off', '') + `<br><span class="row__sub">${esc(say)}</span>`, body: '' };
     }
     const own = viewer === 'owner' ? '你' : '本人', field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
+    // 自动任务卡、账本卡：访客版称呼写“本人”，后台写进句子里的“你”也换（“你们”不动）；本人版原样
+    const toPublic = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
     const link = (path, text) => typeof path === 'string' && path.startsWith('/live/')
       ? `<a href="${esc(route(path))}">${text}</a>` : text;
     // 能点过去的绿字（“第 2 轮 ›”“已交自动修理 ›”）；地址不在站内就只写字、不带箭头
@@ -186,8 +190,8 @@
         : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       // 第三行：近 7 天替你做成的（图上写“这周”，后台给的是近 7 天的数，照数写）
       const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条 · 修好 ${num(w.repaired)} 件 · 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
-      return { tone, head, body: `${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${week}</div>
-        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'} · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>` };
+      return { tone, head, body: toPublic(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${week}</div>
+        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'} · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`) };
     }
     if (id === 'agents') {
       const v = agentsView(d, { viewer, now });
@@ -241,11 +245,13 @@
     const bar = timebar(c.today.map(r => ({ at: r.next_at, kind: c.late(r) ? 'late' : 'next', href: r.href,
       tip: `${U.fieldText(r.title, viewer)} · ${c.late(r) ? `到点没看，原定 ${clock(r.next_at)}` : `${clock(r.next_at)} 看`}` })), now, route, '今天要看的');
     // 列出来的每一件：标题点了到那件；到点没看的橙点、写“到点没看，原定几点”，还没到的绿点、写“几点看”
-    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, field(r.title, '事项标题'))}</p>`
+    // 本人版：这件对外换了说法的，标题后面挂“对外换了说法”（访客版不挂）
+    const titleTag = r => { const t = viewer === 'owner' ? U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer) : ''; return t ? ` ${t}` : ''; };
+    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, field(r.title, '事项标题'))}${titleTag(r)}</p>`
       + `<small class="b6-muted">· ${c.late(r) ? `到点没看，原定 ${esc(clock(r.next_at))}` : `${esc(clock(r.next_at))} 看`}</small></div>`;
     const list = c.today.length ? c.today.slice(0, 3).map(dueItem).join('')
       : `<p class="b6-muted b6-lg-none">今天没有要看的${c.after ? ` · ${go(c.after.href, `下一件 ${esc(time(c.after.next_at))}`)}` : ''}</p>`;
-    return { tone, head, body: `${top}${bar}<div class="b6-lg-list">${list}</div>${foot}` };
+    return { tone, head, body: toPublic(`${top}${bar}<div class="b6-lg-list">${list}</div>${foot}`) };
   }
   // AI 对话卡和 AI 对话页顶上那一行“后台另有 N 个在跑 ›”：数自动任务这会儿在跑的轮数（AI 对话不列后台的对话，本人定的）。
   function backgroundRunning(automation) {
