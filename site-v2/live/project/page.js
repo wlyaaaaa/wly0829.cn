@@ -368,11 +368,9 @@
     const meta = [count, at && `截至 ${at}`].filter(Boolean).join(' · ');
     const linkLabel = U.fieldText(m.label, projectViewer) + '明细';
     U.html(b.head, `<b>${name}</b>${meta ? `<span class="pj-record-meta">${esc(meta)}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
-    const knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(m.section);
+    // 两版同一套：说明书各组不再由前端替访客写“不予公开”，明细照回包画；只有后台把这一项标成只给本人的才写那句
     const hidden = m.value?.hidden_block || m.hidden_block || (isPrivate(m) ? m.value?.hidden_what || m.hidden_what : '');
-    const notice = projectViewer !== 'public' ? '' : knowledge
-      ? esc(`以下是${U.fieldText(m.label)}的认识原文，属于隐私信息，不予公开。`)
-      : hidden ? U.visibilityNote({ visibility: 'owner', hidden_block: hidden }, 'public', U.fieldText(m.label)) : '';
+    const notice = projectViewer !== 'public' || !hidden ? '' : U.visibilityNote({ visibility: 'owner', hidden_block: hidden }, 'public', U.fieldText(m.label));
     b.reading.hidden = !notice;
     U.html(b.reading, notice);
     b.main.hidden = b.foot.hidden = b.more.hidden = b.link.hidden = b.note.hidden = b.cut.hidden = true;
@@ -751,7 +749,7 @@
           into.push(b);
           continue;
         }
-        const sectionNote = id === 'daily-preferences' && s.id === 'understanding' && projectViewer === 'owner' && typeof s.note === 'string'
+        const sectionNote = id === 'daily-preferences' && s.id === 'understanding' && typeof s.note === 'string'
           ? s.note.replace('资料速查只给标题，金额、测量值和秘密不进入页面。', '资料速查明细会显示已记录的数值和单位。')
           : s.note;
         const repeatedNote = sectionNote && s.metrics?.some(m => m.note === sectionNote || m.scope === sectionNote) ? sectionNote : '';

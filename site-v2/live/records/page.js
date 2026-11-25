@@ -88,13 +88,14 @@
       ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
     ],
   };
-  const ownerBusinessFields = {
+  // 后台多给的几列（原件书架未走完的位置、手机每天的计步和应用清单）：两版同一套，回包里有这一列就画，没有就不摆（本人禁令 11-24 14:16）
+  const extraBusinessFields = {
     'personal-materials/refresh_partial': [
       ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
     ],
     'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
   };
-  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
+  extraBusinessFields['phone-collector/daily_exact'] = extraBusinessFields['phone-collector/daily'];
   const skills = ['skill_rows', 'skill_rows_owner'].includes(section);
   const book = window.LiveBook.create($('record-body'), bookSetup());
   const headRead = U.reading(body, { ghost: U.ghost.card(2), name: '项目逐项明细' });
@@ -305,10 +306,8 @@
     next = recordAt && (field || d.at !== recordAt) ? null : d.next;
     recordTotal = recordAt && (field || d.at !== recordAt) ? items.length : d.total; recordSource = d; drawRecordTitle(); drawHeader();
     const privateRow = r => r?.visibility === 'owner' || r?.public === 'owner' || r?.hidden_block || r?.hidden;
-    const publicSkills = skillUsageSection && recordViewer === 'public';
-    const visibleItems = publicSkills ? items.filter(row => !privateRow(row) && !row?.private_count) : items;
-    // 每条都是私事时也留各行（时间、状态照常，只藏字），不收整张表。
-    groupPrivate = recordViewer === 'public' && (knowledge || privateRow(d));
+    // 两版同一套：技能用量、说明书各组都照回包画；后台把整块标成只给本人的才收起（每条都是私事时也留各行，时间、状态照常，只藏字）。
+    groupPrivate = recordViewer === 'public' && privateRow(d);
     $('record-body').hidden = groupPrivate;
     if (groupPrivate) {
       book.set([]);
@@ -318,9 +317,9 @@
       return;
     }
     const siteTodo = section.startsWith('site_todo_');
-    const sorted = U.order(visibleItems, attention, `records:${section}`, siteTodo ? siteTodoKey : recordKey);
+    const sorted = U.order(items, attention, `records:${section}`, siteTodo ? siteTodoKey : recordKey);
     const ordered = knowledge ? sorted : U.mergePrivateRows(sorted, { value: r => r.name || r.label || r.text || r, kind: recordViewer });
-    const hiddenOnly = !publicSkills && !ordered.length && d.hidden > 0;
+    const hiddenOnly = !ordered.length && d.hidden > 0;
     // 后端本来就不给的字段，那一列不摆；给了但没数的格子照旧写原因或“还在采集”
     const has = (...keys) => items.some(r => r && typeof r === 'object' && keys.some(k => k in r && r[k] !== ''));
     const keep = knowledge ? [true, true, true] : skills ? [true, has('count'), has('last')] : [true, has(...STATE_KEYS, 'text', 'detail'), has(...TIME_KEYS)];
@@ -345,20 +344,20 @@
       columns, caption, hasNext: next != null,
       empty: uncertain ? text(emptyNote) : extra?.empty || (hiddenOnly ? hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录') || marker({ visibility: 'owner' }, recordViewer, '这些记录') : text(emptyNote)),
     });
-    drawRecordNote(d, [extra?.note, !publicSkills && !hiddenOnly && d.hidden && (hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录'))]);
+    drawRecordNote(d, [extra?.note, !hiddenOnly && d.hidden && (hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录'))]);
     drawToc(ordered);
     recordRead.done();
     U.land();
     if (!append) fillAll();
   }
-  // 说明书（认识）本人版一次取全：目录要列全这一组，点哪一项都能直接跳到全文（M421）。
+  // 说明书（认识）一次取全（两版同一套）：目录要列全这一组，点哪一项都能直接跳到全文（M421）。
   // 某一批没读到（慢、超时、服务还在准备、一时连不上）不就此停下：隔 2、4、8、15 秒，之后每 30 秒再取，直到列齐；
   // 没读到的这段时间，目录头和账簿底下写清还差几项、正在重取，不悄悄少列（M548）。新的第一批到了就从头再取。
   let fillRun = 0, fillOn = 0, fillMiss = 0, tocRows = [];
   function fillAll() {
     const run = ++fillRun;
     fillMiss = 0;
-    if (!knowledge || recordViewer !== 'owner' || next == null) return;
+    if (!knowledge || next == null) return;
     fillOn = run;
     (async () => {
       while (run === fillRun && next != null) {
@@ -376,11 +375,11 @@
   }
   const restCount = () => Math.max(0, (Number.isFinite(recordTotal) ? recordTotal : 0) - items.filter(r => r && !r.private_count).length);
   const missingRest = () => `${restCount() ? `还差 ${restCount()} 项` : '后面还有'}刚才没读到，正在重取`;
-  // 我的说明书一组（本人版）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
+  // 我的说明书一组（两版同一套）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
   function drawToc(ordered) {
     tocRows = ordered;
     let box = book.el.top.querySelector('.record-toc');
-    if (!knowledge || recordViewer !== 'owner' || ordered.length < 2) { box?.remove(); return; }
+    if (!knowledge || ordered.length < 2) { box?.remove(); return; }
     if (!box) {
       box = document.createElement('nav'); box.className = 'record-toc'; box.setAttribute('aria-label', '这一组的目录'); book.el.top.append(box);
       box.addEventListener('click', e => {
@@ -436,7 +435,7 @@
     ];
     const rows = ordered.map((r, i) => {
       const row = bookRow(r, data, i), n = A.recorded;
-      if (row.wide || row.locked) return row;
+      if (row.wide) return row;
       const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
         [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没有记录')];
       // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
@@ -470,7 +469,7 @@
 
   function businessTable(d, ordered) {
     const key = `${id}/${section}`;
-    const spec = (recordViewer === 'owner' ? ownerBusinessFields[key] : null) || businessFields[key];
+    const spec = extraBusinessFields[key] || businessFields[key];
     if (!spec || !ordered.length) return null;
     const [name, ...rest] = spec;
     const fields = rest.filter(([key]) => ordered.some(r => r[key] != null || r[`${key}_gap`]));
@@ -481,12 +480,10 @@
       const cells = fields.map(([key, label, kind]) => {
         if (row.locked) return '';
         let value = r[key] ?? r[`${key}_gap`];
-        if (key === 'through' && recordViewer === 'public') {
-          const day = /^\d{4}-\d\d-\d\d/.exec(U.fieldText(value, 'public'));
-          if (day) value = day[0];
-        }
         if (typeof value === 'string' && (key.endsWith('_at') || key === 'through' || kind === 'time')) value = format(value);
-        return U.fieldHtml(value, { name: label, kind: recordViewer });
+        // 本人版：后台在这一行的 visitor_labels 里标了这一列的（如原件书架的目录访客拿不到），格子里挂签
+        const tag = U.visitorLabel(r, key, `这一行的${label}`, recordViewer);
+        return U.fieldHtml(value, { name: label, kind: recordViewer }) + (tag ? ` ${tag}` : '');
       });
       return { ...row, cells: [row.cells[0], ...cells] };
     });
@@ -606,7 +603,7 @@
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按整理时间（新的在前）', 'at', -1), by('name', '按名称', 'name', 1)],
     };
     // 按字段摆的明细表（手机采集每天、夜检进度这类，每列一个字段）和技能用量表一样摆一整页：左右两页时一列只剩百来像素，日期、项目名被拆在词中间；一次摆出的行数和原来两页一样（40 行）
-    const fieldTable = !!(businessFields[`${id}/${section}`] || ownerBusinessFields[`${id}/${section}`]);
+    const fieldTable = !!(businessFields[`${id}/${section}`] || extraBusinessFields[`${id}/${section}`]);
     return {
       name: '名称', more: loadNext, spread: !skillUsageSection && !fieldTable, singleUntil: 8, ...(fieldTable ? { page: 40 } : {}),
       columns: [{ id: 'name', label: '这一项' }, { id: 'state', label: '情况' }, { id: 'at', label: '时刻' }],

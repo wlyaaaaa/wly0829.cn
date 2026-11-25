@@ -698,8 +698,8 @@
     if (c.detail === false) return `<span class="row__title">${U.fieldHtml(label, { kind: viewer, place: 'title', name: '对话' })}</span>${note}`;
     return `${title(c, label, 'chats')}${note ? ` <span class="head__rewrite">${note}</span>` : ''}`;
   }
+  // 两版同一套：后台给了帮手详情就照画（访客回包里没有就不出这一块），被标的字由 fieldHtml 按回包里的标记处理
   function chatHelperDetails(helpers, kind) {
-    if (kind !== 'owner') return '';
     const rows = helpers.filter(h => U.fieldText(h.owner_detail, kind).trim()).map(h => {
       const label = U.fieldHtml(h.title ?? h.model_text ?? h.model, { name: '帮手名', kind });
       const detail = U.fieldHtml(h.owner_detail, { name: '帮手详情', kind });
