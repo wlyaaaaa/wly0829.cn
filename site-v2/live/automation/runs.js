@@ -91,8 +91,9 @@
   // 后台没给自己的结论、只拼了“暂时不修 · 这件活。交代”的（summary 里带着这件活的名字），交代的最后一句是现在卡在哪；
   // 后台给了结论的，结论在第一句。超过 32 个字截断加省略号，全文在一轮页
   function deferredWhy(r, F) {
-    // 卡片上面那行已经写了这件活的名字：原因和它一样（后台常把名字原样填进 reason）就不再写一遍
-    const thing = r.subject ? F(r.subject.title, '这件活') : '', same = x => !x || x === thing || x === '暂时不修';
+    // 卡片上面那行已经写了这件活的名字：原因或其中一句的意思已经包含在那行里（去掉标点、空格再比），就不再写一遍
+    const thing = r.subject ? F(r.subject.title, '这件活') : '', bare = x => String(x || '').replace(/[\s\p{P}\p{S}]/gu, '');
+    const same = x => !bare(x) || x === '暂时不修' || !!thing && bare(thing).includes(bare(x));
     const reason = F(r.reason, '原因');
     if (!same(reason)) return reason;
     // 按句号分句，分号不拆：“网络服务窗口已恢复；自动连接未通过，暂用手动连接”整句才看得出为什么放着
