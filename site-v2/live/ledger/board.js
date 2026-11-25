@@ -263,14 +263,14 @@
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
-    if (!d) { T.paint(page.root, T.placeholder(state, 'AI 账本')); page.tick.set([], { off: true }); return; }
+    if (!d) { T.paint(page.root, T.placeholder(state, 'AI 自动任务账本')); page.tick.set([], { off: true }); return; }
     if (view) {
-      T.paint(page.root, `<div class="tp-head"><div><h1>AI 账本</h1><p>从首页 AI 账本卡点进来的那几件；点一件看它的完整经过。</p></div>
+      T.paint(page.root, `<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
         <p class="tp-head__side"><span>截至 ${esc(when(d.at || d.as_of))}</span></p></div>${T.stateNote(state)}${viewList(d)}`);
       page.tick.set([], { off: state.offline });
       return;
     }
-    T.paint(page.root, `<div class="tp-head"><div><h1>AI 账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
+    T.paint(page.root, `<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}<span>截至 ${esc(when(d.at))}</span></p></div>
       ${T.stateNote(state)}${top(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`);
     drawn = true;
@@ -302,7 +302,7 @@
 
   let page;
   page = T.boot({ resource: 'ledger', query: { ...(project ? { project } : {}), ...(view ? { view } : {}) }, back: '/live/#ledger',
-    ask: () => 'AI 账本里还欠着哪些事、哪件该看了、最近了结了什么？先用大白话说，别动手。',
+    ask: () => 'AI 自动任务账本里还欠着哪些事、哪件该看了、最近了结了什么？先用大白话说，别动手。',
     onState(next) {
       state = next; draw();
       if (!next.data || view) return;

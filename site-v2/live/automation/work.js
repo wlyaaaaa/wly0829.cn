@@ -259,7 +259,7 @@
     const related = [
       [route(data.task_href || data.source?.href), '来源', data.source?.label || '来源'],
       [route(data.owner_href), '要办的事', `要${own()}出面的事`],
-      [route(data.ledger_href), '账本', 'AI 账本'],
+      [route(data.ledger_href), '账本', 'AI 自动任务账本'],
     ].filter(([href]) => href);
     if (row.project && row.project_name) related.unshift([route(`/live/project/?id=${segment(row.project)}`), '所属项目', row.project_name]);
     const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');

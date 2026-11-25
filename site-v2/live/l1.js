@@ -12,7 +12,7 @@
     { id: 'needs', name: '等你的事', href: '/live/items/', scoped: true },
     { id: 'chats', name: 'AI 对话', href: '/live/chats/' },
     { id: 'agents', name: '智能体', href: '/live/agents/' },
-    { id: 'ledger', name: 'AI 账本', href: '/live/ledger/', scoped: true },
+    { id: 'ledger', name: 'AI 自动任务账本', href: '/live/ledger/', scoped: true },
     { id: 'automation', name: '自动任务', href: '/live/automation/', scoped: true },
     { id: 'computer', name: '电脑', href: '/live/computer/' },
     { id: 'phone', name: '手机', href: '/live/phone/' },
@@ -368,7 +368,7 @@
     const pieces = sp(text).split(' · '), cutoff = pieces.filter(U.isCutoffNote);
     const gap = pieces.filter(s => !cutoff.includes(s) && (U.isMissingText(s) || /暂时读不到|没存下来/.test(s))), known = pieces.filter(s => !gap.includes(s) && !cutoff.includes(s));
     const note = [...gap, ...cutoff];
-    if (['电脑', 'AI 账本', '项目'].includes(name)) return U.head([name, ...known, ...note].filter(Boolean).join(' · '), options);
+    if (['电脑', 'AI 自动任务账本', '项目'].includes(name)) return U.head([name, ...known, ...note].filter(Boolean).join(' · '), options);
     return U.head(known.join(' · ') || name, options) + (note.length ? `<br><span class="row__sub">${esc(note.join(' · '))}</span>` : '');
   };
   const daysText = n => n < 1 ? '不到 1 天' : n < 365 ? `${Math.round(n)} 天` : `${Math.round(n / 365)} 年`;

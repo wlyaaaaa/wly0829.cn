@@ -400,7 +400,7 @@
     if (/^\/live\/(?:ledger|projects)\/(?:[?#]|$)/.test(href)) lamp = false;
     const raw = sp(text || collectionText());
     const first = raw.split(' · ')[0], marked = !!text?.hidden_block || /^(?:[^<>]*：)?(?:可信设备可见|正在换说法|对外换了说法|换了说法)$/.test(first);
-    const names = { chats: 'AI 对话', items: '等你的事', tasks: '计划任务', automation: '自动任务', ledger: 'AI 账本', projects: '项目', project: '项目', computer: '电脑', phone: '手机', backups: '备份' };
+    const names = { chats: 'AI 对话', items: '等你的事', tasks: '计划任务', automation: '自动任务', ledger: 'AI 自动任务账本', projects: '项目', project: '项目', computer: '电脑', phone: '手机', backups: '备份' };
     const own = name || names[href.split('/')[2]] || (marked || isReadingCutoff(raw) ? document.title?.split(' · ')[0] : '') || '实况';
     const words = (marked ? [sp(own), ...raw.split(' · ').slice(1)] : raw.split(' · ')), cutoff = [...new Set(words.filter(isReadingCutoff))];
     const s = words.filter(s => !cutoff.includes(s)).join(' · ') || own;
