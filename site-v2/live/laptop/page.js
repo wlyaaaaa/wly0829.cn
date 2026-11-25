@@ -67,7 +67,8 @@
     const readingsOld = !!last && (!!x.read_error || !fresh(x.at, x.stale_after));
     const note = x?.read_error_reason ?? x?.missing_reason ?? (typeof x?.read_error === 'string' ? x.read_error : null);
     page.dataset.deviceState = checked ? 'online' : pending ? 'loading' : 'offline';
-    headline = checked ? '在线' : pending ? '正在读笔记本' : disconnected ? '笔记本连不上'
+    // 台式机这头读不到（整页连不上、电脑离线）时不知道笔记本怎样，不说成“笔记本连不上”，照“未重新确认”写、带最后确认在线的时刻（D6）
+    headline = checked ? '在线' : pending ? '正在读笔记本' : x?.state === 'offline' ? '笔记本连不上'
       : seen || at(x?.last_online) ? '笔记本在线状态未重新确认' : x ? '笔记本在线状态这次没读到' : '电脑状态这次没带回笔记本读数';
     // 笔记本确认离线时：写从几点起连不上（后台 offline_since，M918）；observed_at 这时是确认离线那次探测，
     // 不能当“最后确认在线”，改用 last_online，不然会出现“自 22:10 起连不上 · 最后确认在线 22:40”打架
