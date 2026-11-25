@@ -125,8 +125,8 @@
     out += `<line class="tp-axis" x1="${pad.l}" x2="${pad.l + w}" y1="${pad.t + h}" y2="${pad.t + h}"/>`;
     return `<svg class="tp-chart ag-cols" viewBox="0 0 ${W} ${H}" role="img" aria-label="按天">${out}</svg>`;
   }
-  // 本人版技能名旁的小签（访客看不到／对外换了说法），访客版和没标的不挂；名字太长时名字省略、签留着
-  const skillName = (name, labels) => { const tag = viewer === 'owner' && labels?.get(name) ? U.visitorLabel({ visitor_labels: { label: labels.get(name) } }, 'label', '这个技能名', viewer) : '';
+  // 本人版技能名旁的小签（访客看不到／对外换了说法），访客版只挂其中的“对外换了说法”（M930），没标的不挂；名字太长时名字省略、签留着
+  const skillName = (name, labels) => { const tag = labels?.get(name) ? U.visitorLabel({ visitor_labels: { label: labels.get(name) } }, 'label', '这个技能名', viewer) : '';
     return `<span class="ag-hrow__name" title="${esc(name)}">${tag ? `<span class="ag-hrow__label">${esc(name)}</span>${tag}` : esc(name)}</span>`; };
   // 横条（技能）：每家一段，能点。点了一家，横条只画这一家、按它自己用得最多的那个定长，右边写这一家的数
   function bars(key, rows, every, unit, { lower = {}, labels = null } = {}) {

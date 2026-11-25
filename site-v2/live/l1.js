@@ -450,8 +450,8 @@
     const cutoff = !moment && (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
     const recent = changed && !lastState?.offline && fresh('project-changes', changed) ? '<span class="project-recent">刚改</span>' : '';
     const nameNote = viewer === 'public' && it.name && typeof it.name === 'object' ? U.fieldHtml({ ...it.name, text: null, value: null }, { name: '项目名', kind: viewer }) : '';
-    // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版和没标的不挂
-    const nameTag = viewer === 'owner' ? U.visitorLabel(it, ['$', 'name'], '这个项目', viewer) : '';
+    // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版只挂其中的“对外换了说法”（M930），没标的不挂
+    const nameTag = nameNote ? '' : U.visitorLabel(it, ['$', 'name'], '这个项目', viewer);
     const look = typeof projectLooks === 'undefined' || projectLooks === null ? null : window.LiveProjectLook?.of(it.id, projectLooks);
     const style = look && !look.known ? ` style="background:linear-gradient(135deg,${look.glow[0]},${look.glow[1]})"` : '';
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
@@ -585,7 +585,8 @@
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
     // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
-    const marks = viewer !== 'owner' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || U.visibilityNote(it, viewer)}</span>`;
+    const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
+    const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
     return {
       key: it.id,
       cls: 'row',
@@ -700,8 +701,8 @@
     if (c.detail === false) return `<span class="row__title">${U.fieldHtml(label, { kind: viewer, place: 'title', name: '对话' })}</span>${note}`;
     return `${title(c, label, 'chats')}${note ? ` <span class="head__rewrite">${note}</span>` : ''}`;
   }
+  // 两版同一套：后台给了帮手详情就照画（访客回包里没有就不出这一块），被标的字由 fieldHtml 按回包里的标记处理
   function chatHelperDetails(helpers, kind) {
-    if (kind !== 'owner') return '';
     const rows = helpers.filter(h => U.fieldText(h.owner_detail, kind).trim()).map(h => {
       const label = U.fieldHtml(h.title ?? h.model_text ?? h.model, { name: '帮手名', kind });
       const detail = U.fieldHtml(h.owner_detail, { name: '帮手详情', kind });
@@ -734,7 +735,7 @@
     const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(homeAddressed(replyField), c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
     // 两版同一套（本人禁令 11-24 14:16）：回复预览两版都给全文，访客版不再先收成 4 行加“展开全文”
     // M684：本人版回复预览访客那边不一样的，句末挂签；整场对访客藏着的只在 meta 那里挂一个。
-    const previewTag = viewer === 'owner' && reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
+    const previewTag = reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
     const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}${previewTag}</p></div>` : '';
     const helperText = helpers && (c.state === 'done' ? `后台帮手另在处理（${helpers} 个）` : `帮手 ${helpers} 个在干`);
     const lockedMeta = locked ? [c.stage, c.project_name, c.born && ('开始于 ' + U.time(c.born)),
@@ -1313,7 +1314,7 @@
   };
   function projectName(id) { return (home?.projects?.items || []).find(p => p.id === id)?.name || id; }
   // M767：本人版里访客看不到的项目（名册这一行标 visitor_labels.name=hidden），项目变化行的项目名后挂“访客看不到”
-  function projectTag(id) { const tag = viewer === 'owner' ? U.visitorLabel((home?.projects?.items || []).find(p => p.id === id), ['$', 'name'], '这个项目', viewer) : ''; return tag ? ` <span class="head__rewrite">${tag}</span>` : ''; }
+  function projectTag(id) { const tag = U.visitorLabel((home?.projects?.items || []).find(p => p.id === id), ['$', 'name'], '这个项目', viewer); return tag ? ` <span class="head__rewrite">${tag}</span>` : ''; }
   const changeName = c => [projectName(c.project), typeof c.text === 'string' ? c.text.trimEnd().replace(/。$/, '') : c.text];
   const changeTime = at => [U.date(at), U.time(at)].filter(Boolean).join(' ');
   let changesPage;

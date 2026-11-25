@@ -73,7 +73,7 @@
       ? `今天还没用过（统计到 ${U.time(until)}）` : '';
   }
   // 本人版给完整版，不挂“仅你可见”；对外换了说法的照旧提一句。
-  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(viewer === 'owner' && item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
+  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
   const listName = a => marked(a.name) || viewer !== 'owner' && a.name == null && a.visibility === 'owner' ? '' : a.name == null && a.visibility === 'owner' ? note(a)
     : `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${note(a) ? ` <span class="phone-mark">${note(a)}</span>` : ''}`;
   const paragraph = text => `<p class="use-note">${fh(text && typeof text === 'object' ? text : humanText(text))}</p>`;
