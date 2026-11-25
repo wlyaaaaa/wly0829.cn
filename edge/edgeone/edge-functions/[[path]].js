@@ -53,7 +53,10 @@ async function cloudSnapshot(resource) {
       typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at))) throw Error('snapshot');
   const observed = value.resources?.[resource]?.at;
   const at = typeof observed === 'string' && Number.isFinite(Date.parse(observed)) ? new Date(observed).toISOString() : null;
-  return {at, audience: proof.audience};
+  const instant = Date.now(), received = Date.parse(response.headers.get('Last-Modified'));
+  const hostOff = value.v === 1 && Number.isInteger(value.seq) && value.host_off_at === value.at && Date.parse(value.at) <= instant;
+  return {at, audience: proof.audience, hostOffAt: hostOff ? new Date(value.at).toISOString() : null,
+    lastSeen: Number.isFinite(received) && received <= instant ? new Date(received).toISOString() : null};
 }
 export default async function onRequest({request, env = {}}) {
   const url = new URL(request.url), old = url.pathname === '/computer-access/state';
@@ -61,7 +64,7 @@ export default async function onRequest({request, env = {}}) {
   const validDevice = /^[A-Za-z0-9_-]{43}$/.test(device);
   const headers = new Headers({'Cache-Control': 'no-store', Vary: old ? 'Origin, Accept-Encoding, X-Cockpit-Device' : 'X-Cockpit-Device, Origin, Accept-Encoding', Date: new Date(instant).toUTCString()});
   headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS'); headers.set('Access-Control-Allow-Headers', 'X-Cockpit-Device, If-None-Match');
-  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Connection'); headers.set('Access-Control-Max-Age', '86400');
+  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Connection, X-Live-Offline-Since, X-Live-Last-Seen'); headers.set('Access-Control-Max-Age', '86400');
   if (origins.has(request.headers.get('Origin'))) { headers.set('Access-Control-Allow-Origin', request.headers.get('Origin')); headers.set('Access-Control-Allow-Credentials', 'true'); }
   const reply = (value, status = 200) => { headers.set('Content-Type', 'application/json; charset=utf-8'); return new Response(request.method === 'HEAD' || status === 304 ? null : JSON.stringify(value), {status, headers}); };
   const fail = (error, text, status = 503) => reply({error, text, now}, status);
@@ -129,7 +132,12 @@ export default async function onRequest({request, env = {}}) {
     query.delete('opened');
     const variant = String(query);
     const resource = url.pathname.slice(prefix.length) + (variant ? '?' + variant : '');
-    const {at, audience} = await cloudSnapshot(resource);
+    const {at, audience, hostOffAt, lastSeen} = await cloudSnapshot(resource);
+    if (lastSeen) headers.set('X-Live-Last-Seen', lastSeen);
+    if (hostOffAt && connection === 'unreachable') {
+      headers.set('X-Live-Connection', 'host-off');
+      headers.set('X-Live-Offline-Since', hostOffAt);
+    }
     headers.set('X-Live-Source', 'oss');
     headers.set('X-Live-Fallback-Policy', FALLBACK_POLICY);
     headers.set('X-Live-Fallback-Audience', audience);
