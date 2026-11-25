@@ -15,6 +15,8 @@
   const back = fromList ? fromList.pathname + fromList.search + fromList.hash : T.path('/live/automation/', { category });
   const listLabel = fromList && fromList.searchParams.get('category') !== category ? '自动任务' : '';
   let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
+  // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
+  const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
@@ -165,7 +167,7 @@
     const r = R.detail(d, viewer);
     const program = r.who?.program;
     watchChat(program ? {} : r.conversation);
-    T.paint(page.root, `<div class="ar-head"><h1>${title(r)}</h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
+    paint(page.root, `<div class="ar-head"><h1>${title(r)}</h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       <div class="ar-grid"><div class="ar-main">
         <section class="tp-panel ar-card"><h2>为什么开这一轮</h2>${why(r)}</section>
         <section class="tp-panel ar-card"><h2>这一轮做成了什么</h2>${outputs(r)}</section>

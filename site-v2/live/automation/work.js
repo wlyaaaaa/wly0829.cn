@@ -26,6 +26,9 @@
   let audience = 'public';
   const list = v => Array.isArray(v) ? v : [];
   const own = () => audience === 'owner' ? '你' : '本人';
+  // 访客版称呼：后台字里指本人的“你”换成“本人”（和 runs.js 的 asOwner 同一套说法；私事线 11-26），引号里别人说的“你好”这类不碰
+  const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
+  const asOwner = html => audience === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
   const field = (value, name) => U.fieldHtml(value, { kind: audience, name });
   const words = (...values) => values.filter(Boolean).map(value => field(value)).join(' · ');
   const instant = value => {
@@ -207,8 +210,11 @@
       ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
       ? `<details class="aw-past"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
-    const sources = list(data.sources);
-    const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty('这里还看不到'), { symbol: 'search' })}
+    // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。
+    // 已撤的类不再收活，照实说；没撤的照常写这里还看不到
+    const sources = list(data.sources).filter(row => row && (row.label ?? row.title) !== '这里还看不到');
+    const noSource = retired(data.id) ? '这一类已撤，不再从哪里收活；撤之前的来源这里没留记录' : '这里还看不到这一类从哪里收活';
+    const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty(noSource), { symbol: 'search' })}
       ${panel('结果和趋势 · 近 7 天', results(data, rows), { symbol: 'check', cls: readOnly ? 'aw-wide' : '' })}${readOnly ? '' : panel('设置记录', settingLog(data), { symbol: 'gear' })}</div>`;
     return head + lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : '');
   }
@@ -313,7 +319,7 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data), false);
+    U.html(root, asOwner(work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data)), false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;
