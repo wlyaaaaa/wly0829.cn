@@ -413,20 +413,46 @@
       <p class="tp-small au-foot">不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。</p></section>`;
   }
 
-  // —— 各家自带的定时（M183）：定稿只许拿来叫醒当前对话接着干，反复跑的活在上面总表里。三家都列，没有就写没有 ——
+  // —— 各家自带的定时（M183、M921）：三家都列，没有就写没有。各家原生定时也可能开一场新对话，所以不再说“只用来叫醒当前对话” ——
+  // 时间只写一次（M928 第 5 处）：重复周期配上下一次的北京星期和时刻，写成“每周二 00:00（北京）”，不写外国时区名；
+  // 一次性的写日期和时分。调度器另报的预计时刻和原定不在同一分钟才补“预计 …（北京）”。
+  // 后台没给 next_beijing_* 这几个字段、或周期认不出（cron 原文、“每小时”这类）时照原来的写法。
+  const zhDate = at => { const t = T.stamp(at); if (t == null) return ''; const d = new Date(t + 8 * 3600000); return `${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`; };
+  const zhAt = at => `${zhDate(at)} ${clock(at)}（北京）`;
+  function plan(r) {
+    const p = typeof r.period === 'string' ? r.period.trim() : '', due = r.next_nominal_at || r.next_at;
+    if (p === '一次性' || p === '单次运行') return due && T.stamp(due) != null ? zhAt(due) : '';
+    const wd = typeof r.next_beijing_weekday === 'string' ? r.next_beijing_weekday.replace(/^星期/, '周') : '';
+    const at = typeof r.next_beijing_time === 'string' && /^\d{2}:\d{2}$/.test(r.next_beijing_time) ? r.next_beijing_time : '';
+    const m = p.match(/^每\s*(\d*)\s*(周|天|月|年)/);
+    if (!wd || !at || !m) return '';
+    const n = m[1] && m[1] !== '1' ? ` ${m[1]} ` : '', about = p.includes('左右') ? ' 左右' : '';
+    const date = zhDate(r.next_nominal_at);
+    const cycle = m[2] === '周' ? (n ? `每${n}周的${wd}` : `每${wd}`) : m[2] === '天' ? `每${n || ''}天`
+      : !date ? '' : m[2] === '月' ? `每${n ? `${n}个月的 ` : '月 '}${date.replace(/^\d+ 月 /, '')}` : `每年 ${date}`;
+    return cycle ? `${cycle} ${at}${about}（北京）` : '';
+  }
   function scheduled(d) {
     if (!Array.isArray(d.scheduled_activities)) return '';
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
     const hosts = ['Claude', 'Codex', 'Antigravity'];
     for (const r of rows) if (r.producer && !hosts.includes(r.producer)) hosts.push(r.producer);
-    const item = r => `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
+    const item = r => {
+      const when1 = plan(r);
+      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
+      const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
+      const late = est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000) ? `预计 ${zhAt(r.next_estimated_at)}` : '';
+      return `<li><b>${esc(when1)}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small></li>`;
+    };
+    // Claude 只接本机执行的定时（本人 11-25 22:13 定），claude.ai 上建的不接：在 Claude 那行写明
+    const scope = { Claude: d.scheduled_sources?.claude?.scope === 'local_execution' ? '这里只列本机执行的定时，claude.ai 上建的看不到' : '' };
     const body = hosts.map(h => {
       const mine = rows.filter(r => r.producer === h).sort((a, b) => T.stamp(b.next_at || b.at) - T.stamp(a.next_at || a.at));
-      const notes = gaps.filter(g => g.includes(h)).map(g => `<small>${esc(g)}</small>`).join('');
+      const notes = [scope[h], ...gaps.filter(g => g.includes(h))].filter(Boolean).map(g => `<small>${esc(g)}</small>`).join('');
       return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : '没有'}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
-    return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>只用来叫醒当前对话接着干，反复跑的活都在上面${kinds(d)}里</small></p>
+    return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>反复跑的活都在上面${kinds(d)}里</small></p>
       <table class="tp-table au-mini-table"><tbody>${body}</tbody></table>${rest}</div>`;
   }
 

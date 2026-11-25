@@ -43,10 +43,12 @@
   const write = (el, html) => { U.html(el, html, false); el.hidden = !html; };
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
+  // 平台名：三家都认（Antigravity 的定时详情 11-25 起也走这一页，M921）
+  const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
   const provider = v => {
-    const name = text(v);
-    return /^(codex|claude)$/i.test(name)
-      ? `<span class="task-provider" data-provider="${name.toLowerCase()}">${name.toLowerCase() === 'codex' ? 'Codex' : 'Claude'}</span>`
+    const name = text(v), id = typeof name === 'string' ? name.toLowerCase() : '';
+    return Object.hasOwn(PROVIDERS, id)
+      ? `<span class="task-provider" data-provider="${id}">${PROVIDERS[id]}</span>`
       : field(v, '执行者');
   };
   const label = (state, variant) => ({
