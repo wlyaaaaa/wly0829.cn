@@ -364,8 +364,9 @@
     const g = G[c.id] || {}, p = pauseOf(d, c.id), owed = c.id === 'ai-commitments' ? promised() : null;
     const now = p ? `<span class="au-warn">${pauseText(p)}</span>` : c.running ? '<span class="au-ok">正在跑</span>'
       : owed ? (owed.next ? `下一件 ${esc(when(owed.next))}` : '') : c.next_at ? `下次 ${esc(when(c.next_at))}` : c.waiting_for ? F(c.waiting_for) : '';
-    // 点了落到账本页“欠着 · AI 在修的”那块开头
-    const head = !owed ? esc(g.when || '') : link('/live/ledger/#owed', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
+    // 点了落到账本页“欠着 · AI 在修的”那块开头，并选好“约好再查的”筛选，进去列的就是这几件（主控 11-26 02:20 定）；
+    // 落点停在筛选按钮那一排（紧挨着“欠着”那块上面），亮着的“约好再查的”和下面的件数一眼都看得到
+    const head = !owed ? esc(g.when || '') : link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
     return `${head}${now ? `<small>${now}</small>` : ''}`;
   }
   // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面

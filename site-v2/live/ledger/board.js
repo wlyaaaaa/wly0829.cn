@@ -11,7 +11,7 @@
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
-  let state, viewer = 'public', filter = params.get('outcome') || '', kind = '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
+  let state, viewer = 'public', filter = params.get('outcome') || '', kind = ['promised', 'repair'].includes(params.get('kind')) ? params.get('kind') : '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
   let older = [], olderNext, olderBusy = false;
   // 首页 AI 账本卡点进来的那几件：?view=open|opened|closed|due|overdue|opened_7d|closed_7d（数据约定-前端升级 §11）。读 ledger?view=…，
   // 后台返回 {view, started_at, items, total, next}，件数和卡上那个数是同一份；续页把 next 当 cursor，保留 view
@@ -75,13 +75,13 @@
     return `<svg class="tp-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="近 7 天每天新进和了结">${out}</svg>`;
   }
 
-  // —— 筛选按钮：全部｜约好再查的｜修理暂缓的。点了下面“欠着”“放着”两块只列这一种，只在页面里筛、不调后台 ——
+  // —— 筛选按钮：全部｜约好再查的｜修理暂缓的。点了下面“欠着”“放着”两块只列这一种，只在页面里筛、不调后台；网址 ?kind=promised|repair 进来先选好 ——
   // 自动修理记下、暂时放着的是“修理暂缓的”，其余是 AI 答应了再查的（和自动任务页“AI 约好的事 N 件在等”同一种分法）
   const KINDS = [['', '全部'], ['promised', '约好再查的'], ['repair', '修理暂缓的']];
   const kindOf = it => [it.registered_by, it.registered_by_text].some(v => U.fieldText(v ?? '', viewer).trim() === '自动修理') ? 'repair' : 'promised';
   function kinds(d) {
     const all = owed(d), n = k => k ? all.filter(it => kindOf(it) === k).length : all.length;
-    return `<nav class="lg-kinds" aria-label="只看一种">${KINDS.map(([k, label]) =>
+    return `<nav class="lg-kinds" id="kinds" aria-label="只看一种">${KINDS.map(([k, label]) =>
       `<button type="button" class="lg-kind" data-kind="${k}" aria-pressed="${kind === k}">${label} <b>${int(n(k))}</b></button>`).join('')}</nav>`;
   }
 
@@ -352,7 +352,13 @@
     if (p) { autoPick = false; pick(p.dataset.pick); return; }
     if (f) { filter = f.dataset.filter; T.keep(page.root, `[data-filter="${filter}"]`, draw); return; }
     const k = e.target.closest('[data-kind]');
-    if (k) { kind = k.dataset.kind; T.keep(page.root, `[data-kind="${kind}"]`, draw); return; }
+    if (k) {
+      kind = k.dataset.kind;
+      // 网址跟着改（?kind=promised|repair），刷新后还是这一种；自动任务页“AI 约好的事 N 件在等 ›”就是带 ?kind=promised 进来的
+      if (kind) params.set('kind', kind); else params.delete('kind');
+      const q = params.toString(); history.replaceState(history.state, '', `${location.pathname}${q ? `?${q}` : ''}${location.hash}`);
+      T.keep(page.root, `[data-kind="${kind}"]`, draw); return;
+    }
     const more = e.target.closest('[data-more]');
     if (more) { showAll[more.dataset.more] = !showAll[more.dataset.more]; T.keep(page.root, `[data-more="${more.dataset.more}"]`, draw); return; }
     if (e.target.closest('[data-older]')) readOlder();
