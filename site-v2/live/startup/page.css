@@ -25,15 +25,15 @@
 .su-card[data-pic] { --win: clamp(180px, 17%, 230px); }
 .su-card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .72); }
 .su-card--short[data-pic] { --win: clamp(160px, 14%, 200px); }
-.su-title { margin: 0; font-family: var(--black); font-weight: 900; font-size: 25px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }
-.su-sub { margin: 6px 0 0; font-size: 14px; line-height: 22px; letter-spacing: .03em; color: var(--muted); }
+.su-title { margin: 0; font-family: var(--black); font-weight: 900; font-size: 28px; line-height: 36px; letter-spacing: .02em; color: var(--ink); }
+.su-sub { margin: 6px 0 0; font-size: 14.5px; line-height: 22px; letter-spacing: .03em; color: var(--muted); }
 .su-say { margin: 14px 0 0; font-size: 14px; line-height: 22px; color: var(--muted); }
 .su-box > .su-say:first-child { margin-top: 10px; }
 
 /* 一张表：软件、从哪自启、设了自启、这次开机 */
 .su-cols, .su-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.45fr) 96px minmax(0, 1.05fr); column-gap: 18px; align-items: baseline; }
-.su-cols { margin-top: 22px; padding: 0 14px 10px; font-size: 13.5px; letter-spacing: .04em; color: var(--muted); }
-.su-row { padding: 9px 14px; border-bottom: 1px solid rgb(95 103 96 / .1); font-size: 14.5px; line-height: 22px; color: var(--ink); }
+.su-cols { margin-top: 22px; padding: 0 14px 8px; font-size: 14px; letter-spacing: .04em; color: var(--muted); }
+.su-row { padding: 7px 14px; border-bottom: 1px solid rgb(95 103 96 / .1); font-size: 15.5px; line-height: 23px; color: var(--ink); }
 .su-row > span { min-width: 0; overflow-wrap: anywhere; }
 .su-name { font-weight: 500; }
 .su-from { color: var(--ink-soft); }
@@ -43,7 +43,7 @@
 .su-now--none { color: var(--muted); }
 .su-now--wait { color: #c86400; }
 .su-now--bad { color: #b0150f; }
-.su-band { margin-top: 12px; padding: 7px 14px; border-radius: 8px; background: rgb(228 230 248 / .72); font-size: 14px; line-height: 20px; letter-spacing: .03em; color: var(--ink-soft); }
+.su-band { margin-top: 12px; padding: 6px 14px; border-radius: 8px; background: rgb(228 230 248 / .72); font-size: 15px; line-height: 20px; letter-spacing: .03em; color: var(--ink-soft); }
 .su-cols + .su-band { margin-top: 0; }
 .su-band b { font-weight: 600; color: var(--ink); }
 .su-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
@@ -59,9 +59,9 @@
 .su-bar { display: flex; align-items: baseline; gap: 6px; width: 100%; min-height: 50px; padding: 13px 20px; border: 0; border-radius: 14px; background: transparent; font: inherit; text-align: left; color: var(--ink); cursor: pointer; }
 .su-bar:hover { background: rgb(255 255 255 / .5); }
 .su-bar:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
-.su-bar b { font-size: 16.5px; font-weight: 700; letter-spacing: .02em; }
-.su-bar__n { font-size: 15px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.su-bar__state { margin-left: auto; font-size: 14.5px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.su-bar b { font-size: 17.5px; font-weight: 700; letter-spacing: .02em; }
+.su-bar__n { font-size: 16px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.su-bar__state { margin-left: auto; font-size: 15px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
 .su-bar__state .su-warn { color: #e07800; }
 .su-bar__state .su-bad { color: #c8261d; }
 .su-bar__chev { display: inline-block; margin-left: 8px; color: var(--muted); transition: rotate calc(200ms * var(--sp)) ease; }
@@ -73,7 +73,7 @@
 
 /* 变化记录 */
 .su-changes { margin-top: 16px; }
-.su-change { display: grid; grid-template-columns: 112px 78px minmax(0, 1fr); column-gap: 18px; align-items: center; padding: 9px 14px; border-top: 1px solid rgb(95 103 96 / .1); font-size: 14.5px; line-height: 22px; }
+.su-change { display: grid; grid-template-columns: 118px 80px minmax(0, 1fr); column-gap: 18px; align-items: center; padding: 8px 14px; border-top: 1px solid rgb(95 103 96 / .1); font-size: 15.5px; line-height: 22px; }
 .su-change:last-child { border-bottom: 1px solid rgb(95 103 96 / .1); }
 .su-change time { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .su-change > span:last-child { min-width: 0; overflow-wrap: anywhere; }
