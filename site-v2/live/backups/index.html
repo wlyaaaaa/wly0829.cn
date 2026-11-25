@@ -34,6 +34,9 @@
 .page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
 /* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
 .page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
+.page--backups .backup-at > span { white-space: nowrap; }
+/* 窗口不到 1440 宽：大小列放不下整个时刻（“11-16 07:38”伸出灰底），日期和钟点分两行；1440 宽不变（M781） */
+@media (max-width: 1439px) { .page--backups .backup-grid td:nth-child(3) .backup-at { white-space: normal; } }
 .page--backups .backup-grid b { font-weight: 400; }
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
 /* G、H 盘这一轮按备上多少分档，和计划任务同一套颜色（M780、M806）：大部分成功黄、部分成功橙、备份失败红；字用深一点的同色，格底一条粗色线 */
