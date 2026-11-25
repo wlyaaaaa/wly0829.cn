@@ -42,10 +42,11 @@ async function cloudSnapshot(resource) {
   // OSS 上这份按 gzip 存，不管请求头一律回压缩字节（Content-Encoding: gzip）；运行时没替我们解压时开头是 1f 8b，自己解（M817）。
   // 限时用 AbortController：EdgeOne 运行时文档只列了它和 AbortSignal.abort()，没列 AbortSignal.timeout()。
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 5000);
-  let bytes;
+  let bytes, modified;
   try {
     const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: controller.signal});
     if (!response.ok) throw Error('snapshot');
+    modified = response.headers.get('Last-Modified');
     bytes = new Uint8Array(await response.arrayBuffer());
   } finally { clearTimeout(timer); }
   const value = JSON.parse(new TextDecoder().decode(bytes[0] === 0x1f && bytes[1] === 0x8b ? await gunzip(bytes) : bytes)), proof = value?.publication;
@@ -57,7 +58,11 @@ async function cloudSnapshot(resource) {
   const packet = value.metadata_only === false && at && block.seq === value.seq && block.viewer?.kind === 'public' &&
     block.data && typeof block.data === 'object' && !Array.isArray(block.data) && Object.keys(block.data).length
     ? {v: 1, seq: block.seq, at, viewer: {kind: 'public'}, data: block.data} : null;
-  return {at, audience: proof.audience, packet};
+  // 关机标记：电脑正常关机时最后写的那份带 host_off_at，且和整包时刻一样；Last-Modified 是云端收到这份的时刻（后台 43fef13ec）。
+  const instant = Date.now(), received = Date.parse(modified);
+  const hostOff = value.v === 1 && Number.isInteger(value.seq) && value.host_off_at === value.at && Date.parse(value.at) <= instant;
+  return {at, audience: proof.audience, packet, hostOffAt: hostOff ? new Date(value.at).toISOString() : null,
+    lastSeen: Number.isFinite(received) && received <= instant ? new Date(received).toISOString() : null};
 }
 export default async function onRequest({request, env = {}}) {
   const url = new URL(request.url), old = url.pathname === '/computer-access/state';
@@ -65,7 +70,7 @@ export default async function onRequest({request, env = {}}) {
   const validDevice = /^[A-Za-z0-9_-]{43}$/.test(device);
   const headers = new Headers({'Cache-Control': 'no-store', Vary: old ? 'Origin, Accept-Encoding, X-Cockpit-Device' : 'X-Cockpit-Device, Origin, Accept-Encoding', Date: new Date(instant).toUTCString()});
   headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS'); headers.set('Access-Control-Allow-Headers', 'X-Cockpit-Device, If-None-Match');
-  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Fallback-At, X-Live-Connection'); headers.set('Access-Control-Max-Age', '86400');
+  headers.set('Access-Control-Expose-Headers', 'ETag, Date, X-Live-Source, X-Live-Fallback-Policy, X-Live-Fallback-Audience, X-Live-Fallback-At, X-Live-Connection, X-Live-Offline-Since, X-Live-Last-Seen'); headers.set('Access-Control-Max-Age', '86400');
   if (origins.has(request.headers.get('Origin'))) { headers.set('Access-Control-Allow-Origin', request.headers.get('Origin')); headers.set('Access-Control-Allow-Credentials', 'true'); }
   const reply = (value, status = 200) => { headers.set('Content-Type', 'application/json; charset=utf-8'); return new Response(request.method === 'HEAD' || status === 304 ? null : JSON.stringify(value), {status, headers}); };
   const fail = (error, text, status = 503) => reply({error, text, now}, status);
@@ -134,7 +139,12 @@ export default async function onRequest({request, env = {}}) {
     query.sort(); // 包里的资源键和浏览器一样按参数名排好
     const variant = String(query);
     const resource = url.pathname.slice(prefix.length) + (variant ? '?' + variant : '');
-    const {at, audience, packet} = await cloudSnapshot(resource);
+    const {at, audience, packet, hostOffAt, lastSeen} = await cloudSnapshot(resource);
+    if (lastSeen) headers.set('X-Live-Last-Seen', lastSeen);
+    if (hostOffAt && connection === 'unreachable') {
+      headers.set('X-Live-Connection', 'host-off');
+      headers.set('X-Live-Offline-Since', hostOffAt);
+    }
     headers.set('X-Live-Source', 'oss');
     headers.set('X-Live-Fallback-Policy', FALLBACK_POLICY);
     headers.set('X-Live-Fallback-Audience', audience);
