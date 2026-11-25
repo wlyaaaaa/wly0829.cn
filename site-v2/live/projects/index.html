@@ -128,10 +128,11 @@
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
 #changes .pj-changes-actions .more { margin: 0; translate: none; }
-/* 冻结入口在偶用那组下面、同一行的右边（本人 11-24 20:34，图5 那处）：“冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；
-   和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
-#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-end; width: max-content; max-width: 100%; margin-left: auto; }
-#frozen-head > .more { height: auto; margin: 0; translate: 10px 0; }
+/* 冻结入口在偶用那组下面，紧挨左边“展开（还有 N 条）／在用项目名册截至 …”的右边（本人 11-24 20:34，图5 红框那处），左边对齐第二列卡片：
+   “冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。
+   点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
+#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: max-content; max-width: 100%; margin-left: calc((100% - 48px) / 3 + 24px); }
+#frozen-head > .more { height: auto; margin: 0; }
 #frozen-head > .row__sub { margin: 2px 0 0; }
 #frozen-rest { padding-top: 24px; }
 /* 全部变化、成品标题右边的“近 7 天｜近 30 天｜全部”：和智能体页工期、工作量、钩子那三排同一个样子（_lib/live-tape.css 的 .tp-seg，选中绿底白字照 agents/page.css 的 .ag-tseg）。

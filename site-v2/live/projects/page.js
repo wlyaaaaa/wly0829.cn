@@ -36,7 +36,7 @@
   }
   function updateCutoff(key, data) {
     const section = $(key === 'changes' ? 'changes-footer' : key), at = stamp(data?.at);
-    // 冻结名册的截至时刻跟着“冻结 N 个 ›”排在偶用那组右边；只看冻结的时候照旧写在名册底下
+    // 冻结名册的截至时刻跟着“冻结 N 个 ›”排在偶用那组下面、左边那几行字的右边；只看冻结的时候照旧写在名册底下
     const host = key === 'frozen' && !frozenOnly ? $('frozen-head') : section;
     const label = { active: '在用项目名册截止', frozen: '冻结项目名册截止', changes: '项目变化截止' }[key];
     const legacy = !at && isStale(data) && staleText(data);
@@ -50,7 +50,7 @@
     if (key !== 'changes') alignFrozen();
   }
   // “冻结 N 个 ›”和下面那行截至时刻往上提，和偶用那组最后的“展开（还有 N 条）”同一行起（没有展开就和“在用项目名册截至”同一行）；
-  // 那组点开了、或两行都没有，就在下面右边自成一行。提多少按当时版面量；高度至少垫到左边最后一行字底下，下面的近 30 天不会压上来，也不多空一截。
+  // 横着的位置在 index.html 里定（左边对齐第二列卡片，图5 那处）。那组点开了、或两行都没有，就在下面自成一行。提多少按当时版面量；高度至少垫到左边最后一行字底下，下面的近 30 天不会压上来，也不多空一截。
   function alignFrozen() {
     const head = $('frozen-head');
     head.style.marginTop = head.style.minHeight = '';
