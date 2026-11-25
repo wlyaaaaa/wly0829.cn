@@ -20,6 +20,10 @@
   let viewMore = [], viewNext, viewBusy = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
+  // 访客版称呼：本页上“你”都写“本人”，后台写进句子里的也算（“你们”不动）；本人版原样
+  const say = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
+  // 本人版的两种签（访客看不到、对外换了说法），照后台 visitor_labels 挂在原位；访客版不挂
+  const vtag = (obj, keys, what) => { const t = viewer === 'owner' && obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
   // 还欠着的只算在做、在等、暂时不修这三种（后台 summary.open 也这样算）；本人定了不修的不算欠着，放进“最近了结的”
   const owed = d => list(d.items).filter(it => it.state);
@@ -104,8 +108,8 @@
     const nx = stamp(nextOf(it)), over = it.overdue || (nx && nx < now), limit = int(it.check_limit || 3);
     const nth = known(it.check_count) ? `第 ${int(it.check_count + 1)} 次，最多 ${limit} 次` : '';
     const late = group === 'owed' && it.overdue && it.fixer?.text, wait = it.wait?.text || it.when;
-    const why = group === 'parked' && it.park?.text ? `为什么放着：${F(it.park.text, '为什么放着')}`
-      : wait ? waitText(wait) : group === 'owed' && !late && it.fixer?.text ? F(it.fixer.text, '在等什么') : '';
+    const why = group === 'parked' && it.park?.text ? `为什么放着：${F(it.park.text, '为什么放着')}${vtag(it.park, 'text', '为什么放着这句')}`
+      : wait ? waitText(wait) + (it.wait?.text ? vtag(it.wait, 'text', '在等什么这句') : '') : group === 'owed' && !late && it.fixer?.text ? F(it.fixer.text, '在等什么') + vtag(it.fixer, 'text', '在等什么这句') : '';
     const time = full(it) ? `<b class="lg-over">${limit} 次看满了，AI 停手</b>` : late ? F(it.fixer.text, '到点还没了结')
       : nx ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`) : '';
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
@@ -131,7 +135,7 @@
       const bar = acc ? `<i class="lg-bar" style="left:${x(acc)}%;width:${Math.max(.6, x(now) - x(acc))}%"></i><i class="lg-start${acc < from ? ' is-cut' : ''}" style="left:${x(acc)}%"></i>` : '';
       const dots = checks.map(c => `<i class="lg-check" style="left:${x(stamp(c.at))}%" title="${esc(when(c.at))} 看过${c.text ? '：' + esc(U.fieldText(c.text, viewer)) : ''}"></i>`).join('');
       const next = nx && !full(it) ? `${nx > now ? `<i class="lg-link" style="left:${x(now)}%;width:${Math.max(0, x(nx) - x(now))}%"></i>` : ''}<i class="lg-next${over ? ' is-over' : ''}${nx > to ? ' is-far' : ''}" style="left:${x(nx)}%" title="下次看 ${esc(when(nextOf(it)))}"></i>${nx > to ? `<span class="lg-farlabel">${esc(day(nextOf(it)))} ›</span>` : ''}` : '';
-      return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '事项标题')}</button>${tag}<p>${itemMeta(it, group, now)}</p></div>
+      return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '事项标题')}</button>${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}${tag}<p>${itemMeta(it, group, now)}</p></div>
         <div class="lg-lane">${bar}${dots}${next}</div></li>`;
     };
     const legend = '<p class="tp-legend lg-key"><span><i class="lg-key__bar"></i>记下到现在</span><span><i class="lg-key__check"></i>看过</span><span><i class="lg-key__next"></i>下次看</span><span><i class="lg-key__over"></i>到了日子还没看</span></p>';
@@ -190,7 +194,7 @@
         `<button type="button" data-filter="${k}" aria-pressed="${filter === k}">${settledLabel(k)} ${int(counts[k])}</button>`).join('')}</div>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 件：${why7}</p>` : ''}
       <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
-        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
+        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
       <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-older${olderBusy ? ' disabled' : ''}>${olderBusy ? '正在读…' : '看更早的 ›'}</button>` : ''}<span class="tp-small">已读到 ${int(rows.length)} 件${next ? '，还有更早的' : ''}</span></div></section>`;
   }
@@ -230,16 +234,18 @@
       const head = esc(n > 1 ? span(a.at, z.at) : when(a.at));
       const body = n > 1 ? `${every ? every + '一次，' : ''}${a.event === 'attempt' && !SETTLED[out] && !ROUND[out] ? `处理了 ${n} 轮` : `${label}，共 ${n} 次`}${g.text ? `，都是：${esc(g.text)}` : ''}` : `${label}${g.text ? `：${esc(g.text)}` : ''}`;
       // 这一步是哪一轮、哪场对话做的：后台给了地址（source_href）就挂“那一轮 ›”“那场对话 ›”；没地址照后台给的原因写一句小字（M722“点不进对话”）
+      // 对话被藏的那一步：访客版后台给了那一轮的地址照给，原因（如“这一轮的对话仅本人可见。”）照字写在后面；本人版挂“访客看不到”
       const src = [...g.rows].reverse().map(r => r.source_href || r.automation_run?.href).find(h => T.path(h));
-      const why = !src && g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
-      const go = src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : why ? ` <small class="lg-why">${esc(why)}</small>` : '';
+      const why = g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
+      const hidden = g.rows.flatMap(r => list(r.rounds)).find(x => x?.visitor_labels?.conversation === 'hidden');
+      const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}`;
       return `<li><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it);
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
-    const chips = [it.state === 'working' && '正在办', it.repeat && known(it.reopen_count) && `又出现过 ${int(it.reopen_count)} 次`, known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && `最多 ${int(it.check_limit || 3)} 次`, it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
+    const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 30 天坏了 ${int(it.broken_30d)} 次` : known(it.reopen_count) && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && `最多 ${int(it.check_limit || 3)} 次`, it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
-      <p class="lg-detail__t">${F(titleOf(it), '事项标题')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
+      <p class="lg-detail__t">${F(titleOf(it), '事项标题')}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
       ${it.progress_summary || it.outcome_text ? `<p class="tp-small">${F(it.progress_summary || it.outcome_text, '进展')}</p>` : ''}
       <ol class="lg-steps">${lines || (it.accepted || it.first_at ? `<li><b>${esc(when(it.accepted || it.first_at))}</b>${it.repeat ? '第一次出现' : 'AI 接手'}</li>${it.repeat && it.last_at ? `<li><b>${esc(when(it.last_at))}</b>最近一次又出现</li>` : ''}` : '')}${!lines && it.settled ? `<li><b>${it.at && stamp(it.at) !== stamp(it.accepted) ? esc(when(it.at)) : '哪天定的没记下'}</b>${settledLabel(it.settled)}</li>` : ''}${it.settled ? '' : full(it) ? `<li class="is-next"><b>现在</b>${int(it.check_limit || 3)} 次看满了，AI 停手${it.when ? `，${waitText(it.when)}` : ''}</li>`
         : next ? `<li class="is-next"><b>${esc(when(next))}</b>下次看${known(it.check_count) ? `，第 ${int(it.check_count + 1)} 次` : ''}</li>` : ''}</ol>
@@ -290,7 +296,7 @@
         : it.state === 'working' ? '<span class="tp-tag lg-running">正在办</span>' : '<span class="tp-tag" data-tone="soft">在跟</span>';
       const meta = done ? (it.at ? `了结 ${esc(when(it.at))}` : '') : nx && !full(it) ? `${over ? '原定' : '下次看'} ${esc(when(nx))}` : full(it) ? '看满了' : '';
       const sub = [it.accepted && `${esc(when(it.accepted))} 记下`, !done && checkText(it)].filter(Boolean).join(' · ');
-      return `<li>${tag}<span>${link(it.href || (it.id ? `/live/issue/?id=${encodeURIComponent(it.id)}` : ''), F(titleOf(it), '事项标题'))}${sub ? `<small class="lg-view__sub">${sub}</small>` : ''}</span><time>${meta}</time></li>`;
+      return `<li>${tag}<span>${link(it.href || (it.id ? `/live/issue/?id=${encodeURIComponent(it.id)}` : ''), F(titleOf(it), '事项标题'))}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}${sub ? `<small class="lg-view__sub">${sub}</small>` : ''}</span><time>${meta}</time></li>`;
     };
     return `<section class="tp-panel lg-done lg-view" id="view"><div class="tp-panel__head"><h2>${VIEW[view]} ${int(total)} 件${view === 'due' ? '<small>过期的排最前</small>' : ''}</h2>
         <span class="tp-asof">${since ? `新账从 ${esc(day(since))} ${esc(T.clock(since))} 起算` : '新账正在重算'} · ${link('/live/ledger/', '看全部账本 ›')}</span></div>
@@ -313,14 +319,14 @@
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, 'AI 自动任务账本')); page.tick.set([], { off: true }); return; }
     if (view) {
-      T.paint(page.root, `<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
-        <p class="tp-head__side"><span>截至 ${esc(when(d.at || d.as_of))}</span></p></div>${T.stateNote(state)}${viewList(d)}`);
+      T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
+        <p class="tp-head__side"><span>截至 ${esc(when(d.at || d.as_of))}</span></p></div>${T.stateNote(state)}${viewList(d)}`));
       page.tick.set([], { off: state.offline });
       return;
     }
-    T.paint(page.root, `<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
+    T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}<span>截至 ${esc(when(d.at))}</span></p></div>
-      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`);
+      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && (location.hash || asked)) landed = T.reveal(location.hash.slice(1) || 'detail');
