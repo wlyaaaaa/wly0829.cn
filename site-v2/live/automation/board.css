@@ -219,6 +219,7 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .tp a.au-card__go { display: inline-flex; align-items: center; gap: 4px; padding: 6px 4px 6px 12px; font-size: 15px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
 .tp a.au-card__go:hover { text-decoration: underline; text-underline-offset: 3px; }
 .au-capped { margin: -10px 0 16px 2px; }
+.au-roundsnote { margin: -4px 0 12px 2px; }
 
 /* 更早的 · 近 30 天按天看 */
 .au-older { margin: 4px 0 30px; text-align: center; }

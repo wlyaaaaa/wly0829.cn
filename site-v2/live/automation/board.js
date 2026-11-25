@@ -122,20 +122,25 @@
     if (filter.date || !Array.isArray(d?.items)) { backPages.delete(id); return; }
     const edge = query.scope ? -Infinity : Date.now() - 72 * 3600000, past = items => items.length > 0 && (lastAtOf(items.at(-1)) ?? Infinity) < edge;
     const sign = `${st.viewer?.kind || ''}|${d.items[0]?.run_id}|${d.items.length}|${d.next ?? ''}`;
-    if (backPages.get(id)?.sign === sign) return;
-    const job = { sign, rows: [], done: d.next == null || past(d.items) };
+    // 第一页没变：读完了或正在读就不动；上次读到一半断了（某一批没读到），从断的那一批接着读，已读到的留着
+    const old = backPages.get(id);
+    if (old?.sign === sign && (old.done || old.busy)) return;
+    const job = old?.sign === sign ? old : { sign, rows: [], next: d.next, done: d.next == null || past(d.items) };
     backPages.set(id, job);
     if (job.done) return;
+    job.busy = true;
     (async () => {
       const seen = new Set();
-      for (let next = d.next; next != null && !seen.has(String(next));) {
-        seen.add(String(next));
-        const s = await Live.get('automation/runs', { ...query, cursor: next }).catch(() => null);
-        if (backPages.get(id) !== job || !Array.isArray(s?.data?.items)) break;
-        job.rows.push(...s.data.items);
-        next = s.data.next;
-        if (next == null || past(s.data.items)) { job.done = true; break; }
-      }
+      try {
+        while (job.next != null && !seen.has(String(job.next))) {
+          seen.add(String(job.next));
+          const s = await Live.get('automation/runs', { ...query, cursor: job.next }).catch(() => null);
+          if (backPages.get(id) !== job || !Array.isArray(s?.data?.items)) break;
+          job.rows.push(...s.data.items);
+          job.next = s.data.next;
+          if (job.next == null || past(s.data.items)) { job.done = true; break; }
+        }
+      } finally { job.busy = false; }
       if (backPages.get(id) === job) schedule();
     })();
   }
@@ -202,11 +207,12 @@
     const rows = got.rows.filter(r => r.category !== 'excerpt' && RUN_IDS.includes(r.category) && (got.board || inWindow(r))
       // 暂缓的轮次照暂缓显示，不算“跑完的”也不算“没做成的”（没有单独的“暂时不修”筛选，主控 11-25）
       && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status && !r.deferred));
-    let live, done, counts;
+    let live, done, counts, doneRounds = null;
     if (got.board) {
       // 两张列表各排各的：自动修理一件在修、之前几轮已跑完的，在修那轮在“进行中”，跑完的几轮在“近 72 小时跑完的”，件数和后台一致（按轮数）
       const lr = rows.filter(r => r.from === 'running'), dr = rows.filter(r => r.from === 'finished');
       [live, done] = [cards(lr), cards(dr)];
+      doneRounds = dr.length;
       const plain = !filter.family && !filter.status;
       counts = { running: plain && known(got.totals.running) ? got.totals.running : got.waiting && !lr.length ? null : lr.length,
         finished: plain && known(got.totals.finished) ? got.totals.finished : got.waiting && !dr.length ? null : dr.length };
@@ -216,7 +222,7 @@
       counts = { running: got.waiting && !live.length ? null : live.length, finished: got.waiting && !done.length ? null : done.length };
     }
     const problems = problemsOf(d);
-    return { ...got, live, done, counts, problems, total: live.length + done.length + problems.length, byId: new Map(got.rows.map(r => [r.key, r])) };
+    return { ...got, live, done, counts, doneRounds, problems, total: live.length + done.length + problems.length, byId: new Map(got.rows.map(r => [r.key, r])) };
   }
   // 出毛病的：现在还挂着的那一处；正在修的照样列，写“AI 在修”（按钮分开以后不会和“进行中”摆在同一处）。
   // 后台第四段给了 board_problems（登录、额度停等的类不在里面，在页头停等条）就照它；没给照各类下的 problem
@@ -364,10 +370,13 @@
     const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
     const doneWhat = `${doneKinds.length ? doneKinds.join('、') : filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
+    // 按钮和标题上的数是轮数（后台两张列表的 total），自动修理同一件的几轮收在一张卡里，卡片张数会少：都读完了、张数确实少时，标题下面说一句（复查挑过对不上）
+    const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
+      ? `<p class="tp-small au-roundsnote">${int(v.doneRounds)} 是轮数：自动修理同一件修了几轮的，收在同一张卡里，所以下面是 ${int(v.done.length)} 张卡。</p>` : '';
     const excerpt = excerptToday?.data && known(excerptToday.data.total) ? `摘一句不在这里列，今天摘了 ${int(excerptToday.data.total)} 句。` : '';
     const left = v.done.length - doneShown;
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
-    return legacy + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished ?? v.done.length, v.done.length ? v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
+    return legacy + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished ?? v.done.length, v.done.length ? rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
       filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + capped + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
   }
   // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
