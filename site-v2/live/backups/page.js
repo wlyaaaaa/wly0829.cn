@@ -37,7 +37,9 @@
   // 右栏每类小标题右边的“展开／收起”：状态记在按钮的 aria-expanded 上，刷新重画时保留
   $('points').addEventListener('click', e => { const btn = e.target.closest('.backup-toggle'); if (btn) btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true')); });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>');
+  // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”连在一起（M781）
+  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>')
+    .replace(/^([^\s<\d][^<]{0,8}?) (?=<span class="backup-unit">\d)/, '<span class="backup-unit">$1</span> ').replace(/ (份 · 按) /, ' <span class="backup-unit">$1</span> ');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
   const restoreText = (d, s) => {
