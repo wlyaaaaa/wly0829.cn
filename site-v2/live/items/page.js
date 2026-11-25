@@ -265,13 +265,10 @@
     for (const id of selected) if (!available.has(id)) { if (unread && selectable.has(id)) available.set(id, selectable.get(id)); else selected.delete(id); }
     // 多选（本人 11-26 03:0x：“每个选项，先勾选，勾选以后可以点按钮，下面的框依然是确认和取消；核对框最终看一下……√了，选这一条，点旁边的按钮，有个选中效果”）：
     // 勾上的那一行，点这一行自己的办法按钮（不办了、晚点提醒、我知道了、关掉）不马上办，只出选中效果（绿字绿边），再点同一行别的办法就换成那个；取消勾选就清掉这行的选择。
-    // 只有一种办法的行一勾上就自动选中。没勾的行按钮照常用。底部栏只有“已选 N 件 · 确认 · 取消”；点“确认”弹核对框，一件一行写这件怎么办，
+    // 没点按钮的行算没选办法。没勾的行按钮照常用。底部栏只有“已选 N 件 · 确认 · 取消”；点“确认”弹核对框，一件一行写这件怎么办，
     // 勾了没选办法的写“没选办法，这次不动”，再确认一次把选了办法的一起办。两版同一套，访客照样能勾、能选，点“确认”照旧弹可信设备说明框。
-    for (const id of selected) {
-      const intents = rowIntents(available.get(id));
-      if (intents.length === 1) planPicks.set(id, intents[0]);
-      else if (!intents.includes(planPicks.get(id))) planPicks.delete(id);
-    }
+    // 勾上只是勾上：点了这一行的按钮才算选中（本人原话两步：先勾，再点按钮），只有一种办法的行也一样，不自动选
+    for (const id of selected) if (!rowIntents(available.get(id)).includes(planPicks.get(id))) planPicks.delete(id);
     for (const id of [...planPicks.keys()]) if (!selected.has(id)) planPicks.delete(id);
     planAvailable = available;
     const open = selected.size > 0;
