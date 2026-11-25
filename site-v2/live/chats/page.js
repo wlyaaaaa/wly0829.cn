@@ -189,11 +189,13 @@
     const day = U.date(at), time = U.time(at);
     return `截至 ${[(!time || day !== U.date(Date.now())) && day, time].filter(Boolean).join(' ')}`;
   }
+  let readingMerged = false;   // “同时在干”图头读数并进了图下那一句（见 drawReading）
   const chartHost = $('chat-concurrent');
   const concurrent = window.LiveChart.create(chartHost, { small: true, unit: '个', bridge: 0, insetEdgeDots: true, lines: [{ id: 'working', label: '同时在干', hue: 'teal' }],
     onRead([reading], pointedAt) {
       const cell = chartHost.querySelector('.chart__val b');
       if (!cell || !reading) return;
+      cell.parentElement.style.display = pointedAt == null && readingMerged ? 'none' : '';
       if (reading.value == null) cell.textContent = '没记录';
       else if (Number.isFinite(reading.at)) cell.textContent = `${pointedAt == null ? (boardOf() ? `最近一次读数 ${dayClock(new Date(reading.at * 1000).toISOString())}` : readAt(reading.at * 1000)) : `所指记录 ${stamp(reading.at * 1000)}`} · ${reading.value} 个`;
     }
@@ -236,27 +238,45 @@
       U.html(host, links.map(link => ` <span class="chat-stat-piece">· ${link}</span>`).join(''), false);
     });
   }
-  // “同时在干”图下那一句。M915 board 模式：整页只有页头一个“截至”；这块比页头旧 2 分钟以上，写“这块停在 23:07，比页面旧 25 分钟 · 原因”，
-  // 后台只给了“最近的对话记录已超过 120 秒”这种没说为什么的，写“原因还没查到”（设计第 7 节；“已交自动修理 ›”要后台给链到哪一件，见交回）
+  // “同时在干”图下那一句。M915 board 模式：整页只有页头一个“截至”。这块读数旧了（比页头旧 2 分钟以上，或最后一个点之后一直没采到），
+  // 照设计第 7 节把图头读数和图下合成一句：“最近一次读数 11-24 23:55 · 0 个，之后约 23 小时没采到；这块停在 11-25 23:07，比页面旧 78 分钟；
+  // 近 7 个自然日共缺约 156 小时 · 原因”，原因只写一次（后台给了缺段原因用后台的，没给写“原因还没查到”），这时图头不再单写时刻；
+  // 有修理入口（coverage_gaps[].repair_href）才带“已交自动修理 ›”。
   let lastCurrent = null;
+  const lapse = ms => ms >= 5400000 ? `约 ${Math.round(ms / 3600000)} 小时` : ` ${Math.max(1, Math.round(ms / 60000))} 分钟`;
   function drawReading() {
     if (!lastCurrent) return;
     const { current, n } = lastCurrent, b = boardOf();
     const reading = $('chat-current-reading'), at = readAt(current?.at);
     const hasCurrent = Number.isFinite(current?.current), generic = current?.gap === '最近的对话记录已超过 120 秒';
     const behind = b && Number.isFinite(Date.parse(current?.at)) && Number.isFinite(Date.parse(b.as_of)) ? Math.floor((Date.parse(b.as_of) - Date.parse(current.at)) / 60000) : null;
-    const gap = b ? (behind != null && behind >= 2 ? `这块停在 ${dayClock(current.at)}，比页面旧 ${behind} 分钟 · ${generic || !current?.gap ? '原因还没查到' : U.fieldText(current.gap)}` : generic ? '' : current?.gap)
-      : generic ? `此刻同时在干暂时读不到${at ? ' · 上次记录' + at : ''}` : current?.gap;
-    const currentText = hasCurrent && !(b && behind >= 2) ? n(current.current, current, 'current', U.offline?.() ? '断开前在干的主对话' : '此刻在干的主对话') + (at && !b ? ` · ${U.nowrap(at)}` : '') : '';
-    const holes = b && Array.isArray(current?.coverage_gaps) ? current.coverage_gaps.filter(g => Number.isFinite(Date.parse(g?.from)) && Number.isFinite(Date.parse(g?.to))) : [];
-    const lastHole = holes.reduce((a, g) => !a || Date.parse(g.to) > Date.parse(a.to) ? g : a, null);
-    const holeHours = holes.reduce((sum, g) => sum + Math.max(0, Date.parse(g.to) - Date.parse(g.from)), 0) / 3600000;
-    const holeSum = holeHours >= 1 ? `合计约 ${Math.round(holeHours)} 小时` : `合计约 ${Math.max(1, Math.round(holeHours * 60))} 分钟`;
-    const holeText = lastHole && esc(`${current.window?.label || '图上这段时间'}有 ${holes.length} 段没采到，${holeSum}；最近一段 ${dayClock(lastHole.from)}–${dayClock(lastHole.to)} · ${U.fieldText(lastHole.reason) || '原因还没查到'}`)
-      + (typeof lastHole.repair_href === 'string' && lastHole.repair_href.startsWith('/live/') ? ` · <a class="more more--link" href="${esc(route(lastHole.repair_href))}">已交自动修理 ›</a>` : '');
-    U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' }), holeText].filter(Boolean).join(' · '));
-    reading.hidden = !currentText && !gap && !holeText;
-    const cell = chartHost.querySelector('.chart__val b');
+    const stale = behind != null && behind >= 2;
+    const currentText = hasCurrent && !(b && stale) ? n(current.current, current, 'current', U.offline?.() ? '断开前在干的主对话' : '此刻在干的主对话') + (at && !b ? ` · ${U.nowrap(at)}` : '') : '';
+    let text = '';
+    readingMerged = false;
+    if (!b) {
+      const gap = generic ? `此刻同时在干暂时读不到${at ? ' · 上次记录' + at : ''}` : current?.gap;
+      text = [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · ');
+    } else {
+      const holes = Array.isArray(current?.coverage_gaps) ? current.coverage_gaps.filter(g => Number.isFinite(Date.parse(g?.from)) && Number.isFinite(Date.parse(g?.to))) : [];
+      const lastHole = holes.reduce((a, g) => !a || Date.parse(g.to) > Date.parse(a.to) ? g : a, null);
+      const holeMs = holes.reduce((sum, g) => sum + Math.max(0, Date.parse(g.to) - Date.parse(g.from)), 0);
+      const points = current?.series?.[0]?.points, last = Array.isArray(points) ? points.findLast(p => Array.isArray(p) && Number.isFinite(p[0]) && p[1] != null) : null;
+      const lastAt = last ? last[0] * 1000 : Date.parse(current?.last_confirmed_at);
+      const trailing = lastHole && Number.isFinite(lastAt) && Date.parse(lastHole.from) >= lastAt - 60000 ? Date.parse(lastHole.to) - Date.parse(lastHole.from) : 0;
+      readingMerged = stale || trailing >= 120000;
+      const why = U.fieldText(lastHole?.reason) || (!generic && current?.gap ? U.fieldText(current.gap) : '') || '原因还没查到';
+      const total = holes.length ? `${current.window?.label || '图上这段时间'}共缺${lapse(holeMs)}` : '';
+      const sentence = readingMerged ? [[Number.isFinite(lastAt) && `最近一次读数 ${dayClock(new Date(lastAt).toISOString())}${last ? ` · ${last[1]} 个` : ''}`,
+        trailing >= 120000 && `之后${lapse(trailing)}没采到`].filter(Boolean).join('，'), stale && `这块停在 ${dayClock(current.at)}，比页面旧${lapse(behind * 60000)}`, total].filter(Boolean).join('；')
+        : total || (!generic && current?.gap ? U.fieldText(current.gap) : '');
+      const repair = typeof lastHole?.repair_href === 'string' && lastHole.repair_href.startsWith('/live/') ? ` · <a class="more more--link" href="${esc(route(lastHole.repair_href))}">已交自动修理 ›</a>` : '';
+      text = [currentText, sentence && esc(sentence + (readingMerged || total ? ` · ${why}` : '')) + (readingMerged || total ? repair : '')].filter(Boolean).join(' · ');
+    }
+    U.html(reading, text);
+    reading.hidden = !text;
+    const val = chartHost.querySelector('.chart__val'), cell = val?.querySelector('b');
+    if (val) val.style.display = readingMerged ? 'none' : '';
     if (b && cell) cell.textContent = cell.textContent.replace(/^截至 /, '最近一次读数 ');
   }
   function renderStats(stats, temporary = false) {
