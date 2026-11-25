@@ -21,8 +21,8 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e60e4cc87227e04d0a7791fb79268e9a76a588a9f04b7de6adbd7a81a87bb608/%E5%85%AC%E7%94%A8/fonts/ui-c6c4527259268d47.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5c1885610b1fef55822e4d6fb6957c79875b01dd82b3da9264fc579677792fa3/%E5%85%AC%E7%94%A8/fonts/article-7e5d8067d2493dd5.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23bc4a497356f19ba42d49bee4df747e8f7589ef41cb1d509cf9f4589c23ba49/%E5%85%AC%E7%94%A8/fonts/article-aed77005f894a8b4.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E502" data-rule-page="topic-claude-adapter">
+<main class="rules-page" data-rule-release="E507" data-rule-page="topic-claude-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="claude-适配">Claude 适配</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#身份"><span class="toc-number">01</span><span class="toc-label">身份</span></a></li>
@@ -113,7 +113,7 @@
 <h3 id="派-gpt">派 GPT</h3>
 <ul>
 <li><strong>照清单派，摘要写清。</strong> GPT、Gemini 的型号照模型清单都能派，不另要授权（<a href="topic-execution-coordination.html#%E6%9C%AC%E4%BA%BA%E5%AE%9A%E7%9A%84%E5%88%86%E5%B7%A5%E5%92%8C%E5%9E%8B%E5%8F%B7%E8%A7%84%E7%9F%A9%E5%8E%9F%E7%BA%A6%E6%B3%95-l22l23">约法 L23「本人定的分工和型号规矩」</a>）；思考摘要写清“我要派 GPT-6.2 Sol（max）”这样的一句。本人另给的限制（型号、厂商、项目、期限）照办：“本对话直到叫停”不跨对话，“一个项目”不跨项目，同时限定项目和期限就同时遵守。不为这事查询或估算本人账号额度。</li>
-<li><strong>默认分工和选型。</strong> 按模型清单 <code>routing</code> 和<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">共同选型原则</a>，每次显式传 <code>-Model</code>、<code>-Effort</code>；档位及旧值映射只见清单。GPT 涉及本人价值、偏好和理解的内容单列后由 Claude 把关。施工按模型清单 <code>routing.current_generation_defaults.gpt_build</code> 默认交 Sol。遇到 <code>build_supervision</code> 的四种情况，由主持先派 Astra 定方案，交回后再派 Sol 组织施工。生图按「凡是看得见的」一行。范围和授权沿用父任务，需根会话派发的判断及干净上下文的例外见派发说明。</li>
+<li><strong>默认分工和选型。</strong> 按模型清单 <code>routing</code> 和<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">共同选型原则</a>，每次显式传 <code>-Model</code>、<code>-Effort</code>；档位及旧值映射只见清单。GPT 涉及本人价值、偏好和理解的内容单列后由 Claude 把关。施工按模型清单 <code>routing.current_generation_defaults.gpt_build</code> 默认交 Sol。非疑难的复杂设计、深层排障和查深的复核交 Sol <code>max</code>。技术方案独立头脑风暴默认开全新 Opus（<code>xhigh</code>）。确需 Astra，根会话按模型清单 <code>routing.astra_dispatch</code> 办，经共用包装器填报依据与理由。生图按「凡是看得见的」一行。范围和授权沿用父任务，派发和原线程续作见派发说明。</li>
 <li><strong>从包装器进入。</strong> 使用 <code>E:\.agents\tools\Invoke-ClaudeGptChild.ps1</code>，<code>-ParentHarness</code> 默认 <code>Claude</code>。派 GPT 时 Start、Resume 走私有 AppServer（后台服务），派 Gemini 时走 <code>agy acp</code> 的会话协议（ACP，智能体客户端协议）；Start 默认独立执行，Resume 沿用已存方式。确需桌面身份可传 <code>-Detached:$false</code>，或只把凭据动作交根。运行中纠偏用同轮 Steer。不直接调用 <code>codex exec</code>、Codex 的 <code>openai_child</code> 或专用判断角色。共用容量和接续见<a href="topic-execution-coordination.html#%E5%8E%9F%E7%94%9F%E6%B4%BE%E5%8F%91%E4%B8%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E6%8E%A5%E7%BB%AD">分工与并行施工</a>；<code>-ParentHarness Codex</code>、<code>-ParentHarness Antigravity</code> 分别供 <a href="topic-codex-adapter.html#%E7%BB%8F%E5%85%B1%E7%94%A8%E5%8C%85%E8%A3%85%E5%99%A8%E6%B4%BE%E5%8F%91">Codex</a>、<a href="topic-antigravity-adapter.html#%E6%B4%BE%E5%88%AB%E5%AE%B6%E5%85%B1%E7%94%A8%E5%8C%85%E8%A3%85%E5%99%A8">Antigravity</a> 主持时用，Claude 不借用。</li>
 <li><strong>资料与权限。</strong> Codex 子任务按正常 Codex 配置和当前授权工作，不复制 Claude 对话授权值，不另加沙箱或审批覆盖。独立执行者没有桌面祖先身份：真正依赖密码中心桌面身份的凭据步骤交回根会话，其余已授权步骤照常完成；不另行登录、转交秘密或改身份核验来补。资料需求、共享资料期和缺口交回按<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“根核验规则和判断资料需求”一条。</li>
 <li><strong>怎么派一单。</strong> 命令、单子模板、怎么等、怎么验收见 <code>dispatch-work</code> 技能；全部字段和参数见派发说明；修改仓库用任务专用工作树。</li>
@@ -169,8 +169,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E502</dd></div>
-        <div><dt>发布</dt><dd>2026-11-25 01:45 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E507</dd></div>
+        <div><dt>发布</dt><dd>2026-11-25 22:35 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -184,7 +184,7 @@
 <li><a href="topic-claude-adapter.html" aria-current="page">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,348 字<br>Claude 适配 6,874 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,531 字<br>Claude 适配 6,902 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

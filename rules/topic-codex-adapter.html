@@ -21,8 +21,8 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e60e4cc87227e04d0a7791fb79268e9a76a588a9f04b7de6adbd7a81a87bb608/%E5%85%AC%E7%94%A8/fonts/ui-c6c4527259268d47.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5c1885610b1fef55822e4d6fb6957c79875b01dd82b3da9264fc579677792fa3/%E5%85%AC%E7%94%A8/fonts/article-7e5d8067d2493dd5.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23bc4a497356f19ba42d49bee4df747e8f7589ef41cb1d509cf9f4589c23ba49/%E5%85%AC%E7%94%A8/fonts/article-aed77005f894a8b4.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E502" data-rule-page="topic-codex-adapter">
+<main class="rules-page" data-rule-release="E507" data-rule-page="topic-codex-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="codex-适配">Codex 适配</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#入口和新消息"><span class="toc-number">01</span><span class="toc-label">入口和新消息</span></a></li>
@@ -95,8 +95,8 @@
 <p>原生 GPT 的 <code>reasoning_effort</code> 按<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“每次显式写型号和档位”一条和模型清单 <code>routing.effort_rule</code> 填写；其他厂商沿用各自设置。型号换代按新型号怎么调研重评。</p>
 <p>施工估时同样按<a href="topic-engineering-delivery.html">工程与交付</a>“施工估时”一条，用 <code>tools/Set-ConstructionEstimate.ps1</code> 报数、记本人加改、交付结算；自带子代理不经共用包装器，没有单子记录，只记整件。</p>
 <ul>
-<li><strong>主对话是 GPT 时</strong>：普通施工、定大方案和判断型复核见 Codex 入口结尾“GPT 容易错的”。写给本人看的汇报正文、方案和收尾汇报照模型清单「写给本人看的文字」一行；浏览器经包装器，型号和档位按模型清单「操作电脑和浏览器、截图」一行，生图默认由主对话直接做，包装器后备的触发条件见 <code>image-generation</code> 技能。子代理的单子写法、能问不等、必需的文件能改、到时限只叫醒，和 Claude 派单一样。普通 GPT 派单用原生子代理（<code>spawn_agent</code>），按模型清单 <code>routing</code> 的场景表和难度分级（表中的 GPT 型号）选型号和档位，可派型号、档位和适用范围见 <code>hosts.codex.root_openai</code>；表里交 Claude、Gemini 的活经共用包装器派（命令见下面“经共用包装器派发”一节，<code>-ParentHarness Codex</code>）；Codex 主持按模型清单先派 Astra 定疑难方案，或要全新上下文做技术方案的独立头脑风暴、复核时，经包装器另开 Astra（见 Codex 入口结尾）。主持收到方案后派 Sol 组织施工。必要的单点疑难咨询回原 Astra 线程；完工对照和线程清理后的处理见<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">分工与并行施工</a>。被派来定方案的 Astra 要独立看法时，用原生入口另开不继承上下文的代理。显式传 <code>model</code> 和 <code>reasoning_effort</code> 时，<code>fork_turns</code> 用 <code>none</code>，单子附上任务所需上下文。派完核对回执能确认的启动值。</li>
-<li><strong>主对话是其他公司的模型时</strong>：施工和惊艳样板照共用模型清单分工；<code>hosts.codex.root_third_party</code> 只列能经 <code>openai_child</code> 派的 GPT 型号，派 Claude、Gemini 和另开定方案的 Astra 都走下文的共用包装器入口。普通 GPT 派单调用宿主工具 <code>openai_child</code>，显式填写 <code>agent_type</code>、<code>model</code>、<code>reasoning_effort</code>、<code>task_name</code>、<code>message</code>，不传 <code>fork_turns</code>；续聊走同一入口，子代理回话走 <code>openai_parent</code>，查看、等待和停止走 <code>openai_child_control</code>。经 <code>openai_child</code> 派出的 GPT 子代理要再分工时，由原父任务代派。入口满槽或不可用时，按<a href="topic-execution-coordination.html#%E5%8E%9F%E7%94%9F%E6%B4%BE%E5%8F%91%E4%B8%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E6%8E%A5%E7%BB%AD">原生派发与原线程接续</a>处理。遇到其他故障，主对话继续能做的部分并说明缺口，换派按模型清单。</li>
+<li><strong>主对话是 GPT 时</strong>：普通施工、定大方案和判断型复核见 Codex 入口结尾“GPT 容易错的”。写给本人看的汇报正文、方案和收尾汇报照模型清单「写给本人看的文字」一行；浏览器经包装器，型号和档位按模型清单「操作电脑和浏览器、截图」一行，生图默认由主对话直接做，包装器后备的触发条件见 <code>image-generation</code> 技能。子代理的单子写法、能问不等、必需的文件能改、到时限只叫醒，和 Claude 派单一样。普通 GPT 派单用原生子代理（<code>spawn_agent</code>），按模型清单 <code>routing</code> 的场景表和难度分级（表中的 GPT 型号）选型号和档位，可派型号、档位和适用范围见 <code>hosts.codex.root_openai</code>；表里交 Claude、Gemini 的活经共用包装器派（命令见下面“经共用包装器派发”一节，<code>-ParentHarness Codex</code>）；非疑难的复杂设计、深层排障和查深的复核交 Sol <code>max</code>，技术方案的独立头脑风暴默认经包装器另开 Opus（<code>xhigh</code>）。确需 Astra 按模型清单 <code>routing.astra_dispatch</code> 和入口禁令走共用包装器；Codex 原生 <code>spawn_agent</code> 和 <code>openai_child</code> 均拒开 Astra，已有线程续聊照常。完工对照和原线程续作见<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">分工与并行施工</a>。显式传 <code>model</code> 和 <code>reasoning_effort</code> 时，<code>fork_turns</code> 用 <code>none</code>，单子附上任务所需上下文。派完核对回执能确认的启动值。</li>
+<li><strong>主对话是其他公司的模型时</strong>：施工和惊艳样板照共用模型清单分工；普通 GPT 按 <code>hosts.codex.root_third_party</code> 经原生入口派；Claude、Gemini 和符合禁令条件的 Astra 走下文共用包装器。普通 GPT 派单调用宿主工具 <code>openai_child</code>，显式填写 <code>agent_type</code>、<code>model</code>、<code>reasoning_effort</code>、<code>task_name</code>、<code>message</code>，不传 <code>fork_turns</code>；续聊走同一入口，子代理回话走 <code>openai_parent</code>，查看、等待和停止走 <code>openai_child_control</code>。经 <code>openai_child</code> 派出的 GPT 子代理要再分工时，由原父任务代派。入口满槽或不可用时，按<a href="topic-execution-coordination.html#%E5%8E%9F%E7%94%9F%E6%B4%BE%E5%8F%91%E4%B8%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E6%8E%A5%E7%BB%AD">原生派发与原线程接续</a>处理。遇到其他故障，主对话继续能做的部分并说明缺口，换派按模型清单。</li>
 <li><strong>重大动作前的把关</strong>：见<a href="topic-protected-actions.html#%E9%87%8D%E5%A4%A7%E5%8A%A8%E4%BD%9C%E5%89%8D%E7%9A%84%E6%8A%8A%E5%85%B3">重大动作与本人验证</a>，谁动手谁把关，不限型号和档位。确实需要另派时，用当前宿主的普通子代理入口明确填写型号和思考档位；主对话为其他公司的模型时仍从上面的可派范围选择，不凭把关职责扩大可派型号。独立复核按分工原则另行安排。</li>
 <li>AICLI 配置和其他后端任务不是桌面原生子代理，不用来代替因鉴权、参数、上下文或真实能力限制而失败的 <code>openai_child</code>。</li>
 <li><strong>和真人说话</strong>：子任务要以本人身份和真人对话（客服、商家、卖家、房东、平台人工、微信联系人）或替本人拟要发出的消息时，派单必须写一行“和真人说话按 reply-as-me”。</li>
@@ -104,7 +104,7 @@
 <li><strong>Codex 不自行新建顶层对话（本人要求，2026-11-05，源消息 <code>01a1a8b1-4edc-74c1-82a4-49e24bdf16be</code>）。</strong> 不调用 <code>create_thread</code> 或通过其他方式新建侧栏里的独立对话；分工使用当前对话下的子代理。发现项目整体问题时，也在当前对话下安排独立子代理处理，不按共用规则另开顶层对话。</li>
 </ul>
 <h3 id="经共用包装器派发">经共用包装器派发</h3>
-<p>派 Claude、Gemini，操作本人 Chrome 或由 Codex 主持另开全新 Astra 时，按对应场景走共用包装器。显式传 <code>-ParentHarness Codex</code>、<code>-SessionId '&lt;当前真实父任务完整编号&gt;'</code>，型号和档位照模型清单。默认结果目录是 <code>E:\Cache\Codex\Temp\&lt;完整SessionId&gt;\gpt-children</code>，不借 Claude 会话号或截短编号。续作按<a href="topic-execution-coordination.html#%E5%8E%9F%E7%94%9F%E6%B4%BE%E5%8F%91%E4%B8%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E6%8E%A5%E7%BB%AD">原生派发与原线程接续</a>，保留原有授权和任务范围。</p>
+<p>派 Claude、Gemini、操作本人 Chrome 或确需新派 Astra 时，按对应场景走共用包装器。Astra 由根会话按禁令填报 <code>-AstraBasis</code> 与 <code>-AstraReason</code>（参数和任务卡同义栏见下文派发说明）。显式传 <code>-ParentHarness Codex</code>、<code>-SessionId '&lt;当前真实父任务完整编号&gt;'</code>，型号和档位照模型清单。默认结果目录是 <code>E:\Cache\Codex\Temp\&lt;完整SessionId&gt;\gpt-children</code>，不借 Claude 会话号或截短编号。续作按<a href="topic-execution-coordination.html#%E5%8E%9F%E7%94%9F%E6%B4%BE%E5%8F%91%E4%B8%8E%E5%8E%9F%E7%BA%BF%E7%A8%8B%E6%8E%A5%E7%BB%AD">原生派发与原线程接续</a>，保留原有授权和任务范围。</p>
 <pre><code class="language-powershell">$child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 &amp; $child -Mode Start -ParentHarness Codex -SessionId '&lt;当前真实父任务完整编号&gt;' -PromptFile '&lt;任务.md绝对路径&gt;' -Model '&lt;清单场景所选型号&gt;' -Effort '&lt;清单场景所选档位&gt;' -NewWorktree -RepoPath '&lt;仓库绝对路径&gt;' -TaskName '&lt;短名&gt;' -ContinueOnQuota
 &amp; $child -Mode Watch -RunDirs @('&lt;结果目录&gt;')
@@ -114,14 +114,14 @@
 <p>上例的 <code>-ContinueOnQuota</code> 只在同额度根会话仍能正常调用时启用；根会话也调不动时才是真的用完，按<a href="topic-claude-adapter.html">Claude 适配</a>“模型调不动时按原因处理”换家并告诉本人。怎么派一单见 <code>dispatch-work</code> 技能，全部字段和参数见派发说明；修改仓库用任务专用工作树，只读用 <code>-WorkDir '&lt;已有目录&gt;'</code>。</p>
 <h2 id="新消息里的状态">新消息里的状态</h2>
 <p>Hook 每条真实新消息和子代理启动带来共享资料、本人接管及可核实的型号和档位；未知如实写，子代理启动不借父记录。根状态未知用 <code>StatusPersonalEnvironment</code> 回读；个人资料的判断、解锁和缺口交回按<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">资料锁</a>与<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“根核验规则和判断资料需求”一条，纯技术工作继续。</p>
-<p>收工（Stop）和 Claude 一样只查 3 样：资料锁拦住了还没处理、共用包装器派的 GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文；命中的合成一次拦下，同轮第二次只提示；正常收工记实况、按通知条件推手机。本人按停这一轮时，<code>Interrupt</code> 钩子撤掉本轮还在等的审批提醒，免得停了还收到过时的审批。边界核验失败只放行受影响检查并留诊断码。Hook 不按任务自行决定模型职责、档位或是否委派，不加派发许可、不按关键词弹验证；结构化派发参数中的已登记前代和兼容档位，由 Hook 按统一模型登记规范化并保留原请求。原生旧代理确实无法换型续作时，返回 <code>model_migration_required</code>，由根按所有入口一起换代接续，不绕宿主限制。具体接线见状态钩子。</p>
+<p>收工（Stop）和 Claude 一样只查 3 样：资料锁拦住了还没处理、共用包装器派的 GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文；命中的合成一次拦下，同轮第二次只提示；正常收工记实况、按通知条件推手机。本人按停这一轮时，<code>Interrupt</code> 钩子撤掉本轮还在等的审批提醒，免得停了还收到过时的审批。边界核验失败只放行受影响检查并留诊断码。Hook 不按任务自行决定模型职责、档位或是否委派，不加派发许可、不按关键词弹验证。本人于 2026-11-25 明确要求的例外是 Astra 禁令的机械填报校验：Hook 把根会话从原生新派引到共用包装器，包装器检查必填依据和理由；所有子代理一律不得新派 Astra。结构化派发参数中的已登记前代和兼容档位，由 Hook 按统一模型登记规范化并保留原请求。原生旧代理确实无法换型续作时，返回 <code>model_migration_required</code>，由根按所有入口一起换代接续，不绕宿主限制。具体接线见状态钩子。</p>
 <h2 id="官方升级">官方升级</h2>
 <p>Codex 的版本号、构建号、带版本的安装目录和更新批次都不能当可用性门槛。密码中心沿本人 Windows 账户的真实祖先链识别登记包族的 Codex 桌面应用本体，日常调用自动选择 <code>codex-root</code>；从 Claude 桌面启动的 Codex 子进程按其 Claude 祖先识别为 <code>claude-root</code>，不按模型名称改换主体。官方更新后仍按同一账户、包族和桌面本体核验，无需运行时密钥续绑。受管 Hook 的内容哈希只保护 Hook 自身；缺了可选的宿主信息，只让依赖它的那项能力变成不明或不可用，普通项目照常。</p>
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E502</dd></div>
-        <div><dt>发布</dt><dd>2026-11-25 01:45 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E507</dd></div>
+        <div><dt>发布</dt><dd>2026-11-25 22:35 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -135,7 +135,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html" aria-current="page">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,348 字<br>Codex 适配 3,858 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,531 字<br>Codex 适配 3,916 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>

@@ -21,8 +21,8 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e60e4cc87227e04d0a7791fb79268e9a76a588a9f04b7de6adbd7a81a87bb608/%E5%85%AC%E7%94%A8/fonts/ui-c6c4527259268d47.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/5c1885610b1fef55822e4d6fb6957c79875b01dd82b3da9264fc579677792fa3/%E5%85%AC%E7%94%A8/fonts/article-7e5d8067d2493dd5.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23bc4a497356f19ba42d49bee4df747e8f7589ef41cb1d509cf9f4589c23ba49/%E5%85%AC%E7%94%A8/fonts/article-aed77005f894a8b4.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E502" data-rule-page="topic-engineering-delivery">
+<main class="rules-page" data-rule-release="E507" data-rule-page="topic-engineering-delivery">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="工程与交付">工程与交付</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#目标优先于实现"><span class="toc-number">01</span><span class="toc-label">目标优先于实现</span></a></li>
@@ -228,7 +228,7 @@
 <li><strong>清理受阻继续找办法。</strong> 已获本人授权、已确认可清理的对象，一条删除命令被审批拒绝时，查实际限制并继续找受支持的清理方式；删除仍受阻、又确认是本任务的 AI 临时内容时，留给自动清理按规则表删（已登记的 AI 临时目录闲置满 1 天到期），收尾说一句即可。拒绝原因不明时，不自行认定只是命令写法受限；动作本身被明确禁止时，不换工具、shell 或封装绕过，也不关闭安全审查。其他内容确无受支持的方式时，保留并说明具体残留和原因。</li>
 <li><strong>任务暂留材料。</strong> 保留要有具体用途且确实需要本机副本：本人待取的交付物、项目运行和维护资产、必要的恢复材料。“以后可能有用”不算。</li>
 <li><strong>清理靠自动任务按规则表删，删就是永久删。</strong> 电脑上的定期清理由 PCConfig 的“自动清理”自动任务按一张规则表执行：每行写位置、多久没动算到期、怎么删；到期直接永久删，不进回收站，也不进同盘可还原区。回收站只留给本人自己手动删的东西。任务自己确知可清的少量临时文件，收尾时按精确路径直接删；规则表没盖到、碰上了的旧东西照约法“删和存一样重要”那段办；其余都交这个自动任务。程序只问三件答得出的事：在不在保护名单上（在就永远不自动删）；丢了能不能再生（缓存、依赖、构建产物、临时文件、干净且已推送的工作副本，按天数删）；是不是有期限的过程产物（AI 对话、任务目录、生图候选、汇报页、崩溃转储和诊断材料，按本人定的天数删）。不问“它还有没有用”，不做引用盘点。每个候选单独判：最近有写入、正被占用、带没到期保留标记的，以及本人在用的检出里有未提交改动或未推送提交的，只跳过这一个，不连累别的；AI 施工留下的分支和工作副本按下面“Git 收尾”里 AI 分支那一条判。AI 不另建清理机制；规则表上的这些也不派 AI 逐个判断能不能删，规则表没写到的照下一条办。</li>
-<li><strong>只护这几样，其余照约法“删和存一样重要”那段办。</strong> 别的任务的改动、冻结项目的数据、正在用的内容和恢复要用的材料不擅自处理，本人个人原件照那段先问一句。规则表没写到、1 GB 以上又 30 天没动的位置，不再每周问本人，也不分 AI 的地盘还是本人的地盘：AI 打眼一看，看着没用就删，不查证、不证明。云端由往上放东西的程序或任务自己收旧的，本地任务不按“没回”删云上的东西。AI 自己要留的东西，由产生它的任务打保留标记写明理由和到期时间；没标记、到期又没碰上别的保护的就删。自动任务遇到被占用的文件只跳过这一项。文件被占用时，确认属于本任务且没有本人未保存的内容，才解除占用后清理；无法确认的保留并说明具体保护原因。挡住清理的是处理掉也不丢东西的残留时（例如别的任务留下、目录已经不在的工作副本登记，见<a href="topic-execution-coordination.html#%E5%A4%9A%E4%B8%AA%E4%BB%BB%E5%8A%A1%E5%90%8C%E6%97%B6%E6%94%B9%E4%B8%9C%E8%A5%BF">分工与并行施工</a>），直接处理，不请本人决定，也不在汇报里提。其他清理受阻要说清残留、原因和下一步，不谎称清完，也不留给本人手动收拾。</li>
+<li><strong>只护这几样，其余照约法“删和存一样重要”那段办。</strong> 别的任务的改动（放久了没人做的没提交改动归每晚自动修理收拾，见《分工与并行施工》“不动别人的东西”）、冻结项目的数据、正在用的内容和恢复要用的材料不擅自处理，本人个人原件照那段先问一句。规则表没写到、1 GB 以上又 30 天没动的位置，不再每周问本人，也不分 AI 的地盘还是本人的地盘：AI 打眼一看，看着没用就删，不查证、不证明。云端由往上放东西的程序或任务自己收旧的，本地任务不按“没回”删云上的东西。AI 自己要留的东西，由产生它的任务打保留标记写明理由和到期时间；没标记、到期又没碰上别的保护的就删。自动任务遇到被占用的文件只跳过这一项。文件被占用时，确认属于本任务且没有本人未保存的内容，才解除占用后清理；无法确认的保留并说明具体保护原因。挡住清理的是处理掉也不丢东西的残留时（例如别的任务留下、目录已经不在的工作副本登记，见<a href="topic-execution-coordination.html#%E5%A4%9A%E4%B8%AA%E4%BB%BB%E5%8A%A1%E5%90%8C%E6%97%B6%E6%94%B9%E4%B8%9C%E8%A5%BF">分工与并行施工</a>），直接处理，不请本人决定，也不在汇报里提。其他清理受阻要说清残留、原因和下一步，不谎称清完，也不留给本人手动收拾。</li>
 </ul>
 <h2 id="git-收尾">Git 收尾</h2>
 <ul>
@@ -252,8 +252,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E502</dd></div>
-        <div><dt>发布</dt><dd>2026-11-25 01:45 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E507</dd></div>
+        <div><dt>发布</dt><dd>2026-11-25 22:35 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -267,7 +267,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,348 字<br>工程与交付 12,691 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,531 字<br>工程与交付 12,727 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>
