@@ -831,7 +831,7 @@ function connectionTip(off, reason, at, sub, pair = '') {
   }
 }
 liveClient.src = '/live/_lib/live-client.js';
-liveClient.onload = () => window.Live.watch('screen', {}, {
+const watchScreen = () => window.Live?.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
     down.silent = !!state.silent;
@@ -845,11 +845,32 @@ liveClient.onload = () => window.Live.watch('screen', {}, {
     renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
   }
 });
-// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。这时页面不会自己再试。
+liveClient.onload = watchScreen;
+// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。
+// 之后网络回来、页面回到前台，或在前台每过一分钟，再取一次同一份脚本；取到了照常订阅，签和四格自己接上（M983）。
+let clientRetry = 0, clientFetching = false;
+function fetchClientAgain() {
+  if (window.Live || clientFetching || document.hidden) return;
+  clientFetching = true;
+  const again = document.createElement('script');
+  again.src = liveClient.src;
+  again.onload = () => {
+    clientFetching = false;
+    clearInterval(clientRetry);
+    removeEventListener('online', fetchClientAgain);
+    document.removeEventListener('visibilitychange', fetchClientAgain);
+    watchScreen();
+  };
+  again.onerror = () => { clientFetching = false; again.remove(); };
+  document.head.append(again);
+}
 liveClient.onerror = () => {
   down.offline = true;
   connectionTip(true, '连不上实况服务', '', '刷新这一页再试，连上就换成最新的');
   renderScreen(null, null);
+  clientRetry = setInterval(fetchClientAgain, 60000);
+  addEventListener('online', fetchClientAgain);
+  document.addEventListener('visibilitychange', fetchClientAgain);
 };
 document.head.append(liveClient);
 })();
