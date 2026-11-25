@@ -39,6 +39,16 @@
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
   };
+  // 设置表“对话装多满会压缩”写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
+  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。钩子卡里的数由规则仓给，见下面 hookDetail 里的快核。
+  // Claude 上下文窗口 1,000K 和先留给回复的 20K（设置表小字直接显示，也用来算约 490K）。按需更新快核（M928）核法：Claude 对话记录
+  // E:/Data/AppData/Claude/profiles/pro/projects/**/*.jsonl 里每次自动压缩的 compactMetadata.preTokens，近 7 天中位数应≈(窗口−留量)×回包百分比，
+  // 现 1,000K 窗口、先留 20K（11-26 核：220 次，中位 491K，十分位 490,000；窗口也可对钩子程序 claude_root_runtime_module.py 里登记的型号窗口）；变了改这句
+  const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
+  const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
+  const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
+    : h.id === 'codex' && known(hostData(d, h).compact_tokens) ? hostData(d, h).compact_tokens : null;
+  const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
   const WHY = {
     C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
     C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
@@ -55,7 +65,7 @@
     C15: '前面没挂上的，每轮开始再补挂一次，保证花费面板在。',
     C16: '花费有变化时让面板下次画的时候刷新，免得一直显示旧数。',
     C17: '真正把花费画到面板上；没有它面板是空的。',
-    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机，碰上服务繁忙或限流还会等十分钟自己重试一次。',
+    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机。',
     X01: 'Codex 开对话时不知道规矩是不是当前版、这是哪个项目；这条开场时核一下规矩入口，再递上工程和《他要什么》的位置，免得照旧规矩办事或在别的项目里动手。',
     X02: SAME.prompt,
     X03: SAME.helper,
@@ -371,8 +381,9 @@
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `无法设置${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
-    const compact = h => h.id === 'claude' ? (x(h).compact_percent ? `上下文用到 ${esc(x(h).compact_percent)}% 就压缩` : '没读到')
-      : h.id === 'codex' ? (known(x(h).compact_tokens) ? `到 ${dec(x(h).compact_tokens / 10000)} 万 token 压缩${known(x(h).context_window) ? `<small>配的窗口是 ${dec(x(h).context_window / 10000)} 万，压缩线更低</small>` : ''}` : '没读到')
+    // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
+    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，先留 ${kTok(CLAUDE_REPLY)}给回复</small>` : '没读到')
+      : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
       : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
@@ -427,6 +438,14 @@
     const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
+    // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
+    // 页面不另算、也不在“为什么要它”里再写一遍。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
+    // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
+    // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
+    // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
+    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；前端“为什么要它”不写这个数；
+    // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
+    //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
     const facts = [['什么时候跑', F(hook.when)], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
