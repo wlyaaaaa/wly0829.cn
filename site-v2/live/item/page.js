@@ -305,7 +305,8 @@
   const pastRound = (row, d) => {
     const from = Date.parse(row.episode_at || row.born || '');
     const history = (Array.isArray(d.history) ? d.history : []).filter(e => { const t = Date.parse(e.occurred_at || e.at || ''); return Number.isFinite(t) && t <= closedAt + 1000 && !(t < from - 1000); });
-    return { ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
+    // 访客的退出清单行不带来源（origin），来源是这件事的、各轮一样，照详情补上（本人版清单行带的照用清单行的）
+    return { origin: d.origin, ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
   };
   function showItem(d) {
     latestDetail = d;
