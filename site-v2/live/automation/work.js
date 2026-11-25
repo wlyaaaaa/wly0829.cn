@@ -150,9 +150,11 @@
   function message(id) {
     let text = feedback?.id === id ? feedback.text : '';
     // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
     if (text && feedback.want && feedback.reread) {
-      const m = configFor(targetOf(id) || {}).mode;
-      text = m === feedback.want ? '已保存' : `最新读数还是${{ on: '开着', off: '关着', paused: '暂停中' }[m] || '没读到'}`;
+      const s = configFor(targetOf(id) || {}), want = feedback.want;
+      const same = s.mode === want.mode && (!want.until || instant(s.until_at) === instant(want.until));
+      text = same ? '已保存' : `最新读数还是${s.mode === 'paused' ? `暂停到 ${when(s.until_at)}` : { on: '开着', off: '关着' }[s.mode] || '没读到'}`;
     }
     return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
   }
@@ -360,7 +362,7 @@
       if (audience === 'owner') { feedback = { id, text: '正在保存…', pending: true }; paint(); }
       const want = value === 'on' ? 'off' : 'on';
       const reply = await save('type-mode', id, { mode: want }) || { status: 'unknown' };
-      feedbackFor(id, reply, want);
+      feedbackFor(id, reply, { mode: want });
       applySaved(id, reply);
       if (reply.error === 'cockpit_owner_required') return;
       const current = [...root.querySelectorAll('[data-setting=toggle]')].find(el => el.dataset.id === id);
@@ -388,8 +390,9 @@
     result.textContent = '正在保存…';
     feedback = { id, text: '正在保存…', pending: true };
     paint();
-    const reply = await save('type-mode', id, { mode: 'paused', until_at: `${value}:00+08:00` }) || { status: 'unknown' };
-    feedbackFor(id, reply, 'paused');
+    const until = `${value}:00+08:00`;
+    const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
+    feedbackFor(id, reply, { mode: 'paused', until });
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') settings.close();
     else result.textContent = feedback?.text || '';

@@ -328,9 +328,11 @@
     if (feedback?.id !== id) return '';
     let { text, tone = '' } = feedback;
     // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
     if (feedback.want && feedback.reread) {
-      const m = mode(rowOf(id));
-      [text, tone] = m === feedback.want ? ['已保存', 'ok'] : [`最新读数还是${{ on: '开着', off: '关着', paused: '暂停中' }[m] || '没读到'}`, ''];
+      const s = rowOf(id)?.setting || {}, m = s.mode, want = feedback.want, until = isoOf(s.until_at);
+      const same = m === want.mode && (!want.until || T.stamp(until) === T.stamp(want.until));
+      [text, tone] = same ? ['已保存', 'ok'] : [`最新读数还是${m === 'paused' ? `暂停到 ${when(until)}` : { on: '开着', off: '关着' }[m] || '没读到'}`, ''];
     }
     return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
   };
@@ -477,9 +479,11 @@
     if (typeof reply?.message === 'string' && /[一-鿿]/.test(reply.message)) return `没存上：${reply.message}`;
     return '没存上：电脑没写进去，再点一次';
   }
+  // 时刻可能是秒数（后台回包）或时刻字符串（读数）：一律换成时刻字符串再比、再写
+  const isoOf = v => typeof v === 'number' ? new Date(v * 1000).toISOString() : v;
   const rowOf = id => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
   // 后台回包里的 until_at 是秒数，读数里是时刻字符串：并进来时换成时刻字符串，页面照常写“暂停到 几点”
-  const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: new Date(cur.until_at * 1000).toISOString() } : {}) });
+  const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: isoOf(cur.until_at) } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去；没存上但后台带回了电脑上读到的 current（读回和请求不一致），照它显示；
   // 别的没存上、还没确认的，开关留在原档，之后照新读数显示
   async function saved(id, reply, want) {
@@ -531,7 +535,7 @@
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
     else result.textContent = failText(reply);
-    saved(id, reply, 'paused');
+    saved(id, reply, { mode: 'paused', until });
   });
 
   let page;
@@ -567,7 +571,7 @@
       // 后台回之前开关留在原档，旁边只写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
       feedback = { id, text: '正在保存…', pending: true };
       T.keep(page.root, `[data-toggle="${CSS.escape(id)}"]`, draw);
-      saved(id, await save(id, { mode: next }) || { status: 'unknown' }, next);
+      saved(id, await save(id, { mode: next }) || { status: 'unknown' }, { mode: next });
       return;
     }
     if (pause) {
