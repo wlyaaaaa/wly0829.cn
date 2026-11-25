@@ -8,7 +8,10 @@
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
-  const category = R.CATS.includes(params.get('type')) ? params.get('type') : '', id = params.get('run') || '';
+  // 已撤的类（笔记本每周巡检）近 72 小时的旧轮照样列在自动任务页上，点进来也要认：名字表里有的类都认，不只认现役几类
+  const category = Object.hasOwn(R.NAMES, params.get('type') || '') ? params.get('type') : '', id = params.get('run') || '';
+  // 已撤的类在自动任务页上没有“怎么干”那一节和它的提示词，指向那两处的链接不出
+  const retired = !!category && !R.CATS.includes(category);
   // 从自动任务页点进来的，返回回进来时那个网址，三家、状态这些筛选原样留着（验收 11-24 06:40）；
   // 那一页没筛这一类时，返回链接写“自动任务”，不写这一类的名字
   const fromList = (() => {
@@ -195,7 +198,7 @@
     const asTitle = !r.prompt && !d?.task_prompt && d && CV.visibleText(d.title) ? `<div class="ar-prompt">${bodyOf(d.title, '交给 AI 的原话')}</div>` : '';
     const promptText = r.prompt ? `<pre class="ar-prompt">${F(r.prompt, '提示词')}</pre>` : d?.task_prompt ? `<div class="ar-prompt">${bodyOf(d.task_prompt, '任务原文')}</div>` : asTitle;
     const promptTag = asTitle && viewer === 'owner' && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'title', '交给 AI 的原话', viewer) : '';
-    const prompt = program ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt"><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${promptText}</details>`
+    const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt"><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${promptText}</details>`
       : `<p class="ar-msg__more"><a href="${esc(T.path('/live/automation/', { type: category }) + `#prompt-${category}`)}">这一类交给 AI 的原话 ›</a></p>`;
     return { at: start, html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, start), body: `排上这一轮：${reason}${look}${program ? '这一轮由程序直接办，没叫 AI。' : ''}`, after: resumes + prompt }) };
   }
@@ -351,7 +354,7 @@
       r.subject?.href && `<a href="${esc(r.subject.href)}">这件修理的全部几轮 <i>›</i></a>`,
       r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：${esc(r.who.text)}` : ''}</p>`].filter(Boolean);
     return `<aside class="ar-side">${doing.length ? `<section class="tp-panel ar-sidecard"><h2>这一轮在办</h2>${doing.join('')}</section>` : ''}
-      <section class="tp-panel ar-sidecard"><a href="${esc(T.path('/live/automation/', { category }))}">${esc(name())} <i>›</i></a><a href="${esc(T.path('/live/automation/', { type: category }) + `#cat-${category}`)}">这一类怎么干 <i>›</i></a></section>
+      <section class="tp-panel ar-sidecard"><a href="${esc(T.path('/live/automation/', { category }))}">${esc(name())} <i>›</i></a>${retired ? '' : `<a href="${esc(T.path('/live/automation/', { type: category }) + `#cat-${category}`)}">这一类怎么干 <i>›</i></a>`}</section>
       <section class="tp-panel ar-sidecard"><p class="ar-steps">${step(prevId, '上一轮', true)}${step(nextId, '下一轮', false)}</p></section></aside>`;
   }
 
