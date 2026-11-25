@@ -523,8 +523,10 @@
     const main = connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
     const rest = shownUpTo() ? ' · 只有部分块有上次的数据' : ' · 这页没有可显示的上次数据';
     const mainAt = main && dataAt(main), atLine = mainAt ? ` · 下面是 ${shortStamp(mainAt)} 的数据` : rest;
+    // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
+    const since = main && failingStamp(main);
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
-      ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
+      ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试` : '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
     if (!hostOffline(link)) {
       // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”
@@ -662,7 +664,11 @@
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
     // 确认关机和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
     const off = !reachable && (reason === 'host-off' || hostOffline(e.validatedLink));
-    if (reachable) e.lagging = false;
+    // 后台在、只是这一份暂时给不出（重启后首轮发布没齐、来源这次读失败，回 503 live_*_unavailable）：手上有数的照留着，
+    // 但照实写“自几点起读不到新的、这是几点的数”，本页主数据这样时页顶写“正在刷新”，重读照常、读到就收（D6，本人 11-26 00:24）
+    const pending = status === 503 && /^live_(source|variant|detail)_unavailable$/.test(body?.error || '') && e.data !== null && Number.isFinite(Date.parse(e.at));
+    if (reachable) e.lagging = pending && isMain(e);
+    if (pending) e.fallbackNote = staleNote(e);
     if (!body?.link && !reachable && !off && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
       e.missReason = reason; e.missStatus = status;
       if (!e.missCount) e.missSince = Date.now();
@@ -822,10 +828,7 @@
     if (!offline()) return;
     await usePackagedCopy(e);
     if (fixture !== null || publicPaused || e.failure !== failure || e.token !== device() || itemDetail(e)) return;
-    if (e.data !== null && e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
-      const sameDay = dateFormat.format(Date.parse(e.at)) === dateFormat.format(Date.now());
-      e.fallbackNote = `这是 ${sameDay ? time(e.at) : stamp(e.at)} 的旧数，现在读不到新的。`;
-    }
+    if (e.data !== null && e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) e.fallbackNote = staleNote(e);
   }
   function read(e, isInitial = false, card, retryCopy = false, replace = false) {
     if (!replace && e.pending && e.requestVersion === publicationVersion) return e.pending;
