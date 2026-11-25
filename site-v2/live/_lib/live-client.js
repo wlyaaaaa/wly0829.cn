@@ -1044,6 +1044,33 @@
     } catch { /* 原请求可能已经写入，须按同一提交编号核对。 */ }
     return null;
   }
+  // 只读查回执（后台 21be7a5c 起，主持 11-26 01:31）：按原提交编号查这台设备的那一笔，只查不写。
+  // 查到回那张回执；同设备没有这笔回 { status: 'missing' }；没设备（403）、编号无效（400）、查询本身失败回 null，按还没确认算
+  async function lookUpOwnerAction(token, idempotencyKey) {
+    const url = (site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions/receipt' : '/__computer/cockpit/actions/receipt') + '?idempotency_key=' + encodeURIComponent(idempotencyKey);
+    try {
+      const response = await fetch(url, { method: 'GET', cache: 'no-store', credentials: site ? 'omit' : 'same-origin',
+        headers: site ? { 'X-Cockpit-Device': token } : opened.headers(token), signal: AbortSignal.timeout(30000) });
+      const result = await response.json().catch(() => null);
+      if (response.status === 404 && result?.error === 'cockpit_action_missing') return { status: 'missing', error: 'cockpit_action_missing' };
+      if (response.ok && result?.status) return result;
+    } catch { /* 查不了就算还没确认 */ }
+    return null;
+  }
+  // 回到页面接着查：按原提交编号只读查回这一笔，不发写请求。没有这笔先隔 5 秒再查一次（刚刷新时原请求可能还在路上）再下结论；
+  // 后台已收下、还在写的，照办理回查的节奏接着查（前一分钟每 3 秒，之后每 15 秒，最多两分半）；查到结果记下，下回不再查
+  async function checkKeptWrite(token, key, kept) {
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms)), id = kept.data.idempotency_key;
+    let result = await lookUpOwnerAction(token, id);
+    if (result?.status === 'missing' && device() === token) { await wait(5000); result = await lookUpOwnerAction(token, id); }
+    const started = Date.now();
+    while (result?.status === 'waiting_undo' && device() === token && Date.now() - started < 150000) {
+      await wait(Date.now() - started < 60000 ? 3000 : 15000);
+      result = await lookUpOwnerAction(token, id) ?? result;
+    }
+    if (result && !['waiting_undo', 'missing'].includes(result.status)) keepWrite(key, { data: kept.data, at: kept.at, result });
+    return result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+  }
   // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
   globalThis.addEventListener?.('offline', () => { if (!publicPaused) refresh(false); });
   // 硬件小包（computer/hardware）并进页面已有的同名读数行：只在比原来新时换，缺数不盖、不补零；换了返回 true（M519）
@@ -1110,9 +1137,9 @@
       let write = ownerWrites.get(key);
       if (!write) {
         const kept = keptWrites()[key];
-        // 回到页面接着查（resume）只看本机记下的那次结果，不拿原编号再发一遍：后台没有只读的查回执口，原请求要是没到，重发就成了没人点的一笔新操作（本人 11-26 00:13）。
-        // 没记下结果就算还没确认，等清单读回来看这件还在不在
-        if (resume) return kept?.result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+        // 回到页面接着查（resume）不拿原编号再发一遍：原请求要是没到，重发就成了没人点的一笔新操作（本人 11-26 00:13）。
+        // 本机记下过结果就用那次的；没记下就按原编号只读查回执（checkKeptWrite）
+        if (resume) return kept?.result || (kept?.data ? checkKeptWrite(token, key, kept) : { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' });
         // 本人在页面上再点一次同一件：接着用刷新、离开前那一次的编号，后台按编号认出是同一笔，不会写两次
         if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
       }

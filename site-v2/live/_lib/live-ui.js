@@ -673,6 +673,7 @@
     cockpit_item_buttons_disabled: '电脑这会儿没开放卡上的按钮，没保存上。稍后再点一次。',
     cockpit_owner_required: '这台设备没配对，没保存上。',
     cockpit_device_rate_limited: '点得太多了，没保存上。过几分钟再点一次。',
+    cockpit_action_missing: '这一下没送到后台，没办；卡还在，可以再点一次（再点沿用原来的编号，后台认得出是同一笔，不会办两次）。',
   };
   const itemWrites = new Set();
   function itemIntent(item, action) {
@@ -746,7 +747,7 @@
     lastFound = found;
     for (const watch of [...watching]) {
       if (Date.now() - watch.since > WRITING_KEEP) { watching.delete(watch); continue; }
-      const hits = watch.unsure.map(item => [item, found(item, watch.intent, watch.since)]).filter(([, row]) => row);
+      const hits = watch.open().map(item => [item, found(item, watch.intent, watch.since)]).filter(([, row]) => row);
       if (hits.length) watch.settle(hits);
     }
   }
@@ -805,28 +806,32 @@
       const savedText = remind ? '已放到你放着' + (remind.length === 1 && remind[0] ? `，${remind[0]} 再提醒` : '') : wording.saved;
       if (!left.length) { watching.delete(watch); receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) }); }
       else {
-        // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”
+        // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”。后台回了“已收下、还在写”（waiting_undo）的照实说
+        const accepted = unsure.length > 0 && unsure.every(item => receipts[item.id]?.status === 'waiting_undo');
         const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
-          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + (resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：' + (rows.length > 1 ? '不见了的就是办成了，还在的可以再点一次。' : '这件不见了就是办成了，还在可以再点一次。') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
-        const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
+          unsure.length && (rows.length > 1 && failed.length ? (accepted ? `还在写的 ${unsure.length} 件：` : `还没确认的 ${unsure.length} 件：`) : '') + (accepted ? '后台已经收下，还在写；写成了这里会跟着改。' : resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：' + (rows.length > 1 ? '不见了的就是办成了，还在的可以再点一次。' : '这件不见了就是办成了，还在可以再点一次。') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
+        const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && (accepted ? `已收下、还在写 ${unsure.length} 件` : `还没确认 ${unsure.length} 件`)].filter(Boolean).join('，')
+          : failed.length ? (failed[0].error === 'cockpit_action_missing' ? '这一下没送到后台' : '没保存上') : accepted ? '已收下，还在写' : '还没确认保存上';
         receipt.set('fail', head,
           { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => { watching.delete(watch); saveItems(left.map(latestItem), intent, { trigger, complete }); } });
       }
       };
       // “还没确认”只是还不知道，不是没保存上；读到这件已经办成，就算保存上，回执跟着改（晚点提醒用读到的提醒时刻）
-      const watch = { intent, since: started, noted: Date.now(), unsure, settle(hits) {
+      // 盯着的：还没确认的，和查回来“没送到后台”的（原请求要是晚到、真办成了，读到退出记录照样改）
+      const watch = { intent, since: started, noted: Date.now(), unsure, open: () => [...unsure, ...failed.filter(f => f.error === 'cockpit_action_missing').map(f => f.item)], settle(hits) {
         for (const [item, row] of hits) {
-          unsure.splice(unsure.indexOf(item), 1); saved.push(item.id);
+          if (unsure.includes(item)) unsure.splice(unsure.indexOf(item), 1); else failed.splice(failed.findIndex(f => f.item === item), 1);
+          saved.push(item.id);
           if (intent === 'later' && row.act_from) receipts[item.id] = { until: row.act_from };
         }
         keepWriting(hits.map(([item]) => item), null);
         show(); complete(hits.map(([item]) => item.id));
-        if (!unsure.length) watching.delete(watch);
+        if (!watch.open().length) watching.delete(watch);
       } };
-      if (unsure.length) watching.add(watch);
+      if (watch.open().length) watching.add(watch);
       show();
       complete(saved);
-      if (unsure.length) { settleItemWrites(); followWatching(); }
+      if (watch.open().length) { settleItemWrites(); followWatching(); }
       await live.refresh();
     } finally {
       rows.forEach(item => itemWrites.delete(item.id));
