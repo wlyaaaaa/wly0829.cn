@@ -322,7 +322,7 @@
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });
     U.html($('coverage'), coverage); $('coverage').hidden = !coverage;
-    if (!lit) { lit = true; L.lightUp([hero, $('sets'), $('points')]); }
+    if (!lit) { lit = true; L.lightUp([hero, $('backup-matrix'), $('sets'), $('points')]); }
     U.land({ keepOnBack: true });
   }
   window.Live.watch('backups', null, { phase(s) { if (s.data == null) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
