@@ -815,7 +815,7 @@
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
     const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面，按进这一类的时刻从新到旧，做完的是已归档的
+    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     const colTotal = key => Number.isInteger(board?.columns[key]?.total) ? board.columns[key].total : null, colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
     const bySort = list => [...list].sort((a, b) => (Number.isFinite(Date.parse(b.sort_at)) - Number.isFinite(Date.parse(a.sort_at))) || Date.parse(b.sort_at) - Date.parse(a.sort_at) || 0);
@@ -832,7 +832,8 @@
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.running;
     const rows = board && Array.isArray(board.columns.working?.items) ? board : null;   // 带行的 board（chats 读口那一份）才拿来列行
-    const active = rows ? bySort([...colItems('working'), ...colItems('waiting')]) : (d.active || []).filter(c => c.state !== 'done');
+    // 停下没归档的（出错、叫停、回完了没归档、状态不明）照改前一样列在卡上，排在在干、等你后面；几行露在外面照旧由卡高定，其余进“还有 N 个”
+    const active = rows ? [...bySort([...colItems('working'), ...colItems('waiting')]), ...bySort(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
     const working = board ? active.length > 0 || colTotal('working') > 0 || colTotal('waiting') > 0 : active.length > 0 || runningNow > 0 || d.waiting > 0;
     const all = rows ? (working ? active : bySort(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
     const activePreview = working ? all : [];
@@ -845,7 +846,7 @@
     paintList(p['recent-rest'], preview.slice(activeEnd + shown.done), { animate: false });
     chatWorking = working;
     // 列出来的在干行比计数多（比如状态不明的）时按列出来的算，多出来没摆的也写进“还有 N 个”，不悄悄藏掉。
-    chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0), all.length) : all.length)
+    chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0) + (rows ? colTotal('stopped') || 0 : 0), all.length) : all.length)
       : working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
     fitCard('chats');
     U.html(p['done-label'], recent.length ? '已完成' : '');
