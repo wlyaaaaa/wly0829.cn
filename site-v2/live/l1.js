@@ -1281,7 +1281,9 @@
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
     for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下'; grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
-    const grayNote = gray && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`).join('；');
+    // 同一原因下同名的几项并成一个名字、后面写几项（M758：原来会写成“事项状态、事项状态、事项状态 等 13 项”）
+    const sameNames = names => [...names.reduce((seen, n) => { const key = U.fieldText(n, viewer); const hit = seen.get(key); if (hit) hit.count++; else seen.set(key, { n, count: 1 }); return seen; }, new Map()).values()];
+    const grayNote = gray && '读不准：' + [...grayWhy].map(([why, names]) => { const kinds = sameNames(names); return `${kinds.slice(0, 3).map(({ n, count }) => U.fieldHtml(n, { name: '读数名称', kind: viewer }) + (count > 1 ? ` ${count} 项` : '')).join('、')}${kinds.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`; }).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
