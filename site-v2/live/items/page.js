@@ -65,7 +65,9 @@
   const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
   function landItem(item, intent) {
     const at = new Date().toISOString(), base = { since: writeStarted.get(item.id) ?? Date.now(), saved: Date.now(), version: item.item_version };
-    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: null, due: null, _landed: true } });
+    // 先摆上的“你放着”和后台那条一个样子：写上明早 10 点起该办（同后台 tomorrow_10），只留问情况、不办了和网站链接，不再挂“晚点提醒”
+    const tomorrow10 = (d => (d.setUTCDate(d.getUTCDate() + 1), d.toISOString().slice(0, 10) + 'T10:00:00+08:00'))(new Date(Date.now() + 8 * 3600e3));
+    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: tomorrow10, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
     else if (intent === 'close_report') {
       const id = item.owner_item || item.item_id || item.item || item.id;
       landed.set(id, { ...base, key: 'closed', row: { id, kind: 'choose', text: item.text, title: item.title, actions: [], closed: { at, kind: 'declined', text: '本人关掉了这份汇报' }, _landed: true } });
