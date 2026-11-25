@@ -78,3 +78,5 @@ button.chat-quota__cell:is(:hover, :focus-visible), button.chat-quota__cell[aria
 .chat-counts .chat-stat-link strong { margin: 0 2px 0 4px; }
 /* 帮手那一行：标签长（“额度用完 · 5 小时额度 · 预计 01:21 恢复”）时标签自己在右边折行，不把帮手名挤成半截 */
 .chats-board .helper > .helper__at:last-child { max-width: 15em; white-space: normal; }
+/* M928：四栏栏头小字写了“多久没动静算状态不明”，共用样式只留一行会把这句截掉，这页四栏的栏头小字整句显示 */
+.chats-board .lb-card__sub { display: block; }
