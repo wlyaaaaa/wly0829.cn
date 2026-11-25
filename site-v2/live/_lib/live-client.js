@@ -516,14 +516,15 @@
           : release ? `电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示${releaseName()}`
           : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份' };
     }
-    // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
-    const say = Number.isFinite(Date.parse(link?.offSince)) ? `${shortStamp(link.offSince)} 起电脑已关机` : '电脑关机了';
+    // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；说法照本人 11-25 23:19 选的图（OFFLINE1125 A）写“电脑 HH:MM 起离线”。
+    // 没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
+    const say = Number.isFinite(Date.parse(link?.offSince)) ? `电脑 ${shortStamp(link.offSince)} 起离线` : '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
         at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
           : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
-        wait: from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
+        wait: `${from === 'release' ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
     const meta = main?.backupMeta;
     return { stage: 'off', say, from: null, at: rest, wait: meta
