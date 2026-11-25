@@ -1,0 +1,50 @@
+/* 实况 · 账本一件：照“一件事的页-v1”（本人 11-26 01:04 批照图施工）。底子是档案卡（live-dossier.css）：页头大卡带插画，
+   下面三格（发生了什么、有什么影响、接下来），再下面左边“每看一次”、右边三张小卡（反复出现、来源、这件事）。 */
+
+.iss-hero .card__glass { min-height: 236px; }
+.iss-hero .card__head .head__lead { font-size: 34px; line-height: 46px; }
+.iss-hero .card__head.is-long .head__lead { font-size: 28px; line-height: 40px; }
+.iss-state { display: flex; flex-wrap: wrap; align-items: center; row-gap: 2px; margin: 16px 0 0; font-size: 17px; line-height: 28px; font-weight: 600; color: var(--ink); }
+.iss-state > span { display: inline-flex; align-items: center; }
+.iss-state > span + span::before { content: "·"; margin: 0 10px; font-weight: 400; color: #a9a79f; }
+.iss-state .lamp { margin: 0 10px 0 0; }
+.iss-state b { font-weight: 800; }
+.iss-src { margin: 8px 0 0; font-size: 14.5px; line-height: 24px; color: var(--muted); }
+
+.iss-go { color: #00A650; font-weight: 650; text-decoration: none; }
+.iss-go:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 三格：后台没给的那格不画，剩下的平分一行 */
+.iss-three { display: grid; grid-template-columns: repeat(var(--cells, 3), minmax(0, 1fr)); gap: var(--gap); margin-top: var(--gap); }
+.iss-three:empty { display: none; }
+.iss-cell { padding: 20px 26px 22px; }
+.iss-cell h2, .iss-side h2 { margin: 0 0 8px; font-size: 21px; line-height: 30px; font-weight: 800; letter-spacing: .02em; color: var(--ink); }
+.iss-cell p { margin: 0; font-size: 15.5px; line-height: 27px; color: var(--ink-soft); white-space: pre-line; overflow-wrap: anywhere; }
+
+/* 每看一次：一条竖线串起来，每一次一块淡紫底；做完的一次实心绿点，下一次空心圈，到点没看橙点 */
+.iss-grid { grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); }
+.dossier .run.iss-step > .run__main { display: block; padding: 12px 18px; }
+.dossier .run.iss-step:not(:has(> .lamp)) > .run__main::before { border: 0; background: #00A650; box-shadow: 0 0 0 3px rgb(0 166 80 / .16); }
+.dossier .run.iss-step[data-dot="late"]:not(:has(> .lamp)) > .run__main::before { background: #ef8f16; box-shadow: 0 0 0 3px rgb(239 143 22 / .16); }
+.dossier .run.iss-step[data-dot="next"]:not(:has(> .lamp)) > .run__main::before { border: 2px solid #8a8f8c; background: #fff; box-shadow: none; }
+.iss-step .run__main > p { margin: 0; font-size: 15.5px; line-height: 26px; color: var(--ink); overflow-wrap: anywhere; }
+.iss-step .run__main > p.iss-meta { margin-top: 2px; font-size: 14px; line-height: 22px; color: var(--ink-soft); }
+.iss-when { margin-right: 10px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.iss-kind { display: inline-block; margin-right: 8px; padding: 0 9px; border-radius: 999px; background: rgb(255 255 255 / .72); font-size: 13px; line-height: 22px; color: var(--ink-soft); vertical-align: 1px; }
+.iss-kind[data-live] { color: #00813f; }
+.iss-why { color: var(--muted); }
+.iss-more { margin-top: 4px; font-size: 13.5px; line-height: 22px; color: var(--muted); }
+.iss-more > summary { cursor: pointer; width: fit-content; }
+.iss-more > p { margin: 4px 0 0; }
+.iss-foot { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--hair); font-size: 14px; line-height: 22px; color: var(--muted); }
+
+/* 右边三张小卡 */
+.iss-side { padding: 18px 24px 20px; }
+.iss-side > p { margin: 0; font-size: 15px; line-height: 25px; color: var(--ink-soft); overflow-wrap: anywhere; }
+.iss-facts.rec-facts { margin: 4px 0 0; border: 0; }
+.iss-facts .rec-fact { grid-template-columns: 104px minmax(0, 1fr); padding: 8px 0; border-top: 1px solid var(--hair); }
+.iss-facts .rec-fact:first-child { border-top: 0; }
+.iss-facts .rec-fact > dt { font-size: 14px; line-height: 24px; }
+.iss-facts .rec-fact > dd { font-size: 15px; line-height: 24px; overflow-wrap: anywhere; }
+.iss-facts .rec-fact > dd small { display: block; margin: 2px 0 0; }
+.iss-facts .rec-fact > dd a.iss-go { color: #00A650; }
