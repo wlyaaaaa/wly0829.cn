@@ -1056,6 +1056,8 @@
       'Antigravity 搜索里没有唯一对应的结果。请在应用里核对标题和项目。', 'Antigravity 没有确认已切到原对话，请在台式机上核对。',
     ],
   };
+  // 打开请求已交给电脑、却没等到它回话：电脑上可能已经打开了，不说“没打开”（本人 11-26 00:13：后台还没回结果时最多显示已提交、等结果）
+  const OPEN_UNKNOWN = '已提交，电脑还没回话；先到电脑上看看打开没有，别急着再点';
   async function open(itemId, target, href) {
     // 本机产物和事项共用打开接口；别名及其相对路径原样交回电脑。
     if (href && typeof href === 'object') ({ item_id: itemId, target } = href);
@@ -1089,15 +1091,22 @@
           failed(detail, 403, body); clearFailure(detail); settle(detail); emit(detail);
         }
       }
+      if (body?.completion_unknown === true || body?.error === 'cockpit_open_unconfirmed' || !body && [504, 524].includes(response.status)) return { ok: false, unknown: true, text: OPEN_UNKNOWN };
       const antigravityError = typeof body?.error === 'string' && body.error.startsWith('antigravity_');
       const fixed = response.status === 503 && target === 'conversation' && antigravityError && antigravityOpenMessages[body.error];
-      const text = fixed ? fixed.find(message => message === body.message?.replaceAll?.('主驾驶', '台式机')) || fixed[0]
-        : !antigravity && !antigravityError && ![404, 503].includes(response.status) && typeof body?.message === 'string' && /[一-鿿]/.test(body.message) ? body.message : '';
+      // 电脑桌面连不上、没登录：后台说了真实原因就照说（“主驾驶”换成“台式机”）
+      const desktop = response.status === 503 && body?.error === 'cockpit_desktop_unavailable' && typeof body.message === 'string' && /[一-鿿]/.test(body.message)
+        ? `没打开：${body.message.replaceAll('主驾驶', '台式机')}` : '';
+      const text = desktop || (fixed ? fixed.find(message => message === body.message?.replaceAll?.('主驾驶', '台式机')) || fixed[0]
+        : !antigravity && !antigravityError && ![404, 503].includes(response.status) && typeof body?.message === 'string' && /[一-鿿]/.test(body.message) ? body.message : '');
       return { ok: response.ok, text: text || (response.ok ? '已在电脑上打开'
         : response.status === 403 ? '设备已失效，没打开，请重新连接电脑'
         : response.status === 404 ? '目标已不存在，没打开，请重读后再试'
         : response.status === 429 ? '点得太快了，没打开，稍后再试' : '电脑没打开，稍后再试') };
-    } catch { return { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
+    } catch {
+      // 回话没到（超时、半路断了）：请求可能已经到了电脑，照“已提交、不知道结果”说；这台设备本身没联网才是确实没发出去
+      return globalThis.navigator?.onLine === false ? { ok: false, text: '这台设备没联网，没发出去，联网后再点' } : { ok: false, unknown: true, text: OPEN_UNKNOWN };
+    }
   }
   async function automationSetting(data) {
     await pairing;

@@ -1138,11 +1138,15 @@
     }
     if (a.kind === 'open') {
       btn.disabled = true;
+      const row = btn.closest('.row') || btn.parentElement;
+      row.querySelector('.row__feedback')?.remove();
+      const note = document.createElement('p'); note.className = 'row__sub row__feedback'; note.setAttribute('role', 'status');
+      // 等电脑回话时只写“已提交、等结果”（本人 11-26 00:13）；本机文件、仅本人这类马上有结果的不先闪这一句
+      const waiting = setTimeout(() => { note.textContent = '已提交，等电脑回话…'; row.append(note); }, 300);
       try {
         const r = await window.Live.open(item.id, a.target, a.href);
-        const row = btn.closest('.row') || btn.parentElement;
-        row.querySelector('.row__feedback')?.remove();
-        const note = document.createElement('p'); note.className = 'row__sub row__feedback'; note.setAttribute('role', 'status'); note.textContent = r.text; row.append(note);
+        clearTimeout(waiting);
+        note.textContent = r.text; row.append(note);
         if (r.path) {
           const copyPath = document.createElement('button');
           copyPath.type = 'button'; copyPath.className = 'btn btn--sm'; copyPath.textContent = '复制路径';
@@ -1152,7 +1156,7 @@
           note.append(' ', copyPath);
         } else setTimeout(() => note.remove(), 8000);
       }
-      finally { btn.disabled = false; }
+      finally { clearTimeout(waiting); btn.disabled = false; }
     }
   });
 
