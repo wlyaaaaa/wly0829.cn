@@ -1,5 +1,5 @@
 // 实况 · 自动任务：后台 AI 替本人干的八类活。上半部照 AI 对话页的用法（本人 11-24 01:36 FEDQ1 选 A）：
-// 页头、一排分类按钮、在干、出毛病的、近 72 小时跑完的（一轮一张卡，自动修理一件一张卡）、更早的按天看；
+// 页头、一排分类按钮、在干、出毛病的、近 72 小时跑完、没做成、暂时不修的（一轮一张卡，自动修理一件一张卡）、更早的按天看；
 // 下半部是这周做成了多少、八类总表（开关、几点跑、用谁、上次结果、近 30 天，点一行原地展开怎么干）。
 // 读 /computer-access/live/v1/automation 和每一轮的列表 automation/runs（取数和转换在 runs.js）。
 // 网址：?category=<类> 只看一类；?family=claude|codex|antigravity 只看一家（旧链接的 ?host= 也认）；?date=today|YYYY-MM-DD 只看那天；?status=running|completed|incomplete 只看一种结局；
@@ -255,13 +255,17 @@
     const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
     const showLive = !filter.status || filter.status === 'running', showDone = filter.status !== 'running';
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
-    const doneName = filter.date ? `${day}${filter.status === 'incomplete' ? '没做成的' : '跑完的'}` : '近 72 小时跑完的';
+    // 这一节的名字照列表里实际有的几种写：绿点“跑完”、红点“没做成”、灰点“暂时不修”，和筛选按钮、卡上的说法一样；
+    // 筛了“只看跑完的”“只看没做成的”就只剩那一种。列表空着时照筛选写（主控 11-25：原来不管筛什么都写“跑完的”，下面一列红点对不上）
+    const kinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
+    const doneWhat = `${kinds.length ? kinds.join('、') : filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
+    const doneName = `${filter.date ? day : '近 72 小时'}${doneWhat}`;
     const legacy = v.legacy ? '<p class="tp-note" data-tone="off">每一轮的记录后台还没接上：下面先用八类各自最近几次拼出来，点不开经过。</p>' : '';
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     return `${catButtons(d, v)}${legacy}
       ${showLive ? sec('running', '在干', v.live.length, v.live.length ? v.live.map(c => card(d, v, c)).join('') : v.waiting ? waiting : idle) : ''}
       ${v.problems.length ? sec('trouble', '出毛病的', v.problems.length, v.problems.map(p => problemCard(d, p)).join('')) : ''}
-      ${showDone ? sec('done', doneName, v.done.length, v.done.length ? v.done.map(c => card(d, v, c)).join('') : `<p class="au-empty">${v.waiting ? '正在读…' : filter.date ? '这天没有跑完的' : '这 72 小时没有跑完的'}</p>`,
+      ${showDone ? sec('done', doneName, v.done.length, v.done.length ? v.done.map(c => card(d, v, c)).join('') : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
         filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') : ''}${capped}
       ${older(d)}`;
   }
