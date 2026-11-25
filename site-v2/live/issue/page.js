@@ -10,7 +10,6 @@
   const hero = $('hero'), part = name => hero.querySelector(`[data-part="${name}"]`);
   const SETTLED = { fixed: '修好了', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
   const STEP = { not_fixed: '没修好', deferred: '先放着', superseded: '并进了别的一件', not_done: '没办成' };
-  const KIND = { repair: '修理', verify: '验收' };
   const HOST = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
   let viewer = 'public', item = null, history = [], at = null, repeat, repeatAsked = false, first = true;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
@@ -18,22 +17,20 @@
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
+  // 访客版称呼：本页上“你”都写“本人”，后台写进句子里的也算（“你们”不动）；本人版原样
+  const say = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
+  const put = (el, html) => U.html(el, say(html));
   const timed = R.timed, ms = x => Date.parse(x);
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
   const nodot = v => typeof v === 'string' ? v.trim().replace(/[。.]$/u, '') : v;
   const go = (href, text) => site(href) ? `<a class="iss-go" href="${esc(route(site(href)))}">${text}&nbsp;›</a>` : text;
   // 那一轮还是那场对话：看地址是自动任务的一轮还是对话页
-  const goName = href => /^\/live\/chat\//.test(href) ? `${HOST[(new URL(href, location.origin).searchParams.get('id') || '').split(':')[0]] || ''}那场对话`.trim() : '那一轮';
+  const goName = href => /^\/live\/chat\//.test(href) ? `${HOST[(new URL(href, location.origin).searchParams.get('id') || '').split(':')[0]] || ''} 那场对话`.trim() : '那一轮';
   const titleOf = d => T(d.plain_title) ? d.plain_title : T(d.title) ? d.title : d.text;
 
-  // 返回：从哪进来回哪（首页这张卡、账本页、自动任务页、一轮的页、等你的事），别的照旧回账本页
-  const back = document.querySelector('[data-back]');
-  const runPage = url => url.pathname.startsWith('/live/automation/') && (url.searchParams.has('run') || /\/run\/$/.test(url.pathname));
-  let from = null;
-  try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/ledger/', '/live/automation/', '/live/items/', '/live/project/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
-  back.href = from ? from.pathname + from.search + (from.pathname === '/live/' ? '#ledger' : from.hash) : route('/live/ledger/');
-  back.textContent = from ? runPage(from) ? '这一轮' : { '/live/': '实况', '/live/ledger/': 'AI 自动任务账本', '/live/automation/': '自动任务', '/live/items/': '等你的事', '/live/project/': '项目' }[from.pathname] : 'AI 自动任务账本';
-  back.addEventListener('click', U.restoreBack);
+  // 左上照定稿图是面包屑“实况 › AI 自动任务账本 › 这件”（主控 04:5x 定）；点“AI 自动任务账本”回账本页原来的位置
+  for (const a of document.querySelectorAll('.iss-crumb a')) a.href = route(a.getAttribute('href'));
+  document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
 
   const bar = U.topbar({ ask: () => item ? `请看实况 AI 自动任务账本里的这一件 ${item.id}（${T(titleOf(item))}），用大白话说明它现在到哪一步、在等什么。` : '' });
   L.add(hero);
@@ -49,25 +46,33 @@
     return { group: owed ? 'owed' : 'parked', late, label: owed ? '欠着' : '放着', level: late ? 'blue' : owed ? 'green' : 'gray' };
   }
 
-  // 每看一次：自动修理那几件按每一轮列（修理、验收各一行，写型号档位，点进那一轮）；AI 约好的事按每看一次列（点进那场对话）。
-  // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻没有那一轮的才补上。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
-  function steps(d, repair) {
+  // 每看一次：照定稿图只列“看”（看过 2 次就是两行）；修理、验收那几轮不单列，待本人定。
+  // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻没有那一次看的才补上。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
+  // 这次看是在哪一轮里做的：那一轮开始以后、结束后 10 分钟内记下的就是那一轮（AI 约好的事是那一轮结束后几分钟才记下这次看），取结束得最近的；
+  // 型号档位先用这次看自己的，没有再用那一轮的；“那一轮 ›”和“那场对话 ›”都给。
+  // 对话被藏的那一轮（visitor_labels.conversation 是 hidden）：本人版挂“访客看不到”；访客版时刻、型号档位照给，那一轮的页后台给了链接就照给，原位写后台给的原因。
+  function steps(d) {
     const rows = [];
     const rounds = (Array.isArray(d.rounds) ? d.rounds : []).filter(r => r && (timed(r.end_at) || timed(r.at)));
-    // 修理、验收的小签只给自动修理那几件；AI 约好的事每一轮都是到点去看一次，不写“修理”
-    for (const r of rounds) rows.push({ at: r.end_at || r.at, text: r.deliverable ?? r.summary, kind: repair ? KIND[r.kind] || '' : '', live: !r.end_at,
-      who: [r.actual_model || r.executor, r.actual_effort || r.requested_effort].filter(Boolean).join(' · '), href: site(r.source_href), why: r.source_unavailable_reason });
-    const near = t => rows.some(r => Math.abs(ms(r.at) - ms(t)) < 2000);
-    for (const c of Array.isArray(d.checks) ? d.checks : []) if (c && timed(c.at) && !near(c.at)) {
-      rows.push({ at: c.at, text: c.text, kind: '', who: [c.model, c.effort].filter(Boolean).join(' · '), href: site(c.run_href) || site(c.source_href), why: c.source_unavailable_reason });
+    const roundOf = t => rounds.filter(r => ms(t) >= ms(r.at || r.end_at) - 2000 && ms(t) <= ms(r.end_at || r.at) + 600000)
+      .sort((a, b) => Math.abs(ms(a.end_at || a.at) - ms(t)) - Math.abs(ms(b.end_at || b.at) - ms(t)))[0];
+    for (const c of Array.isArray(d.checks) ? d.checks : []) if (c && timed(c.at)) {
+      const r = roundOf(c.at) || {}, chat = site(c.source_href), own = site(c.run_href), run = own || site(r.source_href);
+      // 原因跟着链接走：这次看自己有链接（或什么链接都没有）写这次看给的原因；链接是从那一轮借来的，写那一轮给的原因（本人版那一轮没有原因就不写）
+      const why = own || chat || !run ? c.source_unavailable_reason ?? r.source_unavailable_reason : r.source_unavailable_reason;
+      rows.push({ at: c.at, text: c.text, kind: '', who: [c.model || r.actual_model || r.executor, c.effort || r.actual_effort || r.requested_effort].filter(Boolean).join(' · '),
+        href: run || chat, chat: run && chat !== run ? chat : '', why, tag: hiddenTag(r) });
     }
+    const near = t => rows.some(r => Math.abs(ms(r.at) - ms(t)) < 2000);
     for (const e of history) if (e && timed(e.at) && !near(e.at)) {
       const out = e.resolution === 'recovered' ? 'recovered' : e.outcome;
       rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind: SETTLED[out] ? (out === 'to_owner' ? `转给${you()}` : SETTLED[out]) : STEP[out] || '',
-        who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason });
+        who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
     }
     return rows.sort((a, b) => ms(a.at) - ms(b.at));
   }
+  // 本人版：那一轮的对话访客看不到，原位挂“访客看不到”（访客版不挂）
+  const hiddenTag = r => r && viewer === 'owner' ? U.visitorLabel(r, 'conversation', '这一轮的对话', viewer) : '';
   function stepText(v) {
     if (v == null) return '';
     if (typeof v !== 'string') return F(v, '这一次做了什么');
@@ -82,21 +87,25 @@
     const title = titleOf(d);
     document.title = `${T(title) || '账本一件'} · 实况`;
     const head = part('head');
-    U.html(head, `<span class="head__lead">${F(title, '这件事')}</span>`);
+    // 本人版：这件事对外换了说法或访客看不到，标题后面挂签
+    put(head, `<span class="head__lead">${F(title, '这件事')}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
     const limit = d.check_limit || 3, looked = Number.isInteger(d.check_count) ? d.check_count : null, full = looked != null && looked >= limit;
-    const wait = s.group === 'parked' ? d.park?.text ?? d.wait?.text : s.group === 'owed' && !s.late ? d.fixer?.text ?? d.wait?.text : null;
+    const waitOf = s.group === 'parked' ? d.park?.text != null ? d.park : d.wait : s.group === 'owed' && !s.late ? d.fixer?.text != null ? d.fixer : d.wait : null;
+    const wait = waitOf?.text ?? null;
+    // 本人版：在等什么这句对外换了说法的，原位挂“对外换了说法”（“接下来”那格是同一句时也挂）
+    const waitTag = (t => t ? ` ${t}` : '')(waitOf ? U.visitorLabel(waitOf, 'text', '在等什么这句', viewer) : '');
     const next = s.closed ? null : d.story?.next ?? wait;
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
     const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手` : nextAt ? s.late ? `到点没看，原定 ${esc(when(nextAt))}` : `下次 ${esc(when(nextAt))} 看` : '';
     const nth = s.closed || full || looked == null ? '' : nextAt ? `第 ${esc(looked + 1)} 次看，最多 ${esc(limit)} 次` : `看过 ${esc(looked)} 次，最多 ${esc(limit)} 次`;
     // “等约好的时间再看”和后面“下次几点看”是一回事，有钟点时不写这半句
     const dateOnly = (d.park?.kind || d.wait?.kind) === 'wait_date' && nextAt;
-    const bits = [`${st.lamp}<b>${esc(s.label)}</b>`, !dateOnly && T(wait) && nodot(T(wait)) !== nodot(T(next)) && F(nodot(wait), '在等什么'), look, nth,
+    const bits = [`${st.lamp}<b>${esc(s.label)}</b>`, !dateOnly && T(wait) && nodot(T(wait)) !== nodot(T(next)) && F(nodot(wait), '在等什么') + waitTag, look, nth,
       d.running?.href && go(d.running.href, '正在办')].filter(Boolean);
-    U.html(part('state'), bits.map(b => `<span>${b}</span>`).join('')); part('state').hidden = false;
+    put(part('state'), bits.map(b => `<span>${b}</span>`).join('')); part('state').hidden = false;
     L.tone(hero, st.tone);
 
     // 谁几点记下：自动修理查出来的写第一次发现的时刻，AI 约好的写记下的时刻
@@ -105,34 +114,34 @@
     const born = repair && timed(d.first_at) ? d.first_at : timed(d.accepted) ? d.accepted : d.first_at;
     const src = [timed(born) && `${who ? `${F(who, '谁记的')} ` : ''}${esc(when(born))} ${repair ? '查出来记下' : '记下'}`,
       s.closed && timed(d.at) && `${esc(when(d.at))} 了结`].filter(Boolean);
-    U.html(part('src'), src.join(' · ')); part('src').hidden = !src.length;
+    put(part('src'), src.join(' · ')); part('src').hidden = !src.length;
 
     // 三格
     const what = d.story?.what ?? d.progress_summary ?? d.outcome_text ?? d.text;
     const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', s.closed ? `已经了结：${s.label}，不再看了。` : next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
-    U.html($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}</p></section>`).join(''));
+    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
-    const rows = steps(d, repair), anyChat = rows.some(r => /^\/live\/chat\//.test(r.href));
+    const rows = steps(d), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = (r, dotKind) => {
-      const meta = [r.who && esc(r.who), r.href ? go(r.href, goName(r.href)) : T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
+      const meta = [r.who && esc(r.who), r.href && go(r.href, goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
       return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
       : T(wait) ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>下一次：${F(wait, '在等什么')}</p></div></li>` : '';
     const html = rows.map(r => row(r, 'done')).join('') + nextRow;
-    U.html($('steps'), html || `<li class="run run--empty"><p class="run__none">还没看过。</p></li>`);
+    put($('steps'), html || `<li class="run run--empty"><p class="run__none">还没看过。</p></li>`);
     $('looks').hidden = false;
     const foot = $('steps-foot');
-    foot.textContent = rows.some(r => r.href) ? `每一轮就是那一轮 AI 的对话，点“${anyChat ? '那场对话' : '那一轮'} ›”看它说了什么、做了什么。` : '';
+    foot.textContent = rows.some(r => r.href) ? `每一轮就是那一轮 AI 的对话，点“${anyChat && anyRun ? '那一轮 ›”“那场对话' : anyChat ? '那场对话' : '那一轮'} ›”看它说了什么、做了什么。` : '';
     foot.hidden = !foot.textContent;
 
     // 右边三张小卡
     const side = [repeatCard(d), sourceCard(d), factsCard(d, s, repair, who, born)].filter(Boolean);
-    U.html($('side'), side.join(''));
+    put($('side'), side.join(''));
     $('grid').dataset.shape = side.length ? 'two' : 'main';
     heroRead.done(); restRead.done();
     if (first) { first = false; requestAnimationFrame(() => L.lightUp([hero])); }
@@ -140,7 +149,8 @@
 
   // 反复出现：只对自动修理查出来的故障。近 30 天坏了几次从账本的“反复出现”里取（单件读口没给）；不在那里面就是这 30 天只坏了这一次
   function repeatCard(d) {
-    const fault = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || !!d.object;
+    // AI 约好的事也带 object（就是那句话），不能拿它判；自动修理查出来的件编号以 auto- 开头
+    const fault = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
     if (!fault || repeat === undefined) return '';
     const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p></section>`;
     const rule = `30 天内第 3 次坏，自动修理停手、转给${you()}。`;
@@ -162,8 +172,11 @@
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {
     const fact = (k, v) => v ? `<div class="rec-fact"><dt>${k}</dt><dd>${v}</dd></div>` : '';
+    // 谁记的：后台给了那一轮的地址就点得进去（对话被藏的那一轮访客也打得开）；后台给了原因（如“这一轮的对话仅本人可见。”）照字写在下面；
+    // 本人版：记下它的那一轮对话访客看不到，挂“访客看不到”
     const reg = site(d.registered_by_href);
-    const whoHtml = who ? reg ? go(reg, F(who, '谁记的')) : `${F(who, '谁记的')}${T(d.registered_by_unavailable_reason) ? `<small>${F(d.registered_by_unavailable_reason, '为什么打不开')}</small>` : ''}` : '';
+    const regRound = reg ? [...(Array.isArray(d.rounds) ? d.rounds : []), ...history.flatMap(e => Array.isArray(e?.rounds) ? e.rounds : [])].find(r => r && site(r.source_href) === reg) : null;
+    const whoHtml = who ? `${reg ? go(reg, F(who, '谁记的')) : F(who, '谁记的')}${hiddenTag(regRound) && ` ${hiddenTag(regRound)}`}${T(d.registered_by_unavailable_reason) ? `<small>${F(d.registered_by_unavailable_reason, '为什么打不开')}</small>` : ''}` : '';
     const fixer = d.running?.href ? go(d.running.href, '正在办') : s.group === 'owed' && !s.late && T(d.fixer?.text) ? F(d.fixer.text, '谁在修') : '';
     const kind = repair ? ['auto-repair', '自动修理'] : ['ai-commitments', 'AI 约好的事'];
     const belong = `${go('/live/automation/', '自动任务')} ${go(R.listHref({ category: kind[0] }), R.categoryName(kind[0], viewer) || kind[1])}`;
@@ -195,7 +208,10 @@
     if (item) render();
   }
 
+  // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
+  let ended = false;
   function empty(message) {
+    ended = true;
     U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
     part('state').hidden = part('src').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
@@ -203,12 +219,12 @@
 
   if (!id) empty('没有说是哪一件');
   else window.Live.watch(`ledger/${encodeURIComponent(id)}`, null, {
-    phase(s) { if (!item) { heroRead.set(s); restRead.set(s); } },
+    phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
       if (kind !== viewer) { viewer = kind; repeat = undefined; repeatAsked = false; }
       if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
-      $('rest').hidden = false;
+      $('rest').hidden = false; ended = false;
       at = meta.at || d.at || null; item = d.item; history = Array.isArray(d.history) ? d.history : [];
       render(); loadRepeat();
     },
@@ -218,9 +234,10 @@
         U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
+        if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
+        if (ended) return;
         heroRead.set(s); restRead.set(s);
-        if (s.meta?.status === 404) empty('这件不在账上了，可能已经并进别的一件');
-        else if (s.phase === 'gone') empty('这块没存下来，连上后补上。');
+        if (s.phase === 'gone') empty('这块没存下来，连上后补上。');
         else if (s.phase === 'none') empty('这一件暂时读不到');
       } finally { [hero.querySelector('.card__body'), $('rest')].forEach(el => U.blockNote(el, s)); }
     },

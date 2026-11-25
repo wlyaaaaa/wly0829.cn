@@ -1,6 +1,15 @@
 /* 实况 · 账本一件：照“一件事的页-v1”（本人 11-26 01:04 批照图施工）。底子是档案卡（live-dossier.css）：页头大卡带插画，
    下面三格（发生了什么、有什么影响、接下来），再下面左边“每看一次”、右边三张小卡（反复出现、来源、这件事）。 */
 
+/* 左上面包屑：实况 › AI 自动任务账本 › 这件（照定稿图；样子同计划任务一项的页） */
+.iss-crumb { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; min-height: 30px; margin: 4px 8px 10px; font-size: 15px; color: var(--muted); }
+.iss-crumb a { color: var(--ink-soft); text-decoration: none; }
+.iss-crumb a:hover { color: #00A650; }
+.iss-crumb a::after { content: "›"; margin-left: 10px; color: #666675; }
+.iss-crumb .back { display: inline; height: auto; margin: 0; padding: 0; background: none; font: inherit; letter-spacing: normal; }
+.iss-crumb .back::before { content: none; }
+.iss-crumb strong { font-weight: 600; color: var(--ink); }
+
 .iss-hero .card__glass { min-height: 236px; }
 .iss-hero .card__head .head__lead { font-size: 34px; line-height: 46px; }
 .iss-hero .card__head.is-long .head__lead { font-size: 28px; line-height: 40px; }
