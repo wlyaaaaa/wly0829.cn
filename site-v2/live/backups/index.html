@@ -83,6 +83,17 @@
 .page--backups .backup-group:has(.backup-toggle:not([aria-expanded="true"])) .backup-dates > li[data-more] { display: none; }
 .page--backups .backup-latest .row__meta { white-space: normal; margin-left: 0; }
 .page--backups .backup-tag-stale { margin-left: 8px; color: #94631e; background: #fff0d6; box-shadow: none; }
+/* 窗口不到 1100 宽（M926）：总表一类资料占两行，第一行资料名、本地位置、大小，第二行五个去处、恢复点、操作，每格宽一倍，表头不再挤成一条；1100 以上照旧一行一类 */
+@media (max-width: 1099px) {
+  .page--backups .backup-grid, .page--backups .backup-grid :is(thead, tbody, caption) { display: block; }
+  .page--backups .backup-grid colgroup { display: none; }
+  .page--backups .backup-grid tr { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .page--backups .backup-grid tr > :nth-child(1) { grid-column: span 2; }
+  .page--backups .backup-grid tr > :nth-child(2) { grid-column: span 3; }
+  .page--backups .backup-grid tr > :nth-child(3) { grid-column: span 2; }
+  .page--backups .backup-grid tr > [colspan] { grid-column: 1 / -1; }
+  .page--backups .backup-grid tbody tr { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair); }
+}
 </style>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>
 
