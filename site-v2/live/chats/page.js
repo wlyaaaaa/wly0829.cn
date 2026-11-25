@@ -118,7 +118,7 @@
     const raw = locked ? null : U.chatProgressText(c.text ?? c.doing, c, viewer) ?? c.latest_reply, preview = U.chatPreviewSummary(raw, c, viewer);
     const repeatsStatus = (waitLabel || completed && !stillWorking) && U.chatFields.repeatsState(preview, c, viewer);
     const retry = c.state === 'reconnecting' && retryMessage(U.fieldText(preview, viewer));
-    const snippet = chatCell(preview, '最新进展', c, !retry && viewer === 'public' ? 80 : 0, true, preview !== raw);
+    const snippet = chatCell(preview, '最新进展', c, 0, true, preview !== raw);   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文
     const retryText = retry && chatCell({ ...field(preview, c), text: retry }, '最新进展', c, 0, true);
     // M684：本人版最新进展那句访客那边不一样的，句末挂签；整场对访客藏着的只在标题行挂一个。
     const previewTag = viewer === 'owner' && snippet && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'doing', 'progress'], '这句最新进展', viewer) : '';
@@ -131,7 +131,7 @@
       : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${label} ›</a>` : '';
     const steps = !locked && progress ? `<span class="chat-steps" aria-hidden="true">${plan.map(p => `<i data-status="${esc(stepState(p) || '')}"></i>`).join('')}</span>` : '';
     const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true);
-    const thoughtShort = viewer === 'public' && thoughtFull ? chatCell(c.thinking, '思考摘要', c, 40, true) : thoughtFull;
+    const thoughtShort = thoughtFull;   // 两版同一套（本人禁令 11-24 14:16）：两版思考摘要都给全文
     const thought = thoughtFull ? `<div class="chat-think row__sub"${thoughtShort !== thoughtFull ? ' data-cut' : ''}>` +
       `<span class="chat-think__preview">思考摘要<span class="chat-think__excerpt">：${thoughtShort}</span></span>` +
       '<button class="more chat-think__toggle" type="button" aria-expanded="false"><span class="chat-think__open">展开摘要</span><span class="chat-think__shut">收起摘要</span> <span class="more__chev" aria-hidden="true">›</span></button>' +

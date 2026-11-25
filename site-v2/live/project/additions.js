@@ -36,7 +36,7 @@
     const draw = baseMetrics[m.id] || extraMetrics[m.id], v = m.value;
     // 最近一次发布：后台给了人话（publish_attempt.text，如“已上传素材，网站还没上线这版；…；用时 16 分 57.35 秒”）就照后台写，原始秒数只留作计算
     if (m.id === 'publish_attempt' && typeof m.text === 'string' && m.text.trim()) return m.text.trim();
-    return draw && v && typeof v === 'object' && (m.id !== 'next_first_step' || viewer === 'owner') ? draw(v, stamp) : '';
+    return draw && v && typeof v === 'object' ? draw(v, stamp) : '';
   }
   function desktopNote(m, viewer, lower) {
     const v = m.value;
@@ -65,7 +65,7 @@
     return { key: 'before-after', title: data.title, html: paragraph(data.change), after: paragraph(data.skipped) + paragraph(data.note) + paragraph(`数据截至 ${stamp(data.as_of)}`), chart: { labels: rows.map(r => ({ text: r.date.slice(5), title: r.date })), values: { before: values('before'), after: values('after') } }, series: [{ id: 'before', label: '改前', hue: '#8b9690' }, { id: 'after', label: '改后', hue: '#00A650' }], unit: '分' };
   }
   function showcase(data, viewer, stamp) {
-    if (viewer !== 'owner' || !data?.items?.length) return null;
+    if (!data?.items?.length) return null;
     return { key: 'showcase', title: '可以拿来讲的作品', html: data.items.map(it => `<p class="knowledge-prose">${link(it.open, it.title)} · ${e(it.kind)}<small>${e(it.note)}</small></p>`).join('') + paragraph(data.gap) + paragraph(data.at && `数据截至 ${stamp(data.at)}`) };
   }
   function rulesLengthDelta(delta) {

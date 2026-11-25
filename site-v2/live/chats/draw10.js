@@ -190,7 +190,7 @@
     if (count === null) return '<p class="row__sub">没有记录</p>';
     if (!Number.isInteger(count) || count <= 0) return '';
     const text = '还有 ' + count + ' 个没接上';
-    const list = viewer === 'owner' && Array.isArray(data.unconnected_sources) && data.unconnected_sources;
+    const list = Array.isArray(data.unconnected_sources) && data.unconnected_sources;
     if (!list?.length) return '<p class="row__sub">' + text + '</p>';
     const rows = list.map(item => '<li>' + [item.tool, item.path, item.reason].filter(Boolean).map(esc).join(' · ') + '</li>').join('');
     return '<details class="row__sub"><summary class="more">' + text + '</summary><ul>' + rows + '</ul></details>';
@@ -221,7 +221,7 @@
   function helperDetailHtml(helper, viewer, parent) {
     if (contentLocked(helper, viewer) || contentLocked(parent, viewer)) return '';
     // 出错了的帮手先写出错原因（后台从执行记录取的 failure_reason）；本人版的 owner_detail 已是“出错原因：…”加原文，就只摆它，不重复
-    const detail = viewer === 'owner' ? helper.owner_detail ?? null : null, cause = typeof detail === 'string' && /^出错原因[：:]/.test(detail);
+    const detail = helper.owner_detail ?? null, cause = typeof detail === 'string' && /^出错原因[：:]/.test(detail);
     const failure = cause ? detail.replace(/^出错原因[：:]\s*/, '') : helper.state === 'failed' ? helper.failure_reason ?? null : null;
     // 摘要：Claude 帮手的英文半句或“第 N/M 步”换成后台给的中文进展（localized.summary）；没有中文的照原文，并写清缺因
     const local = helper.localized?.summary, gaps = helper.field_gaps || {};

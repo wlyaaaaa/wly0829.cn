@@ -115,7 +115,7 @@
     const check = d.origin?.last_check;
     const oldStamp = [d.stale_text, d.why].map(v => U.fieldText(v, viewer)).join(' ').match(/最近一次记录于\s*((?:\d\d-\d\d\s+)?\d\d:\d\d)/u)?.[1];
     let readout = d.status_subject ? d.why || d.stale_text : oldStamp && `事项状态上次记录于 ${oldStamp}`;
-    if (viewer === 'owner' && typeof readout === 'string') readout = readout.replace(/，此后没有新读数[。]?$/u, '');
+    if (typeof readout === 'string') readout = readout.replace(/，此后没有新读数[。]?$/u, '');
     const missing = [...new Set(d.partial || [])].map(key => d.missing_names?.[key] || (/[一-鿿]/u.test(key) ? key : d.missing?.[key])).filter(Boolean);
     const checkResult = check?.text || { authenticated: '已登录', expired: '登录已过期', timeout: '检查超时', unknown: '未核实' }[check?.status];
     const checkText = [check?.checked_at && esc(when(check.checked_at)), checkResult && say(checkResult, '核验结果')].filter(Boolean).join(' · ');
@@ -173,7 +173,7 @@
     // 档案卡：一题一行，题目在左、选项按钮靠右
     const askHtml = q => { const html = `<p>${say(q.text && typeof q.text === 'object' ? q.text : q, '问题内容')}</p>${Array.isArray(q.options) ? `<div class="rec-acts">${optionActions(d, q)}</div>` : ''}`; return dossier ? `<div class="dossier-ask">${html}</div>` : html; };
     // 本人版给全：问题、经过都不收。
-    const firstAsk = viewer === 'owner' ? Infinity : FIRST_QUESTIONS, firstRun = viewer === 'owner' ? Infinity : FIRST;
+    const firstAsk = Infinity, firstRun = Infinity;   // 两版同一套（本人禁令 11-24 14:16）：两版问题、经过都不收
     const askShown = askMore ? qs.slice(0, firstAsk) : qs, askRest = askMore ? qs.slice(firstAsk) : [];
     U.html($('question-text'), askShown.map(askHtml).join(''));
     if (askMore) { U.html($('question-rest'), askRest.map(askHtml).join('')); askMore.hidden = !askRest.length; askLabel(); }
@@ -214,7 +214,7 @@
     });
     $('history-box').hidden = !usefulHistory.length && !next;
     // 一条经过的正文：档案卡先摆第一句，其余的点这一句展开看。
-    const runOut = t => { const s = dossier && viewer !== 'owner' && typeof t === 'string' ? D.sentence(t) : null; return s?.rest ? `<details class="run__out run__full"><summary>${say(s.head, '这条经过')}</summary><p class="rec-prose">${say(s.rest, '这条经过')}</p></details>` : `<p class="run__out rec-prose">${say(t, '这条经过')}</p>`; };
+    const runOut = t => `<p class="run__out rec-prose">${say(t, '这条经过')}</p>`;   // 两版同一套（本人禁令 11-24 14:16）：两版经过都给全文
     const events = U.mergePrivateRows(usefulHistory, { value: e => e.text || e, kind: viewer }).map((e, i) => {
       if (e.private_count) return { key: e.key, cls: 'run', html: U.privateSummary(e.private_count) };
       const { actor = '', extra = '' } = eventReadings.get(e) || {};
@@ -231,7 +231,6 @@
     $('earlier').hidden = !issue || !next; U.html($('earlier'), '继续读更早的经过 ›');
     $('coverage').textContent = coverage?.from && Date.parse(coverage.from) !== Date.parse(d.accepted) ? `记录从 ${when(coverage.from)} 起` : '';
     $('rec').hidden = privateItem; if (body) body.hidden ||= privateItem; heroRead.done(); detailsRead.done(); first = false;
-    if (dossier && viewer !== 'owner') D.clamp(part('lead'), $('lead-more'));
     requestAnimationFrame(() => L.lightUp([hero, ...$('events').children, $('rec'), $('notices')]));
   }
   function clearRecord() {

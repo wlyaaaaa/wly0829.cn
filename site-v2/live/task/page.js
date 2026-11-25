@@ -41,6 +41,9 @@
     return s % 60 ? `${wholeMinutes} ${s % 60} 秒` : wholeMinutes;
   };
   const write = (el, html) => { U.html(el, html, false); el.hidden = !html; };
+  // M783：本人版按后台给在这条任务（或这一轮）上的 visitor_labels 在原位挂“对外换了说法／访客看不到”，keys 是这个位置显示的字段；没标的、访客版都不挂
+  const mark = (row, keys, what) => { const tag = viewer === 'owner' ? U.visitorLabel(row, keys, what, viewer) : ''; return tag ? ` ${tag}` : ''; };
+  const marked = (html, row, keys, what) => html ? html + mark(row, keys, what) : html;
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
   const provider = v => {
@@ -96,7 +99,7 @@
     const groupLink = $('crumb-group');
     groupLink.hidden = !group;
     if (group) { groupLink.textContent = group; groupLink.href = route(list, { group: groupId }); }
-    write($('crumb-name'), field(d.display_name ?? d.name, '任务名'));
+    write($('crumb-name'), marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
   $('runs-rest').addEventListener('click', e => {
@@ -256,7 +259,7 @@
   }
   function renderHero(d, kind, upcoming, todayCount, runs, quiet) {
     const name = d.display_name ?? d.name, last = runs[0];
-    U.html($('name'), (field(name, '任务名') || '任务名称未读到') + (kind === 'schedule' ? provider(d.scheduler) : ''), false);
+    U.html($('name'), (marked(field(name, '任务名'), d, ['display_name', 'name'], '任务名') || '任务名称未读到') + (kind === 'schedule' ? provider(d.scheduler) : ''), false);
     document.title = `${text(name) || '任务详情'} · 实况`;
     const showLast = last && runTime(last) != null && runTime(last) <= now;
     const state = showLast ? last.result : ['disabled', 'paused', 'never'].includes(d.state) ? d.state : null;
@@ -279,7 +282,7 @@
     const info = kind === 'plan' ? [mode, d.scheduler === 'windows' && 'Windows 计划任务', group && `分组为${group}`]
       : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
-    write($('task-purpose'), field(d.purpose ?? d.text, '用途'));
+    write($('task-purpose'), marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途'));
     write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
     // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
     const off = d.state === 'disabled' || d.enabled === false;
@@ -301,16 +304,18 @@
     const link = (url, value) => value ? `<a href="${esc(url)}">${value} ›</a>` : '';
     const project = typeof d.project === 'string' && d.project !== 'project-b9c775111c7c33539ba1941c'
       ? link(route('/live/project/', { id: d.project }), field(d.project_name, '项目名')) : field(d.project_name, '项目名');
+    // M767：所属项目在访客版看不到的（后台标 visitor_labels.project_name），本人版在项目名后挂签
+    const projectCell = marked(project, d, 'project_name', '所属项目');
     const rows = [
-      ['做什么', field(d.purpose ?? d.text, '用途')],
-      ['成果', field(d.output, '成果')],
+      ['做什么', marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途')],
+      ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
         : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field(d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
       kind !== 'plan' && ['谁来做', provider(d.executor ?? d.scheduler)],
-      ['怎么停', field(d.stop, '停止办法')],
-      ['停了会怎样', field(d.stop_effect, '停止影响')],
+      ['怎么停', marked(field(d.stop, '停止办法'), d, 'stop', '停止办法')],
+      ['停了会怎样', marked(field(d.stop_effect, '停止影响'), d, 'stop_effect', '停止影响')],
       ['谁配的', field(d.configured_by, '配置者')],
-      ['所属项目', project],
+      ['所属项目', projectCell],
       typeof d.ledger_id === 'string' && ['关联账本', link(route('/live/issue/', { id: d.ledger_id }), '看这件事')],
     ].filter(row => row?.[1]);
     $('about-title').textContent = kind === 'pickup' ? '这个动作' : '这个任务';
@@ -335,7 +340,7 @@
     return d.result_kind === 'display_recovery' && runTime(r) === runTime(asRun(d.last || {})) ? 'computer/displays/recovery' : '';
   }
   function extra(d, r, output = false, open = false) {
-    const path = runPath(d, r), info = [times(r), field(r.reason, '运行说明'), !output && field(r.output, '运行成果')].filter(Boolean);
+    const path = runPath(d, r), info = [times(r), marked(field(r.reason, '运行说明'), r, 'reason', '运行说明'), !output && marked(field(r.output, '运行成果'), r, 'output', '运行成果')].filter(Boolean);
     if (!open && !path && r.end == null && r.exit_code == null && !r.reason && !(!output && r.output)) return '';
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
@@ -351,7 +356,7 @@
     const outsideLog = r => valid(logFrom) && valid(logTo) && r.start != null && (r.start < logFrom - 1000 || r.start > logTo + 1000);
     const labels = kind === 'plan' && heads ? '<div class="task-row task-row--labels"><span>时刻</span><span>结果</span><span>用时</span><span>触发方式</span></div>' : '';
     return labels + `<ol class="task-timeline">${rows.map(r => {
-      const output = kind === 'schedule' && field(runOutput(d, r), '本次成果');
+      const output = kind === 'schedule' && marked(field(runOutput(d, r), '本次成果'), r.output != null ? r : d, 'output', '本次成果');
       // 一小时以上只写到分钟，用时一栏放得下，不挤进触发方式
       const span = kind === 'plan' ? seconds => seconds >= 3600 ? `${Math.floor(seconds / 3600)} 小时 ${Math.floor(seconds % 3600 / 60)} 分` : duration(seconds) : duration;
       const trigger = r.trigger_text ?? TRIGGER[r.trigger], took = span(r.length ?? NaN);
@@ -406,8 +411,8 @@
     const known = r?.result === 'failed';
     $('failure').hidden = kind !== 'plan' || !known;
     if ($('failure').hidden) return;
-    const why = field(r.reason ?? dLast.reason, '出错原因');
-    const output = field(runOutput(d, r), '本次运行结果');
+    const why = marked(field(r.reason ?? dLast.reason, '出错原因'), r.reason != null ? r : dLast, 'reason', '出错原因');
+    const output = marked(field(runOutput(d, r), '本次运行结果'), r.output != null ? r : d, 'output', '本次运行结果');
     U.html($('failure-text'), [times(r), why || (r.exit_code != null ? '只读到退出码，没有出错原因的记录' : '没有出错原因的记录'), output].filter(Boolean).map(v => `<p>${v}</p>`).join(''), false);
     const target = $('failure-checks');
     U.html(target, '', false); readChecks(runPath(d, r), target);

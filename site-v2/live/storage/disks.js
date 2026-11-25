@@ -76,7 +76,7 @@
     if (!rows.length) return note || `<p class="dk-empty">${esc(empty)}</p>`;
     const max = Math.max(1, ...rows.map(r => Number.isFinite(r.bytes) ? r.bytes : 0));
     const li = r => `<li><span>${esc(r.name)}</span><b>${esc(r.size || '—')}</b>${Number.isFinite(r.bytes) ? `<i style="width:${(r.bytes / max * 100).toFixed(1)}%"></i>` : ''}</li>`;
-    const limit = viewer === 'owner' ? rows.length : 10;
+    const limit = rows.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
     const head = rows.slice(0, limit), rest = rows.slice(limit);
     return `<ul class="dk-list">${head.map(li).join('')}</ul>${note}${rest.length ? `<details class="dk-rest" data-key="${esc(key)}"><summary class="dk-rest__sum">还有 ${rest.length} 条</summary><ul class="dk-list">${rest.map(li).join('')}</ul></details>` : ''}`;
   }
