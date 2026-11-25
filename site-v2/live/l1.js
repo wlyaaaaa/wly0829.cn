@@ -1322,7 +1322,10 @@
   let changesPage;
   function checkProjectChanges() {
     const p = parts.projects, box = p['changes-box'];
-    p['more-changes'].hidden = false;
+    // 上面写着“暂时读不到项目变化”时不挂“全部变化 · 近 7 天”，免得一句说读不到、紧挨着又给一个看全部的入口（M964）；
+    // 已经展开着的照旧留着，好收起；读到了变化就回来。
+    const unread = !(home?.projects?.changes || []).length && ['unknown', 'partial', 'stale'].includes(home?.projects?.changes_q);
+    p['more-changes'].hidden = unread && p['more-changes'].getAttribute('aria-expanded') !== 'true';
     if (changesPage && changesPage.kind !== viewer) {
       changesPage = null;
       delete box._loaded;
