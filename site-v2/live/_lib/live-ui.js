@@ -783,8 +783,8 @@
       else {
         // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”
         const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
-          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + (resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：这件不见了就是办成了，还在可以再点一次。' : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
-        const head = rows.length > 1 ? [`保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
+          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + (resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：' + (rows.length > 1 ? '不见了的就是办成了，还在的可以再点一次。' : '这件不见了就是办成了，还在可以再点一次。') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
+        const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
         receipt.set('fail', head,
           { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
       }
