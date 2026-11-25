@@ -1078,7 +1078,9 @@
       // 笔记本的系统写在笔记本格里（原来夹在“机器自己”卡里）。
       const os = x.id === 'secondary_laptop' && x.os != null ? `<p class="row__sub">${U.fieldHtml(typeof x.os === 'object' ? x.os : `系统 ${sp(x.os)}`, { name: '笔记本系统' })}</p>` : '';
       hw = U.mergePrivateRows(hw, { kind: netViewer });
-      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
+      // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：格里大字照旧，这句放进小字（主持 11-26 01:56 定）
+      const linkNote = x.id === 'phone' && x.presence?.state === 'unknown' && x.state !== 'offline' ? '<p class="row__sub">手机连接状态暂时读不到</p>' : '';
+      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${linkNote}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
     }).join('') + remoteEntries(d.remote));
     U.html(hardwarePane, hardware, false);
     if (!hardware) hardwarePane.hidden = true;
@@ -1103,8 +1105,6 @@
       const since = Number.isFinite(Date.parse(x.offline?.since)) ? ` · ${stamp(x.offline.since)} 起` : '';
       if (since || !x.text) return `电脑连不上${since}`;
     }
-    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
-    if (x.id === 'phone' && x.presence?.state === 'unknown' && x.state !== 'offline') return '连接状态暂时读不到';
     const since = x.id === 'main' && offline() && link?.reason === 'host-off' ? link.offSince
       : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since
       : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;

@@ -54,11 +54,10 @@
     const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
     if (d?.presence?.state === 'offline') return at(d.offline_since) ? `手机 ${at(d.offline_since)} 起离线` : '手机离线';
     if (d?.state === 'offline') return `电脑连不上手机${at(d.offline?.since) ? ` · ${at(d.offline.since)} 起` : ''}`;
-    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
-    if (d?.presence?.state === 'unknown') return '手机连接状态暂时读不到';
     const primary = val('screen_on') == null && (d?.metrics || []).find(m => typeof val(m.id) === 'number');
     if (primary) return `${marked(primary.label) ? ({unlocks:'解锁',battery:'电量',battery_temp:'电池温度',screen_on:'亮屏',storage_free:'存储剩',storage_used:'存储已用',memory_used:'内存已用'})[primary.id] || '手机' : sp(primary.label || '')} ${reading(primary.id)}`.trim();
-    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : '手机暂时读不到';
+    // 一样读数都没有、连接证据也不够时，整句写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : d?.presence?.state === 'unknown' ? '手机连接状态暂时读不到' : '手机暂时读不到';
     return `${readingDay('screen_on')}亮屏 ${reading('screen_on')}`;
   }
   // 采到了、今天没用（亮屏和解锁都是 0、不是读不全、带统计到哪一刻）写成一句；还没采到是 null 加 gap，不走这句（统筹 11-17 04:55）
@@ -721,9 +720,10 @@
       : !idleToday() && !usageHasCutoff ? U.staleText({ ...metric('screen_on'), summary: phone?.why || phone?.groups?.find(g => g.key === 'usage')?.reason }) : '';
     if (old && [phone?.why, ...(phone?.groups || []).filter(g => ['red', 'yellow'].includes(g.level)).map(g => g.reason)].some(text => sp(text).includes(sp(old)))) old = '';
     const usageGap = val('screen_on') == null ? metric('screen_on')?.gap || phone?.blocks?.usage?.reason || phone?.reason : '';
-    // 手机连接状态读不到时这句放在最前面，不让上次读数的说明把它挤掉
-    const unclear = phone?.state !== 'offline' && phone?.presence?.state === 'unknown';
-    const noteText = [phoneStatusNote(phone), U.fieldHtml(unclear ? [heading, old || usageGap].filter(Boolean).join(' · ') : old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：大字照旧放真采到的读数，
+    // “手机连接状态暂时读不到”放在小字最前面，不让上次读数的说明把它挤掉（主持 11-26 01:56 定）
+    const unclear = phone?.state !== 'offline' && phone?.presence?.state === 'unknown' && !heading.includes('连接状态');
+    const noteText = [phoneStatusNote(phone), unclear && '手机连接状态暂时读不到', U.fieldHtml(old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
     const lastOnline = lastOnlineNote(phone, pcOffline());
     const notes = [noteText, esc(lastOnline)].filter(Boolean).join('<br>');
     part('note').hidden = !notes; U.html(part('note'), notes);
