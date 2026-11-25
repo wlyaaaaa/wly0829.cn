@@ -219,6 +219,23 @@
     more.querySelector('.chat-models-left').textContent = rows.length - keep;
   }
   if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitModels()).observe($('chat-counts'));
+  // LINK1125（本人 11-25 选 A）：“今天”“近 7 天”第一行后面接“· 干了 X 小时 ›”，只算对话和帮手、不含自动任务（和这页“不含定时和自动”一致），
+  // 点了去智能体页“三家干了多少”、选同一时段；“今天”再接“· 自动任务另跑了 N 轮 ›”，点了去自动任务页只看今天。
+  // 数取首页回包：agents.today.activity.periods.<today|d7>.total.by_activity（智能体页同一份）、automation.results_today.finished_runs（首页自动任务卡同一个数）。
+  let homeFull = null;
+  const hoursText = m => m <= 0 ? '0' : m < 3 ? '不到 0.1' : Math.round(m / 6) >= 1000 ? Math.round(m / 60).toLocaleString('zh-CN')
+    : (Math.round(m / 6) / 10).toLocaleString('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  function statLinks() {
+    document.querySelectorAll('#chat-counts [data-links]').forEach(host => {
+      const key = host.dataset.links === 'today' ? 'today' : 'd7';
+      const by = homeFull?.agents?.today?.activity?.periods?.[key]?.total?.by_activity;
+      const mins = ['conversation', 'subagent'].map(k => by?.[k]?.actual_minutes).filter(Number.isFinite);
+      const runs = homeFull?.automation?.results_today?.finished_runs;
+      const links = [mins.length && `<a class="chat-stat-link" href="${esc(route(`/live/agents/?hours=${key}#hours`))}">干了 <strong>${hoursText(mins.reduce((a, b) => a + b, 0))}</strong><small>小时</small> ›</a>`,
+        key === 'today' && Number.isInteger(runs) && runs >= 0 && `<a class="chat-stat-link" href="${esc(route('/live/automation/?date=today'))}">自动任务另跑了 <strong>${runs}</strong><small>轮</small> ›</a>`].filter(Boolean);
+      U.html(host, links.map(link => ` <span class="chat-stat-piece">· ${link}</span>`).join(''), false);
+    });
+  }
   function renderStats(stats, temporary = false) {
     const current = stats?.concurrent, { from, to } = current?.window ?? current ?? {}, peak = current?.peak;
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
@@ -262,9 +279,10 @@
         + `<details class="chat-models-more" data-models="${key}"${open ? ' open' : ''} hidden><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 <span class="chat-models-left">0</span> 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary></details>`
         : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
-      return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small></p>${notes}${modelList}</div>`;
+      return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small><span class="chat-stat-links" data-links="${key}"></span></p>${notes}${modelList}</div>`;
     }).join('');
     U.html($('chat-counts'), counts);
+    statLinks();
     fitModels();
     const historyQ = current?.history_q ?? (current?.q === 'warming' ? 'warming' : undefined);
     if (Array.isArray(current?.series) && historyQ !== 'warming') concurrent.set({ ...current, from, to, q: historyQ });
@@ -589,7 +607,7 @@
     if (!s.data && !activeChats) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
-  window.Live.watch('home', null, { data(d) { drawBackground(d?.automation); } });
+  window.Live.watch('home', null, { data(d) { drawBackground(d?.automation); homeFull = d; statLinks(); fitModels(); } });
   window.Live.watch('chats', null, { phase(s) { if (!activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
     readViewer(meta);
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
