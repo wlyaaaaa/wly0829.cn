@@ -76,3 +76,5 @@ button.chat-quota__cell:is(:hover, :focus-visible), button.chat-quota__cell[aria
 .chat-counts .chat-stat-piece { white-space: nowrap; } .chat-counts .chat-stat-link { color: inherit; text-decoration: none; }
 .chat-counts .chat-stat-link:is(:hover, :focus-visible) { text-decoration: underline; text-underline-offset: 3px; }
 .chat-counts .chat-stat-link strong { margin: 0 2px 0 4px; }
+/* 帮手那一行：标签长（“额度用完 · 5 小时额度 · 预计 01:21 恢复”）时标签自己在右边折行，不把帮手名挤成半截 */
+.chats-board .helper > .helper__at:last-child { max-width: 15em; white-space: normal; }
