@@ -201,7 +201,8 @@
     return { root, tick };
   }
   const viewerOf = state => state?.meta?.viewer?.kind === 'owner' || state?.viewer?.kind === 'owner' ? 'owner' : 'public';
-  const stateNote = (state, label) => state?.offline ? `<p class="tp-note" data-tone="off">${esc(state.text || '电脑连不上')}。</p>`
+  // 连不上时那句（live-client 拼的）本来就以句号收尾，不再补一个（M959：原来写成“……的数据。。”）
+  const stateNote = (state, label) => state?.offline ? `<p class="tp-note" data-tone="off">${esc((state.text || '电脑连不上').replace(/。?$/, '。'))}</p>`
     : state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
   const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? `电脑连不上，${label}没存下来。`
     : ['none', 'gone', 'error'].includes(state?.phase) || state?.meta?.status >= 400 ? `${label}暂时没读到。` : `正在读${label}…`)}</p>`;

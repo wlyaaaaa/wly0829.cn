@@ -56,10 +56,14 @@
     return U.date(at) === U.date(Date.now()) ? '今天' : `${U.date(at)} `;
   }
   function headText(d) {
-    if (d?.state === 'offline') return `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}`;
+    // 和实况首页手机卡同一套说法（主持 11-26 定）：调试连接和 Tailscale 都找不到手机才叫离线，只有调试连接断叫“电脑连不上手机”
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    if (d?.presence?.state === 'offline') return at(d.offline_since) ? `手机 ${at(d.offline_since)} 起离线` : '手机离线';
+    if (d?.state === 'offline') return `电脑连不上手机${at(d.offline?.since) ? ` · ${at(d.offline.since)} 起` : ''}`;
     const primary = val('screen_on') == null && (d?.metrics || []).find(m => typeof val(m.id) === 'number');
     if (primary) return `${marked(primary.label) ? ({unlocks:'解锁',battery:'电量',battery_temp:'电池温度',screen_on:'亮屏',storage_free:'存储剩',storage_used:'存储已用',memory_used:'内存已用'})[primary.id] || '手机' : sp(primary.label || '')} ${reading(primary.id)}`.trim();
-    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : '手机暂时读不到';
+    // 一样读数都没有、连接证据也不够时，整句写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : d?.presence?.state === 'unknown' ? '手机连接状态暂时读不到' : '手机暂时读不到';
     return `${readingDay('screen_on')}亮屏 ${reading('screen_on')}`;
   }
   // 采到了、今天没用（亮屏和解锁都是 0、不是读不全、带统计到哪一刻）写成一句；还没采到是 null 加 gap，不走这句（统筹 11-17 04:55）
@@ -69,7 +73,7 @@
       ? `今天还没用过（统计到 ${U.time(until)}）` : '';
   }
   // 本人版给完整版，不挂“仅你可见”；对外换了说法的照旧提一句。
-  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(viewer === 'owner' && item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
+  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
   const listName = a => marked(a.name) || viewer !== 'owner' && a.name == null && a.visibility === 'owner' ? '' : a.name == null && a.visibility === 'owner' ? note(a)
     : `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${note(a) ? ` <span class="phone-mark">${note(a)}</span>` : ''}`;
   const paragraph = text => `<p class="use-note">${fh(text && typeof text === 'object' ? text : humanText(text))}</p>`;
@@ -721,6 +725,10 @@
     if (!disconnected && (['online', 'warming'].includes(d?.state) ||
       d?.state === 'partial' && (d.link?.since || d.lamp_q === 'ok' && d.last_online === d.at))) return '';
     const time = phoneReadingTime(d?.last_online);
+    // last_online 是电脑上次用调试连接连上手机的时刻：手机整台离线时照旧叫“上次确认在线”，并写明是两条路都找不到；
+    // 只有调试连接断时手机可能还在线，改叫“电脑最后连上手机”，不让人以为手机不在线（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return ['电脑的调试连接和 Tailscale 都找不到手机', time && `上次确认在线 ${shortDate(d.last_online)} ${time}`].filter(Boolean).join(' · ');
+    if (d?.state === 'offline') return time ? `电脑最后连上手机 ${shortDate(d.last_online)} ${time}` : '';
     return time ? `上次确认在线 ${shortDate(d.last_online)} ${time}` : '';
   }
   function showReceivedTimes(card, text) {
@@ -863,7 +871,10 @@
       : !idleToday() && !usageHasCutoff ? U.staleText({ ...metric('screen_on'), summary: phone?.why || phone?.groups?.find(g => g.key === 'usage')?.reason }) : '';
     if (old && [phone?.why, ...(phone?.groups || []).filter(g => ['red', 'yellow'].includes(g.level)).map(g => g.reason)].some(text => sp(text).includes(sp(old)))) old = '';
     const usageGap = val('screen_on') == null ? metric('screen_on')?.gap || phone?.blocks?.usage?.reason || phone?.reason : '';
-    const noteText = [phoneStatusNote(phone), U.fieldHtml(old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：大字照旧放真采到的读数，
+    // “手机连接状态暂时读不到”放在小字最前面，不让上次读数的说明把它挤掉（主持 11-26 01:56 定）
+    const unclear = phone?.state !== 'offline' && phone?.presence?.state === 'unknown' && !heading.includes('连接状态');
+    const noteText = [phoneStatusNote(phone), unclear && '手机连接状态暂时读不到', U.fieldHtml(old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
     const lastOnline = lastOnlineNote(phone, pcOffline());
     const notes = [noteText, esc(lastOnline)].filter(Boolean).join('<br>');
     part('note').hidden = !notes; U.html(part('note'), notes);

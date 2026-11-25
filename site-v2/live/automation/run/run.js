@@ -133,7 +133,7 @@
     // 原因照全站“访客看不到”小签带上；后台的原因句可能以“访客看不到：”打头，去掉免得重复
     // M684：后台在 visitor_labels.conversation 标了 hidden 也挂这个签；标 rewritten 的挂第二种签“对外换了说法”
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
-    const tag = viewer !== 'owner' ? '' : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
+    const tag = viewer !== 'owner' ? (c.reason === 'private' || c.why || labeled !== 'rewritten' ? '' : U.visitorRewrittenTag('这一轮的对话', '', viewer)) : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
       : labeled === 'rewritten' ? U.visitorRewrittenTag('这一轮的对话', '', viewer) : '';
     const full = c.available ? `<a class="ar-go" href="${esc(c.href)}">看完整对话 <span aria-hidden="true">›</span></a>${tag}`
       : hiddenFromVisitor ? tag : `<p class="ar-none ar-nofull">这一轮没有能打开的完整对话。</p>${tag}`;

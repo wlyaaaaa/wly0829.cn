@@ -267,10 +267,28 @@
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
+  const stampOf = value => Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
   const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
   // 确认关机：副屏那格回 on: false，或回包头 X-Live-Connection 说 host-off（两路都是原有的；后台现在都还不发）。
   // 没确认关机就只重试、留着手里那份，不用云端、随站那两份（本人 11-24 20:34）。
   const confirmedOff = () => !publicPaused && offline() && hostOffline(latestConnection());
+  // 没确认关机时页顶写“自几点起连不上”（M918）：只有这个窗口亲眼见过从读得到变成读不到才写，几点取最后一次读到之后第一次读不到的那会儿；
+  // 首访、新开标签页一开就断的，没见过读得到，不写（不然像是电脑从他打开页面那会儿才断）。
+  // 同一个标签页里换到别的实况页、断开一直没好（2 分钟内还记着断开）就接着用这个时刻；读到在线就清。
+  const LOST_AT = 'wly-live-lost-at';
+  let lostAt = (() => { try { const v = JSON.parse(sessionStorage.getItem(LOST_AT)); return Number.isFinite(Date.parse(v?.at)) && Date.now() - v.seen < 120000 ? v.at : null; } catch { return null; } })();
+  function noteLost() {
+    if (publicPaused) return;
+    try {
+      if (offline()) {
+        // 本页主数据这一页里读到过（freshAt），这一串读不到从 missSince 开始
+        const seen = !lostAt && connectionEntries().filter(e => isMain(e) && e.freshAt && e.missSince > e.freshAt).sort((a, b) => b.freshAt - a.freshAt)[0];
+        if (seen) lostAt = new Date(seen.missSince + clockOffset).toISOString();
+        if (lostAt) sessionStorage.setItem(LOST_AT, JSON.stringify({ at: lostAt, seen: Date.now() }));
+      }
+      else if (latestConnection()?.state === 'online' && lostAt) { lostAt = null; sessionStorage.removeItem(LOST_AT); }
+    } catch { /* 存不下就只记在这一页 */ }
+  }
   // 正在用云端或随站那份的正文（只有时刻的旧包不算）。
   const onBackup = e => e.source === 'fallback' && e.data !== null;
   function linkReason(link) {
@@ -497,18 +515,23 @@
       const release = connectionEntries().some(x => x.backupFrom === 'release' && onBackup(x) || x.backupMeta?.from === 'release');
       const at = main && onBackup(main) ? ` · 下面是${releaseName()}`
         : !mainAt && !shownUpTo() && main?.backupMeta ? ` · ${releaseName()}只记了时刻，没存内容` : atLine;
-      return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at,
+      // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
+      const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
+      return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at,
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
           : release ? `电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示${releaseName()}`
           : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份' };
     }
-    const say = '电脑关机了';
+    // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；说法照本人 11-25 23:19 选的图（OFFLINE1125 A）写“电脑 HH:MM 起离线”。
+    // 没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
+    const say = Number.isFinite(Date.parse(link?.offSince)) ? `电脑 ${shortStamp(link.offSince)} 起离线` : '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
         at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
           : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
-        wait: from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
+        // “这台浏览器没存过上次的数据；”只给电脑页（照 OFFLINE1125 A 那张图）；两个首页本人答了电脑关机时不改，共用这句照原样
+        wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
     const meta = main?.backupMeta;
     return { stage: 'off', say, from: null, at: rest, wait: meta
@@ -528,6 +551,7 @@
       meta: { ...state.meta, fallbackNote: note } };
   }
   function emit(e, onlyPhase = false) {
+    noteLost();
     const state = present(e);
     if (connectionOffline && !state.offline && !publicPaused) reconnected();
     const changed = connectionOffline !== state.offline || state.offline && pageAt !== shownUpTo(); connectionOffline = state.offline; pageAt = shownUpTo();
@@ -598,7 +622,7 @@
       }
     }
   }
-  function failed(e, status, body, via) {
+  function failed(e, status, body, via, offSince) {
     e.status = status; e.warming = false;
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
@@ -608,9 +632,12 @@
     if (status === 403) {
       audience(e, { kind: 'public', device: 'invalid' });
     }
-    e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
+    e.error = status === 403 ? '这部分只对本人开放' : body?.error === 'live_publication_revoked' ? '这块的公开判定正在更新，稍后自动补上'
+      : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
     if (paged(e)) return;
-    const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
+    // 智能体页、开场页那两个读口算不出时回 503 带 agent_hooks_source_unavailable／agents_startup_unavailable：实况服务答了话，电脑是通的，
+    // 只是这一块这会儿没算出来（后台重启后要算十来分钟）；不能等 10 秒就把整页报成“电脑连不上”（M909），照常重读
+    const reachable = status >= 400 && status < 500 || /^(live_((source|variant|detail)_unavailable|publication_revoked)|agent_hooks_source_unavailable|agents_startup_unavailable)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
     // 确认关机和心跳停了一样马上算；关机期间云端偶尔读不到也不改回“连不上”，读到新的才收。
@@ -626,7 +653,7 @@
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
-      : off ? { state: 'offline', basis: 'response', reason: 'host-off' }
+      : off ? { state: 'offline', basis: 'response', reason: 'host-off', offSince: stampOf(offSince) || e.validatedLink?.offSince || null }
       : { state: 'offline', basis: status ? 'response' : 'browser', reason }));
   }
   function clearFailure(e) {
@@ -681,19 +708,16 @@
     for (const item of all) if (item.listeners.size) emit(item);
     return present(e);
   }
+  // 一样资源回“公开判定更新中”（live_publication_revoked）：只空这一块（连同浏览器里存的这一份）、写明为什么，
+  // 别的块照常显示、照常读，不清整页（M970；主控按工程卡“访客口径”定：只放宽不收紧，藏太多才是毛病）。
   function revokePublication(e, body) {
-    publicationVersion++;
     fallback = null;
-    const affected = currentEntries().filter(item => item === e || item.viewer.kind === 'public');
-    for (const item of affected) {
-      forgetData(item, true);
-      clearFailure(item);
-      item.withdrawn = true;
-      item.source = 'net';
-      failed(item, 503, body);
-      settle(item);
-    }
-    for (const item of affected) if (item !== e && item.listeners.size) emit(item);
+    forgetData(e, true);
+    clearFailure(e);
+    e.withdrawn = true;
+    e.source = 'net';
+    failed(e, 503, body);
+    settle(e);
   }
   function restoreBrowserCopy(e) {
     if (e.data === null && !itemDetail(e)) {
@@ -844,7 +868,7 @@
       if (Number.isFinite(Date.parse(responseNow))) { e.now = new Date(responseNow).toISOString(); clockOffset = Date.parse(responseNow) - Date.now(); }
       const via = response.headers.get('X-Live-Connection');
       if (oss) {
-        failed(e, 503, null, via || 'unreachable');
+        failed(e, 503, null, via || 'unreachable', via === 'host-off' ? response.headers.get('X-Live-Offline-Since') : null);
         restoreBrowserCopy(e);
         // 云端那份：记下来，确认关机才用（带正文的是这一块的访客回包，旧包只有时刻）
         e.cloud = fixture !== null ? null : { at: body?.at, packet: body?.error === 'snapshot_content' ? body : null,
@@ -1097,6 +1121,13 @@
     } catch { return { status: 'unknown' }; }
   }
   const ownerWrites = new Map();
+  // 提交编号也记在本机（30 分钟）：点完马上刷新、离开再回来，回到页面按同一次操作接着查；回过的结果一并记下，多选时先回来的几件不用再问（M945）
+  const KEPT_WRITES = 'wly-live-owner-writes', KEEP_WRITES_MS = 1800000;
+  function keptWrites() {
+    try { const all = JSON.parse(localStorage.getItem(KEPT_WRITES) || '{}'), now = Date.now(); for (const [key, v] of Object.entries(all)) if (!(now - v?.at < KEEP_WRITES_MS)) delete all[key]; return all; }
+    catch { return {}; }
+  }
+  function keepWrite(key, value) { try { const all = keptWrites(); all[key] = value; localStorage.setItem(KEPT_WRITES, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ } }
   async function sendOwnerAction(token, data) {
     const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions' : '/__computer/cockpit/actions';
     try {
@@ -1112,6 +1143,33 @@
       if (response.status < 500 && result?.status) return result;
     } catch { /* 原请求可能已经写入，须按同一提交编号核对。 */ }
     return null;
+  }
+  // 只读查回执（后台 21be7a5c 起，主持 11-26 01:31）：按原提交编号查这台设备的那一笔，只查不写。
+  // 查到回那张回执；同设备没有这笔回 { status: 'missing' }；没设备（403）、编号无效（400）、查询本身失败回 null，按还没确认算
+  async function lookUpOwnerAction(token, idempotencyKey) {
+    const url = (site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions/receipt' : '/__computer/cockpit/actions/receipt') + '?idempotency_key=' + encodeURIComponent(idempotencyKey);
+    try {
+      const response = await fetch(url, { method: 'GET', cache: 'no-store', credentials: site ? 'omit' : 'same-origin',
+        headers: site ? { 'X-Cockpit-Device': token } : opened.headers(token), signal: AbortSignal.timeout(30000) });
+      const result = await response.json().catch(() => null);
+      if (response.status === 404 && result?.error === 'cockpit_action_missing') return { status: 'missing', error: 'cockpit_action_missing' };
+      if (response.ok && result?.status) return result;
+    } catch { /* 查不了就算还没确认 */ }
+    return null;
+  }
+  // 回到页面接着查：按原提交编号只读查回这一笔，不发写请求。没有这笔先隔 5 秒再查一次（刚刷新时原请求可能还在路上）再下结论；
+  // 后台已收下、还在写的，照办理回查的节奏接着查（前一分钟每 3 秒，之后每 15 秒，最多两分半）；查到结果记下，下回不再查
+  async function checkKeptWrite(token, key, kept) {
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms)), id = kept.data.idempotency_key;
+    let result = await lookUpOwnerAction(token, id);
+    if (result?.status === 'missing' && device() === token) { await wait(5000); result = await lookUpOwnerAction(token, id); }
+    const started = Date.now();
+    while (result?.status === 'waiting_undo' && device() === token && Date.now() - started < 150000) {
+      await wait(Date.now() - started < 60000 ? 3000 : 15000);
+      result = await lookUpOwnerAction(token, id) ?? result;
+    }
+    if (result && !['waiting_undo', 'missing'].includes(result.status)) keepWrite(key, { data: kept.data, at: kept.at, result });
+    return result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
   }
   // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
   globalThis.addEventListener?.('offline', () => { if (!publicPaused) refresh(false); });
@@ -1158,30 +1216,40 @@
       return (site || Boolean(lanBase)) && fixture === null && !publicView && !offline() &&
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
-    async applyOwnerItems(items, action, followReceipt = false) {
-      const saved = [];
+    async applyOwnerItems(items, action, followReceipt = false, resume = false) {
+      const saved = [], receipts = {};
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
-        const result = await window.Live.ownerAction(item, action, followReceipt);
+        const result = await window.Live.ownerAction(item, action, followReceipt, resume);
+        receipts[item.id] = result;   // 后台回执原样带回（下去的时刻、几点再提醒），页面照它写
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
         else if (result.error === 'cockpit_owner_required') { message = '不是可信设备'; error = result.error; }
         else { if (result.message) message = result.message; error = result.error || ''; }
       }
-      return { saved, pending, unconfirmed, message, error };
+      return { saved, pending, unconfirmed, message, error, receipts };
     },
-    async ownerAction(item, action, followReceipt = false) {
+    async ownerAction(item, action, followReceipt = false, resume = false) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
       const token = device();
       const key = JSON.stringify([token, item.id, item.item_version, action]);
       let write = ownerWrites.get(key);
       if (!write) {
+        const kept = keptWrites()[key];
+        // 回到页面接着查（resume）不拿原编号再发一遍：原请求要是没到，重发就成了没人点的一笔新操作（本人 11-26 00:13）。
+        // 本机记下过结果就用那次的；没记下就按原编号只读查回执（checkKeptWrite）
+        if (resume) return kept?.result || (kept?.data ? checkKeptWrite(token, key, kept) : { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' });
+        // 本人在页面上再点一次同一件：接着用刷新、离开前那一次的编号，后台按编号认出是同一笔，不会写两次
+        if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
+      }
+      if (!write) {
         const data = { item_id: item.id, item_version: item.item_version, action, direct: true,
           idempotency_key: Array.from(crypto.getRandomValues(new Uint8Array(16)), n => n.toString(16).padStart(2, '0')).join('') };
         if (action === 'snooze') data.until = 'tomorrow_10';
-        write = { data, request: null };
+        write = { data, at: Date.now(), request: null };
         ownerWrites.set(key, write);
+        keepWrite(key, { data, at: write.at });
       }
       write.request ||= (async () => {
         let result = await sendOwnerAction(token, write.data);
@@ -1201,7 +1269,7 @@
           result = await sendOwnerAction(token, write.data);
         }
         write.request = null;
-        if (result && result.status !== 'waiting_undo') ownerWrites.delete(key);
+        if (result && result.status !== 'waiting_undo') { ownerWrites.delete(key); keepWrite(key, { data: write.data, at: write.at, result }); }
         return result || { status: 'unknown', message: followReceipt
           ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' };
       })();

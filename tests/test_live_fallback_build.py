@@ -91,12 +91,17 @@ def test_whole_build_checks_links_and_survives_record_failure(tmp_path, monkeypa
     assert json.loads((tmp_path/'output/.build-receipt.json').read_text('utf-8'))['status'] == 'built'
     checked.assert_called_once(); record.assert_called_once()
     assert '构建已成功，实况登记失败' in capsys.readouterr().err
-    # The same actual checker allows the optional fallback, but still stops broken page links.
+    # The optional fallback may be absent. Page links warn, missing assets still fail.
     folder = tmp_path/'checks'; (folder/'公用').mkdir(parents=True); (folder/'live/_lib').mkdir(parents=True)
     (folder/'公用/页名到地址.json').write_text('{}', 'utf-8')
     (folder/'live/_lib/live-client.js').write_text("fetch('/release-identity.json')", 'utf-8')
     build.check_site_links(folder)
-    (folder/'index.html').write_text('<a href="/missing/">broken</a>', 'utf-8')
+    (folder/'index.html').write_text('<a href="/missing/">broken</a><a href="https://wly0829.cn/retired.html">old</a>', 'utf-8')
+    assert build.check_site_links(folder) == [
+        ('index.html', '/missing/（文件不存在）'),
+        ('index.html', 'https://wly0829.cn/retired.html（文件不存在）'),
+    ]
+    (folder/'index.html').write_text('<img src="/missing.png">', 'utf-8')
     with pytest.raises(ValueError, match='文件不存在'): build.check_site_links(folder)
 
 

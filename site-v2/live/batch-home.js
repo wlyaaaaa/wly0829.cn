@@ -82,8 +82,11 @@
         // “上次”：这一家今天的数是证实的 0 时，用 last_at 里对应那一项（工时没有就看开工）
         today: t ? { hours: hoursOf(act ? act.hosts?.[key]?.actual_minutes : t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
     });
+    // 叠加的小时数一天能过 24：算出“今天到现在几小时里平均同时几个在干”，写在大字旁边，一眼看得出数合不合理（主控 11-26 03:50）
+    const sumHours = hoursOf(act ? act.total?.actual_minutes : total.actual_minutes);
+    const span = act ? (Date.parse(act.as_of) - Date.parse(act.window_start)) / 3600000 : NaN;
     return { rows, current, date: R.todayLabel(/^\d{4}-\d\d-\d\d$/.test(today?.date || '') ? `${today.date}T12:00:00+08:00` : now),
-      hours: hoursOf(act ? act.total?.actual_minutes : total.actual_minutes), said: total.messages, noToday: !today, at: time(d.at) };
+      hours: sumHours, together: sumHours > 0 && span >= .25 ? sumHours / span : null, said: total.messages, noToday: !today, at: time(d.at) };
   }
   // 首页 AI 账本卡：新账起（后台清零重算，从正式生效那一刻算），AI 在跟几件、今天到日子、跟得最久、新账起进了结。
   // 取数照数据约定 §11：data.ledger.new_ledger = {started_at, open, opened, closed, due, overdue, next_due, opened_7d?, closed_7d?}，每个数 {count, href}；
@@ -219,14 +222,19 @@
       const work = row => {
         const t = row.today;
         if (!t) return `<span class="b6-host__work">${v.noToday ? '' : `今天的数 ${num(null)}`}</span>`;
-        if (t.hours === 0 && t.starts === 0) return `<a class="b6-host__work" href="${esc(route(row.workHref))}">今天还没开工${t.last ? ` · 上次 ${esc(U.date(t.last))}` : ''} ›</a>`;
-        return `<a class="b6-host__work" href="${esc(route(row.workHref))}">${num(hours(t.hours))} 小时 · 开工 ${num(t.starts)} 件 · ${own}说 ${num(t.said)} 句 ›</a>`;
+        // 小时没读到、也没登记开工、你也没跟它说话：今天就是没干活，照别家没开工那样写，不留一个空着的“ 小时”（M839）
+        if ((t.hours === 0 || t.hours == null && t.said === 0) && t.starts === 0) return `<a class="b6-host__work" href="${esc(route(row.workHref))}">今天还没开工${t.last ? ` · 上次 ${esc(U.date(t.last))}` : ''} ›</a>`;
+        // “开工 N 件”是报了估时登记开工的件数，跟前面实际在干的小时数不是一回事（Codex 26 小时、开工 0 件），本人 11-26 04:27 选 A 去掉
+        return `<a class="b6-host__work" href="${esc(route(row.workHref))}">${num(hours(t.hours))} 小时 · ${own}说 ${num(t.said)} 句 ›</a>`;
       };
+      // 平均同时几个在干：不到 10 写一位小数
+      const together = x => x >= 10 ? Math.round(x) : Math.round(x * 10) / 10;
       return { tone, head: cardTitle('智能体', href, tone, status) + `<span class="b6-date">${esc(v.date)}</span>`, body:
         // 后台这一块没给今天的数（today 为空）：不画“··”免得像还在加载，写明没送到、最近一次是几点读到的（主持 11-24 06:12）
         (v.noToday ? `<div class="b6-big"><strong>今天的数还没送到</strong>${v.at ? `<span class="b6-big__aside">最近一次记录于 ${esc(v.at)}</span>` : ''}</div>`
           // 这句点进智能体页“三家干了多少”那块（#hours），时间直接选“今天”和这里对得上（?hours=today），不预先选哪一家（M738）
-          : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${own}说了 ${num(v.said)} 句</span></div>`) + `
+          // 小时数是叠加的（同时在干的分别算），写明“叠加”，旁边小字“平均同时 N 个在干”，一天过 24 小时也看得懂（主控 11-26 03:50 点名）
+          : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家叠加干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${v.together ? `平均同时 ${esc(together(v.together))} 个在干 · ` : ''}${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
         <p class="b6-foot b6-foot--split">${ruleLine(`规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }

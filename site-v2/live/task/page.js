@@ -41,8 +41,8 @@
     return s % 60 ? `${wholeMinutes} ${s % 60} 秒` : wholeMinutes;
   };
   const write = (el, html) => { U.html(el, html, false); el.hidden = !html; };
-  // M783：本人版按后台给在这条任务（或这一轮）上的 visitor_labels 在原位挂“对外换了说法／访客看不到”，keys 是这个位置显示的字段；没标的、访客版都不挂
-  const mark = (row, keys, what) => { const tag = viewer === 'owner' ? U.visitorLabel(row, keys, what, viewer) : ''; return tag ? ` ${tag}` : ''; };
+  // M783：本人版按后台给在这条任务（或这一轮）上的 visitor_labels 在原位挂“对外换了说法／访客看不到”，keys 是这个位置显示的字段；没标的不挂；访客版只挂“对外换了说法”（M930）
+  const mark = (row, keys, what) => { const tag = U.visitorLabel(row, keys, what, viewer); return tag ? ` ${tag}` : ''; };
   const marked = (html, row, keys, what) => html ? html + mark(row, keys, what) : html;
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';

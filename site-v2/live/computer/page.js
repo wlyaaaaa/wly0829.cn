@@ -1051,7 +1051,7 @@
     part('devs').classList.toggle('has-hardware', list.some(hasHardware));
     U.html(part('devs'), list.filter(x => !offline() || ['online', 'offline'].includes(x.state) || hasHardware(x) || laptopUnavailable(x)).map((x) => {
       // 页面连不上时台式机不写“在线”（那是断开前的旧状态，和顶上“连不上电脑”打架），用现成的“连不上”（M741）。
-      const state = laptopUnavailable(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
+      const state = laptopUnavailable(x) || offSinceText(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
       const inner = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>${U.fieldHtml(state, { name: '设备状态', place: 'label' })}`;
       const pc = x.pc || PC[x.id];
       const detail = { phone: '/live/phone/', secondary_laptop: '/live/laptop/' }[x.id];
@@ -1078,7 +1078,9 @@
       // 笔记本的系统写在笔记本格里（原来夹在“机器自己”卡里）。
       const os = x.id === 'secondary_laptop' && x.os != null ? `<p class="row__sub">${U.fieldHtml(typeof x.os === 'object' ? x.os : `系统 ${sp(x.os)}`, { name: '笔记本系统' })}</p>` : '';
       hw = U.mergePrivateRows(hw, { kind: netViewer });
-      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
+      // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：格里大字照旧，这句放进小字（主持 11-26 01:56 定）
+      const linkNote = x.id === 'phone' && x.presence?.state === 'unknown' && x.state !== 'offline' ? '<p class="row__sub">手机连接状态暂时读不到</p>' : '';
+      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${linkNote}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
     }).join('') + remoteEntries(d.remote));
     U.html(hardwarePane, hardware, false);
     if (!hardware) hardwarePane.hidden = true;
@@ -1088,6 +1090,25 @@
     if (x.id !== 'secondary_laptop' || x.availability !== 'unavailable') return '';
     const since = readingStamp(x.unavailable_since);
     return '笔记本状态暂时读不到' + (since ? ` · 自 ${since} 起` : '');
+  }
+  // 几点起离线（本人 11-25 23:19 选 A：台式机、笔记本那一行写“HH:MM 起离线”）：
+  // 台式机看页面确认离线时边缘给的关机时刻（X-Live-Offline-Since）；笔记本看后台 offline_since（这次持续离线的第一次观察，M918）
+  // 手机那一行和实况首页、手机页同一套（主持 11-26 定）：调试连接和 Tailscale 都找不到才叫离线（presence 同级的 offline_since），
+  // 只有电脑到手机的调试连接断写“电脑连不上 · HH:MM 起”（offline.since），手机这时可能还在线
+  function offSinceText(x) {
+    const link = lastState?.link;
+    // 带不带日期拿现在的北京日期比（和页顶“电脑 HH:MM 起离线”一致）；不拿这份数的时刻当今天，电脑离线跨了零点时那份数还是昨天的
+    const stamp = since => `${U.date(since) !== U.date(Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
+    // 只断调试连接：这格已印着“手机”，写“电脑连不上”，看得出是电脑这头连不上它、手机可能还在线（主持 11-26 定）；
+    // 没有起点、后台也没给别的说法时同样写“电脑连不上”，不写成像手机自己毛病的“连不上”
+    if (x.id === 'phone' && x.presence?.state !== 'offline' && x.state === 'offline') {
+      const since = Number.isFinite(Date.parse(x.offline?.since)) ? ` · ${stamp(x.offline.since)} 起` : '';
+      if (since || !x.text) return `电脑连不上${since}`;
+    }
+    const since = x.id === 'main' && offline() && link?.reason === 'host-off' ? link.offSince
+      : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since
+      : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;
+    return Number.isFinite(Date.parse(since)) ? `${stamp(since)} 起离线` : '';
   }
   function unitHtml(text, name = '硬件信息') { const body = U.fieldHtml(text, { name }); return body.includes('live-mark') ? body : body.replace(/\d+(?:[.,]\d+)*\s*(?:[GMKT]B|ms|GHz|MHz|Hz|℃|次|个|%)/g, '<span class="computer-unit">$&</span>'); }
   function remoteEntries(items) {

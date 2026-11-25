@@ -450,8 +450,8 @@
     const cutoff = !moment && (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
     const recent = changed && !lastState?.offline && fresh('project-changes', changed) ? '<span class="project-recent">刚改</span>' : '';
     const nameNote = viewer === 'public' && it.name && typeof it.name === 'object' ? U.fieldHtml({ ...it.name, text: null, value: null }, { name: '项目名', kind: viewer }) : '';
-    // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版和没标的不挂
-    const nameTag = viewer === 'owner' ? U.visitorLabel(it, ['$', 'name'], '这个项目', viewer) : '';
+    // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版只挂其中的“对外换了说法”（M930），没标的不挂
+    const nameTag = nameNote ? '' : U.visitorLabel(it, ['$', 'name'], '这个项目', viewer);
     const look = typeof projectLooks === 'undefined' || projectLooks === null ? null : window.LiveProjectLook?.of(it.id, projectLooks);
     const style = look && !look.known ? ` style="background:linear-gradient(135deg,${look.glow[0]},${look.glow[1]})"` : '';
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
@@ -585,7 +585,8 @@
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
     // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
-    const marks = viewer !== 'owner' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || U.visibilityNote(it, viewer)}</span>`;
+    const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
+    const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
     return {
       key: it.id,
       cls: 'row',
@@ -700,8 +701,8 @@
     if (c.detail === false) return `<span class="row__title">${U.fieldHtml(label, { kind: viewer, place: 'title', name: '对话' })}</span>${note}`;
     return `${title(c, label, 'chats')}${note ? ` <span class="head__rewrite">${note}</span>` : ''}`;
   }
+  // 两版同一套：后台给了帮手详情就照画（访客回包里没有就不出这一块），被标的字由 fieldHtml 按回包里的标记处理
   function chatHelperDetails(helpers, kind) {
-    if (kind !== 'owner') return '';
     const rows = helpers.filter(h => U.fieldText(h.owner_detail, kind).trim()).map(h => {
       const label = U.fieldHtml(h.title ?? h.model_text ?? h.model, { name: '帮手名', kind });
       const detail = U.fieldHtml(h.owner_detail, { name: '帮手详情', kind });
@@ -713,7 +714,7 @@
     const ago = finished || elapsed(c.at), word = U.chatFields.rowState(c, viewer);
     const quota = U.chatFields.quota(c, viewer);
     const state = quota ? '' : lastState?.offline ? join([`离线前${word}`, ago]) : c.content_locked || ['stopped', 'done', 'running'].includes(c.state) ? join([word, ago]) : word;
-    const helperRows = Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
+    const helperRows = U.chatFields.helperList ? U.chatFields.helperList(c) : Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
     const helpers = U.chatFields.workingHelpers(c);
     const detail = helperRows.some(h => h.owner_detail != null) ? chatHelperDetails(helperRows, viewer) : '';
     const e = c.estimate, work = [e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, e?.worked_min != null && `已干 ${Math.round(e.worked_min)} 分钟`, Math.round(e?.over_min) > 0 && `超 ${Math.round(e.over_min)} 分钟`].filter(Boolean).join(' · ');
@@ -734,7 +735,7 @@
     const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(homeAddressed(replyField), c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
     // 两版同一套（本人禁令 11-24 14:16）：回复预览两版都给全文，访客版不再先收成 4 行加“展开全文”
     // M684：本人版回复预览访客那边不一样的，句末挂签；整场对访客藏着的只在 meta 那里挂一个。
-    const previewTag = viewer === 'owner' && reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
+    const previewTag = reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
     const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}${previewTag}</p></div>` : '';
     const helperText = helpers && (c.state === 'done' ? `后台帮手另在处理（${helpers} 个）` : `帮手 ${helpers} 个在干`);
     const lockedMeta = locked ? [c.stage, c.project_name, c.born && ('开始于 ' + U.time(c.born)),
@@ -819,9 +820,15 @@
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
     const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    const summary = join(pieces);
-    const heading = chatCardHead({ summary, recorded, marker, url: href('chats'), stamps: split && stamps });
-    U.html(p.head, heading + (missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
+    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
+    const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
+    const colTotal = key => Number.isInteger(board?.columns[key]?.total) ? board.columns[key].total : null, colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
+    const bySort = list => [...list].sort((a, b) => (Number.isFinite(Date.parse(b.sort_at)) - Number.isFinite(Date.parse(a.sort_at))) || Date.parse(b.sort_at) - Date.parse(a.sort_at) || 0);
+    const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
+      `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
+    const summary = boardSummary || join(pieces);
+    const heading = chatCardHead({ summary, recorded: board ? recordStamp(board.as_of) : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
+    U.html(p.head, heading + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
     // 这张卡不列后台的对话（本人定的）；后台自动任务这会儿在跑的另起一行，点了到自动任务页
     const background = !lastState?.offline && window.LiveBatchHome.backgroundRunning(home?.automation);
     p.background.hidden = !(background?.n > 0);
@@ -829,10 +836,13 @@
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.running;
-    const active = (d.active || []).filter(c => c.state !== 'done'), working = active.length > 0 || runningNow > 0 || d.waiting > 0;
-    const all = [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
+    const rows = board && Array.isArray(board.columns.working?.items) ? board : null;   // 带行的 board（chats 读口那一份）才拿来列行
+    // 停下没归档的（出错、叫停、回完了没归档、状态不明）照改前一样列在卡上，排在在干、等你后面；几行露在外面照旧由卡高定，其余进“还有 N 个”
+    const active = rows ? [...bySort([...colItems('working'), ...colItems('waiting')]), ...bySort(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
+    const working = board ? active.length > 0 || colTotal('working') > 0 || colTotal('waiting') > 0 : active.length > 0 || runningNow > 0 || d.waiting > 0;
+    const all = rows ? (working ? active : bySort(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
     const activePreview = working ? all : [];
-    const recent = [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
+    const recent = rows ? bySort(colItems('archived')) : [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
     const preview = chatPreviewRows([...activePreview, ...recent.slice(0, 13)]);
     for (const id of expandedReplies) if (!preview.some(row => row.key === id)) expandedReplies.delete(id);
     const activeEnd = activePreview.length;
@@ -841,7 +851,8 @@
     paintList(p['recent-rest'], preview.slice(activeEnd + shown.done), { animate: false });
     chatWorking = working;
     // 列出来的在干行比计数多（比如状态不明的）时按列出来的算，多出来没摆的也写进“还有 N 个”，不悄悄藏掉。
-    chatTotal = working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
+    chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0) + (rows ? colTotal('stopped') || 0 : 0), all.length) : all.length)
+      : working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
     fitCard('chats');
     U.html(p['done-label'], recent.length ? '已完成' : '');
     balanceHome();
@@ -853,7 +864,11 @@
     const name = { lan: '局域网', tailscale: 'Tailscale', bluetooth: '蓝牙' }[link?.route];
     const stamp = recordStamp(status?.at || link?.at || blockAt(d) || d?.received?.last_at);
     const old = lastState?.offline || (status ? status.state !== 'online' || oldReading(status) : oldReading(d)) || oldReading(link);
-    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `手机调试连接上次未连通${stamp ? `（${stamp} 记录）` : ''}` : '手机调试连接未连通';
+    // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
+    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (d?.presence?.state === 'unknown') return lastState?.offline ? `上次读不到手机连接状态${stamp ? `（${stamp} 记录）` : ''}` : '手机连接状态暂时读不到';
     if (name) return old ? `手机上次经${name}连接${stamp ? `（${stamp} 记录）` : ''}` : `手机经${name}连接`;
     if (!old && (status?.state === 'online' || !status && device?.state === 'online')) return '手机调试已连接，线路未记录';
     return d?.received?.last_at || d?.metrics?.some(v => v.id === 'battery' && v.value != null) ? '手机连接线路未记录' : null;
@@ -924,9 +939,12 @@
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
+        // 笔记本连不上时和旁边手机一样写从几点起（后台 offline_since，M918）
+        const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
+          ? ` · ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? ` · 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
-        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
+        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
       }).join(' · '), null, '', '/live/computer/'],
@@ -944,10 +962,23 @@
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
     host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
   }
+  // 手机离线怎么说（主持 11-26 照 C2 建议定，手机页同一套）：电脑的调试连接和 Tailscale 都找不到手机 →“手机离线 · HH:MM 起”，
+  // 时刻是和 presence 同级的 offline_since；只有电脑到手机的调试连接断 →“电脑连不上手机 · HH:MM 起”，时刻是 offline.since
+  function phoneOffText(d) {
+    // 带不带日期拿现在的北京日期比（和手机页、电脑页一致），不拿这份数的时刻当今天
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    // 卡上大字只放“手机离线”，时刻跟在后面一行小字里（和原来“手机连不上 · 几点起”一样的排法，大字不折行）
+    if (d?.presence?.state === 'offline') { const since = at(d.offline_since); return `手机离线${since ? ` · ${since} 起` : ''}`; }
+    const since = at(d?.offline?.since);
+    return `电脑连不上手机${since ? ` · ${since} 起` : ''}`;
+  }
   // —— 手机：每样数自己的时刻；连不上时保留上一次，缺数不补零 ——
   function renderPhone(d) {
     const p = parts.phone, unknown = !d || d.state === 'unknown';
     const offline = d?.state === 'offline' || d?.offline === true, metrics = d?.metrics || [];
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）。
+    // 手机真采到的亮屏、解锁照旧留在大字（主持 01:56 定）；这句在卡底那行连接说明里（phoneConnection，小字）已经写了，卡头不再重复。一样数都没有时才由它当整句
+    const unclear = !offline && d?.presence?.state === 'unknown';
     const m = Object.fromEntries(metrics.map(x => [x.id, x]));
     const value = id => ['unavailable', 'computing'].includes(m[id]?.state) ? null : m[id]?.value;
     const dayLabel = (row, fallback) => {
@@ -959,7 +990,7 @@
       : quantity(m.screen_on, 'value', n => n > 0 && n < 60 ? `${Math.floor(n)} 秒` : U.minutes(Math.floor(n / 60)));
     const usage = value('screen_on') == null ? duration : `${screenLabel} ${duration}`;
     const unlocks = value('unlocks') == null ? U.collectionText("解锁", m.unlocks) : `解锁 ${quantity(m.unlocks, 'value')} 次`;
-    const text = unknown ? U.collectionText("手机", d) : offline ? `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}` : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
+    const text = unknown ? unclear ? '手机连接状态暂时读不到' : U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
     const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
@@ -1092,7 +1123,9 @@
     const d = state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读' : '清单暂时读不到'];
+      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
+        // 这一样回“公开判定更新中”时写明为什么（M970）
+        : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);
     const update = () => {
       const { lamp, tone } = U.status(!state.offline && d?.level ? d : { level: 'gray' });
@@ -1281,7 +1314,7 @@
   };
   function projectName(id) { return (home?.projects?.items || []).find(p => p.id === id)?.name || id; }
   // M767：本人版里访客看不到的项目（名册这一行标 visitor_labels.name=hidden），项目变化行的项目名后挂“访客看不到”
-  function projectTag(id) { const tag = viewer === 'owner' ? U.visitorLabel((home?.projects?.items || []).find(p => p.id === id), ['$', 'name'], '这个项目', viewer) : ''; return tag ? ` <span class="head__rewrite">${tag}</span>` : ''; }
+  function projectTag(id) { const tag = U.visitorLabel((home?.projects?.items || []).find(p => p.id === id), ['$', 'name'], '这个项目', viewer); return tag ? ` <span class="head__rewrite">${tag}</span>` : ''; }
   const changeName = c => [projectName(c.project), typeof c.text === 'string' ? c.text.trimEnd().replace(/。$/, '') : c.text];
   const changeTime = at => [U.date(at), U.time(at)].filter(Boolean).join(' ');
   let changesPage;

@@ -282,12 +282,15 @@
     const rows = r.files.map((f, i) => (extra && i === 0 ? '<h3 class="op-files__group">全局入口</h3>' : '')
       + (extra && i === own ? `<h3 class="op-files__group">${esc(o.name)}多读的 ${int(extra)} 份</h3>` : '') + fileRow(f, i, r)).join('');
     const total = [`合计 ${int(r.count)} 份`, known(r.bytes) ? `${int(r.bytes)} 字节` : '字节数没读全', known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} token` : 'token 没算全'];
+    // 签的说明只写这一家这种开法里真出现的那几种（Claude 全是“按加载规则推算”时，不再列一条用不上的“看到的”）
+    const SAYS = { observed: `${h.id === 'antigravity' ? 'Antigravity 设置页' : '宿主自己的界面'}上列着这一份，数也对得上。`,
+      inferred: '文件和大小是磁盘上的实数，开对话读不读，是照厂商写的加载规则推的。' };
+    const used = Object.keys(SAYS).filter(k => r.files.some(f => f.load === k));
     return `<section ${attrs}><div class="op-files__head"><h2>${esc(whenOpen(o))}读这 ${int(r.count)} 份</h2>${sum}</div>
       <p class="op-files__how">${howCounted(r, h)}</p>
       ${r.files.length ? rows : `<p class="tp-empty">${esc(whenOpen(o))}，${h.name} 没有要读的规矩文件。</p>`}
       <p class="op-files__total">${total.join(' · ')}</p>
-      <ul class="op-files__legend"><li>${ev('observed')}<span>${h.id === 'antigravity' ? 'Antigravity 设置页' : '宿主自己的界面'}上列着这一份，数也对得上。</span></li>
-        <li>${ev('inferred')}<span>文件和大小是磁盘上的实数，开对话读不读，是照厂商写的加载规则推的。</span></li></ul></section>`;
+      ${used.length ? `<ul class="op-files__legend">${used.map(k => `<li>${ev(k)}<span>${SAYS[k]}</span></li>`).join('')}</ul>` : ''}</section>`;
   }
   function tabs(m) {
     return `<div class="op-tabs" role="tablist" aria-label="看哪一家">${m.hosts.map(h => `<button type="button" role="tab" data-family="${h.id}" data-host="${h.id}" aria-selected="${h.id === family}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}</div>`;

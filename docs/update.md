@@ -90,7 +90,7 @@
 
 按 [README](../README.md) 和第十五节准备本轮独立工作副本。已有未完成批次时，接原来的 `update-batch.json` 和同一工作副本。先从最新正式成功回执核对源码、成品和线上版本，以该成品为发布基线，选入本轮要上线的变化。QA 各用自己的源码、批次和回执；同一 `main` 中尚未发布的 QA 改动也照这条边界处理。
 
-1. 读范围：在本轮工作副本跑 `python -B -X utf8 tools/update.py ranges`（第十三节），得到每个项目、技能从哪个提交读到现在。起点是上一轮逐条核到的提交（第二节）；没有记录的用 `site-v2/trial/first-projects/<项目ID>/项目卡.md` 里的“提交号”；技能页对规则仓库 `skills/<技能ID>/` 的提交。各项目这时读到的头就是本轮终点，记下来。
+1. 读范围：在本轮工作副本跑 `python -B -X utf8 tools/update.py ranges`（第十三节）。开头列每轮必核的实况和规则页，以及最近一次正式发布的时间、源码和成品提交。随后列每个项目、技能从哪个提交读到现在。起点是上一轮逐条核到的提交（第二节）；没有记录的用 `site-v2/trial/first-projects/<项目ID>/项目卡.md` 里的“提交号”；技能页对规则仓库 `skills/<技能ID>/` 的提交。各项目这时读到的头就是本轮终点，记下来。
 2. 逐条列：执行者把每个项目、技能范围里的非合并提交列全，“变化：”行逐条列出，去掉“变化：无”；没有“变化：”行的看标题和改了哪些文件；同一件事的几次提交合成一条，写进本轮目录的 `逐条表.json`，每条一个编号。提交多的仓库拆单并行（2026-11-23 那轮按规则仓加技能、电脑大本营前后两半、其余项目分四份）。不再给一个项目写“一句话变化”再凭它挑页：那轮规则仓、电脑大本营十天三千多个提交各压成一句，漏改大半出在这里。
 3. 每条落一个结论：不涉及网站（内部改动、实况数据自动更新、按归属表不上讲解的）／网站已经对（写哪页哪块）／要改（写哪几页哪几块、建议的档）。“变化：”只是线索，事实以现在的代码、文档和活动规则为准。明摆着的内部改动可以成批判，但每条都要有结论。
 4. 要改的和已经对的，都拿两三个关键词把全站稿子和网页源搜一遍（`site-v2/trial/first-projects/<项目>/` 的稿、`网站示意/<项目>/content.js`；原理页冻结，不搜），同样的说法出现在哪页哪块都列上。规则仓的变化也照样搜：AI 百工谱各页在复述规则，规则页随构建重新生成不等于百工谱也改了。
@@ -185,7 +185,7 @@
 
 在公网的正式实况页面以本人身份读第 3–7 条。需要核接口时用页面同一数据源 `/computer-access/live/v1/`，配对和本人可见范围沿用当前入口。
 
-1. 做更新的 AI 每轮直接读 PCConfig 现役的 `E:/PCConfig/registries/live_refresh_policy.json`，按 `fields` 指向 `on_demand` 的字段、`manual_fields` 和 `backup_top_table.on_demand` 回原来源核数及时间。有变化就改原登记或原回执，备份大小取原测量时间，副本内容日期和确认时间各取原记录。台式机手填配置读 PCConfig 的 `registries/machine.json` 中 `hardware.configuration`，型号和核实时间读同组的型号字段和 `hardware.observed_at`。副机读 `registries/remote_computer_mcp.secondary_laptop.json` 的 `hardware` 和 `hardware.observed_at`，手机型号回退读 `docs/design/phone-switch-arrival.md` 的机型和原核实记录。正式发布成功后回读实况的值和来源时刻，缺证据或回读仍旧的写进本轮记录。
+1. 做更新的 AI 每轮直接读 PCConfig 现役的 `E:/PCConfig/registries/live_refresh_policy.json`，按 `fields` 指向 `on_demand` 的字段、`manual_fields` 和 `backup_top_table.on_demand` 回原来源核数及时间。有变化就改原登记或原回执，备份大小取原测量时间，副本内容日期和确认时间各取原记录。台式机手填配置读 PCConfig 的 `registries/machine.json` 中 `hardware.configuration`，型号和核实时间读同组的型号字段和 `hardware.observed_at`。副机读 `registries/remote_computer_mcp.secondary_laptop.json` 的 `hardware` 和 `hardware.observed_at`，手机型号回退读 `docs/design/phone-switch-arrival.md` 的机型和原核实记录。正式发布成功后回读实况的值和来源时刻，缺证据或回读仍旧的写进本轮记录。页面上写死的机制数字（多久一次、几点、多少算数）不在这份登记里：在 `site-v2` 下搜 `按需更新快核`，每处注释的“核法”写了去哪核、现在是多少，来源变了就改页上那句；新补的写死数字也照这个格式写在那句旁边，不另立清单。
 2. 同一份登记的 `blocks` 中，按 `projects/agents/weekly-new` 的 `on_demand` 项更新 `site-v2/live/project/weekly-new.json` 的百工谱“本周新会”和实际周区间，由正常构建带入实况。
 3. 看项目页的卡片（约 12 分钟）：范围是当轮实况在用的项目名册，只有实况、没有讲解页的也算。沿用第五节第 1 步盘点出的变化、刷新异常和“下次先做”，挑 0～2 个会改变本人判断的项目，比如新技能用上了却找不到结果、功能已经搬走、刚撤了卡找不到要紧的事；提交多、例行刷新成功的不算。再从没明显变化的在用项目里随机抽 1 个，先抽近几轮没看过的。打开它们的实况项目页，拿本人平时会问的事去问页面：答不出、以后还会问、又有来源一直答得上的，提议加卡；单位、时间口径或入口让人看错的，提议改；一次性的结论、重复的卡、已归别页的，提议拿掉或合并；答得出就不动。取数断了、漏接已定字段、和定稿对不上的照原样修，不算在这里。要加、改、拿掉卡片的，把现在的局部截图和改后的生图并排放（拿掉的带上相邻的卡，看得出拿完剩什么），照第十二节请本人选，选了才做，不挡这轮别的更新。新卡在图旁写明哪份记录供数、什么事会产生下一笔、卡上哪儿跟着变，从 `projects/<项目ID>` 已有的分段、指标或成品记录取，不在前端写死；只有一份旧数、以后得靠人改文件的想法先搁下。没有值得改的，只在本轮记录里记一行抽了谁、为什么，下轮避开。
 4. 实况「手机 → 应用」和「电脑 → 使用时间」看“其他”。对应接口 `phone/apps`、`computer/usage`。能按实际用途确定的分类交数据来源登记处，其余留在“其他”。
@@ -264,7 +264,11 @@ python -B -X utf8 tools/update.py --batch $batch result
 
 选页用 `pages` 对象，每页给稳定的英文编号、`route`、`title`、`reason`。需要转定稿的页另填 `project`、`draft_page`、`draft_dir`；只改右栏用 `details_only:true`，换图在 `images` 里按现行图编号登记采用文件。新页用 `new:true`，留待下次用 `deferred` 写原因。受影响的列表页等记在 `references`。报告额外事项放 `notes`。需推进页账的页用 `checked_sources` 记录源仓库、提交和北京时间，必要时用 `ledger_page` 对齐历史页号。范围里每个项目、技能都在顶层 `book_reviews` 记一条，键是账名（`project-<ID>`、`skill-<ID>`、`website`）：`reviewed_sources` 以来源仓库为键，写第 1 步逐条核到的完整 `commit`、带时区的核对 `time`，技能另写 `path`（`skills/<技能ID>`，插件里的技能也照这样写）；细读过的项目再写 `last_deep_read`（北京时间 `YYYY-MM-DD`）。这些只在发布、逐页回读都成功后写进账，核对时间晚于发布回读的不写。
 
+`init` 自动把实况和规则页写入每轮必核清单，`status` 可查看 `required_reviews`。需要上线的变化填入 `pages` 或 `references`。
+
 `renames` 按页列改名命中，`before` 留选中旧图，`convert` 只转换名单中选定的稿和图。正式构建前按 [README](../README.md) 挂本轮已登记的 `public`、`owner` 实况回执配置，备用包导出器用这次发布对应的 PCConfig 工作树。规则样稿由构建生成。对照封存成品差异，将确实连带变化的实况、规则、列表和其他页面写进 `pages` 或 `references`。改共享外壳时对同一 `dist` 用 `--pages all --out '<本轮目录>/scan'`，之后仍用本批次 `publish`。
+
+已有项目用 `convert` 更新选定页。确需整项目重转时，在另一目录用稿件、项目配置和在用图生成候选，逐页对照候选与现有网页，再并回本轮改动。
 
 `publish` 用当前正式基线比对成品。选页之外的变化先核原因和计划再发。`result` 从逐页回读、OSS 回收回执和前后图生成底稿，主持从中取每页原因和各步用时写本轮记录。平时不出汇报页；只有要看图对比才定得了的事时，才用 `result --report-generator '<本轮实际生成者型号>'` 生成本地草稿（`-NoOpen`），删到只剩那几道题，主持按汇报页技能用 `-OpenPath` 打开。重新查看批次用 `status`。
 
@@ -287,7 +291,7 @@ python -B -X utf8 tools/update.py --batch $batch result
 
 ## 十四、首次上线交接
 
-2026-11-19 用「个人网站」「网页验货」「实况值守」三页试跑，2026-11-22 新版首次公开。首发记录属迁移批次。现在本人说“更新网站”走本页常规七步。
+2026-11-19 用「个人网站」「网页验货」「实况值守」三页试跑，2026-11-22 新版首次公开。首发记录属迁移批次。现行正式发布以 Git 共享目录下的 `wly-oss/published.json` 为准，成功发布并回读后由发布器更新；`ranges` 直接读这份回执。现在本人说“更新网站”走本页常规七步。
 
 ## 十五、东西在哪、现有工具
 
