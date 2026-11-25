@@ -214,7 +214,10 @@
         title = r.status === 'incomplete' || r.deferred ? endText(r) : result(r);
       }
       const earlier = c.rounds.filter(x => x !== r);
-      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮 · ` : ''}${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : result(x)} ›</a>`).join('')}</p>`;
+      // 之前几轮一律写成“第 N 轮 · 几点 · 结果 ›”：结果只写一个词（跑完／没做成／暂时不修），这一轮的说明点进去看，不塞进条里截成“…”。
+      // 后台没给轮号的（比如派出去没人接的那一轮）写“未编号”，不按排第几自己编。同一件下后台有时分两串编号（同一张卡里出现两个“第 1 轮”），靠后面的时刻分开
+      const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
+      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
