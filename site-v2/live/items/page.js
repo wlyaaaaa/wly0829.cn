@@ -340,7 +340,9 @@
       items = dueOrder(items);
     }
     // 新私事规则（本人 11-24 02:56）：访客版不再按条藏，组标题只数看得到的行，也不再写“另有 N 件仅本人可见”。
-    const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length : '—') + ' 件';
+    // M973：“近 7 天下去的”数的是读回来多少件，同一句并成一行的（“同一件事关过 N 次”）按原来的件数算，不按摆了几行；两版读回来的一样多，件数就一样
+    const pieces = key === 'closed' ? items.reduce((n, it) => n + (it.repeats || 1), 0) : items.length;
+    const count = partial ? key === 'closed' ? '已读 ' + pieces + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? pieces : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
