@@ -9,6 +9,9 @@
   'use strict';
   const params = new URLSearchParams(location.search);
   const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
+  const PAST = ['weekly-laptop'];
+  const RUN_IDS = [...IDS.filter(x => x !== 'excerpt'), ...PAST];
   const typeParam = params.get('type');
   if (params.has('run')) {
     location.replace('/live/automation/run/' + location.search + location.hash);
@@ -73,7 +76,7 @@
     for (const s of subs) s.stop();
     subs = []; pages.clear(); backPages.clear(); excerptToday = undefined;
     const date = filter.date ? dayOf(filter.date) : null;
-    for (const id of IDS.filter(x => x !== 'excerpt')) {
+    for (const id of RUN_IDS) {
       subs.push(Live.watch('automation/runs', { category: id, date }, { phase(st) { pages.set(id, st); readBack(id, st); schedule(); } }));
     }
     subs.push(Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } }));
@@ -110,7 +113,7 @@
 
   // 七类的读数拼成一份：rows 是有的行；legacy=true 表示读口没装上、用的是老读数拼的
   function collect(d) {
-    const ids = IDS.filter(x => x !== 'excerpt'), states = ids.map(id => pages.get(id));
+    const ids = RUN_IDS, states = ids.map(id => pages.get(id));
     const answered = states.filter(s => s && (s.data || s.meta?.status >= 400 || s.phase === 'none' || s.phase === 'gone'));
     const got = ids.map((id, i) => ({ id, p: R.page(states[i]?.data, viewer) })).filter(x => x.p);
     if (got.length) {
@@ -147,7 +150,7 @@
   }
   function view(d) {
     const got = collect(d);
-    const rows = got.rows.filter(r => r.category !== 'excerpt' && IDS.includes(r.category) && inWindow(r)
+    const rows = got.rows.filter(r => r.category !== 'excerpt' && RUN_IDS.includes(r.category) && inWindow(r)
       // 暂缓的轮次照暂缓显示，不算“跑完的”也不算“没做成的”（没有单独的“暂时不修”筛选，主控 11-25）
       && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status && !r.deferred));
     const all = cards(rows), mine = c => !filter.category || c.category === filter.category;
@@ -211,7 +214,10 @@
         title = r.status === 'incomplete' || r.deferred ? endText(r) : result(r);
       }
       const earlier = c.rounds.filter(x => x !== r);
-      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮 · ` : ''}${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : result(x)} ›</a>`).join('')}</p>`;
+      // 之前几轮一律写成“第 N 轮 · 几点 · 结果 ›”：结果只写一个词（跑完／没做成／暂时不修），这一轮的说明点进去看，不塞进条里截成“…”。
+      // 后台没给轮号的（比如派出去没人接的那一轮）写“未编号”，不按排第几自己编。同一件下后台有时分两串编号（同一张卡里出现两个“第 1 轮”），靠后面的时刻分开
+      const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
+      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
