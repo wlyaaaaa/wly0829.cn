@@ -63,11 +63,12 @@
   // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
   const landed = new Map(), writeStarted = new Map();
   const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
-  function landItem(item, intent) {
-    const at = new Date().toISOString(), base = { since: writeStarted.get(item.id) ?? Date.now(), saved: Date.now(), version: item.item_version };
-    // 先摆上的“你放着”和后台那条一个样子：写上明早 10 点起该办（同后台 tomorrow_10），只留问情况、不办了和网站链接，不再挂“晚点提醒”
-    const tomorrow10 = (d => (d.setUTCDate(d.getUTCDate() + 1), d.toISOString().slice(0, 10) + 'T10:00:00+08:00'))(new Date(Date.now() + 8 * 3600e3));
-    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: tomorrow10, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
+  function landItem(item, intent, receipt) {
+    // 本人 11-26 00:13：先摆上的那条只写后台回执里有的，不拿浏览器的钟算。下去的时刻用回执的 created_at（后台收下这一笔的时刻）；
+    // 晚点提醒几点再提醒用回执的 until，回执没给就写“提醒时间还没确认”，等清单读回来换成后台那条
+    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? Date.now()), saved: Date.now(), version: item.item_version };
+    // 先摆上的“你放着”和后台那条一个样子：只留问情况、不办了和网站链接，不再挂“晚点提醒”
+    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: receipt?.until || null, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
     else if (intent === 'close_report') {
       const id = item.owner_item || item.item_id || item.item || item.id;
       landed.set(id, { ...base, key: 'closed', row: { id, kind: 'choose', text: item.text, title: item.title, actions: [], closed: { at, kind: 'declined', text: '本人关掉了这份汇报' }, _landed: true } });
@@ -95,13 +96,13 @@
     const first = Math.min(...[...landed.values()].map(w => w.saved));
     landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
   }
-  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent, at } }) => {
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent, at, receipts } }) => {
     for (const item of items) {
       if (saved === null) writeStarted.set(item.id, at ?? Date.now());   // 回到页面接着查的（M945）按当初点的时刻算
       // 本人 11-26 00:13：页面上显示的结果必须是后台真回的。后台还没回之前这件照旧摆在原处（按钮写“正在办…”，回执写“正在保存…”），回了“已写成”才撤下；没写上、没回结果的留在原处
       if (saved?.includes(item.id)) hiddenWhileWriting.set(item.id, { version: item.item_version });
       else if (saved) hiddenWhileWriting.delete(item.id);
-      if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent);
+      if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent, receipts?.[item.id]);
     }
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
@@ -311,11 +312,11 @@
     }
     const flags = it.text && typeof it.text === 'object' ? it.text : it, hidden = viewer === 'public' && (it.visibility === 'owner' || it.public === 'owner' || flags.visibility === 'owner' || flags.public === 'owner');
     const placeholder = hidden || viewer === 'public' && (flags.hidden || flags.rewrite === 'pending' && !flags.text && !flags.value);
-    const mark = placeholder ? U.fieldHtml(hidden ? { visibility: 'owner' } : flags, { name: '这件事的内容', kind: viewer }) : viewer === 'owner' && (it.visibility === 'owner' || it.public === 'owner' || U.visitorFieldKind(it, ['$', 'text', 'title'])) ? U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) : U.visibilityNote(it, viewer, '这件事的内容'), deadline = monthlyDay(it) || (it.act_from ? `${U.date(it.act_from)} 起该办了` : it.due ? `${U.date(it.due)} 前${it.kind === 'choose' ? '要选' : '要办'}` : '');
+    const mark = placeholder ? U.fieldHtml(hidden ? { visibility: 'owner' } : flags, { name: '这件事的内容', kind: viewer }) : viewer === 'owner' && (it.visibility === 'owner' || it.public === 'owner' || U.visitorFieldKind(it, ['$', 'text', 'title'])) ? U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) : U.visibilityNote(it, viewer, '这件事的内容'), deadline = monthlyDay(it) || (it.act_from ? `${U.date(it.act_from)} 起该办了` : it._landed && it.kind === 'later' ? '提醒时间还没确认' : it.due ? `${U.date(it.due)} 前${it.kind === 'choose' ? '要选' : '要办'}` : '');
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), it._landed && !it.closed?.at ? '时刻还没确认' : U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });

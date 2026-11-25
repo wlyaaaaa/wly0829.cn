@@ -692,12 +692,13 @@
 
   // 一件一件写回，各记各的结果：没生效的写清是哪件、为什么；写回接口说“还没确认”的（unconfirmed）单算，不当失败。
   async function writeItems(live, items, action, followReceipt = false, resume = false) {
-    const saved = [], failed = [];
+    const saved = [], failed = [], receipts = {};
     let pending = 0, unconfirmed = 0;
     // 每件各发一笔；后台慢、没回的，按同一提交编号接着查到真结果（定稿：异步的成功失败回执）。
     const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt, resume));
     for (const [index, result] of (await Promise.all(requests)).entries()) {
       const item = items[index];
+      Object.assign(receipts, result.receipts);
       if (result.saved?.length) saved.push(...result.saved);
       else if (result.pending) pending += result.pending;
       else if (result.unconfirmed) unconfirmed += result.unconfirmed;
@@ -707,7 +708,7 @@
     const text = word => [`${word} ${saved.length} 件` + (pending ? `，正在写入 ${pending} 件` : '') + '。',
       unconfirmed && (followReceipt ? `暂时没读到 ${unconfirmed} 件的结果，稍后刷新可以看最新状态。` : `还没确认 ${unconfirmed} 件，再点一次可继续核对。`),
       failed.length && `没生效 ${failed.length} 件：${failedText}。`].filter(Boolean).join('\n');
-    return { saved, pending, unconfirmed, failed, text };
+    return { saved, pending, unconfirmed, failed, receipts, text };
   }
 
   // 刚办成的卡：后台读数要过几分钟才跟上，这期间刷新页面也先不显示它（按卡的版本认，读数一变就照读数显示；最多 10 分钟）
@@ -740,8 +741,9 @@
   async function saveItems(rows, intent, { trigger = null, extra = '', complete = () => {}, resume = null } = {}) {
     const wording = CONFIRM_ITEM[intent], live = window.Live, lane = document.getElementById('item-action-receipts'), started = resume?.at ?? Date.now();
     // 等你的事页：后台回了“已写成”的从清单撤下；没回、没写上的留在原处（本人 11-26 00:13：显示的结果必须是后台真回的）。
-    const project = saved => {
-      if (wording.action && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent, at: started } }));
+    // 后台的回执（下去的时刻、几点再提醒）一并交给页面，先摆上的那条照回执写，不拿浏览器的钟算
+    const project = (saved, receipts = {}) => {
+      if (wording.action && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent, at: started, receipts } }));
     };
     const nameOf = item => fieldText(item.text || item.title, 'owner');
     // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。
@@ -757,27 +759,31 @@
     const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
     try {
       // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
-      const saved = [], failed = [];
+      // 回到页面接着查（resume）只看本机记下的结果，查一轮就够：后台没有只读的查回执口，不拿原编号重发
+      const saved = [], failed = [], receipts = {};
       let pending = rows;
-      for (let round = 0; pending.length && round < 4; round++) {
+      for (let round = 0; pending.length && round < (resume ? 1 : 4); round++) {
         if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
         const result = await writeItems(live, pending, wording.action, true, !!resume);
-        saved.push(...result.saved); failed.push(...result.failed);
+        saved.push(...result.saved); failed.push(...result.failed); Object.assign(receipts, result.receipts);
         pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
       }
       const left = rows.filter(item => !saved.includes(item.id)), unsure = left.filter(item => !failed.some(f => f.item === item));
-      // 结果不明的留着，下回打开这页接着按同一次操作查；保存上和没保存上的不再记
-      keepWriting(rows.filter(item => !unsure.includes(item)), null);
+      // 结果不明的留着，下回打开这页接着按同一次操作查；保存上和没保存上的不再记。回到页面查过一回的也不再记：再查也查不到新东西，每次打开都弹同一句就成了打扰
+      keepWriting(resume ? rows : rows.filter(item => !unsure.includes(item)), null);
       rememberSaved(rows.filter(item => saved.includes(item.id)));
-      project(saved);
+      project(saved, receipts);
       const detail = saved.length === 1 && rows.length === 1 && trigger?.closest('.dossier-card');
       const state = detail && detail.querySelector('[data-part="state"]');
       if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
-      if (!left.length) receipt.set('ok', wording.saved + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
+      // 晚点提醒几点再提醒照后台回执说（回执的 until，没有就用后台回话里的“X月X日 10:00 再提醒”），后台没说就不写几点
+      const remind = intent === 'later' && [...new Set(saved.map(id => receipts[id]).map(r => r?.until ? `${date(r.until).split('-').map(Number).join('月')}日 ${time(r.until)}` : String(r?.message || '').match(/(\d{1,2}月\d{1,2}日 \d{1,2}:\d{2}) 再提醒/)?.[1] || ''))];
+      const savedText = remind ? '已放到你放着' + (remind.length === 1 && remind[0] ? `，${remind[0]} 再提醒` : '') : wording.saved;
+      if (!left.length) receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
       else {
         // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”
         const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
-          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + '电脑在忙，还没回结果；稍后刷新看，或者再点一次。'].filter(Boolean).join('\n');
+          unsure.length && (rows.length > 1 && failed.length ? `还没确认的 ${unsure.length} 件：` : '') + (resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：这件不见了就是办成了，还在可以再点一次。' : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
         const head = rows.length > 1 ? [`保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && `还没确认 ${unsure.length} 件`].filter(Boolean).join('，') : failed.length ? '没保存上' : '还没确认保存上';
         receipt.set('fail', head,
           { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });

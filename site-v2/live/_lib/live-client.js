@@ -1090,17 +1090,18 @@
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
     async applyOwnerItems(items, action, followReceipt = false, resume = false) {
-      const saved = [];
+      const saved = [], receipts = {};
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
         const result = await window.Live.ownerAction(item, action, followReceipt, resume);
+        receipts[item.id] = result;   // 后台回执原样带回（下去的时刻、几点再提醒），页面照它写
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
         else if (result.error === 'cockpit_owner_required') { message = '不是可信设备'; error = result.error; }
         else { if (result.message) message = result.message; error = result.error || ''; }
       }
-      return { saved, pending, unconfirmed, message, error };
+      return { saved, pending, unconfirmed, message, error, receipts };
     },
     async ownerAction(item, action, followReceipt = false, resume = false) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
@@ -1108,11 +1109,12 @@
       const key = JSON.stringify([token, item.id, item.item_version, action]);
       let write = ownerWrites.get(key);
       if (!write) {
-        // 本页没有这一笔时，先接上刷新、离开前那一次还没回结果的编号；回到页面接着查（resume）只认那一次：回过结果的直接用那次结果，找不到就算没确认，不另起一笔
         const kept = keptWrites()[key];
-        if (resume && kept?.result) return kept.result;
+        // 回到页面接着查（resume）只看本机记下的那次结果，不拿原编号再发一遍：后台没有只读的查回执口，原请求要是没到，重发就成了没人点的一笔新操作（本人 11-26 00:13）。
+        // 没记下结果就算还没确认，等清单读回来看这件还在不在
+        if (resume) return kept?.result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+        // 本人在页面上再点一次同一件：接着用刷新、离开前那一次的编号，后台按编号认出是同一笔，不会写两次
         if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
-        else if (resume) return { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
       }
       if (!write) {
         const data = { item_id: item.id, item_version: item.item_version, action, direct: true,
