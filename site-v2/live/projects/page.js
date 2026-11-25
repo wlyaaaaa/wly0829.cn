@@ -413,8 +413,10 @@
       const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '';
       if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${m.item.ownerNote || ''}</div>` : m.item.ownerNote ? `<div class="acts">${m.item.ownerNote}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
-      const times = r.members.map(x => x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (x.item.ownerNote || '') + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`).join('');
-      return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${r.title} <span class="pj-art__count">×${r.members.length}</span></p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
+      // 本人版的“访客看不到”签跟着自己的日期，成组不拆行；整组每份都挂同一个签时，只在组名旁挂一个
+      const groupNote = r.members.every(x => x.item.ownerNote && x.item.ownerNote === m.item.ownerNote) ? m.item.ownerNote : '';
+      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : x.item.ownerNote || '') + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`}</span>`).join('');
+      return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${r.title} <span class="pj-art__count">×${r.members.length}</span>${groupNote}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;
     const cards = [...groups.values()].map(g => {

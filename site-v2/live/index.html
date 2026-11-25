@@ -32,7 +32,8 @@
 .page--live #phone .accumulating-note { text-wrap: balance; }
 .page--live #computer .kv__row:last-child dd { display: flex; flex-wrap: wrap; column-gap: 5px; }
 .page--live #computer .traffic-hour, .page--live #computer .kv__label { display: inline-block; white-space: nowrap; }
-.page--live #computer .traffic-hour { margin-inline-start: .55em; max-width: 100%; white-space: normal; }
+.page--live #computer .traffic-hour { max-width: 100%; white-space: normal; }
+.page--live #computer .traffic-day:has(+ .traffic-hour) { margin-inline-end: .55em; }
 /* 窗口窄到读数那一栏快挤没了（如 1024 宽）：每行名字放上一行，读数占整行，不伸出卡外（M415、M515） */
 .page--live #computer .kv { container-type: inline-size; }
 @container (max-width: 260px) {
