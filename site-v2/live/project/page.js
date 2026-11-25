@@ -459,7 +459,7 @@
       additions[key] = data;
       if (proj && !first) renderBoard(false);
     };
-    if (id === 'agents' || id === 'timeaudit') reads.push(fetch(id === 'agents' ? '/live/project/weekly-new.json' : '/live/project/before-after.json', { signal: AbortSignal.timeout(15000) }).then(r => r.ok ? r.json() : null).then(d => save(id === 'agents' ? 'weekly' : 'beforeAfter', d)).catch(() => {}));
+    if (id === 'agents') reads.push(fetch('/live/project/weekly-new.json', { signal: AbortSignal.timeout(15000) }).then(r => r.ok ? r.json() : null).then(d => save('weekly', d)).catch(() => {}));
     additionWatches.push(watch('computer', null, { data(d, meta) { if (!sameViewer(meta)) return; if (id === 'wly0829.cn') save('external', d?.external); save('batches', d?.batch_progress); } }));
     if (id === 'pcconfig') additionWatches.push(readSoftware(save, watch));
   }
