@@ -5,10 +5,11 @@
   let header = null;
   const offline = () => !!U.offline?.();
   const missing = (label = '', meta) => offline() ? '这块没存下来，连上后补上。' : U.collectionText(label, meta);
-  const resources = { software: 'software', runtime: 'runtimes', startup: 'startup' }, observed = {};
+  // 开机启动挪到自启动页（/live/startup/，本人 11-26 02:12 选的），这页只留软件版本和命令环境，最下面一行指过去。
+  const resources = { software: 'software', runtime: 'runtimes' }, observed = {};
   const recordResource = (key, cursor) => params.has('fixture') ? `projects/pcconfig/records-${resources[key]}${cursor ? '-2' : ''}` : 'projects/pcconfig/records';
-  const names = { software: '软件版本', runtime: '命令环境', startup: '开机启动' };
-  const pictures = { software: '/live/img/grp-long.webp', runtime: '/live/img/grp-machine.webp', startup: '/live/img/tasks.webp' };
+  const names = { software: '软件版本', runtime: '命令环境' };
+  const pictures = { software: '/live/img/grp-long.webp', runtime: '/live/img/grp-machine.webp' };
   const relations = { equal: '版本相同', behind: '装的版本落后', ahead: '装的版本更新', channel_mismatch: '渠道不同，不能直接比较', unknown: '比不出新旧' };
   const channels = { latest: '最新版', stable: '稳定版', current: '测试版', portable: '便携版', 'beta / stable': '测试版 / 稳定版' };
   const cultures = { 'zh-CN': '简体中文', 'zh-TW': '繁体中文', 'zh-HK': '繁体中文（香港）', 'en-US': '英语（美国）', 'en-GB': '英语（英国）', 'ja-JP': '日语' };
@@ -106,29 +107,7 @@
       }).join('')}</div></details>`);
     } };
   }
-  function source(r) {
-    if (sources[r.source_location]) return sources[r.source_location];
-    if (r.source === 'registry_run') return String(r.source_location || '').startsWith('HKCU') ? '当前用户的注册表启动项' : String(r.source_location || '').startsWith('HKLM') ? '整台电脑的注册表启动项' : '注册表启动项';
-    if (r.source === 'startup_folder') return String(r.source_location || '').includes('Users') ? '当前用户启动文件夹' : '启动文件夹';
-    return sources[r.source] || r.source;
-  }
-  function startupRows(rows) {
-    return `<ul class="env-startup">${rows.map(r => `<li><span class="env-program">${value(r.name, 'startup')}</span><span title="${value(r.source_location, 'startup')}">${value(source(r), 'startup')}</span><span>${esc(r.state_text || ({ enabled: '启用', disabled: '停用', true: '启用', false: '停用' })[r.enabled] || U.collectionText('启停状态', r))}</span><details class="env-path"${foldAttrs('startup-path-' + JSON.stringify([r.id ?? r.name, r.source, r.source_location]))}><summary>来源位置</summary><span class="env-path-text">${value(sources[r.source_location] || r.source_location, 'startup')}</span></details></li>`).join('')}</ul>`;
-  }
-  function startupGroups(rows) {
-    const groups = new Map(), labels = { enabled: '启用', disabled: '停用', unknown: '启停状态未知' };
-    for (const r of rows) { const state = r.enabled ?? r.state, key = state === true || state === 'enabled' ? 'enabled' : state === false || state === 'disabled' ? 'disabled' : state || 'unknown'; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(r); }
-    return [...groups].map(([key, items]) => `<p class="env-note">${esc(labels[key] || items[0].state_label || items[0].state_name || key)} · ${items.length} 项</p>${limitedRows(items, startupRows, `startup-${key}`)}`).join('');
-  }
-  function startup(el) {
-    return { set() {
-      const d = data.startup;
-      if (!d?.items) { U.html(el, `<p class="env-note">${missing('开机启动', d)}</p>`); return; }
-      const gap = window.ComputerStat.gap(d, 'total');
-      U.html(el, `<p class="env-note">${gap ? `${esc(gap)} · ` : ''}这里列出注册表和启动文件夹里的启动项。<a href="/live/tasks/">查看计划任务 ›</a></p><details class="env-details"${foldAttrs('startup-details')}><summary>查看开机启动明细</summary>${startupGroups(d.items)}</details>`);
-    } };
-  }
-  const chapters = { software, runtime: command, startup };
+  const chapters = { software, runtime: command };
   const loading = new Set();
   const softwareCard = 'card/environment/software', softwareClicks = new WeakMap(), softwareReads = new WeakSet();
   $('board').addEventListener('click', e => {
@@ -174,13 +153,12 @@
   function group(key) {
     const d = data[key], waiting = !d && !['none', 'gone'].includes(phases[key]), rows = list(d), r = runtime(d);
     let line = missing(names[key], d);
-    let figures = key === 'software' ? [{ key: 'total', label: '软件', unit: '个' }, { key: 'behind', label: '版本落后', unit: '个' }] : key === 'runtime' ? [{ key: 'risk', label: '可能乱码', unit: '处' }, { key: 'shells', label: '命令环境', unit: '套' }] : [{ key: 'enabled', label: '启用', unit: '项' }, { key: 'disabled', label: '停用', unit: '项' }];
+    let figures = key === 'software' ? [{ key: 'total', label: '软件', unit: '个' }, { key: 'behind', label: '版本落后', unit: '个' }] : [{ key: 'risk', label: '可能乱码', unit: '处' }, { key: 'shells', label: '命令环境', unit: '套' }];
     if (key === 'software' && rows) {
       line = [snapshot(checkedAt('software'), 'software'), softwareEvery(rows)].filter(Boolean).join(' · ');
       figures = [];
     }
     if (key === 'runtime' && r) { line = snapshot(checkedAt('runtime'), 'runtime'); figures = []; }
-    if (key === 'startup' && d?.items) { const enabled = d.items.filter(r => r.enabled === 'enabled' || r.enabled === true).length, disabled = d.items.filter(r => r.enabled === 'disabled' || r.enabled === false).length; line = [snapshot(checkedAt('startup'), 'startup'), count(d.total, '项', d), ['yellow', 'red'].includes(d.level) ? sp(d.why || d.reason) : ''].filter(Boolean).join(' · '); figures = [{ ...figures[0], text: count(enabled, '项', d, 'enabled') }, { ...figures[1], text: count(disabled, '项', d, 'disabled') }]; }
     if (!d && !waiting) figures = [];
     return { ...d, key, name: names[key], pic: pictures[key], wait: waiting, level: d?.level, reason: '', line: sp(line), palette: ['apricot', 'pink'], figures, build: el => { const chapter = chapters[key](el); return { set() { chapter.set(); moreRecords(el, key); } }; } };
   }
@@ -204,10 +182,10 @@
     readingRows();
     if (!$('board').matches(':hover,:focus-within')) groups.sort((a, b) => (Number(!!a.adaptive) - Number(!!b.adaptive)) || ((({ red: 0, yellow: 1, blue: 2, gray: 3, none: 4, green: 5, ok: 5 })[a.level] ?? 4) - (({ red: 0, yellow: 1, blue: 2, gray: 3, none: 4, green: 5, ok: 5 })[b.level] ?? 4))).forEach(g => $('board').append(hosts[g.key]));
     const rows = list(data.software);
-    hero.classList.toggle('is-unread', !offline() && !rows && Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p)));
+    hero.classList.toggle('is-unread', !offline() && !rows && Object.keys(phases).length === Object.keys(resources).length && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p)));
     $('note').textContent = rows ? comparisonNote(rows) : ''; $('note').hidden = !$('note').textContent;
     if (rows) { const behind = rows.filter(r => compared(r) && r.relation === 'behind').length, none = rows.length && !rows.some(compared); U.html($('head'), status.lamp + U.head(`${window.ComputerStat.text(data.software.total ?? rows.length, '个', data.software, 'total')}软件 · ${none ? '还没读到版本，没法比新旧' : `${count(behind, '个', data.software, 'behind')}版本落后`}`, { lamp: false })); heroRead.done(); }
-    else if (Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
+    else if (Object.keys(phases).length === Object.keys(resources).length && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
     if (!lit && Object.keys(data).length) { lit = true; L.lightUp([hero, ...Object.values(boards).flatMap(b => b.cards())]); }
   }
   // 两版同一套：访客也照本人版看各卡自己的截止说明，不再另写一行“公开数据读于 …”把它们换掉（同一接口原时刻照给）

@@ -1784,9 +1784,9 @@
     return [labels[d.protection] || missing, ...notes].join('，');
   }
 
-  // 电脑下面的八页：返回回电脑总览（各页 HTML 里写好），返回下面一排同层切换，这一页标出来（M016、M017）
+  // 电脑下面的九页：返回回电脑总览（各页 HTML 里写好），返回下面一排同层切换，这一页标出来（M016、M017）；自启动排在软件与环境后面（本人 11-26 02:12）
   (() => {
-    const pages = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿与流畅'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
+    const pages = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿与流畅'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境'], ['/live/startup/', '自启动']];
     const back = document.querySelector?.('main a.back[href="/live/computer/"]');
     if (!back || !pages.some(([path]) => path === location.pathname)) return;
     const fixture = new URLSearchParams(location.search).get('fixture'), nav = document.createElement('nav');

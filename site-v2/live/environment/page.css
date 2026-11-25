@@ -32,14 +32,11 @@
 .env-runtime p { margin: 0 0 12px; font-size: 16px; white-space: nowrap; }
 .env-runtime dl { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 8px 12px; margin: 0; font-size: 13px; line-height: 1.7; }
 .env-runtime dt { color: var(--muted); }.env-runtime dd { margin: 0; word-break: normal; overflow-wrap: anywhere; }
-.env-startup { list-style: none; margin: 0; padding: 0; }
-.env-startup > li { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(200px, 1.2fr) 70px 90px; align-items: baseline; gap: 20px; padding: 12px 0; border-top: 1px solid rgb(95 103 96 / .1); font-size: 14px; line-height: 1.7; }
-.env-startup > li > span { word-break: normal; overflow-wrap: normal; }.env-startup > li > span:nth-child(2) { color: var(--muted); font-size: 13px; }
-.env-path { display: contents; font-size: 12px; }.env-path > summary { white-space: nowrap; }
-.env-path code { grid-column: 1 / -1; font-size: 12px; white-space: pre-wrap; word-break: normal; overflow-wrap: anywhere; color: var(--muted); }
 .env-scope { margin-top: 16px; margin-bottom: 0; }
-
-.env-path-text { grid-column: 1 / -1; font: inherit; font-size: 14px; overflow-wrap: anywhere; color: var(--muted); }
+/* 开机启动挪到自启动页后，原处只留这一行 */
+.env-moved { margin: 18px 0 0; padding: 0; border-radius: 16px; font-size: 15px; line-height: 22px; }
+.env-moved a { display: block; padding: 16px 28px; border-radius: inherit; color: var(--ink-soft); text-decoration: none; transition: background .2s ease, color .2s ease; }
+.env-moved a:hover { background: rgb(255 255 255 / .5); color: var(--ink); }
 .env-table { font-size: 14px; line-height: 1.8; border-radius: 12px; background: rgb(255 255 255 / .35); }
 .env-table th, .env-table td { padding: 12px 14px; }
 .env-table th { font-size: 13px; color: var(--ink-soft); }
@@ -48,8 +45,6 @@
 .env-details > summary::-webkit-details-marker { display: none; }
 .env-details > summary::after { content: " ›"; display: inline-block; margin-left: 8px; }
 .env-details[open] > summary::after { transform: rotate(90deg); }
-
-.env-startup > li > .env-program { min-width: 0; overflow-wrap: anywhere; }
 
 .env-table td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .env-table td:last-child .lamp--sm {
