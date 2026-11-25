@@ -267,10 +267,22 @@
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
+  const stampOf = value => Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
   const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
   // 确认关机：副屏那格回 on: false，或回包头 X-Live-Connection 说 host-off（两路都是原有的；后台现在都还不发）。
   // 没确认关机就只重试、留着手里那份，不用云端、随站那两份（本人 11-24 20:34）。
   const confirmedOff = () => !publicPaused && offline() && hostOffline(latestConnection());
+  // 没确认关机时页顶写“自几点起连不上”：几点是这个窗口第一次确认连续读不到的时刻（M918）。
+  // 同一个标签页里换到别的实况页、断开一直没好（2 分钟内还记着断开）就接着用这个时刻；读到在线就清。
+  const LOST_AT = 'wly-live-lost-at';
+  let lostAt = (() => { try { const v = JSON.parse(sessionStorage.getItem(LOST_AT)); return Number.isFinite(Date.parse(v?.at)) && Date.now() - v.seen < 120000 ? v.at : null; } catch { return null; } })();
+  function noteLost() {
+    if (publicPaused) return;
+    try {
+      if (offline()) { lostAt ||= clock(); sessionStorage.setItem(LOST_AT, JSON.stringify({ at: lostAt, seen: Date.now() })); }
+      else if (latestConnection()?.state === 'online' && lostAt) { lostAt = null; sessionStorage.removeItem(LOST_AT); }
+    } catch { /* 存不下就只记在这一页 */ }
+  }
   // 正在用云端或随站那份的正文（只有时刻的旧包不算）。
   const onBackup = e => e.source === 'fallback' && e.data !== null;
   function linkReason(link) {
@@ -491,12 +503,15 @@
       const release = connectionEntries().some(x => x.backupFrom === 'release' && onBackup(x) || x.backupMeta?.from === 'release');
       const at = main && onBackup(main) ? ` · 下面是${releaseName()}`
         : !mainAt && !shownUpTo() && main?.backupMeta ? ` · ${releaseName()}只记了时刻，没存内容` : atLine;
-      return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at,
+      // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
+      const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
+      return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at,
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
           : release ? `电脑没确认关机，一直在重试；这台浏览器没存过上次的数据，先显示${releaseName()}`
           : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份' };
     }
-    const say = '电脑关机了';
+    // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
+    const say = Number.isFinite(Date.parse(link?.offSince)) ? `${shortStamp(link.offSince)} 起电脑已关机` : '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
@@ -522,6 +537,7 @@
       meta: { ...state.meta, fallbackNote: note } };
   }
   function emit(e, onlyPhase = false) {
+    noteLost();
     const state = present(e);
     if (connectionOffline && !state.offline && !publicPaused) reconnected();
     const changed = connectionOffline !== state.offline || state.offline && pageAt !== shownUpTo(); connectionOffline = state.offline; pageAt = shownUpTo();
@@ -592,7 +608,7 @@
       }
     }
   }
-  function failed(e, status, body, via) {
+  function failed(e, status, body, via, offSince) {
     e.status = status; e.warming = false;
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
@@ -620,7 +636,7 @@
     observedConnection(e, body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
       : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
-      : off ? { state: 'offline', basis: 'response', reason: 'host-off' }
+      : off ? { state: 'offline', basis: 'response', reason: 'host-off', offSince: stampOf(offSince) || e.validatedLink?.offSince || null }
       : { state: 'offline', basis: status ? 'response' : 'browser', reason }));
   }
   function clearFailure(e) {
@@ -838,7 +854,7 @@
       if (Number.isFinite(Date.parse(responseNow))) { e.now = new Date(responseNow).toISOString(); clockOffset = Date.parse(responseNow) - Date.now(); }
       const via = response.headers.get('X-Live-Connection');
       if (oss) {
-        failed(e, 503, null, via || 'unreachable');
+        failed(e, 503, null, via || 'unreachable', via === 'host-off' ? response.headers.get('X-Live-Offline-Since') : null);
         restoreBrowserCopy(e);
         // 云端那份：记下来，确认关机才用（带正文的是这一块的访客回包，旧包只有时刻）
         e.cloud = fixture !== null ? null : { at: body?.at, packet: body?.error === 'snapshot_content' ? body : null,

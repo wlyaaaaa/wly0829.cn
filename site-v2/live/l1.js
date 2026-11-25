@@ -920,7 +920,10 @@
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
-        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' : U.collectionText('状态');
+        // 笔记本连不上时和旁边手机一样写从几点起（后台 offline_since，M918）
+        const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
+          ? ` · ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
+        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
       }).join(' · '), null, '', '/live/computer/'],
