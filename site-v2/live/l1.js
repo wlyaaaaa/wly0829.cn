@@ -852,6 +852,8 @@
     // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
     if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
     if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (d?.presence?.state === 'unknown') return lastState?.offline ? `上次读不到手机连接状态${stamp ? `（${stamp} 记录）` : ''}` : '手机连接状态暂时读不到';
     if (name) return old ? `手机上次经${name}连接${stamp ? `（${stamp} 记录）` : ''}` : `手机经${name}连接`;
     if (!old && (status?.state === 'online' || !status && device?.state === 'online')) return '手机调试已连接，线路未记录';
     return d?.received?.last_at || d?.metrics?.some(v => v.id === 'battery' && v.value != null) ? '手机连接线路未记录' : null;
@@ -956,6 +958,8 @@
   function renderPhone(d) {
     const p = parts.phone, unknown = !d || d.state === 'unknown';
     const offline = d?.state === 'offline' || d?.offline === true, metrics = d?.metrics || [];
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）；照“读不到”的老排法放在卡名下那行小字
+    const unclear = !offline && d?.presence?.state === 'unknown';
     const m = Object.fromEntries(metrics.map(x => [x.id, x]));
     const value = id => ['unavailable', 'computing'].includes(m[id]?.state) ? null : m[id]?.value;
     const dayLabel = (row, fallback) => {
@@ -967,13 +971,13 @@
       : quantity(m.screen_on, 'value', n => n > 0 && n < 60 ? `${Math.floor(n)} 秒` : U.minutes(Math.floor(n / 60)));
     const usage = value('screen_on') == null ? duration : `${screenLabel} ${duration}`;
     const unlocks = value('unlocks') == null ? U.collectionText("解锁", m.unlocks) : `解锁 ${quantity(m.unlocks, 'value')} 次`;
-    const text = unknown ? U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
+    const text = unclear ? '手机连接状态暂时读不到' : unknown ? U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
-    const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
+    const fallbackHead = !offline && !unclear && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
     // 手机型号：回包里手机的市场名（data.device，没有就用电脑那块登记的手机名 hw），接在“解锁 N 次”那一行后面；都没有就不写。
     const model = d?.device?.market_name ?? home?.computer?.devices?.find(x => x.id === 'phone')?.hw;
-    const phoneHead = !unknown && typeof model === 'string' && model.trim() ? `${fallbackHead} · ${model.trim()}` : fallbackHead;
+    const phoneHead = !unknown && !unclear && typeof model === 'string' && model.trim() ? `${fallbackHead} · ${model.trim()}` : fallbackHead;
     const readingTimes = ids => [...new Set(ids.map(id => {
       const metric = m[id], sampled = metric?.source_at ?? metric?.at;
       if (!timed(sampled) || value(id) == null) return '';

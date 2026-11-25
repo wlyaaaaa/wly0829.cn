@@ -1097,6 +1097,8 @@
     const link = lastState?.link;
     const stamp = since => `${U.date(since) !== U.date(Date.parse(lastState?.now) || Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
     if (x.id === 'phone' && x.presence?.state !== 'offline' && x.state === 'offline' && Number.isFinite(Date.parse(x.offline?.since))) return `连不上 · ${stamp(x.offline.since)} 起`;
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (x.id === 'phone' && x.presence?.state === 'unknown' && x.state !== 'offline') return '连接状态暂时读不到';
     const since = x.id === 'main' && offline() && link?.reason === 'host-off' ? link.offSince
       : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since
       : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;
