@@ -75,7 +75,8 @@
     return [...items].sort((a, b) => when(a) - when(b));
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
-  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '放着，到了该办的时候再提醒。', know: '只需了解的进展与通知。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  // know 怎么下去。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”那行，现“点我知道了就关，不按天数自己消失”；变了改这句
+  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '放着，到了该办的时候再提醒。', know: '只需了解的进展与通知；点“我知道了”才下去，不按天数消失。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {

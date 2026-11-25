@@ -217,6 +217,8 @@
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
   // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
   const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
+  // 键鼠静止从哪一刻算。按需更新快核（M928）核法：E:/Projects/Tools/TimeAudit/TimeAudit.ahk 的 maxIdleTime，现 60000 毫秒＝1 分钟；变了改这句
+  const AWAY_NOTE = '键鼠停满 1 分钟就算，这段不算在用时间';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -287,7 +289,7 @@
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
         const tl = block('day', el.firstElementChild, V.timeline(el.firstElementChild, { rows, actualEnd: true }));
         return { set: () => {
-          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
+          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s.id === 'away' ? { ...s, note: AWAY_NOTE } : s), payload = {};
           const gap = states.length;
           states.push({ id: 'unrecorded', label: '缺测', hue: 'stone' });
           const strips = dayStrips(d?.day && { ...d.day, spans: d.day.spans?.map(([t, i]) => [t, i ?? gap]) });

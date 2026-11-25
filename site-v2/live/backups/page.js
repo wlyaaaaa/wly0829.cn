@@ -68,7 +68,13 @@
     const retainedShort = d.at && U.date(d.at) === U.date(Date.now()) ? U.time(d.at) : retainedAt;
     const batchNote = batchFailed ? `<span>${retainedAt ? `下表沿用 ${esc(retainedShort)} 的记录` : '这次没读到，下表是上一次的记录'}。带“上次确认”的是旧数，带“本次没读到”的还等更新。</span>` : '';
     const localCaption = localNote ? `<span>${field(localNote, '本机说明')}</span>` : '';
-    const caption = batchNote || localCaption ? `<caption class="pj-note">${batchNote}${localCaption}</caption>` : '';
+    // G、H 盘的“大部分成功／部分成功”怎么分：表里出现这两档时在表头说一次。
+    // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
+    let tierSeen = false;
+    const caption = () => {
+      const tierNote = tierSeen ? '<span>G、H 盘按这一轮备上多少分档：没备上的不超过一半写“大部分成功”（黄），超过一半写“部分成功”（橙），一份也没备上才写“备份失败”（红）。</span>' : '';
+      return batchNote || localCaption || tierNote ? `<caption class="pj-note">${batchNote}${localCaption}${tierNote}</caption>` : '';
+    };
     const refreshLabels = { read: '本次读到清单', failed: '本次没读到', not_recorded: '本次读取未登记', not_applicable: '本次无需读清单' };
     const columnHead = (key, name) => {
       const { observed_at, refresh_counts } = d.columns?.[key] || {};
@@ -152,6 +158,7 @@
       // 和计划任务同一套颜色；后台没给分档或分不出的照旧
       const tier = (key === 'g' || cold) && (told || anomaly === problem('failed')) && TIER[copy?.outcome?.state];
       if (tier) {
+        if (['mostly', 'partial'].includes(tier[0])) tierSeen = true;
         const o = copy.outcome, counts = ['mostly', 'partial'].includes(tier[0]) && Number.isInteger(o.ok) && Number.isInteger(o.failed) ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
         return cell(tier[0], tier[1], [told !== tier[1] && told, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
       }
@@ -170,7 +177,7 @@
       return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(reason(s.missing?.bytes), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(note, '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
-    U.html($('backup-matrix'), `<table class="backup-grid">${caption}<colgroup>${[18,18,6,7,7,7,9,9,12,7].map(width => `<col style="width:${width}%">`).join('')}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
+    U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${[18,18,6,7,7,7,9,9,12,7].map(width => `<col style="width:${width}%">`).join('')}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
   }
   function summary(d) {
     const sets = d.sets || [], supplied = d.summary || {};

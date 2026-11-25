@@ -60,7 +60,8 @@
       : !published && ['ready', 'complete', 'completed'].includes(current) && !!copy?.content_at;
     const problems = original ? { failed: '原件读取失败', missing: '原件缺失', stale: '原件记录已过期', partial: '只核实部分原件' } : PROTECTION;
     // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state）：少数没备上写“大部分成功”，较多没备上写“部分成功”，和备份总表一个说法（M780）
-    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功', partial_success: '部分成功' })[copy?.outcome?.state];
+    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功（没备上的不超过一半）', partial_success: '部分成功（没备上的超过一半）' })[copy?.outcome?.state];
+    // 括号里的分界。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     const anomaly = tier || (copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
       : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : ''));
     const status = retired ? '已停用，保留旧副本' : copy?.status_text ? (U.fieldText?.(copy.status_text, viewer) ?? sp(copy.status_text))
