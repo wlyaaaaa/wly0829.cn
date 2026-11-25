@@ -284,7 +284,8 @@
     document.querySelector('.chat-lower').after(done);
     const disclosure = done.querySelector('details'), summary = disclosure.querySelector('summary');
     const range = disclosure.querySelector('[data-since]'), list = disclosure.querySelector('ul');
-    const doneRead = U.reading(done.querySelector('[data-error]'), { name: doneTitle, ghost: '' });
+    // 读不到时只写“这块暂时读不到”“这块没存下来”，不在小标题底下把“近 30 天 · 做完的对话”再写一遍（主控 11-26 06:15 看 r83 时记）
+    const doneRead = U.reading(done.querySelector('[data-error]'), { ghost: '' });
     function doneUnavailable(state) {
       if (['none', 'gone'].includes(state.phase) || state.meta?.status >= 400) {
         done.hidden = false;
