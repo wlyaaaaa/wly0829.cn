@@ -481,7 +481,9 @@
   page = T.boot({ resource: 'automation', back: '/live/#automation',
     ask: () => '请看实况自动任务页：后台 AI 现在在干什么、刚跑完什么、哪类坏了或停着、要不要我出面。先用大白话说，别动手。',
     onState(next) { state = next; schedule(); } });
-  watchRuns();
+  // 等 T.boot 先订上 automation 本身再订各类运行列表：页顶那条“下面是几点的数据”说的是本页主数据（第一个订的那份），
+  // 原来各类运行列表先订、成了主数据，断线时页顶写列表的时刻、标题下灰条写总览的时刻，一页两个时间（M960）
+  queueMicrotask(watchRuns);
   page.root.addEventListener('click', async e => {
     const toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
     const cat = e.target.closest('[data-cat]'), clear = e.target.closest('[data-clear]'), day = e.target.closest('[data-day]');
