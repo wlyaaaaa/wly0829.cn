@@ -71,6 +71,17 @@
 .page--items #stats button { border: 0; font: inherit; text-align: left; cursor: pointer; }
 .page--items #stats button:hover { box-shadow: inset 0 0 0 1px #00A650; }
 .page--items #stats button[aria-pressed="true"] { background: rgb(0 166 80 / .15); box-shadow: inset 0 0 0 2px #00A650; }
+/* 加绿（本人 11-26 00:14 点头 GREENIMG1126 选 A，照 G-等你的事-v5）：只加颜色，版式和字不动。
+   页标题、右边“近 7 天的变化”、每组大标题前一根绿竖条（带空心圈的“等你 N 件”只留圈，事项前不加）；统计格和组标题里大于 0 的件数绿；
+   “问情况”绿字绿边白底（照本人给的那颗）；“登录××”实心绿、“不办了”“晚点提醒”“我知道了”照旧 */
+.page--items .lbp-title h1, .page--items .lbp-side > .part { display: flex; align-items: center; gap: 10px; }
+.page--items .lbp-title h1::before, .page--items .lbp-side > .part::before, .page--items .lb-card__title::before { content: ""; flex: none; width: 5px; border-radius: 3px; background: #00A650; }
+.page--items .lbp-title h1::before { height: 30px; }
+.page--items .lbp-side > .part::before { height: 15px; }
+.page--items .lb-card__title::before { display: inline-block; height: 21px; margin-right: 10px; vertical-align: -4px; }
+.page--items .lbp-stat b.is-some, .page--items .lb-count__n { color: #00A650; }
+.page--items .lb-item .btn[data-slot="ask"] { border-color: #00A650; background: #fff; color: #00A650; font-weight: 600; }
+.page--items .lb-item .btn[data-slot="ask"]:is(:hover, :focus-visible) { border-color: #008a43; background: rgb(0 166 80 / .07); color: #008a43; }
 
 /* 多选：勾上一件，底部浮出一条和页眉同料的胶囊栏；按钮沿用实况的白色小胶囊，只确认一次 */
 .items-selection { position:fixed; left:50%; bottom:28px; z-index:40; display:flex; align-items:center; gap:10px; max-width:calc(100vw - 48px); box-sizing:border-box; padding:7px 8px 7px 18px; border:1px solid rgb(255 255 255 / .9); border-radius:999px; background:rgb(255 255 255 / .84); -webkit-backdrop-filter:blur(20px) saturate(170%); backdrop-filter:blur(20px) saturate(170%); box-shadow:inset 0 1px 0 #fff, 0 1px 2px rgb(20 20 19 / .06), 0 22px 44px -20px rgb(20 28 36 / .42); transform:translate(-50%, 0); transition:opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1), visibility 0s; }
