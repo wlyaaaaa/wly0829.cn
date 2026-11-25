@@ -49,8 +49,9 @@
   function agentsView(d, { now }) {
     const today = d.today && typeof d.today === 'object' ? d.today : null, total = today?.total || {};
     const act = today?.activity && typeof today.activity === 'object' ? today.activity : null;
-    const current = d.rule_current === true || d.active_version && d.active_version === d.rule_version ? ' 当前版'
-      : d.rule_current === false || d.active_version && d.rule_version && d.active_version !== d.rule_version ? `，不是当前版${d.active_version ? ` ${esc(d.active_version)}` : ''}` : '';
+    // 卡尾那句写明这是三家在用的规则、是不是最新的那版（M636：原来只写“规则 E… 当前版”看不懂）
+    const current = d.rule_current === true || d.active_version && d.active_version === d.rule_version ? '（最新版）'
+      : d.rule_current === false || d.active_version && d.rule_version && d.active_version !== d.rule_version ? `（${d.active_version ? `最新是 ${esc(d.active_version)}` : '不是最新版'}）` : '';
     const rows = Object.entries(entries).map(([key, name]) => {
       const p = items(d.providers).find(x => x.id === key) || { id: key, name, status: 'missing' };
       const t = items(today?.providers).find(x => x.id === key) || null, last = t?.last_at || {};
@@ -198,7 +199,7 @@
           // 小时数是叠加的（同时在干的分别算），写明“叠加”，旁边小字“平均同时 N 个在干”，一天过 24 小时也看得懂（主控 11-26 03:50 点名）
           : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家叠加干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${v.together ? `平均同时 ${esc(together(v.together))} 个在干 · ` : ''}${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
-        <p class="b6-foot b6-foot--split">${ruleLine(`规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
+        <p class="b6-foot b6-foot--split">${ruleLine(`三家在用的规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
 
     // AI 账本卡（本人 11-24 02:45 选 A，照 v3）：AI 在跟几件、今天到日子、跟得最久、新账起进了结；每个数点了到账本页筛好的那几件
