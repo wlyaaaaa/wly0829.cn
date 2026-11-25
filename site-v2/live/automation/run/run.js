@@ -281,13 +281,15 @@
     return { out, gap };
   }
 
-  // 计划：和顶层页同一份 plan，每一步的状态照数据（做完、在干、没开始），当前这一步标出
-  function planFold(p) {
+  // 计划：和顶层页同一份 plan，每一步的状态照数据（做完、在干、没开始），当前这一步标出。
+  // 对话已经结束、计划还停在半路（这一步没标做完）时，不写“在干”：卡头写“停在第 N／M 步”，那一步写“停在这一步”（主控 11-26 06:0x，卡头写“对话已结束”、计划却写“在干”像页面毛病）
+  function planFold(p, ended) {
     const d = chat?.data;
     if (!p.plan.length) return '';
-    const steps = p.plan.map((x, i) => CV.station(x, i, p.current));
+    const steps = p.plan.map((x, i) => CV.station(x, i, p.current)).map(x => ended && x.word === CV.stepWord('running') ? { ...x, word: '停在这一步' } : x);
     const kinds = new Set(p.plan.map(x => CV.privatePlan(x) ? 'owner' : CV.markOf(x.text, x)).filter(Boolean)), marks = CV.marks(kinds, '计划');
-    const head = [p.count, p.plan[p.current] && p.label, p.plan[p.current] && CV.stepWord(U.chatFields.stepState(p.plan[p.current]))].filter(Boolean).join(' · ');
+    const now = p.plan[p.current];
+    const head = [p.count, now && (ended ? `停在${p.label}` : p.label), now && !ended && CV.stepWord(U.chatFields.stepState(now))].filter(Boolean).join(' · ');
     const tag = viewer === 'owner' && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'plan', '执行计划', viewer) : '';
     return `<details class="ar-fold ar-planfold" id="ar-plan"><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
   }
@@ -333,7 +335,7 @@
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
-      plan = locked ? '' : planFold(m.plan);
+      plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
     } else if (scanLine) meta = `<div class="ar-talk__meta">${scanLine}</div>`;
     return `<section class="tp-panel ar-card ar-talk"><div class="ar-talk__head"><h2>这一轮的对话</h2>${tag}${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-count">共 ${count} 条</span></div>${meta}${plan}<ol class="ar-chat">${items.map(x => x.html).join('')}</ol></section>`;
   }
