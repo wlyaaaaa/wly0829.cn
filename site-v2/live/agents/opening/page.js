@@ -50,11 +50,13 @@
       for (let i = a; i <= b; i++) marks[i] = { kind: String(p.kind || ''), shared: list(p.shared_with) };
     }
     return { name: plain(f?.name), path: plain(f?.path) || null, characters: num(f?.characters), tokens: num(f?.tokens),
-      readable: text != null, blocks: blocks(lines, marks, h) };
+      readable: text != null, blocks: blocks(lines, marks, h), rewritten: f?.visitor_text_rewritten === true };
   }
   // 三种开法：data.opening_modes.{no_project|website|agents} = { project_path, hosts:{Claude|Codex|Antigravity:{available, files:[{name,path,
   //   resolved_path,bytes,characters,tokens,scope,file_evidence,load_evidence,imported_by,counted_bytes,excluded_header_bytes}],
   //   file_count,bytes,characters,tokens,count_method, token_limit,tokens_remaining（只 Antigravity）}} }
+  // 项目那几份（scope: project）另带 text、version、paragraphs、visitor_text_rewritten，和全局那几份一样登原文；
+  // 没读到时 text 为 null。旧接口项目那几份不带 text 这一项，那时照旧写一句“这里没登原文”。
   const MODE_NAMES = { no_project: '无项目', website: '网站项目', agents: 'agents 项目' };
   const baseName = p => String(p || '').split(/[\\/]/).filter(Boolean).at(-1) || '';
   function modesOf(d) {
@@ -71,10 +73,15 @@
   }
   function opened(r) {
     if (!r || typeof r !== 'object' || r.available === false) return null;
-    const files = list(r.files).map(f => ({ path: plain(f.path) || plain(f.name), resolved: plain(f.resolved_path) || null,
-      bytes: num(f.bytes), tokens: num(f.tokens), project: f.scope === 'project', read: f.file_evidence !== 'unavailable',
-      load: String(f.load_evidence || ''), importedBy: plain(f.imported_by) || null,
-      counted: num(f.counted_bytes), header: num(f.excluded_header_bytes) }));
+    const files = list(r.files).map(f => {
+      const row = { path: plain(f.path) || plain(f.name), resolved: plain(f.resolved_path) || null,
+        bytes: num(f.bytes), characters: num(f.characters), tokens: num(f.tokens), project: f.scope === 'project', read: f.file_evidence !== 'unavailable',
+        load: String(f.load_evidence || ''), importedBy: plain(f.imported_by) || null,
+        counted: num(f.counted_bytes), header: num(f.excluded_header_bytes) };
+      if (!row.project || !f || !Object.hasOwn(f, 'text')) return row;
+      const doc = file(f);
+      return { ...row, hasText: true, name: doc.name, readable: doc.readable, blocks: doc.blocks, rewritten: doc.rewritten };
+    });
     return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens),
       method: String(r.count_method || ''), limit: num(r.token_limit), left: num(r.tokens_remaining) };
   }
@@ -293,18 +300,23 @@
   function body(m, h) {
     if (!h.present) return `<p class="tp-empty">${h.name} 的开场页这一轮没读到。</p>`;
     if (!h.files.length) return `<p class="tp-empty">${h.name} 的入口目录不在，开对话时没有开场页可读。</p>`;
-    const many = h.files.length > 1, on = Boolean(m.modes), r = on && modeOf(m).hosts[h.id];
-    const html = h.files.map((f, i) => {
-      // 有开法时每份都写路径和 token（和上面“读哪几份”的第几份对得上）；后台还没给开法时照改之前的样子
-      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${[words(f.characters),
-        on && known(f.tokens) && `${(r ? approx(r) : h.id !== 'antigravity') ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
+    const many = h.files.length > 1, on = Boolean(m.modes), o = on && modeOf(m), r = on && o.hosts[h.id];
+    const near = r ? approx(r) : h.id !== 'antigravity';
+    const one = (f, i, key) => {
+      // 有开法时每份都写路径和 token（和上面“读哪几份”的第几份对得上）；后台还没给开法时照改之前的样子。
+      // 访客版这一份换了说法的，本人版在抬头挂全站同一个“对外换了说法”小签（访客版不挂）
+      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
+        on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
-      return top + (f.blocks.length ? f.blocks.map((b, j) => blockHtml(b, h, `same-${h.id}-${i}-${j}`)).join('') : '<p class="tp-empty">这一份是空的。</p>');
-    }).join('');
-    // 项目自己的那几份，后台只给路径和大小、不给原文：说一声原文没登，别让人以为漏了
-    const extra = r ? r.files.map((f, i) => f.project ? i + 1 : 0).filter(Boolean) : [];
+      return top + (f.blocks.length ? f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('') : '<p class="tp-empty">这一份是空的。</p>');
+    };
+    const html = h.files.map((f, i) => one(f, i, `${h.id}-${i}`)).join('');
+    // 项目自己的那几份：后台给了原文就跟全局那几份一样登；旧接口只给路径和大小，说一声原文没登，别让人以为漏了
+    const own = r ? r.files.map((f, i) => [f, i]).filter(([f]) => f.project) : [];
+    const shown = own.filter(([f]) => f.hasText).map(([f, i]) => one(f, i, `${h.id}-${o.id}-${i}`)).join('');
+    const extra = own.filter(([f]) => !f.hasText).map(([, i]) => i + 1);
     const span = extra.length > 1 ? `第 ${extra[0]}–${extra.at(-1)} 份` : `第 ${extra[0]} 份`;
-    return html + (extra.length ? `<p class="op-more">${span}是${esc(whenOpen(modeOf(m)))}多读的项目规矩，这里没登原文，路径和大小在上面“读哪几份”里。</p>` : '');
+    return html + shown + (extra.length ? `<p class="op-more">${span}是${esc(whenOpen(o))}多读的项目规矩，这里没登原文，路径和大小在上面“读哪几份”里。</p>` : '');
   }
   function contextHtml(h) {
     const c = h.context;

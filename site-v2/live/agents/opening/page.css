@@ -125,6 +125,7 @@
 .op-file:first-child { margin-top: 0; }
 .op-file b { font-family: var(--mono); font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
 .op-file span { flex: none; font-variant-numeric: tabular-nums; }
+.page--opening .op-file span .live-mark { margin: 0 10px 0 0; }   /* 全站那条 .page--live .live-mark 把 margin 清成 0，这里要加一层才压得住 */
 /* 项目自己的那几份没登原文：说一声 */
 .op-more { margin: 18px 0 0; padding: 10px 16px; border-radius: 10px; background: rgb(20 20 19 / .04); font-size: 14px; line-height: 22px; color: #57564f; }
 
