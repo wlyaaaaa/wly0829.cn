@@ -35,6 +35,9 @@
     const days = Math.max(0, Math.floor((Date.parse(offline() ? referenceTime(key) || at : new Date().toISOString()) - Date.parse(at)) / 86400000));
     return `${U.isStale(data[key]) ? '上次 ' : ''}${U.date(at)} ${U.time(at)} 查的${days > 7 ? `（${days} 天前）` : ''}`;
   }
+  // 软件版本多久查一次：周期读回包每行的 refresh_interval_seconds；是 7 天时写上钟点。
+  // 按需更新快核（M928）核法：E:/PCConfig/registries/tasks.json 里“PCConfig Governance Check”的 schedule_zh，现“每周日 23:30；错过会补”；变了改这句
+  const softwareEvery = rows => { const s = Number(rows?.[0]?.refresh_interval_seconds); return s === 604800 ? '每周日 23:30 查一次，没开机就开机后补查' : s > 0 ? `每 ${s % 86400 ? `${Math.round(s / 3600)} 小时` : `${s / 86400} 天`}查一次` : ''; };
   function encoding(cp) { return cp == null ? null : Number(cp) === 65001 ? 'UTF-8 · 65001' : Number(cp) === 936 ? 'GBK · 936' : Number(cp) === 20127 ? 'ASCII · 20127' : String(cp); }
   const fields = ['console_input_code_page', 'console_output_code_page', 'pipeline_output_code_page', 'dotnet_default_code_page'];
   const commandRows = r => [['powershell_core', 'PowerShell 7'], ['windows_powershell', '系统自带的 Windows PowerShell']].filter(([key]) => r[key]).map(([key, name]) => {
@@ -173,7 +176,7 @@
     let line = missing(names[key], d);
     let figures = key === 'software' ? [{ key: 'total', label: '软件', unit: '个' }, { key: 'behind', label: '版本落后', unit: '个' }] : key === 'runtime' ? [{ key: 'risk', label: '可能乱码', unit: '处' }, { key: 'shells', label: '命令环境', unit: '套' }] : [{ key: 'enabled', label: '启用', unit: '项' }, { key: 'disabled', label: '停用', unit: '项' }];
     if (key === 'software' && rows) {
-      line = snapshot(checkedAt('software'), 'software');
+      line = [snapshot(checkedAt('software'), 'software'), softwareEvery(rows)].filter(Boolean).join(' · ');
       figures = [];
     }
     if (key === 'runtime' && r) { line = snapshot(checkedAt('runtime'), 'runtime'); figures = []; }
