@@ -91,6 +91,8 @@
 .pj-heat-name:has(.has-note) { flex-wrap: wrap; row-gap: 1px; }
 .pj-heat-name:has(.has-note) .pj-heat-label { flex-basis: 100%; }
 .pj-heat-private.has-note { padding: 0; background: none; }
+/* 本人版名字后的“访客看不到”小签：和名字同一行、收小，行高不超过格子 */
+.page--live .pj-heat-name > .live-mark:is(.live-mark--rewritten, .live-mark--reworded) { flex: none; margin-left: 0; padding: 0 6px; font-size: 12px; line-height: 16px; }
 .pj-heat-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 12px; color: var(--muted); }
 .pj-heat-legend > span { display: inline-flex; align-items: center; gap: 5px; }
 .pj-heat-legend .pj-heat-cell { display: inline-block; width: 12px; height: 12px; cursor: default; }

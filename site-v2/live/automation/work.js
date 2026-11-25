@@ -130,10 +130,11 @@
     // 后台的 text 自己带了“停着：”开头、也写了几点起：调用处已经写了“停着”，开头去掉；text 里有那个钟点就不再补“· 几点起”。没带的照旧
     const text = String(p.text || '').replace(/^停着[：:，,]\s*/, '');
     const why = esc(text || (p.reason === 'login' ? '登录过期' : '额度用完'));
-    const item = audience === 'owner' && p.login_command && route(p.href);
+    // 两版同一套（本人禁令 11-24 14:16）：登录过期两版都给去那张卡的链接
+    const item = (p.login_command || p.reason === 'login') && route(p.href);
     const clock = instant(p.started_at) && U.time(instant(p.started_at));
     const since = when(p.started_at) && !(!item && text && clock && text.includes(clock)) ? ` · ${when(p.started_at)} 起` : '';
-    return (item ? link(item, '登录过期，登录命令在等你的事里') : why) + since;
+    return (item ? link(item, `登录过期，登录命令在等${own()}的事里`) : why) + since;
   }
   const group = (rows, name) => list(rows).filter(row => row.group === name);
   const rowTitle = (row, name = '这件活') => field(row.title, name);
@@ -265,7 +266,9 @@
       [route(data.ledger_href), '账本', 'AI 账本'],
     ].filter(([href]) => href);
     if (row.project && row.project_name) related.unshift([route(`/live/project/?id=${segment(row.project)}`), '所属项目', row.project_name]);
-    const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');
+    // M767：所属项目在访客版看不到的（后台在这件活上标 visitor_labels.project_name），本人版在项目名后挂签
+    const projectMark = audience === 'owner' && U.visitorLabel?.(row, 'project_name', '所属项目', audience) || '';
+    const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}${kind === '所属项目' && projectMark ? ` ${projectMark}` : ''}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');
     const overview = row.summary || list(data.facts).find(fact => fact.label === '问题')?.text;
     const chip = `<p class="aw-chip">${lamp(row) || '<span class="aw-slot-dot"></span>'}一件活</p>`;
     return `<section class="glass aw-hero aw-work-hero"><img alt="" src="${esc(dossier)}" class="aw-art"><div class="aw-lead">${chip}<h1>${rowTitle(row, '这件活的标题')}</h1>

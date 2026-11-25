@@ -307,14 +307,16 @@
     // 新私事规则：登记时填了 open_note 的成品，访客版在打开链接的位置显示这句普通字（“这里是……，所以不予展示”）；本人版照给链接，旁边挂签。
     // M684：访客那边正文看不到（整块写成“这里是……，所以不予展示”），挂“访客看不到”；后台给了 visitor_labels.open 时照它挂哪种。
     const openNote = U.fieldText(it.open_note, projectViewer).trim();
-    const target = !artifactVersion && !(openNote && projectViewer === 'public') && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
-    const action = target ? projectViewer === 'public'
+    // 两版同一套：访客版正文那句（open_note）照写，打开按钮也照摆，不再让那句把按钮压掉
+    const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
+    const action = target ? projectViewer === 'public' && typeof target.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>`
       : pcActions(item, [target]) + (U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
     const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
     const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');
-    const explanation = titleVisible ? it.recent_detail || '这项成品已有登记，内容说明待补充。' : '';
+    // 没写说明就不写这一行（原来的兜底句“这项成品已有登记，内容说明待补充。”两版读着都像没写）
+    const explanation = titleVisible ? it.recent_detail || '' : '';
     const solution = canShorten && typeof it.solves === 'string' ? it.summary_zh || it.solves : it.solves;
     const knownSolution = solution && !/^(?:没有|未)记录(?:解决)?(?:[。.]|$)/.test(sp(solution));
     const solves = knownSolution ? `<p class="row__sub">解决：${U.fieldHtml(solution, { name: '解决', kind: projectViewer })}</p>` : '';
@@ -774,7 +776,7 @@
         // 代表数已经在页头那一条里，卡里不再写一遍
         const duplicate = m => (headId != null && m.id === headId && !!headline(proj)) || (id === 'agents' && s.id === 'skills' && s.metrics.length === 1 && m.value === proj.counts?.skills);
         const intro = readings && s.id === 'scale' ? s.metrics?.find(m => m.id === 'missing_intros') : null;
-        const visible = (s.metrics || []).filter(m => m !== intro && m.label && (m.id !== 'next_first_step' || projectViewer === 'owner') && !duplicate(m) && !hideZero(m) && !(skillUsage && V.skills.includes(m.id)) && !surveyRow(m)).map(m => ({ ...m, scope: descriptions.includes(m.scope) ? null : m.scope, note: descriptions.includes(m.note) ? null : m.note, gap: descriptions.includes(m.gap) ? null : m.gap }));
+        const visible = (s.metrics || []).filter(m => m !== intro && m.label && !duplicate(m) && !hideZero(m) && !(skillUsage && V.skills.includes(m.id)) && !surveyRow(m)).map(m => ({ ...m, scope: descriptions.includes(m.scope) ? null : m.scope, note: descriptions.includes(m.note) ? null : m.note, gap: descriptions.includes(m.gap) ? null : m.gap }));
         if (s.metrics?.length && !intro && !visible.length && !s.items && !s.hidden && !s.rule_history && !(s.id === 'skills' && skillUsage)) continue;
         const arrays = visible.filter(m => m.expandable && m.section);
         const metrics = visible.filter(m => !arrays.includes(m) && (!U.offline?.() || hasValue(m)));
@@ -1055,7 +1057,9 @@
     const tag = phase ? `<span class="tag pj-phase" data-phase="${esc(d.phase)}">${phase}</span>` : d.phase_gap ? `<span class="pj-phase-gap">${U.fieldHtml(d.phase_gap, { name: '分档', kind: projectViewer })}</span>` : '';
     const anonymous = projectViewer === 'public' && /^project-[0-9a-f]{32}$/.test(d.id);
     const heading = titleText(d.name || (anonymous ? '项目名称仅本人可见' : d.id), anonymous ? '项目名称仅本人可见' : '项目');
-    U.html(part('head'), status.lamp + U.head(heading, { lamp: false }) + tag);
+    // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），标题旁挂“访客看不到”
+    const visitorTag = projectViewer === 'owner' ? U.visitorLabel(d, ['$', 'name'], '这个项目', projectViewer) : '';
+    U.html(part('head'), status.lamp + U.head(heading, { lamp: false }) + tag + (visitorTag ? `<span class="head__rewrite">${visitorTag}</span>` : ''));
     document.title = `${heading} · 实况`;
     const acts = heroActs(d); part('acts').hidden = !acts; U.html(part('acts'), acts);
     // 一行：最近改动 ｜ 一句话说明（没有说明时用后端那句，例如冻结项目的“已冻结，保留已有资料”）

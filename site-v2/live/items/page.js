@@ -57,15 +57,56 @@
     const entry = hiddenWhileWriting.get(item.id);
     return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
   };
-  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved } }) => {
+  // 办成后马上跟上（M903）：后台从登记到写成要几秒，办成那一刻重读的退出列表和清单可能还是旧的。
+  // 回执已确认写成的，先照办成的结果摆上：“我知道了”“不办了”“关掉汇报”放进“近 7 天下去的”，“晚点提醒”放进“你放着”；
+  // 后台读数里出现这件（退出记录里有这一次，或清单里换成了新版本）就换成后台那条，旧读数不把它盖回去。
+  // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
+  const landed = new Map(), writeStarted = new Map();
+  const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
+  function landItem(item, intent) {
+    const at = new Date().toISOString(), base = { since: writeStarted.get(item.id) ?? Date.now(), saved: Date.now(), version: item.item_version };
+    // 先摆上的“你放着”和后台那条一个样子：写上明早 10 点起该办（同后台 tomorrow_10），只留问情况、不办了和网站链接，不再挂“晚点提醒”
+    const tomorrow10 = (d => (d.setUTCDate(d.getUTCDate() + 1), d.toISOString().slice(0, 10) + 'T10:00:00+08:00'))(new Date(Date.now() + 8 * 3600e3));
+    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: tomorrow10, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
+    else if (intent === 'close_report') {
+      const id = item.owner_item || item.item_id || item.item || item.id;
+      landed.set(id, { ...base, key: 'closed', row: { id, kind: 'choose', text: item.text, title: item.title, actions: [], closed: { at, kind: 'declined', text: '本人关掉了这份汇报' }, _landed: true } });
+    } else if (LANDED_KIND[intent]) landed.set(item.id, { ...base, key: 'closed', row: { ...item, closed: { at, kind: LANDED_KIND[intent] }, _landed: true } });
+  }
+  // 后台读数已经有这一次的结果，就不再摆先放上去的那条
+  function withLanded(key, rows) {
+    if (!Array.isArray(rows) || !landed.size) return rows;
+    const extra = [];
+    for (const [id, w] of landed) {
+      if (w.key !== key) continue;
+      const seen = key === 'closed' ? rows.some(it => it.id === id && Date.parse(it.closed?.at) >= w.since - 120000)
+        : [...collections].some(([k, c]) => k !== 'closed' && k !== 'reports' && c.items?.some(it => it.id === id && it.item_version !== w.version));
+      if (seen) landed.delete(id); else extra.push(w.row);
+    }
+    return extra.length ? [...extra, ...rows] : rows;
+  }
+  let landedTimer = 0;
+  function followLanded() {
+    clearTimeout(landedTimer);
+    const now = Date.now(), before = landed.size;
+    for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
+    if (landed.size !== before) { redrawItems(); drawClosed(); }
+    if (!landed.size) return;
+    const first = Math.min(...[...landed.values()].map(w => w.saved));
+    landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
+  }
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent } }) => {
     for (const item of items) {
+      if (saved === null) writeStarted.set(item.id, Date.now());
       if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
       else hiddenWhileWriting.delete(item.id);
+      if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent);
     }
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
     redrawItems();
     if (reportsData) renderReports(reportsData);
+    if (saved?.length) { drawClosed(); followLanded(); }
   });
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
@@ -189,7 +230,7 @@
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
   const selected = new Set(), selectable = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
-  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了只提示“不是可信设备”，什么都不改（定稿卡-等你的事 第一节第 4 条）。
+  // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了弹全站共用的可信设备说明框（M803），什么都不改（定稿卡-等你的事 第一节第 4 条）。
   const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
   const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
   function checkbox(it) {
@@ -253,11 +294,7 @@
   }
   function row(it, closed = false, shared = '') {
     function brief(html) {
-    if (viewer === 'owner') return html;   // 本人版给全文，不收成一句
-    // 收起时那一句是纯文字，各小段之间补上和展开后一样的“ · ”，不挤成一串（M670）
-    const text = html.replace(/<\/span>(?=<span class="item-bit[\s"])/g, '</span> · ').replace(/<[^>]*>/g, '');
-    const first = text.match(/^.*?[。！？\n]/)?.[0] || text.slice(0, 100);
-    return text.length > first.length ? `<details class="brief"><summary><span class="brief__text">${first}</span> <span class="more__chev">›</span></summary><div>${html}</div></details>` : html;
+    return html;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，访客版不再先收成一句
     }
     const flags = it.text && typeof it.text === 'object' ? it.text : it, hidden = viewer === 'public' && (it.visibility === 'owner' || it.public === 'owner' || flags.visibility === 'owner' || flags.public === 'owner');
     const placeholder = hidden || viewer === 'public' && (flags.hidden || flags.rewrite === 'pending' && !flags.text && !flags.value);
@@ -265,7 +302,7 @@
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, viewer === 'owner' && U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
@@ -283,22 +320,28 @@
     collections.set(key, { items, empty, renderer, partial });
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);
+    items = (items || []).filter(it => (key === 'closed' || it._landed || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
     }
     // 新私事规则（本人 11-24 02:56）：访客版不再按条藏，组标题只数看得到的行，也不再写“另有 N 件仅本人可见”。
     const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length : '—') + ' 件';
-    U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '（' + count + '）');
+    U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
     const method = it => Object.hasOwn(KIND, it?.kind) ? it.kind : '';
-    if (key === 'closed') items.sort((a, b) => rank(a) - rank(b));
+    // M852：四组按“这组最近一次下去的时刻”排，刚办完的那组在最前；组里照旧新的在上；时刻相同的组照原来的先后（主控 11-25 17:08 转本人 17:03 的话后照建议 A 定，两版同一套）
+    if (key === 'closed') {
+      const when = it => Date.parse(it?.closed?.at) || 0, latest = new Map();
+      for (const it of items) latest.set(method(it), Math.max(latest.get(method(it)) ?? 0, when(it)));
+      items.sort((a, b) => latest.get(method(b)) - latest.get(method(a)) || rank(a) - rank(b) || when(b) - when(a));
+    }
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     const groupName = kind => KIND[kind] ? viewer === 'public' ? KIND[kind].replaceAll('你', '本人') : KIND[kind] : '没写类别';
     // 本人版列表默认给全；访客照旧先摆 5 条。
-    const ul = $(key + '-list'), limit = viewer === 'owner' ? Infinity : 5, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
+    const ul = $(key + '-list'), limit = Infinity, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
     const draw = (group, previous) => group.flatMap(it => {
       if (!grouped) return [renderer(it)];
@@ -480,13 +523,16 @@
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
-    list('closed', d.items == null ? null : closedRows(closedItems), empty, it => row(it, true), true, partial);
-    recentClosed = d.items == null ? null : closedRows(closedItems);
+    const shown = d.items == null ? null : closedRows(withLanded('closed', closedItems));
+    list('closed', shown, empty, it => row(it, true), true, partial);
+    recentClosed = shown;
     if (reportsData) renderReports(reportsData);
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
   }
+  // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
+  function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }
   watch('items/closed', d => renderClosed(d), text => { list('closed', null, text); recentClosed = null; renderSide(); $('closed-next').hidden = true; });
   $('closed-next').addEventListener('click', async (event) => {
     const button = event.currentTarget, cursor = next, kind = viewer;
@@ -510,7 +556,7 @@
   // 同一份汇报关掉后又重新弹出（编号不变，M567）时，按弹出时刻比：关掉的时刻不早于这次弹出，才算已经关了。
   const closedAt = () => new Map(closedItems.map(it => [it.id, Date.parse(it.closed?.at) || 0]));
   const closedSince = (gone, id, opened) => gone.has(id) && gone.get(id) >= (Date.parse(opened) || 0);
-  // M663：访客版也摆“关掉”，点了只提示“不是可信设备”。
+  // M663：访客版也摆“关掉”，点了弹全站共用的可信设备说明框（M803）。
   const reportActions = it => viewer === 'owner' || (it.actions || []).some(a => a.intent === 'close_report') ? it : { ...it, actions: [...(it.actions || []), { kind: 'direct', intent: 'close_report', label: '关掉' }] };
   function renderReports(d) {
     reportsData = d;
@@ -518,8 +564,8 @@
     const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !closedSince(gone, it.id, it.opened) && !closedSince(gone, it.owner_item || it.item_id || it.item, it.opened) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id')))).map(reportActions);
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length; filterBoard();
-    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);
-    const shown = viewer === 'owner' ? drawn.length : 5;   // 本人版列全
+    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}<span class="lb-count">（${reportCount ?? '—'} 件）</span>`);
+    const shown = drawn.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
     U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }
   watch('reports', renderReports, text => { reportCount = null; filterBoard(); U.html(cards.get('reports').title, viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'); U.list($('reports-list'), wait(text)); U.list($('reports-rest'), []); $('reports-more').hidden = true; });

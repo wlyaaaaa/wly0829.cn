@@ -605,7 +605,7 @@
     };
     const short = value => {
       const line = visible(value).split(/[\n。！？]/, 1)[0];
-      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : kind !== 'owner' && line.length > 32 ? line.slice(0, 31) + '…' : line;
+      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : line;
     };
     const name = [c.doing, c.progress, c.latest_reply, c.text, c.project_name, ...extra].map(short).find(Boolean);
     if (name) return name;
@@ -736,7 +736,8 @@
     const answering = intent === 'done' && items.some(item => item.kind === 'choose');
     const wording = CONFIRM_ITEM[intent], live = window.Live, writes = direct || items;
     if (!items.length || !wording || items.some(item => itemWrites.has(item.id)) || document.querySelector('.live-item-confirm[open]')) return;
-    if (!live?.canOwnerAct?.()) { itemFeedback(trigger, '不是可信设备'); return; }
+    // M803：访客（含本人切到看公开版）点关掉类按钮、多选后的处理按钮，和同页别的按钮一样弹全站共用的可信设备说明框；本人设备一时办不了的仍走短浮窗
+    if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else itemFeedback(trigger, '不是可信设备'); return; }
     if (wording.action && writes.some(item => !item.item_version || !item.owner_actions?.includes(wording.action))) {
       itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
     }
@@ -744,7 +745,7 @@
     const followReceipt = !!wording.action;
     // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
     const project = (saved, rows = writes) => {
-      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved } }));
+      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent } }));
     };
     const nameOf = item => fieldText(item.text || item.title, 'owner');
     // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。
@@ -897,6 +898,8 @@
       return { kind: 'open', label: web.label || '看这次记录', href: route(web.href) };
     if (kind === 'owner' && typeof local?.item_id === 'string' && local.item_id && typeof local.target === 'string' && local.target)
       return { kind: 'open', label: local.label || '在电脑上打开', href: local };
+    // 两版同一套（本人禁令 11-24 14:16）：后台在访客回包里也给这个动作（不带私有路径），访客照样摆这颗按钮，点了由共用拦截弹可信设备说明框
+    if (kind !== 'owner' && local && typeof local === 'object' && !Array.isArray(local)) return { kind: 'open', label: local.label || '在电脑上打开', href: local };
     return null;
   }
 

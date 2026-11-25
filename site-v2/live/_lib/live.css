@@ -891,6 +891,10 @@ span.fog__slow { margin: 0 0 0 8px; }
 .page--live #phone .head__cutoff { margin-left: 0; }
 .page--live .vz-rank__name:has(.live-mark) { display: block; }
 .page--live .vz-rank__name:has(.live-mark) > small { display: block; margin-left: 0; }
+/* 名字那一行挂签：名字长了自己省略，签不被挤出去 */
+.page--live .vz-rank__line { display: inline-flex; align-items: center; max-width: 100%; vertical-align: bottom; }
+.page--live .vz-rank__line > .vz-rank__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page--live .vz-rank__line > .live-mark { flex: none; }
 
 .page--live button.trust-note[data-trust-view] { border: 1px solid #cbcfc7; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; max-inline-size: min(100%, 16em); text-align: left; }
 .page--live button.trust-note[data-trust-view]:hover { color: #474b45; background: #e1e4de; text-decoration-style: solid; }

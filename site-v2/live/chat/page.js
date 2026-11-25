@@ -101,8 +101,8 @@
     const mark = markOf(task?.purpose || h.title, h);
     const name = task ? chatCell(task.purpose, '帮手名', chat, task.limit, true)
       : viewer === 'public' && mark === 'owner' ? '' : '未记录具体任务';
-    // 本人版照样给全：派活时的原名（多是内部代号）收在“帮手原名”里，点开能看；访客版不放
-    const raw = field(h.title, h, chat, 'title'), words = viewer === 'owner' ? visibleText(raw) : '';
+    // 派活时的原名（多是内部代号）收在“帮手原名”里，点开能看；两版同一套（本人禁令 11-24 14:16），后台藏了的照后台
+    const raw = field(h.title, h, chat, 'title'), words = visibleText(raw);
     const original = words && !U.chatHelperPurpose.placeholder.test(words) && words !== visibleText(task?.purpose) && chatCell(raw, '帮手名', chat, 0, true);
     const detail = original ? `<details class="row__sub"><summary class="more">帮手原名</summary><p style="overflow-wrap:anywhere">${original}</p></details>` : '';
     return { name, detail, mark };
@@ -145,7 +145,7 @@
     const steps = plan.map((p, i) => station(p, i, current)), drawn = R.line('plan', steps, { current, limit: Infinity });
     $('plan').style.setProperty('--stops', Math.min(drawn.count, 7));
     U.html($('plan'), drawn.html);
-    for (const node of $('plan').querySelectorAll('.route-stop__text')) node.style.webkitLineClamp = viewer === 'owner' ? 'unset' : '';
+    for (const node of $('plan').querySelectorAll('.route-stop__text')) node.style.webkitLineClamp = 'unset';
     U.html($('plan-sub'), sub);
     const kinds = new Set(plan.map(p => privatePlan(p) ? 'owner' : markOf(p.text, p)).filter(Boolean)), less = '';
     const words = [marks(kinds, '计划'), less].filter(Boolean).join('<span class="route-note__sep">·</span>');
@@ -162,8 +162,8 @@
     U.html($('now-step'), step); $('now-step').hidden = !step;
     const currentText = stillWorking ? `后台帮手另在处理（${stillWorking} 个）` : p ? (privatePlan(p) ? U.fieldHtml({ text: null, visibility: 'owner', hidden_what: '这一步' }, { name: '这一步', kind: viewer }) : chatCell(field(p.text, p, chat), '这一步', chat, 0, true)) : esc(chatState(chat));
     U.html($('now-text'), currentText);
-    $('now-text').style.webkitLineClamp = viewer === 'owner' ? 'unset' : '';
-    U.html($('facts'), facts.map(([label, content, clip = viewer !== 'owner'], i) => `<p class="route-fact"${clip ? ' data-clip="fact-' + i + '"' : ''}>${label ? `<span class="route-fact__k">${label}：</span>` : ''}${content}</p>${clip ? '<button type="button" class="route-clip__more" data-clip-for="fact-' + i + '" data-live-opened="card/chat/route-detail" hidden>展开</button>' : ''}`).join(''));
+    $('now-text').style.webkitLineClamp = 'unset';   // 两版同一套（本人禁令 11-24 14:16）：两版都不收行、不收条数
+    U.html($('facts'), facts.map(([label, content, clip = false], i) => `<p class="route-fact"${clip ? ' data-clip="fact-' + i + '"' : ''}>${label ? `<span class="route-fact__k">${label}：</span>` : ''}${content}</p>${clip ? '<button type="button" class="route-clip__more" data-clip-for="fact-' + i + '" data-live-opened="card/chat/route-detail" hidden>展开</button>' : ''}`).join(''));
   }
 
   // —— 帮手：顶上总数和各状态几个（只数数据里有的）；先列出错、在做的前 5 个，其余“看全部”后按批看 ——
@@ -184,7 +184,7 @@
     const locked = contentLocked(chat, viewer);
     const { counts, open, rest } = R.tally(helpers || [], h => Object.hasOwn(CREW, h.state) ? h.state : 'unknown', CREW_FIRST), order = [...open, ...rest];
     const byState = chat.helper_counts?.by_state ?? Object.fromEntries(counts);
-    const b = R.batch('helpers', order.length, viewer === 'owner' ? { first: Math.min(order.length, 50), step: 50, unit: '个', what: '帮手' } : { first: Math.min(5, locked ? order.length : open.length), step: 20, unit: '个', what: '帮手' }), shown = order.slice(0, b.shown);
+    const b = R.batch('helpers', order.length, { first: Math.min(order.length, 50), step: 50, unit: '个', what: '帮手' }), shown = order.slice(0, b.shown);
     U.html($('helpers-part'), `共 ${total} 个${order.length < total ? ` · 已列 ${order.length} 个` : ''}`);
     const states = [...new Set([...Object.keys(CREW), ...Object.keys(byState)])];
     const chips = states.filter(k => Number.isInteger(byState[k])).map(k => `<span class="route-chip route-chip--${esc(k)}">${esc(CREW[k] || '状态不明')}<b>${esc(byState[k])}</b></span>`).join('');
@@ -211,7 +211,7 @@
     }
     // 摘要、回复这两行接上已有的原文：本人版整段摆出，访客版先露两行、点“展开”看全；仅本人可见的照常写锁
     for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && v.at) {
-      const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = viewer !== 'owner' && `log-${key}`;
+      const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = false;
       const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${body}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
       list.push({ key, at: v.at, word, name: esc(name), detail });
     }
@@ -225,7 +225,7 @@
     return [chat.at, list[0]?.at, ...times, ...clocks].filter(validTime).sort((a, b) => Date.parse(b) - Date.parse(a))[0];
   }
   function drawLog(list = events()) {
-    const b = R.batch('log', list.length, viewer === 'owner' ? { first: 50, step: 50, unit: '条' } : { first: 10, step: 20, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
+    const b = R.batch('log', list.length, { first: 50, step: 50, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
     U.html($('log-part'), list.length > shown.length ? `最近 ${shown.length} 条 · 共 ${list.length} 条` : list.length ? `共 ${list.length} 条` : '');
     U.list($('log'), shown.map(e => ({ key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${esc(stamp(e.at))}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b><span class="route-row__name">${e.name || ''}</span></p>${e.detail || ''}</div>${e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : ''}</div>` })), { animate: !first });
     const words = [!list.length && esc(U.collectionText('过程记录')), marks(new Set(shown.map(e => e.mark).filter(Boolean)), '帮手名')].filter(Boolean).join('<span class="route-note__sep">·</span>');
@@ -326,7 +326,7 @@
       return;
     }
     drawThought();
-    fullText(viewer === 'owner');
+    fullText(true);   // 两版同一套（本人禁令 11-24 14:16）：两版都直接给全文
     const facts = [];
     const shown = value => { const el = document.createElement('div'); el.innerHTML = said(value); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
     const summary = replyBody(U.chatProgressText(chat.summary, chat, viewer)), reply = replyBody(rawReply);

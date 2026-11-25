@@ -183,6 +183,9 @@
 .ag-hrow { display: grid; grid-template-columns: 330px minmax(0, 1fr) 120px; align-items: center; gap: 18px; }
 .ag-hrow__name { min-width: 0; overflow: hidden; font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
 .ag-hrow__name small { font-size: 14px; font-weight: 600; color: #57564f; }
+.ag-hrow__name:has(> .live-mark) { display: flex; align-items: center; }
+.ag-hrow__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ag-hrow__name > .live-mark { flex: none; }
 .ag-hrow__track { display: flex; height: 20px; border-radius: 6px; background: rgb(20 20 19 / .06); overflow: hidden; }
 .ag-hrow__fill { display: flex; min-width: 6px; height: 100%; }
 .ag-hseg { min-width: 4px; height: 100%; padding: 0; border: 0; background: var(--fill); cursor: pointer; transition: opacity .2s ease; }

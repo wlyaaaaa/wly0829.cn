@@ -64,15 +64,17 @@
   const hiddenBatch=r=>viewer!=='owner'&&(r.hidden||marked(r));
   // 标题在本人版的 reminders[].title 里（一次可能含几件事）；开头和类别重名的那段去掉，免得写两遍（M306）
   const bare=(t,c)=>c&&typeof t==='string'&&t.startsWith(c)&&/^\s*[｜|·:：]/.test(t.slice(c.length))?t.slice(c.length).replace(/^\s*[｜|·:：]\s*/,'')||t:t;
-  const reminderTitles=r=>[...new Set((Array.isArray(r.reminders)?r.reminders:[]).map(x=>x?.title).filter(t=>t!=null&&t!==''))];
-  const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(t=>shown(bare(t,c),'提醒标题')).filter(Boolean).join('；');};
+  // 本人版：后台在 reminders[].visitor_labels.title 标了 hidden 的（访客那边属于被标了的对话），标题旁挂共用的“访客看不到”签，和别处一个样子；没标照常
+  const reminderTag=x=>x?.visitor_labels?.title==='hidden'?U.visitorHiddenTag('这条提醒的标题','',viewer):'';
+  const reminderTitles=r=>{const seen=new Map();for(const x of Array.isArray(r.reminders)?r.reminders:[]){const t=x?.title;if(t==null||t==='')continue;seen.set(t,seen.get(t)||reminderTag(x));}return [...seen];};
+  const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题');return s&&s+tag;}).filter(Boolean).join('；');};
   // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
   const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
   function others(r){
     const name=isMail(r)?'手机':'邮件',list=Array.isArray(r.reminders)&&r.reminders.length?r.reminders:[{}];
     return list.map(x=>{
       const o=x?.other_channel,ok=!!o&&typeof o==='object',k=ok?kindOf(o):'';
-      return {title:x?.title,name:ok&&channelName(o.channel)||name,state:ok?stateWords[k]:'没有记录',at:ok&&Number.isFinite(parse(o.at))?o.at:null,code:ok&&k!=='sent'?o.error_code:null};
+      return {title:x?.title,tag:reminderTag(x),name:ok&&channelName(o.channel)||name,state:ok?stateWords[k]:'没有记录',at:ok&&Number.isFinite(parse(o.at))?o.at:null,code:ok&&k!=='sent'?o.error_code:null};
     });
   }
   function otherLine(r){
@@ -91,7 +93,8 @@
   // 明细 = 原始记录：提醒原标题、几个时刻精确到秒、原始原因代码。同一件事另一路怎样卡片上已经写了，一次含几件事或另一路也出了错时才在这里逐件写
   function detailHtml(r){
     const list=others(r),key=detailKey(r);
-    const title=o=>viewer!=='owner'?lock('提醒原标题'):`提醒原标题：${o.title?esc(o.title):'没记下'}`;
+    // 两版同一套（本人禁令 11-24 14:16）：回包里给了原标题就两版照写；访客回包没给的才写锁
+    const title=o=>viewer!=='owner'&&!o.title?lock('提醒原标题'):`提醒原标题：${o.title?esc(o.title):'没记下'}${o.title&&o.tag||''}`;
     const road=o=>`走${esc(o.name)}：${esc([o.at&&clock(o.at),o.state].filter(Boolean).join(' '))}${o.code?`（原始原因 <code>${esc(o.code)}</code>）`:''}`;
     const which=list.length>1?`<p>这次一起发了 ${list.length} 件事：</p><ul>${list.map(o=>`<li>${title(o)}<span class="notify-other"> · 同一件事${road(o)}</span></li>`).join('')}</ul>`
       :`<p>${title(list[0])}</p>${list[0].code?`<p>同一件事${road(list[0])}</p>`:''}`;
@@ -104,7 +107,7 @@
       +'</div></details>';
   }
   function notificationLinks(r){
-    if(!Array.isArray(r.keys)||viewer!=='owner')return '';
+    if(!Array.isArray(r.keys))return '';
     const ids=[...new Set(r.keys.filter(key=>typeof key==='string'&&key.startsWith('pending:')).map(key=>key.slice(8).replace(/:urgent$/,'')).filter(Boolean))];
     return ids.map((id,index)=>{
       const url=new URL('/live/',location.origin);url.searchParams.set('item',id);url.hash='needs';

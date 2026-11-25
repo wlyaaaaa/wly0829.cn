@@ -72,7 +72,8 @@ window.LegacyAutomation = function (bar) {
     const cells = pickup ? [field(trigger, '触发条件') || '触发条件未读到', todayText, recent]
       : [provider(t), field(t.schedule, '调度') || '调度未读到', next(t)];
     const href = route('/live/task/', { id: t.id });
-    const actions = viewer === 'owner' ? U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
+    // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
+    const actions = U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
     const state = pickup ? last?.result : { running: 'running', failed: 'failed', warn: 'warn' }[t.state] || t.last?.result;
     return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${title}</a></div>${cells.map(value => `<p class="lb-cell">${value}</p>`).join('')}<div class="row__acts">${actions}</div>` };
   }

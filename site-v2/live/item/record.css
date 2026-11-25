@@ -3,6 +3,8 @@
 .page--l3 .rec-meta > span { position: relative; }
 .page--l3 .rec-meta > span + span::before { position: absolute; left: -12px; top: 0; margin: 0; }
 .rec-prose, .rec-say, .run__out, .run__what { text-wrap: pretty; }
+/* 末尾挂了“对外换了说法／访客看不到”小签的那段不用 pretty：pretty 不让小签独占最后一行，会把最后一个字一起挤下去 */
+.rec-say:has(> .live-mark) { text-wrap: wrap; }
 .issue-event-actor, .issue-event-extra { overflow-wrap: anywhere; }
 .issue-event-extra a { color: #00A650; }
 .dossier-card--state #facts:has(.issue-reading) .rec-fact { grid-template-columns: 116px minmax(0, 1fr); }

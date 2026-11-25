@@ -36,7 +36,7 @@
     const draw = baseMetrics[m.id] || extraMetrics[m.id], v = m.value;
     // 最近一次发布：后台给了人话（publish_attempt.text，如“已上传素材，网站还没上线这版；…；用时 16 分 57.35 秒”）就照后台写，原始秒数只留作计算
     if (m.id === 'publish_attempt' && typeof m.text === 'string' && m.text.trim()) return m.text.trim();
-    return draw && v && typeof v === 'object' && (m.id !== 'next_first_step' || viewer === 'owner') ? draw(v, stamp) : '';
+    return draw && v && typeof v === 'object' ? draw(v, stamp) : '';
   }
   function desktopNote(m, viewer, lower) {
     const v = m.value;
@@ -61,8 +61,8 @@
   }
   // 电脑心电图“11-15 那批采集修复前后”那张卡拿掉了（前端手写、一次性，本人 11-25 选 A）。
   // 私塾“可以拿来讲的作品”只留作品和链接：后台手写的说明里全是写死、不会更新的数，连同“数据截至”那行都不摆（本人 11-25 选 A）。
-  function showcase(data, viewer) {
-    if (viewer !== 'owner' || !data?.items?.length) return null;
+  function showcase(data) {
+    if (!data?.items?.length) return null;
     return { key: 'showcase', title: '可以拿来讲的作品', html: data.items.map(it => `<p class="knowledge-prose">${link(it.open, it.title)}${it.kind ? ` · ${e(it.kind)}` : ''}</p>`).join('') };
   }
   function rulesLengthDelta(delta) {
@@ -149,6 +149,6 @@
     if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
   window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
-    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase, viewer), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
+    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();

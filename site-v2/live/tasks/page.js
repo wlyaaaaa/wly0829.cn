@@ -177,7 +177,8 @@
       const fixing = t.ai_fixing === true || t.level === 'blue';
       const fixAt = fixing && taskNext({ next_at: t.ai_next_at });
       const fixNote = fixing ? `<p class="lb-sub task-fixing">AI 在修${fixAt ? ` · ${esc(nextAt(fixAt))} 接着修` : ''}</p>` : '';
-      const actions = viewer === 'owner' ? U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
+      // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
+      const actions = U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
         `<span class="lb-row__lamp">${fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
         <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>

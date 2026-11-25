@@ -442,7 +442,7 @@
       ?? (/AI|智能|助手/i.test(name) ? 'ai' : /电脑|系统|配置|机/.test(name) ? 'computer' : /网络|代理|连接/.test(name) ? 'network' : /音|影|相|媒体/.test(name) ? 'media' : /记录|笔记|日记|记事/.test(name) ? 'note' : 'project');
     return `<svg class="project-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[kind]}</svg>`;
   }
-  function newProjectLabel(it) { return viewer === 'owner' && it.new === true ? '<span class="tag tag--new">新项目</span>' : ''; }
+  function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span>' : ''; }
   function projectTile(it) {
     const changed = it.changed?.at, h = it.headline, value = headline(it);
     // 代表数的时刻是“这件事最后一次发生”的（账本最后整理、片子最后变动……）：写那一句，不拿它当整张卡的“数据截至”（M769）
@@ -450,11 +450,13 @@
     const cutoff = !moment && (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
     const recent = changed && !lastState?.offline && fresh('project-changes', changed) ? '<span class="project-recent">刚改</span>' : '';
     const nameNote = viewer === 'public' && it.name && typeof it.name === 'object' ? U.fieldHtml({ ...it.name, text: null, value: null }, { name: '项目名', kind: viewer }) : '';
+    // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版和没标的不挂
+    const nameTag = viewer === 'owner' ? U.visitorLabel(it, ['$', 'name'], '这个项目', viewer) : '';
     const look = typeof projectLooks === 'undefined' || projectLooks === null ? null : window.LiveProjectLook?.of(it.id, projectLooks);
     const style = look && !look.known ? ` style="background:linear-gradient(135deg,${look.glow[0]},${look.glow[1]})"` : '';
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
     const rule = it.id === 'agents' && h?.id === 'release' && typeof value === 'string' && /^E\d+$/.test(String(h.value ?? h.text ?? ''));
-    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${it.new === true && viewer === 'owner' ? newProjectLabel(it) : ''}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a><small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer })}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
+    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer })}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
   }
   function renderProjectGroups(data) {
     projectExtraLinks(data);
@@ -578,7 +580,7 @@
     if (it.kind === 'know') sub = elapsed(it.episode_at || it.born);
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760）
-    if (viewer === 'owner' && U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), Infinity, true)]);
+    if (U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), Infinity, true)]);
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
@@ -679,7 +681,7 @@
     const short = value => {
       if (value?.hidden || value?.hidden_block || value?.rewrite === 'pending' || value?.visibility === 'pending' || viewer === 'public' && (value?.visibility === 'owner' || value?.public === 'owner')) return '';
       const line = U.fieldText(value, viewer).trim().split(/[\n。！？]/, 1)[0];
-      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : viewer !== 'owner' && line.length > 32 ? line.slice(0, 31) + '…' : line;
+      return /^(?:已完成|做完了|正在处理|在干|等回答|没有标题|没有记录)(?:\s|$)|没有.*记录$|(?:仅本人可见|可信设备可见|正在换说法)$|^[-\w]+$/.test(line) ? '' : line;
     };
     const [start, scope] = chatStart(c);
     return [c.doing, c.progress, c.latest_reply, c.text, c.project_name, ...extra].map(short).find(Boolean) || join([short(c.model_text ?? c.model) || U.fieldText(c.model_text ?? c.model, viewer), start && `${scope} ${recordStamp(start)}`]);
@@ -730,10 +732,10 @@
     const replyField = U.chatPreviewSummary(rawReply, c, viewer);
     const fieldLock = replyField && typeof replyField === 'object' && viewer === 'public' && c.visibility !== 'owner' && c.public !== 'owner' && (replyField.visibility === 'owner' || replyField.public === 'owner' || replyField.hidden || replyField.hidden_block);
     const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(homeAddressed(replyField), c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
-    const toggle = viewer === 'owner' ? '' : '<button class="more chat-preview__toggle" type="button" aria-expanded="false" hidden>展开全文</button>';
+    // 两版同一套（本人禁令 11-24 14:16）：回复预览两版都给全文，访客版不再先收成 4 行加“展开全文”
     // M684：本人版回复预览访客那边不一样的，句末挂签；整场对访客藏着的只在 meta 那里挂一个。
     const previewTag = viewer === 'owner' && reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
-    const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}${previewTag}</p>${toggle}</div>` : '';
+    const preview = reply ? `<div class="row__sub chat-preview"><p class="chat-preview__text">${reply}${previewTag}</p></div>` : '';
     const helperText = helpers && (c.state === 'done' ? `后台帮手另在处理（${helpers} 个）` : `帮手 ${helpers} 个在干`);
     const lockedMeta = locked ? [c.stage, c.project_name, c.born && ('开始于 ' + U.time(c.born)),
       c.compaction?.count > 0 && ('压缩 ' + c.compaction.count + ' 次'),
@@ -774,7 +776,7 @@
   function renderChatSources(host, d) {
     const count = d.unconnected_source_count, positive = Number.isInteger(count) && count > 0;
     const label = count === null ? '没有记录' : positive ? '还有 ' + count + ' 个没接上' : '';
-    const list = positive && viewer === 'owner' && Array.isArray(d.unconnected_sources) ? d.unconnected_sources : [];
+    const list = positive && Array.isArray(d.unconnected_sources) ? d.unconnected_sources : [];
     const rows = list.map(item => '<li>' + [item.tool, item.path, item.reason].filter(Boolean).map(esc).join(' · ') + '</li>').join('');
     host.hidden = !label;
     U.html(host, rows ? '<details class="row__sub"><summary class="more">' + label + '</summary><ul>' + rows + '</ul></details>' : label ? '<p class="row__sub">' + label + '</p>' : '', false);
@@ -1065,7 +1067,8 @@
       if (!name || seen.has(row.id)) continue;
       seen.add(row.id);
       const label = status;
-      const ask = failed && kind === 'owner' && row.id && U.actions(
+      // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
+      const ask = failed && row.id && U.actions(
         { ...row, text: join([U.fieldText(row.display_name ?? row.name, kind), label, U.fieldText(row.problem?.reason, kind)]) },
         [row.actions?.find(action => action.kind === 'copy' && action.intent === 'ask') || { kind: 'copy', label: '问情况', intent: 'ask' }],
       );
@@ -1118,7 +1121,7 @@
       }
       if (id === 'projects') {
         const counts = isLower(d.projects, 'active') || !text ? projectCount(d.projects) : text;
-        text = viewer === 'public' && Number.isInteger(d.projects.total) ? [`共 ${d.projects.total} 个项目`, counts] : counts;
+        text = Number.isInteger(d.projects.total) ? [`共 ${d.projects.total} 个项目`, counts] : counts;
       }
       U.html(parts[id].head, cardHead(id === 'projects' && typeof text === 'string' ? text.replace(/\s*·\s*\d+\s*个冻结/, '') : text, { backups: '备份', projects: '项目' }[id], { lamp: id === 'backups', href: href(id) + (hot ? `${href(id).includes('?') ? '&' : '?'}attention=${id === 'backups' ? 'gap' : '1'}` : '') }).replace(/(?:至少 )?\d+\s*类(?:齐了|有缺|未传云端|没上云|只有一份|还没读到)(?: ·)?/g, '<span class="l1-unit">$&</span>'));
     }
@@ -1160,7 +1163,7 @@
     // waiting 与 stable 是互不重叠的两批；后端 11-17 05:58 确认“在等”取两者之和，failed 另算。
     const waiting = drive?.waiting != null && drive?.stable != null ? { value: drive.waiting + drive.stable, q: isLower(drive, 'waiting') || isLower(drive, 'stable') ? 'partial' : 'ok' } : null;
     U.html(parts.backups.summary, [['G 盘', stamp((summary ?? backups).g_latest_at)], ['H 盘', stamp((summary ?? backups).h_latest_at)], ['Drive', drive?.sent == null || drive?.total == null ? U.collectionText("已传/总数") : `${quantity(drive, 'sent')} / ${quantity(drive, 'total')} 个文件`], ['在等', waiting ? `${quantity(waiting, 'value')} 个文件` : U.collectionText()], ['失败', drive?.failed == null ? U.collectionText() : `${quantity(drive, 'failed')} 个文件`]].filter(([, value]) => value !== '至少 0' && (!lastState?.offline || !value.includes(U.collectionText()))).map(([label, value]) => `<span class="l1-unit">${esc(`${label} ${value}`)}</span>`).join(' · '));
-    const changes = (d.projects.changes || []).slice(0, defaultCounts.projectChanges).map(c => shortRow({ ...c, name: changeName(c) }, [changeTime(c.at)], `/live/project/?id=${encodeURIComponent(c.project)}`, '', fresh('project-changes', c.at)));
+    const changes = (d.projects.changes || []).slice(0, defaultCounts.projectChanges).map(c => shortRow({ ...c, name: changeName(c) }, [changeTime(c.at)], `/live/project/?id=${encodeURIComponent(c.project)}`, '', fresh('project-changes', c.at) + projectTag(c.project)));
     if (!changes.length && ['unknown', 'partial', 'stale'].includes(d.projects.changes_q)) changes.push({ key: 'unread', cls: 'row row--flat', html: '<p class="row__text row__sub">暂时读不到项目变化</p>' });
     paintList(parts.projects.changes, changes);
     const changesStatus = parts.projects['changes-status'], cutoff = d.projects.changes_at;
@@ -1275,6 +1278,8 @@
     return protectedField(h) ? { ...h, value: text, text } : text;
   };
   function projectName(id) { return (home?.projects?.items || []).find(p => p.id === id)?.name || id; }
+  // M767：本人版里访客看不到的项目（名册这一行标 visitor_labels.name=hidden），项目变化行的项目名后挂“访客看不到”
+  function projectTag(id) { const tag = viewer === 'owner' ? U.visitorLabel((home?.projects?.items || []).find(p => p.id === id), ['$', 'name'], '这个项目', viewer) : ''; return tag ? ` <span class="head__rewrite">${tag}</span>` : ''; }
   const changeName = c => [projectName(c.project), typeof c.text === 'string' ? c.text.trimEnd().replace(/。$/, '') : c.text];
   const changeTime = at => [U.date(at), U.time(at)].filter(Boolean).join(' ');
   let changesPage;
