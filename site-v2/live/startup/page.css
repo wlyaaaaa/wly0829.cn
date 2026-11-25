@@ -29,6 +29,7 @@
 .su-sub { margin: 6px 0 0; font-size: 14.5px; line-height: 22px; letter-spacing: .03em; color: var(--muted); }
 .su-say { margin: 14px 0 0; font-size: 14px; line-height: 22px; color: var(--muted); }
 .su-box > .su-say:first-child { margin-top: 10px; }
+.su-legend { margin-top: 12px; font-size: 13px; line-height: 20px; }
 
 /* 一张表：软件、从哪自启、设了自启、这次开机 */
 .su-cols, .su-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.45fr) 96px minmax(0, 1.05fr); column-gap: 18px; align-items: baseline; }

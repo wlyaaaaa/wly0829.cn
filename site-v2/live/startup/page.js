@@ -59,6 +59,8 @@
       `<span class="su-from">${esc(from(r))}</span><span class="su-set${r.enabled === 'disabled' ? ' su-set--off' : ''}">${esc(set)}</span>` +
       `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span></div>`;
   }
+  // “这次开机”那一列几种说法是什么意思（本人要页面上讲清机制，M928）：后台按哪种证据认的照实写
+  const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“本次未确认”是设了启用、这次没找到它启动过的证据。</p>';
   const cols = '<div class="su-cols" aria-hidden="true"><span>软件</span><span>从哪自启</span><span>设了自启</span><span>这次开机</span></div>';
   const say = text => `<p class="su-say">${esc(text)}</p>`;
 
@@ -117,7 +119,7 @@
     const fold = rows => rows.length ? `<div class="fold${open ? ' is-open' : ''}" data-more aria-hidden="${!open}"${open ? '' : ' inert'}><div>${rows.map(r => row(r, s.boot_at)).join('')}</div></div>` : '';
     U.html(box, `<p class="su-sub">${esc(counts)} · 没起来或有毛病的排前面，其余按名字。</p>${cols}` +
       bands.map((b, i) => `<div class="su-band"><b>${b.label}</b> · ${b.rows.length}</div>${b.rows.slice(0, shown[i]).map(r => row(r, s.boot_at)).join('')}${fold(b.rows.slice(shown[i]))}`).join('') +
-      (hidden ? `<div class="su-foot"><button class="more su-pill" type="button" data-toggle aria-expanded="${open}">${open ? '收起 ›' : `再看 ${hidden} 项 ›`}</button></div>` : ''));
+      (hidden ? `<div class="su-foot"><button class="more su-pill" type="button" data-toggle aria-expanded="${open}">${open ? '收起 ›' : `再看 ${hidden} 项 ›`}</button></div>` : '') + LEGEND);
   }
   $('important-box').addEventListener('click', e => {
     const btn = e.target.closest('[data-toggle]');
