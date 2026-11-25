@@ -20,7 +20,9 @@
 
   // —— 取数：后台给什么，都在这一段转成页面要的样子；约定改了只改这一段 ——
   // 后台形状（数据约定第 7 节）：data = { active_version, charter_href, hosts:{Claude|Codex|Antigravity:{version,current,characters,
-  //   files:[{name,text,characters,version,paragraphs:[{first_line,last_line,kind,shared_with}]}]}}, startup_context:[{at,host,hook,event,text}] }
+  //   files:[{name,text,characters,version,paragraphs:[{first_line,last_line,kind,shared_with}]}]}}, startup_context:[{at,host,hook,event,text,trigger}] }
+  // trigger：startup 开对话 · resume 恢复 · compact 压缩后（旧记录没有）。另有 compact_context（每家最近一次压缩后补的那组）、
+  // message_context（每家最近一次收到消息时补的，Antigravity 是叫模型前那条，带 characters）：这两样现在只取时刻和字数写进一句话，原文不另摆
   // kind：charter 和约法（规则页）一样 · shared 和别家入口共用 · host_only 只这一家有 · unverified 材料不全没比对
   const plain = v => T.plain(v, viewer);
   const num = v => known(v) ? v : null;
@@ -36,7 +38,8 @@
       const behind = r?.current === false && serial(active) != null && serial(version) != null ? serial(active) - serial(version) : null;
       const only = files.flatMap(f => f.blocks.filter(b => b.kind === 'host_only').map(b => b.label)).filter(Boolean);
       return { ...h, present: Boolean(r), version, current: typeof r?.current === 'boolean' ? r.current : null, behind,
-        characters: num(r?.characters), files, only, context: opening(list(d.startup_context), h) };
+        characters: num(r?.characters), files, only, context: opening(list(d.startup_context), h),
+        compact: latest(d.compact_context, h), message: latest(d.message_context, h) };
     });
     const c = d.charter && typeof d.charter === 'object' ? d.charter : null, ref = d.charter_href || c?.href || '';
     return { active, hosts, hasHosts: Boolean(raw), charter: c && { version: plain(c.version) || null },
@@ -91,7 +94,17 @@
     if (!mine.length) return null;
     const last = T.stamp(mine[0].at), group = mine.filter(r => last - T.stamp(r.at) <= 120000).reverse();
     const text = group.map(r => plain(r.text)).filter(s => s.trim()).join('\n');
-    return text ? { at: mine[0].at, text, hooks: group.map(r => r.hook || r.event).filter(Boolean) } : null;
+    return text ? { at: mine[0].at, text, hooks: group.map(r => r.hook || r.event).filter(Boolean),
+      triggers: [...new Set(group.map(r => TRIGGERS[r.trigger]).filter(Boolean))] } : null;
+  }
+  const TRIGGERS = { startup: '开对话时', resume: '恢复时', compact: '压缩后' };
+  // 压缩后、收到消息时补的那几行：只要这一家最近一次的时刻和字数（字段不在就是 null，那句话照不带数的写）
+  function latest(rows, h) {
+    const mine = list(rows).filter(r => hostOf(r.host) === h && T.stamp(r.at)).sort((a, b) => T.stamp(b.at) - T.stamp(a.at));
+    if (!mine.length) return null;
+    const at = mine[0].at, group = mine.filter(r => T.stamp(at) - T.stamp(r.at) <= 120000);
+    const chars = group.reduce((s, r) => s + (num(r.characters) ?? plain(r.text).length), 0);
+    return { at, chars };
   }
 
   // —— 把一份入口原文切成段：按一、二级标题切，同一段里再按“和规则页一样／只这家有／共用”分开 ——
@@ -304,7 +317,7 @@
     const near = r ? approx(r) : h.id !== 'antigravity';
     const one = (f, i, key) => {
       // 有开法时每份都写路径和 token（和上面“读哪几份”的第几份对得上）；后台还没给开法时照改之前的样子。
-      // 访客版这一份换了说法的，本人版在抬头挂全站同一个“对外换了说法”小签（访客版不挂）
+      // 访客版这一份换了说法的，本人版在抬头挂全站同一个“对外换了说法”小签
       const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
         on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
@@ -318,11 +331,30 @@
     const span = extra.length > 1 ? `第 ${extra[0]}–${extra.at(-1)} 份` : `第 ${extra[0]} 份`;
     return html + shown + (extra.length ? `<p class="op-more">${span}是${esc(whenOpen(o))}多读的项目规矩，这里没登原文，路径和大小在上面“读哪几份”里。</p>` : '');
   }
+  // 这几行什么时候补、平常每条消息补什么（M928 补机制）：Claude、Codex 的开场钩子在开对话、恢复和压缩以后都跑
+  // （两家钩子设置里开场那组的条件都是 startup|compact|resume），每收到一条消息另由“收到消息”那条钩子补状态；
+  // Antigravity 只在开新对话时补，之后每次叫模型前补状态（规则仓 hook-catalog.json 的 C01/C03、X01/X02、A01/A02）。
+  // 压缩以后规则文件重不重读，本机没实测，这里不写
+  const REFILL = {
+    claude: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
+    codex: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
+    antigravity: ['只在开新对话时补这几行', '之后每次叫模型前，另补几行状态（资料锁、没答的题、刚才的工具错误）'],
+  };
+  const stampText = x => `${esc(T.day(x.at))} ${esc(T.clock(x.at))}`;
+  function refillText(h) {
+    const [open, each] = REFILL[h.id] || [];
+    if (!open) return '';
+    const compact = h.compact && h.id !== 'antigravity' ? `，最近一次压缩后是 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字` : '';
+    const message = h.message ? `，最近一次 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字` : '';
+    // 每条消息补的原样在智能体页钩子“收到消息”那格里有（最近一次塞给 AI 的原样），这里不另摆，给个去处
+    return `${open}${compact}；${each}${message} ${link('/live/agents/#hooks-message', '原样在智能体页 ›')}`;
+  }
   function contextHtml(h) {
-    const c = h.context;
+    const c = h.context, refill = refillText(h);
+    const what = c?.triggers?.length ? `（${c.triggers.join('、')}补的）` : '';
     return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">最近一次 ${esc(T.day(c.at))} ${esc(T.clock(c.at))}，原样</p><pre>${esc(c.text)}</pre>`
-      : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行。</p>`}</section>`;
+      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
+      : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变
   function cmpNum(m, h) {
