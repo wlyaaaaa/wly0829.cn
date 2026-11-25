@@ -215,14 +215,15 @@
   // —— 一段的几种行 ——
   // 卡里一个读数只露读数和一句解释（note）；口径、截止、取数日期放进 extra，由 fill 合进这一张卡的“说明”
   const plain = html => String(html).replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
-  function lineOf(m) {
+  function lineOf(m, v) {
     const p = subPieces(m), desktop = id === 'pcconfig' && m.id === 'remote' ? window.ProjectAdditions?.desktopNote(m, projectViewer, lower) : '';
-    const line = [p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
+    // 同处标一次：读数本身已挂了“对外换了说法／访客看不到”签，下面那句不再挂第二个
+    const line = [!(v && /\blive-mark\b/.test(v.html)) && p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
     return { line, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
   }
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m, v);
     const label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${cadence || ''}${href ? ' <span class="more__chev">›</span>' : ''}</span>`;
     return {
       key: m.id, extra, labelText,
@@ -232,7 +233,7 @@
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m, v);
     const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + (cadence || '');
     return {
       key: m.id, extra, labelText,
@@ -959,7 +960,7 @@
       head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || ''),
         href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
-      const v = value(m), { line, cadence } = lineOf(m);
+      const v = value(m), { line, cadence } = lineOf(m, v);
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {

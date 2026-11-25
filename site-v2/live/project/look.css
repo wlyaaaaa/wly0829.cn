@@ -198,7 +198,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-fig__v { margin: 2px 0 0; line-height: 30px; }
 .pj-card .pj-fig__v b { font-size: 24px; font-weight: 700; }
 .pj-card .pj-fig__k, .pj-card .pj-fig__link { font-size: 13.5px; line-height: 20px; color: #5d5c56; }
-.pj-card .pj-fig__sub { display: block; margin-top: 1px; font-size: 12px; line-height: 17px; color: #a8a69e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pj-card .pj-fig__sub { display: block; margin-top: 1px; font-size: 12px; line-height: 17px; color: #a8a69e; white-space: normal; overflow-wrap: anywhere; }
 .pj-card #skills .pj-fig__sub { white-space: normal; overflow: visible; }
 .pj-card .pj-fig--wide .pj-fig__v { line-height: 24px; margin-bottom: 2px; }
 .pj-card .pj-fig--wide .pj-fig__v .pj-text, .pj-card .pj-kv__row--wide .pj-kv__v { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; white-space: normal; }
