@@ -96,14 +96,37 @@
     if (/^(?:Stream (?:disconnected|closed|interrupted)|Connection (?:closed|reset|interrupted)|ECONNRESET)\b/i.test(reason)) return '连接中断';
     return /^(?:API Error:|Error:)/i.test(text) ? '连接出错，正在重连' : '';
   }
-  function chat(c, at, completed = false) {
+  // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
+  const { KINDS, statusKind, dayClock, ownerWords, quotaWindow } = U.chatFields;
+  // 行首：排序用的时刻（后台 sort_at）＋这一类的动词（“起在做”“问你”“停下”“归档”）；没有时刻写“时刻没读到”（这一行已排在栏底）
+  function whenCell(c) {
+    const k = KINDS[statusKind(c)] || KINDS.unknown, at = c.sort_at, ok = Number.isFinite(Date.parse(at));
+    const day = ok && U.date(at) !== U.date(Date.now()) ? U.date(at) + ' ' : '';
+    return ok ? `<span class="chat-when"><b>${esc(U.time(at))}</b><small>${esc(day + ownerWords(k.verb, viewer))}</small></span>`
+      : '<span class="chat-when chat-when--none"><small>时刻没读到</small></span>';
+  }
+  function statusPill(c) {
+    const kind = statusKind(c), k = KINDS[kind] || KINDS.unknown, label = rowState(c, viewer);
+    const mark = kind === 'archived' ? `${window.LiveBoard.icon('check', 'chat-status__ico')}` : '';
+    return `<span class="chat-status" data-tone="${k.tone}"${kind === 'running' ? ' data-breathe' : ''}>${mark}${esc(label)}</span>`;
+  }
+  // 标签下面的小字：后台给的原因（“Codex 不记是谁按的停止”“实况读不到 Antigravity 的归档”这类），状态旧了 2 分钟以上加“状态是 16:40 读的”
+  function statusReason(c) {
+    const words = c.status_reason != null ? U.fieldText(c.status_reason, viewer).trim() : '';
+    const seen = Date.parse(c.status_observed_at), asOf = Date.parse(boardOf()?.as_of);
+    const old = Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 ? `状态是 ${dayClock(c.status_observed_at)} 读的` : '';
+    const text = [words && words !== rowState(c, viewer) ? ownerWords(words, viewer) : '', old].filter(Boolean).join(' · ');
+    return text ? `<p class="row__sub chat-reason">${esc(text)}</p>` : '';
+  }
+  function chat(c, at, completed = false, column = '') {
     if (c.private_count) return { key: c.key || c.id, cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.privateSummary(c.private_count, { unit: '场对话' })}</p>` };
     if (c.q === 'warming') return { key: c.id, cls: 'row row--flat', html: '<div class="row__text"><p class="row__sub">正在准备</p></div>' };
     const locked = contentLocked(c, viewer), [startedAt, startLabel] = locked ? U.chatStart(c) : [];
     const e = c.estimate, actual = Object.hasOwn(c, 'worked_seconds') ? c.worked_seconds : Number.isFinite(e?.worked_min) ? Math.round(e.worked_min * 60) : null;
-    const clock = Number.isFinite(Date.parse(c.at)) && (completed ? `${c.state === 'ended_unknown' ? '最后活动 ' : ''}${U.date(c.at)} ${clockWithSeconds.format(new Date(c.at))}` : c.state === 'running' ? U.chatActivity(c, at) : `最后活动 ${stamp(c.at)}`);
-    const stillWorking = c.state === 'done' && workingHelpers(c);
-    const activity = [stillWorking ? '对话已结束' : completed && !U.chatFields.quota(c, viewer) && stateText(c), stillWorking && `后台帮手另在处理（${stillWorking} 个）`, clock].filter(Boolean).join(' · ');
+    // M915 四栏里（column 有值）：行首已经写了排序用的时刻和状态标签，停下、做完的行不再另写“已停止 · 11-25 14:57:03”
+    const clock = Number.isFinite(Date.parse(c.at)) && !(column && (completed || /没动静/.test(rowState(c, viewer)))) && (completed ? `${c.state === 'ended_unknown' ? '最后活动 ' : ''}${U.date(c.at)} ${clockWithSeconds.format(new Date(c.at))}` : c.state === 'running' ? U.chatActivity(c, at) : `最后活动 ${stamp(c.at)}`);
+    const stillWorking = !column && c.state === 'done' && workingHelpers(c);
+    const activity = [stillWorking ? '对话已结束' : !column && completed && !U.chatFields.quota(c, viewer) && stateText(c), stillWorking && `后台帮手另在处理（${stillWorking} 个）`, clock].filter(Boolean).join(' · ');
     const timing = [Number.isFinite(c.elapsed_seconds) && `历时 ${duration(c.elapsed_seconds)}`, Number.isFinite(actual) && `实际工时 ${duration(actual)}`,
       e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, Math.round(e?.over_min) > 0 && `超 ${Math.round(e.over_min)} 分钟`, startedAt && `${startLabel} ${stamp(startedAt)}`, activity].filter(Boolean).join(' · ');
     const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
@@ -114,7 +137,7 @@
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
     // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
     const titleMark = locked || viewer === 'owner' && U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
-    const waitLabel = c.state === 'waiting' && stateText(c);
+    const waitLabel = !column && c.state === 'waiting' && stateText(c);
     const raw = locked ? null : U.chatProgressText(c.text ?? c.doing, c, viewer) ?? c.latest_reply, preview = U.chatPreviewSummary(raw, c, viewer);
     const repeatsStatus = (waitLabel || completed && !stillWorking) && U.chatFields.repeatsState(preview, c, viewer);
     const retry = c.state === 'reconnecting' && retryMessage(U.fieldText(preview, viewer));
@@ -157,7 +180,8 @@
     const lockLine = locked ? `<p class="row__sub">${contentLock()}</p>` : '';
     const lockedMeta = [stage, project && `所属项目 ${project}`].filter(Boolean).join(' · ');
     const meta = lockedMeta ? `<p class="row__sub">${esc(lockedMeta)}</p>` : '';
-    return { key: c.id, cls: `row row--chat lb-item${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${lamp(c)}<p class="row__main">${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${helperCount}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
+    const reason = column ? statusReason(c) : '';
+    return { key: c.id, cls: `row row--chat lb-item${column ? ' row--board' : ''}${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${column ? whenCell(c) : lamp(c)}<p class="row__main">${column ? statusPill(c) : ''}${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${helperCount}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${reason}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
   }
   const stamp = at => `${U.date(at)} ${U.time(at)}`.trim();
   function readAt(at) {
@@ -288,6 +312,11 @@
       U.html($('head'), U.head('AI 对话', { lamp: false }));
       U.html($('chat-note'), '<span class="row__sub">正在准备</span>');
       L.tone($('hero'), 'none');
+    } else if (d && boardOf()) {
+      const status = { ...d, level: d.header_level ?? d.level };
+      U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
+      boardHeading(boardOf());
+      L.tone($('hero'), status);
     } else if (d) {
       const status = { ...d, level: d.header_level ?? d.level };
       U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
@@ -313,6 +342,7 @@
   }
   function render(d, at) {
     const list = activeChats || d, temporary = renderHeading(list);
+    if (boardOf()) { drawBoard(boardOf()); U.land(); activeRead.done(); return; }
     if (!list) return;
     if (list.q === 'warming') U.list($('active-list'), wait('正在准备'));
     else if (!temporary || activeChats) {
@@ -354,6 +384,131 @@
     fitThoughts();
     fitRecent();
   }
+  // —— M915：四栏（在干｜等你，下面整行“停下了，没归档”“做完了 · 已归档”），数据是同一次读到的 board ——
+  // 后台：GET chats 的 board = { as_of, columns: { working, waiting, stopped, archived: { items, total, next } }, quota_exhausted, helpers_working, quotas, automation, source_gaps }；
+  // 归档往下翻 GET chats?window=72h&state=archived&cursor=<next> 回 { items, total, next, as_of }。首页 chats.board 同口径。
+  let baseBoard = null, quotaPick = null, stoppedCard = null;
+  const archivedPages = new Map();
+  const boardOf = () => baseBoard || (homeChats?.board?.columns && typeof homeChats.board.columns === 'object' ? homeChats.board : null);
+  const BOARD = {
+    working: { name: '在干', about: '按进入这一类的时刻，新的在上' },
+    waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
+    stopped: { name: '停下了，没归档', about: '没归档就不算做完：接着做，或者归档。' },
+    archived: { name: '做完了 · 已归档', about: '' },
+  };
+  const colName = key => key === 'waiting' && viewer === 'public' ? '等本人' : BOARD[key].name;
+  const totalOf = col => Number.isInteger(col?.total) ? col.total : null;
+  // 每栏按“进入现在这一类的时刻”（sort_at）从新到旧；没有时刻的放这一栏最下面，彼此照后台给的先后
+  const bySortAt = items => items.map((c, i) => ({ c, i, t: Date.parse(c.sort_at) })).sort((a, b) =>
+    (Number.isFinite(a.t) ? 0 : 1) - (Number.isFinite(b.t) ? 0 : 1) || (Number.isFinite(a.t) && b.t - a.t) || a.i - b.i).map(x => x.c);
+  // 额度条点了哪一家：在干、等你两栏只看被它卡住的（额度用完、过了预计恢复点，或后台标了 quota_affected 的）
+  const stuckBy = (c, soft) => String(c.software || /^(claude|codex|antigravity):/i.exec(c.id)?.[1] || '').toLowerCase() === soft &&
+    (['quota_exhausted', 'quota_overdue'].includes(statusKind(c)) || !!c.quota_affected);
+  function boardHeading(b) {
+    const cols = b.columns || {}, num = key => { const n = totalOf(cols[key]); return n == null ? '没读到' : String(n); };
+    const quota = Number.isInteger(b.quota_exhausted) && b.quota_exhausted > 0 ? `（其中额度用完 ${b.quota_exhausted}）` : '';
+    const waitingN = totalOf(cols.waiting), waiting = `${colName('waiting')} ${num('waiting')}`;
+    const asOf = Number.isFinite(Date.parse(b.as_of)) ? `截至 ${[U.date(b.as_of) !== U.date(Date.now()) && U.date(b.as_of), clockWithSeconds.format(new Date(b.as_of))].filter(Boolean).join(' ')}` : '';
+    const pieces = [esc(`在干 ${num('working')}${quota}`), waitingN > 0 ? `<b class="chat-head-wait">${esc(waiting)}</b>` : esc(waiting),
+      esc(`停下没归档 ${num('stopped')}`), esc(`近 72 小时做完 ${num('archived')}`), asOf && esc(asOf)].filter(Boolean).map(x => `<span class="chat-head-piece">${x}</span>`);
+    U.html($('chat-note'), pieces.join(' · '), false);
+    const link = $('hero').querySelector('.hero__links a[href$="#recent"]'); if (link) link.textContent = '近 72 小时做完的 ›';
+    heroRead.done();
+  }
+  // 三家额度条：每格写“没有额度用完的记录”或“额度用完 · 5 小时额度 · 预计 19:00 恢复 · 卡住 3 场对话、1 个自动任务 ›”，读不到写“没读到”和原因。
+  // 不写“正常”，不写剩多少（设计第 4 节第 2 条）。
+  const SOFT = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']];
+  function drawQuota(b) {
+    let host = $('chat-quota');
+    if (!b.quotas || typeof b.quotas !== 'object') { if (host) host.hidden = true; return; }
+    if (!host) { host = Object.assign(document.createElement('section'), { id: 'chat-quota', className: 'chat-quota' }); host.setAttribute('aria-label', '三家额度'); $('hero').after(host); }
+    host.hidden = false;
+    const cells = SOFT.map(([id, name]) => {
+      const q = b.quotas[id] || {}, state = ['denied', 'no_denial', 'unknown'].includes(q.state) ? q.state : 'unknown';
+      if (state === 'no_denial') return `<div class="chat-quota__cell" data-state="ok"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没有额度用完的记录</span></div>`;
+      if (state === 'unknown') {
+        const why = U.fieldText(q.reason ?? q.gap ?? q.text, viewer).trim();
+        return `<div class="chat-quota__cell" data-state="unknown"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没读到 · ${esc(why || '后台没给原因')}</span></div>`;
+      }
+      const stuck = [Number.isInteger(q.chat_count) && q.chat_count > 0 && `${q.chat_count} 场对话`, Number.isInteger(q.automation_count) && q.automation_count > 0 && `${q.automation_count} 个自动任务`].filter(Boolean);
+      const words = ['额度用完', quotaWindow(q.window), q.reset_at ? `预计 ${dayClock(q.reset_at)} 恢复` : '宿主没给恢复时间', stuck.length && `卡住 ${stuck.join('、')}`].filter(Boolean);
+      const body = `<span class="chat-quota__dot"></span><b>${name}</b><span>· <em>${words[0]}</em>${words.slice(1).map(w => ` · ${esc(w)}`).join('')}</span>`;
+      return stuck.length ? `<button type="button" class="chat-quota__cell" data-state="denied" data-soft="${id}" aria-pressed="${quotaPick === id}">${body} <span class="more__chev" aria-hidden="true">›</span></button>`
+        : `<div class="chat-quota__cell" data-state="denied">${body}</div>`;
+    });
+    U.html(host, cells.join(''), false);
+  }
+  document.addEventListener('click', e => {
+    const cell = e.target.closest('.chat-quota__cell[data-soft]'), clear = e.target.closest('[data-quota-all]');
+    if (!cell && !clear) return;
+    quotaPick = clear || quotaPick === cell.dataset.soft ? null : cell.dataset.soft;
+    const b = boardOf(); if (b) U.anchor(() => drawBoard(b));
+    if (quotaPick) $('active').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  function stoppedColumn() {
+    if (stoppedCard) return stoppedCard;
+    stoppedCard = recentBoard.card('stopped', { icon: 'moon', tint: 'blue', art: 'queued', ids: { el: 'stopped' } });
+    recentBoard.el.prepend(stoppedCard.el);
+    stoppedCard.bound = true; U.fold(stoppedCard.more, stoppedCard.box);
+    return stoppedCard;
+  }
+  function fillColumn(card, key, col, b) {
+    const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? [...archivedPages.values()].flatMap(p => p.items) : [])]
+      .filter((c, i, list) => list.findIndex(x => (x.id ?? x.key) === (c.id ?? c.key)) === i));
+    const picked = quotaPick && (key === 'working' || key === 'waiting') ? all.filter(c => stuckBy(c, quotaPick)) : all;
+    const total = totalOf(col), listed = peopleIn(all), completed = key === 'stopped' || key === 'archived';
+    const rows = picked.map(c => chat(c, b.as_of, completed, key));
+    const name = colName(key), extra = [];
+    if (key === 'working' && Number.isInteger(b.helpers_working) && b.helpers_working > 0) extra.push(`另有帮手 ${b.helpers_working} 个在做`);
+    if (total != null && total > listed) extra.push(`共 ${total} 场，已列出 ${listed} 场`);
+    const about = key === 'waiting' && viewer === 'public' ? '要本人回答或选一下才能接着做' : BOARD[key].about;
+    U.html(card.title, `<b>${esc(name)}</b><span class="lb-card__count chat-col-count${total == null ? ' is-none' : ''}">${esc(total == null ? '没读到' : String(total))}</span>`, false);
+    U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')));
+    const emptyWaiting = key === 'waiting' && total === 0 && !quotaPick;
+    card.el.classList.toggle('lb-card--quiet', emptyWaiting);
+    const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
+    const none = total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
+      : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '';
+    const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
+    const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
+    U.list(card.main, idle || [...pickNote, ...(main.length ? main : none ? wait(none) : [])]);
+    U.list(card.rest, rest);
+    const next = key === 'archived' ? nextArchived(col) : null;
+    card.more.hidden = !rest.length && next == null;
+    U.html(card.more, `<span class="lb-more__open">展开${restCount ? `（还有 ${restCount} 个）` : ''}</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
+    if (card.next) { card.next.hidden = next == null; if (key === 'archived') U.html(card.next, '继续读 ›'); }
+  }
+  function nextArchived(col) {
+    const cursor = [...archivedPages.values()].at(-1)?.next ?? col?.next;
+    return cursor == null || archivedPages.has(cursor) ? null : cursor;
+  }
+  function drawBoard(b) {
+    document.body.classList.add('chats-board');
+    drawQuota(b);
+    const cols = b.columns || {};
+    for (const key of Object.keys(COLUMN)) if (key !== 'running' && key !== 'waiting') { const old = board.get(key); if (old) old.el.hidden = true; }   // 按状态临时冒出来的小卡取消（设计第 4 节第 3 条）
+    runningCard.el.hidden = waitingCard.el.hidden = false;
+    for (const card of [runningCard, waitingCard]) if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
+    fillColumn(runningCard, 'working', cols.working, b);
+    fillColumn(waitingCard, 'waiting', cols.waiting, b);
+    fillColumn(stoppedColumn(), 'stopped', cols.stopped, b);
+    fillColumn(doneCard, 'archived', cols.archived, b);
+    $('recent-note').textContent = '';
+    drawBackground(lastAutomation);
+    board.el.querySelectorAll(':scope > .lb-card').forEach(el => { el.style.minHeight = ''; });
+    board.layout(true); even(); recentBoard.layout(true); fitThoughts();
+  }
+  async function readArchived() {
+    const b = boardOf(), button = $('recent-next'), cursor = b && nextArchived(b.columns?.archived);
+    if (cursor == null) return;
+    button.disabled = true; U.html(button, '正在读…', false);
+    try {
+      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor });
+      if (boardOf()?.as_of !== b.as_of) return;
+      if (Array.isArray(r.data?.items) && (r.data.as_of == null || r.data.as_of === b.as_of)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
+      else U.html(button, Array.isArray(r.data?.items) ? '名单刚更新过，再点一次继续读 ›' : U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
+    } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
+  }
   // 第一排两栏底边拉齐：矮的那栏最后一张卡拉长到和另一栏一样高；卡变高变矮（展开、来了新对话、换窗口宽）时重新拉（M534）
   const evenWatch = typeof ResizeObserver === 'function' ? new ResizeObserver(() => even()) : null, evenSeen = new WeakSet();
   function even() {
@@ -367,6 +522,7 @@
   // 近 72 小时已结束占整行、排成几列：每组先露一整排（这一排放得下几个就露几个），多的进“展开”；换了窗口宽重新算（M534）
   let recentRows = new Map(), recentCols = 3;
   function fitRecent() {
+    if (boardOf()) return;
     const list = $('recent-list'), more = $('recent-more'), open = $('recent-box').classList.contains('is-open');
     const rows = [...list.children].filter(li => recentRows.has(li.dataset.key));
     if (list.offsetWidth) recentCols = Math.max(1, getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length);
@@ -378,6 +534,7 @@
   $('recent-more').addEventListener('click', () => requestAnimationFrame(fitRecent));
   if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('recent-list'));
   function renderRecent() {
+    if (boardOf()) { $('recent').hidden = false; if (recentUsable || baseBoard) recentRead.done(); return; }
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
     if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('最近结束的对话暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
     if (recentWarming) { U.list($('recent-list'), wait('正在准备')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
@@ -408,7 +565,16 @@
   let first = true, activityMinute = null, homeOffline = false;
   // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页。
   // 个数和实况首页 AI 对话卡同一个读口、同一个数法：完整的 home 回包里的 automation；页头用的 home?view=header 不带 automation，读它就永远是 0（M740）
-  const drawBackground = auto => { const n = U.offline?.() ? 0 : Number.isInteger(auto?.running_total) ? auto.running_total : Array.isArray(auto?.running) ? auto.running.length : 0; $('chat-background').hidden = !(n > 0); U.html($('chat-background'), n > 0 ? `<a class="chat-background" href="${esc(route('/live/automation/'))}">后台另有 ${n} 个在跑 ›</a>` : ''); };
+  // M915：board.automation 在时照设计第 6 节写“后台另有 2 个在跑 · 1 个额度用完停等 ›”（字段名待后台定，见交回）
+  let lastAutomation = null;
+  function drawBackground(auto) {
+    lastAutomation = auto;
+    const own = boardOf()?.automation, pick = own && typeof own === 'object' ? own : auto;
+    const n = U.offline?.() ? 0 : Number.isInteger(pick?.running_total) ? pick.running_total : Number.isInteger(pick?.running) ? pick.running : Array.isArray(pick?.running) ? pick.running.length : 0;
+    const paused = own && !U.offline?.() ? [own.quota_paused, own.quota_exhausted, own.paused].find(Number.isInteger) : 0;
+    const words = [n > 0 && `后台另有 ${n} 个在跑`, paused > 0 && `${paused} 个额度用完停等`].filter(Boolean).join(' · ');
+    $('chat-background').hidden = !words; U.html($('chat-background'), words ? `<a class="chat-background" href="${esc(route('/live/automation/'))}">${esc(words)} ›</a>` : '');
+  }
   window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {
       homeChats = d?.chats || null; homeSources = { data: homeChats, viewer }; drawSources(); homeAt = meta.at;
@@ -427,6 +593,9 @@
   window.Live.watch('chats', null, { phase(s) { if (!activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
     readViewer(meta);
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
+    const nextBoard = d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
+    if (nextBoard?.as_of !== baseBoard?.as_of) archivedPages.clear();
+    baseBoard = nextBoard;
     if (homeChats || activeChats) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
   }, link(s) { U.blockNote($('active'), s); } });
@@ -450,6 +619,7 @@
     return cursor == null || pages.has(cursor) ? null : cursor;
   }
   $('recent-next').addEventListener('click', async () => {
+    if (boardOf()) return readArchived();
     const button = $('recent-next'), cursor = nextRecentCursor(), firstPage = pages.get(''); if (cursor == null) return;
     button.disabled = true; U.html(button, '正在读…', false);
     try { const r = await window.Live.get('chats', { window: '72h', cursor });

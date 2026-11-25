@@ -70,7 +70,43 @@
   const stepCodes = { completed: 'done', in_progress: 'running', inProgress: 'running' };
   const stepState = p => { const s = p?.status ?? p?.state; return Object.hasOwn(stepCodes, s) ? stepCodes[s] : s; };
   const stepWord = s => s === 'pending' ? '没开始' : Object.hasOwn(states, s) ? states[s] : '状态不明';
+  // M915：后台给了 status_kind（设计第 3 节那 14 类加“做完了”）时，一场对话、一个帮手只认这一套标签。
+  // col 是放哪一栏，tone 是标签颜色（薄荷绿 AI 在动、黄要你做、橙停等外部、粉出错、灰紫被叫停或中断、蓝灰停着待定、淡紫做完、灰读不到），
+  // verb 是行首时刻后面那两个字（设计第 4 节排序表），label 是后台没给 status_label 时的默认说法。
+  const KINDS = {
+    running: { col: 'working', tone: 'mint', label: '正在做', verb: '起在做' },
+    reconnecting: { col: 'working', tone: 'cyan', label: '在重连', verb: '起在重连' },
+    queued: { col: 'working', tone: 'slate', label: '排队', verb: '起排队' },
+    quota_exhausted: { col: 'working', tone: 'orange', label: '额度用完', verb: '起额度用完' },
+    login_failed: { col: 'working', tone: 'yellow', label: '登录失效 · 等你重登', verb: '起登录失效' },
+    waiting_owner: { col: 'waiting', tone: 'yellow', label: '等你回答', verb: '问你' },
+    quota_overdue: { col: 'waiting', tone: 'yellow', label: '过了预计恢复点 · 说一句“继续”', verb: '过了恢复点' },
+    failed: { col: 'stopped', tone: 'pink', label: '出错停下', verb: '停下' },
+    user_stopped: { col: 'stopped', tone: 'violet', label: '你叫停的', verb: '停下' },
+    ai_stopped: { col: 'stopped', tone: 'violet', label: 'AI 叫停的', verb: '停下' },
+    program_stopped: { col: 'stopped', tone: 'violet', label: '程序停下的', verb: '停下' },
+    interrupted: { col: 'stopped', tone: 'violet', label: '被中断 · 没记下是谁', verb: '停下' },
+    replied: { col: 'stopped', tone: 'slate', label: '回完了 · 没归档', verb: '停下' },
+    unknown: { col: 'stopped', tone: 'gray', label: '状态不明', verb: '最后记录' },
+    archived: { col: 'archived', tone: 'lilac', label: '做完了', verb: '归档' },
+  };
+  const QUOTA_WINDOWS = { '5h': '5 小时额度', five_hour: '5 小时额度', session: '5 小时额度', week: '本周额度', weekly: '本周额度', '7d': '本周额度' };
+  const quotaWindow = w => typeof w !== 'string' ? '' : QUOTA_WINDOWS[w] || (/[一-鿿]/.test(w) ? w : '');
+  // 带日期的钟点：今天的只写钟点，别的天前面加“11-24”
+  const dayClock = at => Number.isFinite(Date.parse(at)) ? [U.date(at) !== U.date(Date.now()) && U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
+  // 访客版把“你”换成“本人”（同全站“等本人回答”的说法）
+  const ownerWords = (text, kind) => kind === 'public' && typeof text === 'string' ? text.replace(/等你/g, '等本人').replace(/问你/g, '问本人').replace(/^你叫停/, '本人叫停') : text;
+  const statusKind = d => typeof d?.status_kind === 'string' && Object.hasOwn(KINDS, d.status_kind) ? d.status_kind : '';
+  function statusLabel(d, kind) {
+    const given = d?.status_label != null ? U.fieldText(d.status_label, kind).trim() : '', k = statusKind(d);
+    if (given) return ownerWords(given, kind);
+    if (!k) return '';
+    if (k === 'quota_exhausted') return ['额度用完', quotaWindow(d.quota_window), d.quota_reset_at ? `预计 ${dayClock(d.quota_reset_at)} 恢复` : '宿主没给恢复时间'].filter(Boolean).join(' · ');
+    return ownerWords(KINDS[k].label, kind);
+  }
   function rowState(d, kind) {
+    const label = statusLabel(d, kind);
+    if (label) return label;
     if (d.state === 'waiting' && d.wait_kind === 'final') return '等本人回答';
     return U.chatWaitLabel(d, kind) || stepWord(d.state);
   }
@@ -93,13 +129,17 @@
   const helperTotal = d => d.helper_counts?.total ?? (Array.isArray(d.helpers) ? d.helpers.reduce((n, h) => n + (h.private_count || 1), 0) : d.helpers?.total);
   const workingHelpers = d => d.helper_counts?.by_state?.running ?? (Array.isArray(d.helpers) ? d.helpers.filter(h => h.state === 'running').length : d.helpers?.running);
   function helperActivity(h, now) {
+    // M915：帮手带了 status_kind（不在做）时，写“这一类从几点起”，不再按旧 state 写“出错于”（额度用完的帮手不是出错）
+    const k = KINDS[statusKind(h)];
+    if (k && statusKind(h) !== 'running' && Number.isFinite(Date.parse(h.sort_at ?? h.at))) return `${dayClock(h.sort_at ?? h.at)} ${statusKind(h) === 'archived' ? '交回' : k.verb}`;
     if (!Number.isFinite(Date.parse(h.at))) return '';
     const at = [U.date(h.at), U.time(h.at)].filter(Boolean).join(' ');
     if (h.state === 'running') return U.offline?.() ? `断开前最后有动静 ${at}` : now ? `${U.ago(h.at, now)}有动静` : `最后有动静 ${at}`;
     const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于';
     return `${verb} ${at}`;
   }
-  U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity };
+  U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
+    KINDS, statusKind, statusLabel, quotaWindow, dayClock, ownerWords };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {
     const { trigger, pre_tokens: tokens, pre_context_ratio: ratio } = event || {};
