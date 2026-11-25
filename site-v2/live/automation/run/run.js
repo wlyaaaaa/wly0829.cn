@@ -306,7 +306,8 @@
     const locked = !!d && U.chatFields.contentLocked(d, viewer);
     let note = '';
     if (program) note = '';
-    else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : '这一轮的对话没存下来，看下面派活程序收到的结论。';
+    // 还在跑的那一轮后台没给对话时，不说“没存下来、看结论”（还没有结论，下面是“正在想……”）
+    else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : r.status === 'running' ? '这一轮的对话还没读到。' : '这一轮的对话没存下来，看下面派活程序收到的结论。';
     else if (!d) note = chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
     else {
       const { out, gap } = middle(r, d, ai, locked);
