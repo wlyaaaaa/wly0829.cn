@@ -74,7 +74,9 @@
     cat?.forEach(c => keepLabel(labels, c));
     return { at: s.as_of || s.observed_at, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
       missing: HOSTS.filter(h => !providers.some(p => p.fam === h)), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
-      invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows' };
+      invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows',
+      // 每家技能记到哪一刻（recorded_through）：比这一轮读到的时候早一天以上，说明后面用的还没入账，下面小字写明记到几点（M742），不让旧数冒充新的
+      through: Object.fromEntries(providers.map(p => [p.fam.id, p.recorded_through || null])), readAt: s.observed_at || s.as_of || null };
   }
   // —— 小零件 ——
   const sum = (v, keys) => keys.reduce((a, h) => a + (known(v?.[h.id]) ? v[h.id] : 0), 0);
@@ -174,7 +176,9 @@
     const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
       `<div class="ag-hrow is-unused">${skillName(n, s.labels)}<span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
-    const notes = [line, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
+    const behind = hs.filter(h => Date.parse(s.readAt) - Date.parse(s.through[h.id]) > 864e5).map(h => `${h.name} 只记到 ${T.when(s.through[h.id])}`);
+    const lag = behind.length ? `${behind.join('、')}，之后用的还没入账` : '';
+    const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at)}
