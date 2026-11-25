@@ -432,7 +432,8 @@
   function todayText(c) {
     if (c.id !== 'ai-commitments') return '';
     const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
-    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).join('，');
+    // 每一截整块不折行（窄栏里“用了 12 分钟”的“钟”会单独掉到下一行）
+    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).map(x => `<span class="au-nobr">${x}</span>`).join('，');
   }
   function lastCell(c) {
     const r = c.last_result;
