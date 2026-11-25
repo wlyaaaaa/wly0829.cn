@@ -119,6 +119,12 @@
   const restricted = v => v?.hidden || v?.hidden_block || v?.visibility === 'pending' || v?.rewrite === 'pending' || projectViewer === 'public' && (v?.visibility === 'owner' || v?.public === 'owner');
   const hookEvents = { UserPromptSubmit: '发消息后', SessionStart: '新开对话时', PreToolUse: '工具运行前', PostToolUse: '工具运行后' };
   const agentsTimed = m => id === 'agents' && ['hook_prompt', 'hook_session', 'hook_tools', 'hook_errors', 'quotes_recent'].includes(m.id);
+  // 原话存档：滚动窗口的终点是最后一条原话存进来的时刻，过了几个钟头再叫“近 24 小时”不对；写成“到 X 为止的 24 小时”（M769）
+  function quotesWindow(m, source) {
+    const end = m.window_as_of || m.source_at || m.at, d1 = source?.[1], d7 = source?.[7];
+    if (!end || !Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(end) ? end : `${end}+08:00`)) || !Number.isFinite(d1) && !Number.isFinite(d7)) return '';
+    return `到 ${stamp(end)} 为止：${[Number.isFinite(d1) && `24 小时 ${num(d1)} 条`, Number.isFinite(d7) && `7 天 ${num(d7)} 条`].filter(Boolean).join('，')}`;
+  }
   function cardReading(m) {
     if (!agentsTimed(m)) return null;
     const source = m.value && typeof m.value === 'object' ? m.value : m;
@@ -126,7 +132,7 @@
     const raw = source.text ?? m.text;
     const dated = typeof raw === 'string' && /^截至/.test(raw), quote = dated ? raw : m.window_text ?? raw;
     const text = m.id === 'quotes_recent'
-      ? typeof quote === 'string' ? quote.replace(/\d{4,}(?=\s*条)/g, n => num(+n)) : quote ?? [7, 1].filter(n => Number.isFinite(source[n])).map(n => `近 ${n === 7 ? '7 天' : '24 小时'} ${num(source[n])} 条`).join(' · ')
+      ? quotesWindow(m, source) || (typeof quote === 'string' ? quote.replace(/\d{4,}(?=\s*条)/g, n => num(+n)) : quote ?? [7, 1].filter(n => Number.isFinite(source[n])).map(n => `近 ${n === 7 ? '7 天' : '24 小时'} ${num(source[n])} 条`).join(' · '))
       : dated ? raw
       : m.summary_zh ?? source.summary_zh ?? (typeof raw === 'string' ? raw.replace(/\b(UserPromptSubmit|SessionStart|PreToolUse|PostToolUse)\b/g, word => hookEvents[word]) : raw);
     return text && typeof text === 'object' ? text : text ? { ...source, value: undefined, text } : null;
@@ -175,8 +181,10 @@
   function subPieces(m) {
     const note = m.note && metricNote(m.note), html = v => U.fieldHtml(v, { name: '读数说明', kind: projectViewer });
     const windowAt = agentsTimed(m) && !restricted(m) && !restricted(m.value) && (m.window_as_of || m.source_at || m.at);
+    // 原话存档的读数里已经写了“到 X 为止”，没旧就不再补一句“数据截至 X”
+    const windowed = m.id === 'quotes_recent' && windowAt && !isStale(m) && !!quotesWindow(m, m.value && typeof m.value === 'object' ? m.value : m);
     const windowDate = windowAt && stamp(windowAt), lead = /此后未更新/.test(note || '') ? note
-      : windowDate ? `数据截至 ${windowDate}${isStale(m) ? '，此后未更新' : ''}` : note;
+      : windowDate && !windowed ? `数据截至 ${windowDate}${isStale(m) ? '，此后未更新' : ''}` : note;
     const gap = m.value?.gap || m.gap;
     const pieces = [m.checked_at && `最近检查成功 ${stamp(m.checked_at)}`, typeof m.scope === 'string' && metricNote(m.scope), note, id === 'agents' && m.id === 'release' && m.at && `${stamp(m.at)} 生效`, gap && (!windowDate || !metricNote(gap).includes(windowDate)) && gap, !windowAt && staleText(m, m.at), !windowAt && m.mode === 'static' && !isStale(m) && !U.offline?.() && m.at && `${shortDate(m.at)} 取的`];
     return { mark: (!isPrivate(m) && marker(m, projectViewer, m.hidden_what || '这项读数')) || '', lead: lead ? html(lead) : '', all: [...new Set(pieces.filter(Boolean).map(html))] };
@@ -217,27 +225,29 @@
   const plain = html => String(html).replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
   function lineOf(m) {
     const p = subPieces(m), desktop = id === 'pcconfig' && m.id === 'remote' ? window.ProjectAdditions?.desktopNote(m, projectViewer, lower) : '';
+    // “这件事最后一次发生”的那一句（LiveProjectMoments）：一张卡里几项同一句时写在卡底一次（moment_shared），否则跟在这一项下面
+    const moment = m.moment && !m.moment_shared ? U.fieldHtml(m.moment, { name: '读数说明', kind: projectViewer }) : '';
     const line = [p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
-    return { line, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
+    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
   }
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m);
     const label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${cadence || ''}${href ? ' <span class="more__chev">›</span>' : ''}</span>`;
     return {
       key: m.id, extra, labelText,
       cls: `pj-fig${v.long ? ' pj-fig--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}`,
+      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
     };
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, extra, labelText, cadence } = lineOf(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m);
     const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + (cadence || '');
     return {
       key: m.id, extra, labelText,
       cls: `pj-kv__row${v.long || v.plain.length > 9 ? ' pj-kv__row--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label} <span class="more__chev">›</span></a>` : label}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
+      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label} <span class="more__chev">›</span></a>` : label}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
     };
   }
   // 状态文字沿用原说法，灯只照后端 level 画。
@@ -358,13 +368,15 @@
   function arrayBlock(m) {
     const b = block(`records-${m.section || m.id}`, 'rows');
     b.el.classList.add('pj-sec--array'); b.array = true; b.metric = m;
-    const href = m.section ? records(m.section) : '', { line, extra } = lineOf(m);
+    const href = m.section ? records(m.section) : '', { line, extra } = lineOf({ ...m, moment_shared: true });
     const name = U.fieldHtml(m.label, { name: '逐项明细名称', place: 'label', kind: projectViewer });
     const count = m.count == null ? '' : `${lower(m, 'count') ? '至少 ' : ''}${num(m.count)} 条`;
     const at = m.at && stamp(m.at, m.at_precision);
-    const meta = [count, at && `截至 ${at}`].filter(Boolean).join(' · ');
+    // 时刻是“这件事最后一次发生”的（11-15 真机验收、最后整理于 11-21……）写那一句，不写“截至”
+    // 同一张卡的卡底已经是这一句时，卡里这一行不再重复（cardTail 里收起）
+    const meta = [count, !m.moment && at && `截至 ${at}`].filter(Boolean).join(' · '); b.moment = m.moment || '';
     const linkLabel = U.fieldText(m.label, projectViewer) + '明细';
-    U.html(b.head, `<b>${name}</b>${meta ? `<span class="pj-record-meta">${esc(meta)}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
+    U.html(b.head, `<b>${name}</b>${meta || b.moment ? `<span class="pj-record-meta">${esc(meta)}${b.moment ? `<span class="pj-record-moment">${meta ? ' · ' : ''}${esc(b.moment)}</span>` : ''}</span>` : ''}${href ? `<a class="more pj-record-link" href="${esc(href)}" aria-label="${esc(linkLabel)}">明细 <span class="more__chev">›</span></a>` : ''}`);
     const knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(m.section);
     const hidden = m.value?.hidden_block || m.hidden_block || (isPrivate(m) ? m.value?.hidden_what || m.hidden_what : '');
     const notice = projectViewer !== 'public' ? '' : knowledge
@@ -377,7 +389,7 @@
     b.explain.hidden = !about; U.html(b.explain, about);
     return b;
   }
-  function fill(b, { label, about, rows, unread = [], total, link, note, explain = [], hidden, hiddenText, hiddenWhat, empty, headOnly = false, limit }, animate) {
+  function fill(b, { label, about, rows, unread = [], total, link, note, explain = [], hidden, hiddenText, hiddenWhat, empty, headOnly = false, limit, moment = '' }, animate) {
     if (b.main) b.main.hidden = headOnly;
     b.headOnly = headOnly;
     b.head.hidden = !label && !about;
@@ -405,7 +417,8 @@
     // 收起来的说明：这一段的口径＋各项除一句解释以外的小字；所有项都一样的截止时刻露在卡底
     const told = explainLines(rows, explain);
     if (b.explain) { b.explain.hidden = !told.lines.length; U.html(b.explain, told.lines.join('<br>')); }
-    if (b.cut) { b.cut.hidden = !told.cut; U.html(b.cut, told.cut); }
+    const cut = [told.cut, moment && U.fieldHtml(moment, { name: '读数说明', kind: projectViewer })].filter(Boolean).join(' · ');
+    if (b.cut) { b.cut.hidden = !cut; U.html(b.cut, cut); }
     // 卡右上角“看全部 ›”用：去逐项明细的路，或者原地展开剩下的
     b.allHref = link?.href || ''; b.allFold = rest > 0 || unread.length > 0;
   }
@@ -670,6 +683,7 @@
     c.tail.querySelector('.pj-notes').hidden = !parts.length;
     const cut = c.tail.querySelector('.pj-cut'); cut.hidden = cuts.length !== 1; cut.textContent = cuts.length === 1 ? cuts[0] : '';
     c.tail.hidden = !parts.length && cuts.length !== 1;
+    for (const b of list) { const said = b.array && b.moment && b.head?.querySelector('.pj-record-moment'); if (said) said.hidden = cuts.length === 1 && cuts[0] === b.moment; }
   }
   function groupsOf(list) {
     const out = new Map();
@@ -771,9 +785,12 @@
           const b = block(s.id, kind), missing = !intro && !metrics.some(hasValue) && !s.hidden && !s.hidden_text;
           b.group = s.id; b.quiet = false;
           if (missing) { if (!arrays.length && !s.items) { fill(b, { label: '', rows: [], empty: missingText(null, s.label || '这块') }, animate); b.quiet = true; into.push(b); } } else {
-          const rows = metrics.map(kind === 'kv' ? kvRow : figRow);
+          // 卡里“最后一次发生”那一句有一句占了这张卡一半以上（至少两项），就只在卡底写一次；别的句子和不够一半的跟在各项下面，免得卡底一句被当成整张卡的
+          const said = new Map(); for (const m of metrics) if (m.moment) said.set(m.moment, (said.get(m.moment) || 0) + 1);
+          const [common = '', times = 0] = [...said].sort((a, b) => b[1] - a[1])[0] || [], moment = times > 1 && times * 2 > metrics.length ? common : '';
+          const rows = metrics.map(m => moment && m.moment === moment ? { ...m, moment_shared: true } : m).map(kind === 'kv' ? kvRow : figRow);
           if (intro) rows.splice(Math.min(rows.length, SHOW.figs - 1), 0, readings.introRow(intro, metricHref(intro)));
-          fill(b, { label: s.label || '', about, explain, rows, note: '', hidden: s.items ? 0 : s.hidden, hiddenWhat: s.hidden_what, hiddenText: s.items ? '' : s.hidden_text, empty: s.text || U.collectionText() }, animate);
+          fill(b, { label: s.label || '', about, explain, rows, note: '', hidden: s.items ? 0 : s.hidden, hiddenWhat: s.hidden_what, hiddenText: s.items ? '' : s.hidden_text, empty: s.text || U.collectionText(), moment }, animate);
           into.push(b); headed = true; }
         }
         // 这一段只有逐项清单或图：卡头单独一块，写段名和那一句
@@ -957,7 +974,7 @@
       head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || ''),
         href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
-      const v = value(m), { line, cadence } = lineOf(m);
+      const v = value(m), { line: said, moment, cadence } = lineOf(m), line = [said, moment].filter(Boolean).join(' · ');
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: v.long ? 'text' : '', wide: v.long && sentence(v.plain), title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
@@ -1053,7 +1070,7 @@
     const chars = size?.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
     const sizeText = size && [size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, size.code_lines != null && `代码 ${big(size.code_lines, '行')}`].filter(Boolean).join(' · '), chars].filter(Boolean).join(' · ');
     const sized = !size ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>`
-      : `${esc(sizeText || U.collectionText())}${size.at ? `<small>${esc(U.offline?.() || isStale(size) ? staleText(size, size.at) : `${shortDate(size.at)} 取的`)}</small>` : ''}`;
+      : `${esc(sizeText || U.collectionText())}${size.at ? `<small>${esc(U.offline?.() || isStale(size) ? staleText(size, size.at) : size.moment || `${shortDate(size.at)} 取的`)}</small>` : ''}`;
     part('facts').hidden = false;
     // 后台没给近 7 天改动数、而最近一次提交在 7 天以前：近 7 天就是 0 次
     const quiet = d.changes7 == null && Number.isFinite(Date.parse(ch?.at)) && (Date.parse(d.at || at) || Date.now()) - Date.parse(ch.at) > 7 * 86400000;
@@ -1163,6 +1180,10 @@
       }
       projectViewer = viewer;
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
+      // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
+      if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
+      // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”
+      if (raw && id === 'agents' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => Array.isArray(s?.metrics) ? { ...s, metrics: s.metrics.map(m => m?.id === 'quotes_recent' && typeof m.label === 'string' && quotesWindow(m, m.value && typeof m.value === 'object' ? m.value : m) ? { ...m, label: m.label.replace(/^近\s*7\s*天存下（含近\s*24\s*小时）$/, '7 天存下（含 24 小时）') } : m) } : s) };
       proj = raw;
       at = meta.at;
       const reads = first ? opening : [];
