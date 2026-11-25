@@ -451,7 +451,7 @@
   const archivedPages = new Map();
   const boardOf = () => baseBoard || (homeChats?.board?.columns && typeof homeChats.board.columns === 'object' ? homeChats.board : null);
   const BOARD = {
-    working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 这一轮还没结束（或帮手还在做）、最近 ${IDLE_LIMIT}内有新记录的算在干，30 分钟以上没动静会在行里注明；超过 ${IDLE_LIMIT}没新记录就标状态不明，挪到下面“停下了，没归档”` },
+    working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 超过 ${IDLE_LIMIT}没新记录、也没结束记录，就标状态不明、挪到停下那栏` },
     waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
     stopped: { name: '停下了，没归档', about: `没归档就不算做完：接着做，或者归档。“状态不明”：${UNKNOWN_RULE}` },
     archived: { name: '做完了 · 已归档', about: '' },
@@ -576,6 +576,13 @@
   const evenWatch = typeof ResizeObserver === 'function' ? new ResizeObserver(() => even()) : null, evenSeen = new WeakSet();
   function even() {
     const cards = [...board.el.children].filter(el => el.matches('.lb-card') && !el.hidden && !el.classList.contains('is-away'));
+    // 四栏模式下“在干｜等你”并排时，两个栏头拉到一样高，两栏第一行对话从同一高度开始（在干栏头的说明比等你长）
+    const heads = boardOf() ? [runningCard, waitingCard].map(card => card.el.querySelector(':scope > .lb-card__head')).filter(Boolean) : [];
+    heads.forEach(head => { head.style.minHeight = ''; });
+    if (heads.length === 2 && Math.abs(heads[0].getBoundingClientRect().top - heads[1].getBoundingClientRect().top) < 2) {
+      const tall = Math.max(...heads.map(head => head.getBoundingClientRect().height));
+      heads.forEach(head => { const css = getComputedStyle(head), extra = css.boxSizing === 'border-box' ? 0 : head.getBoundingClientRect().height - parseFloat(css.height); if (head.getBoundingClientRect().height < tall) head.style.minHeight = `${tall - extra}px`; });
+    }
     cards.forEach(el => { el.style.minHeight = ''; if (!evenSeen.has(el)) { evenSeen.add(el); evenWatch?.observe(el); } });
     const height = [0, 0], last = [];
     for (const el of cards) { const k = Math.min(1, Math.max(0, (parseInt(el.style.gridColumn, 10) || 1) - 1)); height[k] += el.getBoundingClientRect().height + 22; last[k] = el; }
