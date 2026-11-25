@@ -29,10 +29,14 @@
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   function title(r) {
     // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
-    const lead = r.subject ? `${F(r.subject.title, '这件活')}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
-    const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
-      : F(r.summary, '这一轮做了什么') || '跑完了';
-    return lead && tail ? `${lead}：${tail}` : lead || tail;
+    // 这件活的名字写在前半，后台 summary 里又带着它的就去掉，同一句不写两遍（前端 QA 11-25）
+    const thing = r.subject ? F(r.subject.title, '这件活') : '';
+    const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
+    // 暂缓的轮次标题一律短（“这件活 · 第 N 轮 · 暂时不修”），说明写在“这一轮做成了什么”（主控 11-25）；没有这件活的名字时用这一类的名字打头
+    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+      : R.withoutSubject(F(r.summary, '这一轮做了什么'), thing) || '跑完了';
+    // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
+    return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
   }
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
@@ -71,9 +75,11 @@
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
-    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。' : r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
+    // 暂缓那一轮：标题只写“暂时不修”，说明写在这里；有说明就不写“没做出东西”，做出了东西的，说明写在那几样上面（主控 11-25）
+    const note = r.deferred ? R.deferredNote(r, F) : '';
+    const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? (note ? `暂时不修，等下一次检查再看。${note}` : '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。') :r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
       : r.outputCount > 0 ? `做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。` : '这一轮没做出要记下的东西。';
-    return `${rows ? `<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
+    return `${rows ? `${note ? `<p class="ar-none">暂时不修，等下一次检查再看。${note}</p>` : ''}<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
   }
 
   // —— 经过：后台给了时间线就照画；没给就用排上、开始、交回和前后两轮拼。没做成的那一段红点 ——
@@ -86,7 +92,7 @@
       if (T.stamp(r.queuedAt) && T.stamp(r.startedAt) && T.stamp(r.startedAt) - T.stamp(r.queuedAt) > 60000) steps.push({ at: r.queuedAt, text: `${T.clock(r.queuedAt)} 排上`, tone: 'info' });
       if (T.stamp(r.startedAt)) steps.push({ at: r.startedAt, text: `${T.clock(r.startedAt)} ${r.resumes ? '接着做' : '开始'}`, tone: 'ok' });
       if (r.status === 'running') steps.push({ at: r.lastAt, text: `正在${U.fieldText(r.activity, viewer).replace(/^正在/, '') || '跑'}`, tone: 'live' });
-      if (r.status === 'completed' && T.stamp(r.finishedAt)) steps.push({ at: r.finishedAt, text: `${T.clock(r.finishedAt)} 交回：${U.fieldText(r.summary, viewer) || '跑完了'}`, tone: 'ok' });
+      if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) steps.push({ at: r.finishedAt, text: `${T.clock(r.finishedAt)} 交回：${U.fieldText(r.summary, viewer) || '跑完了'}`, tone: 'ok' });
       if (r.deferred) steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 交回：${U.fieldText(r.summary, viewer) || '暂时不修'}`, tone: 'info' });
       else if (r.status === 'incomplete') steps.push({ at: r.finishedAt || r.lastAt, text: `${T.clock(r.finishedAt || r.lastAt)} 没做成${r.reason ? `：${U.fieldText(r.reason, viewer)}` : ''}`, tone: 'bad' });
       const n = r.resumedBy && other(r.resumedBy);
@@ -148,7 +154,8 @@
     viewer = T.viewerOf(state);
     if (backLink && category && !fromReferrer) { backLink.textContent = listLabel || U.fieldText(name(), viewer); backLink.href = back; }
     // 快讯条照自动任务页：用每一轮的列表排开始、跑完、停了（摘一句不放）。后台的 feed 只留最近 30 条，常常全是摘一句，滤完就空了（M672）
-    page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline });
+    // 这一轮自己没读到时也照自动任务页算“读不到”，空着就写“这一页的读数没读到”，不写成“没有新消息”
+    page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline || !state?.data });
     const d = state?.data;
     if (!category || !id) { T.paint(page.root, '<p class="tp-placeholder" role="status">网址里没写是哪一轮。</p>'); return; }
     if (!d) { T.paint(page.root, T.placeholder(state, '这一轮')); return; }
