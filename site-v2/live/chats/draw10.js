@@ -90,13 +90,17 @@
     unknown: { col: 'stopped', tone: 'gray', label: '状态不明', verb: '最后记录' },
     archived: { col: 'archived', tone: 'lilac', label: '做完了', verb: '归档' },
   };
-  const QUOTA_WINDOWS = { '5h': '5 小时额度', five_hour: '5 小时额度', session: '5 小时额度', week: '本周额度', weekly: '本周额度', '7d': '本周额度' };
-  const quotaWindow = w => typeof w !== 'string' ? '' : QUOTA_WINDOWS[w] || (/[一-鿿]/.test(w) ? w : '');
+  // 额度窗口：后台给 five_hour | weekly | null（M915 后台 00:04 定）
+  const QUOTA_WINDOWS = { five_hour: '5 小时额度', weekly: '本周额度' };
+  const quotaWindow = w => Object.hasOwn(QUOTA_WINDOWS, w) ? QUOTA_WINDOWS[w] : '';
   // 带日期的钟点：今天的只写钟点，别的天前面加“11-24”
   const dayClock = at => Number.isFinite(Date.parse(at)) ? [U.date(at) !== U.date(Date.now()) && U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
   // 访客版把“你”换成“本人”（同全站“等本人回答”的说法）
   const ownerWords = (text, kind) => kind === 'public' && typeof text === 'string' ? text.replace(/等你/g, '等本人').replace(/问你/g, '问本人').replace(/^你叫停/, '本人叫停') : text;
   const statusKind = d => typeof d?.status_kind === 'string' && Object.hasOwn(KINDS, d.status_kind) ? d.status_kind : '';
+  const sortVerb = d => statusKind(d) === 'archived' && d.sort_at_source === 'last_activity' ? '最后动静' : (KINDS[statusKind(d)] || KINDS.unknown).verb;
+  // 帮手名单：新回包在 helpers.items，旧回包是数组或 helpers.active
+  const helperList = d => Array.isArray(d?.helpers) ? d.helpers : Array.isArray(d?.helpers?.items) ? d.helpers.items : d?.helpers?.active || [];
   function statusLabel(d, kind) {
     const given = d?.status_label != null ? U.fieldText(d.status_label, kind).trim() : '', k = statusKind(d);
     if (given) return ownerWords(given, kind);
@@ -126,12 +130,13 @@
     const label = current >= 0 ? `第 ${current + 1}／${total} 步` : '';
     return { plan, total, current, label, count: total > 0 ? completed === total ? `已完成 ${total} 步` : `共 ${total} 步` : '' };
   }
-  const helperTotal = d => d.helper_counts?.total ?? (Array.isArray(d.helpers) ? d.helpers.reduce((n, h) => n + (h.private_count || 1), 0) : d.helpers?.total);
-  const workingHelpers = d => d.helper_counts?.by_state?.running ?? (Array.isArray(d.helpers) ? d.helpers.filter(h => h.state === 'running').length : d.helpers?.running);
+  const helperTotal = d => d.helper_counts?.total ?? (Array.isArray(d.helpers) || Array.isArray(d.helpers?.items) ? helperList(d).reduce((n, h) => n + (h.private_count || 1), 0) : d.helpers?.total);
+  const workingHelpers = d => d.helper_counts?.by_state?.running ?? (Array.isArray(d.helpers) || Array.isArray(d.helpers?.items) ? helperList(d).filter(h => h.state === 'running' || h.status_kind === 'running').length : d.helpers?.running);
   function helperActivity(h, now) {
     // M915：帮手带了 status_kind（不在做）时，写“这一类从几点起”，不再按旧 state 写“出错于”（额度用完的帮手不是出错）
     const k = KINDS[statusKind(h)];
-    if (k && statusKind(h) !== 'running' && Number.isFinite(Date.parse(h.sort_at ?? h.at))) return `${dayClock(h.sort_at ?? h.at)} ${statusKind(h) === 'archived' ? '交回' : k.verb}`;
+    if (statusKind(h) === 'archived' && Number.isFinite(Date.parse(h.delivered_at))) return `${dayClock(h.delivered_at)} 交回`;
+    if (k && statusKind(h) !== 'running' && Number.isFinite(Date.parse(h.sort_at ?? h.at))) return `${dayClock(h.sort_at ?? h.at)} ${sortVerb(h)}`;
     if (!Number.isFinite(Date.parse(h.at))) return '';
     const at = [U.date(h.at), U.time(h.at)].filter(Boolean).join(' ');
     if (h.state === 'running') return U.offline?.() ? `断开前最后有动静 ${at}` : now ? `${U.ago(h.at, now)}有动静` : `最后有动静 ${at}`;
@@ -139,7 +144,7 @@
     return `${verb} ${at}`;
   }
   U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
-    KINDS, statusKind, statusLabel, quotaWindow, dayClock, ownerWords };
+    KINDS, statusKind, statusLabel, quotaWindow, dayClock, ownerWords, sortVerb, helperList };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {
     const { trigger, pre_tokens: tokens, pre_context_ratio: ratio } = event || {};

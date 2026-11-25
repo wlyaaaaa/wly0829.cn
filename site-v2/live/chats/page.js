@@ -84,7 +84,7 @@
     const exact = c.helper_counts?.total ?? c.helpers?.total;
     if (knownCount(exact)) return exact ? `帮手 ${exact} 个` : '';
     const active = helperPeople(helpers);
-    if (Array.isArray(c.helpers)) return active ? `帮手 ${active} 个` : '';
+    if (Array.isArray(c.helpers) || Array.isArray(c.helpers?.items)) return active ? `帮手 ${active} 个` : '';
     const observed = [Math.max(knownCount(c.helpers?.running) ? c.helpers.running : 0, active),
       c.helpers?.done, c.helpers?.failed].filter(knownCount).reduce((sum, n) => sum + n, 0);
     return observed ? `已读到 ${observed} 个帮手` : '';
@@ -97,12 +97,12 @@
     return /^(?:API Error:|Error:)/i.test(text) ? '连接出错，正在重连' : '';
   }
   // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
-  const { KINDS, statusKind, dayClock, ownerWords, quotaWindow } = U.chatFields;
+  const { KINDS, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
   // 行首：排序用的时刻（后台 sort_at）＋这一类的动词（“起在做”“问你”“停下”“归档”）；没有时刻写“时刻没读到”（这一行已排在栏底）
   function whenCell(c) {
-    const k = KINDS[statusKind(c)] || KINDS.unknown, at = c.sort_at, ok = Number.isFinite(Date.parse(at));
+    const at = c.sort_at, ok = Number.isFinite(Date.parse(at));
     const day = ok && U.date(at) !== U.date(Date.now()) ? U.date(at) + ' ' : '';
-    return ok ? `<span class="chat-when"><b>${esc(U.time(at))}</b><small>${esc(day + ownerWords(k.verb, viewer))}</small></span>`
+    return ok ? `<span class="chat-when"><b>${esc(U.time(at))}</b><small>${esc(day + ownerWords(sortVerb(c), viewer))}</small></span>`
       : '<span class="chat-when chat-when--none"><small>时刻没读到</small></span>';
   }
   function statusPill(c) {
@@ -148,7 +148,7 @@
     const latest = !snippet || repeatsStatus ? '' : previewTag ? `<p class="row__line">${retryText || snippet}${previewTag}</p>` : retryText && !c.detail
       ? `<details class="row__sub"><summary>${retryText}</summary><p style="overflow-wrap:anywhere">${snippet}</p></details>`
       : `<p class="row__line">${retryText || snippet}</p>`;
-    const helpers = Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
+    const helpers = helperList(c);
     const { label, count, plan, current } = planInfo(c);
     const progress = locked ? (label || count) && `<span class="chat-pill">${esc(label || count)}</span>`
       : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${label} ›</a>` : '';
@@ -160,7 +160,7 @@
       '<button class="more chat-think__toggle" type="button" aria-expanded="false"><span class="chat-think__open">展开摘要</span><span class="chat-think__shut">收起摘要</span> <span class="more__chev" aria-hidden="true">›</span></button>' +
       `<p class="chat-think__full">${thoughtFull}</p></div>` : '';
     // 帮手：在做和出错的先露前 5 个，其余收着按批看
-    const busy = h => h.private_count || ['running', 'failed'].includes(h.state);
+    const busy = h => h.private_count || ['running', 'failed'].includes(h.state) || ['running', 'reconnecting', 'queued', 'quota_exhausted', 'login_failed', 'failed'].includes(h.status_kind);
     const helperFirst = [...helpers.filter(busy), ...(locked ? helpers.filter(h => !busy(h)) : [])].slice(0, 5);
     const helperRest = helpers.filter(h => !helperFirst.includes(h));
     const helperCount = helperLabel(c, helpers), origin = shownOrigin(c);
@@ -168,7 +168,7 @@
     const attribution = [U.chatFields.appTag(c), who(c, 'body', true), source].filter(Boolean).join(' ');
     const modelLine = attribution ? `<span class="chat-model">${attribution}</span>` : '';
     const context = [modelLine, titleMark, timing && `<span data-steady>${esc(timing)}</span>`].filter(Boolean).join('');
-    const runningPreview = !Array.isArray(c.helpers);
+    const runningPreview = !Array.isArray(c.helpers) && !Array.isArray(c.helpers?.items);
     const groupedPreview = runningPreview && helpers.length === 1 && helpers[0].private_count;
     const busyCount = helperPeople(helpers), allCount = c.helper_counts?.total ?? c.helpers?.total;
     const helperPreview = runningPreview && helpers.length && !groupedPreview ? `<li class="row__sub">正在帮这场对话做事的有 ${busyCount} 个${knownCount(allCount) && allCount > busyCount ? `（一共 ${allCount} 个，${c.detail ? '全部在完整对话里' : '其余已结束'}）` : ''}</li>` : '';
@@ -248,8 +248,14 @@
     const gap = b ? (behind != null && behind >= 2 ? `这块停在 ${dayClock(current.at)}，比页面旧 ${behind} 分钟 · ${generic || !current?.gap ? '原因还没查到' : U.fieldText(current.gap)}` : generic ? '' : current?.gap)
       : generic ? `此刻同时在干暂时读不到${at ? ' · 上次记录' + at : ''}` : current?.gap;
     const currentText = hasCurrent && !(b && behind >= 2) ? n(current.current, current, 'current', U.offline?.() ? '断开前在干的主对话' : '此刻在干的主对话') + (at && !b ? ` · ${U.nowrap(at)}` : '') : '';
-    U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · '));
-    reading.hidden = !currentText && !gap;
+    const holes = b && Array.isArray(current?.coverage_gaps) ? current.coverage_gaps.filter(g => Number.isFinite(Date.parse(g?.from)) && Number.isFinite(Date.parse(g?.to))) : [];
+    const lastHole = holes.reduce((a, g) => !a || Date.parse(g.to) > Date.parse(a.to) ? g : a, null);
+    const holeHours = holes.reduce((sum, g) => sum + Math.max(0, Date.parse(g.to) - Date.parse(g.from)), 0) / 3600000;
+    const holeSum = holeHours >= 1 ? `合计约 ${Math.round(holeHours)} 小时` : `合计约 ${Math.max(1, Math.round(holeHours * 60))} 分钟`;
+    const holeText = lastHole && esc(`${current.window?.label || '图上这段时间'}有 ${holes.length} 段没采到，${holeSum}；最近一段 ${dayClock(lastHole.from)}–${dayClock(lastHole.to)} · ${U.fieldText(lastHole.reason) || '原因还没查到'}`)
+      + (typeof lastHole.repair_href === 'string' && lastHole.repair_href.startsWith('/live/') ? ` · <a class="more more--link" href="${esc(route(lastHole.repair_href))}">已交自动修理 ›</a>` : '');
+    U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' }), holeText].filter(Boolean).join(' · '));
+    reading.hidden = !currentText && !gap && !holeText;
     const cell = chartHost.querySelector('.chart__val b');
     if (b && cell) cell.textContent = cell.textContent.replace(/^截至 /, '最近一次读数 ');
   }
@@ -450,14 +456,15 @@
   const SOFT = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']];
   function drawQuota(b) {
     let host = $('chat-quota');
-    if (!b.quotas || typeof b.quotas !== 'object') { if (host) host.hidden = true; return; }
+    const quotas = Array.isArray(b.quotas) ? Object.fromEntries(b.quotas.filter(q => q && typeof q.software === 'string').map(q => [q.software, q])) : null;
+    if (!quotas) { if (host) host.hidden = true; return; }
     if (!host) { host = Object.assign(document.createElement('section'), { id: 'chat-quota', className: 'chat-quota' }); host.setAttribute('aria-label', '三家额度'); $('hero').after(host); }
     host.hidden = false;
     const cells = SOFT.map(([id, name]) => {
-      const q = b.quotas[id] || {}, state = ['denied', 'no_denial', 'unknown'].includes(q.state) ? q.state : 'unknown';
+      const q = quotas[id] || {}, state = ['denied', 'no_denial', 'unknown'].includes(q.state) ? q.state : 'unknown';
       if (state === 'no_denial') return `<div class="chat-quota__cell" data-state="ok"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没有额度用完的记录</span></div>`;
       if (state === 'unknown') {
-        const why = U.fieldText(q.reason ?? q.gap ?? q.text, viewer).trim();
+        const why = U.fieldText(q.reason, viewer).trim();
         return `<div class="chat-quota__cell" data-state="unknown"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没读到 · ${esc(why || '后台没给原因')}</span></div>`;
       }
       const stuck = [Number.isInteger(q.chat_count) && q.chat_count > 0 && `${q.chat_count} 场对话`, Number.isInteger(q.automation_count) && q.automation_count > 0 && `${q.automation_count} 个自动任务`].filter(Boolean);
@@ -497,7 +504,8 @@
     const emptyWaiting = key === 'waiting' && total === 0 && !quotaPick;
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
-    const none = total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
+    const noRows = !Array.isArray(col?.items) && total > 0;
+    const none = noRows ? '正在读' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
       : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '暂时只读到数量';
     const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
     const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
@@ -596,15 +604,15 @@
   let first = true, activityMinute = null, homeOffline = false;
   // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页。
   // 个数和实况首页 AI 对话卡同一个读口、同一个数法：完整的 home 回包里的 automation；页头用的 home?view=header 不带 automation，读它就永远是 0（M740）
-  // M915：board.automation 在时照设计第 6 节写“后台另有 2 个在跑 · 1 个额度用完停等 ›”（字段名待后台定，见交回）
+  // M915：board.automation 在时照设计第 6 节写“后台另有 2 个在跑 · 1 个额度用完停等 ›”；读 running、quota_exhausted（后台 00:04 定），null 是没读到，在跑数退回首页 automation
   let lastAutomation = null;
   function drawBackground(auto) {
     lastAutomation = auto;
-    const own = boardOf()?.automation, pick = own && typeof own === 'object' ? own : auto;
-    const n = U.offline?.() ? 0 : Number.isInteger(pick?.running_total) ? pick.running_total : Number.isInteger(pick?.running) ? pick.running : Array.isArray(pick?.running) ? pick.running.length : 0;
-    const paused = own && !U.offline?.() ? [own.quota_paused, own.quota_exhausted, own.paused].find(Number.isInteger) : 0;
+    const own = boardOf()?.automation && typeof boardOf().automation === 'object' ? boardOf().automation : null;
+    const n = U.offline?.() ? 0 : Number.isInteger(own?.running) ? own.running : Number.isInteger(auto?.running_total) ? auto.running_total : Array.isArray(auto?.running) ? auto.running.length : 0;
+    const paused = own && !U.offline?.() && Number.isInteger(own.quota_exhausted) ? own.quota_exhausted : 0;
     const words = [n > 0 && `后台另有 ${n} 个在跑`, paused > 0 && `${paused} 个额度用完停等`].filter(Boolean).join(' · ');
-    $('chat-background').hidden = !words; U.html($('chat-background'), words ? `<a class="chat-background" href="${esc(route('/live/automation/'))}">${esc(words)} ›</a>` : '');
+    $('chat-background').hidden = !words; U.html($('chat-background'), words ? `<a class="chat-background" href="${esc(route(typeof own?.href === 'string' && own.href.startsWith('/live/') ? own.href : '/live/automation/'))}">${esc(words)} ›</a>` : '');
   }
   window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {

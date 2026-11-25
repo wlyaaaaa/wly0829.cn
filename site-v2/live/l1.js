@@ -709,7 +709,7 @@
     const ago = finished || elapsed(c.at), word = U.chatFields.rowState(c, viewer);
     const quota = U.chatFields.quota(c, viewer);
     const state = quota ? '' : lastState?.offline ? join([`离线前${word}`, ago]) : c.content_locked || ['stopped', 'done', 'running'].includes(c.state) ? join([word, ago]) : word;
-    const helperRows = Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
+    const helperRows = U.chatFields.helperList ? U.chatFields.helperList(c) : Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
     const helpers = U.chatFields.workingHelpers(c);
     const detail = helperRows.some(h => h.owner_detail != null) ? chatHelperDetails(helperRows, viewer) : '';
     const e = c.estimate, work = [e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, e?.worked_min != null && `已干 ${Math.round(e.worked_min)} 分钟`, Math.round(e?.over_min) > 0 && `超 ${Math.round(e.over_min)} 分钟`].filter(Boolean).join(' · ');
@@ -831,11 +831,12 @@
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.running;
-    const active = board ? bySort([...colItems('working'), ...colItems('waiting')]) : (d.active || []).filter(c => c.state !== 'done');
+    const rows = board && Array.isArray(board.columns.working?.items) ? board : null;   // 带行的 board（chats 读口那一份）才拿来列行
+    const active = rows ? bySort([...colItems('working'), ...colItems('waiting')]) : (d.active || []).filter(c => c.state !== 'done');
     const working = board ? active.length > 0 || colTotal('working') > 0 || colTotal('waiting') > 0 : active.length > 0 || runningNow > 0 || d.waiting > 0;
-    const all = board ? (working ? active : bySort(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
+    const all = rows ? (working ? active : bySort(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
     const activePreview = working ? all : [];
-    const recent = board ? bySort(colItems('archived')) : [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
+    const recent = rows ? bySort(colItems('archived')) : [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
     const preview = chatPreviewRows([...activePreview, ...recent.slice(0, 13)]);
     for (const id of expandedReplies) if (!preview.some(row => row.key === id)) expandedReplies.delete(id);
     const activeEnd = activePreview.length;
