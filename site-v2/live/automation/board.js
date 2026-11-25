@@ -312,7 +312,7 @@
     return `<div class="au-older"><button type="button" class="au-older__toggle" data-older aria-expanded="${olderOpen}">更早的 · 近 30 天按天看 <span aria-hidden="true">${olderOpen ? '‹' : '›'}</span></button>${olderOpen ? grid : ''}</div>`;
   }
 
-  // —— 下半部：这周替你做成了 ——
+  // —— 下半部：近 7 天替你做成了（和右边“近 7 天后台 AI 共用了”同一个说法）——
   function results(d) {
     const r = d.results_7d || {};
     // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句，不写“还没采上”
@@ -320,7 +320,7 @@
       ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}`
         : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
     const translatorWhy = F(r.translator_versions_missing ?? list(d.categories).find(c => c.id === 'translator')?.result_7d?.missing_reason, '为什么空着');
-    return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>这周替${you()}做成了<small>近 7 天</small></h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
+    return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>近 7 天替${you()}做成了</h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
       <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', basis(r.repaired_basis), 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
       ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator', translatorWhy)}</div>${missingWeek(d)}</section>`;
   }
