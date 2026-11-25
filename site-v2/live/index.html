@@ -90,7 +90,6 @@
 .page--live #automation .auto-state-row .row__meta { margin-inline-start: 8px; white-space: normal; }
 .page--live #automation .auto-state-recent .row__meta { display: block; margin-inline-start: 0; }
 .page--live #automation .auto-state-footer { padding-top: 12px; border-top: 1px solid var(--hair); }
-.page--live #automation[data-auto-state="idle"] .card__pic img { object-fit: contain; object-position: right bottom; }
 .page--live #automation[data-auto-state] [data-part="status"] { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
 .page--live #automation .auto-why { display: block; margin-top: 2px; }
 .page--live #automation .auto-seg { white-space: nowrap; }
@@ -283,8 +282,9 @@
  .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
 }
 .page--live .b6-card .card__glass { min-height: 195px; }
-.page--live .b6-card .card__pic { width: min(41%, 285px); inset-block: auto 0; height: 100%; }
-.page--live .b6-card .card__pic img { object-fit: contain; object-position: right bottom; }
+/* 智能体、自动任务、AI 账本三张卡的画和别的卡同一种（H2，本人 11-26：首页混着两种插图）：整幅场景画贴卡片右边、铺满整张卡的高度，
+   卡变高变矮跟着铺满，朝字那一侧淡进玻璃，玻璃后面垫同一张画的虚影；画的宽度、淡出和别的卡共用 live.css 的 .card[data-pic]。字让开的宽度照旧 */
+.page--live #automation { --pic-x: 44%; }
 .page--live .b6-card .card__body { padding-right: min(33%, 213px); }
 .page--live .b6-card .card__head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .page--live .b6-card .head__link { display: inline-flex !important; }
@@ -340,7 +340,6 @@
 .page--live:not(.live-unreadable) .b6-card .b6-body > p:not(.b6-checks) > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 /* 电脑窗口窄（如 1024 宽）：右栏只剩三百来像素，画缩小、字让开得少一点，标题和三个数不被挤成一字一行 */
 @media (max-width: 1279px) {
- .page--live .board .b6-card .card__pic { width: min(30%, 285px); }
  .page--live .board :is(#agents,#automation,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(24%, 213px); }
  .b6-metrics > div { padding: 0 9px; }
  .b6-metrics small { word-break: keep-all; }
@@ -377,8 +376,7 @@
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
-/* 这两张卡每家一行、跟得最久一整句要宽一点：画缩小一些、字让开得少一点（v3 图上没有画；画照旧留着） */
-.page--live .board :is(#agents,#ledger).b6-card .card__pic { width: min(27%, 200px); }
+/* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }
 @media (max-width: 1279px) { .b6-metrics > a { padding: 0 9px; } }
 </style>
@@ -427,16 +425,18 @@
 
       <article class="card b6-card" id="agents" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/home-agents-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-agents-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/home-agents-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head"><span class="head__lead">智能体</span></p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
 
       <article class="card b6-card" id="ledger" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/ledger.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-ledger-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/ledger.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
             <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 自动任务账本</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
@@ -456,8 +456,9 @@
 
       <article class="card b6-card" id="automation" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="/live/img/home-automation-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-automation-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="/live/img/home-automation-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
             <a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
