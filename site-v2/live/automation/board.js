@@ -64,7 +64,7 @@
 
   // —— 每一轮：七类各读一份列表（摘一句只读今天的条数）；读口还没装上时退回 automation 里已有的在跑和最近几次 ——
   const pages = new Map();
-  let excerptToday, subs = [];
+  let excerptToday, ledger, subs = [];
   function watchRuns() {
     for (const s of subs) s.stop();
     subs = []; pages.clear(); backPages.clear(); excerptToday = undefined;
@@ -379,18 +379,35 @@
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
       <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
   }
+  // AI 约好的事在等几件、下一件几点：从账本数。后台把自动修理的活记成“自动修理”记的，其余还没了结的就是约好的；在办的不算在等
+  function promised() {
+    const items = ledger?.data?.items;
+    if (!Array.isArray(items)) return null;
+    const mine = items.filter(it => it.state && it.state !== 'working' && it.registered_by !== '自动修理');
+    const full = it => known(it.check_count) && it.check_count >= (it.check_limit || 3);
+    const next = mine.filter(it => !full(it) && T.stamp(it.next_at) > Date.now()).map(it => it.next_at).sort((a, b) => T.stamp(a) - T.stamp(b))[0];
+    return { count: mine.length, next };
+  }
   function whenCell(d, c) {
-    const g = G[c.id] || {}, p = pauseOf(d, c.id);
+    const g = G[c.id] || {}, p = pauseOf(d, c.id), owed = c.id === 'ai-commitments' ? promised() : null;
     const now = p ? `<span class="au-warn">${pauseText(p)}</span>` : c.running ? '<span class="au-ok">正在跑</span>'
-      : c.next_at ? `下次 ${esc(when(c.next_at))}` : c.waiting_for ? F(c.waiting_for) : '';
-    return `${esc(g.when || '')}${now ? `<small>${now}</small>` : ''}`;
+      : owed ? (owed.next ? `下一件 ${esc(when(owed.next))}` : '') : c.next_at ? `下次 ${esc(when(c.next_at))}` : c.waiting_for ? F(c.waiting_for) : '';
+    // 点了落到账本页“欠着 · AI 在修的”那块开头
+    const head = !owed ? esc(g.when || '') : link('/live/ledger/#owed', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
+    return `${head}${now ? `<small>${now}</small>` : ''}`;
+  }
+  // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
+  function todayText(c) {
+    if (c.id !== 'ai-commitments') return '';
+    const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
+    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).join('，');
   }
   function lastCell(c) {
     const r = c.last_result;
     const since = c.recent_stats?.recorded_since;
     if (!r) return mode(c) === 'off' ? `<span class="tp-muted">关着${c.id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}</span>`
       : `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
-    return `${F(r.text, '上次结果')}<small>${esc(when(r.at))}</small>`;
+    return `${F(r.text, '上次结果')}<small>${[esc(when(r.at)), todayText(c)].filter(Boolean).join(' · ')}</small>`;
   }
   function trendCell(c) {
     const days = list(c.daily_30d), s = c.recent_stats || {};
@@ -414,7 +431,7 @@
           <td>${lastCell(c)}</td><td>${trendCell(c)}</td><td class="au-switchcell">${switchCell(c, offline)}</td></tr>
           ${expanded ? `<tr id="mech-${c.id}" class="au-mechrow"><td colspan="6">${mechanism(d, c)}</td></tr>` : ''}`;
       }).join('')}</tbody></table>${scheduled(d)}
-      <p class="tp-small au-foot">不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 账本 ›')}。</p></section>`;
+      <p class="tp-small au-foot">不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。</p></section>`;
   }
 
   // —— 各家自带的定时（M183）：定稿只许拿来叫醒当前对话接着干，反复跑的活在上面八类里。三家都列，没有就写没有 ——
@@ -535,6 +552,8 @@
     ask: () => '请看实况自动任务页：后台 AI 现在在干什么、刚跑完什么、哪类坏了或停着、要不要我出面。先用大白话说，别动手。',
     onState(next) { state = next; schedule(); } });
   watchRuns();
+  // 八类表里“AI 约好的事”那一行的在等几件、下一件几点从账本数
+  Live.watch('ledger', {}, { phase(st) { ledger = st; schedule(); } });
   page.root.addEventListener('click', async e => {
     const toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
     const cat = e.target.closest('[data-cat]'), clear = e.target.closest('[data-clear]'), day = e.target.closest('[data-day]');

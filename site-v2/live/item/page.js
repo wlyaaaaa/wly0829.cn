@@ -32,7 +32,7 @@
   const runPage = url => url.pathname.startsWith('/live/automation/') && (url.searchParams.has('run') || /\/run\/$/.test(url.pathname));
   try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/items/', '/live/ledger/', '/live/project/', '/live/automation/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
   back.href = from ? from.pathname + from.search + from.hash : route(issue ? '/live/ledger/' : '/live/items/');
-  back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 账本' : '等你的事';
+  back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 自动任务账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 自动任务账本' : '等你的事';
   back.addEventListener('click', U.restoreBack);
   const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '这件事' });
   const detailsRead = U.reading($('rec'), { ghost: U.ghost.rows(4), slow: false });

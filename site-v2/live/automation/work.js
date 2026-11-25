@@ -263,7 +263,7 @@
     const related = [
       [route(data.task_href || data.source?.href), '来源', data.source?.label || '来源'],
       [route(data.owner_href), '要办的事', `要${own()}出面的事`],
-      [route(data.ledger_href), '账本', 'AI 账本'],
+      [route(data.ledger_href), '账本', 'AI 自动任务账本'],
     ].filter(([href]) => href);
     if (row.project && row.project_name) related.unshift([route(`/live/project/?id=${segment(row.project)}`), '所属项目', row.project_name]);
     // M767：所属项目在访客版看不到的（后台在这件活上标 visitor_labels.project_name），本人版在项目名后挂签
