@@ -520,13 +520,17 @@
     const view = JSON.stringify([changeLog?.items, changeLog?.total, changeLog?.shown, changeLog?.next, changeIssue, cutoff]);
     if (view !== changeView) { changeView = view; if (!first) U.anchor(() => renderBoard(true)); }
   }
+  // 没读到时写从几点起读不到（这一页先读到过才有，M982）；手上那份截至几点另由“上次改动记录截至”那句写
+  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${what}自 ${stamp(result.failingSince)} 起暂时读不到。` : `${what}暂时读不到。`;
   async function readChanges() {
     const read = ++changeRead;
     const result = await getChanges();
     if (read !== changeRead) return;
+    // 没读到：本页主数据确认接通后自己再读一次，不等项目数据换代（M982）
+    result?.again?.then(() => { if (read === changeRead) readChanges(); });
     const first = changePacket(result), hint = first?.gap || first?.stale_text || first?.note || first?.text;
     const missing = result?.meta?.status >= 400 || !first || !first.items.length && (['unknown', 'missing', 'partial', 'stale'].includes(first.q) || /没读到|未读到|读不到|缺测|没有读到|读取失败|暂不可用|上次记录|最近一次记录/.test(U.fieldText(hint, projectViewer)));
-    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || '改动记录暂时读不到。'); return; }
+    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || unreadText(result)); return; }
     const head = JSON.stringify([changeSource(first), first.items, first.total, first.next]);
     if (head === changeHead) {
       changeRefill = 0;
@@ -547,20 +551,24 @@
         changeLog = replacement; changeHead = head;
       } finally { if (changeRefill === read) changeRefill = 0; }
     }
-    publishChanges(missing ? hint || '改动记录暂时读不到。' : '');
+    publishChanges(missing ? hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
     const read = ++sideReads;
     if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
       if (sameViewer(meta) && d?.stats?.owner_corrections) { additions.corrections = d.stats.owner_corrections; if (!first) renderBoard(false); }
     } });
-    reads.push(readChanges(), window.Live.get('projects', { state: d.phase === 'archived' || d.state === 'frozen' ? 'frozen' : 'active' }).then(r => {
+    const scope = d.phase === 'archived' || d.state === 'frozen' ? 'frozen' : 'active';
+    const readActivity = () => window.Live.get('projects', { state: scope }).then(r => {
+      // 没读到：本页主数据确认接通后自己再读一次（M982）
+      r?.again?.then(() => { if (read === sideReads) readActivity(); });
       const a = sameViewer(r?.meta) ? r?.data?.activity : null, row = a?.items?.find(x => x.id === id);
       return Array.isArray(a?.days) && Array.isArray(row?.commits) ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
     }).catch(() => null).then(next => {
       if (read !== sideReads || !next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
       activity = next; if (!first) renderStrip(proj);
-    }));
+    });
+    reads.push(readChanges(), readActivity());
   }
   function changeRow(it, index) {
     const protectedRow = restricted(it), locked = protectedRow || restricted(it.text), field = protectedRow ? it : it.text ?? it;
@@ -577,7 +585,12 @@
       const result = await getChanges(cursor);
       if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
       const page = result?.meta?.status < 400 && changePacket(result);
-      if (!page?.items.length) { publishChanges('下一页暂时读不到，已读到的留在这里。'); return; }
+      if (!page?.items.length) {
+        publishChanges('下一页暂时读不到，已读到的留在这里。');
+        // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
+        result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
+        return;
+      }
       const extended = extendChanges(changeLog, page);
       if (!extended) { await readChanges(); return; }
       changeLog = extended; publishChanges();
@@ -601,7 +614,11 @@
       const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
       if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
       if (result.data) { arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; renderBoard(true); }
-      else { b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer })); }
+      else {
+        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer }));
+        // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
+        result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
+      }
     } finally { b.page.disabled = false; U.html(b.page, label, false); }
   }
   function graphBlock(key, label) {

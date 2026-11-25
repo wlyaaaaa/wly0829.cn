@@ -1353,6 +1353,11 @@
         if (!page.loaded) paintList(ul, [{ key: 'error', cls: 'row row--flat', html: '<p class="row__text row__sub">暂时读不到近 7 天的变化</p>' }]);
         more.textContent = '暂时读不到，点此重试 ›';
         more.hidden = false;
+        // 首页主数据确认接通后，这一批（同一个翻页位置）自己再取一次，不用点；收起着就等下次展开再读（M982）
+        r.again?.then(() => {
+          if (page !== changesPage || page.loading || parts.projects['more-changes'].getAttribute('aria-expanded') !== 'true') return;
+          load().then(ok => { if (ok) parts.projects['changes-box']._loaded = true; });
+        });
         return false;
       }
       for (const item of r.data.items || []) page.items.set(item.id, item);

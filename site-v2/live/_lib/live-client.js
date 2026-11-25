@@ -231,6 +231,16 @@
   // 翻页取的一批（带 cursor）只管它自己那一处：读不到不算整页连不上，也不当本页主数据（M553）
   const paged = e => new URLSearchParams(e.query).has('cursor');
   const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
+  // 页面点开才取的那几批（展开的明细、翻页、项目变化）没读到时，等本页主数据下一次读到新的（这一读是在那批失败之后发出的），
+  // 或者这一批自己原有的重读先读到了，就交回页面用同一批次再取一次（M982）。不另起计时、不另订：跟着原有的读数走；一直读不到就一直等。
+  let mainBack = [];
+  function mainConfirmed(e) {
+    if (!mainBack.length) return;
+    const sent = e.requestedAt || 0, ok = w => w.entry === e || isMain(e) && w.at < sent;
+    const ready = mainBack.filter(ok);
+    mainBack = mainBack.filter(w => !ok(w));
+    ready.forEach(w => w.resolve());
+  }
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
   const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
   // 读到过数以后又读不到：偶发一两次只标“这次刷新慢了”；本页主数据连续三次读不到，而且这期间别的读口也没读到新的，
@@ -254,7 +264,7 @@
       if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
-      if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`;
+      if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = staleNote(e);
     }
     settle(e);
     emit(e);
@@ -321,6 +331,9 @@
   // 随站那份是最近一次更新网站时一起发上去的（本人 11-25 17:00：说的是最近一次更新网站，不是第一次上线），包里有生成时刻就写上
   const releaseName = () => `最近一次更新网站${Number.isFinite(Date.parse(releaseMade)) ? `（${stamp(releaseMade)}）` : ''}时带的那份`;
   const shortStamp = at => dateFormat.format(new Date(at)) === dateFormat.format(new Date(clock())) ? time(at) : stamp(at);
+  // 这一份从几点起读不到（换成后台钟）；只有这个窗口里先读到过、之后才读不到的才算（M982，同 M918 首访不写“自几点起”）
+  const failingStamp = e => e.failSince && e.freshAt && e.freshAt < e.failSince ? new Date(e.failSince + clockOffset).toISOString() : null;
+  const staleNote = e => { const since = failingStamp(e); return since ? `自 ${shortStamp(since)} 起读不到新的，这是 ${shortStamp(e.at)} 的旧数。` : `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`; };
   const itemDetail = e => e.resource.startsWith('items/') && e.resource !== 'items/closed';
   function storage(key, value) {
     try {
@@ -491,9 +504,12 @@
     const viewer = publicPaused ? { kind: 'public', device: 'none' } : e.viewer;
     const pairNotice = !publicPaused && e.previewOwner && viewer.kind === 'public' && viewer.device === 'invalid'
       ? '这台设备的配对已失效，正在显示公开版。重新配对后可查看本人实况。' : '';
-    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead,
+    // 两个时刻分开给（M982）：failingSince 是这一份从几点起读不到（这个窗口里读到过它、之后才读不到才有；没见过读得到的不给），
+    // shownAt／meta.at 是手上最后一份是几点的
+    const failingSince = !publicPaused && failingStamp(e);
+    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead, failingSince,
       source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn }, link, viewer, now,
-      shownAt: resourceAt, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
+      shownAt: resourceAt, failingSince, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
       pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
       pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say, conn: connInfo() };
@@ -624,6 +640,8 @@
   }
   function failed(e, status, body, via, offSince) {
     e.status = status; e.warming = false;
+    // 从几点起读不到：这一串失败里第一次的时刻，读到新的就清（M982）；撤回、无权照旧不记
+    if (!e.failSince && ![403, 410].includes(status) && !(status === 404 && body?.error === 'live_missing')) e.failSince = Date.now();
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
       forgetData(e, true);
@@ -881,11 +899,11 @@
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.fallbackNote = ''; e.lagging = false; e.backupMeta = null;
+        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.failSince = 0; e.missCount = 0; e.fallbackNote = ''; e.lagging = false; e.backupMeta = null;
         observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
-        freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.lagging = false; e.backupMeta = null;
+        freshArrived(e); e.freshAt = Date.now(); e.failSince = 0; e.missCount = 0; e.lagging = false; e.backupMeta = null;
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
         let renewed = false;
@@ -938,7 +956,9 @@
         clearFailure(e);
       }
       settle(e);
-      return emit(e);
+      const shown = emit(e);
+      if (response.status === 304 || response.ok) mainConfirmed(e);
+      return shown;
     })().finally(() => { if (e.pending === request) e.pending = null; });
     return e.pending = request;
   }
@@ -1020,7 +1040,12 @@
     if (e.pending) opened.card(card);
     // 返回时，点开才读的明细也先照存下的画；现读在后台补，不挡住回来的第一帧。
     if (returning && e.data !== null && (fixture !== null || e.viewer.kind === 'owner')) { read(e, true, card); return Promise.resolve(present(e)); }
-    if (!paged(e)) return read(e, true, card, fallbackOnFailure);
+    // 没读到、又不是撤回或无权的：带上 again，本页主数据确认接通后它会完成，页面拿同一批次再取一次（M982）
+    const settled = state => {
+      if (state.data != null || publicPaused || e.withdrawn || e.listeners.size || [400, 403, 404, 410].includes(state.meta?.status)) return state;
+      return { ...state, again: new Promise(resolve => mainBack.push({ at: Date.now(), entry: e, resolve })) };
+    };
+    if (!paged(e)) return read(e, true, card, fallbackOnFailure).then(settled);
     // 这一批没读到（连不上或服务出错）：隔 2 秒、5 秒自己再取，还不行才交回页面在那一处写“这一批没读到”（M553）
     return (async () => {
       let state = await read(e, true, card);
@@ -1029,7 +1054,7 @@
         await new Promise(resolve => later(resolve, wait));
         state = await read(e, true, card);
       }
-      return state;
+      return settled(state);
     })();
   }
   function afterReady(ready, callbacks) {
