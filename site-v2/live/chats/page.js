@@ -346,7 +346,7 @@
   function readViewer(meta) {
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
-      homeChats = activeChats = null; recentUsable = false; pages.clear();
+      homeChats = activeChats = null; recentUsable = false; pages.clear(); archivedPages.clear();
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
     }
     viewer = next;
@@ -517,8 +517,15 @@
     stoppedCard.bound = true; U.fold(stoppedCard.more, stoppedCard.box);
     return stoppedCard;
   }
+  // 已经往下读过的归档几批，名单更新（as_of 变了）后照旧留着接在后面，不退回第一批；同一场以新读到的为准，
+  // 已经挪到别的栏、或已经出了近 72 小时的，从留着的几批里去掉
+  function laterArchived(b) {
+    const elsewhere = new Set(['working', 'waiting', 'stopped'].flatMap(k => Array.isArray(b.columns?.[k]?.items) ? b.columns[k].items.map(c => c.id ?? c.key) : []));
+    const from = Date.parse(b.as_of) - 72 * 3600000;
+    return [...archivedPages.values()].flatMap(p => p.items).filter(c => !elsewhere.has(c.id ?? c.key) && !(Date.parse(c.sort_at) < from));
+  }
   function fillColumn(card, key, col, b) {
-    const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? [...archivedPages.values()].flatMap(p => p.items) : [])]
+    const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? laterArchived(b) : [])]
       .filter((c, i, list) => list.findIndex(x => (x.id ?? x.key) === (c.id ?? c.key)) === i));
     const picked = quotaPick && (key === 'working' || key === 'waiting') ? all.filter(c => stuckBy(c, quotaPick)) : all;
     const total = totalOf(col), listed = peopleIn(all), completed = key === 'stopped' || key === 'archived';
@@ -570,10 +577,11 @@
     if (cursor == null) return;
     button.disabled = true; U.html(button, '正在读…', false);
     try {
-      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor });
-      if (boardOf()?.as_of !== b.as_of) return;
-      if (Array.isArray(r.data?.items) && (r.data.as_of == null || r.data.as_of === b.as_of)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
-      else U.html(button, Array.isArray(r.data?.items) ? '名单刚更新过，再点一次继续读 ›' : U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
+      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor }), kind = viewer;
+      if (!boardOf() || r.meta?.viewer?.kind && r.meta.viewer.kind !== kind) return;
+      // 读的时候名单更新了也照样接上（按编号去重），不让人再点一次（M915：读到第二页不能被更新冲掉）
+      if (Array.isArray(r.data?.items)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
+      else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
     } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
   }
   // 第一排两栏底边拉齐：矮的那栏最后一张卡拉长到和另一栏一样高；卡变高变矮（展开、来了新对话、换窗口宽）时重新拉（M534）
@@ -668,7 +676,7 @@
     readViewer(meta);
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
     const nextBoard = d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
-    if (nextBoard?.as_of !== baseBoard?.as_of) archivedPages.clear();
+    if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
     baseBoard = nextBoard;
     if (homeChats || activeChats) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
