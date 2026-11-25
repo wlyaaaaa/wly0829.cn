@@ -204,7 +204,11 @@
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
     let body, tone;
     if (r.deferred) {
-      body = `收到结论：暂时不修，等下一次检查再看。${R.deferredNote(r, F)}`; tone = 'off';
+      // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
+      // 这一轮做了什么（summary）另起一行，和原因是同一句的不再写（公网复核 11-26：暂缓原因没显示）
+      const why = F(r.reason, '为什么先放着'), whyPlain = plainOf(r.reason), note = R.deferredNote(r, F);
+      const hasWhy = whyPlain && whyPlain !== '暂时不修', dupNote = hasWhy && note && loose(whyPlain).includes(loose(note.replace(/<[^>]+>/g, '')));
+      body = `收到结论：暂时不修，等下一次检查再看。${hasWhy ? `<br>为什么先放着：${why}` : ''}${note && !dupNote ? `<br>${hasWhy ? '这一轮做了：' : ''}${note}` : ''}`; tone = 'off';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       const step = r.stop?.step ? `停在：${F(r.stop.step, '这一步')}。` : '', until = T.stamp(r.stop?.until) ? `${esc(T.when(r.stop.until))} 再接着做。` : '';
