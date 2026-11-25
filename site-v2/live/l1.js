@@ -285,7 +285,7 @@
       '<p class="card__head" data-part="head"></p><div class="b6-body" data-part="batch"></div>'])),
     projects: `<p class="card__head" data-part="head"></p><ul class="rows project-changes" data-part="changes"></ul>
       <p class="row__sub" data-part="changes-status" hidden></p>
-      <button class="more" type="button" data-part="more-changes" hidden>近 7 天全部变化 <span class="more__chev">›</span></button>
+      <button class="more" type="button" data-part="more-changes" hidden>全部变化 · 近 7 天 <span class="more__chev">›</span></button>
       <div class="fold" data-part="changes-box"><div><ul class="rows project-changes"></ul><button class="more" type="button" hidden>再看一些 ›</button></div></div>
       <div class="project-groups" data-part="main"></div>
       <a class="more" data-part="artifacts" hidden></a><nav class="card__foot project-footer" aria-label="项目卡相关入口">
@@ -475,7 +475,7 @@
     artifacts.hidden = !recent?.href;
     if (!artifacts.hidden) {
       artifacts.href = route(recent.href);
-      U.html(artifacts, `最近成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
+      U.html(artifacts, `成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
     }
   }
 
