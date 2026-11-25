@@ -849,7 +849,9 @@
     const name = { lan: '局域网', tailscale: 'Tailscale', bluetooth: '蓝牙' }[link?.route];
     const stamp = recordStamp(status?.at || link?.at || blockAt(d) || d?.received?.last_at);
     const old = lastState?.offline || (status ? status.state !== 'online' || oldReading(status) : oldReading(d)) || oldReading(link);
-    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `手机调试连接上次未连通${stamp ? `（${stamp} 记录）` : ''}` : '手机调试连接未连通';
+    // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
+    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
     if (name) return old ? `手机上次经${name}连接${stamp ? `（${stamp} 记录）` : ''}` : `手机经${name}连接`;
     if (!old && (status?.state === 'online' || !status && device?.state === 'online')) return '手机调试已连接，线路未记录';
     return d?.received?.last_at || d?.metrics?.some(v => v.id === 'battery' && v.value != null) ? '手机连接线路未记录' : null;
@@ -941,6 +943,15 @@
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
     host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
   }
+  // 手机离线怎么说（主持 11-26 照 C2 建议定，手机页同一套）：电脑的调试连接和 Tailscale 都找不到手机 →“手机离线 · HH:MM 起”，
+  // 时刻是和 presence 同级的 offline_since；只有电脑到手机的调试连接断 →“电脑连不上手机 · HH:MM 起”，时刻是 offline.since
+  function phoneOffText(d) {
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(lastState?.now ?? Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    // 卡上大字只放“手机离线”，时刻跟在后面一行小字里（和原来“手机连不上 · 几点起”一样的排法，大字不折行）
+    if (d?.presence?.state === 'offline') { const since = at(d.offline_since); return `手机离线${since ? ` · ${since} 起` : ''}`; }
+    const since = at(d?.offline?.since);
+    return `电脑连不上手机${since ? ` · ${since} 起` : ''}`;
+  }
   // —— 手机：每样数自己的时刻；连不上时保留上一次，缺数不补零 ——
   function renderPhone(d) {
     const p = parts.phone, unknown = !d || d.state === 'unknown';
@@ -956,7 +967,7 @@
       : quantity(m.screen_on, 'value', n => n > 0 && n < 60 ? `${Math.floor(n)} 秒` : U.minutes(Math.floor(n / 60)));
     const usage = value('screen_on') == null ? duration : `${screenLabel} ${duration}`;
     const unlocks = value('unlocks') == null ? U.collectionText("解锁", m.unlocks) : `解锁 ${quantity(m.unlocks, 'value')} 次`;
-    const text = unknown ? U.collectionText("手机", d) : offline ? `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}` : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
+    const text = unknown ? U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
     const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;

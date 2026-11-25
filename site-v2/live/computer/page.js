@@ -1091,13 +1091,16 @@
   }
   // 几点起离线（本人 11-25 23:19 选 A：台式机、笔记本那一行写“HH:MM 起离线”）：
   // 台式机看页面确认离线时边缘给的关机时刻（X-Live-Offline-Since）；笔记本看后台 offline_since（这次持续离线的第一次观察，M918）
+  // 手机那一行和实况首页、手机页同一套（主持 11-26 定）：调试连接和 Tailscale 都找不到才叫离线（presence 同级的 offline_since），
+  // 只有电脑到手机的调试连接断写“连不上 · HH:MM 起”（offline.since），手机这时可能还在线
   function offSinceText(x) {
     const link = lastState?.link;
+    const stamp = since => `${U.date(since) !== U.date(Date.parse(lastState?.now) || Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
+    if (x.id === 'phone' && x.presence?.state !== 'offline' && x.state === 'offline' && Number.isFinite(Date.parse(x.offline?.since))) return `连不上 · ${stamp(x.offline.since)} 起`;
     const since = x.id === 'main' && offline() && link?.reason === 'host-off' ? link.offSince
-      : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since : null;
-    if (!Number.isFinite(Date.parse(since))) return '';
-    const day = U.date(since) !== U.date(Date.parse(lastState?.now) || Date.now()) ? `${U.date(since)} ` : '';
-    return `${day}${U.time(since)} 起离线`;
+      : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since
+      : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;
+    return Number.isFinite(Date.parse(since)) ? `${stamp(since)} 起离线` : '';
   }
   function unitHtml(text, name = '硬件信息') { const body = U.fieldHtml(text, { name }); return body.includes('live-mark') ? body : body.replace(/\d+(?:[.,]\d+)*\s*(?:[GMKT]B|ms|GHz|MHz|Hz|℃|次|个|%)/g, '<span class="computer-unit">$&</span>'); }
   function remoteEntries(items) {

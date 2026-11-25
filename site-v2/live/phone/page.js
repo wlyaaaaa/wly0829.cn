@@ -50,7 +50,10 @@
     return U.date(at) === U.date(Date.now()) ? '今天' : `${U.date(at)} `;
   }
   function headText(d) {
-    if (d?.state === 'offline') return `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}`;
+    // 和实况首页手机卡同一套说法（主持 11-26 定）：调试连接和 Tailscale 都找不到手机才叫离线，只有调试连接断叫“电脑连不上手机”
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    if (d?.presence?.state === 'offline') return at(d.offline_since) ? `手机 ${at(d.offline_since)} 起离线` : '手机离线';
+    if (d?.state === 'offline') return `电脑连不上手机${at(d.offline?.since) ? ` · ${at(d.offline.since)} 起` : ''}`;
     const primary = val('screen_on') == null && (d?.metrics || []).find(m => typeof val(m.id) === 'number');
     if (primary) return `${marked(primary.label) ? ({unlocks:'解锁',battery:'电量',battery_temp:'电池温度',screen_on:'亮屏',storage_free:'存储剩',storage_used:'存储已用',memory_used:'内存已用'})[primary.id] || '手机' : sp(primary.label || '')} ${reading(primary.id)}`.trim();
     if (!d || d.state === 'unknown') return pcOffline() ? '手机' : '手机暂时读不到';
@@ -570,6 +573,10 @@
     if (!disconnected && (['online', 'warming'].includes(d?.state) ||
       d?.state === 'partial' && (d.link?.since || d.lamp_q === 'ok' && d.last_online === d.at))) return '';
     const time = phoneReadingTime(d?.last_online);
+    // last_online 是电脑上次用调试连接连上手机的时刻：手机整台离线时照旧叫“上次确认在线”，并写明是两条路都找不到；
+    // 只有调试连接断时手机可能还在线，改叫“电脑最后连上手机”，不让人以为手机不在线（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return ['电脑的调试连接和 Tailscale 都找不到手机', time && `上次确认在线 ${shortDate(d.last_online)} ${time}`].filter(Boolean).join(' · ');
+    if (d?.state === 'offline') return time ? `电脑最后连上手机 ${shortDate(d.last_online)} ${time}` : '';
     return time ? `上次确认在线 ${shortDate(d.last_online)} ${time}` : '';
   }
   function showReceivedTimes(card, text) {
