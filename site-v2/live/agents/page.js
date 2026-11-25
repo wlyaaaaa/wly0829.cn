@@ -480,7 +480,15 @@
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
-    if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
+    if (!d) {
+      // 后台一直回“正在准备”（202）时读数层会一直重问、阶段停在“读得慢”：过了 10 秒照全站读不到的说法写，不一直写“正在读”（M909）。
+      // 还在读的头 10 秒，快讯和正文一样说“正在读”，不先说没读到；读不到了两处一起说没读到
+      const stuck = state?.warming && state.phase === 'slow';
+      const reading = !stuck && !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase) && !(state?.meta?.status >= 400);
+      T.paint(page.root, stuck ? '<p class="tp-placeholder" role="status">智能体暂时没读到：后台还在准备这一页的数，准备好了这里会自己换上。</p>' : T.placeholder(state, '智能体'));
+      page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
+      return;
+    }
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <div class="tp-head__side ag-headside"><span>截至 ${esc(when(d.at))}</span>${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips }) || ''}${configSection(d)}${hooksSection(d)}`;
