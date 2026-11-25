@@ -49,25 +49,30 @@
     }
     return out;
   }
+  // 哪天变的：后台的 date 是记下来的那天（每天零点后记一次），变化发生在上一次记录之后；上一次记录就在前一天时算前一天变的，
+  // 和日用软件卡上“几号起用这版”对得上。隔了几天才记到的（电脑关着、每周才测的受管工具）照记下来那天写。
+  const changeDay = r => { const prev = Date.parse(r.previous_observed_at), day = Date.parse(`${r.date}T00:00:00+08:00`);
+    return Number.isFinite(prev) && Number.isFinite(day) && dayKey(prev) === dayKey(day - DAY) ? dayKey(day - DAY) : r.date; };
   // 按天排：先列这天你装的软件，系统组件和驱动零件合成这天最后一行灰字
   function entries(d, viewer) {
     const days = new Map();
-    for (const r of merged(visible(d, viewer))) {
-      if (!days.has(r.date)) days.set(r.date, { apps: [], quiet: [] });
-      days.get(r.date)[QUIET[r.category] ? 'quiet' : 'apps'].push(r);
+    for (const raw of merged(visible(d, viewer))) {
+      const r = { ...raw, day: changeDay(raw) };
+      if (!days.has(r.day)) days.set(r.day, { apps: [], quiet: [] });
+      days.get(r.day)[QUIET[r.category] ? 'quiet' : 'apps'].push(r);
     }
-    return [...days].flatMap(([date, g]) => [...g.apps, ...(g.quiet.length ? [{ quiet: true, date, rows: g.quiet }] : [])]);
+    return [...days].sort(([a], [b]) => a < b ? 1 : a > b ? -1 : 0).flatMap(([day, g]) => [...g.apps, ...(g.quiet.length ? [{ quiet: true, day, rows: g.quiet }] : [])]);
   }
   const KIND = { installed: ['新装', 'new'], uninstalled: ['卸载', 'gone'], updated: ['升级', 'up'] };
   function row(r, viewer, sub) {
     const [tag, cls] = r.kind === 'updated' && r.previous_version && r.version && lower(r.version, r.previous_version) ? ['降级', 'down'] : KIND[r.kind] || [r.kind, 'other'];
     const versions = [...new Set([r.previous_version, r.version].filter(Boolean))].map(U.esc).join(' → ');
-    return `<li class="env-ch${sub ? ' env-ch--sub' : ''}"${r.drive ? ` title="${U.esc(`${r.drive} 盘`)}"` : ''}><span class="env-ch__date">${sub ? '' : U.esc(dateText(r.date))}</span><span class="env-ch__tag" data-kind="${cls}">${U.esc(tag)}</span><span class="env-ch__name">${U.fieldHtml(r.label || r.base, { name: '软件', kind: viewer })}</span><span class="env-ch__ver">${versions}</span></li>`;
+    return `<li class="env-ch${sub ? ' env-ch--sub' : ''}"${r.drive ? ` title="${U.esc(`${r.drive} 盘`)}"` : ''}><span class="env-ch__date">${sub ? '' : U.esc(dateText(r.day))}</span><span class="env-ch__tag" data-kind="${cls}">${U.esc(tag)}</span><span class="env-ch__name">${U.fieldHtml(r.label || r.base, { name: '软件', kind: viewer })}</span><span class="env-ch__ver">${versions}</span></li>`;
   }
   function quiet(g, viewer) {
     const kinds = [...new Set(g.rows.map(r => r.category))];
     const name = kinds.length > 1 ? 'Windows 自带组件和驱动零件' : QUIET[kinds[0]];
-    return `<li class="env-ch env-ch--quiet"><span class="env-ch__date">${U.esc(dateText(g.date))}</span><details class="env-ch__fold" data-day="${U.esc(g.date)}"${opened.has(g.date) ? ' open' : ''}><summary>${U.esc(name)} · ${g.rows.length} 项</summary><ul>${g.rows.map(r => row(r, viewer, true)).join('')}</ul></details></li>`;
+    return `<li class="env-ch env-ch--quiet"><span class="env-ch__date">${U.esc(dateText(g.day))}</span><details class="env-ch__fold" data-day="${U.esc(g.day)}"${opened.has(g.day) ? ' open' : ''}><summary>${U.esc(name)} · ${g.rows.length} 项</summary><ul>${g.rows.map(r => row(r, viewer, true)).join('')}</ul></details></li>`;
   }
   function changes(d, viewer, limit = Infinity) {
     if (!Array.isArray(d?.items) || d.visibility === 'owner' && viewer !== 'owner') return '';

@@ -63,11 +63,12 @@
 
 #board .grp.is-open .grp__head { min-height: 76px; padding-block: 12px; }
 /* 软件版本表按“要不要你管”分组（照图 ENV-1）：组名一行带竖条，要你点头的那组用正绿 */
-.env-table--versions th:first-child, .env-table--versions td:first-child { width: 19%; }
+.env-table--versions th:first-child, .env-table--versions td:first-child { width: 17%; }
 .env-table--versions th:nth-child(2), .env-table--versions th:nth-child(3) { width: 13%; }
-.env-table--versions th:nth-child(4) { width: 17%; }
+.env-table--versions th:nth-child(4) { width: 16%; }
 .env-table--versions th:last-child { width: auto; }
 .env-table--versions td:last-child { white-space: normal; overflow: visible; }
+.env-nw { white-space: nowrap; }
 .env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 9px 16px; font-size: 15px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 4px 0 0 rgb(0 166 80 / .45); border-top: 6px solid transparent; background-clip: padding-box; }
 .env-table .env-group__head th span { letter-spacing: .02em; }
 .env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .12); box-shadow: inset 4px 0 0 #00A650; }
@@ -106,8 +107,8 @@
 .env-ch--quiet > .env-ch__date { padding-top: 6px; }
 .env-ch__fold > summary { display: flex; align-items: center; padding: 7px 18px; border-radius: 12px; background: rgb(95 103 96 / .07); color: var(--muted); cursor: pointer; list-style: none; transition: background .2s ease; }
 .env-ch__fold > summary::-webkit-details-marker { display: none; }
-.env-ch__fold > summary::after { content: "›"; display: inline-block; margin-left: 10px; transition: rotate .2s ease; }
-.env-ch__fold[open] > summary::after { rotate: 90deg; }
+.env-ch__fold > summary::after { content: "›"; display: inline-block; margin-left: auto; padding-left: 12px; transition: transform .2s ease; }
+.env-ch__fold[open] > summary::after { transform: rotate(90deg); }
 .env-ch__fold > summary:hover { background: rgb(95 103 96 / .11); }
 .env-ch__fold > ul { list-style: none; margin: 6px 0 2px; padding: 0; }
 .env-ch--sub { grid-template-columns: 0 64px max-content minmax(0, 1fr); padding: 3px 0 3px 18px; font-size: 14px; }

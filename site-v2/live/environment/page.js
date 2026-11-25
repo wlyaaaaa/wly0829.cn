@@ -67,6 +67,8 @@
   const weekday = at => validAt(at) ? '日一二三四五六'[new Date(Date.parse(at) + 8 * 3600000).getUTCDay()] : '';
   const weekly = rows => weekday(rows?.find(r => validAt(r.target_next_run_at))?.target_next_run_at);
   const hasMode = rows => rows.some(r => ['automatic', 'owner_approval'].includes(r.update_mode));
+  // 最新版上次是哪天查的：取各行周检时刻里最晚的（“最新版本”那列最旧可能是一周前的）
+  const targetAt = rows => rows.map(r => r.target_observed_at).filter(validAt).sort((a, b) => Date.parse(b) - Date.parse(a))[0] || checkedAt('software');
   function versionGroups(rows) {
     const behind = rows.filter(isBehind);
     return [
@@ -93,7 +95,7 @@
   }
   function versionRow(r) {
     const now = nowState(r);
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.level ? indicator({}, now.level) : ''}${esc(now.text)}</td></tr>`;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${esc(updateWay(r))}</td><td title="${esc(now.text)}">${now.level ? indicator({}, now.level) : ''}${now.text.split(' · ').map(s => `<span class="env-nw">${esc(s)}</span>`).join(' · ')}</td></tr>`;
   }
   function versionTable(rows) {
     const body = versionGroups(rows).map(g => {
@@ -107,15 +109,15 @@
   const DAILY_FIRST = 6, DAILY_STEP = 6, DAY = 86400000;
   let daily = null, dailyPhase = null, dailyShown = DAILY_FIRST;
   const dayKey = at => new Date(at + 8 * 3600000).toISOString().slice(0, 10);
-  // 最近一次换版本：有安装登记日期写“几号装上这版”（登记日分不出新装还是升级）；只能靠前后两天的清单对出来的写“几号换成这版”（夜里那份算前一天）；
+  // 最近一次换版本：有安装登记日期写“几号起用这版”（登记日分不出新装还是升级，“起用”两样都对）；只能靠前后两天的清单对出来的也写“几号起用这版”（夜里那份算前一天），跨了几天写“几号到几号之间换成这版”；
   // 两样都没有，就是清单记着的这几天里没换过（后台按最近 8 份日清单对，所以最多说近 7 天）
   function dailyChange(c, d) {
     const nowAt = Date.parse(referenceTime('software') || new Date().toISOString()), recent = at => Number.isFinite(at) && nowAt - at < 7 * DAY;
-    if (c?.at && Number.isFinite(Date.parse(`${c.at}T00:00:00+08:00`))) { const at = Date.parse(`${c.at}T00:00:00+08:00`); return { text: `${U.date(at)} 装上这版`, recent: recent(at) }; }
+    if (c?.at && Number.isFinite(Date.parse(`${c.at}T00:00:00+08:00`))) { const at = Date.parse(`${c.at}T00:00:00+08:00`); return { text: `${U.date(at)} 起用这版`, recent: recent(at) }; }
     if (validAt(c?.after) && validAt(c?.by)) {
       const from = Date.parse(c.after), by = Date.parse(c.by), end = by - (new Date(by + 8 * 3600000).getUTCHours() < 6 ? DAY : 0);
       const a = U.date(from), b = U.date(Math.max(from, end));
-      return { text: a === b ? `${a} 换成这版` : `${a} 到 ${b} 之间换成这版`, recent: recent(by) };
+      return { text: a === b ? `${a} 起用这版` : `${a} 到 ${b} 之间换成这版`, recent: recent(by) };
     }
     const start = Date.parse(d?.started_at), seen = Date.parse(d?.observed_at);
     const days = Number.isFinite(start) && Number.isFinite(seen) ? Math.min(7, Math.round((Date.parse(dayKey(seen)) - Date.parse(dayKey(start))) / DAY)) : 0;
@@ -216,7 +218,7 @@
     const w = weekly(list(data.software)), next = list(data.software)?.find(x => validAt(x.target_next_run_at))?.target_next_run_at;
     if (key === 'software' && rows) {
       line = w && rows.some(x => Number(x.current_refresh_seconds) === 86400)
-        ? [U.isStale(d) ? snapshot(checkedAt('software'), 'software') : '', `装的版本每天夜里查 · 最新版每周${w}查，下次 ${U.date(next)}`].filter(Boolean).join(' · ')
+        ? [U.isStale(d) ? snapshot(checkedAt('software'), 'software') : '', `装的版本每天夜里查 · 最新版每周${w}查，${targetAt(rows) ? `上次 ${U.date(targetAt(rows))}，` : ''}下次 ${U.date(next)}`].filter(Boolean).join(' · ')
         : [snapshot(checkedAt('software'), 'software'), softwareEvery(rows)].filter(Boolean).join(' · ');
       figures = [];
     }
