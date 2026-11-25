@@ -6,8 +6,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI;
-  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-laptop', 'weekly-live', 'excerpt', 'ai-commitments'];
-  // 八类的名字：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
+  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  // 各类的名字（笔记本每周巡检已取消，名字留着给旧记录用）：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
   const NAMES = { 'auto-repair': '自动修理', 'message-review': '替你看新消息', translator: '翻译官', 'weekly-rules': '每周规矩复核',
     'weekly-laptop': '笔记本每周巡检', 'weekly-live': '实况每周对一遍', excerpt: '摘一句', 'ai-commitments': 'AI 约好的事' };
   const FAMILIES = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
@@ -36,6 +36,8 @@
     return { program: false, text: text || (worker?.kind === 'ai' ? 'AI（型号没记下）' : ''), short: text };
   }
   const runPath = (category, id) => category && id ? T.path('/live/automation/run/', { type: category, run: id }) : '';
+  // “用谁”点进智能体页看这一家干了多少：落在“三家各干了多少活”那块、亮出这一家（和首页智能体卡同一个落点，只看一家一律 ?family=）
+  const agentsPath = family => FAMILIES[family] ? `/live/agents/?family=${family}#work` : '';
   const minutesBetween = (a, b) => { const x = T.stamp(a), y = T.stamp(b); return x != null && y != null && y >= x ? (y - x) / 60000 : null; };
   const OUTPUT = {
     owner_item: { where: '等你的事那张卡', go: '去那张卡' },
@@ -178,5 +180,5 @@
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject };
 })();

@@ -41,7 +41,10 @@
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
     const time = [clockRange(r), minutes != null && (r.status === 'running' ? `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>` : `用了 ${span(minutes)}`)].filter(Boolean).join(' · ');
-    return [esc(name()), F(r.trigger, '为什么开这一轮'), r.who?.text ? esc(r.who.text) : '', r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
+    // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
+    const family = !r.who?.program && R.agentsPath(r.family);
+    const who = !r.who?.text ? '' : family ? link(family, `${esc(r.who.text)} ›`) : esc(r.who.text);
+    return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
       .map(t => `<span class="ar-tag">${t}</span>`).join('');
   }
 
