@@ -41,15 +41,17 @@
     return s % 60 ? `${wholeMinutes} ${s % 60} 秒` : wholeMinutes;
   };
   const write = (el, html) => { U.html(el, html, false); el.hidden = !html; };
-  // M783：本人版按后台给在这条任务（或这一轮）上的 visitor_labels 在原位挂“对外换了说法／访客看不到”，keys 是这个位置显示的字段；没标的、访客版都不挂
-  const mark = (row, keys, what) => { const tag = viewer === 'owner' ? U.visitorLabel(row, keys, what, viewer) : ''; return tag ? ` ${tag}` : ''; };
+  // M783：本人版按后台给在这条任务（或这一轮）上的 visitor_labels 在原位挂“对外换了说法／访客看不到”，keys 是这个位置显示的字段；没标的不挂；访客版只挂“对外换了说法”（M930）
+  const mark = (row, keys, what) => { const tag = U.visitorLabel(row, keys, what, viewer); return tag ? ` ${tag}` : ''; };
   const marked = (html, row, keys, what) => html ? html + mark(row, keys, what) : html;
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
+  // 平台名：三家都认（Antigravity 的定时详情 11-25 起也走这一页，M921）
+  const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
   const provider = v => {
-    const name = text(v);
-    return /^(codex|claude)$/i.test(name)
-      ? `<span class="task-provider" data-provider="${name.toLowerCase()}">${name.toLowerCase() === 'codex' ? 'Codex' : 'Claude'}</span>`
+    const name = text(v), id = typeof name === 'string' ? name.toLowerCase() : '';
+    return Object.hasOwn(PROVIDERS, id)
+      ? `<span class="task-provider" data-provider="${id}">${PROVIDERS[id]}</span>`
       : field(v, '执行者');
   };
   const label = (state, variant) => ({
@@ -133,6 +135,12 @@
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
   const weekLabel = { ok: '有成功记录', failed: '有出错记录', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
+  // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
+  // 后台没给分档、或给的是 unknown（次数读不全）的，照下面原来的判法
+  const TIER = { success: ['ok', '全部成功'], mostly_successful: ['mostly', '有出错，大部分成功'], partial_success: ['partial', '有出错，部分成功'],
+    failed: ['failed', '全部出错'], warn: ['warn', '有部分完成'] };
+  const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0
+    ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   const dayMark = (state, key = false) => `<span class="task-mark${key ? '' : ' task-day'}" data-state="${state}" aria-hidden="true"></span>`;
   function week(days, runs) {
     const dateKey = t => new Date(t + BJ).toISOString().slice(0, 10), evidence = new Map();
@@ -144,6 +152,8 @@
     }
     const dates = Array.isArray(days) && days.length ? days : Array.from({ length: 7 }, (_, i) => ({ date: dateKey(dayStart(now) - (6 - i) * DAY), state: null }));
     const cells = dates.map(day => {
+      const tier = TIER[day.outcome?.state];
+      if (tier) return { ...day, state: tier[0], name: tier[1], key: tier[1], counts: tierCounts(day.outcome), started: true };
       const sawRun = evidence.has(day.date), outcome = evidence.get(day.date);
       const failed = day.state === 'failed' || outcome === 'failed';
       // 当天有部分完成（后台 days7 的 state=warn；旧包从已读到的轮次看出）：同一天先算出错，其次成功，再次部分完成（M676）
@@ -155,8 +165,8 @@
       return { ...day, state: state === 'unknown' && started ? 'started' : state, name, started };
     });
     if (!cells.some(day => day.state !== 'unknown' || day.started)) return '<div class="task-week"><strong>近 7 天</strong><span>每日结果还没读到</span></div>';
-    const marks = cells.map(({ date, state, name }) => `<li title="${esc(date)} ${name}">${dayMark(state)}<time datetime="${esc(date)}" aria-label="${esc(date)} ${name}">${esc(date.slice(5))}</time></li>`).join('');
-    const legend = [...new Set(cells.map(day => day.state))].map(state => `<span>${dayMark(state, true)}${weekLabel[state]}</span>`).join('');
+    const marks = cells.map(({ date, state, name, counts = '' }) => `<li title="${esc(date)} ${name}${counts}">${dayMark(state)}<time datetime="${esc(date)}" aria-label="${esc(date)} ${name}${counts}">${esc(date.slice(5))}</time></li>`).join('');
+    const legend = [...new Map(cells.map(day => [`${day.state}|${day.key || weekLabel[day.state]}`, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.key || weekLabel[day.state]}</span>`).join('');
     return `<div class="task-week"><strong>近 7 天</strong><ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}</div></div>`;
   }
   function count(n, exact) {
@@ -427,6 +437,8 @@
     const { rows, coverage, covered } = metrics(d, runs, kind);
     const quiet = quietWeek(d, runs, kind, covered);
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
+    // “出错”那格照后台对这些轮次的分档上色（runs_summary.outcome，没有就看近 7 天 week_outcome）：大部分成功黄、部分成功橙、全出错红、全成功不上色；没给分档照旧粉色（M779）
+    $('task-stats').dataset.outcome = TIER[(d.runs_summary?.outcome ?? d.week_outcome)?.state]?.[0] || '';
     write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => `<div class="glass task-stat" data-stat="${key}"><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(reason || '未读到')}</dd></div>`).join(''), false);
     const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
     const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;

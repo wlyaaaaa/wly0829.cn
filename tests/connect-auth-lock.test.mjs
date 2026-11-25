@@ -9,10 +9,10 @@ function setup(owner = false) {
   const context = vm.createContext({
     local: false, busy: false, pending: null, disconnected: false, fresh: () => true,
     state: owner ? { state_version: 'v1', personal_data: { state: 'unlocked' } } : { personal_data: { state: 'private' } },
-    meta: { viewer: { kind: owner ? 'owner' : 'public' } }, fields: { pd: 'personal_data' }, kinds: { pd: 'personal-data' },
-    lockIds: {}, deals: { pd: { sync() {} } }, base: '', actionSequence: 0, clock: () => 123,
+    meta: { viewer: { kind: owner ? 'owner' : 'public' } }, fields: { pd: 'personal_data', ur: 'unrestricted' }, kinds: { pd: 'personal-data', ur: 'unrestricted' },
+    lockIds: {}, deals: { pd: { sync() {} }, ur: { sync() {} } }, base: '', actionSequence: 0, clock: () => 123,
     cooldownUntil: 0, cooldownRead: null, openKey: null,
-    crypto: { randomUUID: () => `request-${calls.length}` }, localStorage: { getItem: () => owner ? 'device' : null },
+    requestId: () => `request-${calls.length}`, localStorage: { getItem: () => owner ? 'device' : null },
     refreshAccess() {}, window: { TrustModal: { show() { throw Error('unexpected modal'); } } },
     remember(value) { context.pending = value; }, render() {}, setOpen() {},
     message: text => messages.push(text), receipt(value) { receipts.push(value); context.pending = null; },
@@ -42,8 +42,8 @@ test('public lock uses the existing code flow, omits absent version, and retries
   assert.deepEqual(calls[0].body, { request_id: 'request-0', totp: '123456' });
   assert.equal(calls[0].path, '/locks/personal-data');
   const fallback = setup(true); fallback.context.required = true;
-  await fallback.context.lock('pd');
-  await fallback.context.lock('pd', '654321');
+  await fallback.context.lock('ur');
+  await fallback.context.lock('ur', '654321');
   assert.equal(fallback.calls[0].body.request_id, fallback.calls[1].body.request_id);
   assert.equal(fallback.calls[1].body.totp, '654321');
 });
@@ -65,14 +65,26 @@ test('HTTP 200 blocked receipts show the failure notice and use a new ID for the
   }
 });
 
-test('paired device still locks directly without a code', async () => {
-  const { context: c, calls, receipts } = setup(true);
+test('paired device must enter a code to lock personal data, and sends no state version with it', async () => {
+  const { context: c, calls, messages, receipts } = setup(true);
   await c.lock('pd');
+  assert.equal(calls.length, 0);
+  assert.equal(messages[0], '输动态码确认是本人');
+  await c.lock('pd', '012345');
+  assert.deepEqual(calls[0].body, { request_id: 'request-0', totp: '012345' });
+  assert.equal(calls[0].device, 'device');
+  assert.equal(receipts[0].state, 'succeeded');
+});
+
+test('paired device still ends unrestricted access directly without a code', async () => {
+  const { context: c, calls, receipts } = setup(true);
+  c.response = { status: 'pass', state: 'succeeded', action: 'unrestricted', unrestricted: { state: 'inactive' } };
+  await c.lock('ur');
   assert.deepEqual(calls[0].body, { request_id: 'request-0', state_version: 'v1' });
   assert.equal(calls[0].device, 'device');
   assert.equal(receipts[0].state, 'succeeded');
   c.failure = 'public_state_changed';
-  await c.lock('pd');
+  await c.lock('ur');
   assert.equal(calls.length, 3);   // 旧状态被拒：重读一次、换新编号再办一次
   assert.notEqual(calls[1].body.request_id, calls[2].body.request_id);
   assert.equal(receipts[1].error, 'public_state_changed');

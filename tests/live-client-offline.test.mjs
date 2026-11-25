@@ -241,7 +241,7 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const localStorage = {get length() {return stored.size;}, key: i => [...stored.keys()][i],
     getItem: key => stored.get(key), setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
   const audience = 'a'.repeat(64);
-  let paused = false, offline = false, fallbackRead, packagedPolicy = 'policy-9';
+  let paused = false, offline = false, hostOff = false, fallbackRead, packagedPolicy = 'policy-9';
   const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
   const requested = [];
   const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
@@ -259,12 +259,13 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
       }
       if (paused) return Response.json({error: 'live_public_paused'}, {status: 503});
       if (!offline) return Response.json({...packet, data: {text: 'safe'}});
+      const off = hostOff ? {'X-Live-Connection': 'host-off'} : {};
       if (url.endsWith('/projects')) {
         return Response.json({...packet, data: {text: 'stale-edge-body'}},
-          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11'}});
+          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', ...off}});
       }
       return Response.json({error: 'snapshot_metadata_only', at, data: {text: 'stale-edge-body'}}, {status: 503,
-        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience}});
+        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience, ...off}});
     }};
   vm.runInNewContext(source, sandbox);
   const client = sandbox.window.Live, shown = [];
@@ -278,7 +279,8 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   await client.get('home'); lapse();
   const slow = await client.get('home');
   assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
-  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；没读到过的只用备用包的元数据
+  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；
+  // 没确认关机时，浏览器里没有上次数据的块照 r80 退到随站那份（只用元数据），有数的块留着手里那份
   sandbox.navigator = {onLine: false};
   await client.get('home');
   assert.equal((await client.get('projects')).data, null);
@@ -295,6 +297,11 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const edge = await client.get('home');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);
+  assert.equal(edge.conn.stage, 'lost'); assert.match(edge.conn.at, /下面是 .+ 的数据/);
+  // 确认关机后，手里那份比备用包新就留着，写明是这台浏览器存的
+  delete sandbox.navigator; hostOff = true;
+  const off = await client.get('home');
+  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.match(off.conn.at, /下面是这台浏览器存的最后一份/);
   assert.deepEqual(shown, ['safe']);
   paused = true;
   assert.equal((await client.get('home')).publicPaused, true);
@@ -327,9 +334,13 @@ test('authority clears a withdrawn detail and never fills it from a saved public
   assert.deepEqual(shown, ['synthetic title', null]);
   response = () => Response.json(publicPacket);
   await client.get('chats/example');
+  // 别的读口回“公开判定更新中”：只空那一块、写明为什么，已经显示的这一块照常留着（M970）
   response = () => Response.json({error: 'live_publication_revoked'}, {status: 503});
-  assert.equal((await client.get('home')).meta.withdrawn, true);
-  assert.deepEqual(shown, ['synthetic title', null, 'synthetic title', null]);
+  const revoked = await client.get('home');
+  assert.equal(revoked.meta.withdrawn, true);
+  assert.equal(revoked.data, null);
+  assert.equal(revoked.text, '这块的公开判定正在更新，稍后自动补上');
+  assert.deepEqual(shown, ['synthetic title', null, 'synthetic title']);
   assert.equal(requested.filter(url => !url.startsWith('/release-identity.json')).every(url => url.startsWith('https://live.wly0829.cn/')), true);
 });
 

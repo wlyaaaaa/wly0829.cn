@@ -39,6 +39,16 @@
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
   };
+  // 设置表“对话装多满会压缩”写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
+  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。钩子卡里的数由规则仓给，见下面 hookDetail 里的快核。
+  // Claude 上下文窗口 1,000K 和先留给回复的 20K（设置表小字直接显示，也用来算约 490K）。按需更新快核（M928）核法：Claude 对话记录
+  // E:/Data/AppData/Claude/profiles/pro/projects/**/*.jsonl 里每次自动压缩的 compactMetadata.preTokens，近 7 天中位数应≈(窗口−留量)×回包百分比，
+  // 现 1,000K 窗口、先留 20K（11-26 核：220 次，中位 491K，十分位 490,000；窗口也可对钩子程序 claude_root_runtime_module.py 里登记的型号窗口）；变了改这句
+  const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
+  const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
+  const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
+    : h.id === 'codex' && known(hostData(d, h).compact_tokens) ? hostData(d, h).compact_tokens : null;
+  const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
   const WHY = {
     C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
     C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
@@ -55,7 +65,7 @@
     C15: '前面没挂上的，每轮开始再补挂一次，保证花费面板在。',
     C16: '花费有变化时让面板下次画的时候刷新，免得一直显示旧数。',
     C17: '真正把花费画到面板上；没有它面板是空的。',
-    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机，碰上服务繁忙或限流还会等十分钟自己重试一次。',
+    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机。',
     X01: 'Codex 开对话时不知道规矩是不是当前版、这是哪个项目；这条开场时核一下规矩入口，再递上工程和《他要什么》的位置，免得照旧规矩办事或在别的项目里动手。',
     X02: SAME.prompt,
     X03: SAME.helper,
@@ -92,6 +102,10 @@
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
+  // 同一时刻只说一次（M746）：顶栏固定在屏幕顶上，已写“HH:MM 读到”；卡里的“截至”跟它（或这张卡已写的）同一分钟就不写，不一样才写这张卡自己的时刻
+  let barAt = null;
+  const minuteOf = at => { const t = T.stamp(at); return t == null ? null : Math.floor(t / 60000); };
+  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [barAt, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
   const ruleVer = (v, label = esc(v), cls) => v ? link('/rules/', label, cls) : '';   // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”）
   // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
   const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
@@ -152,8 +166,9 @@
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
+  // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
-    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2></div>
       <div class="tp-grid ag-scores">${HOSTS.map(h => scoreCard(d, h)).join('')}</div></section>`;
   }
 
@@ -281,7 +296,7 @@
       : `同一批 ${int(p.samples)} 件里，实际报的比程序推荐的${gap > 0 ? '多' : '少'}对上 ${int(Math.abs(gap))} 件（${int(a.hits)} 对 ${int(p.hits)}）。`;
     const per = HOSTS.map(h => ({ h, r: b.hosts?.[h.id]?.rows })).filter(x => BASES.every(([id]) => known(find(x.r, id)?.hits)));
     const scope = mine ? `${HOSTS.find(h => h.id === only).name} 的 ${int(p.samples)} 件` : only ? `${HOSTS.find(h => h.id === only).name} 单独的数还没出，这里是三家合起来的` : b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`;
-    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${b.at ? ` · 截至 ${esc(when(b.at))}` : ''}</small></p>
+    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${asof(b.at, d.work_stats?.as_of) ? ` · ${esc(asof(b.at, d.work_stats?.as_of))}` : ''}</small></p>
       <div class="tp-bars">${BASES.map(bar).join('')}</div>
       <p class="ag-say">${say}</p>
       ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span class="ag-perhost${dim(h.id)}"><span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}</span>`).join('<br>')}</p>` : ''}
@@ -292,7 +307,7 @@
     if (!ws) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">工期账这一轮没读到。</p></section>`;
     if (ws.unavailable_reason) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">${esc(ws.unavailable_reason)}</p></section>`;
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}<span class="tp-asof">截至 ${esc(when(ws.as_of))}</span></div></div>`;
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${asof(ws.as_of) ? `<span class="tp-asof">${esc(asof(ws.as_of))}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
@@ -304,7 +319,7 @@
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
   }
 
-  // —— 三、三家各干了多少活（和工期放一起） ——
+  // —— 三、报了估时的活（原名“三家各干了多少活”，本人 11-26 04:27 选 A 改名；和工期放一起） ——
   const MODEL = id => {
     const m = /^(claude|gpt|gemini)-(.+)$/.exec(String(id || ''));
     if (!m) return String(id || '');
@@ -329,19 +344,22 @@
     const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
-      ${cell('开工', w?.starts, '件', 'starts')}${cell('总工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
+      ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
-      ${lost ? '<p class="tp-small">开工和工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
+      ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
     const ws = d.work_stats;
     if (!ws || ws.unavailable_reason) return '';
-    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d), first = weeks[0]?.week_start;
+    const weeks = list(stats(d, HOSTS[0]).weeks), labels = weekLabels(d);
+    // “几号起才有记录”只在选的这一段（近 7／30 天）起点早于最早一条记录时写；“全部”和记录全了的不写，后台没给起点判断不了也不写（M911）
+    const earliest = ws.periods?.all?.from, start = ws.periods?.[period]?.from;
+    const first = period !== 'all' && Date.parse(start) < Date.parse(earliest) ? earliest : null;
     // 只看一家时柱子只画这一家、按它自己的数定高（Antigravity 叠在三家里几乎看不见），图例点哪家整页跟着变（本人 11-24：“三家各干了多少活右下角不能点”）
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
-    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>三家各干了多少活<small>按每次开工算，派出去的单不算摘一句</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first + 'T00:00:00+08:00'))} 起有记录</span>` : ''}</div></div>
+    return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>报了估时的活<small>派活时报过估时的活；登记工时是完工时记下的用时，和上面实际在干的总时间不是一回事</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-      <div><p class="tp-sub">按周比 · 工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
+      <div><p class="tp-sub">按周比 · 登记工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 
@@ -363,8 +381,9 @@
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `无法设置${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
-    const compact = h => h.id === 'claude' ? (x(h).compact_percent ? `上下文用到 ${esc(x(h).compact_percent)}% 就压缩` : '没读到')
-      : h.id === 'codex' ? (known(x(h).compact_tokens) ? `到 ${dec(x(h).compact_tokens / 10000)} 万 token 压缩${known(x(h).context_window) ? `<small>配的窗口是 ${dec(x(h).context_window / 10000)} 万，压缩线更低</small>` : ''}` : '没读到')
+    // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
+    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
+      : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
       : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
@@ -380,7 +399,7 @@
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
-    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
@@ -419,6 +438,14 @@
     const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
+    // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
+    // 页面不另算、也不在“为什么要它”里再写一遍。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
+    // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
+    // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
+    // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
+    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；前端“为什么要它”不写这个数；
+    // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
+    //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
     const facts = [['什么时候跑', F(hook.when)], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
@@ -438,7 +465,7 @@
   function hooksSection(d) {
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p><span class="tp-asof">截至 ${esc(when(hv?.at || hs.at || d.at))}</span></div>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
@@ -480,10 +507,22 @@
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
-    if (!d) { T.paint(page.root, T.placeholder(state, '智能体')); page.tick.set([], { off: true }); return; }
+    if (!d) {
+      // 后台一直回“正在准备”（202）时读数层会一直重问、阶段停在“读得慢”：过了 10 秒照全站读不到的说法写，不一直写“正在读”（M909）。
+      // 还在读的头 10 秒，快讯和正文一样说“正在读”，不先说没读到；读不到了两处一起说没读到
+      // 后台这一块算失败回 503（服务通着，下一轮重算）也照这句写，不写成“电脑连不上”（M909，live-client 把它算作服务答了话）
+      const stuck = state?.warming && state.phase === 'slow' || !state?.offline && state?.meta?.status === 503;
+      const reading = !stuck && !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase) && !(state?.meta?.status >= 400);
+      T.paint(page.root, stuck ? '<p class="tp-placeholder" role="status">智能体暂时没读到：后台还在准备这一页的数，准备好了这里会自己换上。</p>' : T.placeholder(state, '智能体'));
+      page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
+      return;
+    }
+    // 顶栏已写同一分钟的“读到／最后一份”，大标题区和各卡就不再写同一分钟的“截至”；分钟不一样才写（M746）
+    barAt = state.offline ? state.cutoffAt : state.shownAt;
+    const headAt = asof(d.at);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
-        <div class="tp-head__side ag-headside"><span>截至 ${esc(when(d.at))}</span>${picker()}</div></div>
-      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips }) || ''}${configSection(d)}${hooksSection(d)}`;
+        <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
+      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));

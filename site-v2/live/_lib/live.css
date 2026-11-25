@@ -355,21 +355,20 @@ body.page--live .btn.btn--go:active { background: #007639; }
 /* 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同一个样子（11-23 08:06 改）——同样的玻璃、圆角、阴影、
    第一行灯 + 大字 + 轻一号的后半句，右边同样铺一整幅画、边缘淡进玻璃，画的颜色透过玻璃垫在那一侧。一件事一行；卡本身不能点、没有叉。
    画跟着整张卡（卡出现才下载）。连接那一行的灯和箭头一直在动，连上后灯变正绿、约 2 秒后收走这一行；没什么要说了整张卡收起。
-   画的两处动作照 r62 原值：卡挂出来时画自己再慢一点淡进来（.9s）；连上、卡里没别的事要收起时，画先自己淡掉（.6s），再照常收起
-   （卡里还有别的提醒、整张卡留着时，画跟着卡留着）。 */
-.live-conn { --win: clamp(160px, 28%, 250px); --conn-art: url("/live/img/connection-scene-v1.webp");
+   画卡挂出来时自己再慢一点淡进来（.9s，照 r62）。全站照本人图15统一（11-24 20:34）：画占卡宽一半、实的那段约三分之一，
+   往左长长地渐隐进底色；连上了也照样在，跟着卡一起收起，不先淡没。确认关机灯是灰的。 */
+.live-conn { --win: 52%; --conn-art: url("/live/img/connection-scene-v1.webp");
   overflow: hidden; margin: 0 0 var(--gap, 22px); padding-block: 12px; box-sizing: border-box; color: var(--ink);
   animation: live-conn-in .6s ease; transition: height .5s var(--mo-out, ease), opacity .5s ease, margin .5s ease, padding .5s ease; }
 .live-conn[hidden] { display: none; }
 .live-conn.is-closing { height: 0 !important; margin-bottom: 0; padding-block: 0; opacity: 0; }
 .live-conn__pic, .live-conn__tint { position: absolute; z-index: 0; pointer-events: none; animation: live-conn-in .9s ease; transition: opacity .6s ease; }
-.live-conn:not(:has(#notices > li, .live-conn__row:not([data-key="link"]))):has(.live-conn__row[data-key="link"].is-back) :is(.live-conn__pic, .live-conn__tint) { opacity: 0; }
-.live-conn__pic { top: 0; right: 0; bottom: 0; width: var(--win); background: var(--conn-art) center / cover no-repeat;
-  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%);
-  mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%); }
+.live-conn__pic { top: 0; right: 0; bottom: 0; width: var(--win); background: var(--conn-art) right center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 60%, rgb(0 0 0 / .86) 67%, rgb(0 0 0 / .66) 74%, rgb(0 0 0 / .44) 81%, rgb(0 0 0 / .24) 88%, rgb(0 0 0 / .09) 94%, transparent 100%);
+  mask-image: linear-gradient(270deg, #000 0%, #000 60%, rgb(0 0 0 / .86) 67%, rgb(0 0 0 / .66) 74%, rgb(0 0 0 / .44) 81%, rgb(0 0 0 / .24) 88%, rgb(0 0 0 / .09) 94%, transparent 100%); }
 .live-conn__tint { inset: 0; background: var(--conn-art) 80% 40% / cover no-repeat; filter: blur(30px) saturate(1.1); opacity: .2;
-  -webkit-mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%); mask-image: linear-gradient(270deg, #000 0 22%, transparent 50%); }
-.live-conn__rows, .live-conn > #notices { position: relative; z-index: 1; padding-right: calc(var(--win) * .6); }
+  -webkit-mask-image: linear-gradient(270deg, #000 0 30%, transparent 70%); mask-image: linear-gradient(270deg, #000 0 30%, transparent 70%); }
+.live-conn__rows, .live-conn > #notices { position: relative; z-index: 1; padding-right: calc(var(--win) * .62); }
 .live-conn__row { position: relative; display: flex; flex-wrap: wrap; align-items: center; column-gap: 13px; row-gap: 4px; padding: 14px 28px; box-sizing: border-box;
   font-size: 16.5px; line-height: 24px; letter-spacing: .03em; color: var(--ink-soft); transition: height .5s var(--mo-out, ease), opacity .5s ease, padding .5s ease; }
 .live-conn__row.is-closing { height: 0 !important; min-height: 0; padding-block: 0; opacity: 0; }
@@ -379,6 +378,13 @@ body.page--live .btn.btn--go:active { background: #007639; }
   box-shadow: 0 0 0 4px rgb(242 165 22 / .16), 0 0 14px rgb(242 165 22 / .7);
   animation: live-conn-breathe 2.8s ease-in-out infinite; transition: background .45s ease, box-shadow .45s ease; }
 .live-conn__row.is-back .live-conn__lamp { background: #00A650; box-shadow: 0 0 0 4px rgb(0 166 80 / .16), 0 0 14px rgb(0 166 80 / .6); }
+/* 电脑页：确认离线时页顶那张卡整张换成淡琥珀底、细橙边（本人 11-25 23:19 选 A，照 OFF-电脑页首访-v1）。
+   灯照旧灰；高度、字号、右边的画都不变。实况首页不这样（本人说那半不做），别的页等各页离线那张单。 */
+body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="off"]) {
+  background: linear-gradient(180deg, rgb(255 239 210 / .92) 0%, rgb(255 244 226 / .86) 100%);
+  box-shadow: inset 0 0 0 1px rgb(236 160 76 / .72), inset 0 1px 0 rgb(255 255 255 / .7), 0 1px 1px rgb(20 20 19 / .04),
+    0 4px 10px -6px rgb(20 28 36 / .1), 0 22px 44px -28px rgb(20 28 36 / .32); }
+.live-conn__row[data-stage="off"] .live-conn__lamp { background: #9aa1aa; box-shadow: 0 0 0 4px rgb(140 148 158 / .18), 0 0 12px rgb(140 148 158 / .5); }
 .live-conn__say { flex: 1 1 0; min-width: 0; }
 .live-conn__say b { font-family: var(--black); font-weight: 900; font-size: 26px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }
 .live-conn__at { font-weight: 500; }
@@ -433,6 +439,8 @@ body.page--live .btn.btn--go:active { background: #007639; }
 .topbar .live-at.is-refreshing, .topbar .live-at.is-refreshing:hover { color: #4a4944; }
 .is-refreshing .live-refresh-icon { left: calc(50% - 8px); animation: live-refresh-turn calc(var(--live-at-turn) * var(--sp, 1)) cubic-bezier(.45, .1, .45, .9) var(--live-at-t) infinite; }
 .is-refreshing .live-refresh-text { opacity: 0; transition-duration: calc(var(--live-at-t) * .3); transition-delay: 0s; }
+/* 读不到、正在重试：字写“正在重试”，图标原地一直转（本人 11-24 20:34） */
+.topbar .live-at.is-retrying:not(.is-refreshing) .live-refresh-icon { animation: live-refresh-turn 1.4s linear infinite; }
 @keyframes live-refresh-turn { to { rotate: 1turn; } }
 .topbar .live-ask { margin-right: 10px; }
 .head__link { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; color: inherit; text-decoration: none; border-radius: 8px; }
@@ -840,8 +848,11 @@ span.fog__slow { margin: 0 0 0 8px; }
 .page--live .board .card[data-tone="off"] .lamp::after { opacity: 0 !important; animation: none; }
 .card--warming .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none; }
 .live-offline .lamp:not([data-tone])::before { opacity: 1 !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; }
-.live-offline .lamp:not([data-tone])::after { opacity: 0 !important; animation: none !important; box-shadow: none !important; }
-.live-offline .topbar .brand__lamp { background: transparent !important; box-shadow: inset 0 0 0 1.5px #b9b6ad !important; animation: none !important; }
+/* 连不上：各卡小灯（没上色的、页面连不上时标成灰的）和页眉灯换成灰色，照常呼吸（本人禁令：动效一直开着，连不上也不停；压过上面 .live-off 和灰灯那几条“熄灯不呼吸”） */
+.live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"])) { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); }
+.live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { opacity: 1 !important; transform: none !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
+.live-offline :is(.lamp--sm:not([data-tone]), .lamp--sm:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { animation-name: lamp-breathe-sm !important; }
+.live-offline .topbar .brand__lamp { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); background: radial-gradient(circle at 34% 30%, #f3f4f6 0%, #c9cdd3 26%, #9aa1aa 60%, #7b828b 100%) !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
 .live-offline .notices .notice { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; font-size: 17px; line-height: 27px; color: var(--ink); }
 .live-offline .notices .notice::before, .live-offline .notices .notice > .lamp { display: none; }
 .live-offline [data-read="gone"], .live-offline .card__glass:has(> [data-read="gone"]) { min-height: 0 !important; height: auto !important; }
@@ -914,9 +925,8 @@ span.fog__slow { margin: 0 0 0 8px; }
   white-space: normal;
   overflow-wrap: anywhere;
 }
-/* 离线复用各页现有横条，不另外叠一条；状态动画停，装饰光色照旧。 */
+/* 离线复用各页现有横条，不另外叠一条；动效照常播（本人禁令：连不上时也不停）。 */
 .live-offline #notices > :is(.notice, .l1-unreadable-note) { padding: 14px 20px; border: 1px solid #d5d6d0; border-radius: 12px; background: #eeefeb; color: #4d5149; font-size: 16px; font-weight: 600; line-height: 1.6; }
-.live-offline .lamp::after, .live-offline .live-mark--pending::before, .live-offline .live-refresh-icon { animation: none !important; }
 
 /* 暂停公开时，卡框留着，数、正文和控件一起收起。 */
 .live-public-paused .page--live .stage * { visibility: hidden !important; }

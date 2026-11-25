@@ -104,6 +104,8 @@
 .ag-config td.ag-same { text-align: left; color: #3d3d3a; }
 .ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
+/* Claude 压缩线那行小字比格子宽一点点，折行后“复”字会单独掉到第三行：“先留…给回复”整句不拆，要折就在逗号后折 */
+.ag-config td small .ag-keep { white-space: nowrap; }
 .ag-foot { margin: 12px 0 0; }
 
 /* 五、钩子 */

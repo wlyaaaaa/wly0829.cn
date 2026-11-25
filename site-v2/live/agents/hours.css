@@ -24,6 +24,11 @@
 .ag-htable tr.is-sum > * { font-weight: 800; font-size: 19px; border-top: 1px solid var(--tp-line); }
 .ag-htable tr.is-sum th { font-family: var(--black); color: var(--ink); }
 .ag-htable .tp-fog { font-size: 13px; }
+/* 行名能点（照 L-agents-v3）：黑字照旧，后面一个灰“›”；指上去才出下划线 */
+.ag-htable a.ag-hrowlink { color: inherit; text-decoration: none; }
+.ag-htable a.ag-hrowlink span { margin-left: 6px; color: #9a988f; font-weight: 400; }
+.ag-htable a.ag-hrowlink:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ag-htable a.ag-hrowlink:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
 .ag-hpick { display: inline-flex; align-items: center; margin: -3px -8px; padding: 3px 8px; border: 0; border-radius: 7px; background: none; font: inherit; font-weight: 700; color: var(--ink); cursor: pointer; transition: background .15s ease; }
 .ag-hpick:hover { background: color-mix(in srgb, var(--host) 16%, #fff); }
 .ag-hpick:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
@@ -53,6 +58,6 @@
 .ag-hunit { margin: 0 62px 0 calc(var(--hname) + 12px); text-align: center; font-size: 12.5px; color: #6c6b64; }
 .ag-hlegend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 26px; margin: 12px 0 0; font-size: 14px; color: #3d3d3a; }
 .ag-hlegend span { display: inline-flex; align-items: center; gap: 8px; }
-.ag-hlegend .ag-hseg { width: 18px; height: 14px; border-radius: 3px; }
+.ag-hlegend .ag-hseg { width: 18px; height: 14px; border-radius: 3px; cursor: default; }   /* 图例只是说明颜色，不能点：不出手形（M624“看着像按钮的点不了”） */
 .ag-hnote { margin: 14px 0 0; }
 @keyframes ag-hgrow { from { scale: 0 1; } to { scale: 1 1; } }

@@ -2,7 +2,7 @@
   'use strict';
   const U = window.LiveUI, L = window.LiveLight, V = window.LiveViz, $ = id => document.getElementById(id), { esc, sp } = U;
   const params = new URLSearchParams(location.search), data = {}, phases = {}, clocks = {}, links = {};
-  let header = null, overviewMeta = null, overviewReadAt = null, softwareMeta = null;
+  let header = null;
   const offline = () => !!U.offline?.();
   const missing = (label = '', meta) => offline() ? '这块没存下来，连上后补上。' : U.collectionText(label, meta);
   const resources = { software: 'software', runtime: 'runtimes', startup: 'startup' }, observed = {};
@@ -35,6 +35,9 @@
     const days = Math.max(0, Math.floor((Date.parse(offline() ? referenceTime(key) || at : new Date().toISOString()) - Date.parse(at)) / 86400000));
     return `${U.isStale(data[key]) ? '上次 ' : ''}${U.date(at)} ${U.time(at)} 查的${days > 7 ? `（${days} 天前）` : ''}`;
   }
+  // 软件版本多久查一次：周期读回包每行的 refresh_interval_seconds；是 7 天时写上钟点。
+  // 按需更新快核（M928）核法：E:/PCConfig/registries/tasks.json 里“PCConfig Governance Check”的 schedule_zh，现“每周日 23:30；错过会补”；变了改这句
+  const softwareEvery = rows => { const s = Number(rows?.[0]?.refresh_interval_seconds); return s === 604800 ? '每周日 23:30 查一次，没开机就开机后补查' : s > 0 ? `每 ${s % 86400 ? `${Math.round(s / 3600)} 小时` : `${s / 86400} 天`}查一次` : ''; };
   function encoding(cp) { return cp == null ? null : Number(cp) === 65001 ? 'UTF-8 · 65001' : Number(cp) === 936 ? 'GBK · 936' : Number(cp) === 20127 ? 'ASCII · 20127' : String(cp); }
   const fields = ['console_input_code_page', 'console_output_code_page', 'pipeline_output_code_page', 'dotnet_default_code_page'];
   const commandRows = r => [['powershell_core', 'PowerShell 7'], ['windows_powershell', '系统自带的 Windows PowerShell']].filter(([key]) => r[key]).map(([key, name]) => {
@@ -50,7 +53,7 @@
   function addBoard(key) {
     const host = document.createElement('section');
     host.dataset.section = key; hosts[key] = host; $('board').append(host);
-    boards[key] = V.board(host, { key: `environment-${key}`, collapsible: Object.hasOwn(resources, key), onToggle: syncAll });
+    boards[key] = V.board(host, { key: `environment-${key}`, collapsible: Object.hasOwn(resources, key) });
   }
   function readingRows() {
     const ghost = hosts.software.querySelector('.grp__ghost .fog__chart');
@@ -65,15 +68,9 @@
     return `<table class="env-table"><thead><tr><th>软件</th><th>装的版本</th><th>上次查到的版本</th><th>渠道</th><th>比较结果</th></tr></thead><tbody>${body}</tbody></table>`;
   }
   const envFolds = new Map();
-  let defaultFoldOpen = false;
-  const foldAttrs = key => ` data-env-fold="${esc(key)}"${(envFolds.get(key) ?? defaultFoldOpen) ? ' open' : ''}`;
+  const foldAttrs = key => ` data-env-fold="${esc(key)}"${envFolds.get(key) ? ' open' : ''}`;
   const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open);
   const details = () => [...$('board').querySelectorAll('details[data-env-fold]')].filter(d => !d.closest('.grp--private,.is-unread'));
-  function allOpen() {
-    const folds = details();
-    return (folds.length ? folds.every(d => d.open) : defaultFoldOpen) && Object.keys(resources).every(key => boards[key]?.allOpen());
-  }
-  function syncAll() { $('all').textContent = allOpen() ? '全部收起' : '全部展开'; }
   function limitedRows(rows, render, key) {
     return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
   }
@@ -141,7 +138,7 @@
   $('board').addEventListener('toggle', e => {
     const detail = e.target;
     if (!detail.matches('details[data-env-fold]')) return;
-    rememberFold(detail); syncAll();
+    rememberFold(detail);
     if (!detail.matches('.env-normal > details')) return;
     const click = softwareClicks.get(detail);
     softwareClicks.delete(detail);
@@ -179,7 +176,7 @@
     let line = missing(names[key], d);
     let figures = key === 'software' ? [{ key: 'total', label: '软件', unit: '个' }, { key: 'behind', label: '版本落后', unit: '个' }] : key === 'runtime' ? [{ key: 'risk', label: '可能乱码', unit: '处' }, { key: 'shells', label: '命令环境', unit: '套' }] : [{ key: 'enabled', label: '启用', unit: '项' }, { key: 'disabled', label: '停用', unit: '项' }];
     if (key === 'software' && rows) {
-      line = snapshot(checkedAt('software'), 'software');
+      line = [snapshot(checkedAt('software'), 'software'), softwareEvery(rows)].filter(Boolean).join(' · ');
       figures = [];
     }
     if (key === 'runtime' && r) { line = snapshot(checkedAt('runtime'), 'runtime'); figures = []; }
@@ -213,43 +210,25 @@
     else if (Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
     if (!lit && Object.keys(data).length) { lit = true; L.lightUp([hero, ...Object.values(boards).flatMap(b => b.cards())]); }
   }
-  $('all').addEventListener('click', () => {
-    defaultFoldOpen = !allOpen();
-    for (const key of Object.keys(resources)) boards[key].all(defaultFoldOpen);
-    for (const d of details()) { d.open = defaultFoldOpen; rememberFold(d); }
-    syncAll();
-  });
-  const packNote = document.createElement('p');
-  packNote.className = 'hero__note'; packNote.hidden = true; $('note').after(packNote);
-  const isCutoff = text => /^数据截止\s+(?:(?:\d{4}-)?\d\d-\d\d(?:[ T]\d\d:\d\d(?::\d\d)?)?|\d\d:\d\d(?::\d\d)?)。?$/.test(String(text || '').trim());
-  const publicTime = (meta, at = meta?.at) => meta?.viewer?.kind === 'public' && validAt(at) && U.time(at) ? `${U.date(at)} ${U.time(at)}` : '';
+  // 两版同一套：访客也照本人版看各卡自己的截止说明，不再另写一行“公开数据读于 …”把它们换掉（同一接口原时刻照给）
   function updateNotes() {
-    const owner = [overviewMeta, softwareMeta].some(meta => meta?.viewer?.kind === 'owner');
-    const overviewTime = !owner && (publicTime(overviewMeta, overviewReadAt) || publicTime(overviewMeta));
-    const softwareTime = !owner && !overviewTime && publicTime(softwareMeta);
-    packNote.textContent = overviewTime ? `公开数据读于 ${overviewTime}` : softwareTime ? `公开数据读于 ${softwareTime}（该概览所用公开包）` : '';
-    packNote.hidden = !packNote.textContent;
-    if (!packNote.hidden) hero.classList.remove('is-unread');
     for (const [key, s] of Object.entries(links)) {
-      const clean = text => !packNote.hidden && (s.viewer || s.meta?.viewer)?.kind === 'public' && isCutoff(text) ? '' : text;
-      const state = { fallbackNote: clean(s.fallbackNote), meta: { fallbackNote: clean(s.meta?.fallbackNote) } };
+      const state = { fallbackNote: s.fallbackNote, meta: { fallbackNote: s.meta?.fallbackNote } };
       if (key === 'software') U.blockNote(hero.querySelector('.card__body'), state);
       boards[key].cards().forEach(el => U.blockNote(el, state));
     }
   }
-  function repaint() { details().forEach(rememberFold); paint(); updateNotes(); syncAll(); }
+  function repaint() { details().forEach(rememberFold); paint(); updateNotes(); }
   repaint();
   readingRows();
   for (const [key, resource] of Object.entries(resources)) window.Live.watch(recordResource(key), { section: resource }, {
     phase(s) { phases[key] = s.phase; boards[key].phase(s); readingRows(); if (!s.data) { if (key === 'software') heroRead.set(s); if (s.phase === 'none' || s.phase === 'gone') repaint(); } },
-    data(d, meta) { data[key] = d; clocks[key] = d && validAt(meta?.at); if (key === 'software') softwareMeta = list(d) ? meta : null; if (d) boards[key].data({ series: [] }); repaint(); },
+    data(d, meta) { data[key] = d; clocks[key] = d && validAt(meta?.at); if (d) boards[key].data({ series: [] }); repaint(); },
     link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${esc(sp(s.text))}</span>` }] : []); } else if (s.offline) repaint(); else updateNotes(); },
   });
-  window.Live.watch('projects/pcconfig', null, { data(d, meta) {
+  window.Live.watch('projects/pcconfig', null, { data(d) {
     // 后端 03:45：正式接入时这三组还在 registry 分组下、没有单独的 environment 分组，两种形状都给 data.environment，先读它
     header = d?.environment || d?.sections?.find(s => s.id === 'environment') || null;
-    overviewMeta = d ? meta : null;
-    overviewReadAt = validAt(d?.read_at);
     const metrics = d?.sections?.flatMap(s => s.metrics || []) || [];
     for (const [key, section] of Object.entries(resources)) observed[key] = metrics.find(m => m.id === section || m.section === section)?.at;
     repaint();

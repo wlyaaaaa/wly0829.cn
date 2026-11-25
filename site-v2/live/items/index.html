@@ -31,9 +31,20 @@
 .page--items .brief > summary::-webkit-details-marker { display: none; }
 .page--items .lb-item > .row__acts .btn { width: auto; padding: 0 10px; gap: 4px; font-size: 12.5px; letter-spacing: .03em; }
 .page--items .lb-item > .row__acts .btn::before { display: none; }
+/* 电脑窗口窄、卡跟着窄到标题挤成几个字一行时：这一行的按钮折到标题下面一行，从左排、各列照旧对齐，标题照常横排；宽窗口（1440 及以上）不变（M853）。
+   折不折看这张卡的按钮有多宽：有“去办”链接又有“晚点提醒”的卡一排窄于 740 就折（这种卡一行四颗钮加多选框，1440 宽时标题只剩约 200 像素、断成四行，所以 1440 宽也折，标题占一行、按钮在下，M962），有“晚点提醒”的 520，别的 420（只剩“近 7 天下去的”一张占整宽、两列排时按 860）。
+   折下来一排还摆不下这些按钮时，按钮自己换行。 */
+.page--items .lb-card--items .lb-rows { container-type: inline-size; }
+@container (max-width: 419px) { .page--items #groups .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 519px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 739px) { .page--items #groups .lb-card:has([data-slot="later"]):has([data-slot="go"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
+@container (max-width: 439px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
+@container (max-width: 259px) { .page--items #groups .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
 .page--items #hero .card__glass { min-height: 0; padding: 20px 26px; }
 .page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
 .page--items .lb-card__title { display: block; letter-spacing: 0; }
+.page--items .lb-card__title .lb-count { white-space: nowrap; }   /* 窄窗时卡头标题括号那段（几件）不拆开，不剩一个“件）”单独一行 */
 .page--items .lb-card__more { display: block; text-align: center; }
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
@@ -67,9 +78,30 @@
 .items-selection__count { margin:0; font-size:14px; font-weight:600; letter-spacing:.02em; white-space:nowrap; color:var(--ink); }
 .items-selection__count b { display:inline-grid; place-items:center; min-width:22px; height:22px; margin:0 5px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#00A650; color:#fff; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 .items-selection__sep { width:1px; height:20px; background:rgb(20 20 19 / .12); }
-#item-selection-actions { display:flex; gap:8px; }
+#item-selection-actions { display:flex; align-items:center; gap:10px; }
+/* 多选（本人 11-26 03:0x）：勾上的那一行，点了的办法按钮绿字绿边（选中）；底部栏只有已选几件、确认、取消，一件都没选办法时“确认”灰着 */
+.page--items .lb-item button[data-action-set][aria-pressed="true"] { color:#00A650; background:rgb(0 166 80 / .07); box-shadow:inset 0 0 0 1.5px #00A650; }
+.items-selection .items-plan__go { background:#00A650; color:#fff; box-shadow:none; }
+.items-selection .items-plan__go:disabled { background:rgb(20 20 19 / .07); color:rgb(20 20 19 / .38); box-shadow:none; cursor:default; }
+/* 核对框：一件一行“类 · 这件 → 办法”（勾了没选办法的写“这次不动”，灰一点），类的颜色同页上那一组；框底一句去向说明和两个按钮 */
+.live-item-confirm--plan .live-item-confirm__card { width:min(900px, calc(var(--item-confirm-width, 100vw) - 28px)); }
+.live-item-confirm--plan .live-item-confirm__card h2 { margin-bottom:34px; }
+.item-plan { display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px 16px; margin:0; padding:0; list-style:none; }
+.item-plan li { display:grid; grid-column:1 / -1; grid-template-columns:subgrid; align-items:center; padding:14px 16px; border-radius:14px; background:rgb(25 35 28 / .05); font-size:17px; line-height:1.5; }
+.item-plan__kind { justify-self:start; padding:4px 14px; border-radius:999px; font-size:15px; font-weight:700; white-space:nowrap; background:rgb(var(--plan-tint) / .2); color:color-mix(in srgb, rgb(var(--plan-tint)) 62%, #1d1d1b); }
+.item-plan__kind[data-kind="do"] { --plan-tint:var(--glow-peach); } .item-plan__kind[data-kind="choose"] { --plan-tint:var(--glow-lilac); } .item-plan__kind[data-kind="later"] { --plan-tint:var(--glow-cyan); }
+.item-plan__kind[data-kind="know"] { --plan-tint:var(--glow-blue); } .item-plan__kind[data-kind="reports"] { --plan-tint:var(--glow-pink); } .item-plan__kind { --plan-tint:var(--glow-sage); }
+.item-plan__name { overflow-wrap:anywhere; font-weight:600; }
+.item-plan__to { white-space:nowrap; color:var(--muted); } .item-plan__to b { color:var(--ink); font-weight:750; }
+.item-plan__to.is-skip { color:var(--muted); font-weight:500; }
+.item-plan__foot { display:flex; align-items:center; gap:16px; margin-top:18px; }
+.live-item-confirm__card .item-plan__foot p { flex:1; margin:0; font-size:14px; color:var(--muted); }
+.item-plan__foot .live-item-confirm__buttons { flex-wrap:nowrap; margin-top:0; }
+/* 手机上（整页缩小以后框只有三百多像素宽）：这件占一行、怎么办写在它下面，说明和按钮上下排，不把字挤成一列 */
+.live-item-confirm--plan .live-item-confirm__card { container-type:inline-size; }
+@container (max-width: 600px) { .item-plan { grid-template-columns:auto minmax(0, 1fr); } .item-plan__to { grid-column:2; white-space:normal; } .item-plan__foot { flex-direction:column; align-items:stretch; } .item-plan__foot .live-item-confirm__buttons { justify-content:end; flex-wrap:wrap; } }
 .items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
-.items-selection [data-batch-action]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.items-selection .items-plan__go:not(:disabled):hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
 .items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
 body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
@@ -95,6 +127,6 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 <div class="card__body"><p class="card__head" id="head"></p>
 <p class="hero__note" id="note"></p><div class="lbp-stats" id="stats"></div></div></div>
 </article><section class="lbp-side glass" data-mo-rise><p class="part">近 7 天的变化</p><div class="lbp-side__list"><div id="side-body">正在读关闭记录</div><a class="more" href="#closed">近 7 天下去的 ›</a><a class="more" href="#reports">等答的汇报 ›</a></div></section></div>
-<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消选择</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
+<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/_lib/live-runs.js"></script><script src="/live/items/page.js"></script>
 </body></html>

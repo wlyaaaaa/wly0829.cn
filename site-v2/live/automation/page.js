@@ -52,10 +52,12 @@ window.LegacyAutomation = function (bar) {
   const scheduledAgain = t => t.enabled !== false && !['paused', 'disabled'].includes(t.state)
     && t.scheduled_again !== false && (future(t) || t.scheduled_again === true && raw(t.schedule) !== '单次运行');
   const next = t => future(t) ? time(nextAt(t), true) : '下次时间未读到';
+  // 平台名：三家都认（Antigravity 的定时 11-25 起也进这一组，M921）
+  const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
   const provider = t => {
     const id = raw(t.scheduler);
-    return id === 'codex' || id === 'claude'
-      ? `<span class="automation-provider" data-provider="${id}">${id === 'codex' ? 'Codex' : 'Claude'}</span>` : '平台未读到';
+    return Object.hasOwn(PROVIDERS, id)
+      ? `<span class="automation-provider" data-provider="${id}">${PROVIDERS[id]}</span>` : '平台未读到';
   };
   function row(t, pickup) {
     const title = field(t.display_name ?? t.name, '任务名', 'title') || '任务名未读到';

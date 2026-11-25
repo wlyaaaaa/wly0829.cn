@@ -55,18 +55,65 @@
   const hiddenWhileWriting = new Map();
   const hiddenByWrite = item => {
     const entry = hiddenWhileWriting.get(item.id);
-    return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
+    return viewer === 'owner' && entry && entry.version === item.item_version;
   };
-  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved } }) => {
+  // 办成后马上跟上（M903）：后台从登记到写成要几秒，办成那一刻重读的退出列表和清单可能还是旧的。
+  // 回执已确认写成的，先照办成的结果摆上：“我知道了”“不办了”“关掉汇报”放进“近 7 天下去的”，“晚点提醒”放进“你放着”；
+  // 后台读数里出现这件（退出记录里有这一次，或清单里换成了新版本）就换成后台那条，旧读数不把它盖回去。
+  // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
+  const landed = new Map(), writeStarted = new Map();
+  const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
+  function landItem(item, intent, receipt) {
+    // 本人 11-26 00:13：先摆上的那条只写后台回执里有的，不拿浏览器的钟算。下去的时刻用回执的 created_at（后台收下这一笔的时刻）；
+    // 晚点提醒几点再提醒用回执的 until，回执没给就写“提醒时间还没确认”，等清单读回来换成后台那条
+    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? Date.now()), saved: Date.now(), version: item.item_version };
+    // 先摆上的“你放着”和后台那条一个样子：只留问情况、不办了和网站链接，不再挂“晚点提醒”
+    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: receipt?.until || null, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
+    else if (intent === 'close_report') {
+      const id = item.owner_item || item.item_id || item.item || item.id;
+      landed.set(id, { ...base, key: 'closed', row: { id, kind: 'choose', text: item.text, title: item.title, actions: [], closed: { at, kind: 'declined', text: '本人关掉了这份汇报' }, _landed: true } });
+    } else if (LANDED_KIND[intent]) landed.set(item.id, { ...base, key: 'closed', row: { ...item, closed: { at, kind: LANDED_KIND[intent] }, _landed: true } });
+  }
+  // 后台读数已经有这一次的结果，就不再摆先放上去的那条
+  function withLanded(key, rows) {
+    if (!Array.isArray(rows) || !landed.size) return rows;
+    const extra = [];
+    for (const [id, w] of landed) {
+      if (w.key !== key) continue;
+      const seen = key === 'closed' ? rows.some(it => it.id === id && Date.parse(it.closed?.at) >= w.since - 120000)
+        : [...collections].some(([k, c]) => k !== 'closed' && k !== 'reports' && c.items?.some(it => it.id === id && it.item_version !== w.version));
+      if (seen) landed.delete(id); else extra.push(w.row);
+    }
+    return extra.length ? [...extra, ...rows] : rows;
+  }
+  let landedTimer = 0;
+  function followLanded() {
+    clearTimeout(landedTimer);
+    const now = Date.now(), before = landed.size;
+    for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
+    if (landed.size !== before) { redrawItems(); drawClosed(); }
+    if (!landed.size) return;
+    const first = Math.min(...[...landed.values()].map(w => w.saved));
+    landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
+  }
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent, at, receipts } }) => {
     for (const item of items) {
-      if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
-      else hiddenWhileWriting.delete(item.id);
+      if (saved === null) writeStarted.set(item.id, at ?? Date.now());   // 回到页面接着查的（M945）按当初点的时刻算
+      // 本人 11-26 00:13：页面上显示的结果必须是后台真回的。后台还没回之前这件照旧摆在原处（按钮写“正在办…”，回执写“正在保存…”），回了“已写成”才撤下；没写上、没回结果的留在原处
+      if (saved?.includes(item.id)) hiddenWhileWriting.set(item.id, { version: item.item_version });
+      else if (saved) hiddenWhileWriting.delete(item.id);
+      if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent, receipts?.[item.id]);
     }
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
     redrawItems();
     if (reportsData) renderReports(reportsData);
+    if (saved?.length) { drawClosed(); followLanded(); }
   });
+  // 还没确认的那几次（M945，主持 11-26 01:24）：读回来的退出记录里有这件、时刻不早于点的时候（留两分钟钟差），或晚点提醒的这件换了新版本到了“你放着”，就是办成了
+  const foundWrite = (item, intent, since) => intent === 'later'
+    ? collections.get('later')?.items?.find(it => it.id === item.id && !it._landed && it.item_version !== item.item_version)
+    : closedItems.find(it => it.id === (intent === 'close_report' ? item.owner_item || item.item_id || item.item || item.id : item.id) && Date.parse(it.closed?.at) >= since - 120000);
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -75,7 +122,8 @@
     return [...items].sort((a, b) => when(a) - when(b));
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
-  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '放着，到了该办的时候再提醒。', know: '只需了解的进展与通知。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做，只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
+  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到日子转成要你做（默认上午 10 点），没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”就下去，不按天数消失。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
@@ -146,7 +194,9 @@
     let path = '', gap = true;
     days.forEach((d,i) => { if (d.open == null) { gap = true; return; } path += `${gap ? 'M' : 'L'}${x(i)},${y(d.open)} `; gap = false; });
     const last = days[days.length-1];
-    return `<p class="trend-last">全站 · 最后一天 <b>${last?.open == null ? '—' : esc(last.open)}</b> 件未办</p><svg class="needs-trend" viewBox="0 0 300 118" role="img" aria-label="近 7 天待办件数，缺数的日期留空">${scale}<path class="needs-trend__line" d="${path.trim()}"/>${days.map((d,i) => `${d.open == null ? '' : `<circle cx="${x(i)}" cy="${y(d.open)}" r="3"/>`}<text x="${x(i)}" y="108" text-anchor="middle"><title>${esc(d.open == null ? d.gap || '这天没读到' : `${d.open} 件未办`)}</title>${esc(d.date.slice(5))}</text>`).join('')}</svg>`;
+    // M946：后台每天数的是那天结束时清单上还挂着的全部事项，四类都算（你放着、要你知道也在里面），不只是要你做、要你选；不叫“未办／待办”，免得和页头“等你 N 件”对不上
+    const also = viewer === 'public' ? '含本人放着、要本人知道' : '含你放着、要你知道';
+    return `<p class="trend-last">全站 · 最后一天清单上共 <b>${last?.open == null ? '—' : esc(last.open)}</b> 件<span style="white-space: nowrap">（${also}）</span></p><svg class="needs-trend" viewBox="0 0 300 118" role="img" aria-label="近 7 天每天清单上共几件（${also}），缺数的日期留空">${scale}<path class="needs-trend__line" d="${path.trim()}"/>${days.map((d,i) => `${d.open == null ? '' : `<circle cx="${x(i)}" cy="${y(d.open)}" r="3"/>`}<text x="${x(i)}" y="108" text-anchor="middle"><title>${esc(d.open == null ? d.gap || '这天没读到' : `清单上共 ${d.open} 件`)}</title>${esc(d.date.slice(5))}</text>`).join('')}</svg>`;
   }
   function renderSide() { U.html($('side-body'), sideHtml(openTrend, recentClosed)); }
   // 展开后的说明和问题整段照原文显示，不按字数截（M690，本人 11-24：字数上限是让写的人在这个字数内说清，不是显示时省略）。
@@ -189,6 +239,14 @@
   const itemRecordedAt = it => it.recorded_at || it.changed || it.born;
   const selected = new Set(), selectable = new Map();
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
+  // 多选按类选办法：类的顺序照页面上的组；办法的顺序照卡上的按钮
+  const PLAN_ORDER = ['ack', 'later', 'decline', 'close_report'], PLAN_KINDS = ['do', 'choose', 'later', 'know', 'reports'], PLAN_LABEL = { ...KIND, reports: '汇报' };
+  const planPicks = new Map();   // 勾上的哪一件 → 选中的办法
+  let planAvailable = new Map(), planWriting = false;
+  // 这一行的这颗按钮是哪种办法（不办了、晚点提醒、我知道了、关掉）；问情况、去办这类不算
+  const planIntent = (item, action) => { const key = pickIntent(item, action), intent = key === 'decline_copy' ? 'decline' : key; return PLAN_ORDER.includes(intent) ? intent : ''; };
+  const rowIntents = item => PLAN_ORDER.filter(intent => item.actions.some(action => planIntent(item, action) === intent));
+  const planKind = item => rowIntents(item).includes('close_report') ? 'reports' : item.kind;
   // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了弹全站共用的可信设备说明框（M803），什么都不改（定稿卡-等你的事 第一节第 4 条）。
   const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
   const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
@@ -203,35 +261,114 @@
       const id = box.dataset.selectItem, item = selectable.get(id);
       if (item) available.set(id, item);
     }
-    for (const id of selected) if (!available.has(id)) selected.delete(id);
-    const operations = new Map();
-    for (const id of selected) {
-      const item = available.get(id);
-      for (const action of item.actions) {
-        // 有后续的“不办了”和普通“不办了”合成一个按钮，确认框里再分组。
-        const intent = pickIntent(item, action), key = intent === 'decline_copy' ? 'decline' : intent;
-        if (key) operations.set(key, [...(operations.get(key) || []), item]);
-      }
-    }
+    // M972：清单一时没读到（后台正在准备、读不到时整块换成一句话）时，勾上的不丢，栏也不收，读回来照样勾着；读回来了还找不到（办掉了、被筛掉了）才去掉
+    const unread = Object.keys(KIND).some(key => collections.has(key) && collections.get(key).items == null) || reportCount === null && !!reportsData;
+    for (const id of selected) if (!available.has(id)) { if (unread && selectable.has(id)) available.set(id, selectable.get(id)); else selected.delete(id); }
+    // 多选（本人 11-26 03:0x：“每个选项，先勾选，勾选以后可以点按钮，下面的框依然是确认和取消；核对框最终看一下……√了，选这一条，点旁边的按钮，有个选中效果”）：
+    // 勾上的那一行，点这一行自己的办法按钮（不办了、晚点提醒、我知道了、关掉）不马上办，只出选中效果（绿字绿边），再点同一行别的办法就换成那个；取消勾选就清掉这行的选择。
+    // 没点按钮的行算没选办法。没勾的行按钮照常用。底部栏只有“已选 N 件 · 确认 · 取消”；点“确认”弹核对框，一件一行写这件怎么办，
+    // 勾了没选办法的写“没选办法，这次不动”，再确认一次把选了办法的一起办。两版同一套，访客照样能勾、能选，点“确认”照旧弹可信设备说明框。
+    // 勾上只是勾上：点了这一行的按钮才算选中（本人原话两步：先勾，再点按钮），只有一种办法的行也一样，不自动选
+    for (const id of selected) if (!rowIntents(available.get(id)).includes(planPicks.get(id))) planPicks.delete(id);
+    for (const id of [...planPicks.keys()]) if (!selected.has(id)) planPicks.delete(id);
+    planAvailable = available;
     const open = selected.size > 0;
     selection.classList.toggle('is-open', open); selection.inert = !open; selection.setAttribute('aria-hidden', String(!open));
     U.html($('item-selection-count'), '已选<b>' + selected.size + '</b>件');
-    const ORDER = ['done', 'ack', 'later', 'decline', 'decline_copy', 'close_report'];
-    const ordered = [...operations].sort(([a], [b]) => ORDER.indexOf(a) - ORDER.indexOf(b));
-    operations.clear(); ordered.forEach(([intent, rows]) => operations.set(intent, rows));
-    const signature = [...operations].map(([intent, rows]) => intent + ':' + rows.length + ':' + rows.filter(item => item.decline_followup).length).join('|');
-    if (selectionActions.dataset.signature !== signature) {
-      selectionActions.dataset.signature = signature;
-      U.html(selectionActions, [...operations].map(([intent, rows]) => '<button class="btn btn--sm" type="button" data-batch-action="' + esc(intent) + '" aria-haspopup="dialog">' + esc(U.itemLabels[intent === 'decline' && rows.every(item => item.decline_followup) ? 'decline_copy' : intent]) + (rows.length === selected.size ? '' : ' · ' + rows.length + ' 件') + '</button>').join(' '));
-    }
-    for (const button of selectionActions.querySelectorAll('[data-batch-action]')) {
-      button.onclick = () => U.confirmItems(button, operations.get(button.dataset.batchAction), button.dataset.batchAction, ids => {
-        ids.forEach(id => selected.delete(id));
-        redrawItems(); if (reportsData) renderReports(reportsData);
-        renderSelection();
-      });
+    markPicks();
+    const picked = [...selected].filter(id => planPicks.has(id)).length;
+    const signature = JSON.stringify([picked, planWriting]);
+    if (selectionActions.dataset.signature === signature) return;
+    selectionActions.dataset.signature = signature;
+    U.html(selectionActions, '<button class="btn btn--sm items-plan__go" type="button" data-plan-go aria-haspopup="dialog"' + (picked ? '' : ' title="勾上的几行还没点办法"')
+      + (!picked || planWriting ? ' disabled' : '') + '>' + (planWriting ? '正在办…' : '确认') + '</button>');
+  }
+  // 勾上的行里，选中的那颗办法按钮标成按下（绿字绿边）；行重画以后跟着 renderSelection 再标一遍
+  function markPicks() {
+    for (const btn of document.querySelectorAll('button[data-action-set][data-act]')) {
+      const id = btn.dataset.item, hit = selected.has(id) && planPicks.has(id) && U.actionAt?.(btn);
+      if (hit?.action && planIntent(hit.item, hit.action) === planPicks.get(id)) btn.setAttribute('aria-pressed', 'true'); else btn.removeAttribute('aria-pressed');
     }
   }
+  // 勾上的那一行，点办法按钮只是选中，不弹框、不办；问情况、去办这类照常。比全站那个按钮监听先一步接住
+  document.addEventListener('click', event => {
+    const btn = event.target.closest?.('button[data-action-set][data-act]');
+    if (!btn || !selected.has(btn.dataset.item)) return;
+    const hit = U.actionAt?.(btn), intent = hit?.action && planIntent(hit.item, hit.action);
+    if (!intent) return;
+    event.preventDefault(); event.stopPropagation();
+    planPicks.set(btn.dataset.item, intent); renderSelection();
+  }, true);
+  // 多选核对框（本人 11-26 02:12、03:0x：“核对框最终看一下”）。放在本页自己的代码里，不动全站共用的确认框（本人 03:19：共用特别容易改旧出新）。
+  // 一件一行“类 · 这件 → 办法”，勾了没选办法的写“没选办法，这次不动”；框底一句去向，“返回改”“确认，办这 N 件”（N 只数选了办法的）。
+  // 确认后按办法分批交给全站共用的写回（U.saveItems，每件各发一笔，照常弹回执）：后台真回了才写办成、卡才下去；没回写还没确认；没办成照实说、卡留着能再点（本人 11-26 00:13）。
+  const PLAN_TO = { ack: '我知道了', later: '晚点提醒（挪到“你放着”）', decline: '不办了', decline_copy: '不办了（有后续，复制给 AI）', close_report: '关掉' };
+  function confirmPlan(trigger, all, { start, done, complete }) {
+    const live = window.Live, plan = all.filter(p => p.intent);
+    const notice = (state, head, name = '') => window.SiteNotice(head, '', 'item-action-receipts').set(state, head, { name });
+    if (!plan.length || plan.some(p => U.itemWriting(p.item.id)) || document.querySelector('.live-item-confirm[open]')) return;
+    if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else notice('fail', '不是可信设备'); return; }
+    const intentOf = p => p.intent === 'decline' && p.item.decline_followup ? 'decline_copy' : p.intent;
+    if (plan.some(p => { const action = U.itemWriteAction(intentOf(p)); return action && (!p.item.item_version || !p.item.owner_actions?.includes(action)); })) {
+      notice('fail', '这件事刚刚有变化，请重读后再试。'); return;
+    }
+    const used = new Set(plan.map(intentOf)), off = ['ack', 'decline'].filter(intent => used.has(intent)).map(intent => U.itemLabels[intent]);
+    const note = [off.length && off.join('、') + '的从“等你的事”撤下', used.has('later') && '晚点提醒的挪到“你放着”', used.has('close_report') && '关掉的汇报从“等你答的汇报”撤下',
+      used.has('decline_copy') && '有后续的不办了复制成一段话，贴给 AI 处理后续'].filter(Boolean).join('；') + '。';
+    const dialog = document.createElement('dialog');
+    dialog.className = 'live-item-confirm live-item-confirm--plan';
+    dialog.setAttribute('aria-labelledby', 'live-item-confirm-title');
+    dialog.setAttribute('aria-describedby', 'live-item-confirm-name live-item-confirm-note');
+    dialog.innerHTML = `<div class="live-item-confirm__card">
+      <button type="button" data-cancel class="live-item-confirm__x" aria-label="关闭核对框">×</button>
+      <h2 id="live-item-confirm-title">核对一下，办这 ${plan.length} 件？</h2>
+      <ul id="live-item-confirm-name" class="item-plan">${all.map(p => `<li><span class="item-plan__kind" data-kind="${esc(p.kind)}">${esc(p.label)}</span><span class="item-plan__name">${esc(U.fieldText(p.item.text || p.item.title, 'owner'))}</span>${p.intent ? `<span class="item-plan__to">→ <b>${esc(PLAN_TO[intentOf(p)])}</b></span>` : '<span class="item-plan__to is-skip">→ 没选办法，这次不动</span>'}</li>`).join('')}</ul>
+      <div class="item-plan__foot"><p id="live-item-confirm-note">${esc(note)}</p>
+      <div class="live-item-confirm__buttons"><button type="button" data-cancel autofocus>返回改</button><button type="button" data-apply>确认，办这 ${plan.length} 件</button></div></div></div>`;
+    const viewport = window.visualViewport;
+    const size = () => {
+      if (!viewport) return;
+      const zoom = Math.max(1, 1 / viewport.scale);
+      dialog.style.setProperty('--item-confirm-zoom', zoom);
+      dialog.style.setProperty('--item-confirm-width', `${viewport.width / zoom}px`);
+    };
+    dialog.addEventListener('click', event => { if (event.target === dialog || event.target.closest('[data-cancel]')) dialog.close(); });
+    dialog.addEventListener('close', () => { viewport?.removeEventListener('resize', size); dialog.remove(); trigger.focus({ preventScroll: true }); }, { once: true });
+    dialog.querySelector('[data-apply]').addEventListener('click', async () => {
+      dialog.close();
+      start();
+      try {
+        // 有后续的先复制（要趁这次点按），再按办法分批写回
+        const follow = plan.filter(p => intentOf(p) === 'decline_copy').map(p => p.item);
+        if (follow.length) {
+          const ok = await U.copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
+          notice(ok ? 'ok' : 'fail', ok ? '已复制，粘贴到 AI 对话发送' : '没复制成，请再点一次', ok ? `有后续的 ${follow.length} 件：AI 办完后续再关卡。` : '');
+          if (ok) complete(follow.map(item => item.id));
+        }
+        const byIntent = new Map();
+        for (const p of plan) if (intentOf(p) !== 'decline_copy') byIntent.set(intentOf(p), [...(byIntent.get(intentOf(p)) || []), p.item]);
+        await Promise.all([...byIntent].map(([intent, rows]) => U.saveItems(rows, intent, { complete })));
+      } finally { done(); }
+    }, { once: true });
+    size();
+    viewport?.addEventListener('resize', size);
+    document.body.append(dialog);
+    dialog.showModal();
+    dialog.querySelector('[autofocus]').focus({ preventScroll: true });
+  }
+  // 点“确认”弹核对框（confirmPlan）；办成的从勾选里去掉，没办成、没回结果的和没选办法的照旧勾着、选的办法也留着，能再点
+  selectionActions.addEventListener('click', event => {
+    const go = event.target.closest('[data-plan-go]');
+    if (!go || go.disabled) return;
+    const order = item => PLAN_KINDS.indexOf(planKind(item));
+    const plan = [...selected].map(id => planAvailable.get(id)).filter(Boolean).sort((a, b) => order(a) - order(b))
+      .map(item => ({ item, intent: planPicks.get(item.id) || '', kind: planKind(item), label: PLAN_LABEL[planKind(item)] || '其他' }));
+    confirmPlan(go, plan, {
+      start() { planWriting = true; renderSelection(); },
+      done() { planWriting = false; renderSelection(); },
+      complete(ids) { ids.forEach(id => selected.delete(id)); redrawItems(); if (reportsData) renderReports(reportsData); renderSelection(); },
+    });
+  });
   document.addEventListener('change', event => {
     const id = event.target.dataset.selectItem;
     if (!id) return;
@@ -251,17 +388,19 @@
     const { note } = U.status({ ...it, source_at: source, level: it.light, partial: [], attention_count: 0, gray_count: 0, ai_fixing_count: null });
     if (note) return { stamp, time, note, key: JSON.stringify([stamp, time, normalizeNote(note)]) };
   }
+  // M947：每月循环的提醒（后台给整数 monthly_day），在写日期的那一格写“每月 6 日”；这一期从哪天起照旧按 act_from 排
+  const monthlyDay = it => Number.isInteger(it.monthly_day) && it.monthly_day >= 1 && it.monthly_day <= 31 ? `每月 ${it.monthly_day} 日` : '';
   function row(it, closed = false, shared = '') {
     function brief(html) {
     return html;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，访客版不再先收成一句
     }
     const flags = it.text && typeof it.text === 'object' ? it.text : it, hidden = viewer === 'public' && (it.visibility === 'owner' || it.public === 'owner' || flags.visibility === 'owner' || flags.public === 'owner');
     const placeholder = hidden || viewer === 'public' && (flags.hidden || flags.rewrite === 'pending' && !flags.text && !flags.value);
-    const mark = placeholder ? U.fieldHtml(hidden ? { visibility: 'owner' } : flags, { name: '这件事的内容', kind: viewer }) : viewer === 'owner' && (it.visibility === 'owner' || it.public === 'owner' || U.visitorFieldKind(it, ['$', 'text', 'title'])) ? U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) : U.visibilityNote(it, viewer, '这件事的内容'), deadline = it.act_from ? `${U.date(it.act_from)} 起该办了` : it.due ? `${U.date(it.due)} 前${it.kind === 'choose' ? '要选' : '要办'}` : '';
+    const mark = placeholder ? U.fieldHtml(hidden ? { visibility: 'owner' } : flags, { name: '这件事的内容', kind: viewer }) : viewer === 'owner' && (it.visibility === 'owner' || it.public === 'owner' || U.visitorFieldKind(it, ['$', 'text', 'title'])) || U.visitorFieldKind(it, ['$', 'text', 'title']) === 'rewritten' ? U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) : U.visibilityNote(it, viewer, '这件事的内容'), deadline = monthlyDay(it) || (it.act_from ? `${U.date(it.act_from)} 起该办了` : it._landed && it.kind === 'later' ? '提醒时间还没确认' : it.due ? `${U.date(it.due)} 前${it.kind === 'choose' ? '要选' : '要办'}` : '');
     let closing = it.closed?.text && (typeof it.closed.text === 'object' ? it.closed.text : viewer === 'public' ? it.closed.text.replace(/^你(?=办完了|说不办了)/, '本人') : it.closed.text);
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
-    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
+    const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), it._landed && !it.closed?.at ? '时刻还没确认' : U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
@@ -277,20 +416,29 @@
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });
+    if (viewer === 'owner' && (key === 'closed' || key === 'later')) U.settleItemWrites?.(foundWrite);
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);
+    items = (items || []).filter(it => (key === 'closed' || it._landed || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
     }
     // 新私事规则（本人 11-24 02:56）：访客版不再按条藏，组标题只数看得到的行，也不再写“另有 N 件仅本人可见”。
-    const count = partial ? key === 'closed' ? '已读 ' + items.length + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? items.length : '—') + ' 件';
-    U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '（' + count + '）');
+    // M973：“近 7 天下去的”数的是读回来多少件，同一句并成一行的（“同一件事关过 N 次”）按原来的件数算，不按摆了几行；两版读回来的一样多，件数就一样
+    const pieces = key === 'closed' ? items.reduce((n, it) => n + (it.repeats || 1), 0) : items.length;
+    const count = partial ? key === 'closed' ? '已读 ' + pieces + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? pieces : '—') + ' 件';
+    U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
     const method = it => Object.hasOwn(KIND, it?.kind) ? it.kind : '';
-    if (key === 'closed') items.sort((a, b) => rank(a) - rank(b));
+    // M852：四组按“这组最近一次下去的时刻”排，刚办完的那组在最前；组里照旧新的在上；时刻相同的组照原来的先后（主控 11-25 17:08 转本人 17:03 的话后照建议 A 定，两版同一套）
+    if (key === 'closed') {
+      const when = it => Date.parse(it?.closed?.at) || 0, latest = new Map();
+      for (const it of items) latest.set(method(it), Math.max(latest.get(method(it)) ?? 0, when(it)));
+      items.sort((a, b) => latest.get(method(b)) - latest.get(method(a)) || rank(a) - rank(b) || when(b) - when(a));
+    }
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     const groupName = kind => KIND[kind] ? viewer === 'public' ? KIND[kind].replaceAll('你', '本人') : KIND[kind] : '没写类别';
     // 本人版列表默认给全；访客照旧先摆 5 条。
@@ -476,13 +624,16 @@
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
-    list('closed', d.items == null ? null : closedRows(closedItems), empty, it => row(it, true), true, partial);
-    recentClosed = d.items == null ? null : closedRows(closedItems);
+    const shown = d.items == null ? null : closedRows(withLanded('closed', closedItems));
+    list('closed', shown, empty, it => row(it, true), true, partial);
+    recentClosed = shown;
     if (reportsData) renderReports(reportsData);
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
   }
+  // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
+  function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }
   watch('items/closed', d => renderClosed(d), text => { list('closed', null, text); recentClosed = null; renderSide(); $('closed-next').hidden = true; });
   $('closed-next').addEventListener('click', async (event) => {
     const button = event.currentTarget, cursor = next, kind = viewer;
@@ -514,7 +665,7 @@
     const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !closedSince(gone, it.id, it.opened) && !closedSince(gone, it.owner_item || it.item_id || it.item, it.opened) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id')))).map(reportActions);
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length; filterBoard();
-    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}（${reportCount ?? '—'} 件）`);
+    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}<span class="lb-count">（${reportCount ?? '—'} 件）</span>`);
     const shown = drawn.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
     U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }

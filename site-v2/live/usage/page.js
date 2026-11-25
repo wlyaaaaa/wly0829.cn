@@ -181,8 +181,8 @@
   }
   // 本人版：后台在窗口标题这一条（排行 titles、最近前台 recent）的 visitor_labels 里标了窗口标题（title、'$'）或程序名（app）的，
   // 在原位挂签：标题的签挂在标题那一行，程序名的签挂在程序名旁，两样都标了就各挂各的；没标的不挂。专注时间（focus）只画色条、不写标题，没有挂签的地方。程序排行（apps）用键 name。
-  const titleTag = t => viewer !== 'owner' ? '' : U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer);
-  const appTag = t => viewer !== 'owner' ? '' : U.visitorLabel(t, 'app', '这个程序名', viewer);
+  const titleTag = t => U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer);
+  const appTag = t => U.visitorLabel(t, 'app', '这个程序名', viewer);
   function visibleTitle(row) {
     if (viewer === 'public' && row.visibility === 'owner') return null;
     const field = row.title;
@@ -210,7 +210,7 @@
       : valid ? `这里是${scope} ${countWords(n)}窗口标题，本人版能看到全部，所以不予展示` : `这里是${scope}窗口标题，本人版能看到全部，所以不予展示`);
   }
   function appRows(d) {
-    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), visitor_tag: viewer === 'owner' ? U.visitorLabel(a, ['$', 'name'], '这个程序名', viewer) : '', sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
+    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), visitor_tag: U.visitorLabel(a, ['$', 'name'], '这个程序名', viewer), sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
   }
   const statesForView = (states) => states.map((s) => ({ ...s, label: { work: '在用', active: '在用', sleep: '睡着' }[s.id] || s.label, note: '' }));
   // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：
@@ -218,6 +218,8 @@
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
   // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
   const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
+  // 键鼠静止从哪一刻算。按需更新快核（M928）核法：E:/Projects/Tools/TimeAudit/TimeAudit.ahk 的 maxIdleTime，现 60000 毫秒＝1 分钟；变了改这句
+  const AWAY_NOTE = '键鼠停满 1 分钟就算，这段不算在用时间';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -288,7 +290,7 @@
         const rows = ['day', 'day1', 'day2'].map(key => ({ key, label: '' }));
         const tl = block('day', el.firstElementChild, V.timeline(el.firstElementChild, { rows, actualEnd: true }));
         return { set: () => {
-          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s), payload = {};
+          const d = usage, unnoted = stateNotes(d), states = statesForView(d?.states || []).map(s => s.id === 'off' ? { ...s, note: OFF_NOTE } : unnoted.has(s.id) ? { ...s, note: unnoted.get(s.id) } : s.id === 'away' ? { ...s, note: AWAY_NOTE } : s), payload = {};
           const gap = states.length;
           states.push({ id: 'unrecorded', label: '缺测', hue: 'stone' });
           const strips = dayStrips(d?.day && { ...d.day, spans: d.day.spans?.map(([t, i]) => [t, i ?? gap]) });

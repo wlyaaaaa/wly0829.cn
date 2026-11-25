@@ -55,9 +55,12 @@
     const hours = num(c.interval_hours) || 6;
     let next = at(c.next_run_at), estimated = false;
     if (!next && last) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
-    const overdue = !!last && now - at(last.finished_at) > (hours * 2 + 1) * 3600000;
+    const overdue = !!last && now - at(last.finished_at) > lateHours(hours) * 3600000;
     return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running: runs[0]?.result === 'running' ? runs[0] : null };
   }
+
+  // 多久没跑完一轮算“没按时跑”：两轮间隔再加 1 小时（M928 机制说明写在“下次”那格）。间隔读回包 interval_hours，不用按需更新快核
+  function lateHours(hours) { return hours * 2 + 1; }
 
   // 给页首用：保护名单被删 > 出错或没按时跑；都没有返回 null（再看盘会不会满）。
   function alarm(d) {
@@ -201,7 +204,8 @@
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
-      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`].filter(Boolean).map(esc).join('<br>');
+      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
+      g.last && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     const kept = num(g.last?.skipped_unsaved_conversations);
     const firstTile = g.last ? first : `<li data-tone="gray">${ICON.ok}<div><b>出错</b><span class="cl-dash">—</span></div></li>`;
@@ -300,14 +304,14 @@
     }
     const n = Math.max(2, Math.min(5, Math.floor((W - L - R) / 130)));
     for (let i = 0; i < n; i++) { const t = data.from + (data.to - data.from) * i / (n - 1); svg.push(`<text class="cl-xtxt" x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${esc(i === n - 1 ? '今天' : K.dayKey(t))}</text>`); }
-    const ends = [];
+    const ends = [], fresh = [];
     for (const s of data.series) {
       const real = s.pts.filter(p => p[1] != null), [lastAt, lastFree] = real.at(-1);
       if (s.short) {
         const byDay = new Map(real.map(p => [K.dayKey(p[0]), p]));
         byDay.forEach(([t, v]) => svg.push(`<circle class="cl-dot" cx="${x(t).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.6" fill="${s.color}"><title>${esc(`${K.volName(s.v)} ${K.dayKey(t)} 空闲 ${K.size(v)}`)}</title></circle>`));
         const [t0, v0] = real[0];
-        svg.push(`<text class="cl-newtxt" x="${(x(t0) - 8).toFixed(1)}" y="${(y(v0) + 4).toFixed(1)}" text-anchor="end" fill="${s.color}">${esc(`${K.letter(s.v)} 盘刚开始记`)}</text>`);
+        fresh.push({ s, x: x(t0) - 8, y: y(v0) });
       } else {
         let path = '', pen = false;
         for (const [t, v] of s.pts) { if (v == null) { pen = false; continue; } path += `${pen ? 'L' : 'M'}${x(t).toFixed(1)} ${y(v).toFixed(1)}`; pen = true; }
@@ -315,6 +319,11 @@
       }
       if (!s.short) ends.push({ s, y: y(lastFree), x: x(lastAt) });
     }
+    // 几个盘同一时候刚开始记、空闲又差不多时，“X 盘刚开始记”会叠在一起：横向挨着的往下错开一行，到底了整体往上收（M937）。
+    fresh.sort((a, b) => a.y - b.y);
+    fresh.forEach((f, i) => { for (const g of fresh.slice(0, i)) if (Math.abs(g.x - f.x) < 110) f.y = Math.max(f.y, g.y + 17); });
+    const lift = fresh.length ? Math.max(0, Math.max(...fresh.map(f => f.y)) - (H - B - 4)) : 0;
+    for (const f of fresh) svg.push(`<text class="cl-newtxt" x="${f.x.toFixed(1)}" y="${(f.y - lift + 4).toFixed(1)}" text-anchor="end" fill="${f.s.color}">${esc(`${K.letter(f.s.v)} 盘刚开始记`)}</text>`);
     ends.sort((a, b) => a.y - b.y);
     for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
     const overflow = ends.length ? Math.max(0, ends.at(-1).y - (H - B)) : 0;

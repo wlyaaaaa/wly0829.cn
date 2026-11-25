@@ -932,6 +932,8 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 
 /* 输动态码锁定：结果、错码和断线都在原来的三张卡旁说明。 */
 .page--auth .cell__receipt { position: absolute; right: 28px; bottom: 25px; margin: 0; text-align: right; white-space: nowrap; }
+/* Windows 那一格底下一直并排着锁屏、解锁两颗钮：卡上那句提示放在状态下面，不跟按钮叠 */
+.page--auth .cell[data-key="win"] .cell__receipt { position: static; margin: 10px 0 0; font-size: 14px; line-height: 20px; text-align: left; white-space: normal; }
 .page--auth .cell__receipt[hidden], .page--auth .auth-offline[hidden] { display: none; }
 .page--auth .cell__receipt strong { display: block; color: #356b53; font-size: 17px; font-weight: 600; line-height: 22px; }
 .page--auth .cell__receipt span { display: block; color: #8f8d86; font-size: 13px; line-height: 18px; }
@@ -945,6 +947,18 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .has-error .lock-error { display: block; }
 .page--auth .has-error .code input { background: #fff5ef; box-shadow: inset 0 0 0 1.5px #ad6248; }
 .page--auth .deal.is-lock .go__btn:disabled { opacity: .5; }
+/* 开授权那一行排满了（时长、补充到上限、两项一起办、码格、验证），中间放不下提示字，原来会压在码格底下：
+   有提示时把它放到这一行下面、靠右写全，这一条随之加高；这一行里各样东西的位置不变（码格前留出原来那句空着时的 10+14px），没提示时和原来一样 */
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) { position: relative; padding-bottom: 28px; }
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) .code { margin-left: 24px; }
+.page--auth .deal.is-active:not(.is-lock):not(.is-retry) .go__msg.is-shown { position: absolute; right: 0; bottom: 0; margin: 0; }
+/* 浏览器放大（比如 125%）或窗口矮时主体栏变窄，这一行原来硬排成一行，码格和验证钮会挤出框外（M940）：
+   码格和验证钮当成一组靠右，一行排不下时整组换到下一行，还排不下的时长也往下换；排得下时和原来一样。
+   锁定、结束、解锁那种只有码格的照旧（这一组不成框，码格和按钮仍按原来的格子摆）。 */
+.deal__end { display: contents; }
+/* 只在这一条按开授权的宽度排时换行；锁定那种窄条（520px）里藏着的另两份照旧不换行，免得把窄条撑高 */
+.page--auth .dealbar:not(:has(.deal.is-lock.is-active)) .deal:not(.is-lock) { flex-wrap: wrap; row-gap: 12px; }
+.page--auth .deal:not(.is-lock) .deal__end { display: flex; flex: none; align-items: center; margin-left: auto; }
 
 .cell__inline { margin: 6px 0 0; font-size: 14px; }
 .cell__inline a { margin-left: 8px; }

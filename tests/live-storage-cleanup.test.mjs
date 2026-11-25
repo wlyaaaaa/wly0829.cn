@@ -119,7 +119,8 @@ test('云盘用原始字节重算，旧摘要的十进制余量不会重复显�
     google_drive: { free_bytes: 2 ** 40, used_bytes: 0.8 * GiB, days_until_full: 20, text: 'Google 云盘还剩 1.10 TB，约 20 天满' },
     aliyun_oss: { used_bytes: 1_073_741_824 },
   }, 'owner');
-  assert.match(html, /剩余 1 TB · 已用 819 MB · 约 20 天满/);
+  // 每段数字包在各自的 <span> 里，先去掉标签再比页面上读到的那句话。
+  assert.match(html.replace(/<[^>]+>/g, ''), /剩余 1 TB · 已用 819 MB · 约 20 天满/);
   assert.match(html, /阿里云对象存储.*已用 1 GB/);
   assert.doesNotMatch(html, /1\.10 TB/);
   assert.match(C.billing({ days_remaining_rounded: 587 }, 'owner'), /阿里云账户可用余额估计还能用 587 天/);

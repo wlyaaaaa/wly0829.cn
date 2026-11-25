@@ -86,6 +86,9 @@
   };
   const readonly = id => id === 'ai-review' || id === 'ai-stalled';
   const readonlyNote = '<p class="aw-readonly">这一类只显示，不派人修</p>';
+  // 已撤的类（M802）：后台不再收它的开关和暂停，点了只回“已撤”，所以旧链接打开时不摆这两个按钮，只写已撤
+  const retired = id => id === 'improvements';
+  const retiredNote = '<p class="aw-readonly">这一类已撤，开关和暂停不再起作用，下面是撤之前的记录</p>';
   // 每类四句：管、比如、关了、不管（本人审定的原句，备份、软件和工具、规则和技能按定稿第六轮⑤改成白话）。
   const descriptions = {
     'computer': ["硬盘空间突然往下掉，内存守护没压住内存上涨，系统记录里的蓝屏、非正常关机、致命硬件和磁盘错误", "内存守护碰到打不开的进程就整轮停摆 → AI 改成跳过它接着查 → 重载后真跑不再报错才算好", "守护照常报警，页面上看得到，只是没人去查谁在狂写盘、吃内存", "电脑卡顿不派人修，只用来让不急的重活错开"],
@@ -149,7 +152,14 @@
     error: ['出错', 'bad'], no_conclusion: ['没结论', 'off'], launched: ['已启动', 'run'], running: ['正在跑', 'run'] };
   const result = status => pill(...(resultPill[status] || []));
   function message(id) {
-    const text = feedback?.id === id ? feedback.text : '';
+    let text = feedback?.id === id ? feedback.text : '';
+    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
+    if (text && feedback.want && feedback.reread) {
+      const s = configFor(targetOf(id) || {}), want = feedback.want;
+      const same = s.mode === want.mode && (!want.until || instant(s.until_at) === instant(want.until));
+      text = same ? '已保存' : `最新读数还是${s.mode === 'paused' ? `暂停到 ${when(s.until_at)}` : { on: '开着', off: '关着' }[s.mode] || '没读到'}`;
+    }
     return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
   }
   function sourceRow(row) {
@@ -187,7 +197,7 @@
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
-    const controls = readOnly ? readonlyNote
+    const controls = readOnly ? readonlyNote : retired(data.id) ? retiredNote
       : settingBar(data);
     const counters = stats([['在修', c.occupied ?? c.running, 'run'], ['等复查', c.followup, 'queue'], [`要${own()}`, c.owner, 'owner'], ['7 天修好', c.repaired, 'done']]);
     const art = ART[data.id] || hero;
@@ -265,7 +275,7 @@
     ].filter(([href]) => href);
     if (row.project && row.project_name) related.unshift([route(`/live/project/?id=${segment(row.project)}`), '所属项目', row.project_name]);
     // M767：所属项目在访客版看不到的（后台在这件活上标 visitor_labels.project_name），本人版在项目名后挂签
-    const projectMark = audience === 'owner' && U.visitorLabel?.(row, 'project_name', '所属项目', audience) || '';
+    const projectMark = U.visitorLabel?.(row, 'project_name', '所属项目', audience) || '';
     const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}${kind === '所属项目' && projectMark ? ` ${projectMark}` : ''}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');
     const overview = row.summary || list(data.facts).find(fact => fact.label === '问题')?.text;
     const chip = `<p class="aw-chip">${lamp(row) || '<span class="aw-slot-dot"></span>'}一件活</p>`;
@@ -322,22 +332,26 @@
     }
   }
   // 结果写在开关旁边那行：已保存／没存上：后台给的原因／还没确认存上（超时、断线、电脑回不了话）
-  const feedbackFor = (id, reply) => {
+  const feedbackFor = (id, reply, want) => {
     if (reply.status === 'saved') feedback = { id, text: '已保存' };
     // 后台回“已撤”时照写它给的说明，不说“没存上”
     else if (reply.status === 'retired') feedback = { id, text: reply.message || '已撤' };
     // 不是本人设备：可信设备弹框已经弹了，旁边不另写
     else if (reply.error === 'cockpit_owner_required') feedback = null;
-    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上' };
+    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上', want };
     else feedback = { id, text: typeof reply.message === 'string' && /[一-鿿]/.test(reply.message) ? `没存上：${reply.message}` : '没存上，再试一次' };
   };
   // 回包到了才动开关：存上了照回包里的 current 显示；没存上但后台带回了电脑上读到的 current（读回和请求不一致），也照它显示；
   // 别的没存上、还没确认的留在原档，再读一次照新读数显示
+  const targetOf = id => { const data = state?.data; return work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id); };
   function applySaved(id, reply) {
-    const data = state?.data, t = work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id);
+    const t = targetOf(id);
     if (t && reply.current && typeof reply.current === 'object') t.setting = { ...t.setting, ...reply.current };
     paint();
-    if (reply.error !== 'cockpit_owner_required') void Live.refresh();
+    if (reply.error === 'cockpit_owner_required') return;
+    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
+    const fb = feedback;
+    Live.refresh().then(() => { if (feedback === fb && fb?.want) { fb.reread = true; paint(); } });
   }
   async function save(operation, id, value) {
     if (busy) return;
@@ -352,8 +366,9 @@
     if (op === 'toggle') {
       // 后台回之前开关留在原档，旁边写“正在保存…”；访客点了由可信设备弹框说明，不写这句
       if (audience === 'owner') { feedback = { id, text: '正在保存…', pending: true }; paint(); }
-      const reply = await save('type-mode', id, { mode: value === 'on' ? 'off' : 'on' }) || { status: 'unknown' };
-      feedbackFor(id, reply);
+      const want = value === 'on' ? 'off' : 'on';
+      const reply = await save('type-mode', id, { mode: want }) || { status: 'unknown' };
+      feedbackFor(id, reply, { mode: want });
       applySaved(id, reply);
       if (reply.error === 'cockpit_owner_required') return;
       const current = [...root.querySelectorAll('[data-setting=toggle]')].find(el => el.dataset.id === id);
@@ -381,8 +396,9 @@
     result.textContent = '正在保存…';
     feedback = { id, text: '正在保存…', pending: true };
     paint();
-    const reply = await save('type-mode', id, { mode: 'paused', until_at: `${value}:00+08:00` }) || { status: 'unknown' };
-    feedbackFor(id, reply);
+    const until = `${value}:00+08:00`;
+    const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
+    feedbackFor(id, reply, { mode: 'paused', until });
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') settings.close();
     else result.textContent = feedback?.text || '';

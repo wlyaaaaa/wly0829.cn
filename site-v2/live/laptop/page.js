@@ -69,8 +69,11 @@
     page.dataset.deviceState = checked ? 'online' : pending ? 'loading' : 'offline';
     headline = checked ? '在线' : pending ? '正在读笔记本' : disconnected ? '笔记本连不上'
       : seen || at(x?.last_online) ? '笔记本在线状态未重新确认' : x ? '笔记本在线状态这次没读到' : '电脑状态这次没带回笔记本读数';
-    const confirmed = time(seen || x?.last_online, now);
-    const stamp = confirmed ? ` · ${checked ? '最近确认' : '最后确认在线'} ${confirmed}` : disconnected && !last ? ' · 没有留存读数' : '';
+    // 笔记本确认离线时：写从几点起连不上（后台 offline_since，M918）；observed_at 这时是确认离线那次探测，
+    // 不能当“最后确认在线”，改用 last_online，不然会出现“自 22:10 起连不上 · 最后确认在线 22:40”打架
+    const laptopOff = x?.state === 'offline' && !checked, offSince = laptopOff ? time(x.offline_since, now) : '';
+    const confirmed = time(laptopOff ? x.last_online : seen || x?.last_online, now);
+    const stamp = (offSince ? ` · 自 ${offSince} 起` : '') + (confirmed ? ` · ${checked ? '最近确认' : '最后确认在线'} ${confirmed}` : disconnected && !last ? ' · 没有留存读数' : '');
     const readings = readingsOld && last !== confirmed ? ` · 下面的读数是 ${last} 的` : '';
     U.html($('laptop-state'), `${status(checked ? '● 在线' : headline, checked)}${U.esc(stamp + readings)}${note ? ` · ${field(note, '读取原因')}` : ''}`);
     const missing = pending ? '正在读' : unavailable;

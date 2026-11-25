@@ -73,7 +73,8 @@ def slug(text):
 #   旧格式（只有一个列表、每行带 file）照旧可用。
 # 1. 先按“替换”换掉确定的词组（每一处都换），能只改一处的只改那一处；
 # 2. 换完仍带“收起的词”的句子（以。！？；为界，加粗、行内代码、链接不拆开）从公开稿拿掉，整段空了就整段拿掉；
-# 3. 写着全局通用句的那一段（第一层边界本身），公开稿只留开头的加粗小标题和这句通用句。
+# 3. 写着全局通用句的那一段（第一层边界本身）换完仍带收起的词时，公开稿只留开头的加粗小标题和这句通用句（兜底；
+#    平时由改写表把这一段改成不点名的说法，其余句子照原文放出）。
 # 本人稿不经过这里，原样给配对设备。
 GENERIC = "公开版按实际情况说明事项的进展和结果。部分个人细节只在本人版显示。"
 SENTENCE_END = re.compile(r"[。！？；](?:[」”’）)]*)")
@@ -431,6 +432,9 @@ def main():
         rewrite_links(documents, release)
         charter_title = escape(documents[0]["title"].get_text())
         header = header_html()
+        # 访客读到的都是公开版：每页醒目标出“公开版”。“个别内容仅本人可见”只写在约法那页（本人 11-25），
+        # 整套里有句子只给本人稿时才写；专题页只标“公开版”。
+        owner_only = any(doc["trimmed"] for doc in documents)
         for doc in documents:
             title = escape(doc["title"].get_text())
             parts = document_parts(doc, documents, config)
@@ -442,9 +446,9 @@ def main():
             kicker = ('' if doc["output"] == "index.html" else
                       f'<p class="rules-kicker"><a href="index.html">{charter_title}</a>'
                       '<span class="rules-kicker-sep"> · </span>专题</p>')
-            # 访客读到的都是公开版：醒目标出“公开版”，这一页有句子只给本人稿时再加一句“个别内容仅本人可见”。
+            note = owner_only and doc["output"] == "index.html"
             public_mark = ('<p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span>'
-                           + ('<span class="rules-public-mark__note">个别内容仅本人可见</span>' if doc["trimmed"] else '') + '</p>')
+                           + ('<span class="rules-public-mark__note">个别内容仅本人可见</span>' if note else '') + '</p>')
             page = template.substitute(title=title, kicker=kicker, header=header, charter=charter, public_mark=public_mark,
                                        version=escape(version), date=date.strftime("%Y-%m-%d %H:%M"),
                                        page_key=Path(doc["output"]).stem, topics=topics, **parts)

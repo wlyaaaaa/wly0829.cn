@@ -132,7 +132,7 @@
     box.hidden = !thought; node.hidden = !thought;
     // M684：思考摘要访客那边不一样的，在这块标题后挂签（整场藏着的只在页头挂）
     const thinkHead = box.querySelector('.route-h__text');
-    if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && viewer === 'owner' && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
+    if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
     U.html(node, html);
   }
   // 本人版给全文：页头那句、思考摘要、过程记录和帮手的每一行都不收、不截；访客版照旧一句收起

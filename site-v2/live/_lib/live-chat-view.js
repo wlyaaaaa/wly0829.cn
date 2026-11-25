@@ -212,7 +212,8 @@
       if (prompt && shown(chat.task_prompt) !== shown(say)) facts.push(['', prompt]);
       return facts;
     }
-    const blockTag = (key, what) => viewer === 'owner' && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
+    // M930：“对外换了说法”访客版同一处也挂（visitorLabel 给访客只出这一种，“访客看不到”照旧只给本人）
+    const blockTag = (key, what) => !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
 
     const api = { marker, model, who, text, pending, field, replyBody, chatCell, said, privateSaid, headerNote, chatTitle, when, projectInfo, actions,
       privatePlan, wholeOwner, chatState, stepWord, markOf, plainName, marks, visibleText, helperWords, activityOf, dayOf, stamp, helperRow, station,

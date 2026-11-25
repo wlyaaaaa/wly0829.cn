@@ -78,7 +78,10 @@
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
     const time = [clockRange(r), minutes != null && (r.status === 'running' ? `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>` : `用了 ${span(minutes)}`)].filter(Boolean).join(' · ');
-    return [esc(name()), F(r.trigger, '为什么开这一轮'), r.who?.text ? esc(r.who.text) : '', r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
+    // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
+    const family = !r.who?.program && R.agentsPath(r.family);
+    const who = !r.who?.text ? '' : family ? link(family, `${esc(r.who.text)} ›`) : esc(r.who.text);
+    return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
       .map(t => `<span class="ar-tag">${t}</span>`).join('');
   }
 
@@ -197,7 +200,7 @@
     // 原话：这一轮的提示词（prompt_text）、对话的任务原文（task_prompt）；都没有时，Codex 自动任务对话的标题就是派给它的那段话（顶层页拿它当标题），照它给
     const asTitle = !r.prompt && !d?.task_prompt && d && CV.visibleText(d.title) ? `<div class="ar-prompt">${bodyOf(d.title, '交给 AI 的原话')}</div>` : '';
     const promptText = r.prompt ? `<pre class="ar-prompt">${F(r.prompt, '提示词')}</pre>` : d?.task_prompt ? `<div class="ar-prompt">${bodyOf(d.task_prompt, '任务原文')}</div>` : asTitle;
-    const promptTag = asTitle && viewer === 'owner' && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'title', '交给 AI 的原话', viewer) : '';
+    const promptTag = asTitle && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'title', '交给 AI 的原话', viewer) : '';
     const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt"><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${promptText}</details>`
       : `<p class="ar-msg__more"><a href="${esc(T.path('/live/automation/', { type: category }) + `#prompt-${category}`)}">这一类交给 AI 的原话 ›</a></p>`;
     return { at: start, html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, start), body: `排上这一轮：${reason}${look}${program ? '这一轮由程序直接办，没叫 AI。' : ''}`, after: resumes + prompt }) };
@@ -290,7 +293,7 @@
     const kinds = new Set(p.plan.map(x => CV.privatePlan(x) ? 'owner' : CV.markOf(x.text, x)).filter(Boolean)), marks = CV.marks(kinds, '计划');
     const now = p.plan[p.current];
     const head = [p.count, now && (ended ? `停在${p.label}` : p.label), now && !ended && CV.stepWord(U.chatFields.stepState(now))].filter(Boolean).join(' · ');
-    const tag = viewer === 'owner' && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'plan', '执行计划', viewer) : '';
+    const tag = !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'plan', '执行计划', viewer) : '';
     return `<details class="ar-fold ar-planfold" id="ar-plan"><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
   }
 
@@ -324,7 +327,7 @@
     const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；标 rewritten 的挂“对外换了说法”（M684）
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
-    const tag = viewer !== 'owner' ? '' : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
+    const tag = viewer !== 'owner' ? (c.reason === 'private' || c.why || labeled !== 'rewritten' ? '' : U.visitorRewrittenTag('这一轮的对话', '', viewer)) : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
       : labeled === 'rewritten' ? U.visitorRewrittenTag('这一轮的对话', '', viewer) : '';
     const count = items.filter(x => x.html.startsWith('<li class="ar-msg')).length;
     let meta = '', plan = '';
