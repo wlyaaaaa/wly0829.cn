@@ -289,7 +289,7 @@
     const desktop = desktopFrame(data), desktopRate = desktop === 'desktop_duplication_frame';
     const desktopStill = desktop === 'desktop_duplication_still';
     const fpsCutoff = (desktopRate || desktopStill && data.fps.series?.some(measured)) && cutoff(data.fps.at);
-    const fpsLine = desktopRate ? '桌面实测帧率' : desktopStill ? '画面没变 · 本次采集正常，没有新画面' : '';
+    const fpsLine = desktopRate ? '桌面实测帧率' : desktopStill ? '本次采集正常，画面没变' : '';
     const fpsTime = fpsCutoff && `${desktopStill ? '历史帧率截至' : '截至'} ${fpsCutoff}`;
     const out = [
       { key: 'stutters', name: '卡顿明细', palette: ['pink', 'violet'], pic: '/live/img/head-smooth.webp',
