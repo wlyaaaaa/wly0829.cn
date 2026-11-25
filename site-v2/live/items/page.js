@@ -330,7 +330,12 @@
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
     const method = it => Object.hasOwn(KIND, it?.kind) ? it.kind : '';
-    if (key === 'closed') items.sort((a, b) => rank(a) - rank(b));
+    // M852：四组按“这组最近一次下去的时刻”排，刚办完的那组在最前；组里照旧新的在上；时刻相同的组照原来的先后（主控 11-25 17:08 转本人 17:03 的话后照建议 A 定，两版同一套）
+    if (key === 'closed') {
+      const when = it => Date.parse(it?.closed?.at) || 0, latest = new Map();
+      for (const it of items) latest.set(method(it), Math.max(latest.get(method(it)) ?? 0, when(it)));
+      items.sort((a, b) => latest.get(method(b)) - latest.get(method(a)) || rank(a) - rank(b) || when(b) - when(a));
+    }
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     const groupName = kind => KIND[kind] ? viewer === 'public' ? KIND[kind].replaceAll('你', '本人') : KIND[kind] : '没写类别';
     // 本人版列表默认给全；访客照旧先摆 5 条。
