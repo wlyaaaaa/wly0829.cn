@@ -201,7 +201,7 @@
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
-    let title, body = '', meta;
+    let title, body = '', meta, why = '';
     if (c.kind === 'repair') {
       // 第几轮只用后台给的 subject.round；没给就不写，不按列表里排第几自己编（列表和详情要对得上，验收 11-24 07:15）
       const nth = x => known(x.subject?.round) && x.subject.round > 0 ? x.subject.round : null;
@@ -225,13 +225,15 @@
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
       body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
-      meta = [r.deferred && R.deferredWhy(r, F), range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
+      // 暂缓的为什么放着、在等什么单独一行；下面那行照别的卡只写几点、谁、为什么开这一轮
+      why = r.deferred ? R.deferredWhy(r, F) : '';
+      meta = [range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
     }
     if (c.kind === 'repair' && c.subject.href) meta += ` · ${link(c.subject.href, '这件的全部经过 ›')}`;
     // M684：本人版这一轮所挂的对话访客那边不一样的（visitor_labels.conversation），在这行末挂签
     meta += U.visitorLabel({ visitor_labels: r.labels }, 'conversation', '这一轮的对话', viewer);
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
-      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}<p class="au-card__meta">${meta}</p></div>${go(r.href)}</article>`;
+      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p></div>${go(r.href)}</article>`;
   }
   function problemCard(d, p) {
     const href = T.path(p.href) || (p.run_id ? R.runPath(p.category, p.run_id) : '');
