@@ -21,6 +21,58 @@
 .op-dot { margin: 0 10px; color: #8f8d85; }
 .op-warn { color: var(--tp-amber); font-weight: 700; }
 
+/* 开法：一排胶囊，选中的那个用这一家的颜色 */
+.op-modes { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin: -8px 0 20px; padding: 0 4px; }
+.op-modes__label { margin-right: 6px; font-size: 16px; color: #6c6b64; }
+.op-modes button { padding: 7px 20px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgb(20 20 19 / .06);
+  font: inherit; font-size: 16px; font-weight: 600; line-height: 24px; color: #3d3d3a; font-variant-numeric: tabular-nums; cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease; }
+.op-modes button:hover { background: #f6f6f3; }
+.op-modes button[aria-pressed="true"] { border-color: var(--host); background: color-mix(in srgb, var(--host) 13%, #fff); color: color-mix(in srgb, var(--host) 62%, #000);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--host) 16%, transparent); }
+.op-modes button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.op-modes__hint { margin-left: 8px; font-size: 14.5px; color: #6c6b64; overflow-wrap: anywhere; }
+.op-modes__hint code { font-family: var(--mono); font-size: 13.5px; }
+
+/* 读哪几份：卡头浅浅一层这一家的颜色，下面一份一行 */
+.op-col { display: grid; gap: 0; min-width: 0; }
+.op-files { padding: 14px 22px 20px; }
+.op-files[data-fresh] { animation: op-in .45s cubic-bezier(.3, .7, .3, 1) both; }
+@keyframes op-in { from { opacity: .35; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+.op-files__head { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 18px; margin: 0 -8px 10px; padding: 14px 18px 18px; border-radius: 12px; background: color-mix(in srgb, var(--host) 10%, #fff); overflow: hidden; }
+.op-files__head h2 { margin: 0; font-family: var(--black); font-size: 26px; line-height: 34px; }
+.op-files__sum { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0; font-family: var(--black); font-size: 22px; line-height: 30px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.op-files__sum b { font-weight: inherit; }
+.op-files__sum em { padding-left: 12px; border-left: 1px solid var(--tp-line); font-style: normal; color: var(--tp-green); }
+.op-files__sum em[data-tone="over"] { color: var(--tp-amber); }
+.op-files__sum .op-ev { font-family: var(--sans); }
+.op-gauge { position: absolute; left: 18px; right: 18px; bottom: 7px; height: 6px; border-radius: 3px; background: rgb(20 20 19 / .08); overflow: hidden; }
+.op-gauge i { display: block; height: 100%; border-radius: 3px; background: var(--host); transform-origin: left; animation: tp-growx .9s cubic-bezier(.3, .7, .3, 1) both; }
+.op-gauge[data-tone="over"] i { background: var(--tp-amber); }
+.tp-still .op-gauge i { animation: none; }
+.op-files[data-fresh] .op-gauge i { animation: tp-growx .7s cubic-bezier(.3, .7, .3, 1) both; }
+.op-files__how { margin: 0 0 8px; font-size: 13.5px; line-height: 22px; color: #6c6b64; }
+.op-files__group { margin: 14px 0 2px; font-size: 15px; font-weight: 700; line-height: 22px; color: #6c6b64; }
+.op-fr { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto 122px; align-items: center; gap: 4px 14px; padding: 9px 10px; border-bottom: 1px solid var(--tp-hair); }
+.op-fr[data-scope="project"] { box-shadow: inset 3px 0 0 var(--host); padding-left: 18px; }
+.op-fr__no { font-size: 13.5px; color: #6c6b64; white-space: nowrap; }
+.op-fr__path { display: grid; gap: 1px; min-width: 0; }
+.op-fr__path > code { font-family: var(--mono); font-size: 14px; line-height: 21px; color: var(--ink); overflow-wrap: anywhere; }
+.op-fr__path small { font-size: 12.5px; line-height: 19px; color: #6c6b64; overflow-wrap: anywhere; }
+.op-fr__path small code { font-family: var(--mono); font-size: 12px; }
+.op-fr__num { font-size: 14.5px; color: #2f2f2b; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+.op-fr__num b { font-size: 16px; font-weight: 800; color: var(--ink); }
+.op-fr .op-ev { justify-self: end; }
+.op-files__total { margin: 12px 0 10px; font-family: var(--black); font-size: 18px; line-height: 26px; font-variant-numeric: tabular-nums; }
+.op-files__legend { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; line-height: 22px; color: #57564f; }
+.op-files__legend li { display: flex; align-items: center; gap: 10px; }
+.op-files__legend .op-ev::after { content: "："; }
+/* 看到的：蓝；按加载规则推算：琥珀、虚线边；读不到：灰 */
+.op-ev { display: inline-flex; align-items: center; flex: none; padding: 1px 10px; border: 1px solid #9cc0ee; border-radius: 999px; background: #e9f2fe; color: #1f5cb8;
+  font-size: 13px; font-weight: 700; line-height: 20px; white-space: nowrap; }
+.op-ev[data-ev="inferred"] { border: 1px dashed #e0a43a; background: #fff5df; color: #7a4a00; }
+.op-ev[data-ev="unavailable"] { border-color: var(--tp-line); background: rgb(20 20 19 / .05); color: #6c6b64; }
+
 .op-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
 .op-main { padding: 26px 28px 28px; }
 
@@ -71,7 +123,10 @@
 /* 几份文件拼起来装的（Antigravity）：每份前面一行文件名 */
 .op-file { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 22px 0 12px; padding: 0 0 8px; border-bottom: 1px dashed var(--tp-line); font-size: 14px; color: #57564f; }
 .op-file:first-child { margin-top: 0; }
-.op-file b { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+.op-file b { font-family: var(--mono); font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.op-file span { flex: none; font-variant-numeric: tabular-nums; }
+/* 项目自己的那几份没登原文：说一声 */
+.op-more { margin: 18px 0 0; padding: 10px 16px; border-radius: 10px; background: rgb(20 20 19 / .04); font-size: 14px; line-height: 22px; color: #57564f; }
 
 /* 开场时程序另外补的几行 */
 .op-ctx { margin: 28px 0 0; padding: 24px 0 0; border-top: 1px solid var(--tp-line); scroll-margin-top: calc(var(--bar-bottom) + 16px); }
@@ -82,6 +137,8 @@
 /* 右栏：三家比一比，点一家就切过去 */
 .op-side { position: sticky; top: calc(var(--bar-bottom) + 14px); padding: 24px 26px 14px; }
 .op-side h2 { margin: 0 0 8px; font-family: var(--black); font-size: 28px; line-height: 36px; }
+.op-side__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.op-side__head span { font-size: 14px; color: #6c6b64; white-space: nowrap; }
 .op-cmp { display: grid; gap: 4px; width: calc(100% + 16px); margin: 0 -8px; padding: 16px 8px; border: 0; border-top: 1px solid var(--tp-hair); border-radius: 10px; background: none; font: inherit; text-align: left; cursor: pointer; transition: background .15s ease; }
 .op-cmp:hover { background: rgb(20 20 19 / .04); }
 .op-cmp:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
