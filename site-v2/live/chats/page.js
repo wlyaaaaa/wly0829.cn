@@ -195,7 +195,7 @@
       const cell = chartHost.querySelector('.chart__val b');
       if (!cell || !reading) return;
       if (reading.value == null) cell.textContent = '没记录';
-      else if (Number.isFinite(reading.at)) cell.textContent = `${pointedAt == null ? readAt(reading.at * 1000) : `所指记录 ${stamp(reading.at * 1000)}`} · ${reading.value} 个`;
+      else if (Number.isFinite(reading.at)) cell.textContent = `${pointedAt == null ? (boardOf() ? `最近一次读数 ${dayClock(new Date(reading.at * 1000).toISOString())}` : readAt(reading.at * 1000)) : `所指记录 ${stamp(reading.at * 1000)}`} · ${reading.value} 个`;
     }
   });
   const daily = window.LiveViz.bars($('chat-days'), { stack: true, unit: '个', series: [{ id: 'claude', label: 'Claude', hue: 'apricot' }, { id: 'gpt', label: 'Codex', hue: 'teal' }, { id: 'antigravity', label: 'Antigravity', hue: 'violet' }] });
@@ -236,6 +236,23 @@
       U.html(host, links.map(link => ` <span class="chat-stat-piece">· ${link}</span>`).join(''), false);
     });
   }
+  // “同时在干”图下那一句。M915 board 模式：整页只有页头一个“截至”；这块比页头旧 2 分钟以上，写“这块停在 23:07，比页面旧 25 分钟 · 原因”，
+  // 后台只给了“最近的对话记录已超过 120 秒”这种没说为什么的，写“原因还没查到”（设计第 7 节；“已交自动修理 ›”要后台给链到哪一件，见交回）
+  let lastCurrent = null;
+  function drawReading() {
+    if (!lastCurrent) return;
+    const { current, n } = lastCurrent, b = boardOf();
+    const reading = $('chat-current-reading'), at = readAt(current?.at);
+    const hasCurrent = Number.isFinite(current?.current), generic = current?.gap === '最近的对话记录已超过 120 秒';
+    const behind = b && Number.isFinite(Date.parse(current?.at)) && Number.isFinite(Date.parse(b.as_of)) ? Math.floor((Date.parse(b.as_of) - Date.parse(current.at)) / 60000) : null;
+    const gap = b ? (behind != null && behind >= 2 ? `这块停在 ${dayClock(current.at)}，比页面旧 ${behind} 分钟 · ${generic || !current?.gap ? '原因还没查到' : U.fieldText(current.gap)}` : generic ? '' : current?.gap)
+      : generic ? `此刻同时在干暂时读不到${at ? ' · 上次记录' + at : ''}` : current?.gap;
+    const currentText = hasCurrent && !(b && behind >= 2) ? n(current.current, current, 'current', U.offline?.() ? '断开前在干的主对话' : '此刻在干的主对话') + (at && !b ? ` · ${U.nowrap(at)}` : '') : '';
+    U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · '));
+    reading.hidden = !currentText && !gap;
+    const cell = chartHost.querySelector('.chart__val b');
+    if (b && cell) cell.textContent = cell.textContent.replace(/^截至 /, '最近一次读数 ');
+  }
   function renderStats(stats, temporary = false) {
     const current = stats?.concurrent, { from, to } = current?.window ?? current ?? {}, peak = current?.peak;
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
@@ -250,13 +267,8 @@
       const prefix = key === 'manual_opened' && text.startsWith('至少 ') ? '至少 ' : '';
       return `${label} ${prefix}<strong>${U.fieldHtml(text.slice(prefix.length), { name: label, place: 'body' })}</strong>${key === 'manual_opened' ? ' 个' : ''}`;
     }
-    const reading = $('chat-current-reading'), at = readAt(current?.at);
-    const hasCurrent = Number.isFinite(current?.current);
-    const gap = current?.gap === '最近的对话记录已超过 120 秒'
-      ? `此刻同时在干暂时读不到${at ? ' · 上次记录' + at : ''}` : current?.gap;
-    const currentText = hasCurrent ? n(current.current, current, 'current', U.offline?.() ? '断开前在干的主对话' : '此刻在干的主对话') + (at ? ` · ${U.nowrap(at)}` : '') : '';
-    U.html(reading, [currentText, gap && U.fieldHtml(gap, { name: '统计说明', place: 'body' })].filter(Boolean).join(' · '));
-    reading.hidden = !currentText && !gap;
+    lastCurrent = { current, n };
+    drawReading();
     const gapHtml = gap => U.fieldHtml(gap, { name: '统计说明', place: 'body' });
     // 型号先全写出来，比另一栏长的那栏由 fitModels 按高度收进“展开”（M460）
     const modelsOf = key => stats[key]?.models && (U.draw10?.modelRows(stats[key].models) || stats[key].models);
@@ -486,7 +498,7 @@
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
     const none = total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
-      : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '';
+      : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '暂时只读到数量';
     const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
     const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
     U.list(card.main, idle || [...pickNote, ...(main.length ? main : none ? wait(none) : [])]);
@@ -513,6 +525,7 @@
     fillColumn(doneCard, 'archived', cols.archived, b);
     $('recent-note').textContent = '';
     drawBackground(lastAutomation);
+    drawReading();
     board.el.querySelectorAll(':scope > .lb-card').forEach(el => { el.style.minHeight = ''; });
     board.layout(true); even(); recentBoard.layout(true); fitThoughts();
   }
