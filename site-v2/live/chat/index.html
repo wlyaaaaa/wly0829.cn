@@ -29,6 +29,23 @@
 /* 对话来自某一轮自动任务时，头卡里写“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，样子跟等你的事一样 */
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
+/* H1（本人 HEADS1125：“标题有个框比没有好看”）：标题收进一张页头卡，用全站页头卡的玻璃（.card__glass.glass，同 AI 对话页页头卡）；
+   返回留在卡外，插画收进卡右边、往左淡进玻璃；卡里的字和下面四张卡不动 */
+.route-head--card { min-height: 0; margin-bottom: 18px; }
+.route-head--card > .card__glass { min-height: 0; padding: 28px 40px 26px; }
+.route-head--card .route-head__art { top: 0; right: 0; bottom: 0; height: auto; width: min(980px, 60%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 16%, #000 42%); mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 16%, #000 42%); }
+.route-head--card .card__body { padding-top: 0; }
+/* 设计第 9 节：状态标签后面接“从几点起”和原因（标签那颗照原来的样子） */
+.route-head .card__head > .head__tail:has(+ .head__since) { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 999px; background: var(--route-accent-soft); color: var(--route-accent-deep); font-size: 15px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+.route-head .card__head > .head__since { font-size: 15px; line-height: 30px; letter-spacing: .02em; color: var(--route-muted); }
+/* LINK1125：型号那项点了去智能体页这一家、“开场读的规矩”点了去开场页这一家；样子同“压缩过 N 次 ›”，字色不变 */
+.route-head .route-head__go { color: inherit; font-weight: inherit; text-decoration: none; }
+.route-head .route-head__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* “· 开场读的规矩 ›”接在“压缩过 N 次 ›”同一行；展开压缩记录时它留在摘要那一行右边 */
+.route-head [data-compaction]:has(> [data-opening]) { display: flex; align-items: baseline; column-gap: 6px; }
+.route-head [data-compaction] > details { min-width: 0; }
+.route-head [data-compaction] > [data-opening] { flex: none; white-space: nowrap; }
 </style>
 <script src="/motion/motion.js"></script>
 <script src="/live/_lib/live-motion.js"></script>
@@ -39,8 +56,9 @@
   <div class="field" aria-hidden="true"></div>
   <a class="back" href="/live/chats/" data-back data-mo-rise>AI 对话</a>
   <ul class="notices" id="notices" aria-live="polite"></ul>
-  <article class="card route-head" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+  <article class="card route-head route-head--card" id="hero" data-tone="off" data-pic="right" data-mo-rise>
     <div class="card__glow" aria-hidden="true"></div>
+    <div class="card__glass glass">
     <span class="route-art route-head__art" aria-hidden="true"></span>
     <div class="card__body">
       <p class="card__head" data-part="head"></p>
@@ -51,6 +69,7 @@
         <div class="route-say"><span class="route-say__icon" aria-hidden="true"></span><p class="route-say__text" data-part="say" data-clip="say" hidden></p><button type="button" class="route-clip__more" data-clip-for="say" hidden>展开</button></div>
         <div class="route-head__acts" data-part="acts" hidden></div>
       </div>
+    </div>
     </div>
   </article>
   <div class="route-body" id="rec">
