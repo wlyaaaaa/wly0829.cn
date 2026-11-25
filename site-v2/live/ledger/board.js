@@ -86,6 +86,7 @@
   }
 
   // —— 还欠着的每一件：时间轨道。分“欠着”（在修的、到点还没了结的）和“放着”（等约好的时间或条件的、暂时不修的），按后台给的 group 分 ——
+  // “放着”小字里“自动修理同一件修两轮还没好，也先放到这里”照后台 automation/core.py 的 REPAIR_LIMIT=2 写死，改了那边要跟着改
   function nextOf(it) { return it.next_at || it.wait?.at || null; }
   const groupOf = it => it.group === 'owed' || it.group === 'parked' ? it.group : it.running || it.state === 'working' || it.overdue ? 'owed' : 'parked';
   // 谁记的：后台给了记下这件事的那场对话或那一轮的地址（registered_by_href）就做成链接；没有地址照原样写字，打不开的原因放在悬停说明里。
@@ -143,7 +144,7 @@
     };
     return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件<span class="lg-live">实时</span><small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
       ${board('owed', '没有在修的事。')}</section>
-      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；到那天还没了结就挪进欠着；看满 3 次就了结。</small></h2></div>
+      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；自动修理同一件修两轮还没好，也先放到这里；到那天还没了结就挪进欠着；看满 3 次就了结。</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
   }
   // “现在”竖线跟着时间往右走
@@ -241,12 +242,12 @@
       ${pickedState?.data === null ? '<p class="tp-small">经过正在读…</p>' : lines ? '' : `<p class="tp-small lg-gap">${gapText()}</p>`}${related ? `<p class="tp-small lg-rel">关联：${related}</p>` : ''}</section>`;
   }
 
-  // —— 反复出现 ——
+  // —— 反复出现 ——（“30 天内第三次坏就停手转给本人”照后台 automation/core.py 的 FAULT_WINDOW=30 天、LOOK_LIMIT=3 写死，改了那边要跟着改）
   function repeats(d) {
     const r = d.repeat_fixes || {}, rows = list(r.items);
     if (!rows.length) return '';
     const now = Date.now(), from = now - 30 * DAY, x = t => (t - from) / (30 * DAY) * 100;
-    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>修好了又出现的同一件，近 30 天</small></h2></div>
+    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>修好了又出现的同一件，近 30 天；30 天内第三次坏，自动修理停手、转给${you()}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const times = (list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at]).map(stamp).filter(t => t && t >= from);
         return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">又发生 ${int(it.reopen_count)} 次</span>
