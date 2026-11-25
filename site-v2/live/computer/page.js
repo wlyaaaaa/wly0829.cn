@@ -1095,7 +1095,8 @@
   // 只有电脑到手机的调试连接断写“电脑连不上 · HH:MM 起”（offline.since），手机这时可能还在线
   function offSinceText(x) {
     const link = lastState?.link;
-    const stamp = since => `${U.date(since) !== U.date(Date.parse(lastState?.now) || Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
+    // 带不带日期拿现在的北京日期比（和页顶“电脑 HH:MM 起离线”一致）；不拿这份数的时刻当今天，电脑离线跨了零点时那份数还是昨天的
+    const stamp = since => `${U.date(since) !== U.date(Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
     // 只断调试连接：这格已印着“手机”，写“电脑连不上”，看得出是电脑这头连不上它、手机可能还在线（主持 11-26 定）；
     // 没有起点、后台也没给别的说法时同样写“电脑连不上”，不写成像手机自己毛病的“连不上”
     if (x.id === 'phone' && x.presence?.state !== 'offline' && x.state === 'offline') {

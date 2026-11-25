@@ -948,7 +948,8 @@
   // 手机离线怎么说（主持 11-26 照 C2 建议定，手机页同一套）：电脑的调试连接和 Tailscale 都找不到手机 →“手机离线 · HH:MM 起”，
   // 时刻是和 presence 同级的 offline_since；只有电脑到手机的调试连接断 →“电脑连不上手机 · HH:MM 起”，时刻是 offline.since
   function phoneOffText(d) {
-    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(lastState?.now ?? Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    // 带不带日期拿现在的北京日期比（和手机页、电脑页一致），不拿这份数的时刻当今天
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
     // 卡上大字只放“手机离线”，时刻跟在后面一行小字里（和原来“手机连不上 · 几点起”一样的排法，大字不折行）
     if (d?.presence?.state === 'offline') { const since = at(d.offline_since); return `手机离线${since ? ` · ${since} 起` : ''}`; }
     const since = at(d?.offline?.since);
