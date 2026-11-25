@@ -6,8 +6,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI;
-  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-laptop', 'weekly-live', 'excerpt', 'ai-commitments'];
-  // 八类的名字：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
+  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  // 各类的名字（笔记本每周巡检已取消，名字留着给旧记录用）：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
   const NAMES = { 'auto-repair': '自动修理', 'message-review': '替你看新消息', translator: '翻译官', 'weekly-rules': '每周规矩复核',
     'weekly-laptop': '笔记本每周巡检', 'weekly-live': '实况每周对一遍', excerpt: '摘一句', 'ai-commitments': 'AI 约好的事' };
   const FAMILIES = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
