@@ -950,6 +950,13 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) { position: relative; padding-bottom: 28px; }
 .page--auth .deal.is-active:not(.is-lock):not(.is-retry):has(.go__msg.is-shown) .code { margin-left: 24px; }
 .page--auth .deal.is-active:not(.is-lock):not(.is-retry) .go__msg.is-shown { position: absolute; right: 0; bottom: 0; margin: 0; }
+/* 浏览器放大（比如 125%）或窗口矮时主体栏变窄，这一行原来硬排成一行，码格和验证钮会挤出框外（M940）：
+   码格和验证钮当成一组靠右，一行排不下时整组换到下一行，还排不下的时长也往下换；排得下时和原来一样。
+   锁定、结束、解锁那种只有码格的照旧（这一组不成框，码格和按钮仍按原来的格子摆）。 */
+.deal__end { display: contents; }
+/* 只在这一条按开授权的宽度排时换行；锁定那种窄条（520px）里藏着的另两份照旧不换行，免得把窄条撑高 */
+.page--auth .dealbar:not(:has(.deal.is-lock.is-active)) .deal:not(.is-lock) { flex-wrap: wrap; row-gap: 12px; }
+.page--auth .deal:not(.is-lock) .deal__end { display: flex; flex: none; align-items: center; margin-left: auto; }
 
 .cell__inline { margin: 6px 0 0; font-size: 14px; }
 .cell__inline a { margin-left: 8px; }
