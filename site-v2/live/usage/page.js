@@ -181,8 +181,8 @@
   }
   // 本人版：后台在窗口标题这一条（排行 titles、最近前台 recent）的 visitor_labels 里标了窗口标题（title、'$'）或程序名（app）的，
   // 在原位挂签：标题的签挂在标题那一行，程序名的签挂在程序名旁，两样都标了就各挂各的；没标的不挂。专注时间（focus）只画色条、不写标题，没有挂签的地方。程序排行（apps）用键 name。
-  const titleTag = t => viewer !== 'owner' ? '' : U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer);
-  const appTag = t => viewer !== 'owner' ? '' : U.visitorLabel(t, 'app', '这个程序名', viewer);
+  const titleTag = t => U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer);
+  const appTag = t => U.visitorLabel(t, 'app', '这个程序名', viewer);
   function visibleTitle(row) {
     if (viewer === 'public' && row.visibility === 'owner') return null;
     const field = row.title;
@@ -210,7 +210,7 @@
       : valid ? `这里是${scope} ${countWords(n)}窗口标题，本人版能看到全部，所以不予展示` : `这里是${scope}窗口标题，本人版能看到全部，所以不予展示`);
   }
   function appRows(d) {
-    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), visitor_tag: viewer === 'owner' ? U.visitorLabel(a, ['$', 'name'], '这个程序名', viewer) : '', sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
+    return d?.apps ? d.apps.map((a, i) => S.row({ key: `app:${i}`, private_value: a.name_field ?? a.name, name: sp(U.programName(a.name)), mark: usageMark(a.name), visitor_tag: U.visitorLabel(a, ['$', 'name'], '这个程序名', viewer), sub: a.name_field && typeof a.name_field === 'object' ? a.name_field : CAT[a.category] || '', value: a.seconds, text: a.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', a)) : dur(a.seconds), hue: catHue(a.category) }, a, 'seconds')) : null;
   }
   const statesForView = (states) => states.map((s) => ({ ...s, label: { work: '在用', active: '在用', sleep: '睡着' }[s.id] || s.label, note: '' }));
   // 屏幕关闭、睡着、关机这几样，后台在这段时间一条记录都没有时给来源说明（summary.state_notes）：

@@ -113,7 +113,7 @@
     const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
     // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
-    const titleMark = locked || viewer === 'owner' && U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
+    const titleMark = locked || U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = c.state === 'waiting' && stateText(c);
     const raw = locked ? null : U.chatProgressText(c.text ?? c.doing, c, viewer) ?? c.latest_reply, preview = U.chatPreviewSummary(raw, c, viewer);
     const repeatsStatus = (waitLabel || completed && !stillWorking) && U.chatFields.repeatsState(preview, c, viewer);
@@ -121,7 +121,7 @@
     const snippet = chatCell(preview, '最新进展', c, 0, true, preview !== raw);   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文
     const retryText = retry && chatCell({ ...field(preview, c), text: retry }, '最新进展', c, 0, true);
     // M684：本人版最新进展那句访客那边不一样的，句末挂签；整场对访客藏着的只在标题行挂一个。
-    const previewTag = viewer === 'owner' && snippet && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'doing', 'progress'], '这句最新进展', viewer) : '';
+    const previewTag = snippet && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'doing', 'progress'], '这句最新进展', viewer) : '';
     const latest = !snippet || repeatsStatus ? '' : previewTag ? `<p class="row__line">${retryText || snippet}${previewTag}</p>` : retryText && !c.detail
       ? `<details class="row__sub"><summary>${retryText}</summary><p style="overflow-wrap:anywhere">${snippet}</p></details>`
       : `<p class="row__line">${retryText || snippet}</p>`;

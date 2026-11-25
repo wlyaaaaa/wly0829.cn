@@ -118,8 +118,8 @@
       return { key: `group:${label}`, cls: 'pj-list-group', html: `${key === 'changes' ? first.band || '' : ''}${label ? `<p class="part">${title}</p>` : ''}${list(items.slice(0, shown))}${items.length > shown ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${items.length - shown} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${list(items.slice(shown))}</details>` : ''}` };
     });
   }
-  // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），名字旁挂“访客看不到”；访客版和没标的不挂
-  const projectTag = (it, kind = viewer) => kind === 'owner' ? U.visitorLabel(it, ['$', 'name'], '这个项目', kind) : '';
+  // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），名字旁挂“访客看不到”；访客版只挂其中的“对外换了说法”（M930），没标的不挂
+  const projectTag = (it, kind = viewer) => U.visitorLabel(it, ['$', 'name'], '这个项目', kind);
   const name = (it, kind = viewer) => { const field = it.name || it.label || '', hidden = kind === 'public' && (field?.hidden || field?.visibility === 'owner' || field?.public === 'owner'), text = U.fieldHtml(field, { name: '项目', place: 'label', kind }), note = (hidden ? U.fieldHtml(field, { name: '项目名', kind }) : U.visibilityNote(it, kind, it.hidden_what || '这个项目')) || projectTag(it, kind); return (it.href ? `<a class="row__title" href="${esc(route(it.href))}">${text} <span class="more__chev">›</span></a>` : `<span class="row__title">${text}</span>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
   const stamp = at => {
     if (typeof at !== 'string' || !at) return '';
@@ -373,6 +373,12 @@
           if (ownerNote) item = { ...item, ownerNote };
           const renamed = typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(raw, audience).trim();
           const nameTag = U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', audience) : '');
+          if (nameTag) title += nameTag;
+        }
+        if (audience !== 'owner') {
+          // M930：访客版只挂“对外换了说法”（后台在访客回包里标了 rewritten 才有）
+          const openTag = U.visitorLabel(it, 'open', '这份成品的正文', audience), nameTag = U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience);
+          if (openTag) item = { ...item, ownerNote: openTag };
           if (nameTag) title += nameTag;
         }
       }

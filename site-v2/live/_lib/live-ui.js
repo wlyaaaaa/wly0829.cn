@@ -432,10 +432,8 @@
     return `<span class="live-mark live-mark--plain">${esc(label)}</span>`;
   }
   function rewriteNote(name, kind) {
-    // 本人版用第二种标签（visitorRewrittenTag）；访客版照旧。
-    if (kind === 'owner') return visitorRewrittenTag(name || '这句话', '', kind);
-    const subject = name || '这句话';
-    return explanationButton('rewritten', '换了说法', subject, `${subject}对外换了说法。本人能看到原文。`);
+    // M930：两版同一个签“对外换了说法”（访客版原来写“换了说法”），点开的说明各按各的读者写。
+    return visitorRewrittenTag(name || '这句话', '', kind);
   }
   function privateDownload(name) {
     return explanationButton('owner', '演示文件下载仅本人可见', '这份演示文件', `下载权限仅给本人。本人能在电脑上打开或保存${name || '这份演示文件'}。`);
@@ -457,7 +455,8 @@
     }
     return '';
   }
-  // M684：本人版两种标签，全站同一个样子，访客版不挂（本人 11-24 定稿：两种一眼分得开）。
+  // M684：本人版两种标签，全站同一个样子（本人 11-24 定稿：两种一眼分得开）。
+  // M930（本人 11-25 17:59、18:03）：“对外换了说法”访客版同一处也挂，字一样；“访客看不到”照旧只在本人版挂。
   // 第一种“访客看不到”（紫色）：访客那边这一处看不到原内容，只有中性占位。第二种“对外换了说法”（琥珀色）：访客看到的是换过的说法。
   // 后台在本人读口的显示对象上给可选 visitor_labels：键是同一对象里的字段名，'$' 表示整块；值只有 hidden / rewritten，隐藏优先，缺键不挂。
   // 正文对象里只换了词时，标记给在字段自己身上（如 reply.visitor_labels.text），这里一并读。
@@ -473,10 +472,10 @@
   // 访客版整条藏掉的（visibility: 'owner'、整场锁、visitor_labels 标了整块或标题 hidden），原位挂“访客看不到”，点开写清藏了什么、为什么（M648）；
   // 只标了换说法的挂第二种签（rewrittenWhat 是换了说法的那一样）。后台给了 visitor_hidden_why 就把原因带上。
   function visitorHiddenMark(item, what = '这一条', kind = viewer, { keys = ['$', 'title'], rewrittenWhat = `${what}的标题` } = {}) {
-    if (kind !== 'owner') return '';
     const whole = item?.visibility === 'owner' || item?.public === 'owner' || item?.content_locked === true || visitorFieldKind(item, '$') === 'hidden';
     const labeled = visitorFieldKind(item, keys);
     if (!whole && labeled !== 'hidden') return labeled === 'rewritten' ? visitorRewrittenTag(rewrittenWhat, '', kind) : '';
+    if (kind !== 'owner') return '';
     const why = typeof item.visitor_hidden_why === 'string' ? item.visitor_hidden_why.trim() : '';
     return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}的${whole ? '标题和内容' : '标题'}。${why ? `原因：${why.replace(/[。.]?$/, '。')}` : ''}`);
   }
@@ -489,14 +488,15 @@
     return explanationButton('rewritten', '访客看不到', what, `访客版看不到${what}。${reason}`);
   }
   function visitorRewrittenTag(what, why = '', kind = viewer) {
-    if (kind !== 'owner' || !what) return '';
+    if (!what) return '';
+    if (kind !== 'owner') return explanationButton('reworded', '对外换了说法', what, `${what}对外换了说法，本人版是原文。`);
     const reason = typeof why === 'string' && why.trim() ? why.trim().replace(/[。.]?$/, '。') : '';
     return explanationButton('reworded', '对外换了说法', what, `访客版看到的${what}是换过的说法，本人这边是原文。${reason}`);
   }
   // 按 visitor_labels 在原位挂两种签之一；keys 是这个位置显示的字段名（整块的位置带上 '$'）。
   function visitorLabel(item, keys, what, kind = viewer) {
-    if (kind !== 'owner') return '';
     const type = visitorFieldKind(item, keys);
+    if (kind !== 'owner') return type === 'rewritten' ? visitorRewrittenTag(what, '', kind) : '';
     return type === 'hidden' ? visitorHiddenTag(what, item?.visitor_hidden_why, kind) : type === 'rewritten' ? visitorRewrittenTag(what, '', kind) : '';
   }
   // 新私事规则：访客侧不再画“另有 N 条仅本人可见”。
@@ -628,7 +628,8 @@
         : esc(v.hidden_block ? blockSentence(v.hidden_block) : `${fieldText(v.hidden_what) || (place === 'title' ? '标题' : name || '这一项')}仅本人可见`);
       const old = typeof value === 'string' && /^(?:([^<>]*)：)?可信设备可见$/.exec(s);
       if (old) return esc(`${old[1] || name || '这一项'}仅本人可见`);
-      if (place === 'body' && v.visibility === 'rewritten' && s) return esc(s);
+      // M930：换了说法的正文，访客版同一处也挂“对外换了说法”；只把号码、私事句换成“仅本人可见”的照旧不挂（同 visibilityNote）
+      if (place === 'body' && v.visibility === 'rewritten' && s && /仅本人可见/.test(s)) return esc(s);
     }
     const marked = marker || place !== 'body';
     const hidden = privateField(v);
