@@ -203,7 +203,7 @@
       if (s.private_count) return `<tr><td colspan="10">${U.privateSummary(s.private_count, { unit: '类资料' })}</td></tr>`;
       const state = U.status(s, { small: true, cover: d }), ps = points(d, s.id).sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
       const links = ps.map(pt => `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at) : '恢复点时间未登记')}</a>`);
-      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>共 ${links.length} 个，<span class="backup-unit">查看其余</span></summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : field(restoreText(d, s), '恢复点');
+      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>共 ${links.length} 个，<span class="backup-unit">查看其余</span></summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : field(restoreText(d, s), '恢复点').replace(/清单(?![^<]*>)/g, '<span class="backup-unit">清单</span>');
       const notes = [...new Set((d.restore || []).filter(g => g.set === s.id).flatMap(g => [g.restore_sessions?.text, g.gap]).filter(note => note && !emptyWord(note)))];
       const why = state.note && (s.why && state.note === field(s.why, '状态说明')
         ? explain(s.why, '备份说明') : `<small>${state.note}</small>`);
