@@ -38,9 +38,16 @@ function acceptsGzip(header) {
 
 async function cloudSnapshot(resource) {
   // The fixed OSS address cannot prove that its audience is still current.
-  const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: AbortSignal.timeout(5000)});
-  if (!response.ok) throw Error('snapshot');
-  const value = await response.json(), proof = value?.publication;
+  // OSS 上这份按 gzip 存，不管请求头一律回压缩字节（Content-Encoding: gzip）；运行时没替我们解压时开头是 1f 8b，自己解（M817）。
+  // 限时用 AbortController：EdgeOne 运行时文档只列了它和 AbortSignal.abort()，没列 AbortSignal.timeout()。
+  const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 5000);
+  let bytes;
+  try {
+    const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: controller.signal});
+    if (!response.ok) throw Error('snapshot');
+    bytes = new Uint8Array(await response.arrayBuffer());
+  } finally { clearTimeout(timer); }
+  const value = JSON.parse(new TextDecoder().decode(bytes[0] === 0x1f && bytes[1] === 0x8b ? await gunzip(bytes) : bytes)), proof = value?.publication;
   if (value?.metadata_only !== true || proof?.policy !== FALLBACK_POLICY ||
       typeof proof.audience !== 'string' || !/^[a-f0-9]{64}$/.test(proof.audience) ||
       typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at))) throw Error('snapshot');
@@ -83,8 +90,10 @@ export default async function onRequest({request, env = {}}) {
     const packed = gzipBytes && /gzip/i.test(upstream.headers.get('Content-Encoding') || '');
     if (!old && upstream.status >= 500) {
       const plain = async () => JSON.parse(new TextDecoder().decode(packed ? await gunzip(bytes) : bytes));
+      // 源站答了、只是这一项读不到（live_source_unavailable、live_variant_unavailable）也原样转：浏览器按“在线、这一项暂时读不到”显示，不当整个服务掉线（M813）。
       const preserve503 = upstream.status === 503 && (request.method === 'HEAD' ||
-        ['live_public_paused', 'live_publication_revoked', 'live_detail_unavailable'].includes((bytes && await plain().catch(() => null))?.error));
+        ['live_public_paused', 'live_publication_revoked', 'live_detail_unavailable', 'live_source_unavailable', 'live_variant_unavailable']
+          .includes((bytes && await plain().catch(() => null))?.error));
       if (!preserve503) {
         if ([500, 503].includes(upstream.status)) connection = 'service';
         throw Error('origin');
