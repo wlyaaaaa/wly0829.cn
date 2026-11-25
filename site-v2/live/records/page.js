@@ -512,7 +512,7 @@
     const prose = [r.text, r.detail].filter((value, index, all) => plain(value) && plain(value) !== plain(name) && all.findIndex(v => plain(v) === plain(value)) === index);
     const knowledgeParts = knowledge ? knowledgeCells(r) : null;
     const proseLength = (knowledge ? [r.text, r.detail, ...(r.statements || []).map(s => s.text)] : prose).reduce((length, value) => length + plain(value).length, 0);
-    const long = recordViewer !== 'owner' && proseLength > 128;   // 本人版给全文，不截成“…”
+    const long = false;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，不截成“…”
     const summary = prose.length ? long ? `<p>${esc(plain(prose[0]).slice(0, 90))}…</p>` : prose.map(value => `<p>${text(value)}</p>`).join('') : '';
     const detail = long ? (knowledge ? knowledgeParts[3] : prose.map(value => `<p>${text(value)}</p>`).join('')) : '';
     const cells = knowledge ? [knowledgeParts[0], [knowledgeParts[1], !long && knowledgeParts[3], knowledgeParts[4]].filter(Boolean).join(''), knowledgeParts[2]] : skills ? [
