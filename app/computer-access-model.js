@@ -263,7 +263,7 @@ export function canRetryVerification(result) {
 export function createGrantAttempt({ requestId, body, api, onCreated, onVerificationStarted = () => {}, existing = false }) {
   let createdPromise, current, cancelled = false, code = "", cancelPromise, factorSubmitted = false;
   const rejectedBeforeCreation = failure => new Set([
-    "public_state_changed", "public_totp_cooldown", "public_totp_not_ready",
+    "public_state_changed", "public_totp_cooldown", "public_totp_anonymous_paused", "public_totp_not_ready",
     "public_duration_total_exceeds_72_hours", "personal_access_duration_hours_invalid",
     "public_request_capacity", "public_request_source_capacity", "public_request_rate_limited",
     "public_request_temporarily_busy", "public_request_invalid", "public_origin_not_allowed",
@@ -272,6 +272,9 @@ export function createGrantAttempt({ requestId, body, api, onCreated, onVerifica
     schema: "pcconfig.public-access-result.v1", request_id: requestId,
     state: cancel ? "cancelled" : "failed", status: cancel ? "pass" : "blocked",
     ...(cancel ? { reason: failure.data.error } : { error: failure.data.error }),
+    // 几点再试、后台的说明照带回去（输码暂停时页面要显示）
+    ...(Number.isFinite(failure.data.cooldown_until_unix) ? { cooldown_until_unix: failure.data.cooldown_until_unix } : {}),
+    ...(typeof failure.data.message === "string" ? { message: failure.data.message } : {}),
     request_created: false, factor_submitted: false, plaintext_returned: false,
   });
   return {

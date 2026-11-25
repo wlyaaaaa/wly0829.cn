@@ -80,6 +80,19 @@
 .au-switchcell small { display: block; min-height: 19px; margin-top: 4px; max-width: 190px; font-size: 12.5px; color: #57564f; white-space: normal; }
 .au-switchcell small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
 .au-switchcell small[data-tone="bad"] { color: var(--tp-red); }
+/* 电脑上把窗口拉窄（1400 以下）时：任务名、用谁、近 30 天、开关几栏不再死撑一行，柱图跟着栏宽缩，“暂停到…”换到开关下面，
+   把宽度让给“什么时候跑”“上次结果”，免得这两栏挤成一字一行（M902）。1440 宽和手机（按 1440 等比缩小）不受影响 */
+@media (max-width: 1399px) {
+  .au-table thead th:nth-child(1) { width: 14%; }
+  .au-table thead th:nth-child(2) { width: 17%; }
+  .au-table thead th:nth-child(3) { width: 10%; }
+  .au-table thead th:nth-child(5) { width: 18%; }
+  .au-table thead th:nth-child(6) { width: 96px; }
+  .au-table tbody th, .au-model, .au-trend > span, .au-switchcell { white-space: normal; }
+  .au-trend { justify-items: stretch; }
+  .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }
+  .au-pausebtn { margin: 6px 0 0; }
+}
 .au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
 .au-state[data-mode="off"] { background: var(--tp-gray); }
 .au-state[data-mode="paused"] { background: var(--tp-amber); }
@@ -171,7 +184,8 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .au-card__meta { margin: 4px 0 0; font-size: 14px; line-height: 21px; color: #57564f; }
 .au-card__meta .tp-link { font-weight: 700; }
 .au-card__rounds { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 0; }
-.au-card__rounds a { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fafaf8; font-size: 12.5px; color: #3d3d3a; text-decoration: none; white-space: nowrap; }
+/* 一轮的结果可能很长：一行写不下就省略号收在卡里，不伸出卡片、不压右边的“看经过 ›”（前端 QA 11-25） */
+.au-card__rounds a { display: block; max-width: 100%; height: 26px; padding: 0 10px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fafaf8; font-size: 12.5px; line-height: 24px; color: #3d3d3a; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .au-card__rounds a[data-tone="bad"] { border-color: rgb(217 59 59 / .3); color: var(--tp-red); }
 .au-card__rounds a:hover { border-color: rgb(20 20 19 / .3); }
 .tp a.au-card__go { display: inline-flex; align-items: center; gap: 4px; padding: 6px 4px 6px 12px; font-size: 15px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }

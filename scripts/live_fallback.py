@@ -66,5 +66,6 @@ def read_checked_fallback(path):
     check = getattr(load_exporter(), 'check_fallback_publication', None)
     if check is None:
         raise ValueError('实况导出器尚未更新到本次访客规则')
-    check(data, require_metadata=True)
+    # metadata_only 显式为 false 是带访客版正文的新包，交导出器按正文逐块复核；其余一律按只有时刻的旧包核（后台 11-25 06:56）
+    check(data, require_metadata=data.get('metadata_only') is not False)
     return data

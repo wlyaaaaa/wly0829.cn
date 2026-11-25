@@ -293,7 +293,9 @@
       U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
       const current = (key, label) => {
         const listed = peopleIn(d.active?.filter(c => c.state === key));
-        if (Number.isFinite(d[key]) && d[key] < listed) return `${label}（汇总 ${d[key]} 场，列表列出 ${listed} 场）`;
+        // 后台的件数只算最近一次快读又确认过的（离最新一次 2 分钟内；快读每轮只轮到 4 场），列表还留着上次读到、这次没核对到的那几场；
+        // 那几场上次读到时状态就是这一栏的状态，现在还是不是说不准：照实说“上次还在干、这次没核对到”，不替它说已停
+        if (Number.isFinite(d[key]) && d[key] < listed) return `${d[key]} 个${label}（另 ${listed - d[key]} 个上次还${key === 'waiting' ? '在等' : '在干'}，这次没核对到）`;
         const count = chatCount(d, key, listed);
         return count && count + label;
       };

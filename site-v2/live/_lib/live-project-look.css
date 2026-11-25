@@ -59,6 +59,12 @@
 .pj-summary > span { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
 .pj-summary b { font-size: 23px; font-weight: 600; }
 .pj-summary small, .pj-recent { font-size: 12px; color: var(--muted); }
+/* 代码字数是主数，行数小字放在它下面（M846）；整块按第一行和“代码”两个字对齐 */
+.pj-summary-stack { display: inline-flex; flex-direction: column; }
+.pj-summary-stack > span { display: flex; align-items: baseline; gap: 6px; }
+.pj-summary-lines { line-height: 16px; }
+/* “合计只含有记录的项目”照旧单独一行在下面（代码那格变窄后不往第一行挤） */
+.pj-summary > small { flex-basis: 100%; }
 .pj-recent { display: block; line-height: 22px; }
 #active .pj-thumb { grid-row: 1 / span 4; }
 #activity { margin-bottom: 32px; }

@@ -209,6 +209,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-kv { column-gap: 28px; }
 .pj-card .pj-kv__row { padding: 8px 0; }
 .pj-card .pj-kv__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* “这件事最后一次发生”那一句（M769）：单独一行，格子窄时折行写全，不截成“…” */
+.pj-card .pj-moment { white-space: normal; overflow: visible; text-overflow: clip; }
 .pj-card .list { border-bottom: 0; }
 .pj-card .list > .row:first-child { border-top: 0; }
 .pj-card .rows:not(:has(.lamp)) { --gut: 0px; }

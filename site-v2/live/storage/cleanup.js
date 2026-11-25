@@ -300,14 +300,14 @@
     }
     const n = Math.max(2, Math.min(5, Math.floor((W - L - R) / 130)));
     for (let i = 0; i < n; i++) { const t = data.from + (data.to - data.from) * i / (n - 1); svg.push(`<text class="cl-xtxt" x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${esc(i === n - 1 ? '今天' : K.dayKey(t))}</text>`); }
-    const ends = [];
+    const ends = [], fresh = [];
     for (const s of data.series) {
       const real = s.pts.filter(p => p[1] != null), [lastAt, lastFree] = real.at(-1);
       if (s.short) {
         const byDay = new Map(real.map(p => [K.dayKey(p[0]), p]));
         byDay.forEach(([t, v]) => svg.push(`<circle class="cl-dot" cx="${x(t).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.6" fill="${s.color}"><title>${esc(`${K.volName(s.v)} ${K.dayKey(t)} 空闲 ${K.size(v)}`)}</title></circle>`));
         const [t0, v0] = real[0];
-        svg.push(`<text class="cl-newtxt" x="${(x(t0) - 8).toFixed(1)}" y="${(y(v0) + 4).toFixed(1)}" text-anchor="end" fill="${s.color}">${esc(`${K.letter(s.v)} 盘刚开始记`)}</text>`);
+        fresh.push({ s, x: x(t0) - 8, y: y(v0) });
       } else {
         let path = '', pen = false;
         for (const [t, v] of s.pts) { if (v == null) { pen = false; continue; } path += `${pen ? 'L' : 'M'}${x(t).toFixed(1)} ${y(v).toFixed(1)}`; pen = true; }
@@ -315,6 +315,11 @@
       }
       if (!s.short) ends.push({ s, y: y(lastFree), x: x(lastAt) });
     }
+    // 几个盘同一时候刚开始记、空闲又差不多时，“X 盘刚开始记”会叠在一起：横向挨着的往下错开一行，到底了整体往上收（M937）。
+    fresh.sort((a, b) => a.y - b.y);
+    fresh.forEach((f, i) => { for (const g of fresh.slice(0, i)) if (Math.abs(g.x - f.x) < 110) f.y = Math.max(f.y, g.y + 17); });
+    const lift = fresh.length ? Math.max(0, Math.max(...fresh.map(f => f.y)) - (H - B - 4)) : 0;
+    for (const f of fresh) svg.push(`<text class="cl-newtxt" x="${f.x.toFixed(1)}" y="${(f.y - lift + 4).toFixed(1)}" text-anchor="end" fill="${f.s.color}">${esc(`${K.letter(f.s.v)} 盘刚开始记`)}</text>`);
     ends.sort((a, b) => a.y - b.y);
     for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
     const overflow = ends.length ? Math.max(0, ends.at(-1).y - (H - B)) : 0;

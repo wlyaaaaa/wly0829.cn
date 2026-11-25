@@ -12,7 +12,7 @@
     { id: 'needs', name: '等你的事', href: '/live/items/', scoped: true },
     { id: 'chats', name: 'AI 对话', href: '/live/chats/' },
     { id: 'agents', name: '智能体', href: '/live/agents/' },
-    { id: 'ledger', name: 'AI 账本', href: '/live/ledger/', scoped: true },
+    { id: 'ledger', name: 'AI 自动任务账本', href: '/live/ledger/', scoped: true },
     { id: 'automation', name: '自动任务', href: '/live/automation/', scoped: true },
     { id: 'computer', name: '电脑', href: '/live/computer/' },
     { id: 'phone', name: '手机', href: '/live/phone/' },
@@ -285,7 +285,7 @@
       '<p class="card__head" data-part="head"></p><div class="b6-body" data-part="batch"></div>'])),
     projects: `<p class="card__head" data-part="head"></p><ul class="rows project-changes" data-part="changes"></ul>
       <p class="row__sub" data-part="changes-status" hidden></p>
-      <button class="more" type="button" data-part="more-changes" hidden>近 7 天全部变化 <span class="more__chev">›</span></button>
+      <button class="more" type="button" data-part="more-changes" hidden>全部变化 · 近 7 天 <span class="more__chev">›</span></button>
       <div class="fold" data-part="changes-box"><div><ul class="rows project-changes"></ul><button class="more" type="button" hidden>再看一些 ›</button></div></div>
       <div class="project-groups" data-part="main"></div>
       <a class="more" data-part="artifacts" hidden></a><nav class="card__foot project-footer" aria-label="项目卡相关入口">
@@ -368,7 +368,7 @@
     const pieces = sp(text).split(' · '), cutoff = pieces.filter(U.isCutoffNote);
     const gap = pieces.filter(s => !cutoff.includes(s) && (U.isMissingText(s) || /暂时读不到|没存下来/.test(s))), known = pieces.filter(s => !gap.includes(s) && !cutoff.includes(s));
     const note = [...gap, ...cutoff];
-    if (['电脑', 'AI 账本', '项目'].includes(name)) return U.head([name, ...known, ...note].filter(Boolean).join(' · '), options);
+    if (['电脑', 'AI 自动任务账本', '项目'].includes(name)) return U.head([name, ...known, ...note].filter(Boolean).join(' · '), options);
     return U.head(known.join(' · ') || name, options) + (note.length ? `<br><span class="row__sub">${esc(note.join(' · '))}</span>` : '');
   };
   const daysText = n => n < 1 ? '不到 1 天' : n < 365 ? `${Math.round(n)} 天` : `${Math.round(n / 365)} 年`;
@@ -445,7 +445,9 @@
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span>' : ''; }
   function projectTile(it) {
     const changed = it.changed?.at, h = it.headline, value = headline(it);
-    const cutoff = (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
+    // 代表数的时刻是“这件事最后一次发生”的（账本最后整理、片子最后变动……）：写那一句，不拿它当整张卡的“数据截至”（M769）
+    const moment = window.LiveProjectMoments?.headline(it, true) || '';
+    const cutoff = !moment && (h?.at || h?.source_at) && recordStamp(blockAt(h), h?.at_precision);
     const recent = changed && !lastState?.offline && fresh('project-changes', changed) ? '<span class="project-recent">刚改</span>' : '';
     const nameNote = viewer === 'public' && it.name && typeof it.name === 'object' ? U.fieldHtml({ ...it.name, text: null, value: null }, { name: '项目名', kind: viewer }) : '';
     // M767：本人版里后台标了 visitor_labels.name 的项目（hidden／rewritten），格子里项目名下面挂同一种小签；访客版只挂其中的“对外换了说法”（M930），没标的不挂
@@ -454,7 +456,7 @@
     const style = look && !look.known ? ` style="background:linear-gradient(135deg,${look.glow[0]},${look.glow[1]})"` : '';
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
     const rule = it.id === 'agents' && h?.id === 'release' && typeof value === 'string' && /^E\d+$/.test(String(h.value ?? h.text ?? ''));
-    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer })}</small>${cutoff ? `<small class="project-cutoff">${U.nowrap(`数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
+    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer })}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
   }
   function renderProjectGroups(data) {
     projectExtraLinks(data);
@@ -477,7 +479,7 @@
     artifacts.hidden = !recent?.href;
     if (!artifacts.hidden) {
       artifacts.href = route(recent.href);
-      U.html(artifacts, `最近成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
+      U.html(artifacts, `成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
     }
   }
 
@@ -923,7 +925,9 @@
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
-        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' : U.collectionText('状态');
+        // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
+        const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? ` · 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
+        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
       }).join(' · '), null, '', '/live/computer/'],
@@ -1336,7 +1340,8 @@
   function renderNotices(state) {
     const rows = [];
     if (state.offline || (!home && state.text && state.phase === 'none')) {
-      const text = state.text;
+      // 实况在线、只是首页这一份读不到：说清是哪几块（计划任务单独读）
+      const text = state.offline || !/读不到/.test(state.text) ? state.text : '首页这一份暂时读不到：除计划任务外各块先空着，正在重读';
       rows.push({ key: 'link', cls: home ? 'notice glass' : 'l1-unreadable-note', html: `${home ? '<span class="lamp" aria-hidden="true"></span>' : ''}<span>${U.fieldHtml(text, { name: '连接情况', kind: viewer })}</span>` });
     }
     if (project) {
@@ -1557,6 +1562,7 @@
     document.body.classList.add('live-unreadable');
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
+    balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
     Light.offline(!!lastState?.offline);
     showHome();
   }

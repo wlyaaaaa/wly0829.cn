@@ -93,12 +93,17 @@
   const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '自动任务' });
   const groupsRead = U.reading($('groups'), { ghost: U.ghost.rows(4) }), changesRead = U.reading(changesBox, { ghost: U.ghost.rows(3), slow: false });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
+  // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
+  // 后台没给分档、或给的是 unknown（次数读不全）的，照原来的 state 画（同一天先算出错，其次成功，再次部分完成，M676）
+  const TIER = { success: 'ok', mostly_successful: 'mostly', partial_success: 'partial', failed: 'failed', warn: 'warn', none: 'none' };
+  const dayTier = day => TIER[day?.outcome?.state] || day?.state;
+  const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0 && o.state !== 'none'
+    ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   function week(d) {
     if (U.offline?.() && !Array.isArray(d.days7)) return '';
-    // 当天有部分完成：后台 days7 的 state=warn（同一天先算出错，其次成功，再次部分完成，M676）
-    const labels = { ok: '跑成了', failed: '没跑成', warn: '部分完成', none: '没跑' }, days = d.days7;
+    const labels = { ok: '跑成了', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '没跑成', warn: '部分完成', none: '没跑' }, days = d.days7;
     if (!Array.isArray(days) || days.every(day => day.state == null || day.state === 'unknown')) return '';
-    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const label = `${U.date(day.date)} ${labels[day.state] || U.collectionText()}`; return day.state == null || day.state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${day.state == null ? 'unknown' : esc(day.state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
+    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const state = day.state == null || day.state === 'unknown' ? day.state : dayTier(day), label = `${U.date(day.date)} ${labels[state] || U.collectionText()}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`; return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
   }
   function taskName(t) {
     if (viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden || t.hidden_block || t.content_locked)) return { visibility: 'owner' };
@@ -142,7 +147,7 @@
     const reason = notRunningReason(t) || (t.state === 'disabled' ? '停用' : '');
     const plan = t.schedule ? U.fieldHtml(t.schedule, { name: '运行周期', place: 'body', kind: viewer }) : '';
     // 近 7 天每天的小方块只给出过事的任务画；正常的只写时间和结果
-    const trouble = Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed');
+    const trouble = Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed' || ['mostly', 'partial', 'failed'].includes(dayTier(day)));
     const field = (value, name) => U.fieldHtml(value, { name, kind: viewer });
     const outcome = field(Object.hasOwn(t, 'status_text') ? t.status_text : result, '运行结果');
     const lastCell = [lastAt && `<span aria-label="上次${last.start ? '运行' : '结束'} ${esc(stamp(lastAt))}">${stamp(lastAt)}</span>`, (outcome || trouble) && `<span class="lb-run"><span data-task-state data-result="${esc(resultKey)}">${outcome}</span>${trouble ? week(t) : ''}</span>`];

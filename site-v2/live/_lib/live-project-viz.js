@@ -18,13 +18,16 @@
   const gap = m => m?.gap || '';
   function summary(host, data, viewer) {
     const wan = n => esc((n / 1e4).toLocaleString('zh-CN', { maximumFractionDigits: 1 }));
-    // 代码多少字跟在代码行数后面（名册 code_size：全覆盖给 code_chars，没数全给 observed_code_chars 和数到几个）
-    const chars = finite(data?.code_chars) ? `<small>、</small><b>${wan(data.code_chars)}</b><small>万字</small>`
-      : finite(data?.observed_code_chars) ? `<small>、</small><b>至少 ${wan(data.observed_code_chars)}</b><small>万字${finite(data.covered) && finite(data.active) ? `（数到 ${data.covered}／${data.active} 个）` : ''}</small>` : '';
+    // 代码：字数是主数，行数用小字放在它下面（本人 11-25 06:39，M846）。名册 code_size：全覆盖给 code_chars，没数全给 observed_code_chars 和数到几个；
+    // 字数一样没有时照旧只写行数。文档行数后台还没有（code_size 只有 docs_chars、code_chars、code_lines），文档下面暂不放行数。
+    const chars = finite(data?.code_chars) ? `<b>${wan(data.code_chars)}</b><small>万字</small>`
+      : finite(data?.observed_code_chars) ? `<b>至少 ${wan(data.observed_code_chars)}</b><small>万字${finite(data.covered) && finite(data.active) ? `（数到 ${data.covered}／${data.active} 个）` : ''}</small>` : '';
     const missing = [], parts = [['changed_7d', '近 7 天', '个项目动过', 1], ['docs_chars', '文档', '万字', 1e4], ['code_lines', '代码', '万行', 1e4]].map(([key, name, unit, scale]) => {
       if (data?.[`${key}_visibility`] === 'owner' && viewer === 'public') return `<span><small>${name}</small>${U.visibilityNote({ visibility: 'owner', hidden_what: data.hidden_what }, viewer, `${name}统计`)}</span>`;
       if (!finite(data?.[key])) { missing.push(name); return ''; }
-      return `<span><small>${name}</small><b>${lower(data, key) ? '至少 ' : ''}${esc((data[key] / scale).toLocaleString('zh-CN', { maximumFractionDigits: 1 }))}</b><small>${unit}</small>${key === 'code_lines' ? chars : ''}</span>`;
+      const value = `${lower(data, key) ? '至少 ' : ''}${esc((data[key] / scale).toLocaleString('zh-CN', { maximumFractionDigits: 1 }))}`;
+      if (key === 'code_lines' && chars) return `<span><small>${name}</small><span class="pj-summary-stack"><span>${chars}</span><small class="pj-summary-lines">${value} ${unit}</small></span></span>`;
+      return `<span><small>${name}</small><b>${value}</b><small>${unit}</small></span>`;
     });
     host.innerHTML = parts.join('') + (data?.q === 'partial' && gap(data) ? `<small>${esc(gap(data))}</small>` : '') + (missing.length ? `<span class="pj-summary-none">${U.offline?.() ? parts.some(Boolean) ? '' : emptyText('') : esc(U.collectionText(missing.join('、'), data))}</span>` : '');
   }
@@ -94,7 +97,8 @@
       if (!data) { host.innerHTML = `<p class="pj-note">${emptyText(U.collectionText('发布、退回', data))}</p>`; return; }
       const all = data.weeks || [], first = all.findIndex(w => finite(w.published) || finite(w.rolled_back));
       if (first < 0) { host.innerHTML = `<p class="pj-note">${emptyText(esc(U.collectionText('发布、退回', data)))}</p>`; return; }
-      const weeks = all.slice(first), caption = `${data.first_version} → ${data.current_version}${data.observed_from ? ` · ${data.observed_from.slice(5, 10)} 起有记录` : ''}`;
+      // 柱子从有记录的第一周画起，图里没有缺记录的一段，不再写“几号起有记录”（M911）；观察开始前的流水不全由卡头照后台的说明写
+      const weeks = all.slice(first), caption = `${data.first_version} → ${data.current_version}`;
       host.classList.toggle('pj-rule-single', weeks.length === 1);
       host.innerHTML = `<p class="pj-week-range pj-note">${esc(caption)}</p><div class="pj-week-scroll" tabindex="0" aria-label="规则每周发布，左右滑动查看"><div class="pj-week-bars"></div></div>`;
       if (weeks.length === 1) {

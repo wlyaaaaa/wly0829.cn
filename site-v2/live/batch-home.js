@@ -100,8 +100,15 @@
       opened: plain(d.opened_7d), closed: plain(d.closed_7d) };
   }
 
+  // 首页整包没读到（实况在线、只是 home 这一项读不到，或电脑连不上又没存下来）时，l1.js 给的是空的：
+  // 和别的卡一样只写一句“××暂时读不到”（电脑连不上时写“这块没存下来”），不画一张没有数的卡
+  const MISSING = { agents: '智能体', automation: '自动任务', ledger: 'AI 账本' };
   function render(id, data, options) {
     const { viewer, route, href, offline, now } = options;
+    if (data == null && MISSING[id]) {
+      const name = MISSING[id], say = offline ? `${name}：这块没存下来，连上后补上。` : `${name}暂时读不到`;
+      return { tone: 'off', head: cardTitle(name, href, 'off', '') + `<br><span class="row__sub">${esc(say)}</span>`, body: '' };
+    }
     const own = viewer === 'owner' ? '你' : '本人', field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
     const link = (path, text) => typeof path === 'string' && path.startsWith('/live/')
       ? `<a href="${esc(route(path))}">${text}</a>` : text;
@@ -189,7 +196,7 @@
     // AI 账本卡（本人 11-24 02:45 选 A，照 v3）：AI 在跟几件、今天到日子、跟得最久、新账起进了结；每个数点了到账本页筛好的那几件
     const v = ledgerView(d, { viewer });
     const tone = d.repair && !offline ? 'repair' : !v.pending && count(v.open.n) && !offline ? 'ok' : 'off';
-    const head = cardTitle('AI 账本', href, tone, '') + (v.since ? `<span class="b6-date">${esc(U.date(v.since))} 新账起</span>` : '');
+    const head = cardTitle('AI 自动任务账本', href, tone, '') + (v.since ? `<span class="b6-date">${esc(U.date(v.since))} 新账起</span>` : '');
     if (v.pending) return { tone, head, body: `<div class="b6-big"><strong>正在重算</strong></div><p class="b6-muted">新账从正式生效那一刻起算，算好了这里写 AI 在跟几件。</p>` };
     const flow = v.legacy || v.week
       ? `近 7 天进 ${go(v.opened.href, num(v.opened.n))} · 了结 ${go(v.closed.href, num(v.closed.n))}`

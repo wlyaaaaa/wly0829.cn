@@ -41,7 +41,7 @@
     return `<table class="fe-l3b-table">${note ? `<caption>${esc(note)}</caption>` : ''}<thead><tr>${indices.map(i => `<th>${heads[i]}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${indices.map(i => `<td>${absent(row[i]) ? `<span class="row__sub">${row[i]}</span>` : row[i]}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   };
 
-  const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本已过期', partial: '副本不齐' };
+  const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本旧了', partial: '副本不齐' };
   const PLACES = [['local', '本机'], ['g', 'G 盘'], ['h', 'H 盘']], CLOUDS = { drive: 'Drive', photos: '照片云' };
   const notApplicable = copy => copy?.state === 'not_applicable' || (Object.hasOwn(copy || {}, 'applicable') ? copy.applicable === false : copy?.required === false);
   const absentReason = (data, key) => {
@@ -59,8 +59,10 @@
       : hasConfirmation ? copy.confirmed_state === 'complete' && !!copy.confirmed_at
       : !published && ['ready', 'complete', 'completed'].includes(current) && !!copy?.content_at;
     const problems = original ? { failed: '原件读取失败', missing: '原件缺失', stale: '原件记录已过期', partial: '只核实部分原件' } : PROTECTION;
-    const anomaly = copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
-      : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : '');
+    // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state）：少数没备上写“大部分成功”，较多没备上写“部分成功”，和备份总表一个说法（M780）
+    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功', partial_success: '部分成功' })[copy?.outcome?.state];
+    const anomaly = tier || (copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
+      : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : ''));
     const status = retired ? '已停用，保留旧副本' : copy?.status_text ? (U.fieldText?.(copy.status_text, viewer) ?? sp(copy.status_text))
       : confirmed ? original ? '已确认有原件' : '上次确认有副本' : '';
     const quantity = copy?.count == null ? '' : `${count(copy, 'count', n => n.toLocaleString('en-US'))} 份${copy.count_basis === 'verified_managed_logical_files' ? '受管逻辑文件' : ''}`;

@@ -132,9 +132,7 @@
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #phone .head__lead { font-size: 18px; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
-.live-unreadable .live-refresh-text { margin-left: 0; font-size: 0; }
-.live-unreadable .live-refresh-text::after { content: '连不上'; font-size: 13px; }
-.live-unreadable .live-refresh-icon { display: none; }
+.page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
 .page--live.live-unreadable .topbar .live-at::before { display: none; }
 
@@ -427,7 +425,7 @@
         <div class="card__glass glass">
           <span class="card__pic" aria-hidden="true"><img src="/live/img/b6-ledger-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
-            <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 账本</span><span class="head__tail" aria-hidden="true">›</span></a>
+            <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 自动任务账本</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
@@ -484,6 +482,7 @@
 <script src="/header/topbar.js"></script>
 <script src="/live/_lib/live-light.js"></script>
 <script src="/live/_lib/live-project-look.js"></script>
+<script src="/live/_lib/live-project-moments.js"></script>
 <script src="/live/chats/draw10.js"></script>
 <script src="/live/_lib/live-runs.js"></script>
 <script src="/live/batch-home.js"></script>
