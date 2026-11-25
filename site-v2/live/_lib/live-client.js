@@ -1045,9 +1045,11 @@
     if (e.pending) opened.card(card);
     // 返回时，点开才读的明细也先照存下的画；现读在后台补，不挡住回来的第一帧。
     if (returning && e.data !== null && (fixture !== null || e.viewer.kind === 'owner')) { read(e, true, card); return Promise.resolve(present(e)); }
-    // 没读到、又不是撤回或无权的：带上 again，本页主数据确认接通后它会完成，页面拿同一批次再取一次（M982）
+    // 没读到、又不是撤回或无权的：带上 again，本页主数据确认接通后它会完成，页面拿同一批次再取一次（M982）。
+    // 手上留着上一次的数、这一次没读到（比如项目换代后重读改动记录失败）也算没读到，不然要等下一次换代才重读
     const settled = state => {
-      if (state.data != null || publicPaused || e.withdrawn || e.listeners.size || [400, 403, 404, 410].includes(state.meta?.status)) return state;
+      const fresh = state.data != null && state.meta?.status >= 200 && state.meta.status < 400;
+      if (fresh || publicPaused || e.withdrawn || e.listeners.size || [400, 403, 404, 410].includes(state.meta?.status)) return state;
       return { ...state, again: new Promise(resolve => mainBack.push({ at: Date.now(), entry: e, resolve })) };
     };
     if (!paged(e)) return read(e, true, card, fallbackOnFailure).then(settled);
