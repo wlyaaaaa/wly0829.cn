@@ -136,6 +136,7 @@ def controls(dist):
 def legacy_routes(dist, runtime):
     catalog = load('v2_catalog', 'site-v2/site-assembly/组装.py')
     _, skills = catalog.load_catalog()
+    hidden = catalog.hidden_ids()
     owners = {row['技能ID']: row['归属项目ID'] for row in skills}
     projects = {p.name for p in dist.iterdir() if (p / 'project.html').is_file()}
     preferred = {'/rules/charter/': '/rules/'}
@@ -162,7 +163,7 @@ def legacy_routes(dist, runtime):
     redirects = {}
     for route in sorted(routes - {'/rescue/'}):
         path = dist / runtime.nav.route_file(route)
-        if path.exists():
+        if path.exists() or catalog.hidden_route(route, hidden):   # 不给访客看的项目连旧地址跳转也不留
             continue
         parts = route.strip('/').split('/')
         project = (parts[1] if len(parts) > 1 and parts[0] == 'projects' else
