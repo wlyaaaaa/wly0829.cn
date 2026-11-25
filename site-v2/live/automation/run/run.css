@@ -54,6 +54,7 @@
 .ar-talk__meta > [data-compaction] { font-size: 13.5px; color: #6c6b64; }
 .ar-talk__meta > [data-compaction] summary { cursor: pointer; }
 .ar-talk__note { margin: 0 !important; font-size: 13.5px !important; color: #6c6b64; }
+.ar-talk__scan { flex-basis: 100%; }
 .ar-talk__acts { display: flex; gap: 8px; margin-left: auto; }
 .ar-talk .rec-none { color: #8a897f; }
 .ar-talk .route-note__sep { margin: 0 6px; color: #b5b3aa; }

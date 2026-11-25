@@ -32,14 +32,43 @@
   };
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
+  // 回执里“这次带入：……读到……”那串明细（receipt.scan）不进大标题和结论，挪到对话卡头（主控 11-26）
+  const SCAN = /这次带入[:：][\s\S]*$/;
+  const scanOf = r => plainOf(r.receipt?.scan) || (plainOf(r.summary).match(SCAN)?.[0] ?? '');
+  const withoutScan = (html, r) => {
+    const s = esc(scanOf(r)), cut = s && html.includes(s) ? html.replace(s, '') : html.replace(SCAN, '');
+    return cut.replace(/[，,；;、\s]+$/, '').trim();
+  };
+  // 大标题只留第一句；后面的话照旧在派活程序“收到结论”里，不丢。引号、括号里的句号不算（“给「……通知。」补了进展”）；带访客标记（HTML）的整段不切
+  const firstSentence = html => {
+    if (/</.test(html)) return html;
+    let depth = 0;
+    for (let i = 0; i < html.length - 1; i++) {
+      const ch = html[i];
+      if ('「『“（('.includes(ch)) depth++;
+      else if ('」』”）)'.includes(ch)) depth = Math.max(0, depth - 1);
+      else if (!depth && '。！？'.includes(ch)) return html.slice(0, ch === '。' ? i : i + 1);
+    }
+    return html.replace(/。$/, '');
+  };
+  // 后台的 headline 是一句结局时拿来当大标题；现在后台给的还是“名字 · summary”，和长标题一样，就退回长标题（主控 11-26 02:30）
+  function ownHeadline(r) {
+    const h = plainOf(r.headline), s = plainOf(r.summary);
+    if (!h) return '';
+    const names = [r.subject ? plainOf(r.subject.title) : '', plainOf(name()), R.NAMES[category] || ''].filter(Boolean);
+    if (names.some(n => h === n || h.startsWith(`${n} · `)) || (s && norm(h).endsWith(norm(s)))) return '';
+    return F(r.headline, '这一轮的结局');
+  }
   function title(r) {
+    const own = ownHeadline(r);
+    if (own) return own;
     // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
     // 这件活的名字写在前半，后台 summary 里又带着它的就去掉，同一句不写两遍（前端 QA 11-25）
     const thing = r.subject ? F(r.subject.title, '这件活') : '';
     const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     // 暂缓的轮次标题一律短（“这件活 · 第 N 轮 · 暂时不修”），说明写在“这一轮做成了什么”（主控 11-25）；没有这件活的名字时用这一类的名字打头
     const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
-      : R.withoutSubject(F(r.summary, '这一轮做了什么'), thing) || '跑完了';
+      : firstSentence(withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), thing), r)) || '跑完了';
     // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
     return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
   }
@@ -55,6 +84,7 @@
   const other = rid => siblings?.rows.find(x => x.id === rid);
   const ordered = () => (siblings?.rows || []).slice().sort((a, b) => (T.stamp(a.startedAt || a.queuedAt) || 0) - (T.stamp(b.startedAt || b.queuedAt) || 0));
   const plainOf = v => U.fieldText(v, viewer).replace(/\s+/g, ' ').trim();
+  const loose = s => String(s || '').replace(/[\s，,。．.；;、：:！!？?「」『』“”"（）()·]/g, '');
 
   // —— 标题前的状态色点：正在跑绿点一闪一闪，跑完绿，暂缓灰，没做成红 ——
   const toneOf = r => r.status === 'running' ? 'live' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
@@ -62,12 +92,13 @@
   // —— 三格：发生了什么、有什么影响、接下来。后台给的 three；“发生了什么”还等于后台标题那句（还没拆出单独一句）时先不画，
   // “没有记下……”这种空话不画，缺哪格就不画那格（单子第 4 条）——
   function three(r) {
-    const t = r.three || {}, head = plainOf(r.headline);
+    const t = r.three || {}, head = plainOf(r.headline), shown = loose(title(r).replace(/<[^>]+>/g, ''));
     const cells = [['发生了什么', t.happened], ['有什么影响', t.impact], ['接下来', t.next]].filter(([key, v]) => {
       if (v == null || v === '') return false;
       const words = plainOf(v);
       if (typeof v === 'string' && /^没有记下/.test(words)) return false;
-      return !(key === '发生了什么' && head && words === head);
+      // 大标题退回长标题时，标题就是 summary 的第一句；后台的“发生了什么”是同一句（只差标点）就不再写一遍
+      return !(key === '发生了什么' && ((head && words === head) || (shown && loose(words) === shown)));
     }).map(([h, v]) => [h, F(v, h)]).filter(([, html]) => html.trim());   // 画出来是空的（本人版里没给原字的占位）不画
     return cells.length ? `<div class="ar-three" style="--cells:${cells.length}">${cells.map(([h, html]) => `<section class="tp-panel ar-cell"><h2>${h}</h2><p>${html}</p></section>`).join('')}</div>` : '';
   }
@@ -79,11 +110,13 @@
     const receipt = r.receipt || {}, recorded = list(receipt.recorded);
     // 自动修理的业务回执就是“这件修理的全部几轮”那一页，右栏已经有，这里不再放一遍
     const ownHref = receipt.href && receipt.href !== r.subject?.href;
-    if (!r.outputs.length && !(r.outputCount > 0) && !recorded.length && !receipt.told && !ownHref) return '';
+    // 本人版写真内容；后台给本人的也只是“仅本人可见的事项”这类占位话，就不放这一行（主控 11-26：本人看了像打哑谜）。访客版照私事定稿写“仅本人可见”
+    const mine = viewer !== 'owner' ? recorded : recorded.filter(x => !/^仅本人可见的?(事项?|事)?$/.test(plainOf(x?.title ?? x?.text ?? x)));
+    if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
       ${o.href ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
         : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
-    const extra = [recorded.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded.map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
+    const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       ownHref && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
     const count = !rows && r.outputCount > 0 ? `<p class="ar-none">做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。</p>` : '';
@@ -177,7 +210,8 @@
       const step = r.stop?.step ? `停在：${F(r.stop.step, '这一步')}。` : '', until = T.stamp(r.stop?.until) ? `${esc(T.when(r.stop.until))} 再接着做。` : '';
       body = `没收到结论：${why}${/[。！？]$/.test(why) ? '' : '。'}${step}${until}`; tone = 'bad';
     } else {
-      const result = R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : '') || F(r.summary, '这一轮做了什么');
+      // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
+      const result = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : '') || F(r.summary, '这一轮做了什么'), r);
       body = `收到结论：${result || '跑完了'}`; tone = 'ok';
     }
     return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: later, tone, cls: 'ar-end' }) };
@@ -282,13 +316,15 @@
       : labeled === 'rewritten' ? U.visitorRewrittenTag('这一轮的对话', '', viewer) : '';
     const count = items.filter(x => x.html.startsWith('<li class="ar-msg')).length;
     let meta = '', plan = '';
+    // 这一轮带入了哪些来源、各读到几点（回执的 scan）：从大标题挪到这里，单独一行（主控 11-26）
+    const scan = scanOf(r), scanLine = scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '';
     if (d && !program && c.available) {
       const m = CV.pageMeta(), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
-      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${U.visitorHiddenMark(d, '这场对话', viewer)}</p>${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
+      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
       plan = locked ? '' : planFold(m.plan);
-    }
+    } else if (scanLine) meta = `<div class="ar-talk__meta">${scanLine}</div>`;
     return `<section class="tp-panel ar-card ar-talk"><div class="ar-talk__head"><h2>这一轮的对话</h2>${tag}${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-count">共 ${count} 条</span></div>${meta}${plan}<ol class="ar-chat">${items.map(x => x.html).join('')}</ol></section>`;
   }
 
