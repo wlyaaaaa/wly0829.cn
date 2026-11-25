@@ -624,7 +624,8 @@
     if (status === 403) {
       audience(e, { kind: 'public', device: 'invalid' });
     }
-    e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
+    e.error = status === 403 ? '这部分只对本人开放' : body?.error === 'live_publication_revoked' ? '这块的公开判定正在更新，稍后自动补上'
+      : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
     if (paged(e)) return;
     const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
@@ -697,19 +698,16 @@
     for (const item of all) if (item.listeners.size) emit(item);
     return present(e);
   }
+  // 一样资源回“公开判定更新中”（live_publication_revoked）：只空这一块（连同浏览器里存的这一份）、写明为什么，
+  // 别的块照常显示、照常读，不清整页（M970；主控按工程卡“访客口径”定：只放宽不收紧，藏太多才是毛病）。
   function revokePublication(e, body) {
-    publicationVersion++;
     fallback = null;
-    const affected = currentEntries().filter(item => item === e || item.viewer.kind === 'public');
-    for (const item of affected) {
-      forgetData(item, true);
-      clearFailure(item);
-      item.withdrawn = true;
-      item.source = 'net';
-      failed(item, 503, body);
-      settle(item);
-    }
-    for (const item of affected) if (item !== e && item.listeners.size) emit(item);
+    forgetData(e, true);
+    clearFailure(e);
+    e.withdrawn = true;
+    e.source = 'net';
+    failed(e, 503, body);
+    settle(e);
   }
   function restoreBrowserCopy(e) {
     if (e.data === null && !itemDetail(e)) {

@@ -1088,7 +1088,9 @@
     const d = state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读' : '清单暂时读不到'];
+      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
+        // 这一样回“公开判定更新中”时写明为什么（M970）
+        : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);
     const update = () => {
       const { lamp, tone } = U.status(!state.offline && d?.level ? d : { level: 'gray' });
