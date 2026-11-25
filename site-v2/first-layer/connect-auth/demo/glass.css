@@ -932,6 +932,8 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 
 /* 输动态码锁定：结果、错码和断线都在原来的三张卡旁说明。 */
 .page--auth .cell__receipt { position: absolute; right: 28px; bottom: 25px; margin: 0; text-align: right; white-space: nowrap; }
+/* Windows 那一格底下一直并排着锁屏、解锁两颗钮：卡上那句提示放在状态下面，不跟按钮叠 */
+.page--auth .cell[data-key="win"] .cell__receipt { position: static; margin: 10px 0 0; font-size: 14px; line-height: 20px; text-align: left; white-space: normal; }
 .page--auth .cell__receipt[hidden], .page--auth .auth-offline[hidden] { display: none; }
 .page--auth .cell__receipt strong { display: block; color: #356b53; font-size: 17px; font-weight: 600; line-height: 22px; }
 .page--auth .cell__receipt span { display: block; color: #8f8d86; font-size: 13px; line-height: 18px; }

@@ -39,12 +39,18 @@
       && meta.dataRead > readAfter && Math.abs(clock() - at) <= 120;
   };
   const grantKeys = (key, combined) => combined ? ['pd', 'ur'] : [key];
-  // Windows 解锁按钮：后台报解锁能用，电脑锁屏，而且这份读数在两分钟内。
-  // 没有登录会话（no_session）解不了锁：不给按钮，卡上写明，免得输对了码也白白用掉（云端审查第 5 条）
-  const windowsReadAs = s => state?.policy?.actions?.unlock_windows === true &&
-    state?.windows?.state === s && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
-  const canOfferWindowsUnlock = () => windowsReadAs('locked');
+  // Windows 那一格：读到状态后“锁屏”“解锁”两个按钮一直并排都在（本人 11-26 04:27：“能不能锁屏和解锁按钮同时显示呢”）。
+  // 点了先看两分钟内的读数：不用办的（没锁点解锁、已锁点锁屏，解锁时没有登录会话、后台没开远程解锁）不开码格，卡上直接说一句（本人 04:34：“点解锁就提示一个东西就行了”）；
+  // 锁着、读数旧了或读不准的照常开码格，由电脑那头按真状态办（电脑本来没锁时后台直接回已解锁，不提交密码；没有登录会话时不核码）
+  const windowsIs = s => state?.windows?.state === s && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
+  const windowsReadAs = s => state?.policy?.actions?.unlock_windows === true && windowsIs(s);
   const noSessionText = '电脑现在没有登录会话，解不了锁';
+  const windowsHints = {
+    unlock: () => windowsIs('unlocked') ? '电脑现在没锁，不用解锁' : windowsIs('no_session') ? noSessionText : state?.policy?.actions?.unlock_windows !== true ? '远程解锁没开' : '',
+    close: () => windowsIs('locked') ? '电脑已经锁着' : '',
+  };
+  const canOfferWindowsUnlock = () => !windowsHints.unlock();
+  let windowsHint = '';   // 卡上那句提示是点哪个按钮给的（unlock／close）；读数变了、那句不再成立就收掉，开码格、点别的也收掉
   function refreshAccess() {
     // Reads started before this action returned cannot enable another action.
     readAfter = window.Live.readSequence();
@@ -344,7 +350,7 @@
   // Windows 解锁：配对和没配对的设备都输六位码；正文只有请求号和码，不附状态版本
   async function unlockWindows(code) {
     if (local) return entry();
-    if (busy || pending || disconnected || !fresh('win') || !canOfferWindowsUnlock() || windowsUnlockCooldown > clock() || !/^\d{6}$/.test(code)) return;
+    if (busy || pending || disconnected || !canOfferWindowsUnlock() || windowsUnlockCooldown > clock() || !/^\d{6}$/.test(code)) return;
     const request_id = requestId(), action = 'windows-unlock', windowsAtSubmit = state.windows;
     busy = true; actionSequence++; windowsUnlockReceipt = '';
     begin(['win']);
@@ -404,7 +410,7 @@
       own.setAttribute('aria-label', `自己填几小时，0.5 到 ${m === null ? 72 : roomHours(m)}`);
       const minutes = durationMinutes(hours);
       const keys = grantKeys(key, both.checked);
-      if (key === 'win' && winUnlock) { go.disabled = busy || !!pending || disconnected || !fresh('win') || !canOfferWindowsUnlock() || !/^\d{6}$/.test(code()) || windowsUnlockCooldown > clock(); return; }
+      if (key === 'win' && winUnlock) { go.disabled = busy || !!pending || disconnected || !canOfferWindowsUnlock() || !/^\d{6}$/.test(code()) || windowsUnlockCooldown > clock(); return; }
       if (root.classList.contains('is-lock')) { go.disabled = busy || !!pending || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
       go.textContent = retry ? '重新验证' : '验证';
       if (retry) { go.disabled = busy || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
@@ -423,7 +429,7 @@
   }
   // unlock：Windows 那一块开的是解锁（样子和锁屏一样只有码格，按钮写“解锁”）；不给就沿用现在开着的那种
   function setOpen(key, locking = deals[key]?.root.classList.contains('is-lock'), unlock = key === 'win' && unlocking()) {
-    inlineAction = null;
+    inlineAction = null; windowsHint = '';
     unlock = key === 'win' && !!unlock;
     if (openKey === 'win' && (key !== 'win' || unlock !== winUnlock)) deals.win.root.querySelectorAll('.code input').forEach(box => { box.value = ''; });
     openKey = key; winUnlock = unlock; bar.classList.toggle('is-open', !!key);
@@ -454,18 +460,20 @@
       }
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
-      const winNote = key === 'win' && (windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
+      if (key === 'win' && windowsHint && !windowsHints[windowsHint]()) windowsHint = '';
+      const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
       result.hidden = disconnected || !(key === 'win' ? winNote : lockedAt[key]); result.replaceChildren();
       if (!result.hidden && key === 'win') result.textContent = winNote;
       else if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
       const acts = cell.querySelector('.cell__acts'); acts.replaceChildren();
       cell.querySelector('.cell__inline')?.remove();
-      const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? (grant?.state === 'locked' || grant?.state === 'no_session' ? canOfferWindowsUnlock() ? [['解锁', 'unlock']] : [] : [['锁屏', 'close']])
+      const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? [['锁屏', 'close'], ['解锁', 'unlock']]
         : [[active ? '延长' : key === 'pd' ? '解锁' : '开启', 'open'], ...(active || privateState ? [[key === 'pd' ? '锁定' : '结束', 'close']] : [])];
       for (const [label, kind] of actions) {
         const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.dataset.kind = kind;
-        // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）。锁定、结束随时能点，不等“状态是最新的”（本人 11-24）
-        const anytime = kind === 'close' && !local;
+        // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）。锁定、结束随时能点，不等“状态是最新的”（本人 11-24）；
+        // Windows 解锁也随时能点：读数旧了、读不准照样开码格，由电脑那头按真状态办
+        const anytime = (kind === 'close' || kind === 'unlock') && !local;
         const why = !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
           : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || kind !== 'unlock' && !state.state_version) ? '状态不是最新的，刷新后再试' : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
@@ -476,6 +484,8 @@
         else if (kind === 'open' && !privateState) b.setAttribute('aria-expanded', String(openKey === key && !deals[key].root.classList.contains('is-lock')));
         else if (kind === 'close') b.setAttribute('aria-expanded', String(openKey === key && deals[key].root.classList.contains('is-lock') && !unlocking()));
         b.onclick = () => {
+          // Windows：读数说不用办（没锁点解锁、已锁点锁屏，解锁时没有登录会话、后台没开远程解锁），收起码格，卡上说一句
+          if (key === 'win' && windowsHints[kind]?.()) { setOpen(null); windowsHint = kind; render(); cells.win.querySelector(`[data-kind="${kind}"]`)?.focus(); return; }
           if (inline) {
             const again = inlineAction?.key === key && inlineAction?.kind === kind;
             setOpen(null);
