@@ -131,6 +131,12 @@
       conversation: chatOf(d.conversation),
       receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
+      // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、
+      // AI 约好的事是谁约的（promised_by）。后台没给的是 null，页面照现在的样子退回
+      headline: d.headline, three: d.three && typeof d.three === 'object' ? d.three : null,
+      stop: d.stop && typeof d.stop === 'object' ? { kind: str(d.stop.kind), text: d.stop.text, step: d.stop.step, until: d.stop.until_at } : null,
+      ledger: d.ledger_item && typeof d.ledger_item === 'object' ? { title: d.ledger_item.title, href: T.path(d.ledger_item.href), look: num(d.ledger_item.look), lookMax: num(d.ledger_item.look_max), group: str(d.ledger_item.group) } : null,
+      promisedBy: d.promised_by && typeof d.promised_by === 'object' ? { title: d.promised_by.title, href: T.path(d.promised_by.href), host: str(d.promised_by.host) } : null,
     };
   }
 
