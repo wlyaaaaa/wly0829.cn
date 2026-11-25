@@ -98,6 +98,10 @@
   }
   // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
   const { KINDS, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
+  // 在干和状态不明的分界照后台 live_chat_board.py 的 status_fields：这一轮没结束、离最后一条记录不到 2 小时算在干（30 分钟起在原因里写“已经 N 分钟没动静”），
+  // 满 2 小时还没有这一轮的结束记录就标状态不明、进“停下了，没归档”（M928 机制写清；数字改了要跟着改）
+  const IDLE_LIMIT = '2 小时';
+  const UNKNOWN_RULE = `在干的对话超过 ${IDLE_LIMIT}没新记录、也没有这一轮的结束记录，就标状态不明，挪到“停下了，没归档”；读不到记录的也标这个，原因写在各行`;
   // 行首：排序用的时刻（后台 sort_at）＋这一类的动词（“起在做”“问你”“停下”“归档”）；没有时刻写“时刻没读到”（这一行已排在栏底）
   function whenCell(c) {
     const at = c.sort_at, ok = Number.isFinite(Date.parse(at));
@@ -108,7 +112,7 @@
   function statusPill(c) {
     const kind = statusKind(c), k = KINDS[kind] || KINDS.unknown, label = rowState(c, viewer);
     const mark = kind === 'archived' ? `${window.LiveBoard.icon('check', 'chat-status__ico')}` : '';
-    return `<span class="chat-status" data-tone="${k.tone}"${kind === 'running' ? ' data-breathe' : ''}>${mark}${esc(label)}</span>`;
+    return `<span class="chat-status" data-tone="${k.tone}"${kind === 'running' ? ' data-breathe' : ''}${kind === 'unknown' ? ` title="${esc(UNKNOWN_RULE)}"` : ''}>${mark}${esc(label)}</span>`;
   }
   // 标签下面的小字：后台给的原因（“Codex 不记是谁按的停止”“实况读不到 Antigravity 的归档”这类），状态旧了 2 分钟以上加“状态是 16:40 读的”
   function statusReason(c) {
@@ -447,9 +451,9 @@
   const archivedPages = new Map();
   const boardOf = () => baseBoard || (homeChats?.board?.columns && typeof homeChats.board.columns === 'object' ? homeChats.board : null);
   const BOARD = {
-    working: { name: '在干', about: '按进入这一类的时刻，新的在上' },
+    working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 这一轮还没结束（或帮手还在做）、最近 ${IDLE_LIMIT}内有新记录的算在干，30 分钟以上没动静会在行里注明；超过 ${IDLE_LIMIT}没新记录就标状态不明，挪到下面“停下了，没归档”` },
     waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
-    stopped: { name: '停下了，没归档', about: '没归档就不算做完：接着做，或者归档。' },
+    stopped: { name: '停下了，没归档', about: `没归档就不算做完：接着做，或者归档。“状态不明”：${UNKNOWN_RULE}` },
     archived: { name: '做完了 · 已归档', about: '' },
   };
   const colName = key => key === 'waiting' && viewer === 'public' ? '等本人' : BOARD[key].name;
