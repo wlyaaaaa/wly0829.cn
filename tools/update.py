@@ -23,6 +23,10 @@ SCHEMA = "wly.selected-site-update.v1"
 FINGERPRINT = re.compile(r"[a-f0-9]{40}")
 REPORT = Path("E:/.agents/skills/report-page/scripts/New-ReportPage.ps1")
 STEPS = dict(renames="查改名", before="保留改前图", convert="改稿换进网页", scan="验成品", publish="发布回读")
+REQUIRED_REVIEWS = {
+    "/live/": "实况：逐项核 docs/update.md 第九节的 7 条",
+    "/rules/": "规则：对照活动版本、专题名单和适用范围",
+}
 
 
 def now():
@@ -86,7 +90,7 @@ def init(batch, plan):
         raise ValueError("改名记录须同时写原称呼和现称呼")
     validate_book_reviews(plan.get("book_reviews", {}))
     return {**plan, "schema": SCHEMA, "run_id": batch.parent.name, "created_at": now(),
-            "repository": str(ROOT), "progress": {}, "attempts": []}
+            "repository": str(ROOT), "required_reviews": REQUIRED_REVIEWS, "progress": {}, "attempts": []}
 
 
 def git_at(path, *args):
@@ -95,6 +99,18 @@ def git_at(path, *args):
 
 
 def ranges():
+    print("每轮必核页面：")
+    for route, review in REQUIRED_REVIEWS.items():
+        print(f"- {route} {review}")
+    common = git_at(ROOT, "rev-parse", "--path-format=absolute", "--git-common-dir")
+    receipt = Path(common) / "wly-oss/published.json" if common else None
+    published = read_json(receipt) if receipt and receipt.is_file() else {}
+    if published.get("schema") == "wly.site-publication.v1" and published.get("deployment"):
+        verified_at = datetime.fromisoformat(published["verified_at_beijing"]).astimezone(timezone(timedelta(hours=8)))
+        print(f"最近正式发布：{verified_at.isoformat(timespec='seconds')}，源码 {published['source_commit']}，成品 {published['commit']}")
+    else:
+        print("未取得最近正式发布的成功回执")
+    print()
     ledger = Ledger(ROOT)
     registry = Path("E:/PCConfig/registries")
     paths = {row["repo"].casefold(): row["path"] for row in read_json(registry / "repository-paths.json")["entries"]}
@@ -416,6 +432,7 @@ def main():
         state = read_json(batch)
         if state["schema"] != SCHEMA or state["repository"] != str(ROOT):
             raise ValueError("更新清单不属于此工作树")
+        state["required_reviews"] = REQUIRED_REVIEWS
         if args.action == "status":
             print(json.dumps(state, ensure_ascii=False, indent=2))
             return 0

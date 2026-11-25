@@ -286,11 +286,16 @@ def seal(dist, runtime, timings, full=False):
     return identity, inputs
 
 
-def check_site_links(dist):
+def check_site_links(dist, cached_warnings=None):
     assembly = load('whole_site_links', 'site-v2/site-assembly/组装.py')
+    if cached_warnings is not None:
+        assembly.report_page_links(cached_warnings)
+        return cached_warnings
     assembly.OUT = dist
-    bad = assembly.check_links()
+    bad, page_warnings = assembly.check_links()
+    assembly.report_page_links(page_warnings)
     if bad: raise ValueError('站内检查失败：' + json.dumps(bad, ensure_ascii=False))
+    return page_warnings
 
 
 def build(dist, full=False, cache_dir=None):
@@ -320,6 +325,7 @@ def build(dist, full=False, cache_dir=None):
             _, verified_sources, verified_identity = step('verify_inputs', lambda: source_inputs(runtime))
             if (actual == {row['path']: {k: row[k] for k in ('bytes', 'sha256')} for row in cached['files']}
                     and verified_sources == sources and verified_identity == identity):
+                check_site_links(destination, cached.get('page_link_warnings'))
                 cached.update(prepared_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat(),
                               seconds=round(time.monotonic() - started, 3), timings=timings,
                               output_changes={'updated': [], 'removed': []})
@@ -333,7 +339,7 @@ def build(dist, full=False, cache_dir=None):
     connected = step('buttons', lambda: connect_cockpit(dist))
     step('controls', lambda: controls(dist))
     step('visitors', lambda: visitors(dist, runtime, redirects))
-    step('links', lambda: check_site_links(dist))
+    page_link_warnings = step('links', lambda: check_site_links(dist))
     word_policy = load('site_public_words', 'scripts/site_public_words.py')
     hits = word_policy.scan_baseline(dist, policy=word_policy.load_policy())
     if hits: raise ValueError('公开底线命中：' + json.dumps(hits, ensure_ascii=False))
@@ -348,7 +354,8 @@ def build(dist, full=False, cache_dir=None):
                'seconds': round(time.monotonic() - started, 3), 'output': str(destination), 'output_changes': changes,
                'html_files': sum(row['path'].endswith('.html') for row in files), 'files': files,
                'input_fingerprints': inputs, 'preserved_cockpit_files': {}, 'timings': timings,
-               'legacy_redirects': redirects, 'connected_cockpit_buttons': connected}
+               'legacy_redirects': redirects, 'connected_cockpit_buttons': connected,
+               'page_link_warnings': page_link_warnings}
     runtime.oss.write(destination / '.build-receipt.json', receipt)
     try:
         import live_project

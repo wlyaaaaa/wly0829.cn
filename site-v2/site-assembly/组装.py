@@ -1094,6 +1094,7 @@ def report(label, files):
 
 def check_links():
     bad = []
+    page_warnings = []
     unfinished = set()
     files = {p.relative_to(OUT).as_posix() for p in OUT.rglob('*') if p.is_file()}
     folded = {p.casefold(): p for p in files}
@@ -1135,14 +1136,22 @@ def check_links():
             relative = f.relative_to(OUT).as_posix()
             if ref in RUNTIME_REFS.get(relative, set()):
                 continue
-            if re.match(r'(?:[a-z][a-z\d+.-]*:|//|#|%23)', ref, re.I) or ' + ' in ref:
+            if ref.startswith(('#', '%23')) or ' + ' in ref:
+                continue
+            absolute = re.match(r'(?:[a-z][a-z\d+.-]*:|//)', ref, re.I)
+            if absolute and not re.match(r'(?:https?:)?//wly0829\.cn(?::\d+)?(?=[/?#]|$)', ref, re.I):
                 continue
             try:
-                path = unquote(urlsplit(html.unescape(ref)).path, encoding='utf-8', errors='strict')
+                path = unquote(urlsplit(html.unescape(ref)).path or ('/' if absolute else ''),
+                               encoding='utf-8', errors='strict')
             except (UnicodeDecodeError, ValueError):
-                bad.append((f.relative_to(OUT).as_posix(), ref + '（URL 编码有误）'))
+                (page_warnings if absolute else bad).append((relative, ref + '（URL 编码有误）'))
                 continue
             if not path or '${' in path:
+                continue
+            extension = posixpath.splitext(path.rstrip('/'))[1].lower()
+            is_page = path.endswith('/') or extension in ('', '.html', '.htm')
+            if absolute and not is_page:
                 continue
             for base in bases:
                 key = posixpath.normpath(path if path.startswith('/') else base + '/' + path).lstrip('/')
@@ -1154,7 +1163,8 @@ def check_links():
                         unfinished.add((relative, '/' + key.rstrip('/') + '/'))
                         continue
                     actual = folded.get(key.casefold())
-                    bad.append((f.relative_to(OUT).as_posix(), ref + (f'（大小写不符，实际 /{actual}）' if actual else '（文件不存在）')))
+                    findings = page_warnings if is_page else bad
+                    findings.append((relative, ref + (f'（大小写不符，实际 /{actual}）' if actual else '（文件不存在）')))
     # 构建把写全的站内图址换成云端地址、图只放云端；脚本、样式、JSON 里漏换的站内图址上线后在网站上取不到（预览直接读产物看不出）。
     github = set(json.loads(manifest.read_text(encoding='utf-8')).get('files', {})) if manifest.is_file() else set()
     image_ref = re.compile(r'''["'`(](/[^"'`()\s<>?#]+\.(?:webp|png|jpe?g|gif|svg|avif))["'`)?#]''', re.I)
@@ -1183,7 +1193,13 @@ def check_links():
                         bad.append((f.relative_to(OUT).as_posix()+'#'+card['id'], f'灰按钮「{label}」已有目标 {href}'))
     for page, route in sorted(unfinished):
         print(f'实况施工中：{page} → {route}')
-    return sorted(set(bad))
+    return sorted(set(bad)), sorted(set(page_warnings))
+
+
+def report_page_links(warnings):
+    print(f'站内页面链接异常 {len(warnings)} 处（仅提示）')
+    for page, ref in warnings:
+        print(f'  {page} → {ref}')
 
 
 SITE_ICONS = ('favicon.ico', 'icon-192.png', 'apple-touch-icon.png')
@@ -1415,7 +1431,8 @@ def main():
         for page, word, sentence in hits:
             print(f'{label}命中（只是提示，不拦）：{page} → {word} → {sentence}')
         print(f'{label}检查命中 {len(hits)} 处（{count} 词，只是提示，不拦{note}）')
-    bad = check_links()
+    bad, page_warnings = check_links()
+    report_page_links(page_warnings)
     old_bad = [(page, ref) for page, ref in bad if page.split('#', 1)[0] in preserved]
     bad = [(page, ref) for page, ref in bad if page.split('#', 1)[0] not in preserved]
     print(f'保留旧实况站内链接或按钮异常 {len(old_bad)} 处（仅记录）')
@@ -1426,7 +1443,7 @@ def main():
         for page, ref in bad:
             print(f'  {page} → {ref}')
     else:
-        print('新站站内链接都找得到')
+        print('站内资源和按钮检查通过')
     if bad:
         sys.exit(1)
 
