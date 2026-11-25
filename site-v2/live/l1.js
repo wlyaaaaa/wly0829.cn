@@ -853,7 +853,11 @@
     const name = { lan: '局域网', tailscale: 'Tailscale', bluetooth: '蓝牙' }[link?.route];
     const stamp = recordStamp(status?.at || link?.at || blockAt(d) || d?.received?.last_at);
     const old = lastState?.offline || (status ? status.state !== 'online' || oldReading(status) : oldReading(d)) || oldReading(link);
-    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `手机调试连接上次未连通${stamp ? `（${stamp} 记录）` : ''}` : '手机调试连接未连通';
+    // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
+    if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (d?.presence?.state === 'unknown') return lastState?.offline ? `上次读不到手机连接状态${stamp ? `（${stamp} 记录）` : ''}` : '手机连接状态暂时读不到';
     if (name) return old ? `手机上次经${name}连接${stamp ? `（${stamp} 记录）` : ''}` : `手机经${name}连接`;
     if (!old && (status?.state === 'online' || !status && device?.state === 'online')) return '手机调试已连接，线路未记录';
     return d?.received?.last_at || d?.metrics?.some(v => v.id === 'battery' && v.value != null) ? '手机连接线路未记录' : null;
@@ -924,9 +928,12 @@
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
+        // 笔记本连不上时和旁边手机一样写从几点起（后台 offline_since，M918）
+        const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
+          ? ` · ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? ` · 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
-        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
+        const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
       }).join(' · '), null, '', '/live/computer/'],
@@ -944,10 +951,23 @@
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
     host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
   }
+  // 手机离线怎么说（主持 11-26 照 C2 建议定，手机页同一套）：电脑的调试连接和 Tailscale 都找不到手机 →“手机离线 · HH:MM 起”，
+  // 时刻是和 presence 同级的 offline_since；只有电脑到手机的调试连接断 →“电脑连不上手机 · HH:MM 起”，时刻是 offline.since
+  function phoneOffText(d) {
+    // 带不带日期拿现在的北京日期比（和手机页、电脑页一致），不拿这份数的时刻当今天
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    // 卡上大字只放“手机离线”，时刻跟在后面一行小字里（和原来“手机连不上 · 几点起”一样的排法，大字不折行）
+    if (d?.presence?.state === 'offline') { const since = at(d.offline_since); return `手机离线${since ? ` · ${since} 起` : ''}`; }
+    const since = at(d?.offline?.since);
+    return `电脑连不上手机${since ? ` · ${since} 起` : ''}`;
+  }
   // —— 手机：每样数自己的时刻；连不上时保留上一次，缺数不补零 ——
   function renderPhone(d) {
     const p = parts.phone, unknown = !d || d.state === 'unknown';
     const offline = d?.state === 'offline' || d?.offline === true, metrics = d?.metrics || [];
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）。
+    // 手机真采到的亮屏、解锁照旧留在大字（主持 01:56 定）；这句在卡底那行连接说明里（phoneConnection，小字）已经写了，卡头不再重复。一样数都没有时才由它当整句
+    const unclear = !offline && d?.presence?.state === 'unknown';
     const m = Object.fromEntries(metrics.map(x => [x.id, x]));
     const value = id => ['unavailable', 'computing'].includes(m[id]?.state) ? null : m[id]?.value;
     const dayLabel = (row, fallback) => {
@@ -959,7 +979,7 @@
       : quantity(m.screen_on, 'value', n => n > 0 && n < 60 ? `${Math.floor(n)} 秒` : U.minutes(Math.floor(n / 60)));
     const usage = value('screen_on') == null ? duration : `${screenLabel} ${duration}`;
     const unlocks = value('unlocks') == null ? U.collectionText("解锁", m.unlocks) : `解锁 ${quantity(m.unlocks, 'value')} 次`;
-    const text = unknown ? U.collectionText("手机", d) : offline ? `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}` : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
+    const text = unknown ? unclear ? '手机连接状态暂时读不到' : U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
     const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
@@ -1092,7 +1112,9 @@
     const d = state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读' : '清单暂时读不到'];
+      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
+        // 这一样回“公开判定更新中”时写明为什么（M970）
+        : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);
     const update = () => {
       const { lamp, tone } = U.status(!state.offline && d?.level ? d : { level: 'gray' });

@@ -79,6 +79,16 @@ test('reject broken or old fallback packages', async () => {
   } finally { globalThis.fetch = restore; }
 });
 
+test('shutdown marker, OSS receipt and resource time stay independent', async t => {
+  const value = {v: 1, seq: 1, metadata_only: true, at, publication: {policy, audience}, resources: {home: {at: '2026-11-17T11:50:00.000Z'}}};
+  t.mock.method(globalThis, 'fetch', async url => url === oss ? Response.json(value, {headers: {'Last-Modified': 'Tue, 17 Nov 2026 12:00:05 GMT'}}) : new Response('{}', {status: 502}));
+  for (const [marker, connection] of [[true, 'unreachable'], [at, 'host-off']]) {
+    value.host_off_at = marker;
+    const response = await call();
+    assert.deepEqual([response.headers.get('X-Live-Connection'), response.headers.get('X-Live-Offline-Since'), response.headers.get('X-Live-Last-Seen'), (await response.json()).at], [connection, marker === at ? at : null, '2026-11-17T12:00:05.000Z', value.resources.home.at]);
+  }
+});
+
 test('origin withdrawals, missing details, temporary unavailability and empty statuses pass through', async () => {
   const restore = globalThis.fetch;
   let upstream, cloudReads = 0;

@@ -334,9 +334,13 @@ test('authority clears a withdrawn detail and never fills it from a saved public
   assert.deepEqual(shown, ['synthetic title', null]);
   response = () => Response.json(publicPacket);
   await client.get('chats/example');
+  // 别的读口回“公开判定更新中”：只空那一块、写明为什么，已经显示的这一块照常留着（M970）
   response = () => Response.json({error: 'live_publication_revoked'}, {status: 503});
-  assert.equal((await client.get('home')).meta.withdrawn, true);
-  assert.deepEqual(shown, ['synthetic title', null, 'synthetic title', null]);
+  const revoked = await client.get('home');
+  assert.equal(revoked.meta.withdrawn, true);
+  assert.equal(revoked.data, null);
+  assert.equal(revoked.text, '这块的公开判定正在更新，稍后自动补上');
+  assert.deepEqual(shown, ['synthetic title', null, 'synthetic title']);
   assert.equal(requested.filter(url => !url.startsWith('/release-identity.json')).every(url => url.startsWith('https://live.wly0829.cn/')), true);
 });
 
