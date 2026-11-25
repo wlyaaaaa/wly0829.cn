@@ -150,6 +150,7 @@
     L.tone(hero, status.tone);
     const field = value => say(value);
     const closedSay = d.closed && (d.closed.kind === 'unknown' || d.closed.text === '本人关掉了这份汇报' ? d.closed.text || CLOSED.unknown : CLOSED[d.closed.kind] || CLOSED.unknown);
+    const monthly = !issue && Number.isInteger(d.monthly_day) && d.monthly_day >= 1 && d.monthly_day <= 31 ? `每月 ${d.monthly_day} 日` : '';
     const facts = issue ? [
       // 档案卡里结局就是状态卡的大字，了结说明在“结论”卡（能展开），这里不再重复。
       !dossier && d.outcome && fact('结局', say(OUT[d.outcome])),
@@ -162,7 +163,8 @@
       ...(!privateItem && issueReadings?.detail(!d.outcome_text && progress ? { ...d, progress_summary: null, owner_detail: null } : d, viewer, (name, value) => fact(name, value, ' issue-reading')) || []),
     ] : [
       d.due && fact('什么时候要', when(d.due)),
-      d.act_from && fact('从什么时候办', when(d.act_from)),
+      // M947：每月循环的提醒（后台给整数 monthly_day）这一行写“每月 6 日”，不另加行
+      (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
       d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
       d.closed && fact('了结说明', say(d.closed.text)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
