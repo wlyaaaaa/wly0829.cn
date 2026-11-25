@@ -324,7 +324,16 @@
   // 只有本人能点的按钮：访客版加 data-need-trusted，现成的可信设备弹框（trust-modal.js）在捕获阶段拦下、弹“这一步只有可信设备能做”；本人版不加，照常
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
   // 开关旁边那行小字：正在保存…／已保存／没存上：原因／还没确认存上（feedback 按开关的 id 记）
-  const noteFor = id => feedback?.id === id ? `<small role="status" data-tone="${feedback.tone || ''}">${esc(feedback.text)}</small>` : '';
+  const noteFor = id => {
+    if (feedback?.id !== id) return '';
+    let { text, tone = '' } = feedback;
+    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    if (feedback.want && feedback.reread) {
+      const m = mode(rowOf(id));
+      [text, tone] = m === feedback.want ? ['已保存', 'ok'] : [`最新读数还是${{ on: '开着', off: '关着', paused: '暂停中' }[m] || '没读到'}`, ''];
+    }
+    return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
+  };
   const waitingOn = id => feedback?.id === id && feedback.pending ? ' aria-busy="true"' : '';
   function switchCell(c, offline) {
     // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，旁边写“正在保存…”
@@ -473,9 +482,9 @@
   const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: new Date(cur.until_at * 1000).toISOString() } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去；没存上但后台带回了电脑上读到的 current（读回和请求不一致），照它显示；
   // 别的没存上、还没确认的，开关留在原档，之后照新读数显示
-  async function saved(id, reply) {
+  async function saved(id, reply, want) {
     feedback = reply.status === 'saved' ? { id, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id, text: reply.message || '已撤' }
-      : { id, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad' };
+      : { id, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad', want: reply.status === 'unknown' ? want : undefined };
     const row = rowOf(id);
     if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
     // 主开关在原地滑到新档（圆钮滑、底色跟着变），滑完再整块重画
@@ -488,7 +497,9 @@
       await new Promise(r => setTimeout(r, 320));
     }
     draw();
-    void Live.refresh();
+    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（noteFor）
+    const fb = feedback;
+    Live.refresh().then(() => { if (feedback === fb && fb.want) { fb.reread = true; draw(); } });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
   dialog.querySelector('[data-cancel]').addEventListener('click', () => dialog.close());
@@ -520,7 +531,7 @@
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
     else result.textContent = failText(reply);
-    saved(id, reply);
+    saved(id, reply, 'paused');
   });
 
   let page;
@@ -556,7 +567,7 @@
       // 后台回之前开关留在原档，旁边只写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
       feedback = { id, text: '正在保存…', pending: true };
       T.keep(page.root, `[data-toggle="${CSS.escape(id)}"]`, draw);
-      saved(id, await save(id, { mode: next }) || { status: 'unknown' });
+      saved(id, await save(id, { mode: next }) || { status: 'unknown' }, next);
       return;
     }
     if (pause) {

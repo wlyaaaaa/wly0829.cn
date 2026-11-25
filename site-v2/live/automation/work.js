@@ -148,7 +148,12 @@
     error: ['出错', 'bad'], no_conclusion: ['没结论', 'off'], launched: ['已启动', 'run'], running: ['正在跑', 'run'] };
   const result = status => pill(...(resultPill[status] || []));
   function message(id) {
-    const text = feedback?.id === id ? feedback.text : '';
+    let text = feedback?.id === id ? feedback.text : '';
+    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
+    if (text && feedback.want && feedback.reread) {
+      const m = configFor(targetOf(id) || {}).mode;
+      text = m === feedback.want ? '已保存' : `最新读数还是${{ on: '开着', off: '关着', paused: '暂停中' }[m] || '没读到'}`;
+    }
     return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
   }
   function sourceRow(row) {
@@ -319,22 +324,26 @@
     }
   }
   // 结果写在开关旁边那行：已保存／没存上：后台给的原因／还没确认存上（超时、断线、电脑回不了话）
-  const feedbackFor = (id, reply) => {
+  const feedbackFor = (id, reply, want) => {
     if (reply.status === 'saved') feedback = { id, text: '已保存' };
     // 后台回“已撤”时照写它给的说明，不说“没存上”
     else if (reply.status === 'retired') feedback = { id, text: reply.message || '已撤' };
     // 不是本人设备：可信设备弹框已经弹了，旁边不另写
     else if (reply.error === 'cockpit_owner_required') feedback = null;
-    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上' };
+    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上', want };
     else feedback = { id, text: typeof reply.message === 'string' && /[一-鿿]/.test(reply.message) ? `没存上：${reply.message}` : '没存上，再试一次' };
   };
   // 回包到了才动开关：存上了照回包里的 current 显示；没存上但后台带回了电脑上读到的 current（读回和请求不一致），也照它显示；
   // 别的没存上、还没确认的留在原档，再读一次照新读数显示
+  const targetOf = id => { const data = state?.data; return work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id); };
   function applySaved(id, reply) {
-    const data = state?.data, t = work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id);
+    const t = targetOf(id);
     if (t && reply.current && typeof reply.current === 'object') t.setting = { ...t.setting, ...reply.current };
     paint();
-    if (reply.error !== 'cockpit_owner_required') void Live.refresh();
+    if (reply.error === 'cockpit_owner_required') return;
+    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
+    const fb = feedback;
+    Live.refresh().then(() => { if (feedback === fb && fb?.want) { fb.reread = true; paint(); } });
   }
   async function save(operation, id, value) {
     if (busy) return;
@@ -349,8 +358,9 @@
     if (op === 'toggle') {
       // 后台回之前开关留在原档，旁边写“正在保存…”；访客点了由可信设备弹框说明，不写这句
       if (audience === 'owner') { feedback = { id, text: '正在保存…', pending: true }; paint(); }
-      const reply = await save('type-mode', id, { mode: value === 'on' ? 'off' : 'on' }) || { status: 'unknown' };
-      feedbackFor(id, reply);
+      const want = value === 'on' ? 'off' : 'on';
+      const reply = await save('type-mode', id, { mode: want }) || { status: 'unknown' };
+      feedbackFor(id, reply, want);
       applySaved(id, reply);
       if (reply.error === 'cockpit_owner_required') return;
       const current = [...root.querySelectorAll('[data-setting=toggle]')].find(el => el.dataset.id === id);
@@ -379,7 +389,7 @@
     feedback = { id, text: '正在保存…', pending: true };
     paint();
     const reply = await save('type-mode', id, { mode: 'paused', until_at: `${value}:00+08:00` }) || { status: 'unknown' };
-    feedbackFor(id, reply);
+    feedbackFor(id, reply, 'paused');
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
     if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') settings.close();
     else result.textContent = feedback?.text || '';
