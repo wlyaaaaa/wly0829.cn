@@ -32,7 +32,8 @@
     // 这件活的名字写在前半，后台 summary 里又带着它的就去掉，同一句不写两遍（前端 QA 11-25）
     const thing = r.subject ? F(r.subject.title, '这件活') : '';
     const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
-    const tail = r.deferred ? R.deferredTitle(r, F, !!lead) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+    // 暂缓的轮次标题一律短（“这件活 · 第 N 轮 · 暂时不修”），说明写在“这一轮做成了什么”（主控 11-25）；没有这件活的名字时用这一类的名字打头
+    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : R.withoutSubject(F(r.summary, '这一轮做了什么'), thing) || '跑完了';
     // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
     return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
@@ -74,11 +75,11 @@
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
-    // 暂缓那一轮：标题只写了“暂时不修”时，summary 里剩下的说明写在这里，不说成“没做出东西”（主控 11-25）
-    const note = r.deferred ? R.deferredNote(r, F, !!r.subject) : '';
+    // 暂缓那一轮：标题只写“暂时不修”，说明写在这里；有说明就不写“没做出东西”，做出了东西的，说明写在那几样上面（主控 11-25）
+    const note = r.deferred ? R.deferredNote(r, F) : '';
     const empty = r.status === 'running' ? '还在跑，做完再写。' : r.deferred ? (note ? `暂时不修，等下一次检查再看。${note}` : '暂时不修，等下一次检查再看；这一轮没做出要记下的东西。') :r.status === 'incomplete' ? `没做成，这一轮没做出东西${r.reason ? `：${F(r.reason, '原因')}` : ''}。`
       : r.outputCount > 0 ? `做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。` : '这一轮没做出要记下的东西。';
-    return `${rows ? `<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
+    return `${rows ? `${note ? `<p class="ar-none">暂时不修，等下一次检查再看。${note}</p>` : ''}<ol class="ar-outs">${rows}</ol>` : `<p class="ar-none">${empty}</p>`}${extra}`;
   }
 
   // —— 经过：后台给了时间线就照画；没给就用排上、开始、交回和前后两轮拼。没做成的那一段红点 ——

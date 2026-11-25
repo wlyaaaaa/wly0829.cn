@@ -76,21 +76,26 @@
     };
   }
 
-  // 暂缓那一轮的标题：“暂时不修：……”。后台的 summary 已经以原因开头（“暂时不修 · H 盘……”）就照写，不重复；
-  // 这一轮修的那件（subject）已经写在前面时，summary 里再带那件的名字就只写原因，免得一句话里同一件写两遍。F 是页面的转义写法
-  function deferredTitle(r, F, subjectShown = false) {
-    const reason = F(r.reason, '原因') || '暂时不修', summary = F(r.summary, '结果'), thing = subjectShown && r.subject ? F(r.subject.title, '这件活') : '';
-    if (!summary || thing && summary.includes(thing)) return reason;
-    return summary.startsWith(reason) ? summary : `${reason}：${summary}`;
+  // 暂缓的轮次标题一律短：只写“暂时不修”，说明不进标题（主控 11-25：同一种暂缓轮次只留一种排法）。
+  // 说明：summary 去掉这件活的名字（标题前半已写过）和打头的“暂时不修”后剩下的；后台的 reason 写了“暂时不修”以外的原因、summary 又是空的，就用 reason。
+  // 一轮页“这一轮做成了什么”写全文；列表卡那行小字只取一句。F 是页面的转义写法
+  function deferredNote(r, F) {
+    const summary = F(r.summary, '结果'), thing = r.subject ? F(r.subject.title, '这件活') : '', reason = F(r.reason, '原因');
+    let note = thing ? withoutSubject(summary, thing) : summary;
+    for (const lead of [reason, '暂时不修']) if (lead && note.startsWith(lead)) note = note.slice(lead.length).replace(/^\s*[·:：。]\s*/, '');
+    return note || (reason && reason !== '暂时不修' ? reason : '');
   }
-  // 暂缓那一轮标题只写了原因（summary 里带着那件的名字，上面一条就只留原因）时，summary 里去掉那件名字和打头的“暂时不修”后剩下的说明；
-  // 标题已经照写了 summary 的、或者去掉后什么都不剩的，返回空。一轮页“这一轮做成了什么”拿它写（主控 11-25）
-  function deferredNote(r, F, subjectShown = false) {
-    const summary = F(r.summary, '结果'), thing = subjectShown && r.subject ? F(r.subject.title, '这件活') : '';
-    if (!summary || !thing || !summary.includes(thing)) return '';
-    let note = withoutSubject(summary, thing);
-    for (const lead of [F(r.reason, '原因'), '暂时不修']) if (lead && note.startsWith(lead)) note = note.slice(lead.length).replace(/^\s*[·:：。]\s*/, '');
-    return note;
+  // 列表卡那行小字里的一句短原因：后台 reason 写了真原因就用它；否则从说明里挑一句。
+  // 后台没给自己的结论、只拼了“暂时不修 · 这件活。交代”的（summary 里带着这件活的名字），交代的最后一句是现在卡在哪；
+  // 后台给了结论的，结论在第一句。超过 32 个字截断加省略号，全文在一轮页
+  function deferredWhy(r, F) {
+    const reason = F(r.reason, '原因');
+    if (reason && reason !== '暂时不修') return reason;
+    const parts = deferredNote(r, F).split(/[。；]+/).map(x => x.trim()).filter(Boolean);
+    if (!parts.length) return '';
+    const thing = r.subject ? F(r.subject.title, '这件活') : '';
+    const one = thing && F(r.summary, '结果').includes(thing) ? parts.at(-1) : parts[0];
+    return [...one].length > 32 ? [...one].slice(0, 31).join('') + '…' : one;
   }
 
   // 后台的 summary 常把这件活的名字再写一遍（“转给你 · 收拾仓库……”“暂时不修 · 内存守护……。独立复核通过……”）。
@@ -173,5 +178,5 @@
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredTitle, deferredNote, withoutSubject };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject };
 })();

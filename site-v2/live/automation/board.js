@@ -179,7 +179,8 @@
   }
   // 暂缓（暂时不修）是灰点，和没做成的红点分开（M674）
   const tone = r => r.status === 'running' ? 'run' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
-  const endText = (r, subjectShown = false) => r.deferred ? R.deferredTitle(r, F, subjectShown) : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+  // 暂缓的轮次大字只写“暂时不修”，为什么写在卡片最下面那行小字里（主控 11-25）
+  const endText = r => r.deferred ? '暂时不修' : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
@@ -193,7 +194,7 @@
       if (r.status === 'running') title = what;
       else {
         head = `<p class="au-card__cat">${catLabel(d, c.category)} · ${what}</p>`;
-        title = r.status === 'incomplete' || r.deferred ? endText(r, true) : result(r);
+        title = r.status === 'incomplete' || r.deferred ? endText(r) : result(r);
       }
       const earlier = c.rounds.filter(x => x !== r);
       if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮 · ` : ''}${range(x)} · ${x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : result(x)} ›</a>`).join('')}</p>`;
@@ -204,7 +205,7 @@
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
       body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
-      meta = [range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
+      meta = [r.deferred && R.deferredWhy(r, F), range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
     }
     if (c.kind === 'repair' && c.subject.href) meta += ` · ${link(c.subject.href, '这件的全部经过 ›')}`;
     // M684：本人版这一轮所挂的对话访客那边不一样的（visitor_labels.conversation），在这行末挂签
