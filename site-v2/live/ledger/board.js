@@ -78,18 +78,17 @@
   // —— 还欠着的每一件：时间轨道。分“欠着”（在修的、到点还没了结的）和“放着”（等约好的时间或条件的、暂时不修的），按后台给的 group 分 ——
   function nextOf(it) { return it.next_at || it.wait?.at || null; }
   const groupOf = it => it.group === 'owed' || it.group === 'parked' ? it.group : it.running || it.state === 'working' || it.overdue ? 'owed' : 'parked';
-  // 第二行：谁记的 · 为什么放着／在等什么 · 下次几点看 · 第几次、最多几次
+  // 第二行：谁记的 · 为什么放着／在等什么（后台原句）· 下次几点看（到点没看的写后台那句“约好几点再看，到点还没了结”）· 第几次、最多几次
   function itemMeta(it, group, now) {
     const nx = stamp(nextOf(it)), over = it.overdue || (nx && nx < now), limit = int(it.check_limit || 3);
     const nth = known(it.check_count) ? `第 ${int(it.check_count + 1)} 次，最多 ${limit} 次` : '';
-    const late = group === 'owed' && it.fixer?.text && it.overdue;
-    const why = group === 'owed' ? (it.fixer?.text ? F(it.fixer.text, '在等什么') : '')
-      : it.park?.text ? `为什么放着：${F(it.park.text, '为什么放着')}` : (it.wait?.text || it.when) ? waitText(it.wait?.text || it.when) : '';
-    const next = full(it) ? `<b class="lg-over">${limit} 次看满了，AI 停手</b>`
-      : late ? nth
-      : nx ? [over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`, nth].filter(Boolean).join(' · ')
-      : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
-    return [it.registered_by && `${esc(it.registered_by)} 记的`, why.replace(/。$/, ''), next].filter(Boolean).join(' · ');
+    const late = group === 'owed' && it.overdue && it.fixer?.text, wait = it.wait?.text || it.when;
+    const why = group === 'parked' && it.park?.text ? `为什么放着：${F(it.park.text, '为什么放着')}`
+      : wait ? waitText(wait) : group === 'owed' && !late && it.fixer?.text ? F(it.fixer.text, '在等什么') : '';
+    const time = full(it) ? `<b class="lg-over">${limit} 次看满了，AI 停手</b>` : late ? F(it.fixer.text, '到点还没了结')
+      : nx ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`) : '';
+    const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
+    return [it.registered_by ? `${esc(it.registered_by)} 记的` : '', why, time, count].map(s => s.replace(/。$/, '')).filter(Boolean).join(' · ');
   }
   function track(d) {
     const all = owed(d);
