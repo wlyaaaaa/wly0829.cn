@@ -186,10 +186,10 @@
       .map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
   }
 
-  // 本人版的签（私事线 11-26）：整轮对访客藏着的挂“访客看不到”，点开写后台给的是哪一种情况；只换了说法的挂“对外换了说法”。访客版不挂
+  // 本人版的签（私事线 11-26）：整轮对访客藏着的挂“访客看不到”，点开写后台给的是哪一种情况；只换了说法的挂“对外换了说法”，访客版也挂这一种（M930）
   const HIDDEN_NOTE = '计划、思考摘要和回复仅本人可见';
   function roundTag(r, viewer) {
-    if (viewer !== 'owner') return '';
+    if (viewer !== 'owner') return U.visitorLabel({ visitor_labels: r.labels }, ['summary', 'title', 'activity', '$'], '这一轮的说法', viewer);
     if (r.hidden) return U.visitorHiddenTag('这一轮的标题和对话', r.hiddenWhy && r.hiddenWhy !== HIDDEN_NOTE ? r.hiddenWhy : '', viewer);
     return U.visitorLabel({ visitor_labels: r.labels }, ['summary', 'title', 'activity', '$'], '这一轮的说法', viewer);
   }

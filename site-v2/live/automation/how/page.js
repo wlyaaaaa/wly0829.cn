@@ -32,7 +32,7 @@
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const pill = m === 'on' ? ['on', '开着'] : m === 'off' ? ['off', '关着'] : m === 'paused' ? ['paused', pausedText(c.setting?.until_at)] : ['', '没读到开没开'];
     const steps = list(g.steps);
-    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${i + 1}. ${esc(text)}</p></li>`).join('')}</ol>`;
+    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
     const prompt = c.prompt_template ? `<p>派活程序每一轮把下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>这一类没有固定的一段话：每轮按收到的那件事现写。</p>';

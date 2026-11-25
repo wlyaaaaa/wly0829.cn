@@ -116,6 +116,9 @@
   .au-trend { justify-items: stretch; }
   .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }
   .au-pausebtn { margin: 6px 0 0; }
+  /* 成坏数后面的“几号起记”整段换到下一行，不留打头的“·”，也不把“记”字单独甩下去 */
+  .au-table .au-trend > span small { display: block; white-space: nowrap; }
+  .au-table .au-trend > span small i { display: none; }
 }
 .au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
 .au-state[data-mode="off"] { background: var(--tp-gray); }
@@ -150,6 +153,11 @@
 .au-stat p { margin: 0; font-size: 14px; color: #57564f; }
 .au-stat .tp-big { font-size: 48px; color: var(--ink); }
 .au-extra { margin: 0 0 12px; }
+/* 各家自带的定时：和上面表下那行小字隔开（.au-extra 写在后面，会把 .au-sched 的上间距盖成 0） */
+.au-extra.au-sched { margin: 18px 0 12px; }
+.au-nw { white-space: nowrap; }
+/* 一段字的最后一行不只剩一个字（复查 11-26 挑过“钟”字掉行）：这几页的字都按 pretty 折行 */
+.tp { text-wrap: pretty; }
 .au-subs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .au-subs .tp-pill[data-mode="off"] { color: var(--tp-gray); }
 /* 小类开关旁那行小字（正在保存…／已保存／没存上：原因），字号颜色照主开关下面那行 */
@@ -179,6 +187,7 @@
 .au-use__since .au-use__more { font-size: 13px; }
 .au-use__since span + .au-use__more { margin-left: 12px; }
 .au-trend > span small { display: inline; color: #8a8981; }
+.au-trend > span small i { font-style: normal; }
 .au-basis { max-width: 230px; margin-top: 4px; }
 p.au-basis { max-width: none; margin: -6px 0 14px; }
 

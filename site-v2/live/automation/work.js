@@ -213,7 +213,7 @@
     // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。
     // 已撤的类不再收活，照实说；没撤的照常写这里还看不到
     const sources = list(data.sources).filter(row => row && (row.label ?? row.title) !== '这里还看不到');
-    const noSource = retired(data.id) ? '这一类已撤，不再从哪里收活；撤之前的来源这里没留记录' : '这里还看不到这一类从哪里收活';
+    const noSource = retired(data.id) ? '这一类已撤，不再收新活；撤之前从哪里收的活，这里没留记录' : '这里还看不到这一类从哪里收活';
     const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty(noSource), { symbol: 'search' })}
       ${panel('结果和趋势 · 近 7 天', results(data, rows), { symbol: 'check', cls: readOnly ? 'aw-wide' : '' })}${readOnly ? '' : panel('设置记录', settingLog(data), { symbol: 'gear' })}</div>`;
     return head + lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : '');

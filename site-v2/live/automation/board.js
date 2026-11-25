@@ -365,10 +365,9 @@
       return legacy + sec('running', '进行中', v.counts.running ?? v.live.length, v.live.length ? v.live.map(c => card(d, v, c)).join('') : v.waiting ? waiting : idle);
     }
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
-    // 这一节的名字照列表里实际有的几种写：绿点“跑完”、红点“没做成”、灰点“暂时不修”，和筛选按钮、卡上的说法一样；
-    // 筛了“只看跑完的”“只看没做成的”就只剩那一种。列表空着时照筛选写（主控 11-25：原来不管筛什么都写“跑完的”，下面一列红点对不上）
-    const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
-    const doneWhat = `${doneKinds.length ? doneKinds.join('、') : filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
+    // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
+    // 下面卡片的点分颜色：绿点跑完、红点没做成、灰点暂时不修。只看没做成的时写“没做成的”
+    const doneWhat = `${filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     // 按钮和标题上的数是轮数（后台两张列表的 total），自动修理同一件的几轮收在一张卡里，卡片张数会少：都读完了、张数确实少时，标题下面说一句（复查挑过对不上）
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
@@ -551,7 +550,8 @@
   function todayText(c) {
     if (c.id !== 'ai-commitments') return '';
     const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
-    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).join('，');
+    // 几分钟整个不拆行（复查 11-26：“分钟”的“钟”单独掉到下一行）
+    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `<span class="au-nw">用了 ${s > 0 ? minutes(s) : '0 分钟'}</span>` : ''].filter(Boolean).join('，');
   }
   function lastCell(c) {
     const r = c.last_result;
@@ -566,7 +566,7 @@
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     const nums = known(s.success) ? `成 ${int(s.success)} · 坏 ${int(s.failed)}` : '还没采上';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small> · ${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
@@ -588,7 +588,7 @@
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
           <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>
-      <p class="tp-small au-foot">点一行看这一类；不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。</p>${scheduled(d)}</section>`;
+      <p class="tp-small au-foot">点一行看这一类；不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。摘一句每答完一次就跑一下、单独记数，不算在上面“进行中”“近 72 小时跑完的”里。</p>${scheduled(d)}</section>`;
   }
 
   // —— 各家自带的定时（M183、M921）：三家都列，没有就写没有。各家原生定时也可能开一场新对话，所以不再说“只用来叫醒当前对话” ——
@@ -626,8 +626,11 @@
     const item = r => {
       const when1 = plan(r);
       if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small>${wake(r)}</li>`;
+      // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
+      // 不然“每周二 00:00”后面跟一句“预计 11 月 30 日 23:55”（早 5 分钟跨过半夜成了周一）读着像矛盾（复查 11-26）
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
-      const late = est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000) ? `预计 ${zhAt(r.next_estimated_at)}` : '';
+      const off = est != null && nominal != null ? Math.round((est - nominal) / 60000) : 0;
+      const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
       return `<li><b>${esc(when1)}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍

@@ -64,7 +64,7 @@
     const note = thing ? R.withoutSubject(summary, thing) || reason
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
     const nth = r.subject && known(r.subject.round) && r.subject.round > 0 ? `第 ${int(r.subject.round)} 轮` : '';
-    const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}` : '') : known(r.minutes) ? `用了 ${minutes(r.minutes * 60)}` : '';
+    const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `<span class="au-nw">跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}</span>` : '') : known(r.minutes) ? `<span class="au-nw">用了 ${minutes(r.minutes * 60)}</span>` : '';
     const meta = [note, nth, r.who?.text ? esc(r.who.text) : '', ran].filter(Boolean).join(' · ');
     // 本人版：整轮对访客藏着的挂“访客看不到”、换了说法的挂“对外换了说法”（私事线 11-26）
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
@@ -76,7 +76,7 @@
   const allRuns = () => {
     const page = R.page(runs?.data, viewer), seen = new Set(), out = [];
     for (const r of [...(page?.rows || []), ...more.map(x => R.run(x, viewer))]) if (r.id && !seen.has(r.key)) { seen.add(r.key); out.push(r); }
-    return { rows: out, total: page?.total, more: cursor !== undefined ? cursor != null : !!runs?.data?.next };
+    return { rows: out, total: page?.total, counts: runs?.data?.counts, more: cursor !== undefined ? cursor != null : !!runs?.data?.next };
   };
 
   // —— 页头大卡 ——
@@ -127,7 +127,12 @@
 
   // —— 最近几轮 ——
   function recent(rows, info) {
-    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${known(info.total) ? `<small>一共 ${int(info.total)} 轮</small>` : ''}</div>`;
+    // 右上角的总数：列表里除了叫 AI 跑的轮次，还有程序自己空查的、程序直接办没叫 AI 的；后台给了 counts 就分开写，免得和上面四个数里的“几轮”对不上
+    const n = info.counts || {}, ai = known(n.runs) ? n.runs : null, checks = known(n.checks) ? n.checks : 0;
+    const other = known(info.total) && ai != null ? info.total - ai - checks : 0;
+    const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} 轮`
+      : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
+    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
     if (!runs?.data && !(runs?.phase === 'none' || runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
     if (!rows.length) {
       const next = catNext();
