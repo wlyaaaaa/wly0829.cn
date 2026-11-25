@@ -187,7 +187,9 @@
     let path = '', gap = true;
     days.forEach((d,i) => { if (d.open == null) { gap = true; return; } path += `${gap ? 'M' : 'L'}${x(i)},${y(d.open)} `; gap = false; });
     const last = days[days.length-1];
-    return `<p class="trend-last">全站 · 最后一天 <b>${last?.open == null ? '—' : esc(last.open)}</b> 件未办</p><svg class="needs-trend" viewBox="0 0 300 118" role="img" aria-label="近 7 天待办件数，缺数的日期留空">${scale}<path class="needs-trend__line" d="${path.trim()}"/>${days.map((d,i) => `${d.open == null ? '' : `<circle cx="${x(i)}" cy="${y(d.open)}" r="3"/>`}<text x="${x(i)}" y="108" text-anchor="middle"><title>${esc(d.open == null ? d.gap || '这天没读到' : `${d.open} 件未办`)}</title>${esc(d.date.slice(5))}</text>`).join('')}</svg>`;
+    // M946：后台每天数的是那天结束时清单上还挂着的全部事项，四类都算（你放着、要你知道也在里面），不只是要你做、要你选；不叫“未办／待办”，免得和页头“等你 N 件”对不上
+    const also = viewer === 'public' ? '含本人放着、要本人知道' : '含你放着、要你知道';
+    return `<p class="trend-last">全站 · 最后一天清单上共 <b>${last?.open == null ? '—' : esc(last.open)}</b> 件<span style="white-space: nowrap">（${also}）</span></p><svg class="needs-trend" viewBox="0 0 300 118" role="img" aria-label="近 7 天每天清单上共几件（${also}），缺数的日期留空">${scale}<path class="needs-trend__line" d="${path.trim()}"/>${days.map((d,i) => `${d.open == null ? '' : `<circle cx="${x(i)}" cy="${y(d.open)}" r="3"/>`}<text x="${x(i)}" y="108" text-anchor="middle"><title>${esc(d.open == null ? d.gap || '这天没读到' : `清单上共 ${d.open} 件`)}</title>${esc(d.date.slice(5))}</text>`).join('')}</svg>`;
   }
   function renderSide() { U.html($('side-body'), sideHtml(openTrend, recentClosed)); }
   // 展开后的说明和问题整段照原文显示，不按字数截（M690，本人 11-24：字数上限是让写的人在这个字数内说清，不是显示时省略）。
