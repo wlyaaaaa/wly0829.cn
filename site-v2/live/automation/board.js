@@ -291,7 +291,8 @@
     const number = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
       : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
       : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
-    // 合计和“三家各干了多少”点了都到智能体页“三家干了多少”那块，先选好“近 7 天”
+    // 合计和“三家各干了多少”点了都到智能体页“三家干了多少”那块，先选好“近 7 天”（这个数本来就是从 6 天前 0 点算到现在，和那边“近 7 天”同一段时间；
+    // 两边算法不同：这里只算自动任务各类登记的每次调用，那边按三家日志里实际干活的时间算，所以数会不一样，数旁边写明这里的口径）
     const label = known(seconds) ? `<a class="au-use__go" href="${esc(T.path(WEEK_HOURS))}">${number}<span class="au-use__chev" aria-hidden="true">›</span></a>` : number;
     const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的没有记录</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
     // 星期照上面日期格子的取法，按北京日期本身算，不用浏览器本机时区
@@ -299,7 +300,7 @@
     const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00Z').getUTCDay()],
       parts: [{ value: (x.seconds || 0) / 3600, color: i === days.length - 1 ? '#00a650' : '#9fdcb9' }], text: known(x.seconds) ? `${dec(x.seconds / 3600)}h` : '没记' })),
       width: 380, height: 150, fmt: v => `${dec(v)}h`, grow: !drawn }) : `<p class="tp-small">每天各用多久后台还没分开给${known(seconds) ? '，先只有合计' : ''}。</p>`;
-    return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>这周后台 AI 共用了</h2></div><p class="au-use__num">${label}${covered}</p>${chart}</section>`;
+    return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>近 7 天后台 AI 共用了</h2></div><p class="au-use__num">${label}${known(seconds) ? '<small class="au-use__basis">只算自动任务各类登记的每次调用</small>' : ''}${covered}</p>${chart}</section>`;
   }
 
   // 跑着的卡：跑了几分钟，每秒往前走
