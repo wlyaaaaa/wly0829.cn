@@ -1294,11 +1294,11 @@
           show(label);
           return;
         }
-        const stamp = state.offline ? state.cutoffAt : state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
+        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
         const retry = state.meta?.source !== 'fixture' && ['retrying', 'lost'].includes(state.conn?.stage);
         if (stamp || state.offline || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : retry ? '正在重试'
-          : atText || (state.offline ? '电脑关机了' : state.phase === 'none' ? collectionText() : label);
+          : atText || (state.offline ? '电脑关机了' : state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
       },

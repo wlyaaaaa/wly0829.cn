@@ -1330,7 +1330,8 @@
   function renderNotices(state) {
     const rows = [];
     if (state.offline || (!home && state.text && state.phase === 'none')) {
-      const text = state.text;
+      // 实况在线、只是首页这一份读不到：说清是哪几块（计划任务单独读）
+      const text = state.offline || !/读不到/.test(state.text) ? state.text : '首页这一份暂时读不到：除计划任务外各块先空着，正在重读';
       rows.push({ key: 'link', cls: home ? 'notice glass' : 'l1-unreadable-note', html: `${home ? '<span class="lamp" aria-hidden="true"></span>' : ''}<span>${U.fieldHtml(text, { name: '连接情况', kind: viewer })}</span>` });
     }
     if (project) {

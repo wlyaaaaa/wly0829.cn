@@ -477,18 +477,17 @@
   //   off 确认关机：写关机了，下面是哪一份（这台浏览器存的、云端存的、上线时带的），三样都没有才写没有可显示的。
   function connInfo() {
     if (publicPaused) return { stage: 'paused' };
-    const upTo = shownUpTo(), atLine = at => at ? ` · 下面是 ${shortStamp(at)} 的数据` : ' · 这页没有可显示的上次数据';
+    // 下面是几点的数，说本页主数据那一份；主数据没存下来、只有别的块有数时，不拿别的块的时刻说整页（不然横幅说“下面是几点的数据”，卡上却写没存下来）
+    const main = connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
+    const rest = shownUpTo() ? ' · 只有部分块有上次的数据' : ' · 这页没有可显示的上次数据';
+    const mainAt = main && dataAt(main), atLine = mainAt ? ` · 下面是 ${shortStamp(mainAt)} 的数据` : rest;
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
-      ? { stage: 'retrying', say: '正在刷新', at: atLine(upTo), wait: '这次没读到新的，正在重试' } : { stage: 'online' };
+      ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
-    if (!hostOffline(link)) return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at: atLine(upTo),
+    if (!hostOffline(link)) return { stage: 'lost', say: `${linkReason(link)}，正在重试`, at: atLine,
       wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
         : '电脑没确认关机，先留着这份一直重试；确认关机后先显示云端存的那份，云端读不到再显示上线时带的那份' };
     const say = '电脑关机了';
-    // 说的是本页主数据那一份；主数据一样都没有、别的块有（比如旧随站包里的计划任务名册），说页上最新的那一块，和页眉按钮的时刻对得上
-    const shown = connectionEntries().filter(e => e.data !== null && Number.isFinite(Date.parse(e.at)));
-    const main = shown.find(e => isMain(e) && e.listeners.size) || shown.sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0]
-      || connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
@@ -497,7 +496,7 @@
         wait: from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
     }
     const meta = main?.backupMeta;
-    return { stage: 'off', say, from: null, at: ' · 这页没有可显示的上次数据', wait: meta
+    return { stage: 'off', say, from: null, at: rest, wait: meta
       ? `${meta.from === 'cloud' ? '云端' : '上线时带的那份'}只记了最后一份是 ${shortStamp(meta.at)}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
   }
   function present(e) {

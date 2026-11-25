@@ -102,7 +102,7 @@
 
   // 首页整包没读到（实况在线、只是 home 这一项读不到，或电脑连不上又没存下来）时，l1.js 给的是空的：
   // 和别的卡一样只写一句“××暂时读不到”（电脑连不上时写“这块没存下来”），不画一张没有数的卡
-  const MISSING = { automation: '自动任务', ledger: 'AI 账本' };
+  const MISSING = { agents: '智能体', automation: '自动任务', ledger: 'AI 账本' };
   function render(id, data, options) {
     const { viewer, route, href, offline, now } = options;
     if (data == null && MISSING[id]) {
