@@ -745,7 +745,7 @@
     const followReceipt = !!wording.action;
     // 等你的事页：写着的先从清单撤下，没写上的回来（定稿：失败卡回来）。
     const project = (saved, rows = writes) => {
-      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved } }));
+      if (followReceipt && lane) lane.dispatchEvent(new CustomEvent('item-write', { detail: { items: rows, saved, intent } }));
     };
     const nameOf = item => fieldText(item.text || item.title, 'owner');
     // 点下去马上有动静：按钮换成“正在办…”，弹窗写“正在保存…”。

@@ -57,15 +57,54 @@
     const entry = hiddenWhileWriting.get(item.id);
     return viewer === 'owner' && entry && (entry.pending || entry.version === item.item_version);
   };
-  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved } }) => {
+  // 办成后马上跟上（M903）：后台从登记到写成要几秒，办成那一刻重读的退出列表和清单可能还是旧的。
+  // 回执已确认写成的，先照办成的结果摆上：“我知道了”“不办了”“关掉汇报”放进“近 7 天下去的”，“晚点提醒”放进“你放着”；
+  // 后台读数里出现这件（退出记录里有这一次，或清单里换成了新版本）就换成后台那条，旧读数不把它盖回去。
+  // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
+  const landed = new Map(), writeStarted = new Map();
+  const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
+  function landItem(item, intent) {
+    const at = new Date().toISOString(), base = { since: writeStarted.get(item.id) ?? Date.now(), saved: Date.now(), version: item.item_version };
+    if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: null, due: null, _landed: true } });
+    else if (intent === 'close_report') {
+      const id = item.owner_item || item.item_id || item.item || item.id;
+      landed.set(id, { ...base, key: 'closed', row: { id, kind: 'choose', text: item.text, title: item.title, actions: [], closed: { at, kind: 'declined', text: '本人关掉了这份汇报' }, _landed: true } });
+    } else if (LANDED_KIND[intent]) landed.set(item.id, { ...base, key: 'closed', row: { ...item, closed: { at, kind: LANDED_KIND[intent] }, _landed: true } });
+  }
+  // 后台读数已经有这一次的结果，就不再摆先放上去的那条
+  function withLanded(key, rows) {
+    if (!Array.isArray(rows) || !landed.size) return rows;
+    const extra = [];
+    for (const [id, w] of landed) {
+      if (w.key !== key) continue;
+      const seen = key === 'closed' ? rows.some(it => it.id === id && Date.parse(it.closed?.at) >= w.since - 120000)
+        : [...collections].some(([k, c]) => k !== 'closed' && k !== 'reports' && c.items?.some(it => it.id === id && it.item_version !== w.version));
+      if (seen) landed.delete(id); else extra.push(w.row);
+    }
+    return extra.length ? [...extra, ...rows] : rows;
+  }
+  let landedTimer = 0;
+  function followLanded() {
+    clearTimeout(landedTimer);
+    const now = Date.now(), before = landed.size;
+    for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
+    if (landed.size !== before) { redrawItems(); drawClosed(); }
+    if (!landed.size) return;
+    const first = Math.min(...[...landed.values()].map(w => w.saved));
+    landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
+  }
+  $('item-action-receipts').addEventListener('item-write', ({ detail: { items, saved, intent } }) => {
     for (const item of items) {
+      if (saved === null) writeStarted.set(item.id, Date.now());
       if (saved === null || saved.includes(item.id)) hiddenWhileWriting.set(item.id, { pending: saved === null, version: item.item_version });
       else hiddenWhileWriting.delete(item.id);
+      if (saved?.includes(item.id) && viewer === 'owner') landItem(item, intent);
     }
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
     redrawItems();
     if (reportsData) renderReports(reportsData);
+    if (saved?.length) { drawClosed(); followLanded(); }
   });
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
@@ -279,7 +318,8 @@
     collections.set(key, { items, empty, renderer, partial });
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
-    items = (items || []).filter(it => (key === 'closed' || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
+    if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);
+    items = (items || []).filter(it => (key === 'closed' || it._landed || !hiddenByWrite(it) && !U.justSaved(it)) && (!query || matchesQuery(it)) && (!KIND[closedKind] || it.kind === closedKind));
     if (key !== 'closed' && key !== 'reports') {
       U.blockNote($(key), null);
       items = dueOrder(items);
@@ -476,13 +516,16 @@
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
-    list('closed', d.items == null ? null : closedRows(closedItems), empty, it => row(it, true), true, partial);
-    recentClosed = d.items == null ? null : closedRows(closedItems);
+    const shown = d.items == null ? null : closedRows(withLanded('closed', closedItems));
+    list('closed', shown, empty, it => row(it, true), true, partial);
+    recentClosed = shown;
     if (reportsData) renderReports(reportsData);
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
   }
+  // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
+  function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }
   watch('items/closed', d => renderClosed(d), text => { list('closed', null, text); recentClosed = null; renderSide(); $('closed-next').hidden = true; });
   $('closed-next').addEventListener('click', async (event) => {
     const button = event.currentTarget, cursor = next, kind = viewer;
