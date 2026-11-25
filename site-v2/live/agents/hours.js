@@ -35,7 +35,7 @@
     const a = d.work_stats?.today?.activity;
     if (!a || typeof a !== 'object') return null;
     const periods = a.periods && typeof a.periods === 'object' ? a.periods : { today: a };   // 旧回包只有今天
-    return { periods, earliest: Object.values(periods).map(p => p?.earliest_record_at).find(Boolean) || null };
+    return { periods, earliest: Object.values(periods).map(p => p?.earliest_record_at).find(Boolean) || null, source: a.chat_source_at || null };
   }
 
   const segs = (s, color) => [...KINDS.map(([k, label], i) => ({ k, label, v: s.kinds[k] || 0, i })), { k: 'rest', label: '没分出类', v: s.rest, i: 3 }]
@@ -62,10 +62,13 @@
     return `<div class="ag-hchart"><div class="ag-hplot"><div class="ag-hgrids" aria-hidden="true">${grid}</div>${rows.map(line).join('')}</div>
       <p class="ag-hunit" aria-hidden="true">小时</p></div>`;
   }
+  // 行名点了去哪（本人 11-25 23:15 选 A，照 L-agents-v3）：普通对话、子代理去 AI 对话页，自动任务去自动任务页；行名黑字后面一个灰“›”
+  const ROW_HREF = { conversation: '/live/chats/', subagent: '/live/chats/', automatic: '/live/automation/' };
   function table(cols) {
     const cell = (s, k) => s.total == null ? fog : k === 'total' ? esc(hrs(s.total)) : s.kinds[k] == null ? fog : esc(hrs(s.kinds[k]));
     const head = cols.map(c => `<th scope="col" class="${c.h.id === 'all' ? 'is-all' : ''}" style="--host:${c.h.color}"><button type="button" class="ag-hpick" ${c.h.id === 'all' ? 'data-only="all"' : `data-pick="${c.h.id}"`}>${c.h.id === 'all' ? '' : '<i class="tp-swatch"></i>'}${esc(c.h.name)}</button></th>`).join('');
-    const row = ([k, label]) => `<tr${k === 'total' ? ' class="is-sum"' : ''}><th scope="row">${label}</th>${cols.map(c => `<td class="${c.h.id === 'all' ? 'is-all' : ''}">${cell(c.s, k)}</td>`).join('')}</tr>`;
+    const name = (k, label) => ROW_HREF[k] ? `<a class="ag-hrowlink" href="${ROW_HREF[k]}">${label}<span aria-hidden="true">›</span></a>` : label;
+    const row = ([k, label]) => `<tr${k === 'total' ? ' class="is-sum"' : ''}><th scope="row">${name(k, label)}</th>${cols.map(c => `<td class="${c.h.id === 'all' ? 'is-all' : ''}">${cell(c.s, k)}</td>`).join('')}</tr>`;
     return `<table class="tp-table ag-htable"><thead><tr><th scope="col">类别</th>${head}</tr></thead><tbody>${[...KINDS, ['total', '合计']].map(row).join('')}</tbody></table>`;
   }
 
@@ -82,8 +85,10 @@
     // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
     // “几号起才有记录”只在选的这一段起点早于最早一条记录时写；“全部”标题里已写从哪天起，记录全了、判断不了都不写（本人 11-25 16:30，M911）
     const first = p?.earliest_record_at || m?.earliest, gap = period !== 'all' && Date.parse(p?.window_start) < Date.parse(first);
-    const asof = [p?.as_of && (last?.asof ? last.asof(p.as_of) : `截至 ${T.when(p.as_of)}`), gap && `${md(first)} 起才有记录`].filter(Boolean).join(' · ');
-    const head = `<div class="tp-panel__head ag-hhead"><h2>${esc(title)}<small>按实际干活的时间算，同时在干的分别计，没做完的也算</small></h2>
+    // 对话、帮手的记录（chat_source_at）比“截至”早 10 分钟以上：这之后对话和帮手干的还没算进来，照实写读到几点，不让旧数冒充新的
+    const lag = m?.source && p?.as_of && Date.parse(p.as_of) - Date.parse(m.source) > 6e5 ? `对话和帮手只记到 ${T.when(m.source)}` : '';
+    const asof = [p?.as_of && (last?.asof ? last.asof(p.as_of) : `截至 ${T.when(p.as_of)}`), lag, gap && `${md(first)} 起才有记录`].filter(Boolean).join(' · ');
+    const head = `<div class="tp-panel__head ag-hhead"><h2>${esc(title)}<small>三家实际在干的时间，同时在干的叠加算，没做完的算到此刻</small></h2>
       <div class="ag-hside">${seg}${asof ? `<span class="tp-asof">${esc(asof)}</span>` : ''}</div></div>`;
     grow = grow && !!p;
     let body;
@@ -96,7 +101,12 @@
       const legendColor = host ? host.color : ALL.color;
       const anyRest = rows.some(r => r.s.rest > 0);
       const legend = `<p class="ag-hlegend" style="--host:${legendColor}" aria-hidden="true">${KINDS.map(([k, label]) => `<span><i class="ag-hseg" data-kind="${k}"></i>${label}</span>`).join('')}${anyRest ? '<span><i class="ag-hseg" data-kind="rest"></i>没分出类</span>' : ''}</p>`;
+      // 叠加的小时数一天能过 24：顺手写“这段经过几小时、平均同时几个在干”，看得出数合不合理（主控 11-26 03:50 点名“今天 43 小时”）
+      const span = (Date.parse(p.as_of) - Date.parse(period === 'all' ? first || p.window_start : p.window_start)) / 3600000;
+      const one = v => v < 10 ? T.dec(Math.round(v * 10) / 10) : T.int(Math.round(v));
       const notes = [
+        mine.total > 0 && span >= .25 && `这 ${one(span)} 小时里平均同时 ${one(mine.total / 60 / span)} 个在干`,
+        mine.kinds.automatic > 0 && '自动任务这一行比自动任务页的数多：这里还算了各家自带的定时和后台程序开的对话，自动任务页只算登记的每次调用',
         mine.total != null && !mine.split && '这一段后台还没分出普通对话、子代理、自动任务，只有合计',
         mine.split && mine.rest >= 3 && `另有 ${hrs(mine.rest)} 小时没分出是哪一类，算在合计里`,
         mine.running > 0 && `现在还在干的 ${T.int(mine.running)} 件算到此刻`,
