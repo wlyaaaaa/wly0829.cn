@@ -921,62 +921,8 @@
     dialog.showModal();
     dialog.querySelector('[autofocus]').focus({ preventScroll: true });
   }
-  // 多选核对框（本人 11-26 02:12：“选完以后确认，弹出确认框核对状态，一次性确认”）：一件一行“类 · 这件 → 办法”，框底一句去向说明，“返回改”“确认，办这 N 件”。
-  // plan：[{ item, intent, kind, label }]，“不办了”一律写 decline，有后续的照旧复制给 AI。确认后按办法分批写回（每件各发一笔），每种办法照常弹自己的回执：
-  // 后台真回了才写办成、卡才下去；没回最多写还没确认、等结果；没办成照实说哪几件、卡留着能再点（本人 11-26 00:13）。
-  function confirmItemPlan(trigger, plan, { start = () => {}, done = () => {}, complete = () => {} } = {}) {
-    const live = window.Live;
-    if (!plan.length || plan.some(p => !p.intent || itemWrites.has(p.item.id)) || document.querySelector('.live-item-confirm[open]')) return;
-    if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else itemFeedback(trigger, '不是可信设备'); return; }
-    const intentOf = p => p.intent === 'decline' && p.item.decline_followup ? 'decline_copy' : p.intent;
-    if (plan.some(p => { const action = CONFIRM_ITEM[intentOf(p)]?.action; return !CONFIRM_ITEM[intentOf(p)] || action && (!p.item.item_version || !p.item.owner_actions?.includes(action)); })) {
-      itemFeedback(trigger, '这件事刚刚有变化，请重读后再试。'); return;
-    }
-    const TO = { ack: '我知道了', later: '晚点提醒（挪到“你放着”）', decline: '不办了', decline_copy: '不办了（有后续，复制给 AI）', close_report: '关掉' };
-    const used = new Set(plan.map(intentOf)), off = ['ack', 'decline'].filter(intent => used.has(intent)).map(intent => INTENT[intent]);
-    const note = [off.length && off.join('、') + '的从“等你的事”撤下', used.has('later') && '晚点提醒的挪到“你放着”', used.has('close_report') && '关掉的汇报从“等你答的汇报”撤下',
-      used.has('decline_copy') && '有后续的不办了复制成一段话，贴给 AI 处理后续'].filter(Boolean).join('；') + '。';
-    const dialog = document.createElement('dialog');
-    dialog.className = 'live-item-confirm live-item-confirm--plan';
-    dialog.setAttribute('aria-labelledby', 'live-item-confirm-title');
-    dialog.setAttribute('aria-describedby', 'live-item-confirm-name live-item-confirm-note');
-    dialog.innerHTML = `<div class="live-item-confirm__card">
-      <button type="button" data-cancel class="live-item-confirm__x" aria-label="关闭核对框">×</button>
-      <h2 id="live-item-confirm-title">核对一下，办这 ${plan.length} 件？</h2>
-      <ul id="live-item-confirm-name" class="item-plan">${plan.map(p => `<li><span class="item-plan__kind" data-kind="${esc(p.kind)}">${esc(p.label)}</span><span class="item-plan__name">${esc(fieldText(p.item.text || p.item.title, 'owner'))}</span><span class="item-plan__to">→ <b>${esc(TO[intentOf(p)])}</b></span></li>`).join('')}</ul>
-      <div class="item-plan__foot"><p id="live-item-confirm-note">${esc(note)}</p>
-      <div class="live-item-confirm__buttons"><button type="button" data-cancel autofocus>返回改</button><button type="button" data-apply>确认，办这 ${plan.length} 件</button></div></div></div>`;
-    const viewport = window.visualViewport;
-    function size() {
-      if (!viewport) return;
-      const zoom = Math.max(1, 1 / viewport.scale);
-      dialog.style.setProperty('--item-confirm-zoom', zoom);
-      dialog.style.setProperty('--item-confirm-width', `${viewport.width / zoom}px`);
-    }
-    dialog.addEventListener('click', event => { if (event.target === dialog || event.target.closest('[data-cancel]')) dialog.close(); });
-    dialog.addEventListener('close', () => { viewport?.removeEventListener('resize', size); dialog.remove(); trigger.focus({ preventScroll: true }); }, { once: true });
-    dialog.querySelector('[data-apply]').addEventListener('click', async () => {
-      dialog.close();
-      start();
-      try {
-        // 有后续的先复制（要趁这次点按），再按办法分批写回
-        const follow = plan.filter(p => intentOf(p) === 'decline_copy').map(p => p.item);
-        if (follow.length) {
-          const ok = await copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
-          itemReceipt().set(ok ? 'ok' : 'fail', ok ? '已复制，粘贴到 AI 对话发送' : '没复制成，请再点一次', { name: ok ? `有后续的 ${follow.length} 件：AI 办完后续再关卡。` : '' });
-          if (ok) complete(follow.map(item => item.id));
-        }
-        const byIntent = new Map();
-        for (const p of plan) if (intentOf(p) !== 'decline_copy') byIntent.set(intentOf(p), [...(byIntent.get(intentOf(p)) || []), p.item]);
-        await Promise.all([...byIntent].map(([intent, rows]) => saveItems(rows, intent, { complete })));
-      } finally { done(); }
-    }, { once: true });
-    size();
-    viewport?.addEventListener('resize', size);
-    document.body.append(dialog);
-    dialog.showModal();
-    dialog.querySelector('[autofocus]').focus({ preventScroll: true });
-  }
+  // 等你的事页多选核对框（在那一页自己的代码里）要用的：哪件正在写、某种办法写回后台用哪个动作。只读，不改原来的路子
+  const itemWriting = id => itemWrites.has(id), itemWriteAction = intent => CONFIRM_ITEM[intent]?.action;
   let receipts, receiptQueued = false;
   const receiptKey = () => 'wly-live-actions:' + (new URLSearchParams(location.search).get('fixture') ?? 'net');
   function actionReceipts() {
@@ -1061,6 +1007,9 @@
       return `<button class="btn btn--sm" type="button" ${binding} data-act="${i}"${markup}${slot}${pc} data-mo-press>${label}</button>`;
     }).join('');
   }
+
+  // 某颗卡上按钮对应哪一件、哪个动作（等你的事页多选时，点勾上那一行的按钮只算选中办法，要先认出是哪种办法）
+  function actionAt(btn) { const item = actionSets.get(btn?.dataset.actionSet); return item ? { item, action: item.actions[Number(btn.dataset.act)] } : null; }
 
   // 等你的事卡上：登记带的去处（例：“登录牛客”和它的网址）排第一个，绿底白字带 ↗，一眼看得出能点、点了新开那个网址（M491）
   function goActions(item, list) {
@@ -1842,5 +1791,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, confirmItemPlan, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

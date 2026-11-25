@@ -79,14 +79,11 @@
 .items-selection__count b { display:inline-grid; place-items:center; min-width:22px; height:22px; margin:0 5px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#00A650; color:#fff; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 .items-selection__sep { width:1px; height:20px; background:rgb(20 20 19 / .12); }
 #item-selection-actions { display:flex; align-items:center; gap:10px; }
-/* 多选按类选办法（本人 11-26 02:12）：类名在前，点了的办法绿字绿边，可改选；每类都选好了“确认”才能点，没选好时灰着、旁边琥珀色写还差哪一类 */
-.items-plan { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
-.items-plan__kind { font-size:13px; letter-spacing:.02em; color:var(--muted); }
-.items-selection [data-intent][aria-pressed="true"] { color:#00A650; background:rgb(0 166 80 / .07); box-shadow:inset 0 0 0 1.5px #00A650; }
-.items-plan__missing { font-size:13px; font-weight:600; white-space:nowrap; color:color-mix(in srgb, rgb(var(--glow-amber)) 82%, #5a2d00); }
+/* 多选（本人 11-26 03:0x）：勾上的那一行，点了的办法按钮绿字绿边（选中）；底部栏只有已选几件、确认、取消，一件都没选办法时“确认”灰着 */
+.page--items .lb-item button[data-action-set][aria-pressed="true"] { color:#00A650; background:rgb(0 166 80 / .07); box-shadow:inset 0 0 0 1.5px #00A650; }
 .items-selection .items-plan__go { background:#00A650; color:#fff; box-shadow:none; }
 .items-selection .items-plan__go:disabled { background:rgb(20 20 19 / .07); color:rgb(20 20 19 / .38); box-shadow:none; cursor:default; }
-/* 核对框：一件一行“类 · 这件 → 办法”，类的颜色同页上那一组；框底一句去向说明和两个按钮 */
+/* 核对框：一件一行“类 · 这件 → 办法”（勾了没选办法的写“这次不动”，灰一点），类的颜色同页上那一组；框底一句去向说明和两个按钮 */
 .live-item-confirm--plan .live-item-confirm__card { width:min(900px, calc(var(--item-confirm-width, 100vw) - 28px)); }
 .live-item-confirm--plan .live-item-confirm__card h2 { margin-bottom:34px; }
 .item-plan { display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px 16px; margin:0; padding:0; list-style:none; }
@@ -96,11 +93,12 @@
 .item-plan__kind[data-kind="know"] { --plan-tint:var(--glow-blue); } .item-plan__kind[data-kind="reports"] { --plan-tint:var(--glow-pink); } .item-plan__kind { --plan-tint:var(--glow-sage); }
 .item-plan__name { overflow-wrap:anywhere; font-weight:600; }
 .item-plan__to { white-space:nowrap; color:var(--muted); } .item-plan__to b { color:var(--ink); font-weight:750; }
+.item-plan__to.is-skip { color:var(--muted); font-weight:500; }
 .item-plan__foot { display:flex; align-items:center; gap:16px; margin-top:18px; }
 .live-item-confirm__card .item-plan__foot p { flex:1; margin:0; font-size:14px; color:var(--muted); }
 .item-plan__foot .live-item-confirm__buttons { flex-wrap:nowrap; margin-top:0; }
 .items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
-.items-selection [data-intent]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.items-selection .items-plan__go:not(:disabled):hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
 .items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
 body:has(.items-selection.is-open) .stage { padding-bottom:110px; }

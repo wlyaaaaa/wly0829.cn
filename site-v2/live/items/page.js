@@ -240,8 +240,12 @@
   const selection = $('item-selection'), selectionActions = $('item-selection-actions');
   // 多选按类选办法：类的顺序照页面上的组；办法的顺序照卡上的按钮
   const PLAN_ORDER = ['ack', 'later', 'decline', 'close_report'], PLAN_KINDS = ['do', 'choose', 'later', 'know', 'reports'], PLAN_LABEL = { ...KIND, reports: '汇报' };
-  const planPicks = new Map();   // 哪一类 → 选中的办法
-  let planGroups = [], planWriting = false;
+  const planPicks = new Map();   // 勾上的哪一件 → 选中的办法
+  let planAvailable = new Map(), planWriting = false;
+  // 这一行的这颗按钮是哪种办法（不办了、晚点提醒、我知道了、关掉）；问情况、去办这类不算
+  const planIntent = (item, action) => { const key = pickIntent(item, action), intent = key === 'decline_copy' ? 'decline' : key; return PLAN_ORDER.includes(intent) ? intent : ''; };
+  const rowIntents = item => PLAN_ORDER.filter(intent => item.actions.some(action => planIntent(item, action) === intent));
+  const planKind = item => rowIntents(item).includes('close_report') ? 'reports' : item.kind;
   // M663：访客版按钮照样摆出来（多选框也是），没配对的设备点了弹全站共用的可信设备说明框（M803），什么都不改（定稿卡-等你的事 第一节第 4 条）。
   const CLOSE_INTENTS = ['ack', 'later', 'decline', 'close_report'];
   const pickIntent = (it, action) => viewer === 'owner' ? (action.intent === 'done' ? '' : U.itemIntent(it, action)) : CLOSE_INTENTS.includes(action.intent) ? action.intent : '';
@@ -259,52 +263,109 @@
     // M972：清单一时没读到（后台正在准备、读不到时整块换成一句话）时，勾上的不丢，栏也不收，读回来照样勾着；读回来了还找不到（办掉了、被筛掉了）才去掉
     const unread = Object.keys(KIND).some(key => collections.has(key) && collections.get(key).items == null) || reportCount === null && !!reportsData;
     for (const id of selected) if (!available.has(id)) { if (unread && selectable.has(id)) available.set(id, selectable.get(id)); else selected.delete(id); }
-    // 多选（本人 11-26 02:12：“勾选的时候点按钮算选中这个按钮，选完以后确认，弹出确认框核对状态，一次性确认”）：
-    // 勾上的几件按类分开摆办法，点办法只是选中（绿字绿边，可以改选），每类只选一个，不同类各选各的；只有一种办法的那类一勾上就算选好。
-    // 每类都选好了“确认”才能点，没选好时灰着、旁边写还差哪一类；点了弹核对框按件列出怎么办，再确认一次全部一起办。两版同一套，访客点“确认”照旧弹可信设备说明框。
-    // 同一类里几件能用的办法不一样时（少见），按能用的办法分开摆，类名后写几件。
-    const groups = new Map();
+    // 多选（本人 11-26 03:0x：“每个选项，先勾选，勾选以后可以点按钮，下面的框依然是确认和取消；核对框最终看一下……√了，选这一条，点旁边的按钮，有个选中效果”）：
+    // 勾上的那一行，点这一行自己的办法按钮（不办了、晚点提醒、我知道了、关掉）不马上办，只出选中效果（绿字绿边），再点同一行别的办法就换成那个；取消勾选就清掉这行的选择。
+    // 只有一种办法的行一勾上就自动选中。没勾的行按钮照常用。底部栏只有“已选 N 件 · 确认 · 取消”；点“确认”弹核对框，一件一行写这件怎么办，
+    // 勾了没选办法的写“没选办法，这次不动”，再确认一次把选了办法的一起办。两版同一套，访客照样能勾、能选，点“确认”照旧弹可信设备说明框。
     for (const id of selected) {
-      const item = available.get(id);
-      const intents = PLAN_ORDER.filter(intent => item.actions.some(action => { const key = pickIntent(item, action); return (key === 'decline_copy' ? 'decline' : key) === intent; }));
-      if (!intents.length) continue;
-      const kind = intents.includes('close_report') ? 'reports' : item.kind, key = kind + ':' + intents.join(',');
-      if (!groups.has(key)) groups.set(key, { key, kind, intents, items: [] });
-      groups.get(key).items.push(item);
+      const intents = rowIntents(available.get(id));
+      if (intents.length === 1) planPicks.set(id, intents[0]);
+      else if (!intents.includes(planPicks.get(id))) planPicks.delete(id);
     }
+    for (const id of [...planPicks.keys()]) if (!selected.has(id)) planPicks.delete(id);
+    planAvailable = available;
     const open = selected.size > 0;
     selection.classList.toggle('is-open', open); selection.inert = !open; selection.setAttribute('aria-hidden', String(!open));
     U.html($('item-selection-count'), '已选<b>' + selected.size + '</b>件');
-    planGroups = [...groups.values()].sort((a, b) => PLAN_KINDS.indexOf(a.kind) - PLAN_KINDS.indexOf(b.kind));
-    for (const g of planGroups) {
-      g.label = (viewer === 'public' ? (PLAN_LABEL[g.kind] || '其他').replaceAll('你', '本人') : PLAN_LABEL[g.kind] || '其他') + (planGroups.filter(o => o.kind === g.kind).length > 1 ? ' · ' + g.items.length + ' 件' : '');
-      if (g.intents.length === 1) planPicks.set(g.key, g.intents[0]);
-      else if (!g.intents.includes(planPicks.get(g.key))) planPicks.delete(g.key);
-    }
-    for (const key of [...planPicks.keys()]) if (!groups.has(key)) planPicks.delete(key);
-    const missing = planGroups.filter(g => !planPicks.has(g.key));
-    const intentLabel = (g, intent) => U.itemLabels[intent === 'decline' && g.items.every(item => item.decline_followup) ? 'decline_copy' : intent];
-    const signature = JSON.stringify([planGroups.map(g => [g.key, g.label, planPicks.get(g.key) || '', g.items.every(item => item.decline_followup)]), planWriting]);
+    markPicks();
+    const picked = [...selected].filter(id => planPicks.has(id)).length;
+    const signature = JSON.stringify([picked, planWriting]);
     if (selectionActions.dataset.signature === signature) return;
     selectionActions.dataset.signature = signature;
-    const sep = '<span class="items-selection__sep" aria-hidden="true"></span>';
-    U.html(selectionActions, planGroups.map(g => '<span class="items-plan" role="group" aria-label="' + esc(g.label) + '"><span class="items-plan__kind">' + esc(g.label) + '</span>'
-        + g.intents.map(intent => '<button class="btn btn--sm" type="button" data-plan="' + esc(g.key) + '" data-intent="' + esc(intent) + '" aria-pressed="' + (planPicks.get(g.key) === intent) + '">' + esc(intentLabel(g, intent)) + '</button>').join('') + '</span>').join(sep)
-      + sep + (missing.length ? '<span class="items-plan__missing">还差' + missing.map(g => '“' + esc(g.label) + '”').join('') + '没选</span>' : '')
-      + '<button class="btn btn--sm items-plan__go" type="button" data-plan-go aria-haspopup="dialog"' + (missing.length || planWriting ? ' disabled' : '') + '>' + (planWriting ? '正在办…' : '确认') + '</button>');
+    U.html(selectionActions, '<button class="btn btn--sm items-plan__go" type="button" data-plan-go aria-haspopup="dialog"' + (picked ? '' : ' title="勾上的几行还没点办法"')
+      + (!picked || planWriting ? ' disabled' : '') + '>' + (planWriting ? '正在办…' : '确认') + '</button>');
   }
-  // 点办法只是选中；点“确认”弹核对框（U.confirmItemPlan），办成的从勾选里去掉，没办成、没回结果的照旧勾着、办法也留着，能再点
-  selectionActions.addEventListener('click', event => {
-    const pick = event.target.closest('[data-intent]');
-    if (pick) {
-      planPicks.set(pick.dataset.plan, pick.dataset.intent); renderSelection();
-      [...selectionActions.querySelectorAll('[data-intent]')].find(b => b.dataset.plan === pick.dataset.plan && b.dataset.intent === pick.dataset.intent)?.focus({ preventScroll: true });
-      return;
+  // 勾上的行里，选中的那颗办法按钮标成按下（绿字绿边）；行重画以后跟着 renderSelection 再标一遍
+  function markPicks() {
+    for (const btn of document.querySelectorAll('button[data-action-set][data-act]')) {
+      const id = btn.dataset.item, hit = selected.has(id) && planPicks.has(id) && U.actionAt?.(btn);
+      if (hit?.action && planIntent(hit.item, hit.action) === planPicks.get(id)) btn.setAttribute('aria-pressed', 'true'); else btn.removeAttribute('aria-pressed');
     }
+  }
+  // 勾上的那一行，点办法按钮只是选中，不弹框、不办；问情况、去办这类照常。比全站那个按钮监听先一步接住
+  document.addEventListener('click', event => {
+    const btn = event.target.closest?.('button[data-action-set][data-act]');
+    if (!btn || !selected.has(btn.dataset.item)) return;
+    const hit = U.actionAt?.(btn), intent = hit?.action && planIntent(hit.item, hit.action);
+    if (!intent) return;
+    event.preventDefault(); event.stopPropagation();
+    planPicks.set(btn.dataset.item, intent); renderSelection();
+  }, true);
+  // 多选核对框（本人 11-26 02:12、03:0x：“核对框最终看一下”）。放在本页自己的代码里，不动全站共用的确认框（本人 03:19：共用特别容易改旧出新）。
+  // 一件一行“类 · 这件 → 办法”，勾了没选办法的写“没选办法，这次不动”；框底一句去向，“返回改”“确认，办这 N 件”（N 只数选了办法的）。
+  // 确认后按办法分批交给全站共用的写回（U.saveItems，每件各发一笔，照常弹回执）：后台真回了才写办成、卡才下去；没回写还没确认；没办成照实说、卡留着能再点（本人 11-26 00:13）。
+  const PLAN_TO = { ack: '我知道了', later: '晚点提醒（挪到“你放着”）', decline: '不办了', decline_copy: '不办了（有后续，复制给 AI）', close_report: '关掉' };
+  function confirmPlan(trigger, all, { start, done, complete }) {
+    const live = window.Live, plan = all.filter(p => p.intent);
+    const notice = (state, head, name = '') => window.SiteNotice(head, '', 'item-action-receipts').set(state, head, { name });
+    if (!plan.length || plan.some(p => U.itemWriting(p.item.id)) || document.querySelector('.live-item-confirm[open]')) return;
+    if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else notice('fail', '不是可信设备'); return; }
+    const intentOf = p => p.intent === 'decline' && p.item.decline_followup ? 'decline_copy' : p.intent;
+    if (plan.some(p => { const action = U.itemWriteAction(intentOf(p)); return action && (!p.item.item_version || !p.item.owner_actions?.includes(action)); })) {
+      notice('fail', '这件事刚刚有变化，请重读后再试。'); return;
+    }
+    const used = new Set(plan.map(intentOf)), off = ['ack', 'decline'].filter(intent => used.has(intent)).map(intent => U.itemLabels[intent]);
+    const note = [off.length && off.join('、') + '的从“等你的事”撤下', used.has('later') && '晚点提醒的挪到“你放着”', used.has('close_report') && '关掉的汇报从“等你答的汇报”撤下',
+      used.has('decline_copy') && '有后续的不办了复制成一段话，贴给 AI 处理后续'].filter(Boolean).join('；') + '。';
+    const dialog = document.createElement('dialog');
+    dialog.className = 'live-item-confirm live-item-confirm--plan';
+    dialog.setAttribute('aria-labelledby', 'live-item-confirm-title');
+    dialog.setAttribute('aria-describedby', 'live-item-confirm-name live-item-confirm-note');
+    dialog.innerHTML = `<div class="live-item-confirm__card">
+      <button type="button" data-cancel class="live-item-confirm__x" aria-label="关闭核对框">×</button>
+      <h2 id="live-item-confirm-title">核对一下，办这 ${plan.length} 件？</h2>
+      <ul id="live-item-confirm-name" class="item-plan">${all.map(p => `<li><span class="item-plan__kind" data-kind="${esc(p.kind)}">${esc(p.label)}</span><span class="item-plan__name">${esc(U.fieldText(p.item.text || p.item.title, 'owner'))}</span>${p.intent ? `<span class="item-plan__to">→ <b>${esc(PLAN_TO[intentOf(p)])}</b></span>` : '<span class="item-plan__to is-skip">→ 没选办法，这次不动</span>'}</li>`).join('')}</ul>
+      <div class="item-plan__foot"><p id="live-item-confirm-note">${esc(note)}</p>
+      <div class="live-item-confirm__buttons"><button type="button" data-cancel autofocus>返回改</button><button type="button" data-apply>确认，办这 ${plan.length} 件</button></div></div></div>`;
+    const viewport = window.visualViewport;
+    const size = () => {
+      if (!viewport) return;
+      const zoom = Math.max(1, 1 / viewport.scale);
+      dialog.style.setProperty('--item-confirm-zoom', zoom);
+      dialog.style.setProperty('--item-confirm-width', `${viewport.width / zoom}px`);
+    };
+    dialog.addEventListener('click', event => { if (event.target === dialog || event.target.closest('[data-cancel]')) dialog.close(); });
+    dialog.addEventListener('close', () => { viewport?.removeEventListener('resize', size); dialog.remove(); trigger.focus({ preventScroll: true }); }, { once: true });
+    dialog.querySelector('[data-apply]').addEventListener('click', async () => {
+      dialog.close();
+      start();
+      try {
+        // 有后续的先复制（要趁这次点按），再按办法分批写回
+        const follow = plan.filter(p => intentOf(p) === 'decline_copy').map(p => p.item);
+        if (follow.length) {
+          const ok = await U.copy(follow.map(item => live.copy(item, 'decline')).join('\n\n'));
+          notice(ok ? 'ok' : 'fail', ok ? '已复制，粘贴到 AI 对话发送' : '没复制成，请再点一次', ok ? `有后续的 ${follow.length} 件：AI 办完后续再关卡。` : '');
+          if (ok) complete(follow.map(item => item.id));
+        }
+        const byIntent = new Map();
+        for (const p of plan) if (intentOf(p) !== 'decline_copy') byIntent.set(intentOf(p), [...(byIntent.get(intentOf(p)) || []), p.item]);
+        await Promise.all([...byIntent].map(([intent, rows]) => U.saveItems(rows, intent, { complete })));
+      } finally { done(); }
+    }, { once: true });
+    size();
+    viewport?.addEventListener('resize', size);
+    document.body.append(dialog);
+    dialog.showModal();
+    dialog.querySelector('[autofocus]').focus({ preventScroll: true });
+  }
+  // 点“确认”弹核对框（confirmPlan）；办成的从勾选里去掉，没办成、没回结果的和没选办法的照旧勾着、选的办法也留着，能再点
+  selectionActions.addEventListener('click', event => {
     const go = event.target.closest('[data-plan-go]');
-    if (!go || go.disabled || planGroups.some(g => !planPicks.has(g.key))) return;
-    const plan = planGroups.flatMap(g => g.items.map(item => ({ item, intent: planPicks.get(g.key), kind: g.kind, label: PLAN_LABEL[g.kind] || '其他' })));
-    U.confirmItemPlan(go, plan, {
+    if (!go || go.disabled) return;
+    const order = item => PLAN_KINDS.indexOf(planKind(item));
+    const plan = [...selected].map(id => planAvailable.get(id)).filter(Boolean).sort((a, b) => order(a) - order(b))
+      .map(item => ({ item, intent: planPicks.get(item.id) || '', kind: planKind(item), label: PLAN_LABEL[planKind(item)] || '其他' }));
+    confirmPlan(go, plan, {
       start() { planWriting = true; renderSelection(); },
       done() { planWriting = false; renderSelection(); },
       complete(ids) { ids.forEach(id => selected.delete(id)); redrawItems(); if (reportsData) renderReports(reportsData); renderSelection(); },
