@@ -1280,15 +1280,17 @@
     const cutoff = endNote && !existing && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
-    for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下'; grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
+    // 电脑、手机卡上“读数暂缺”已经点过名的组（卡顿、程序身份筛查……），“读不准”里不再写一遍；它的原因并到“读数暂缺”那一项后面（一项只说一次，不把要紧数往下压）
+    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
+    const lackWhy = new Map(), lackOf = g => { const name = sp(U.fieldText(g?.name, viewer)).trim(); return lacking.find(l => name === l || name.startsWith(l)); };
+    for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下', lack = lackOf(g); if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, g?.reason); continue; } grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
     // 同一原因下同名的几项并成一个名字、后面写几项（M758：原来会写成“事项状态、事项状态、事项状态 等 13 项”）
     const sameNames = names => [...names.reduce((seen, n) => { const key = U.fieldText(n, viewer); const hit = seen.get(key); if (hit) hit.count++; else seen.set(key, { n, count: 1 }); return seen; }, new Map()).values()];
-    const grayNote = gray && '读不准：' + [...grayWhy].map(([why, names]) => { const kinds = sameNames(names); return `${kinds.slice(0, 3).map(({ n, count }) => U.fieldHtml(n, { name: '读数名称', kind: viewer }) + (count > 1 ? ` ${count} 项` : '')).join('、')}${kinds.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`; }).join('；');
+    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => { const kinds = sameNames(names); return `${kinds.slice(0, 3).map(({ n, count }) => U.fieldHtml(n, { name: '读数名称', kind: viewer }) + (count > 1 ? ` ${count} 项` : '')).join('、')}${kinds.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`; }).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
-    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
     const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
-    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map(name => esc(name) + (name === '卡顿' && stutterNote ? `（${stutterNote}）` : '')).join('、')}` : '';
+    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map(name => esc(name) + (name === '卡顿' && stutterNote ? `（${stutterNote}）` : lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? `（${U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer })}）` : '')).join('、')}` : '';
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
