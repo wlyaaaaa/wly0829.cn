@@ -362,7 +362,9 @@
     if (reply.error === 'cockpit_owner_required') return;
     // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
     const fb = feedback;
-    Live.refresh().then(() => { if (feedback === fb && fb?.want) { fb.reread = true; paint(); } });
+    Live.get(category ? 'automation' : resource, {}).then(read => {
+      if (feedback === fb && fb?.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; paint(); }
+    });
   }
   async function save(operation, id, value) {
     if (busy) return;
@@ -395,6 +397,11 @@
     configuration = { op, id };
     $('automation-setting-title').textContent = '暂停到几点';
     settings.querySelector('[data-fields]').innerHTML = '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>';
+    const current = instant(targetOf(id)?.setting?.until_at);
+    if (Date.parse(current) > Date.now()) {
+      form.elements.value.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16);
+      configuration.until = current;
+    }
     form.querySelector('[data-dialog-result]').textContent = '';
     settings.showModal();
   }
@@ -407,7 +414,8 @@
     result.textContent = '正在保存…';
     feedback = { id, text: '正在保存…', pending: true };
     paint();
-    const until = `${value}:00+08:00`;
+    const selected = `${value}:00+08:00`;
+    const until = Math.floor(Date.parse(configuration.until) / 60000) === Date.parse(selected) / 60000 ? configuration.until : selected;
     const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
     feedbackFor(id, reply, { mode: 'paused', until });
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
