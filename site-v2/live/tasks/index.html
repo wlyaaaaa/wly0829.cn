@@ -8,7 +8,7 @@
 /* 每组卡头的插画（画风变量：对清以后换图只改这里） */
 .page--tasks .lb-card[data-art="ai"] { --lb-art: url("/live/img/tasks-grp-ai.webp"); }
 .page--tasks .lb-card[data-art="upkeep"] { --lb-art: url("/live/img/tasks-grp-upkeep.webp"); }
-.page--tasks .lb-card[data-key="upkeep"] .lb-card__title { color: #00A650; }
+.page--tasks .lb-card:is([data-key="ai"], [data-key="upkeep"]) .lb-card__title { color: #00A650; }
 .page--tasks .lb-card[data-art="hardware"] { --lb-art: url("/live/img/tasks-grp-hardware.webp"); }
 .page--tasks .lb-card[data-art="backup"] { --lb-art: url("/live/img/tasks-grp-backup.webp"); }
 .page--tasks .lb-card[data-art="daily"] { --lb-art: url("/live/img/tasks-grp-daily.webp"); }
@@ -71,6 +71,8 @@
 .page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
 .task-compact .lb-cell--time > * { overflow: visible; }
 .task-compact .task-last > span { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
+/* 已停用的下次运行只有“停用”，把多余列宽留给完整的上次结果。 */
+.page--tasks:not(.tasks--ai-today) .lb-card[data-key="disabled"] { --lb-row-cols: 10px minmax(0, 1fr) minmax(94px, .42fr) minmax(60px, .42fr) 64px; }
 .page--tasks .lb-card[data-key="disabled"] .task-last > [data-task-state] { white-space: normal; }
 .task-compact .task-last:has(.task-week) { line-height: 14px; }
 .task-compact .task-last .task-week { margin-top: 0; }
