@@ -773,7 +773,7 @@
   // 用全站共用的通知浮窗（trust-modal.js 的 SiteNotice），列表还是 #item-action-receipts，等你的事页在它上面听 item-write。
   const itemTextUnits = html => html
     .replace(/<span class="live-unit">((?:\d{4}-)?\d{1,2}-\d{2})<\/span>( +)<span class="live-unit">(\d{1,2}:\d{2}(?::\d{2})?)<\/span>/g, '$1$2$3')
-    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
+    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
       (value, tag) => tag || `<span class="live-unit">${value}</span>`);
   function itemReceipt(head = '正在保存…', detail = '', trigger = null) {
     const lane = document.getElementById('item-action-receipts');
@@ -786,7 +786,11 @@
     const format = () => {
       for (const text of receipt.note.querySelectorAll('.site-notice__head, .site-notice__name')) text.innerHTML = itemTextUnits(esc(text.textContent));
     };
-    const reveal = () => { if (ownSpace) lane.scrollIntoView({ block: 'nearest' }); };
+    const reveal = () => {
+      if (ownSpace || lane && document.body.dataset.record === 'item' && receipt.note.classList.contains('is-fail')) {
+        lane.scrollIntoView({ block: 'nearest' });
+      }
+    };
     format(); reveal();
     return { ...receipt, set(...args) {
       const box = receipt.note.getBoundingClientRect(), visible = box.bottom > 0 && box.top < innerHeight;

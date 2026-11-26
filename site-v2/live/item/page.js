@@ -173,7 +173,7 @@
       (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
       d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
-      closedNote && fact('了结说明', closedNote), d.closed?.at && fact('了结时刻', when(d.closed.at)),
+      closedNote && fact('了结说明', U.itemTextUnits(closedNote)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
     ];
     $('about').hidden = !facts.some(Boolean) || privateItem; U.html($('facts'), facts.filter(Boolean).join(''));
     const qs = Array.isArray(d.questions) ? d.questions : [];
