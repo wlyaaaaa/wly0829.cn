@@ -75,12 +75,14 @@
 .ak-run__body b a { color: inherit; text-decoration: none; }
 .ak-run__body b a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .ak-run__body small { display: block; margin-top: 2px; font-size: 13px; line-height: 20px; color: #6c6b64; }
-/* 下面那句几段：只在段与段之间折，每段前头的“·”折到行首时落在左边裁掉的那一截里；后面的签和“去那张卡”不画点，左边让开同样宽 */
+/* 下面那句几段：只在段与段之间折，短的几段整段走。每段左边让开 1.3em、中间画一个点，整行左移这一截再裁掉：折到行首那段的点落在裁掉的那一截里。
+   box-decoration-break: clone 让一段自己折下去的每一行也先让开这一截，开头的字不被裁（主控 11-26 11:17：原来接下去那行开头一个字被裁）。
+   后面的签和“去那张卡”同样让开、不画点 */
 .ak-run__body small:has(> .ak-line) { overflow-x: clip; }
 .ak-line { display: block; margin-left: -1.3em; }
-.ak-seg__dot { display: inline-block; width: 1.3em; text-align: center; font-style: normal; }
+.ak-seg, .ak-tail { padding-left: 1.3em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ak-seg { background: radial-gradient(circle, currentColor 1.1px, transparent 1.5px) 0 50% / 1.3em 100% no-repeat; }
 .ak-seg.is-keep { white-space: nowrap; }
-.ak-tail { margin-left: 1.3em; }
 .ak-line #live-privacy-note { margin-left: 1.3em; }
 .tp a.ak-run__go { font-size: 14.5px; font-weight: 700; line-height: 22px; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
 .tp a.ak-run__go:hover { text-decoration: underline; text-underline-offset: 3px; }
