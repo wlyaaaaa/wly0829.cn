@@ -71,7 +71,8 @@
 .page--backups .backup-summary .backup-wait { color: #536896; font-weight: 600; }
 /* 右栏每类一个小标题，“展开／收起”在小标题右边，下面只列能退回的日期（M781，样子 B2）；收起按钮和左栏“还有 N 条”同一个样子 */
 .page--backups .backup-group .row__text { grid-column: 2 / 4; }
-.page--backups .backup-group__head { display: flex; align-items: center; }
+/* 窄窗时右栏一行放不下“类名 整机恢复 展开（还有 N 条）”：展开按钮折到下一行，类名不再挤成两行带“…”；一行放得下的不变 */
+.page--backups .backup-group__head { display: flex; flex-wrap: wrap; align-items: center; }
 .page--backups .backup-toggle { flex: none; height: 26px; margin: 0 0 0 auto; translate: none; white-space: nowrap; }
 .page--backups .backup-toggle[aria-expanded="true"] .more__shut, .page--backups .backup-toggle:not([aria-expanded="true"]) .more__open { display: none; }
 .page--backups .backup-toggle[aria-expanded="true"] .more__chev { rotate: -90deg; }
@@ -80,6 +81,8 @@
 .page--backups .backup-dates > li:first-child { border-top: 0; }
 .page--backups .backup-dates a { color: inherit; text-decoration: none; }
 .page--backups .backup-dates a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.page--backups .backup-dates .backup-old { display: block; font-size: 12.5px; line-height: 18px; letter-spacing: 0; color: #94631e; }
+.page--backups .backup-dates .backup-can { font-size: 13px; letter-spacing: 0; color: var(--muted); }
 .page--backups .backup-group:has(.backup-toggle:not([aria-expanded="true"])) .backup-dates > li[data-more] { display: none; }
 .page--backups .backup-latest .row__meta { white-space: normal; margin-left: 0; }
 .page--backups .backup-tag-stale { margin-left: 8px; color: #94631e; background: #fff0d6; box-shadow: none; }
