@@ -225,7 +225,7 @@
     if (key === 'machine') rows.unshift(['CPU', hostText('cpu-model', metric('cpu-model'))], ['显卡', hostText('gpu-model', metric('gpu-model'))], ['显存总量', capacity('gpu-memory-total')]);
     // 屏幕和首屏台式机格读同一份配置；笔记本的系统写在首屏笔记本格，自动恢复写在“台式机稳不稳”卡。
     if (key === 'machine' && configuredScreens().length) rows = rows.map(row => row[0] === '屏幕' ? [row[0], configuredScreens().map(r => `${r.label} ${screenBrief(r)}`).join('；')] : row);
-    if (offline()) rows = rows.filter(([, text]) => text && text !== '还没读到' && text !== missing());
+    if (offline()) rows = rows.filter(([, text]) => text && text !== '还没读到' && text !== '没有记录' && text !== missing());
     const updateLamp = U.status(metric('os-update'), { small: true }).lamp;
     return rows.length ? `<ul class="rows">${rows.map(([label, text, warn]) => `<li class="row row--flat"${warn ? ' style="--gut:25px"' : ''}>${warn ? updateLamp : ''}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(label, { name: '电脑信息', place: 'label' })}</span><span class="row__meta">${hostReadingHtml(label, text)}</span></p></div></li>`).join('')}</ul>` : offline() ? '' : `<p class="row__sub">${missing()}</p>`;
   }
@@ -531,7 +531,7 @@
   }
   function exitsChapter(el) {
     el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><p class="grp-split__k">连得上吗</p><div data-exits></div><div data-draw10-network></div></section>';
-    drawExits = () => { U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || r.status !== '还没读到'); el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`); };
+    drawExits = () => { U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || !['还没读到', '没有记录'].includes(r.status)); /* 块已经说没存下来，下面不再列一串“没有记录”（r83 返修第二轮） */ el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`); };
     finishExitAnchor(el.querySelector("#exits"));
     return { set: drawExits };
   }
