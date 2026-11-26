@@ -115,6 +115,19 @@
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
     return [recorder(it), why, time, count].map(s => s.replace(/。$/, '')).filter(Boolean).join(' · ');
   }
+  // 一条轨道上挨得太近的点（记下、看过、下次看）以它们的中间为准左右摊开，两两至少隔一个点宽，不叠成一团；只挪几像素，真时刻看点上的提示。
+  // 整串都留在轨道里。w 是轨道多宽（像素，取上一次画出来的，头一次按电脑宽约 640）
+  function spread(pts, w) {
+    const gap = 14 / Math.max(200, w) * 100, ends = g => { const a = g.c - (g.ps.length - 1) * gap / 2; return [a, a + (g.ps.length - 1) * gap]; };
+    const groups = [...pts].sort((a, b) => a.x - b.x).map(p => ({ ps: [p], c: p.x }));
+    for (let i = 1; i < groups.length;) {
+      if (ends(groups[i])[0] - ends(groups[i - 1])[1] >= gap) { i++; continue; }
+      const ps = groups[i - 1].ps.concat(groups[i].ps);
+      groups.splice(i - 1, 2, { ps, c: (ps[0].x + ps.at(-1).x) / 2 }); i = Math.max(1, i - 1);
+    }
+    for (const g of groups) { const [a, b] = ends(g), s = a < 0 ? -a : b > 100 ? 100 - b : 0; g.ps.forEach((p, i) => { p.x = a + s + i * gap; }); }
+    return pts;
+  }
   function track(d) {
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
     const sort = rows => rows.sort((a, b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue)) || (stamp(nextOf(a)) ?? 9e15) - (stamp(nextOf(b)) ?? 9e15));
@@ -126,15 +139,18 @@
     const ticks = []; for (let t = from + DAY - (from + 8 * 3600000) % DAY; t <= to; t += DAY) ticks.push(t);
     const step = Math.ceil(ticks.length / 14);
     const axis = `<div class="lg-axis">${ticks.map((t, i) => i % step ? '' : `<span style="left:${x(t)}%">${esc(day(new Date(t).toISOString()))}</span>`).join('')}</div>`;
+    const laneW = page?.root?.querySelector('.lg-lane')?.clientWidth || 640;
     const row = (it, group) => {
       const acc = stamp(it.accepted), nx = stamp(nextOf(it)), over = it.overdue || (nx && nx < now);
       const checks = list(it.checks).filter(c => stamp(c.at));
+      const pts = spread([acc && { k: 'start', x: x(acc) }, ...checks.map(c => ({ k: 'check', x: x(stamp(c.at)), c })), nx && !full(it) && { k: 'next', x: x(nx) }].filter(Boolean), laneW);
+      const px = k => pts.find(p => p.k === k)?.x;
       const running = it.running?.href;
       const tag = running ? link(it.running.href, '正在办 ›', 'tp-tag lg-running') : it.state === 'working' ? '<span class="tp-tag lg-running">正在办</span>' : it.state === 'deferred' ? '<span class="tp-tag" data-tone="soft">暂时不修</span>'
         : it.outcome === 'not_fixed' ? '<span class="tp-tag" data-tone="bad">没修好</span>' : it.outcome === 'wont_fix' ? `<span class="tp-tag" data-tone="soft">${you()}定了不修</span>` : '';
-      const bar = acc ? `<i class="lg-bar" style="left:${x(acc)}%;width:${Math.max(.6, x(now) - x(acc))}%"></i><i class="lg-start${acc < from ? ' is-cut' : ''}" style="left:${x(acc)}%"></i>` : '';
-      const dots = checks.map(c => `<i class="lg-check" style="left:${x(stamp(c.at))}%" title="${esc(when(c.at))} 看过${c.text ? '：' + esc(U.fieldText(c.text, viewer)) : ''}"></i>`).join('');
-      const next = nx && !full(it) ? `${nx > now ? `<i class="lg-link" style="left:${x(now)}%;width:${Math.max(0, x(nx) - x(now))}%"></i>` : ''}<i class="lg-next${over ? ' is-over' : ''}${nx > to ? ' is-far' : ''}" style="left:${x(nx)}%" title="下次看 ${esc(when(nextOf(it)))}"></i>${nx > to ? `<span class="lg-farlabel">${esc(day(nextOf(it)))} ›</span>` : ''}` : '';
+      const bar = acc ? `<i class="lg-bar" style="left:${px('start')}%;width:${Math.max(.6, x(now) - px('start'))}%"></i><i class="lg-start${acc < from ? ' is-cut' : ''}" style="left:${px('start')}%"></i>` : '';
+      const dots = pts.filter(p => p.k === 'check').map(({ x: l, c }) => `<i class="lg-check" style="left:${l}%" title="${esc(when(c.at))} 看过${c.text ? '：' + esc(U.fieldText(c.text, viewer)) : ''}"></i>`).join('');
+      const next = nx && !full(it) ? `${nx > now ? `<i class="lg-link" style="left:${x(now)}%;width:${Math.max(0, px('next') - x(now))}%"></i>` : ''}<i class="lg-next${over ? ' is-over' : ''}${nx > to ? ' is-far' : ''}" style="left:${px('next')}%" title="下次看 ${esc(when(nextOf(it)))}"></i>${nx > to ? `<span class="lg-farlabel">${esc(day(nextOf(it)))} ›</span>` : ''}` : '';
       return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '事项标题')}</button>${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}${tag}<p>${itemMeta(it, group, now)}</p></div>
         <div class="lg-lane">${bar}${dots}${next}</div></li>`;
     };
@@ -256,7 +272,7 @@
   // 每件写“近 30 天坏了几次”（后台 broken_30d，点是 broken_at 每次坏的时刻），本人 11-24 选的规矩按坏了几次数；
   // 以前写的是“又发生几次”（reopen_count，修好后又重开的次数，大半是 0，满屏红字“又发生 0 次”）。后台没给坏了几次的旧包照旧写重开几次。
   function repeats(d) {
-    const r = d.repeat_fixes || {}, now = Date.now(), from = now - 30 * DAY, x = t => (t - from) / (30 * DAY) * 100;
+    const r = d.repeat_fixes || {}, now = Date.now(), from = now - 30 * DAY;
     const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
     // 后台给了“近 30 天坏了几次”就只列坏了 2 次以上的（或已转给本人的）；没给这个数的（比如约好再查的那几件只记了重开）不算坏，不进这一块
     const counted = list(r.items).some(it => Number.isInteger(it.broken_30d));
@@ -268,9 +284,13 @@
       <ul class="lg-replist">${rows.map(it => {
         const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
         const times = at.map(stamp).filter(t => t && t >= from);
+        // 从现在往回每 24 小时一格、共 30 格，同一格里坏的并成一个点、点上写几次；点落在格子正中，30 格排开不叠，最右一格也整个露在条里
+        const slots = new Map();
+        for (const t of times) { const k = Math.max(0, Math.min(29, Math.floor((now - t) / DAY))); slots.set(k, [...(slots.get(k) || []), t]); }
+        const dots = [...slots].map(([k, ts]) => `<i style="left:${100 - (k + .5) / 30 * 100}%"${ts.length > 1 ? ' data-n' : ''} title="${ts.map(t => esc(when(new Date(t).toISOString()))).join('、')} 坏了${ts.length > 1 ? ` ${ts.length} 次` : '一次'}">${ts.length > 1 ? ts.length : ''}</i>`).join('');
         const handed = it.handed_to_owner ? ` ${it.owner_href ? link(it.owner_href, `已转给${you()} ›`) : `已转给${you()}`}` : '';
         return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">${said(it)}${handed}</span>
-          <div class="lg-rep__axis">${[0, 5, 10, 15, 20, 25, 30].map(n => `<span style="left:${n / 30 * 100}%"${n === 0 ? ' data-edge="start"' : n === 30 ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${times.map(t => `<i style="left:${x(t)}%" title="${esc(when(new Date(t).toISOString()))} 坏了一次"></i>`).join('')}</div></li>`;
+          <div class="lg-rep__axis">${[0, 5, 10, 15, 20, 25, 30].map(n => `<span style="left:${n / 30 * 100}%"${n === 0 ? ' data-edge="start"' : n === 30 ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${dots}</div></li>`;
       }).join('')}</ul>${rows.some(it => list(it.broken_at).length || list(it.reopen_at).length) ? '' : '<p class="tp-small">每次坏的日子还没采上，先画第一次和最近一次。</p>'}</section>`;
   }
 
