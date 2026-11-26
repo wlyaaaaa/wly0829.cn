@@ -111,7 +111,7 @@
     const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker));
     const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
-      .map(t => `<span class="ar-tag">${keepDates(t)}</span>`).join('');
+      .map(t => `<span class="ar-tag"><span>${keepDates(t)}</span></span>`).join('');
   }
 
 
