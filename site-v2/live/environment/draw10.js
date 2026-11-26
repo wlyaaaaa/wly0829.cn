@@ -67,7 +67,7 @@
   function row(r, viewer, sub) {
     const [tag, cls] = r.kind === 'updated' && r.previous_version && r.version && lower(r.version, r.previous_version) ? ['降级', 'down'] : KIND[r.kind] || [r.kind, 'other'];
     const versions = [...new Set([r.previous_version, r.version].filter(Boolean))].map(U.esc).join(' → ');
-    return `<li class="env-ch${sub ? ' env-ch--sub' : ''}"${r.drive ? ` title="${U.esc(`${r.drive} 盘`)}"` : ''}><span class="env-ch__date">${sub ? '' : U.esc(dateText(r.day))}</span><span class="env-ch__tag" data-kind="${cls}">${U.esc(tag)}</span><span class="env-ch__name">${U.fieldHtml(r.label || r.base, { name: '软件', kind: viewer })}</span><span class="env-ch__ver">${versions}</span></li>`;
+    return `<li class="env-ch${sub ? ' env-ch--sub' : ''}"${r.drive ? ` title="${U.esc(`${r.drive} 盘`)}"` : ''}><span class="env-ch__date">${sub ? '' : U.esc(dateText(r.day))}</span><span class="env-ch__tag" data-kind="${cls}">${U.esc(tag)}</span><span class="env-ch__name">${U.fieldHtml(r.label && r.label !== r.name ? r.label : r.base, { name: '软件', kind: viewer })}</span><span class="env-ch__ver">${versions}</span></li>`;
   }
   function quiet(g, viewer) {
     const kinds = [...new Set(g.rows.map(r => r.category))];
