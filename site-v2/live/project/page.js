@@ -985,7 +985,8 @@
     const chart = !two.some(w => w.published != null || w.rolled_back != null) ? '' : `<div class="pj-wk"><p class="pj-wk__cap"><span class="pj-wk__sum">近两周：发布 ${total('published')}、退回 ${total('rolled_back')}</span><span class="pj-wk__legend"><span><i class="is-pub"></i>发布</span><span><i class="is-back"></i>退回</span></span></p><div class="pj-wk__plot">${two.map(week).join('')}</div><div class="pj-wk__x">${two.map(w => `<span>${text(w.label)}</span>`).join('')}</div></div>`;
     // 逐版记录和更早没记录的缘由收在“逐版记录”里；打开先列 10 条，一次多露 10 条，露到底“收起”（R147）
     U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
-    host._ruleEvents = events;
+    // 最新的在上，和上面的逐版时间线、“最近改动”一样新的在前；先露最近 10 个版本，再往更早的露（主持 11-26 10:3x 定）
+    host._ruleEvents = [...events].reverse();
     const opened = host.querySelector('.pj-rh-events');
     if (opened && !opened._stepBound) { opened._stepBound = true; opened.addEventListener('toggle', () => { if (!opened.open) { host._ruleShown = 0; drawRuleEvents(host); } }); }
     drawRuleEvents(host);
