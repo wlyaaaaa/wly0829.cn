@@ -74,11 +74,11 @@
       // 在修：只有 repairing 为真才算（约定 §10）；旧包没有 repairing 时写了谁在修就算。第几轮、点到哪一轮取在修那几处里第一处写明了的
       const busy = issues.filter(i => i.repairing === true || i.repairing == null && (i.handler || i.handler_text));
       const fix = busy.find(i => typeof i.href === 'string' && i.href.startsWith('/live/')) || {};
-      // 点这一家那一行：到智能体页“三家各干了多少活”那块（#work），高亮这一家；后台给了这一家的地址就用它（网址只看一家一律 ?family=，F1 定的）
-      const base = typeof t?.href === 'string' && t.href.startsWith('/live/agents/') ? t.href : `/live/agents/?family=${key}`;
+      // 点这一家那一行：这一行写的是这一家今天实际干了几小时，所以到智能体页“三家干了多少”那块（#hours），时间选好“今天”，亮这一家那条横条
+      // （以前到“三家各干了多少活”，那块现在叫“报了估时的活”，数是登记工时，和这一行对不上；网址只看一家一律 ?family=，F1 定的）
       return { ...p, name: p.name || name, color: HOST_COLOR[key], issues, fixing: issues.length ? busy.length > 0 : p.status === 'repair',
         round: busy.map(i => i.round).find(r => count(r) && r > 0) || null, fixHref: R.runPage(fix.href) || null,
-        workHref: base.includes('#') ? base : `${base}#work`,
+        workHref: `/live/agents/?hours=today&family=${key}#hours`,
         // “上次”：这一家今天的数是证实的 0 时，用 last_at 里对应那一项（工时没有就看开工）
         today: t ? { hours: hoursOf(act ? act.hosts?.[key]?.actual_minutes : t.actual_minutes), starts: t.starts, said: t.messages, last: last.work || last.starts || null } : null };
     });
@@ -237,7 +237,7 @@
           // 小时数是叠加的（同时在干的分别算），写明“叠加”，旁边小字“平均同时 N 个在干”，一天过 24 小时也看得懂（主控 11-26 03:50 点名）
           : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家叠加干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${v.together ? `平均同时 ${esc(together(v.together))} 个在干 · ` : ''}${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
-        <p class="b6-foot b6-foot--split">${ruleLine(`规则 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
+        <p class="b6-foot b6-foot--split">${ruleLine(`三家读的规矩 ${field(d.rule_version) || num(null)}${v.current}`)}${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
 
     // AI 自动任务账本卡（照“首页账本卡-v1”，本人 11-26 01:04 批照图施工）：欠着几件（大字）、放着几件 ›；今天要看的时间条；
