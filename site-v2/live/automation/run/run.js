@@ -117,14 +117,15 @@
   // “没有记下……”这种空话不画，缺哪格就不画那格（单子第 4 条）——
   function three(r) {
     const t = r.three || {}, head = plainOf(r.headline), shown = loose(title(r).replace(/<[^>]+>/g, ''));
-    const cells = [['发生了什么', t.happened], ['有什么影响', t.impact], ['接下来', t.next]].filter(([key, v]) => {
+    const cells = [['发生了什么', t.happened, 'happened'], ['有什么影响', t.impact, 'impact'], ['接下来', t.next, 'next']].filter(([key, v]) => {
       if (v == null || v === '') return false;
       const words = plainOf(v);
       if (typeof v === 'string' && /^没有记下/.test(words)) return false;
       // 大标题退回长标题时，标题就是 summary 的第一句；后台的“发生了什么”是同一句（只差标点）就不再写一遍
       return !(key === '发生了什么' && ((head && loose(words) === loose(head)) || (shown && loose(words) === shown)));
-    }).map(([h, v]) => [h, F(v, h)]).filter(([, html]) => html.trim());   // 画出来是空的（本人版里没给原字的占位）不画
-    return cells.length ? `<div class="ar-three" style="--cells:${cells.length}">${cells.map(([h, html]) => `<section class="tp-panel ar-cell"><h2>${h}</h2><p>${html}</p></section>`).join('')}</div>` : '';
+      // 访客那边这一格换了说法的（visitor_labels 的 three.happened、three.impact、three.next），这一格末尾挂全站同一个签，规则同标题、成品
+    }).map(([h, v, key]) => [h, F(v, h), U.visitorLabel({ visitor_labels: r.labels }, `three.${key}`, `“${h}”这一格`, viewer)]).filter(([, html]) => html.trim());   // 画出来是空的（本人版里没给原字的占位）不画
+    return cells.length ? `<div class="ar-three" style="--cells:${cells.length}">${cells.map(([h, html, tag]) => `<section class="tp-panel ar-cell"><h2>${h}</h2><p>${withTag(html, tag)}</p></section>`).join('')}</div>` : '';
   }
 
   // —— 这一轮做成了什么：做出来的东西、回执里记下的、告诉本人的；有东西时才放（单子：原来那块的内容不能丢）——
