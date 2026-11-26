@@ -1007,17 +1007,14 @@ html .live-conn > #notices > li + li, html .live-conn__rows:not(:empty) + #notic
 .notice-message__body > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
 .notice-message__body[open] > summary { color: #00A650; }
 .notice-message__body > p { margin: 6px 0 4px; font-weight: 400; white-space: pre-line; overflow-wrap: anywhere; }
-/* 等你的事（实况首页那张卡、等你的事页）的按钮：每种按钮占固定的一列，右对齐，哪行少一个按钮别的也不挪位（本人 11-23 圈的对不齐）；
-   一组里谁都没有的那种按钮，那一列收成 0 */
-:is(.page--items .lb-item, .page--live #needs .row) > .row__acts:has(> [data-slot]) { display: grid; grid-template-columns: auto var(--slot-ask, 72px) var(--slot-close, 88px) var(--slot-later, 88px) var(--slot-pick, 0px); justify-content: end; justify-items: end; align-items: center; column-gap: 0; max-width: none; flex-wrap: nowrap; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="ask"])) { --slot-ask: 0px; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="close"])) { --slot-close: 0px; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="later"])) { --slot-later: 0px; }
-.page--items .lb-card:has([data-slot="pick"]) { --slot-pick: 34px; }
-.row__acts:has(> [data-slot]) > [data-slot] { grid-row: 1; }
-.row__acts:has(> [data-slot]) > [data-slot="go"] { grid-column: 1; grid-row: auto; margin-right: 6px; }
-.row__acts:has(> [data-slot]) > [data-slot="ask"] { grid-column: 2; }
-.row__acts:has(> [data-slot]) > [data-slot="close"] { grid-column: 3; }
-.row__acts:has(> [data-slot]) > [data-slot="later"] { grid-column: 4; }
-.row__acts:has(> [data-slot]) > [data-slot="pick"] { grid-column: 5; }
+/* 等你的事各入口共用按钮间距。按实际按钮宽度排，少一个按钮就少一个位置。 */
+:is(.page--items, .page--live #needs, .page--l3[data-record="item"]) { --item-action-gap: 8px; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--item-action-gap); max-width: 100%; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot] { margin: 0; }
+.row__acts > [data-slot="go"] { margin-right: 6px; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="go"] { order: -2; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="ask"] { order: -1; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="later"] { order: 1; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="pick"] { order: 2; }
+.page--l3[data-record="item"] .dossier-card--state .rec-acts { gap: var(--item-action-gap); }
 .row__acts > .btn.is-busy { opacity: .75; cursor: progress; }

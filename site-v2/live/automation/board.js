@@ -555,6 +555,7 @@
       const next = st.next_at || c.next_at;
       main = next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`;
     }
+    if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
   }
   // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
@@ -575,7 +576,9 @@
     const result = c.id === 'translator' && typeof r.text === 'string'
       ? r.text.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : r.text;
     const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
-    return `${duplicate ? '' : keepDates(F(result, '上次结果'))}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    const words = duplicate ? '' : keepDates(F(result, '上次结果'));
+    const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
+    return `${text}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {

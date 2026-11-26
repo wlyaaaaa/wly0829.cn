@@ -98,17 +98,25 @@
     }
     return key ? U.visitorLabel({ visitor_labels: r.labels }, key, '这一轮的说法', viewer) : '';
   }
+  const longerThanChat = (r, d) => {
+    const span = R.minutesBetween(d?.turn_started_at, r.finishedAt);
+    return span != null && r.workedMinutes != null && r.workedMinutes - span >= 1;
+  };
   function tags(r) {
+    const d = chat?.data || r.conversation.meta;
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
     const whole = R.minutesBetween(r.queuedAt || r.startedAt, r.finishedAt);
+    // 派活先启动、随后 AI 对话才开始时，不能把含派活启动的时长写成对话处理时间。
+    const runSpan = R.minutesBetween(r.startedAt, r.finishedAt);
+    const workLabel = !longerThanChat(r, d) ? 'AI 实际 ' : T.dec(runSpan) === T.dec(r.workedMinutes)
+      ? `任务运行 ${T.when(r.startedAt)} 起，` : '后台记录用时 ';
     const time = [clockRange(r), whole != null && `整轮 ${T.dec(whole)} 分钟`,
       r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
-      r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `AI 实际 ${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
+      r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `${workLabel}${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
-    const d = chat?.data || r.conversation.meta;
     const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
     const model = !r.who?.program && !r.who?.short && worker.model ? R.whoOf(worker).short : r.who?.text;
-    const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker));
+    const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker), true);
     const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
       .map(t => `<span class="ar-tag"><span>${keepDates(t)}</span></span>`).join('');
@@ -291,8 +299,9 @@
     } else {
       // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
       const plainSummary = typeof r.summary === 'string' && lastWords ? r.summary.replace(SCAN, '').match(/[^。！？\n]+[。！？]*|\n+/g) : null;
-      const heading = plainSummary ? CV.flatWords(title(r)) : '';
-      const summary = plainSummary ? plainSummary.filter(sentence => !alreadySaid(lastWords, sentence) && !alreadySaid(heading, sentence)).join('').trim() : r.summary;
+      // 先按实际显示的称呼比较，访客看到的“要本人选”和对话原文“要你选”是同一句。
+      const compared = [lastWords, plainSummary ? CV.flatWords(title(r)) : ''].map(words => R.asOwner(words, viewer));
+      const summary = plainSummary ? plainSummary.filter(sentence => !compared.some(words => alreadySaid(words, R.asOwner(sentence, viewer)))).join('').trim() : r.summary;
       const shown = F(summary, '这一轮做了什么');
       const result = withoutScan(R.withoutSubject(shown, r.subject ? F(r.subject.title, '这件活') : '') || shown, r);
       const tag = U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer);
@@ -340,8 +349,12 @@
         const words = CV.visibleText(d.thinking), split = splitThought(words);
         msgs[msgs.length - 1].thoughtHtml = t.head + (typeof d.thinking === 'string' && split !== words ? bodyOf(split, '思考摘要') : t.thought);
       }
-      for (const m of msgs) out.push({ at: m.at, html: say({ who: 'ai', name: esc(ai), at: clockOf(r, m.at), body: m.body + (m.label ? `<small class="ar-msg__label">${m.label}</small>` : ''),
-        after: quotes(m.quotes, m.key) + (m.thoughtHtml ? `<blockquote class="ar-quote">${m.thoughtHtml}</blockquote>` : '') }) });
+      for (const m of msgs) {
+        const label = m.label ? `<small class="ar-msg__label">${m.label}</small>` : '';
+        const body = m.label === '最新回复' && m.words ? CV.withTag(m.body, label) : m.body + label;
+        out.push({ at: m.at, html: say({ who: 'ai', name: esc(ai), at: clockOf(r, m.at), body,
+          after: quotes(m.quotes, m.key) + (m.thoughtHtml ? `<blockquote class="ar-quote">${m.thoughtHtml}</blockquote>` : '') }) });
+      }
     }
     // 帮手：默认收成一行，点“展开”看这个帮手的全部（逐步记录、帮手原名、帮手详情、打开对话）；内容和顶层页的帮手行用同一个函数出
     const helpers = Array.isArray(d.helpers) ? d.helpers : locked ? list(d.helpers?.active) : [];
@@ -393,7 +406,8 @@
       else if (!out.length) note = esc(gap || '这一轮说了什么没有存下来。');
       items.push(...out);
     }
-    if (note) items.push({ html: `<li class="ar-gap">${note}</li>` });
+    const headerLink = viewer === 'public' && hiddenFromVisitor && c.headerHref ? ` · ${link(c.headerHref, '看对话页头 ›')}` : '';
+    if (note) items.push({ html: `<li class="ar-gap">${note}${headerLink}</li>` });
     // 还在跑：最后一行写它这会儿在干什么；跑完了：派活程序说结论
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
@@ -417,7 +431,18 @@
       const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
-      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${keepDates(U.fieldHtml(v, { name: '对话内容', kind: viewer }))}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
+      const longer = longerThanChat(r, d);
+      const family = R.familyOf({ host: d.software, model: CV.visibleText(d.model) }) || r.family;
+      const facts = m.meta.map((v, i) => {
+        const words = keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
+          { name: '对话内容', kind: viewer }));
+        const modelHref = i === 0 && v === CV.who(d, true) && R.agentsPath(family, true);
+        return modelHref ? link(modelHref, `${words} ›`) : words;
+      });
+      if (m.project) facts.push(`所属项目 ${m.project}`);
+      const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
+      if (mark) facts[0] = `<span class="live-unit">${facts[0] || ''}${mark}</span>`;
+      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${facts.map(v => `<span>${v}</span>`).join('')}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
       plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
     } else {
       // 对话没读到（访客版对话藏着、本人版还在读或读不到）：照后台给的 conversation.metadata 和 message_count 写卡头这一行，正文照旧
@@ -454,7 +479,7 @@
     const look = li && [li.look ? `第 ${int(li.look)} 次看` : '', !li.look && li.lookMax ? `最多看 ${int(li.lookMax)} 次` : '', group].filter(Boolean).join('，');
     const doing = [li?.title && (li.href ? `<a href="${esc(li.href)}">属于账本：${F(li.title, '账本那件')} <i>›</i></a>` : `<p>属于账本：${F(li.title, '账本那件')}</p>`), look && `<p>${look}</p>`,
       r.subject?.href && `<a href="${esc(r.subject.href)}">这件修理的全部几轮 <i>›</i></a>`,
-      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：${esc(r.who.text)}` : ''}</p>`].filter(Boolean);
+      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：<span class="live-unit">${esc(r.who.text)}</span>` : ''}</p>`].filter(Boolean);
     return `<aside class="ar-side">${doing.length ? `<section class="tp-panel ar-sidecard"><h2>这一轮在办</h2>${doing.join('')}</section>` : ''}
       <section class="tp-panel ar-sidecard"><a href="${esc(T.path('/live/automation/', { category }))}">${esc(name())} <i>›</i></a>${retired ? '' : `<a href="${esc(T.path('/live/automation/', { type: category }) + `#cat-${category}`)}">这一类怎么干 <i>›</i></a>`}</section>
       <section class="tp-panel ar-sidecard"><p class="ar-steps">${step(prevId, '上一轮', true)}${step(nextId, '下一轮', false)}</p></section></aside>`;

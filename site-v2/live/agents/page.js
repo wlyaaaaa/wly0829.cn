@@ -513,6 +513,10 @@
   // —— 快讯：只滚三家开工、完工（本人 16:35 照图点头）。“××检查拦下 1 次”这类不上快讯：拦下次数里多少是真违规拿不准，本人 03:00 定了不放；
   // 钩子表每格的“拦 N 次”照旧。后台出 feed 就从里面挑开工、完工；没出先拿这页已有的“这周开工几件”拼 ——
   const WORK_KINDS = new Set(['work_start', 'work_finish']);
+  const WORK_UNAVAILABLE = new Map([
+    ['本次读不到工期账本。', '三家开工、完工的记录这次没读到，下一轮会自动再读'],
+    ['工期账本还未生成。', '三家开工、完工的记录还没生成，有了会出现在这里'],
+  ]);
   function feed(d) {
     if (Array.isArray(d.feed)) return d.feed.filter(r => WORK_KINDS.has(r.kind))
       .map(r => ({ at: r.at, actor: U.fieldText(r.actor, viewer), text: U.fieldText(r.text, viewer), href: r.href, tone: r.tone }));
@@ -539,7 +543,9 @@
         <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
-    page.tick.set(feed(d), { off: state.offline });
+    const rows = feed(d), reason = d.work_stats?.unavailable_reason;
+    if (reason && !rows.some(row => row.text)) rows.push({ text: WORK_UNAVAILABLE.get(reason) ?? reason });
+    page.tick.set(rows, { off: state.offline });
     if (!landed && location.hash === '#hours') {
       const section = document.getElementById('hours');
       // 跨页过渡期间下一帧可能晚于锚点定位。工时区画出来就滚到同一个锚点。
