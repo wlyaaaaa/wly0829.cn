@@ -272,7 +272,7 @@
 .page--live .card--empty { --headline-lamp-top: 6px; }
 .page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) > :is(.head__marker,.head__cutoff,.row__sub) { margin-left: 0; }
 @media (max-width: 1200px) {
- .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time), .page--live #phone .card__note { margin-inline-end: calc(24px - var(--win)); }
 }
 /* 电脑窗口窄（如 1024 宽）：AI 对话行尾两个按钮挪到这一行下面，标题和型号用整行宽（M498） */
 @media (max-width: 1279px) {
