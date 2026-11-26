@@ -224,9 +224,11 @@
     const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
     // 设计第 9 节：标签后面接“从几点起”（排序时刻＋这一类的动词，同 AI 对话页行首）和原因；状态旧了 2 分钟以上加“状态是几点读的”。后台没给的那一项不写
     const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
+    const delegated = chat.state === 'done' && (!reason || reason === state) && F.workingHelpers(chat);
     const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
     const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
       reason && reason !== state && F.ownerWords(reason, viewer),
+      delegated && `后台帮手另在处理（${delegated} 个）`,
       Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
     // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
     pageWords = new Set();

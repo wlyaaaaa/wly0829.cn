@@ -822,7 +822,7 @@
     const sample = d.running_sample && typeof d.running_sample === 'object' ? d.running_sample : null;
     const running = sample ? { n: Number.isInteger(sample.n) ? sample.n : null, at: sample.at } : { n: counts.running, at: observed };
     const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(sample.at) && new Date(lastState?.now || Date.now()) - Date.parse(sample.at) >= 120000 : old;
-    // 在干、等回答、近 72 小时做完各有各的时刻：一样就共用开头的“几点记录”，不一样各自贴上，不拿旧时刻顶新读数
+    // 在干、等回答、近 72 小时已回复各有各的时刻：一样就共用开头的“几点记录”，不一样各自贴上，不拿旧时刻顶新读数
     const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(counts.window?.to ?? counts.at);
     const has = { running: running.n != null, waiting: counts.waiting != null, done: counts.done72 != null };
     const stamps = [...new Set([has.running && runningAt, has.waiting && waitingAt, has.done && doneAt].filter(Boolean))], split = stamps.length > 1;
@@ -838,22 +838,24 @@
     };
     const concurrent = has.running && `${runningText} 个${runningOld && !(split ? runningAt : recorded) ? '当时' : ''}在干`;
     const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const done = has.done && `近 72 小时做完 ${quantity(counts, 'done72')} 个`;
+    const done = has.done && `近 72 小时已回复 ${quantity(counts, 'done72')} 个`;
     const own = (piece, at, label) => !piece || !split || !at || at === recorded ? piece : label(piece, at);
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
-    const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
+    const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时已回复数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
+    // M915：后台给了 board（和 AI 对话页同一份）时，当前状态沿用对话页；近 72 小时只报已回复，保留回复窗口自己的截止。
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     const colTotal = key => totalOf(board?.columns[key]), colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
     const countNote = key => {
       const listed = listedOf(board?.columns[key]), n = colTotal(key);
       return listed > (n ?? 0) ? `${key === 'working' ? '在干' : addressed('等你')}清单列出 ${listed} 场` : '';
     };
+    const boardAt = recordStamp(board?.as_of);
+    const boardReply = done && doneAt && doneAt !== boardAt ? `截至 ${doneAt} 的${done}` : done;
     const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
-      `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
+      `停下没归档 ${colTotal('stopped') ?? '没读到'}`, boardReply || '近 72 小时已回复 没读到']);
     const summary = boardSummary || join(pieces);
-    const heading = chatCardHead({ summary, recorded: board ? recordStamp(board.as_of) : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
+    const heading = chatCardHead({ summary, recorded: board ? boardAt : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
     const note = join(board ? ['working', 'waiting'].map(countNote) : [olderRows('running', running.n, runningAt),
       olderRows('waiting', counts.waiting, recordStamp(counts === d ? observed : counts.at))]);
     // 标题伸到插画上，窄窗的说明按画窗宽度让开。
@@ -1277,7 +1279,7 @@
     const tried = recordStamp(blockAt(d), d.at_precision);
     const reading = reasons.some(r => /还在读|warming/.test(r)), gap = d.read_error || d.refresh_error || reasons.some(r => !/还在读|warming/.test(r));
     // 后台重载后续扫完整名单：上一份完整名单还在（做完数照常有），读不全的只是“本轮还在读取”，后台随手给同一项记的 read_failed 不算真失败；
-    // 卡头已写着名单自己的截止（截至 … 的近 72 小时做完），这里不再说“没读全，正在重读”。没有留存名单或真读失败照旧。
+    // 卡头已写着名单自己的截止（截至 … 的近 72 小时已回复），这里不再说“没读全，正在重读”。没有留存名单或真读失败照旧。
     const named = new Set((d.gray_items || []).map(g => U.fieldText(g?.name, viewer)));
     const ownGap = d.read_error || d.refresh_error || [...(d.gray_items || []).map(g => g?.reason), ...Object.entries(d.missing || {}).filter(([key]) => !named.has(key)).map(([, r]) => r?.reason_code ?? r?.reason ?? r)]
       .some(r => !/还在读|warming/.test(sp(U.fieldText(r, viewer))));

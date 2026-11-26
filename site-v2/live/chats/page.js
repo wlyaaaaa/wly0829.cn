@@ -714,11 +714,16 @@
       key, name, rows: (rows || []).filter(c => states.includes(c.state))
         .map(c => ({ ...chat(c, at, true), count: c.private_count || 1 })),
     }));
+    const [done, stopped, unknown] = sections.map(group => group.rows.reduce((n, row) => n + row.count, 0));
+    const ended = done + stopped;
+    const full = count === total && ended + unknown === total && !label.startsWith('至少');
+    const endedLabel = full || ended ? `已结束 ${full ? '' : '至少 '}${ended} 个` : label;
     // 每组先摆一整排，多的留在本组后面、点“展开”才露出来：组名只出一次，展开后仍按组、组里按时间排。
-    const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label', html: `<h3>${name}</h3>` },
+    const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label',
+      html: `<h3>${name}${key === 'ended_unknown' ? ` ${full ? '' : '至少 '}${unknown} 个` : ''}</h3>` },
       ...rows.map((row, i) => ({ ...row, i, cls: i < recentCols ? row.cls : `${row.cls} chat-ended-extra` }))] : []);
     recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, i: row.i }]));
-    U.html($('recent-title'), recentTitle + (label ? `<span class="lb-card__count">${esc(label)}</span>` : ''), false);
+    U.html($('recent-title'), recentTitle + (endedLabel ? `<span class="lb-card__count">${esc(endedLabel)}</span>` : ''), false);
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有可回看的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
     U.list($('recent-rest'), []);
