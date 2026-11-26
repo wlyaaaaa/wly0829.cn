@@ -63,6 +63,7 @@
 .page--backups .backup-grid summary { cursor: pointer; color: var(--muted); font-size: 12px; }
 .page--backups .backup-note > summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; list-style-position: inside; }
 .page--backups .backup-note > div { font-size: 12px; font-weight: 400; }
+.page--backups .backup-grid .backup-narrow-detail { display: none; }
 .page--backups .backup-summary { grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; }
 .page--backups .backup-summary b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .page--backups .backup-summary .backup-drive { min-width: 0; word-break: normal; overflow-wrap: normal; }
@@ -96,6 +97,9 @@
   .page--backups .backup-grid tr > :nth-child(3) { grid-column: span 2; }
   .page--backups .backup-grid tr > [colspan] { grid-column: 1 / -1; }
   .page--backups .backup-grid tbody tr { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair); }
+  .page--backups .backup-grid :is(.backup-failure-long, .backup-failure-long ~ .backup-note) { display: none; }
+  .page--backups .backup-grid .backup-narrow-detail { display: inline-block; color: var(--muted); font-size: 12px; text-decoration: underline; }
+  .page--backups .backup-grid tr[data-set="devconfig"] td[data-copy="h"] .backup-at { display: inline-block; overflow-wrap: normal; }
 }
 </style>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>

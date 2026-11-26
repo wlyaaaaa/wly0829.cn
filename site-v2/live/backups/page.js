@@ -98,11 +98,11 @@
     const retainedShort = d.at && U.date(d.at) === U.date(Date.now()) ? U.time(d.at) : retainedAt;
     const batchNote = batchFailed ? `<span>${retainedAt ? `下表沿用 ${esc(retainedShort)} 的记录` : '这次没读到，下表是上一次的记录'}。带“上次确认”的是旧数，带“本次没读到”的还等更新。</span>` : '';
     const localCaption = localNote ? `<span>${field(localNote, '本机说明')}</span>` : '';
-    // G、H 盘的“大部分成功／部分成功”怎么分：表里出现这两档时在表头说一次。
+    // 表里出现备份结果分档时，在表头说明确数和估档的区别。
     // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     let tierSeen = false;
     const caption = () => {
-      const tierNote = tierSeen ? '<span>G、H 盘按这一轮备上多少分档：没备上的不超过一半写“大部分成功”（黄），超过一半写“部分成功”（橙），一份也没备上才写“备份失败”（红）。</span>' : '';
+      const tierNote = tierSeen ? '<span>G、H 盘按这一轮备上多少分档：没备上的不超过一半写“大部分成功”（黄），超过一半写“部分成功”（橙），一份也没备上才写“备份失败”（红）。份数没数全时照备份程序报的档位写，比例说不准；一点结果都没收到的，不算失败。</span>' : '';
       return batchNote || localCaption || tierNote ? `<caption class="pj-note">${batchNote}${localCaption}${tierNote}</caption>` : '';
     };
     const refreshLabels = { read: '本次读到清单', failed: '本次没读到', not_recorded: '本次读取未登记', not_applicable: '本次无需读清单' };
@@ -133,7 +133,7 @@
     const copyCell = (s, key) => {
       const copy = s[key], retired = key === 'g' && copy?.retired === true;
       const cloud = key === 'drive' || key === 'photos', original = key === 'local', cold = key === 'h';
-      const cell = (state, label, lines = [], details = '') => `<td data-copy="${key}" data-state="${state}"><b>${tableText(label)}</b>${lines.filter(Boolean).map(text => `<small>${tableText(text)}</small>`).join('')}${details}</td>`;
+      const cell = (state, label, lines = [], details = '', lead = '') => `<td data-copy="${key}" data-state="${state}"><b>${tableText(label)}</b>${lead}${lines.filter(Boolean).map(text => `<small>${tableText(text)}</small>`).join('')}${details}</td>`;
       if (!retired && (copy?.required === false || original && copy?.original_state === 'not_applicable')) return cell('none', '不适用');
       const current = copy?.state, complete = ['ready', 'complete', 'completed'], queued = ['waiting', 'queued', 'stable'];
       const problem = state => ({
@@ -195,12 +195,16 @@
       if (tier) {
         const o = copy.outcome, exactCounts = o.exact === true && Number.isInteger(o.ok) && Number.isInteger(o.failed);
         const split = ['mostly', 'partial'].includes(tier[0]) && exactCounts;
-        if (split) tierSeen = true;
+        if (tier[0] !== 'complete') tierSeen = true;
         const counts = split ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
         // 没备全、失败的那一档，后台给的这一轮说明（如“这轮未备份……”）也写上
         const said = !told && copy.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
+        const narrowFailure = cold && s.id === 'devconfig' && tier[0] === 'failed' && said;
+        const failureNote = narrowFailure ? `<small class="backup-failure-long">${tableText(said)}</small>` : '';
+        const link = narrowFailure ? `<a class="backup-narrow-detail" href="${esc(route('/live/backup/?id=devconfig#copies-section'))}">详情 ›</a>` : '';
+        const note = causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '';
         cells.set(`${s.id}:${key}`, { state: tier[0], label: tier[1] });
-        return cell(tier[0], tier[1], [told !== tier[1] && told, said, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+        return cell(tier[0], tier[1], [told !== tier[1] && told, !narrowFailure && said, counts, ...lines], note + link, failureNote);
       }
       cells.set(`${s.id}:${key}`, { state: told ? 'gap' : state, label: told || label });
       return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
