@@ -86,7 +86,8 @@
     // 还没取的下一页：有总数就算进“还有几条”，没有总数也照样给“继续看”
     const unloaded = d.next ? Number.isFinite(d.total) ? Math.max(0, d.total - d.items.length) : null : 0;
     const left = list.length - head.length + (unloaded || 0), fetch = head.length >= list.length && unloaded !== 0;
-    const label = paging ? '正在读…' : pageFailed ? '下一页暂时读不到，再试一次 ›' : left > STEP ? `再看 ${STEP} 条（还有 ${left} 条） ›` : left > 0 ? `再看剩下 ${left} 条 ›` : '继续看 ›';
+    // 后台还有没取的页时，剩下的原始记录合并、折叠后是几条说不准，按钮不写“还有几条”，取完了再写
+    const label = paging ? '正在读…' : pageFailed ? '下一页暂时读不到，再试一次 ›' : unloaded !== 0 ? `再看 ${STEP} 条 ›` : left > STEP ? `再看 ${STEP} 条（还有 ${left} 条） ›` : left > 0 ? `再看剩下 ${left} 条 ›` : '继续看 ›';
     const more = left > 0 || fetch ? `<p class="env-ch-more"><button type="button" class="more" data-change-more${fetch ? ' data-needs-pc' : ''}${paging ? ' disabled' : ''}>${label}</button></p>` : '';
     // 起点之前没记录造成的“快照缺口”已由上一句说清；起点之后真缺了日子才照后台原话说
     const gap = d.gap && !(d.q === 'partial' && cover.late && !cover.inner) ? d.gap : '';
