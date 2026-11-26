@@ -38,7 +38,8 @@ function parseItem(text) {
   return {type,step,children,name:named?.[1],main:named ? named[2] : main};
 }
 const panes = new Map(), shots = new Map(), paginations = new Map();
-const detailCount = item => item.detail.filter(text=>parseItem(text).type !== 'heading').length;
+// 细节条数＝右栏编了号的那几条：小标题不算，“出处”“源码”放在栏底另列、也不算（和右栏的 01、02… 对得上）
+const detailCount = item => item.detail.map(parseItem).filter(entry=>entry.type !== 'heading' && !['出处','源码'].includes(entry.name)).length;
 function fitPictures() {
   pictures.style.setProperty('--picture-scale',Math.min(1,document.documentElement.clientWidth / pictures.offsetWidth));
 }
