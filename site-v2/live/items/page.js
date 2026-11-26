@@ -151,7 +151,8 @@
     const gap = Math.abs(total - 2 * left), column = left * 2 <= total ? '1' : '2';
     closed.dataset.itemsCol = ''; closed.toggleAttribute('data-wide', false); closed.style.setProperty('--items-column', column);
     const own = closed.hidden ? 0 : closed.getBoundingClientRect().height + 22;
-    const wide = !!picked || !shown.length || Math.abs(own - gap) > gap + 400;
+    // 只在窄窗（窗口不到 1200 宽）这样挪；1440 这类宽窗照原来接短栏（主控只指了 900，r83 返修第二轮）
+    const wide = !!picked || !shown.length || innerWidth < 1200 && Math.abs(own - gap) > gap + 400;
     closed.toggleAttribute('data-wide', wide);
     closed.style.setProperty('--items-column', wide ? '1 / -1' : column);
     board.layout();
