@@ -1266,7 +1266,8 @@
     const hasFrame = Object.hasOwn(reading, 'recorded_at'), last = recordStamp(reading.recorded_at);
     const until = recordStamp(reading.observed_at ?? row?.at ?? (!hasFrame && reading.at));
     const why = reading.read_error === true ? '这次读取失败' : reason && (reading.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
-    const times = [hasFrame && (last ? `最后读到 ${last}` : '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
+    // 原因里已经说了“没有采到合格帧”，后面不再跟一句“没读到合格帧记录”（同一件事说两遍，r83 返修第三轮）
+    const times = [hasFrame && (last ? `最后读到 ${last}` : !/合格帧/.test(String(reason)) && '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
     return [why, esc(times)].filter(Boolean).join('；');
   }
   function paintStatus(id, data) {
@@ -1292,12 +1293,16 @@
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
-    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map(name => esc(name) + (name === '卡顿' && stutterNote ? `（${stutterNote}）` : lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? `（${U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer })}）` : '')).join('、')}` : '';
+    // 相邻几组原因一样时并成一句，写在最后一组后面（“CPU 温度、磁盘余量、网络丢包（最近一次记录于 10:26，此后没有新读数）”），不每组各写一遍（r83 返修第三轮）
+    const lackReasons = lacking.map(name => name === '卡顿' && stutterNote ? stutterNote : lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
+    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map((name, i) => esc(name) + (lackReasons[i] && lackReasons[i] !== lackReasons[i + 1] ? `（${lackReasons[i]}）` : '')).join('、')}` : '';
+    // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
+    const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
     p.head.querySelector(':scope > .lamp')?.remove();
     if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && /^缺：/.test(text))), grayNote, cutoff].filter(Boolean).join(' · ');
+      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
     p.status.hidden = !note; U.html(p.status, note);
     Light.tone(cards[id], cardTone(id, data, state));
