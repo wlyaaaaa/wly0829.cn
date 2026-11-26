@@ -104,10 +104,18 @@
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
   // 公用读数由顶栏或页头报一次，只有同一批的时刻才拿来比；独立读数照写自己的截至。
   const asof = (at, coveredAt) => T.stamp(at) == null || at === coveredAt ? '' : `截至 ${when(at)}`;
-  // 采样时只有匹配到活动版原件，才能给开场文件标出版号。
-  const sampledRule = entry => entry?.current === true && typeof entry.version === 'string' && /^E[1-9]\d*$/.test(entry.version) ? esc(entry.version) : '';
-  const rulePageLabel = (version, cls) => `${version} · ${link('/rules/', '规则页 ›', cls)}`;
-  const ruleMismatch = '开场先读的规矩 · 没比对上';
+  const RULE_CHECK = '开场先读的规矩';
+  const ruleHint = '每次采样时，拿三家开场要读的规矩文件跟本机现用的那版比一次，看是不是同一版。';
+  const ruleMismatch = `${RULE_CHECK} · 没比对上`;
+  const rulePart = text => `<span class="ag-rule-part">${text}</span>`;
+  function ruleStatus(entry) {
+    const version = typeof entry?.version === 'string' && /^E[1-9]\d*$/.test(entry.version) ? esc(entry.version) : '';
+    if (entry?.current === false) {
+      const hint = version ? ` title="采样时拿这家开场读的文件跟本机现用的 ${version} 比，对不上。这家实际读的是哪版，这里看不出。"` : '';
+      return `<span class="ag-rule-mismatch"${hint}>没比对上</span>`;
+    }
+    return entry?.current === true && version ? `${rulePart(`${version} · `)}<wbr>${rulePart('跟本机现用的一致')}` : '没读到';
+  }
   // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
   const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
     `<button type="button" data-only="${h.id}" style="--host:${h.color}" aria-pressed="${only === h.id}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}</div>`;
@@ -126,7 +134,7 @@
     const x = hostData(d, h), rows = [];
     const add = (ok, good, bad, extra = {}) => rows.push({ ok, text: ok === false ? bad : good, ...extra });
     const entry = x.entry || {};
-    add(entry.current ?? null, '开场先读的规矩', ruleMismatch);
+    add(entry.current ?? null, RULE_CHECK, ruleMismatch);
     if (h.id !== 'antigravity') {
       const off = x.memory === false && Object.values(x.memory_options || {}).every(v => v !== true);
       add(x.memory === true ? false : x.memory === false ? off : null, '自带记忆关着', '自带记忆开着，和规矩不一样');
@@ -163,9 +171,9 @@
     const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
     const fix = owner || !(c.fail.length || issues.length) ? ''
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
-    const stats = d.hook_stats?.totals?.[h.id] || {}, version = sampledRule(x.entry);
+    const stats = d.hook_stats?.totals?.[h.id] || {};
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${[version && rulePageLabel(`规矩 ${version}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
+      <header><span>${h.name}</span><small>${ruleStatus(x.entry)}${known(stats.installed) ? ` · <wbr>${rulePart(`钩子装着 ${stats.installed} 条 · `)}<wbr>${rulePart(`定稿 ${stats.expected} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
@@ -393,12 +401,9 @@
       : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
       : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
-    const version = entries.map(entry => {
-      const version = sampledRule(entry);
-      return version ? rulePageLabel(version) : entry.current === false ? '没比对上' : '没读到';
-    });
+    const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
     const rows = [
-      row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
+      row(`<span title="${ruleHint}">${RULE_CHECK}</span>`, entries.map(ruleStatus), { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
       row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
@@ -412,7 +417,7 @@
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2></div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}${link('/rules/', '规则页 ›')}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}${rulesLink}</p></section>`;
   }
 
   // —— 五、钩子 ——

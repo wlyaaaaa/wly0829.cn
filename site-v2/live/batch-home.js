@@ -224,6 +224,10 @@
       const hours = x => count(x) ? (x >= 10 ? Math.round(x) : Math.round(x * 10) / 10) : null;
       // 回包里的版号是采集时的比较依据。规则页展示网站另行发布的正文。
       const ruleVersion = typeof d.rule_version === 'string' && /^E[1-9]\d*$/.test(d.rule_version) ? esc(d.rule_version) : '';
+      const ruleAt = Number.isFinite(Date.parse(d.at)) ? U.time(d.at) : '';
+      const ruleSample = ruleVersion
+        ? (ruleAt ? `<span class="b6-rule-part">三家开场读的规矩 ${ruleVersion} · </span><wbr><span class="b6-rule-part">${esc(ruleAt)} 读到</span> ` : '')
+        : '没读到 ';
       const work = row => {
         const t = row.today;
         if (!t) return `<span class="b6-host__work">${v.noToday ? '' : `今天的数 ${num(null)}`}</span>`;
@@ -241,7 +245,7 @@
           // 小时数是叠加的（同时在干的分别算），写明“叠加”，旁边小字“平均同时 N 个在干”，一天过 24 小时也看得懂（主控 11-26 03:50 点名）
           : `<div class="b6-big"><strong><a href="${esc(route('/live/agents/?hours=today#hours'))}">今天三家叠加干了 <em>${num(hours(v.hours))}</em> 小时 ›</a></strong><span class="b6-big__aside">${v.together ? `平均同时 ${esc(together(v.together))} 个在干 · ` : ''}${own}说了 ${num(v.said)} 句</span></div>`) + `
         <ul class="b6-hosts">${v.rows.map(row => `<li class="b6-host" style="--host:${row.color}"><a class="b6-host__name" href="${esc(route(row.workHref))}"><i aria-hidden="true"></i>${esc(row.name)}</a>${chip(row)}${work(row)}</li>`).join('')}</ul>
-        <p class="b6-foot b6-foot--split"><span>${ruleVersion ? `规矩 ${ruleVersion} · ` : ''}<a class="b6-go" href="/rules/">规则页 ›</a></span>${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
+        <p class="b6-foot b6-foot--split"><span>${ruleSample}<a class="b6-go b6-rule-part" href="/rules/">规则页 ›</a></span>${go(options.openingHref || OPENING, '开场页 · 三家')}</p>` };
     }
 
     // AI 自动任务账本卡（照“首页账本卡-v1”，本人 11-26 01:04 批照图施工）：欠着几件（大字）、放着几件 ›；今天要看的时间条；
