@@ -23,6 +23,7 @@
   const put = (el, html) => U.html(el, say(html));
   const timed = R.timed, ms = x => Date.parse(x);
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
+  const clock = x => `<time datetime="${esc(x)}">${esc(when(x))}</time>`;
   const nodot = v => typeof v === 'string' ? v.trim().replace(/[。.]$/u, '') : v;
   const go = (href, text) => site(href) ? `<a class="iss-go" href="${esc(route(site(href)))}">${text}&nbsp;›</a>` : text;
   const fact = (k, v) => v ? `<div class="rec-fact"><dt>${k}</dt><dd>${v}</dd></div>` : '';
@@ -123,7 +124,8 @@
     const waitTag = (t => t ? ` ${t}` : '')(waitOf ? U.visitorLabel(waitOf, 'text', '在等什么这句', viewer) : '');
     const next = s.closed ? null : d.story?.next ?? wait;
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
-    const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手` : nextAt ? s.late ? `到点没看，原定 ${esc(when(nextAt))}` : `下次 ${esc(when(nextAt))} 看` : '';
+    const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手`
+      : nextAt ? `<span>${s.late ? `到点没看，原定 ${clock(nextAt)}` : `下次 ${clock(nextAt)} 看`}</span>` : '';
     const nth = s.closed || full || looked == null ? '' : nextAt ? `第 ${esc(looked + 1)} 次看，最多 ${esc(limit)} 次` : `看过 ${esc(looked)} 次，最多 ${esc(limit)} 次`;
     // “等约好的时间再看”和后面“下次几点看”是一回事，有钟点时不写这半句
     const dateOnly = (d.park?.kind || d.wait?.kind) === 'wait_date' && nextAt;
@@ -136,8 +138,8 @@
     const repair = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理';
     const who = T(d.registered_by_text) && T(d.registered_by_text) !== '登记人未记下' ? d.registered_by_text : T(d.registered_by) ? d.registered_by : '';
     const born = repair && timed(d.first_at) ? d.first_at : timed(d.accepted) ? d.accepted : d.first_at;
-    const src = [timed(born) && `${who ? `${F(who, '谁记的')} ` : ''}${esc(when(born))} ${repair ? '查出来记下' : '记下'}`,
-      s.closed && timed(d.at) && `${esc(when(d.at))} 了结`].filter(Boolean);
+    const src = [timed(born) && `${who ? `${F(who, '谁记的')} ` : ''}${clock(born)} ${repair ? '查出来记下' : '记下'}`,
+      s.closed && timed(d.at) && `${clock(d.at)} 了结`].filter(Boolean);
     put(part('src'), src.join(' · ')); part('src').hidden = !src.length;
 
     // 三格
@@ -182,7 +184,7 @@
     if (!repeat) return card(`近 30 天只坏了这一次。${rule}`);
     const n = Number.isInteger(repeat.broken_30d) ? repeat.broken_30d : null, dates = (repeat.broken_at || []).filter(timed);
     const lastAt = dates.length ? dates.at(-1) : repeat.last_at;
-    const said = n != null ? `近 30 天坏了 ${esc(n)} 次${timed(lastAt) ? `，最近一次 ${esc(when(lastAt))}` : ''}。` : Number.isInteger(repeat.reopen_count) ? `修好以后又出现过 ${esc(repeat.reopen_count)} 次。` : '';
+    const said = n != null ? `近 30 天坏了 ${esc(n)} 次${timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。` : Number.isInteger(repeat.reopen_count) ? `修好以后又出现过 ${esc(repeat.reopen_count)} 次。` : '';
     const handed = repeat.handed_to_owner ? `已转给${you()}${site(repeat.owner_href) ? ` ${go(repeat.owner_href, '看那张卡')}` : ''}。` : n != null && n < 3 ? rule : '';
     return said || handed ? card(said + handed) : '';
   }

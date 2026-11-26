@@ -1,6 +1,7 @@
 /* 实况 · AI 账本（新版）：版式。共用的行情屏样子在 /live/_lib/live-tape.css。 */
 
 .lg-title { padding: 0; border: 0; background: none; font: inherit; font-weight: 700; color: var(--ink); text-align: left; cursor: pointer; }
+#tp-root :is(.tp-head h1, .tp-panel__head h2, .lg-title, p, .lg-steps li) { text-wrap: pretty; }
 .lg-title:hover { color: var(--tp-green-ink); text-decoration: underline; text-underline-offset: 3px; }
 .lg-title:focus-visible, .lg-more:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
 .is-picked { background: var(--tp-green-soft); }

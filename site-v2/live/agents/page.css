@@ -218,3 +218,5 @@
   .ag-hrow { grid-template-columns: 240px minmax(0, 1fr) 104px; }
 }
 .ag-moved .tp-panel__head { flex-wrap: wrap; row-gap: 8px; }
+#tp-root :is(.tp-head h1, .tp-panel__head h2, .tp-small) { text-wrap: pretty; }
+#tp-root :is(.ag-headside > span, .tp-asof) { white-space: nowrap; }

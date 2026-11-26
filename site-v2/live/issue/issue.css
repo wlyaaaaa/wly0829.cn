@@ -19,6 +19,8 @@
 .iss-state .lamp { margin: 0 10px 0 0; }
 .iss-state b { font-weight: 800; }
 .iss-src { margin: 8px 0 0; font-size: 14.5px; line-height: 24px; color: var(--muted); }
+.iss-hero time, .iss-side time { white-space: nowrap; }
+:is(.iss-hero .card__head, .iss-cell p, .iss-step .run__main p, .iss-side p, #raw dd) { text-wrap: pretty; }
 
 .iss-go { color: #00A650; font-weight: 650; text-decoration: none; }
 .iss-go:hover { text-decoration: underline; text-underline-offset: 3px; }
