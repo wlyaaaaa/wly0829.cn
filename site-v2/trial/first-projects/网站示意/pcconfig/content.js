@@ -845,6 +845,7 @@ window.PAGE_DATA = {
         "只查不修：夜里这次只负责发现，新故障交给每五分钟那一轮去接。",
         "**每五分钟那次**",
         "没事不开 AI：每五分钟读一遍现有故障和到期要验收的事，有能开始的才派给空着的 AI，没有就到此为止。",
+        "半夜只修急的：北京时间 0 点到 6:10 这一段只派急的故障，普通故障等 6:10 以后照常派。",
         "有人在做就让开：派单时附上这个项目近期的对话、提交和没提交的改动；同一处有人在改，这一轮让开，下一轮再看。",
         "只在副本里改：代码只在给它的单独副本里修，按原来出事的入口验过才提交，主检出由程序合。",
         "出处：项目里能对上这一张的文件，想核对的人可以去看——`docs/runtime/nightly-project-checks.md`（夜里那次检查的说明）、`docs/governance/scheduled_task_purpose_catalog.md`（每五分钟派活的说明）；`registries/project_cards.json`（各项目登记的检查）；`tools/remote-computer-mcp/nightly_project_checks.py`、`automation/scheduler.py`（这两件事的程序）"
