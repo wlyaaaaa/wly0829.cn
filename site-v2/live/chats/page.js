@@ -219,7 +219,7 @@
       else if (Number.isFinite(reading.at)) cell.textContent = `${pointedAt == null ? (boardOf() ? `最近一次读数 ${dayClock(new Date(reading.at * 1000).toISOString())}` : readAt(reading.at * 1000)) : `所指记录 ${stamp(reading.at * 1000)}`} · ${reading.value} 个`;
     }
   });
-  const daily = window.LiveViz.bars($('chat-days'), { stack: true, unit: '个', series: [{ id: 'claude', label: 'Claude', hue: 'apricot' }, { id: 'gpt', label: 'Codex', hue: 'teal' }, { id: 'antigravity', label: 'Antigravity', hue: 'violet' }] });
+  const daily = window.LiveViz.bars($('chat-days'), { stack: true, unit: '个', missingText: '还没读到', series: [{ id: 'claude', label: 'Claude', hue: 'apricot' }, { id: 'gpt', label: 'Codex', hue: 'teal' }, { id: 'antigravity', label: 'Antigravity', hue: 'violet' }] });
   // “今天”“近 7 天”两栏并排时底边拉齐：长的那栏从后往前把型号收进“展开”，总数行、说明行都算进高度，至少露 1 个型号；
   // 只多 1 个型号不收（收了也要多一行“展开”）。数据刷新、换窗口宽时重新算（M460）
   function fitModels() {
