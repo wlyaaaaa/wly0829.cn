@@ -848,7 +848,7 @@ function connectionTip(off, reason, at, sub, pair = '') {
   }
 }
 liveClient.src = '/live/_lib/live-client.js';
-const watchScreen = (recovering = false) => window.Live?.watch('screen', {}, {
+const watchScreen = () => window.Live?.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
     down.silent = !!state.silent;
@@ -858,12 +858,9 @@ const watchScreen = (recovering = false) => window.Live?.watch('screen', {}, {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
     connectionTip(state.offline, state.reason, state.pageAtText, '连上就换成最新的', state.pairNotice);
-    const paint = () => {
-      recovering = false;
-      renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
-    };
-    // 补回脚本时先收走“右边屏上暂时没有数”，免得新数和这句同屏。
-    if (recovering && !state.offline && !state.pairNotice && !tip.hidden) paintAfterTip = paint;
+    const paint = () => renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
+    // 接回时先收走断线小签，免得正式数字与旧提示同屏。
+    if (!state.offline && !state.pairNotice && !tip.hidden) paintAfterTip = paint;
     else { paintAfterTip = null; paint(); }
   }
 });
@@ -881,7 +878,7 @@ function fetchClientAgain() {
     clearInterval(clientRetry);
     removeEventListener('online', fetchClientAgain);
     document.removeEventListener('visibilitychange', fetchClientAgain);
-    watchScreen(true);
+    watchScreen();
   };
   again.onerror = () => { clientFetching = false; again.remove(); };
   document.head.append(again);
