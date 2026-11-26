@@ -131,8 +131,7 @@
 .ag-heat--none { padding: 10px 12px !important; background: #f6f6f3; font-size: 12.5px; line-height: 18px; color: var(--muted); }
 .ag-badge { flex: none; padding: 0 6px; border-radius: 5px; font-size: 11.5px; font-weight: 800; line-height: 18px; color: #fff; background: var(--tp-amber); }
 .ag-badge[data-tone="bad"] { background: var(--tp-red); }
-.ag-errorrow { font-size: 13.5px; color: #3d3d3a; background: #fbfbf9; }
-.ag-errorhosts { display: flex; flex-wrap: wrap; gap: 4px 22px; margin-top: 4px; font-size: 13px; color: #57564f; }
+.ag-heat--none .ag-errorstatus { display: block; margin-top: 4px; font-size: inherit; }
 .ag-detailrow > td { padding: 14px 16px 18px !important; background: #f8f8f5; }
 .ag-hooks { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
 .ag-hook { padding: 12px 14px; border: 1px solid var(--tp-line); border-left: 4px solid var(--host); border-radius: 10px; background: #fff; }
@@ -143,6 +142,8 @@
 .ag-hook dl > div { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 8px; }
 .ag-hook dt { color: var(--muted); }
 .ag-hook dd { margin: 0; }
+.ag-hook__what { margin: 0; padding-inline-start: 1.5em; list-style: disc; }
+.ag-hook__what li + li { margin-top: 4px; }
 .ag-hook__num { margin: 8px 0 0; font-size: 13px; color: #3d3d3a; font-variant-numeric: tabular-nums; }
 
 /* 钩子“最近一次塞给 AI 的原样”：summary 带 live-disclosure 躲开第二层通用的“展开后把 ::after 转 90 度”，“收起”两个字也不许被挤得折行（照 F1） */
