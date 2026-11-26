@@ -81,7 +81,10 @@
     const every = finite(x?.refresh_seconds) && x.refresh_seconds > 0 ? x.refresh_seconds : null, expire = finite(x?.stale_after) && x.stale_after > 0 ? x.stale_after : null;
     const span = s => s % 60 ? `${s} 秒` : `${s / 60} 分钟`;
     const rule = every && expire ? ` · 每 ${span(every)}确认一次在线，超过 ${span(expire)}没确认上就写“未重新确认”，远程连接报它离线才写“连不上”` : '';
-    U.html($('laptop-state'), `${status(checked ? '● 在线' : headline, checked)}${U.esc(stamp + readings)}${note ? ` · ${field(note, '读取原因')}` : ''}${U.esc(rule)}`);
+    // 在线时“●”单独一格，后面整段折行后跟“在线”两个字对齐（不回到圆点底下）
+    const rest = `${U.esc(stamp + readings)}${note ? ` · ${field(note, '读取原因')}` : ''}${U.esc(rule)}`;
+    $('laptop-state').classList.toggle('laptop-state--dot', checked);
+    U.html($('laptop-state'), checked ? `<span class="laptop-good" aria-hidden="true">●</span><span>${status('在线', true)}${rest}</span>` : `${status(headline, false)}${rest}`);
     const missing = pending ? '正在读' : unavailable;
     const display = (value, name) => value == null && pending ? missing : field(value, name);
     const capacity = (value, name, format) => finite(value) ? field(`${name} ${format(value)}`, name) : display(value, name);
