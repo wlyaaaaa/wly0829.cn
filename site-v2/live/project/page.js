@@ -24,6 +24,8 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents']);
+  let interfaceLoad;
   const artifactVersion = id === 'agents' && /^E\d+$/.test(params.get('artifact') || '') && params.get('artifact');
   function projectLookKey(id) {
     let hash = 0x811c9dc5;
@@ -1146,6 +1148,10 @@
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
     U.html(strip, html);
+    if (interfaceProjects.has(id) && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip))
+        .catch(() => { interfaceLoad = null; });
+    }
   }
   // 名字旁边：项目介绍（外链）、问情况
   function projectItemReferences(action) {

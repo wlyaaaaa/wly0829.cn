@@ -1,0 +1,59 @@
+{
+  "passwordcenter": [
+    ["/live/project/interfaces/passwordcenter/01-thumb.webp", "/live/project/interfaces/passwordcenter/01.png", "银行卡这一类：列表里只有卡名和用途，右边是查看、编辑（演示数据）"],
+    ["/live/project/interfaces/passwordcenter/02-thumb.webp", "/live/project/interfaces/passwordcenter/02.png", "API 密钥这一类：只列名字和用途，密钥本身不显示（演示数据）"],
+    ["/live/project/interfaces/passwordcenter/03-thumb.webp", "/live/project/interfaces/passwordcenter/03.png", "BitLocker 这一类：按电脑和盘列出恢复密钥的编号，密钥本身不展开（演示数据）"],
+    ["/live/project/interfaces/passwordcenter/04-thumb.webp", "/live/project/interfaces/passwordcenter/04.png", "已连接的手机：能批准绑定、解除绑定、删除记录（演示数据）"],
+    ["/live/project/interfaces/passwordcenter/05-thumb.webp", "/live/project/interfaces/passwordcenter/05.webp", "解锁个人资料前先选怎么验证：通行密钥、动态验证码、恢复码、账号验证四选一（9 月 24 日）"],
+    ["/live/project/interfaces/passwordcenter/06-thumb.webp", "/live/project/interfaces/passwordcenter/06.webp", "用手机验证器上的 6 位动态码验证（9 月 24 日）"],
+    ["/live/project/interfaces/passwordcenter/07-thumb.webp", "/live/project/interfaces/passwordcenter/07.webp", "这次解锁多久：0.5～72 小时，无限制授权要不要一起开单独选（9 月 24 日）"]
+  ],
+  "proxyclean": [
+    ["/live/project/interfaces/proxyclean/01-thumb.webp", "/live/project/interfaces/proxyclean/01.webp", "首页：一句话说出现在的代理情况，这次是手动代理已关、还检测到代理隧道；下面一个按钮检查并修复（11 月 24 日本人截图）"],
+    ["/live/project/interfaces/proxyclean/02-thumb.webp", "/live/project/interfaces/proxyclean/02.webp", "检查中：先查现在用的是哪个代理，能看到做到哪一步，也能取消；这一步不改网络（9 月 24 日）"],
+    ["/live/project/interfaces/proxyclean/03-thumb.webp", "/live/project/interfaces/proxyclean/03.webp", "没找到能自动修的：给出下一步，并写明没重启网卡、没改无线设置（9 月 24 日，这页提示文字后来改过）"]
+  ],
+  "pcconfig": [
+    ["/live/project/interfaces/pcconfig/01-thumb.webp", "/live/project/interfaces/pcconfig/01.webp", "手机锁屏上的实况通知：电脑这边有事要你知道，直接弹到手机上（11 月 24 日本人截图）"],
+    ["/live/project/interfaces/pcconfig/02-thumb.webp", "/live/project/interfaces/pcconfig/02.webp", "出门在外，手机经 TailSocks 连回家里这台电脑；TailSocks 是别人做的 App，按电脑大本营的设置跑（11 月 24 日本人截图）"],
+    ["/live/project/interfaces/pcconfig/03-thumb.webp", "/live/project/interfaces/pcconfig/03.webp", "手机上的自动宏：收到验证码自动复制、电脑剪贴板推到手机；MacroDroid 是别人做的 App（11 月 24 日本人截图）"]
+  ],
+  "pc-panel-hub": [
+    ["/live/project/interfaces/pc-panel-hub/01-thumb.webp", "/live/project/interfaces/pc-panel-hub/01.png", "机箱竖屏这一刻的画面：时间天气、CPU、显卡、内存、硬盘读写和最忙的几个程序（11 月 26 日 10:54，程序自己写出的那一帧）"],
+    ["/live/project/interfaces/pc-panel-hub/02-thumb.webp", "/live/project/interfaces/pc-panel-hub/02.webp", "曲面屏平时的样子：没事时只在壁纸上显示手机电量和时间（11 月 26 日晚上，AI 在后台截）"]
+  ],
+  "video-scaffold": [
+    ["/live/project/interfaces/video-scaffold/01-thumb.webp", "/live/project/interfaces/video-scaffold/01.webp", "有声预览页：左边选场，点一个字跳到那一秒，能调动画跟哪句词（测试样片）"],
+    ["/live/project/interfaces/video-scaffold/02-thumb.webp", "/live/project/interfaces/video-scaffold/02.webp", "自动做出来的封面（测试样片，标题是测试名）"],
+    ["/live/project/interfaces/video-scaffold/03-thumb.webp", "/live/project/interfaces/video-scaffold/03.webp", "成片里的一帧：字叠在循环的玻璃背景上（测试样片）"]
+  ],
+  "localocr": [
+    ["/live/project/interfaces/localocr/01-thumb.webp", "/live/project/interfaces/localocr/01.webp", "原图：一张合成的采购单，有标题、六列表格和合计"],
+    ["/live/project/interfaces/localocr/02-thumb.webp", "/live/project/interfaces/localocr/02.webp", "本机认出来的结果：六列、五行和合计都对（9 月 3 日实际输出）"]
+  ],
+  "ai-cli-profile-manager": [
+    ["/live/project/interfaces/ai-cli-profile-manager/01-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/01.png", "选厂商和模型的列表：打开前先写清连哪、用谁（9 月 15 日，列表里 DeepSeek V4 那几条后来下线了）"],
+    ["/live/project/interfaces/ai-cli-profile-manager/02-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/02.webp", "桌面版里选本机 Qwen3.8 27B 回答问题，思考摘要也是中文（9 月 15 日）"],
+    ["/live/project/interfaces/ai-cli-profile-manager/03-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/03.webp", "① 先核对现在生效的规则版本，再读要用的技能说明（9 月 15 日）"],
+    ["/live/project/interfaces/ai-cli-profile-manager/04-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/04.webp", "② 做完个人资料的访问检查，才去查偏好库（9 月 15 日）"],
+    ["/live/project/interfaces/ai-cli-profile-manager/05-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/05.webp", "③ 最后用中文给出回答（9 月 15 日）"]
+  ],
+  "wly0829.cn": [
+    ["/live/project/interfaces/wly0829.cn/01-thumb.webp", "/live/project/interfaces/wly0829.cn/01.webp", "网站首页：机箱、瀑布和几块实时读数（11 月 26 日公网，AI 用无头浏览器截）"],
+    ["/live/project/interfaces/wly0829.cn/02-thumb.webp", "/live/project/interfaces/wly0829.cn/02.webp", "实况首页：等本人办的事、AI 对话、电脑和手机此刻的读数，访客打开看到的样子（11 月 26 日 20:29 公网，AI 用无头浏览器截）"],
+    ["/live/project/interfaces/wly0829.cn/03-thumb.webp", "/live/project/interfaces/wly0829.cn/03.webp", "实况里的项目总览：在用项目按日用、偶用分组（11 月 26 日公网，访客看到的样子）"]
+  ],
+  "agents": [
+    ["/live/project/interfaces/agents/01-thumb.webp", "/live/project/interfaces/agents/01.webp", "Codex 累计 521.9 亿 tokens（账号 @wlyaaaaaa），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/02-thumb.webp", "/live/project/interfaces/agents/02.webp", "Codex 累计 204.4 亿 tokens（账号 @3544768219），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/03-thumb.webp", "/live/project/interfaces/agents/03.webp", "Codex 累计 296.5 亿 tokens（账号 @2490850763），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/04-thumb.webp", "/live/project/interfaces/agents/04.webp", "Codex 累计 378.2 亿 tokens（账号 @1097909459），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/05-thumb.webp", "/live/project/interfaces/agents/05.webp", "Codex 累计 520.1 亿 tokens（账号 @1614300037），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/06-thumb.webp", "/live/project/interfaces/agents/06.webp", "GLM / ZCode：能看到的统计是 2.2 亿 tokens，截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/07-thumb.webp", "/live/project/interfaces/agents/07.webp", "DeepSeek：9,383,373 tokens（截图选的是当月统计），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/08-thumb.webp", "/live/project/interfaces/agents/08.webp", "Qwen：43,094K tokens（统计区间 2026-08-25 至 2026-09-24），截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/09-thumb.webp", "/live/project/interfaces/agents/09.webp", "OpenCode：105.0M tokens、1,170 次请求，截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/10-thumb.webp", "/live/project/interfaces/agents/10.webp", "Google Antigravity：Google AI Pro 订阅和额度页，没有累计 token 数，截至 2026年9月24日"],
+    ["/live/project/interfaces/agents/11-thumb.webp", "/live/project/interfaces/agents/11.webp", "Grok：SuperGrok Lite 订阅页，没有累计 token 数，截至 2026年9月24日"]
+  ]
+}
