@@ -61,7 +61,8 @@
     document.title = `${U.fieldText(cn(c.title || g.title), viewer)}怎么干 · 自动任务 · 实况`;
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const pill = m === 'on' ? ['on', '开着'] : m === 'off' ? ['off', '关着'] : m === 'paused' ? ['paused', pausedText(c.setting?.until_at)] : ['', '没读到开没开'];
-    const schedule = c.schedule_text ? F(c.schedule_text, '开工条件') : '几点跑、什么情况下跑，这次没读到。';
+    // 关着的类没有开工时间，不写“这次没读到”
+    const schedule = c.schedule_text ? F(c.schedule_text, '开工条件') : m === 'off' ? '' : '几点跑、什么情况下跑，这次没读到。';
     const interval = T.duration(d.dispatch?.interval_seconds);
     const dispatchNote = id === 'auto-repair' || id === 'message-review'
       ? (interval ? `派活程序每 ${interval}查一次。` : '派活程序多久查一次，这次没读到。') : '';

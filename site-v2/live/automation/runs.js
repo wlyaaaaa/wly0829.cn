@@ -203,7 +203,7 @@
     }
     for (const p of list(d?.provider_pauses)) out.push({ at: p.started_at, actor: list(p.categories).map(title).join('、'), html: `<span><em>停了</em>：${p.reason === 'login' ? '登录过期' : '额度用完'}</span>`, tone: 'bad' });
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30)
-      .map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
+      .map(r => ({ ...r, html: oneVersion(r.html) })).map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
   }
 
   // 本人版的签（私事线 11-26）：整轮对访客藏着的挂“访客看不到”，点开写后台给的是哪一种情况；只换了说法的挂“对外换了说法”，访客版也挂这一种（M930）
