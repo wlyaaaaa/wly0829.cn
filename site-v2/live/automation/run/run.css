@@ -6,6 +6,7 @@
 /* 标题字和后面的签包成一块：日期时刻（.live-unit）不拆开，签和标题最后几个字连着换行，不单独掉到下一行 */
 .ar-title { min-width: 0; }
 .ar-tail { white-space: nowrap; }
+.ar-title, .ar-card p, .ar-quote, .ar-helper__line, .ar-sidecard p { text-wrap: pretty; }
 .ar-head h1 .ar-tail > .live-mark { margin-left: 14px; }
 .ar-dot { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--tp-gray); }
 .ar-dot[data-tone="ok"] { background: var(--tp-green); }
