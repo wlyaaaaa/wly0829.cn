@@ -23,6 +23,9 @@
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   const F = (v, name) => T.field(v, viewer, name);
+  // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
+  const said = v => U.fieldText(v ?? '', viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
+  const sameText = (a, b) => !!said(a) && said(a) === said(b);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
 
@@ -140,11 +143,13 @@
     // 本人版什么都给全：后台给本人的也只是“仅本人可见……”这类占位话（后台缺数）时，这一行照样在，写清后台没给原文，
     // 不悄悄少一行、不让本人看到的比访客少（私事线 11-26 04:43）。访客版照后台给的字
     const noOriginal = x => viewer === 'owner' && /^仅本人可见/.test(plainOf(x?.title ?? x?.text ?? x));
-    // 回执里记下的这一条和上面做成的某一件指向同一张卡（站内地址）或同一份文件（本机路径）的，不再列一遍；全都一样，“回执里记下的”整块不出。
-    // 只看指向、不看标题字（两版标题可能换了说法、对不上），本人版访客版同一个判定；后台没给指向的那条照列（主控 11-26 11:02）
-    const outs = new Set(r.outputs.flatMap(o => [o.href && !o.github && `href:${o.href}`, o.file && `file:${o.file}`]).filter(Boolean));
-    const pointsTo = x => [T.path(x?.href) && `href:${T.path(x.href)}`, typeof x?.local_path === 'string' && x.local_path && `file:${x.local_path}`].filter(Boolean);
-    const mine = list(receipt.recorded).filter(x => !pointsTo(x).some(k => outs.has(k)));
+    // 回执里记下的这一条和上面做成的某一件是同一件的，不再列一遍；全都一样，“回执里记下的”整块不出。
+    // 同一件看指向：后台标的成品号（receipt.recorded[].output_id = 同一回包里 outputs[].id，访客版是换过的那个号）、同一张卡（站内地址）、同一份文件（本机路径），
+    // 有指向就只看指向（两版标题可能换了说法、对不上）；三样都没有时才退回比标题字。本人版访客版同一个判定（主控 11-26 11:02、11:2x，后台第 18 轮定的字段名）
+    const outs = new Set(r.outputs.flatMap(o => [o.id != null && o.id !== '' && `id:${o.id}`, o.href && !o.github && `href:${o.href}`, o.file && `file:${o.file}`]).filter(Boolean));
+    const pointsTo = x => [x?.output_id != null && x.output_id !== '' && `id:${x.output_id}`, T.path(x?.href) && `href:${T.path(x.href)}`, typeof x?.local_path === 'string' && x.local_path && `file:${x.local_path}`].filter(Boolean);
+    const sameThing = x => { const keys = pointsTo(x); return keys.length ? keys.some(k => outs.has(k)) : r.outputs.some(o => sameText(o.title, x?.title ?? x?.text ?? x)); };
+    const mine = list(receipt.recorded).filter(x => !sameThing(x));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
     // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；链接访客那边没有的（outputs[].visitor_labels.href = hidden），本人版链接后挂“访客看不到”（主控 11-26 11:02，等后台给）；
     // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
