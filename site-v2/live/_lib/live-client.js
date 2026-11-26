@@ -1121,6 +1121,8 @@
     if (!token || token !== viewerToken) return { ok: false, text: site ? '请先连接电脑，再打开这项内容' : '本机预览不能打开电脑上的文件，请从正式实况打开' };
     if (!itemId || !target) return { ok: false, text: '没有可打开的目标，请重读后再试' };
     const antigravity = target === 'conversation' && /^antigravity:/i.test(itemId);
+    const itemPage = /^\/live\/(?:items?\/)?$/.test(location.pathname);
+    const unconfirmed = { ok: false, text: '电脑还没确认打开结果，请先在电脑上核对' };
     try {
       const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/open' : '/__computer/cockpit/open';
       const response = await fetch(url, { method: 'POST', cache: 'no-store', credentials: 'omit',
@@ -1137,13 +1139,15 @@
       }
       const antigravityError = typeof body?.error === 'string' && body.error.startsWith('antigravity_');
       const fixed = response.status === 503 && target === 'conversation' && antigravityError && antigravityOpenMessages[body.error];
+      if (itemPage && (body?.completion_unknown === true || response.ok && body?.status !== 'pass' ||
+          response.status >= 500 && !fixed && body?.status !== 'error')) return unconfirmed;
       const text = fixed ? fixed.find(message => message === body.message?.replaceAll?.('主驾驶', '台式机')) || fixed[0]
         : !antigravity && !antigravityError && ![404, 503].includes(response.status) && typeof body?.message === 'string' && /[一-鿿]/.test(body.message) ? body.message : '';
       return { ok: response.ok, text: text || (response.ok ? '已在电脑上打开'
         : response.status === 403 ? '设备已失效，没打开，请重新连接电脑'
         : response.status === 404 ? '目标已不存在，没打开，请重读后再试'
         : response.status === 429 ? '点得太快了，没打开，稍后再试' : '电脑没打开，稍后再试') };
-    } catch { return { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
+    } catch { return itemPage ? unconfirmed : { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
   }
   async function automationSetting(data) {
     await pairing;

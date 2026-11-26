@@ -601,18 +601,25 @@
     };
   }
 
+  const savedNeed = item => viewer === 'owner' && U.justSaved(item);
   function renderNeeds(d, target, end = d.at) {
     const p = parts.needs;
     if (!project && viewer === 'owner') U.pruneReceipts(d.items);
-    const scoped = project ? d.items.filter(it => it.project === project) : d.items;
-    const focus = target?.section === 'needs' ? target : null;
+    const counts = { ...d.counts };
+    const scoped = (project ? d.items.filter(it => it.project === project) : d.items).filter(it => {
+      if (!savedNeed(it)) return true;
+      if (Number.isInteger(counts[it.kind])) counts[it.kind] = Math.max(0, counts[it.kind] - 1);
+      if (Number.isInteger(counts.later) && U.savedReminder(it)) counts.later++;
+      return false;
+    });
+    const focus = target?.section === 'needs' && (target.closed || !savedNeed(target.item)) ? target : null;
     const extra = !focus?.closed && ['choose', 'do'].includes(focus?.item?.kind) && !scoped.some(it => it.id === focus.id) ? focus.item : null;
     const by = k => scoped.filter(it => it.kind === k);
-    const { count, exact, text } = waitingCount(d.counts, extra ? [...scoped, extra] : scoped);
+    const { count, exact, text } = waitingCount(counts, extra ? [...scoped, extra] : scoped);
     U.html(p.head, U.head(addressed(text), { href: href('needs') }).replace(/(<span class="live-unit">(?:至少 )?)(\d+)/, '$1<span class="needs-num">$2</span>') + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
     // 刚在本页点过、已经办成的，后台读数跟上前先不显示
-    const all = [...by('choose').sort(newest), ...by('do').sort(newest)].filter(it => !U.justSaved(it));
+    const all = [...by('choose').sort(newest), ...by('do').sort(newest)];
     const rows = needsPreview(all).map(it => needRow(it, focus && it.id === focus.id ? noticeDetail(focus.item) : '', end));
     const closed = focus && closedNoticeRow(focus), targetIndex = rows.findIndex(row => row.key === focus?.id);
     const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, noticeDetail(focus.item), end));
@@ -626,7 +633,7 @@
     paintList(p.main, rows, { animate: false });
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
-    U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(d.counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
+    U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
     p.closed.hidden = p.foot.hidden = !(project && !all.length);
     if (!p.closed.hidden) { U.html(p.closed, `近 7 天下去的 ${quantity(d, 'closed7')} 条`); p.closed.onclick = () => { location.href = href('needs') + '#closed'; }; }
   }
@@ -1488,6 +1495,8 @@
   async function focusItem() {
     const focus = home?.focus, id = focus?.id || focusId;
     if (!home || !id || focused) return;
+    const target = noticeFocus(home, viewer);
+    if (target?.section === 'needs' && !target.closed && savedNeed(target.item)) return;
     focused = true;
     const row = [...document.querySelectorAll('[data-key]')].find(el => el.dataset.key === id && !el.hidden);
     if (!row) { const page = { chats: 'chat', tasks: 'task', ledger: 'issue' }[focus?.section] || 'item'; location.assign(route(`/live/${page}/?id=${encodeURIComponent(id)}`)); return; }
@@ -1611,6 +1620,14 @@
     card.classList.add('card--link'); card.tabIndex = 0; card.setAttribute('role', 'link');
     card.setAttribute('aria-label', `${link.textContent.replace(/›/g, '').trim()}，查看详情`);
   }
+  const redrawNeeds = () => U.anchor(() => {
+    renderHomeNeeds(home);
+    labelCard(cards.needs);
+    balanceHome();
+  });
+  document.getElementById('item-action-receipts')?.addEventListener('item-write', ({ detail }) => {
+    if (home && viewer === 'owner' && detail.saved?.length) redrawNeeds();
+  });
   function watchNotice(data) {
     const focus = data.focus, id = focus?.id || focusId;
     if (!id) return;
@@ -1628,11 +1645,7 @@
         current.detail = detail;
         current.kind = meta.viewer?.kind;
         if (!home || current !== notice || current.kind !== viewer) return;
-        U.anchor(() => {
-          renderHomeNeeds(home);
-          labelCard(cards.needs);
-          balanceHome();
-        });
+        redrawNeeds();
         if ((detail?.kind || detail?.closed) && !focused && home.needs.q !== 'warming') requestAnimationFrame(focusItem);
       }
     });

@@ -575,6 +575,11 @@
     const needs = d.needs; if (d.q === 'warming' || needs?.q === 'warming') { missingHome('正在准备'); return; } if (!needs) { missingHome(U.collectionText()); return; }
     const embedded = Object.hasOwn(needs, 'items'), page = !embedded && openRows?.kind === viewer ? openRows : null;
     const rows = embedded ? needs.items : page?.items;
+    // 刷新仍读到旧清单时，按成功回执接回刚移到‘你放着’的那条。
+    if (viewer === 'owner') for (const item of rows || []) {
+      const saved = U.savedReminder(item);
+      if (saved && !landed.has(item.id)) landItem(item, 'later', saved);
+    }
     const partial = embedded ? needs.q === 'partial' : page?.cursor != null || page?.incomplete;
     openTrend = needs.open_trend7; renderSide();
     pendingItems = new Set((rows || []).map(it => it.id)); if (reportsData) renderReports(reportsData);
