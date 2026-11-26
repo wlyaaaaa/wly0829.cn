@@ -44,7 +44,7 @@
   // 锁着、读数旧了或读不准的照常开码格，由电脑那头按真状态办（电脑本来没锁时后台直接回已解锁，不提交密码；没有登录会话时不核码）
   const windowsIs = s => state?.windows?.state === s && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
   const windowsReadAs = s => state?.policy?.actions?.unlock_windows === true && windowsIs(s);
-  const noSessionText = '电脑现在没有登录会话，解不了锁';
+  const noSessionText = '登录界面还没就绪，稍后再试';   // no_session 只说明 Windows 眼下给不出可用的控制台；登录界面起来、还没人签入时照样能解锁（后台 11-26 08:03）
   const windowsHints = {
     unlock: () => windowsIs('unlocked') ? '电脑现在没锁，不用解锁' : windowsIs('no_session') ? noSessionText : state?.policy?.actions?.unlock_windows !== true ? '远程解锁没开' : '',
     close: () => windowsIs('locked') ? '电脑已经锁着' : windowsIs('no_session') ? '电脑现在没有登录会话，不用锁屏' : '',
