@@ -390,7 +390,7 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
 .live-conn__at { font-weight: 500; }
 .live-conn__wait { display: inline-flex; flex-basis: 100%; align-items: center; gap: 8px; margin-left: 25px; color: var(--muted); font-size: 15px; transition: opacity .45s ease; }
 .live-conn__row.is-back .live-conn__wait { opacity: 0; }
-.live-conn__spin { display: inline-flex; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
+.live-conn__spin { display: inline-flex; flex: none; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
 .live-conn__spin svg { width: 100%; height: 100%; }
 @keyframes live-conn-breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.82); } }
 @keyframes live-conn-spin { to { transform: rotate(360deg); } }

@@ -996,7 +996,13 @@
       : quantity(m.screen_on, 'value', n => n > 0 && n < 60 ? `${Math.floor(n)} 秒` : U.minutes(Math.floor(n / 60)));
     const usage = value('screen_on') == null ? duration : `${screenLabel} ${duration}`;
     const unlocks = value('unlocks') == null ? U.collectionText("解锁", m.unlocks) : `解锁 ${quantity(m.unlocks, 'value')} 次`;
-    const text = unknown ? unclear ? '手机连接状态暂时读不到' : U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
+    const batteryStatus = U.status(m.battery), storageStatus = U.status(m.storage_free);
+    const batteryHot = ['amber', 'red'].includes(batteryStatus.tone), storageHot = ['amber', 'red'].includes(storageStatus.tone);
+    const received = d?.received;
+    const reason = offline ? d.offline?.cause : received?.gap?.text || (!(batteryHot || storageHot) && ['yellow', 'red'].includes(d?.level) ? d?.reason : null);
+    const connection = phoneConnection(d)?.replace(/^手机((?:上次)?经)/, '电脑$1');
+    // 卡底那行有原因时会写成“手机连接状态暂时读不到 · 原因”：卡头就不再说这句，照读不到的老说法写（判 C2b 末尾；留卡底原有那行，同 7ad0f7f13）
+    const text = unknown ? unclear && !(reason && connection) ? '手机连接状态暂时读不到' : U.collectionText("手机", d) : offline ? phoneOffText(d) : value('screen_on') != null ? `手机${usage}${value('unlocks') == null ? '' : ` · ${unlocks}`}` : d.text || `手机${usage} · ${unlocks}`;
     const primary = metrics.find(x => typeof value(x.id) === 'number');
     const screenGap = !offline && !unknown && value('screen_on') == null ? m.screen_on?.gap || d?.blocks?.usage?.reason || d?.reason || usage : '';
     const fallbackHead = !offline && (screenGap || /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|没读全|还不准/.test(text)) ? join([value('screen_on') != null && usage, value('unlocks') != null && unlocks, value('battery') != null ? `电量 ${quantity(m.battery, 'value', n => `${n}%`)}` : primary && `${primary.label || ''} ${quantity(primary, 'value')} ${primary.unit || ''}`, !screenGap && text]) : text;
@@ -1026,8 +1032,6 @@
     const growth = days != null && days <= 60 ? join([value('storage_week_growth') != null && `这周涨 ${quantity(m.storage_week_growth, 'value', U.gb.scaled)}`, `照这样${isLower(m.storage_days_to_full, 'value') || days < 1 ? '' : '约'} ${quantity(m.storage_days_to_full, 'value', daysText)}满`]) : '';
     const memory = join([value('memory_used') == null ? '' : `已用 ${quantity(m.memory_used, 'value', U.gb.scaled)}`, value('memory_total') == null ? '' : `共 ${quantity(m.memory_total, 'value', U.gb.scaled)}`]);
     const pendingStorage = [...new Set(['storage_week_growth', 'storage_days_to_full'].filter(id => m[id]?.value === null && m[id]?.accumulating).map(id => U.accumulatingText(m[id].accumulating)))].join(' · ');
-    const batteryStatus = U.status(m.battery), storageStatus = U.status(m.storage_free);
-    const batteryHot = ['amber', 'red'].includes(batteryStatus.tone), storageHot = ['amber', 'red'].includes(storageStatus.tone);
     const rows = [
       ['电量', esc(battery), ['battery', 'charging', 'battery_temp'], m.battery],
       ['上网', net, ['net_kind', 'carrier', 'ssid']],
@@ -1043,9 +1047,6 @@
       const reading = `${html}${cutoff ? ` <small>${cutoff}</small>` : ''}`;
       return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${group ? `<a class="kv__link" href="${esc(href('phone'))}#grp-${group}" aria-label="${esc(label)}，查看详情">${reading}</a>` : reading}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
     }).join(''));
-    const received = d?.received;
-    const reason = offline ? d.offline?.cause : received?.gap?.text || (!(batteryHot || storageHot) && ['yellow', 'red'].includes(d?.level) ? d?.reason : null);
-    const connection = phoneConnection(d)?.replace(/^手机((?:上次)?经)/, '电脑$1');
     const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), received?.last_at ? `${lastState?.offline ? U.time(received.last_at) : U.ago(received.last_at, lastState?.now || at)}收到` : '还没收到数据', received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
     p.note.hidden = !note;
     U.html(p.note, `${reason && !offline ? lamp(received?.gap) : ''}<span class="card__note-text">${reason && !offline && connection ? esc(connection) + ' · ' : ''}${U.fieldHtml(typeof note === 'string' ? note.replace(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, (_, m, d) => `${m.padStart(2, '0')}-${d.padStart(2, '0')}`) : note, { name: '手机情况', kind: viewer })}</span>${reason ? U.actions({ id: 'phone', text: reason }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}`);
@@ -1376,6 +1377,11 @@
         if (!page.loaded) paintList(ul, [{ key: 'error', cls: 'row row--flat', html: '<p class="row__text row__sub">暂时读不到近 7 天的变化</p>' }]);
         more.textContent = '暂时读不到，点此重试 ›';
         more.hidden = false;
+        // 首页主数据确认接通后，这一批（同一个翻页位置）自己再取一次，不用点；收起着就等下次展开再读（M982）
+        r.again?.then(() => {
+          if (page !== changesPage || page.loading || parts.projects['more-changes'].getAttribute('aria-expanded') !== 'true') return;
+          load().then(ok => { if (ok) parts.projects['changes-box']._loaded = true; });
+        });
         return false;
       }
       for (const item of r.data.items || []) page.items.set(item.id, item);

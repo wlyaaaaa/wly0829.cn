@@ -71,7 +71,9 @@
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '项目' });
   const projectGhost = `<div class="pj-figs pj-grid-ghost">${Array.from({ length: 4 }, () => '<div class="pj-fig"><span class="pj-fig__k fog__text">正在读项目</span><span class="pj-fig__v fog__text">正在读这一项</span></div>').join('')}</div>`;
   const reads = Object.fromEntries(['active', 'frozen', 'changes'].map(key => [key, U.reading($(key), { ghost: key === 'changes' ? U.ghost.rows(4) : projectGhost, slow: key !== 'active' })]));
-  const phase = (key, s) => { if (s.data != null) return; if (key === 'home') { homeRead.set(s); if (p.has('fixture') && !frozenOnly) reads.active.set(s); } else reads[key].set(s); };
+  // 冻结那组平常收在“冻结 N 个”按钮后面、没有自己的小标题：连不上又没存下来时不另写“这块没存下来”，
+  // 不然紧接在“在用的”那句下面再写一遍，读着像同一句连写两遍（D6 复查）；列表那边同样不写
+  const phase = (key, s) => { if (s.data != null) return; if (key === 'home') { homeRead.set(s); if (p.has('fixture') && !frozenOnly) reads.active.set(s); } else if (key === 'frozen' && !frozenOnly && (s.offline || s.phase === 'gone')) reads.frozen.done(); else reads[key].set(s); };
   const primed = new Set(), update = (key, paint) => { if (primed.has(key)) U.anchor(paint); else paint(); primed.add(key); };
   L.add(hero);
   const bar = U.topbar({ ask: () => `请看实况项目：${home?.text ? U.fieldText(home.text) : '请说明现在的情况'}。` });
@@ -117,7 +119,7 @@
   }
   let changesPack = null;
   function fill(key, rows, none) {
-    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? '这块没存下来，连上后补上。' : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
+    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? (key === 'frozen' && !frozenOnly ? '' : '这块没存下来，连上后补上。') : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
     rows = withLook(key, rows);
     const total = rows.length;
     if (key !== 'frozen' || !frozenOnly && rows.length > 6) rows = groupedRows(rows, key);
