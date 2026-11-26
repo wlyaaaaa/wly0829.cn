@@ -70,7 +70,7 @@
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
     const segs = [[note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
-    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep]) => `<span class="ak-seg${keep ? ' is-keep' : ''}">${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
+    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
       <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
@@ -179,7 +179,10 @@
       return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}${noteFor(sub.id)}</span>`;
     }).join('')}</div>`]);
     if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：第 ${int(p.version)} 版 · ${esc(when(p.published_at))} · ${p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的'}</li>`).join('')}</ul>`]);
-    if (list(c.weekly_runs).length) rows.push(['每周一行', `<ul class="ak-list">${list(c.weekly_runs).map(w => `<li>${esc(T.day(w.scheduled_at))} · ${F(w.summary, '这周结论')}${known(w.elapsed_seconds) ? ` · ${esc(minutes(w.elapsed_seconds))}` : ''}</li>`).join('')}</ul>`]);
+    if (list(c.weekly_runs).length) rows.push(['每周一行', `<ul class="ak-list">${list(c.weekly_runs).map(w => {
+      const sep = /[。！？；]$/u.test(U.fieldText(w.summary, viewer).trim()) ? ' ' : ' · ';
+      return `<li>${esc(T.day(w.scheduled_at))} · ${F(w.summary, '这周结论')}${known(w.elapsed_seconds) ? sep + esc(minutes(w.elapsed_seconds)) : ''}</li>`;
+    }).join('')}</ul>`]);
     if (list(c.setting_log).length) rows.push(['开关改动', `<ul class="ak-list">${list(c.setting_log).map(r => `<li>${esc(when(r.at))} · ${F(r.text, '改了什么')}</li>`).join('')}</ul>`]);
     return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◈</span><h2>这一类</h2></div>
       <dl class="ak-about">${rows.map(([k, v]) => `<div${k === '各小类' ? ' class="is-wide"' : ''}><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl></section>`;

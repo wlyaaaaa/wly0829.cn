@@ -424,7 +424,8 @@
   function basis(b, shown) {
     const text = b ? U.fieldText(b.text, viewer).trim() : '';
     if (!text) return '';
-    return F(b.text, '口径说明') + (!shown && T.stamp(b.from) && !dated(text) ? ` ·&nbsp;${esc(T.day(b.from))}&nbsp;起` : '');
+    const stop = /[。！？]$/u.test(text) ? '' : '。';
+    return F(b.text, '口径说明') + (!shown && T.stamp(b.from) && !dated(text) ? `${stop} <span class="au-nobr">${esc(T.day(b.from))} 起</span>` : '');
   }
   // 这周的合计后台没给时写为什么：派活记录从哪天才有
   function missingWeek(d) {
