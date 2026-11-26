@@ -824,7 +824,7 @@
       const chapter = card.querySelector('.grp__chapter');
       let note = chapter.querySelector('.computer-chart-end');
       if (!note) { note = document.createElement('p'); note.className = 'computer-chart-end'; note.dataset.keep = ''; chapter.prepend(note); }
-      const reason = ended ? offline() ? (known.length ? '曲线没存下来，连上后补上。' : state?.say || missing()) : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
+      const reason = ended ? offline() ? (known.length || g.hasOther?.() ? '曲线没存下来，连上后补上。' : state?.say || missing()) : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
       note.hidden = !known.length && (!ended || offline() && card.querySelector('.grp__said')?.textContent.includes('这块没存下来'));
       U.html(note, [...known, U.fieldHtml(reason, { name: g.name })].filter(Boolean).join('　'));
     }
