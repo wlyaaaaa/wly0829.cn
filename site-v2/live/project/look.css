@@ -306,6 +306,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .more.pj-led, .pj-card details.pj-led > summary { display: none; }
 .pj-card .pj-foot:not(:has(> :not([hidden]):not(.pj-led))) { display: none; }
 .pj-rh-events p { margin: 6px 0 0; font-size: 13px; line-height: 21px; color: #5d5c56; }
+.pj-rh-list > .pj-rh-step { margin: 6px 0 0; translate: -10px 0; }
 
 #artifacts { container-type: inline-size; }
 @container (width < 260px) {

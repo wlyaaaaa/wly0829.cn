@@ -973,8 +973,12 @@
     const total = key => { const got = two.map(w => w[key]).filter(Number.isFinite); return got.length ? `${two.some(w => w.partial && w[key] > 0) ? '至少 ' : ''}${got.reduce((a, b) => a + b, 0)} 次` : '没有记录'; };
     // 两周都没有任何记录：不画两个空框
     const chart = !two.some(w => w.published != null || w.rolled_back != null) ? '' : `<div class="pj-wk"><p class="pj-wk__cap"><span class="pj-wk__sum">近两周：发布 ${total('published')}、退回 ${total('rolled_back')}</span><span class="pj-wk__legend"><span><i class="is-pub"></i>发布</span><span><i class="is-back"></i>退回</span></span></p><div class="pj-wk__plot">${two.map(week).join('')}</div><div class="pj-wk__x">${two.map(w => `<span>${text(w.label)}</span>`).join('')}</div></div>`;
-    // 逐版记录和更早没记录的缘由收在“看全部”里
-    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary>${events.map(e => `<p>${e}</p>`).join('')}${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    // 逐版记录和更早没记录的缘由收在“逐版记录”里；打开先列 10 条，一次多露 10 条，露到底“收起”（R147）
+    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    host._ruleEvents = events;
+    const opened = host.querySelector('.pj-rh-events');
+    if (opened && !opened._stepBound) { opened._stepBound = true; opened.addEventListener('toggle', () => { if (!opened.open) { host._ruleShown = 0; drawRuleEvents(host); } }); }
+    drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
     if (axis && left < 0) axis.scrollLeft = left;
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
@@ -983,6 +987,13 @@
     });
   }
 
+  const RULE_STEP = 10;
+  function drawRuleEvents(host) {
+    const box = host.querySelector('.pj-rh-list');
+    if (!box) return;
+    const all = host._ruleEvents || [], n = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0)), left = all.length - n;
+    box.innerHTML = all.slice(0, n).map(e => `<p>${e}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
+  }
   function ruleTimeline(kept, current, text) {
     const index = kept.findLastIndex(e => e.version === current);
     const dot = (e, i) => `<li${i === index ? ' aria-current="true"' : ''} class="${i === index ? 'is-now' : e.kind === 'rolled_back' ? 'is-back' : ''}"><i></i><b>${ruleLink(text(e.version))}</b><small>${text([e.kind === 'rolled_back' && '退回', e.at ? stamp(e.at) : '时刻未留'].filter(Boolean).join(' · '))}</small>${e.time_gap ? `<small>${text(e.time_gap)}</small>` : ''}</li>`;
@@ -1216,6 +1227,16 @@
     requestAnimationFrame(go);
   }
 
+  // 规则版本卡“逐版记录”底下的“展开（还有 N 条）／收起”
+  board.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('.pj-rh-step'), host = btn?.closest('.pj-viz');
+    if (!host) return;
+    if (btn.hasAttribute('data-open')) {
+      const details = btn.closest('details');
+      details.open = false;
+      if (details.getBoundingClientRect().top < 0) details.scrollIntoView({ block: 'start', behavior: 'instant' });
+    } else { host._ruleShown = Math.max(RULE_STEP, host._ruleShown || 0) + RULE_STEP; drawRuleEvents(host); }
+  });
   // 分组底下的“展开（还有 N 条）／收起”
   board.addEventListener('click', (e) => {
     const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
