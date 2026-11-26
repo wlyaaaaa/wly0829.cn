@@ -632,7 +632,8 @@
     const { loaded, preview } = b, total = changeLog?.total;
     const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
     const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
-    const available = [shown < loaded && `还有 ${num(loaded - shown)} 条可展开`, Number.isFinite(total) && total > loaded && `另有 ${num(total - loaded)} 条待取`].filter(Boolean).join('，');
+    // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
+    const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '正在读改动记录…');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
