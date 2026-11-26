@@ -55,7 +55,7 @@
     const head = $('frozen-head');
     head.style.marginTop = head.style.minHeight = '';
     if (frozenOnly || $('board').hidden || $('frozen').dataset.read || !head.querySelector(':scope > :not([hidden])')) return;
-    const anchor = $('active-list').lastElementChild?.querySelector(':scope > details:not([open]) > summary') || $('active').querySelector('[data-source-cutoff]');
+    const anchor = $('active-list').lastElementChild?.querySelector(':scope > .pj-step') || $('active').querySelector('[data-source-cutoff]');
     if (!anchor?.getClientRects().length) return;
     // 按排版位置量（offsetTop 一层层加），不受切换名册时那下 6 像素的动效位移影响
     const pageY = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
@@ -77,7 +77,26 @@
   const bar = U.topbar({ ask: () => `请看实况项目：${home?.text ? U.fieldText(home.text) : '请说明现在的情况'}。` });
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  for (const key of ['active', 'frozen', 'changes']) { U.fold($(`${key}-more`), $(`${key}-box`)); $(`${key}-more`).addEventListener('click', () => foldLabel(key)); }
+  for (const key of ['active', 'frozen']) { U.fold($(`${key}-more`), $(`${key}-box`)); $(`${key}-more`).addEventListener('click', () => foldLabel(key)); }
+  // 分批展开（R97“逐步展开”、R147）：名册各组、冻结名册、全部变化的组和组里的行，先露一批，点“展开（还有 N …）”一次多露一批，露到底变“收起”。
+  // 露到第几批按块记着（名册约每分钟重画、变化翻页后重画都照着露）；切时间档时全部变化从头露。
+  const STEP = { active: 6, frozen: 6, changes: 5 }, MORE = { active: 6, frozen: 6, changes: 5 }, GROUPS = { first: 5, more: 4 };
+  const reveals = { active: new Map(), frozen: new Map(), changes: new Map() };
+  let groupsShown = 0;
+  const redraw = key => key === 'changes' ? renderChanges() : key === 'frozen' ? renderFrozen(states.get('frozen')?.data?.items) : renderActive(p.has('fixture') ? home?.items : states.get('active')?.data?.items);
+  $('stage').addEventListener('click', e => {
+    const b = e.target.closest('button.pj-step[data-step-of]');
+    if (!b) return;
+    const key = b.dataset.stepOf, map = reveals[key], label = b.dataset.step, close = b.hasAttribute('data-open');
+    map.set(label, close ? 0 : (map.get(label) || 0) + MORE[key]);
+    U.anchor(() => redraw(key));
+    if (close) { const again = [...document.querySelectorAll(`button.pj-step[data-step-of="${key}"]`)].find(x => x.dataset.step === label); if (again && again.getBoundingClientRect().top < 0) again.scrollIntoView({ block: 'center' }); }
+  });
+  $('changes-more').addEventListener('click', () => {
+    groupsShown = $('changes-more').getAttribute('aria-expanded') === 'true' ? 0 : groupsShown + GROUPS.more;
+    U.anchor(renderChanges);
+    if (!groupsShown && $('changes').getBoundingClientRect().top < 0) $('changes').scrollIntoView({ block: 'start' });
+  });
   function setRosterVisibility() {
     $(frozenOnly ? 'all-link' : 'frozen-link').removeAttribute('aria-current');
     $(frozenOnly ? 'frozen-link' : 'all-link').setAttribute('aria-current', 'page');
@@ -117,15 +136,20 @@
   }
   let changesPack = null;
   function fill(key, rows, none) {
-    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? '这块没存下来，连上后补上。' : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
+    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? GROUPS.first + groupsShown : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? '这块没存下来，连上后补上。' : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
     rows = withLook(key, rows);
     const total = rows.length;
-    if (key !== 'frozen' || !frozenOnly && rows.length > 6) rows = groupedRows(rows, key);
-    U.list($(`${key}-list`), rows.length ? rows.slice(0, n) : none ? [empty(none, key !== 'changes')] : []); U.list($(`${key}-rest`), rows.slice(n));
+    if (key !== 'frozen' || rows.length > STEP.frozen) rows = groupedRows(rows, key);
+    U.list($(`${key}-list`), rows.length ? rows.slice(0, n) : none ? [empty(none, key !== 'changes')] : []); U.list($(`${key}-rest`), key === 'changes' ? [] : rows.slice(n));
     watchBands($(key));
     // 项目变化：先列的几组和展开后的其余几组接着排两栏，展开后不在两块之间空一截（M486/M487）
     if (key === 'changes') (changesPack ||= window.LivePack.create([$('changes-list'), $('changes-rest')], { cols: 2, gap: 24 })).fit();
-    $(`${key}-more`).hidden = rows.length <= n; foldLabel(key, key === 'frozen' ? total : Math.max(0, rows.length - n));
+    if (key === 'changes') {
+      // 全部变化的项目组：先露 5 组，点一次再露 4 组（两栏各两组），露到底变“收起”
+      const more = $('changes-more'), left = Math.max(0, rows.length - n);
+      more.hidden = rows.length <= GROUPS.first; more.setAttribute('aria-expanded', String(!left));
+      U.html(more, `${left ? `展开（还有 ${left} 个项目组）` : '收起'} <span class="more__chev">›</span>`);
+    } else { $(`${key}-more`).hidden = rows.length <= n; foldLabel(key, key === 'frozen' ? total : Math.max(0, rows.length - n)); }
     L.lightUp([hero, $('board'), $('notices')]);
   }
   function groupedRows(rows, key) {
@@ -134,8 +158,10 @@
     const list = items => `<ul class="${cls}">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
     return [...groups].map(([label, items]) => {
       const first = items[0], title = key === 'changes' ? name({ name: first.groupLabel, href: first.href }, changeViewer) : U.fieldHtml(first.groupLabel ?? label, { name: '项目分类', kind: viewer });
-      const shown = key === 'changes' ? 5 : 6;  // 名册排三列，先露两整排
-      return { key: `group:${label}`, cls: 'pj-list-group', html: `${key === 'changes' ? first.band || '' : ''}${label ? `<p class="part">${title}</p>` : ''}${list(items.slice(0, shown))}${items.length > shown ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${items.length - shown} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${list(items.slice(shown))}</details>` : ''}` };
+      // 名册排三列，先露两整排、点一次再露两排；变化每组先 5 条、点一次再 5 条
+      const extra = Math.max(0, items.length - STEP[key]), open = Math.min(extra, reveals[key].get(label) || 0), left = extra - open;
+      const step = extra ? `<button class="more pj-step" type="button" data-step-of="${key}" data-step="${esc(label)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      return { key: `group:${label}`, cls: 'pj-list-group', html: `${key === 'changes' ? first.band || '' : ''}${label ? `<p class="part">${title}</p>` : ''}${list(items.slice(0, STEP[key] + open))}${step}` };
     });
   }
   // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），名字旁挂“访客看不到”；访客版只挂其中的“对外换了说法”（M930），没标的不挂
@@ -261,6 +287,7 @@
     for (const b of document.querySelectorAll(`[data-range-of="${key}"]`)) b.setAttribute('aria-pressed', String(b === button));
     if (pick[key] === range) return;
     pick[key] = range;
+    if (key === 'changes') { groupsShown = 0; reveals.changes.clear(); }   // 换了时间档，全部变化从头一批批露
     if (range === '7d' || ranged[key][range]?.state === 'ok') drawRange(key); else loadRange(key, range);
   });
   function renderChanges() {

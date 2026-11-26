@@ -153,6 +153,11 @@
 .pj-tseg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 #recent-artifacts > .pj-extra__next { margin: 10px 0 0; translate: none; }
 #recent-artifacts > .pj-extra__next[hidden] { display: none; }
+/* 名册各组、冻结名册、全部变化每组底下的“展开（还有 N 条）／收起”：点一次多露一批（R97、R147）；字号颜色照原来那行“展开（还有 N 条）”，箭头朝下、露到底变“收起”箭头朝上 */
+#stage .pj-list-group > .pj-step { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
+#changes .pj-list-group > .pj-step { margin: 6px 0 0; }
+.pj-step .more__chev { rotate: 90deg; }
+.pj-step[data-open] .more__chev { rotate: -90deg; }
 #changes-more .more__chev { rotate: 90deg; }
 #changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style></head>
