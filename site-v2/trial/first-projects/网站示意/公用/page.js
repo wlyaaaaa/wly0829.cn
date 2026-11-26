@@ -116,7 +116,10 @@ function buildPane(item) {
   const index = data.indexOf(item), pagination = document.createElement('nav');pagination.className = 'pagination';pagination.ariaLabel = '翻张';pagination.dataset.picture = item.id;pagination.style.setProperty('--order',order++);
   for (const delta of [-1,1]) {
     const next = data[index+delta];if (!next) {pagination.append(document.createElement('span'));continue;}
-    const button = document.createElement('button');button.type = 'button';button.textContent = delta < 0 ? `‹ 上一张 ${next.title}` : `下一张 ${next.title} ›`;
+    const button = document.createElement('button');button.type = 'button';
+    // 下一张：标题最后两个字和“›”连在一起折行，不让“›”带一个字单独掉到下一行
+    if (delta < 0) button.textContent = `‹ 上一张 ${next.title}`;
+    else { const chars = [...next.title], tail = document.createElement('span');tail.style.whiteSpace = 'nowrap';tail.textContent = `${chars.slice(-2).join('')} ›`;button.append(`下一张 ${chars.slice(0,-2).join('')}`,tail); }
     button.addEventListener('click',()=>openDetails(next));pagination.append(button);
   }paginations.set(item.id,pagination);return pane;
 }
