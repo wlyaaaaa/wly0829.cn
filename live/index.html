@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=1440">
 <title>实况</title>
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9b005e21457339ca36bfc663e9fbf6cf2fda53aae784c4355ec2f5b496970225/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/042ccc54f69b7676e0b0d1239821eeafb9ee81647b5fe21f2723008b74060ea3/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/beded42bc7c9fc4aa1a40ccad62c0a07518f71116bae7e571c42caa61020d887/connect-auth/glass.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8497fbe5e47cf00a6ffe17b02160081b6c385d0f6e223fe6c2a3514475e49353/live/_lib/live.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/de03218e569020c5ac832a7866e9e0f48480472c1491701c8271e2dc9f4d3a96/live/_lib/live.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0a19095d333c3a4e7cd530ff119b438ce36e338ad70cafb48193f6e8aeb1c0a7/live/_lib/live-motion.js"></script>
@@ -15,6 +15,12 @@
 .live-first-read .board { visibility: hidden; }
 .live-first-status { display: none; }
 .live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
+/* 和电脑页一样，滚过正文时底色随顶栏移动，只淡出导航字。 */
+#topbar[data-state="compact"] .topbar__glass { background-color: var(--paper); }
+#topbar[data-state="compact"] { opacity: 1; }
+#topbar[data-state="compact"] :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+#topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav #topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
 .page--live :is(.row, .project-cell):has(.home-detail-link) { position: relative; }
 .page--live .home-detail-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
 .page--live .home-detail-link:focus-visible { outline: none; }
@@ -32,7 +38,8 @@
 .page--live #phone .accumulating-note { text-wrap: balance; }
 .page--live #computer .kv__row:last-child dd { display: flex; flex-wrap: wrap; column-gap: 5px; }
 .page--live #computer .traffic-hour, .page--live #computer .kv__label { display: inline-block; white-space: nowrap; }
-.page--live #computer .traffic-hour { margin-inline-start: .55em; max-width: 100%; white-space: normal; }
+.page--live #computer .traffic-hour { max-width: 100%; white-space: normal; }
+.page--live #computer .traffic-day:has(+ .traffic-hour) { margin-inline-end: .55em; }
 /* 窗口窄到读数那一栏快挤没了（如 1024 宽）：每行名字放上一行，读数占整行，不伸出卡外（M415、M515） */
 .page--live #computer .kv { container-type: inline-size; }
 @container (max-width: 260px) {
@@ -89,7 +96,6 @@
 .page--live #automation .auto-state-row .row__meta { margin-inline-start: 8px; white-space: normal; }
 .page--live #automation .auto-state-recent .row__meta { display: block; margin-inline-start: 0; }
 .page--live #automation .auto-state-footer { padding-top: 12px; border-top: 1px solid var(--hair); }
-.page--live #automation[data-auto-state="idle"] .card__pic img { object-fit: contain; object-position: right bottom; }
 .page--live #automation[data-auto-state] [data-part="status"] { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
 .page--live #automation .auto-why { display: block; margin-top: 2px; }
 .page--live #automation .auto-seg { white-space: nowrap; }
@@ -104,7 +110,8 @@
 .page--live #automation .auto-a-row .auto-tag { margin-top: 1px; }
 .page--live #backups .restore__line { font-weight: 400; }
 .page--live #backups .restore__line .row__title { margin-right: 8px; }
-.page--live #phone .head__lead { white-space: nowrap; font-size: clamp(24px, 1.75vw, 34px); }
+.page--live #phone .head__lead { white-space: nowrap; }
+.page--live:not(.live-empty-home) #phone .head__lead { font-size: clamp(24px, 1.75vw, 34px); }
 .page--live .board .row__title { word-break: normal; }
 /* 等你的事、AI 对话两张卡的标题：只在空格和标点处折行，连着的中文不从中间断开（“解锁”不拆成“解／锁”）；一段长过整行才硬断（M743） */
 .page--live .board :is(#needs, #chats) .row__title { word-break: keep-all; overflow-wrap: break-word; }
@@ -125,15 +132,20 @@
 .live-unreadable .board__wide { grid-column: auto; }
 .page--live.live-unreadable .board .card .card__glass { min-height: 0; padding: 14px 20px; }
 .live-unreadable .card__body { padding: 0 !important; }
+/* 电脑连不上、各卡收成一两行时，长的那行（计划任务）也在画淡进来之前换行，不伸到右边插画下面（r83 返修） */
+.page--live.live-unreadable .board .card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .6) !important; }
 .live-unreadable .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
 .page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
-.page--live.live-unreadable #phone .head__lead { font-size: 18px; }
+.page--live.live-unreadable:not(.live-empty-home) #phone .head__lead { font-size: 18px; }
+/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+.page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
+.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
+.live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
-.live-unreadable .live-refresh-text { margin-left: 0; font-size: 0; }
-.live-unreadable .live-refresh-text::after { content: '连不上'; font-size: 13px; }
-.live-unreadable .live-refresh-icon { display: none; }
+.page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
 .page--live.live-unreadable .topbar .live-at::before { display: none; }
 
@@ -189,23 +201,16 @@
 .page--live #needs .row__main { grid-column: 2; grid-row: 1; }
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
-/* 等你的事卡每件事三行（M752，本人 11-24 16:09 点头的样子）：第一行“要本人做 ·”加标题占满整行，长了照原样折行；
-   第二行按钮从左排，种类、顺序、样子照旧；第三行原来的灰字。卡窄到一行放不下这些按钮时，按钮自己折行。
-   以后要“标题短、放得下就和按钮同一行”，把下面标题的 flex 从 1 0 100% 改成 0 1 auto 即可（按钮会靠右） */
-.page--live #needs [data-part="main"] { container-type: inline-size; }
-.page--live #needs [data-part="main"] > .row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 10px; position: relative; padding-left: var(--gut); }
-.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; left: 2px; top: 14px; margin: 0; }
-.page--live #needs [data-part="main"] > .row .row__main { order: 1; flex: 1 0 100%; min-width: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts, .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { order: 2; flex: none; padding-left: 0; }
-.page--live #needs [data-part="main"] > .row .row__text > :not(.row__main) { order: 3; flex: 1 0 100%; margin-top: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts > :first-child { justify-self: start; }
-@container (max-width: 390px) {
- .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; gap: 6px 8px; max-width: 100%; }
- .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="go"] { margin-right: 0; }
-}
+/* 等你的事卡三行依次排标题、按钮和小字，按钮窄时照常折行。 */
+.page--live #needs [data-part="main"] > .row { grid-template-columns: minmax(0, 1fr); row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
+.page--live #needs [data-part="main"] > .row:has(> .lamp) { padding-left: max(24px, var(--gut)); }
+.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; grid-column: auto; left: 2px; top: 14px; margin: 0; }
+.page--live #needs [data-part="main"] > .row .row__main { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
+.page--live #needs [data-part="main"] > .row > .row__acts { grid-column: 1 / -1; grid-row: 2; padding-left: 0; justify-content: flex-start; }
+.page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
-.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
+.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"],.live-fallback-note,.chat-background) { margin-inline-start: 25px; }
 .page--live #projects .card__body { padding-right: 0; }
 .page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
 .page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
@@ -219,28 +224,33 @@
 .page--live #projects .project-cell { position: relative; min-height: 88px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / .8); background: rgb(255 255 255 / .68); border-radius: 14px; display: flex; flex-direction: column; justify-content: flex-start; }
 .page--live #projects .project-cell > a { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: inherit; text-decoration: none; }
 .page--live #projects .project-icon { width: 20px; height: 20px; flex: 0 0 20px; }
-.page--live #projects .project-cell > small { font-size: 13px; line-height: 21px; overflow-wrap: anywhere; }
+.page--live #projects .project-cell > small { font-size: 13px; line-height: 21px; overflow-wrap: anywhere; text-wrap: pretty; }   /* 最后一行不单剩一个字（“显示／器”“6171／份”，r83 返修第二轮） */
 .page--live #projects .project-cell > a + small { margin-top: 3px; }
 .page--live #projects .project-cell > .project-changed { font-size: 11px; color: #575b55; }
 .page--live #projects .project-recent { display: inline-block; margin-inline-start: 4px; font-size: 11px; color: #37749a; background: #e6f3ff; border-radius: 5px; padding: 0 5px; white-space: nowrap; }
 .page--live #projects .project-cell:has(.project-recent) { background: #f0f8ff; }
 .page--live :is(#computer,#phone) :is(.row__sub,.card__note,[data-part="why"]) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .page--live #phone .card__note:has(> .btn) { display: flex; align-items: center; overflow: visible; }
-.page--live #phone .card__note-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.page--live #phone :is(.card__note,.card__note-text) { min-width: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #phone .card__note > .btn { flex: none; }
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
-.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
+.page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
+.page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
-.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
+.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
 .page--live #chats .chat-head-title > .head__lead { white-space: nowrap; }
 .page--live #chats .chat-head-scope { color: var(--muted); font-size: 13px; }
-.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: nowrap; overflow-wrap: normal; margin-left: 0; font-size: min(13.5px, 2.28cqi); letter-spacing: 0; }
+.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: normal; overflow-wrap: anywhere; text-wrap: pretty; margin-left: 0; font-size: 13.5px; letter-spacing: 0; }
 .page--live #phone .phone-head-cutoffs.row__sub { white-space: normal; }
 .page--live #phone .phone-reading-time { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
 .page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
-.page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
+body.page--live #needs .row.notice-target { outline-offset: -2px; }
+.page--live #needs .notice-detail[open] > p { color: var(--ink-soft); overflow-wrap: anywhere; }
+.page--live #needs .notice-detail .item-open { display: flex; width: fit-content; height: auto; margin: var(--item-action-gap) 0 0; padding: 0; translate: none; color: #00A650; font-weight: 600; line-height: 22px; }
+.page--live #needs .notice-detail .item-open:hover { background: none; color: #00A650; text-decoration: underline; }
 .page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
 /* 等你的事、计划任务、备份卡的每条标题整句显示，放不下就换行，不收成两行“…”（M760） */
 .page--live .board :is(#needs,#tasks,#backups) .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
@@ -254,7 +264,10 @@
 .page--live .card--empty { --headline-lamp-top: 6px; }
 .page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) > :is(.head__marker,.head__cutoff,.row__sub) { margin-left: 0; }
 @media (max-width: 1200px) {
- .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live:not(.live-unreadable) #phone .card__head,
+ .page--live #phone :is(.kv__row dd:has(.phone-reading-time), .card__note, [data-missing-groups="yes"]) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live #phone .phone-head-tail { max-width: 100%; white-space: normal; }
+ .page--live #phone .phone-head-tail > .head__tail:first-child { white-space: normal; overflow-wrap: anywhere; }
 }
 /* 电脑窗口窄（如 1024 宽）：AI 对话行尾两个按钮挪到这一行下面，标题和型号用整行宽（M498） */
 @media (max-width: 1279px) {
@@ -271,8 +284,19 @@
  .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
 }
 .page--live .b6-card .card__glass { min-height: 195px; }
-.page--live .b6-card .card__pic { width: min(41%, 285px); inset-block: auto 0; height: 100%; }
-.page--live .b6-card .card__pic img { object-fit: contain; object-position: right bottom; }
+/* 加绿（本人 11-26 00:14 点头，GREENIMG1126 选 A，照 G-实况首页-v5 和按钮小图第二行那颗）：只加颜色，版式和字不动 */
+/* “问情况”“打开对话”：绿字、绿描边、白底；绿底的“登录 ×× ↗”、复制好了的黑底、正在办的那颗照旧 */
+.page--live .btn.btn--sm:is([data-slot="ask"], [data-slot="go"]):not(.btn--go, .is-done, [aria-expanded="true"]) { color: #00A650; font-weight: 600; background: #fff; box-shadow: inset 0 0 0 1px #00A650, 0 1px 2px rgb(20 20 19 / .07), 0 4px 10px -6px rgb(20 28 36 / .16); }
+.page--live .btn.btn--sm:is([data-slot="ask"], [data-slot="go"]):not(.btn--go, .is-done, [aria-expanded="true"]):is(:hover, :focus-visible) { color: #008a43; background: #fff; box-shadow: inset 0 0 0 1.5px #008a43, 0 10px 20px -12px rgb(0 120 60 / .35); }
+/* 等你几件：没有状态灯时标题前一根绿竖条（有灯就只留灯）；件数的数字用强调绿 */
+.page--live .board #needs .card__head:not(:has(> .lamp)) .head__lead::before { content: ""; display: inline-block; width: 5px; height: .82em; margin-right: 10px; border-radius: 3px; background: #00A650; vertical-align: -.06em; }
+.page--live .board #needs .head__lead .needs-num { color: #00A650; }
+/* 电脑卡：显卡占用（不到 90% 时）和最紧的盘还剩多少用强调绿；这一行亮了提醒灯（盘快满）就照旧黑字 */
+.page--live .board #computer .kv-good { color: #00A650; }
+.page--live .board #computer .kv__row:not(:has(> .lamp)) .kv__link:has(> .disk-note) > .live-unit { color: #00A650; }
+/* 智能体、自动任务、AI 账本三张卡的画和别的卡同一种（H2，本人 11-26：首页混着两种插图）：整幅场景画贴卡片右边、铺满整张卡的高度，
+   卡变高变矮跟着铺满，朝字那一侧淡进玻璃，玻璃后面垫同一张画的虚影；画的宽度、淡出和别的卡共用 live.css 的 .card[data-pic]。字让开的宽度照旧 */
+.page--live #automation { --pic-x: 44%; }
 .page--live .b6-card .card__body { padding-right: min(33%, 213px); }
 .page--live .b6-card .card__head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .page--live .b6-card .head__link { display: inline-flex !important; }
@@ -328,7 +352,6 @@
 .page--live:not(.live-unreadable) .b6-card .b6-body > p:not(.b6-checks) > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 /* 电脑窗口窄（如 1024 宽）：右栏只剩三百来像素，画缩小、字让开得少一点，标题和三个数不被挤成一字一行 */
 @media (max-width: 1279px) {
- .page--live .board .b6-card .card__pic { width: min(30%, 285px); }
  .page--live .board :is(#agents,#automation,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(24%, 213px); }
  .b6-metrics > div { padding: 0 9px; }
  .b6-metrics small { word-break: keep-all; }
@@ -349,6 +372,7 @@
 .b6-metrics > a:last-child { border-right: 0; }
 .b6-metrics > a:hover { background: rgb(255 255 255 / .6); }
 .b6-last { color: #44504c; }
+#ledger .b6-last { text-wrap: pretty; }
 .b6-foot--go { padding-top: 9px; margin-bottom: 0; }
 /* AI 对话卡：后台另有 N 个在跑（AI 对话不列后台的对话，本人定的）。和上一行小字、下面对话标题同一条左边线（让出灯那一栏），自己占一行、上下留空（M709） */
 .page--live #chats .chat-background { margin: 4px 0 8px var(--gut); font-size: 13.5px; line-height: 20px; }
@@ -365,10 +389,46 @@
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
-/* 这两张卡每家一行、跟得最久一整句要宽一点：画缩小一些、字让开得少一点（v3 图上没有画；画照旧留着） */
-.page--live .board :is(#agents,#ledger).b6-card .card__pic { width: min(27%, 200px); }
+/* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }
 @media (max-width: 1279px) { .b6-metrics > a { padding: 0 9px; } }
+/* 自动任务卡、账本卡（照“首页自动任务卡-v2”“首页账本卡-v1”，本人 11-26 01:04 批照图施工）：一个深绿大数；0–24 点时间条只这两张卡用 */
+.b6-big--runs { margin: 6px 0 0; }
+.b6-big--runs > a { display: inline-flex; align-items: baseline; gap: 14px; color: inherit; text-decoration: none !important; }
+.b6-big--runs em, .b6-lg__owed em { font-style: normal; font-family: var(--black); font-size: 54px; line-height: 1.05; font-weight: 900; color: #0a532b; letter-spacing: -.02em; }
+.b6-big--runs span { font-size: 19px; font-weight: 650; color: #3a4642; }
+.b6-body p.b6-fail { margin: 0 0 2px; font-size: 16px; font-weight: 650; color: #3a4642; }
+.b6-lines p { font-size: 14.5px; }
+#automation .b6-body p { text-wrap: pretty; }
+.page--live:not(.live-unreadable) .b6-card .b6-lines > p > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
+.b6-lg { display: flex; align-items: center; gap: 22px; margin: 8px 0 0; }
+.b6-lg__owed { display: inline-flex; align-items: baseline; gap: 10px; font-size: 22px; font-weight: 700; color: #20302b !important; text-decoration: none !important; }
+.b6-lg__sep { width: 1px; align-self: stretch; margin: 12px 0; background: #293c4126; }
+.b6-lg__parked { font-size: 19px; font-weight: 650; color: #5f6966 !important; white-space: nowrap; }
+.b6-lg__parked b { margin: 0 3px; font-weight: 700; }
+.b6-lg__chev { margin-left: 8px; color: #00A650; font-weight: 800; }
+.b6-tb { position: relative; margin: 6px 0 4px; padding: 22px 0 21px; }
+.b6-tb__from, .b6-tb__to { position: absolute; top: 2px; font-size: 13px; line-height: 18px; color: #4a5756; }
+.b6-tb__from { left: 0; }
+.b6-tb__to { right: 0; }
+.b6-tb__line { position: relative; height: 2px; margin: 7px 0; border-radius: 2px; background: #d6dad7; }
+.b6-tb__dot { position: absolute; top: 50%; width: 9px; height: 9px; translate: -50% -50%; box-sizing: border-box; border-radius: 50%; background: #00A650; box-shadow: 0 0 0 1.5px #fff; }
+.b6-tb__dot[data-kind="bad"], .b6-tb__dot[data-kind="late"], .b6-dot[data-kind="late"] { background: #ef8f16; }
+.b6-tb__dot[data-kind="next"] { border: 2px solid #6c7370; background: #fff; }
+#ledger .b6-tb__dot { width: 13px; height: 13px; }
+a.b6-tb__dot::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
+a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166 80 / .2); outline: none; }
+.b6-tb__now { position: absolute; top: 50%; width: 2px; height: 26px; translate: -50% -50%; border-radius: 2px; background: #00A650; pointer-events: none; }
+.b6-tb__now b, .b6-tb__now small { position: absolute; left: 50%; translate: -50% 0; white-space: nowrap; font-size: 13px; line-height: 18px; font-weight: 600; color: #3a4642; }
+.b6-tb__now b { bottom: calc(100% + 1px); }
+.b6-tb__now small { top: calc(100% + 1px); font-variant-numeric: tabular-nums; }
+.b6-lg-list { margin: 4px 0 8px; }
+.b6-lg-item { position: relative; margin: 9px 0; }
+.page--live .b6-lg-item > .b6-dot { position: absolute; left: -25px; top: .5em; margin: 0; }
+.b6-body .b6-lg-item > p { margin: 0; font-size: 15px; line-height: 1.45; }
+.b6-lg-item > small { display: block; margin-top: 1px; }
+.b6-body p.b6-lg-none { margin: 8px 0 10px; }
+.b6-lg-foot b { color: #0a532b; }
 </style>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
@@ -382,8 +442,8 @@
 <meta property="og:description" content="电脑、计划任务、自动任务、备份、项目和 AI 当前进展的实时总览。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/07e99b732cb070f44ef45e1ca6e78150bda3515a3dbad6eabfe45dba40e7b7e8/%E5%85%AC%E7%94%A8/fonts/live-aeb0ab9df1959590.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a553c8089783901e20aae6a89a2b5d6398d1152e724936eaf63f42a49aa309d2/%E5%85%AC%E7%94%A8/fonts/ui-17f0446ca64f37aa.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/686c66a1835ffd7bc3de24bc74cb49207ef2429577a6111aa9ea11ea1751c2e6/%E5%85%AC%E7%94%A8/fonts/live-1dc9bd8b0d61740e.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body class="page page--live live-first-read">
@@ -397,6 +457,7 @@
   <div class="field" aria-hidden="true"></div>
 
   <ul class="notices" id="notices" aria-live="polite"></ul>
+  <ul class="site-notices" id="item-action-receipts"></ul>
   <p class="live-first-status row__sub" role="status">正在读实况…</p>
 
   <div class="board">
@@ -430,18 +491,20 @@
 
       <article class="card b6-card" id="agents" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/87c8b50100cdded38ff9f4093ad9f05238420e4cf80ec86d5d260979f6958c9e/live/img/home-agents-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7d43b10fd9883643f3ee6e6315c4052410be19d5aa72b30e37b717b354d038f7/live/img/b6-agents-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/87c8b50100cdded38ff9f4093ad9f05238420e4cf80ec86d5d260979f6958c9e/live/img/home-agents-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head"><span class="head__lead">智能体</span></p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
 
       <article class="card b6-card" id="ledger" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7c6fd1a75d09834bf4b977094d06901c15a32012eb3b2dd50fe425570550ef69/live/img/b6-ledger-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/2a8c859d906e050ee0c1fb5f5e032ae6a4cbec78681c19e4e6d68ee92655c3f3/live/img/ledger.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
-            <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 账本</span><span class="head__tail" aria-hidden="true">›</span></a>
+            <a class="head__link" href="/live/ledger/"><span class="head__lead">AI 自动任务账本</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
         </div>
       </article>
@@ -459,8 +522,9 @@
 
       <article class="card b6-card" id="automation" data-pic="right">
         <div class="card__glow" aria-hidden="true"></div>
+        <img class="card__tint" src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe47eaa64fcc8b2417e07976f4276306ba94335db0cb5c6b76641a4566420523/live/img/home-automation-v1.webp" loading="lazy" alt="" aria-hidden="true">
         <div class="card__glass glass">
-          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d0b3e188558e5baf5c3c3df1dea273f867f57ffe87c4a8c7644bc2c387fe13ff/live/img/b6-automation-v1.webp" width="560" height="560" loading="lazy" alt=""></span>
+          <span class="card__pic" aria-hidden="true"><img src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fe47eaa64fcc8b2417e07976f4276306ba94335db0cb5c6b76641a4566420523/live/img/home-automation-v1.webp" width="1000" height="1000" loading="lazy" alt=""></span>
           <div class="card__body"><p class="card__head" data-part="head">
             <a class="head__link" href="/live/automation/"><span class="head__lead">自动任务</span><span class="head__tail" aria-hidden="true">›</span></a>
           </p><div class="b6-body" data-part="batch"></div></div>
@@ -493,15 +557,16 @@
 </main>
 
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cbfb461c207f1cabdf7bbc370d596196d4581a294110eddb62867cc498e72d3e/live/_lib/live-client.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bb5ca16c72a70a0e1d902280532aa52e5cdf7c5231d67f8e10baa95fe763d861/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8f5f8282413fc3591ebf750f68469bd8e2d2c126079d7743b053f4517745a486/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/77aa3e05c43a2338a08dbf259da58570c760eec2d9826aa1e28015c9466d40dc/live/_lib/live-ui.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/03c80a9c191d31d1100fd8078ba5c9957725b377b923f7c7f50210f6636fcec4/live/chats/draw10.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f2205da1cd4380c9ce759c8a1b0a053e5d78d0ca860c5092fb45c6a3a7b6c0d1/live/_lib/live-runs.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/b85a9f974c45d6193b4db31cb862fb31434a59ce2b23387d11917c48dbf890fc/live/batch-home.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/4533c3be9a92603ec2c0007c8965406b29292f2f0bb72a0c002b9fa1b5e6cf12/live/l1.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/60181e912e5e7f07669cbeee783b5044911e1b065467e7574988f98babba2143/live/_lib/live-project-moments.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/184236dc74fc96d46a42830fd5a7df4bf8709baba5f7db994e175bb753088dd7/live/chats/draw10.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/382a7cff27c0eef31d7255b69736c8932418895ba244cffb74280af7e6de61eb/live/_lib/live-runs.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28f745fe71df3e51569b6c232932f57f01c5111abe1c87f745f055d72f358584/live/batch-home.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3668de263d15fbc505c65e85f15367a432a77be2920de885b4660c178e4122cb/live/l1.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body>

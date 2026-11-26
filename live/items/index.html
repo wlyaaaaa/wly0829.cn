@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head><meta name="referrer" content="strict-origin-when-cross-origin">
 <meta charset="utf-8"><meta name="viewport" content="width=1440"><title>等你的事 · 实况</title>
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9b005e21457339ca36bfc663e9fbf6cf2fda53aae784c4355ec2f5b496970225/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8497fbe5e47cf00a6ffe17b02160081b6c385d0f6e223fe6c2a3514475e49353/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a90f1624ed6f12cd5fe0fa02b150893515533b568a85f8598e53cab70a283fc3/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28dcc91b4fa342bfa18644bc0902de270c20821e6fe6483f4b23bc713eab1100/live/_lib/live-board.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/042ccc54f69b7676e0b0d1239821eeafb9ee81647b5fe21f2723008b74060ea3/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/beded42bc7c9fc4aa1a40ccad62c0a07518f71116bae7e571c42caa61020d887/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/de03218e569020c5ac832a7866e9e0f48480472c1491701c8271e2dc9f4d3a96/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a90f1624ed6f12cd5fe0fa02b150893515533b568a85f8598e53cab70a283fc3/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28dcc91b4fa342bfa18644bc0902de270c20821e6fe6483f4b23bc713eab1100/live/_lib/live-board.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
 <style>
 .page--items .lb-card[data-art="do"] { --lb-art: url('https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/b9ef0bcc1656fa58fd0f47edc70d23019d687510564fb590822ceac6c4f4d5bb/live/items/art/do-v1.webp'); }
 .page--items .lb-card[data-art="choose"] { --lb-art: url('https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/be851d0f403cf862b5b05357f8c3ce8f95b0d79990e2cc132ee28959d7ce3aab/live/items/art/choose-v1.webp'); }
@@ -15,15 +15,20 @@
 .page--items .lb-rows { gap: 0; }
 .page--items .lb-item { --gut: 0px; }
 /* 标题整句显示，放不下就换行，不收成两行“…”（M760） */
-.page--items .row__title { overflow-wrap: anywhere; }
-.page--items [data-text-open="true"] .row__title,.page--items .is-expanded .row__title,.page--items[data-viewer="owner"] .row__title { -webkit-line-clamp: unset; }
+.page--items .row__title { overflow-wrap: anywhere; text-wrap: pretty; }   /* 最后一行不单剩一个字（“少了一轮新备／份。”“会不会卡／死”，r83 返修第三轮） */
+.page--items [data-text-open="true"] .row__title,.page--items .is-expanded .row__title,.page--items .row__title { -webkit-line-clamp: unset; }
 .page--items .row__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .page--items .row__main .row__title { flex: 1 1 100%; min-width: 0; }
 .page--items .row__meta { margin-left: 0; }
 .page--items .item-expand { margin: 0; padding: 0; min-height: 20px; font-size: 12px; }
 .page--items .item-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.page--items .item-options > .btn { display: block; max-width: 100%; height: auto; min-height: 28px; padding-block: 5px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
 .page--items .row__sub>.item-bit { display: inline; }
-.page--items .item-bit+.item-bit:before { content: ' · '; }
+.page--items #closed .row__sub { text-wrap: pretty; }
+.page--items .item-bit+.item-bit:before { content: '\00a0· '; }   /* “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看） */
+/* 时刻、“约 N 分钟”这类不断开的短段（item-keep）原来是行内块，连同前面的“ · ”粘住前一个字一起折，剩“微／信”“到／了。”这种断法；改成行内不断开、“ · ”处可以折 */
+.page--items .row__sub > .item-keep { display: inline; }
+.page--items .row__sub > .item-bit + .item-keep::before { white-space: normal; }
 /* 收起时一行：截的是字，句尾“›”一直露在外面，看得出能展开（M679） */
 .page--items .brief > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 4px; min-width: 0; }
 .page--items .brief > summary > .brief__text { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -31,9 +36,28 @@
 .page--items .brief > summary::-webkit-details-marker { display: none; }
 .page--items .lb-item > .row__acts .btn { width: auto; padding: 0 10px; gap: 4px; font-size: 12.5px; letter-spacing: .03em; }
 .page--items .lb-item > .row__acts .btn::before { display: none; }
+/* 长标题需要整行时把按钮排到正文下方，从左起；保留现有的四种折行阈值。 */
+.page--items .lb-card--items .lb-rows { container-type: inline-size; }
+@container (max-width: 419px) { .page--items #groups .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 519px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 739px) { .page--items #groups .lb-card:has([data-slot="later"]):has([data-slot="go"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 439px) {
+  /* 按钮行能借用卡片右边的留白，正文宽度和勾选框的点击范围不变。 */
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) { margin-inline-end: calc(-1 * var(--item-action-gap)); max-width: none; }
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) .btn { padding: 0 9px; }
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) > [data-slot="pick"] { width: 22px; }
+}
 .page--items #hero .card__glass { min-height: 0; padding: 20px 26px; }
 .page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
 .page--items .lb-card__title { display: block; letter-spacing: 0; }
+.page--items .lb-card__title .lb-count { white-space: nowrap; }   /* 窄窗时卡头标题括号那段（几件）不拆开，不剩一个“件）”单独一行 */
+/* 卡窄到卡头说明一行放不下时（卡头内宽约 590 以下）：说明换行写全、不收成一行“…”，字停在右边插画淡入的地方，不压到画上；宽卡不变 */
+.page--items .lb-card__head { container-type: inline-size; }
+@container (max-width: 589px) { .page--items .lb-card__words { padding-right: 45%; } .page--items .lb-card__sub { -webkit-line-clamp: unset; } }
+@media (min-width: 1280px) {
+  @container (width > 589px) { .page--items :is(#later, #know) .lb-card__sub { -webkit-line-clamp: 2; } }
+}
 .page--items .lb-card__more { display: block; text-align: center; }
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
@@ -60,6 +84,17 @@
 .page--items #stats button { border: 0; font: inherit; text-align: left; cursor: pointer; }
 .page--items #stats button:hover { box-shadow: inset 0 0 0 1px #00A650; }
 .page--items #stats button[aria-pressed="true"] { background: rgb(0 166 80 / .15); box-shadow: inset 0 0 0 2px #00A650; }
+/* 加绿（本人 11-26 00:14 点头 GREENIMG1126 选 A，照 G-等你的事-v5）：只加颜色，版式和字不动。
+   页标题、右边“近 7 天的变化”、每组大标题前一根绿竖条（带空心圈的“等你 N 件”只留圈，事项前不加）；统计格和组标题里大于 0 的件数绿；
+   “问情况”绿字绿边白底（照本人给的那颗）；“登录××”实心绿、“不办了”“晚点提醒”“我知道了”照旧 */
+.page--items .lbp-title h1, .page--items .lbp-side > .part { display: flex; align-items: center; gap: 10px; }
+.page--items .lbp-title h1::before, .page--items .lbp-side > .part::before, .page--items .lb-card__title::before { content: ""; flex: none; width: 5px; border-radius: 3px; background: #00A650; }
+.page--items .lbp-title h1::before { height: 30px; }
+.page--items .lbp-side > .part::before { height: 15px; }
+.page--items .lb-card__title::before { display: inline-block; height: 21px; margin-right: 10px; vertical-align: -4px; }
+.page--items .lbp-stat b.is-some, .page--items .lb-count__n { color: #00A650; }
+.page--items .lb-item .btn[data-slot="ask"] { border-color: #00A650; background: #fff; color: #00A650; font-weight: 600; }
+.page--items .lb-item .btn[data-slot="ask"]:is(:hover, :focus-visible) { border-color: #008a43; background: rgb(0 166 80 / .07); color: #008a43; }
 
 /* 多选：勾上一件，底部浮出一条和页眉同料的胶囊栏；按钮沿用实况的白色小胶囊，只确认一次 */
 .items-selection { position:fixed; left:50%; bottom:28px; z-index:40; display:flex; align-items:center; gap:10px; max-width:calc(100vw - 48px); box-sizing:border-box; padding:7px 8px 7px 18px; border:1px solid rgb(255 255 255 / .9); border-radius:999px; background:rgb(255 255 255 / .84); -webkit-backdrop-filter:blur(20px) saturate(170%); backdrop-filter:blur(20px) saturate(170%); box-shadow:inset 0 1px 0 #fff, 0 1px 2px rgb(20 20 19 / .06), 0 22px 44px -20px rgb(20 28 36 / .42); transform:translate(-50%, 0); transition:opacity .22s ease, transform .32s cubic-bezier(.2,.8,.2,1), visibility 0s; }
@@ -67,13 +102,34 @@
 .items-selection__count { margin:0; font-size:14px; font-weight:600; letter-spacing:.02em; white-space:nowrap; color:var(--ink); }
 .items-selection__count b { display:inline-grid; place-items:center; min-width:22px; height:22px; margin:0 5px; padding:0 6px; box-sizing:border-box; border-radius:999px; background:#00A650; color:#fff; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 .items-selection__sep { width:1px; height:20px; background:rgb(20 20 19 / .12); }
-#item-selection-actions { display:flex; gap:8px; }
+#item-selection-actions { display:flex; align-items:center; gap:10px; }
+/* 多选（本人 11-26 03:0x）：勾上的那一行，点了的办法按钮绿字绿边（选中）；底部栏只有已选几件、确认、取消，一件都没选办法时“确认”灰着 */
+.page--items .lb-item button[data-action-set][aria-pressed="true"] { color:#00A650; background:rgb(0 166 80 / .07); box-shadow:inset 0 0 0 1.5px #00A650; }
+.items-selection .items-plan__go { background:#00A650; color:#fff; box-shadow:none; }
+.items-selection .items-plan__go:disabled { background:rgb(20 20 19 / .07); color:rgb(20 20 19 / .38); box-shadow:none; cursor:default; }
+/* 核对框：一件一行“类 · 这件 → 办法”（勾了没选办法的写“这次不动”，灰一点），类的颜色同页上那一组；框底一句去向说明和两个按钮 */
+.live-item-confirm--plan .live-item-confirm__card { width:min(900px, calc(var(--item-confirm-width, 100vw) - 28px)); }
+.live-item-confirm--plan .live-item-confirm__card h2 { margin-bottom:34px; }
+.item-plan { display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:12px 16px; margin:0; padding:0; list-style:none; }
+.item-plan li { display:grid; grid-column:1 / -1; grid-template-columns:subgrid; align-items:center; padding:14px 16px; border-radius:14px; background:rgb(25 35 28 / .05); font-size:17px; line-height:1.5; }
+.item-plan__kind { justify-self:start; padding:4px 14px; border-radius:999px; font-size:15px; font-weight:700; white-space:nowrap; background:rgb(var(--plan-tint) / .2); color:color-mix(in srgb, rgb(var(--plan-tint)) 62%, #1d1d1b); }
+.item-plan__kind[data-kind="do"] { --plan-tint:var(--glow-peach); } .item-plan__kind[data-kind="choose"] { --plan-tint:var(--glow-lilac); } .item-plan__kind[data-kind="later"] { --plan-tint:var(--glow-cyan); }
+.item-plan__kind[data-kind="know"] { --plan-tint:var(--glow-blue); } .item-plan__kind[data-kind="reports"] { --plan-tint:var(--glow-pink); } .item-plan__kind { --plan-tint:var(--glow-sage); }
+.item-plan__name { overflow-wrap:anywhere; font-weight:600; }
+.item-plan__to { white-space:nowrap; color:var(--muted); } .item-plan__to b { color:var(--ink); font-weight:750; }
+.item-plan__to.is-skip { color:var(--muted); font-weight:500; }
+.item-plan__foot { display:flex; align-items:center; gap:16px; margin-top:18px; }
+.live-item-confirm__card .item-plan__foot p { flex:1; margin:0; font-size:14px; color:var(--muted); }
+.item-plan__foot .live-item-confirm__buttons { flex-wrap:nowrap; margin-top:0; }
+/* 手机上（整页缩小以后框只有三百多像素宽）：这件占一行、怎么办写在它下面，说明和按钮上下排，不把字挤成一列 */
+.live-item-confirm--plan .live-item-confirm__card { container-type:inline-size; }
+@container (max-width: 600px) { .item-plan { grid-template-columns:auto minmax(0, 1fr); } .item-plan__to { grid-column:2; white-space:normal; } .item-plan__foot { flex-direction:column; align-items:stretch; } .item-plan__foot .live-item-confirm__buttons { justify-content:end; flex-wrap:wrap; } }
 .items-selection .btn--sm { height:32px; padding:0 15px; font-size:13px; }
-.items-selection [data-batch-action]:hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
+.items-selection .items-plan__go:not(:disabled):hover { box-shadow:inset 0 0 0 1px rgb(0 166 80 / .5), 0 10px 20px -12px rgb(20 20 19 / .4); }
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
 .items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
 body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
-.items-choice { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:9px; cursor:pointer; }
+.items-choice { display:inline-grid; align-items:center; justify-items:start; width:28px; height:28px; border-radius:9px; cursor:pointer; }
 .items-choice:hover { background:rgb(20 20 19 / .05); }
 .items-choice input { -webkit-appearance:none; appearance:none; width:18px; height:18px; margin:0; border-radius:6px; background:rgb(255 255 255 / .85); box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .24); cursor:pointer; transition:background-color .15s ease, box-shadow .15s ease; }
 .items-choice input:hover { box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .46); }
@@ -85,6 +141,9 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 /* 卡上的“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，点了到那一轮 */
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
+/* 卡展开后最后一行绿字“看这件的详情 ›”，单占一行，跟上面的字左边对齐 */
+.row__detail .item-open { display:flex; width:fit-content; height:auto; margin:var(--item-action-gap) 0 0; padding:0; translate:none; color:#00A650; font-weight:600; line-height:22px; }
+.row__detail .item-open:hover { background:none; color:#00A650; text-decoration:underline; }
 </style><meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -97,8 +156,8 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 <meta property="og:description" content="查看需要本人决定或动手的事项，以及每件事的来由和处理步骤。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/07e99b732cb070f44ef45e1ca6e78150bda3515a3dbad6eabfe45dba40e7b7e8/%E5%85%AC%E7%94%A8/fonts/live-aeb0ab9df1959590.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a553c8089783901e20aae6a89a2b5d6398d1152e724936eaf63f42a49aa309d2/%E5%85%AC%E7%94%A8/fonts/ui-17f0446ca64f37aa.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/686c66a1835ffd7bc3de24bc74cb49207ef2429577a6111aa9ea11ea1751c2e6/%E5%85%AC%E7%94%A8/fonts/live-1dc9bd8b0d61740e.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head><body class="page page--live page--l2 page--board page--items"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#needs" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
@@ -110,8 +169,8 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 <div class="card__body"><p class="card__head" id="head"></p>
 <p class="hero__note" id="note"></p><div class="lbp-stats" id="stats"></div></div></div>
 </article><section class="lbp-side glass" data-mo-rise><p class="part">近 7 天的变化</p><div class="lbp-side__list"><div id="side-body">正在读关闭记录</div><a class="more" href="#closed">近 7 天下去的 ›</a><a class="more" href="#reports">等答的汇报 ›</a></div></section></div>
-<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消选择</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cbfb461c207f1cabdf7bbc370d596196d4581a294110eddb62867cc498e72d3e/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d8bff377e42d8b7560027dbeed29eea76cdf385b13170c0a25af8e8938c6c4d8/live/_lib/live-header.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bb5ca16c72a70a0e1d902280532aa52e5cdf7c5231d67f8e10baa95fe763d861/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3919eaf7cdae0631464919c0913a41e613826d70593fbf9622271ffe6d1fd782/live/_lib/live-board.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f2205da1cd4380c9ce759c8a1b0a053e5d78d0ca860c5092fb45c6a3a7b6c0d1/live/_lib/live-runs.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/82df67d83f1fe8b422f67d059ee8ede2a445847343eda1cf4cc7696e2250568d/live/items/page.js"></script>
+<div class="lbp-tools"><form class="l2-search lbp-search" id="search" role="search"><input id="q" type="search" aria-label="搜索事项" placeholder="搜索事项"><button class="pill-btn" type="submit">查找</button></form><label class="l2-filter"><select id="kind-pick" aria-label="按类型看"><option value="">全部类型</option></select></label><label class="l2-filter"><select id="state-pick" aria-label="按状态看"><option value="">全部状态</option><option value="pending">待处理</option><option value="closed">已关闭</option></select></label><label class="l2-filter"><select id="due-sort" aria-label="事项排序"><option value="">默认顺序</option><option value="due">按到期时间看</option></select></label><div class="lbp-tools__end"><a class="more" href="#reports">等答的汇报 ›</a></div></div><div class="items-selection" id="item-selection" role="toolbar" aria-label="多选操作" aria-hidden="true" inert><p class="items-selection__count" id="item-selection-count" aria-live="polite"></p><span class="items-selection__sep" aria-hidden="true"></span><div id="item-selection-actions"></div><button class="btn btn--sm items-selection__clear" type="button" data-clear>取消</button></div><div id="groups" data-mo-rise></div><p class="pj-note" id="board-empty" hidden>没有符合筛选的事项</p></main>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8f5f8282413fc3591ebf750f68469bd8e2d2c126079d7743b053f4517745a486/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d8bff377e42d8b7560027dbeed29eea76cdf385b13170c0a25af8e8938c6c4d8/live/_lib/live-header.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/77aa3e05c43a2338a08dbf259da58570c760eec2d9826aa1e28015c9466d40dc/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3919eaf7cdae0631464919c0913a41e613826d70593fbf9622271ffe6d1fd782/live/_lib/live-board.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/382a7cff27c0eef31d7255b69736c8932418895ba244cffb74280af7e6de61eb/live/_lib/live-runs.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23a6929841ab5dfaab0c89594b73377c77650eb5e5a56e416cbbbedda91c0f3f/live/items/page.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body></html>

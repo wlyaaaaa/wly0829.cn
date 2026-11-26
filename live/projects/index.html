@@ -1,10 +1,19 @@
 <!doctype html>
 <html lang="zh-CN">
 <head><meta name="referrer" content="strict-origin-when-cross-origin"><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>项目 · 实况</title>
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9b005e21457339ca36bfc663e9fbf6cf2fda53aae784c4355ec2f5b496970225/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8497fbe5e47cf00a6ffe17b02160081b6c385d0f6e223fe6c2a3514475e49353/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a90f1624ed6f12cd5fe0fa02b150893515533b568a85f8598e53cab70a283fc3/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e4529ead33f53aac3ea6bf7ce83db277944a5547192e2c21ba2357cb269d669c/live/_lib/live-project-look.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/be913dad39b62857f865f72c1f4887c85221854e2e0e9fa4a103bc3891864bb7/live/_lib/live-viz.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/042ccc54f69b7676e0b0d1239821eeafb9ee81647b5fe21f2723008b74060ea3/header/topbar.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/beded42bc7c9fc4aa1a40ccad62c0a07518f71116bae7e571c42caa61020d887/connect-auth/glass.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/de03218e569020c5ac832a7866e9e0f48480472c1491701c8271e2dc9f4d3a96/live/_lib/live.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a90f1624ed6f12cd5fe0fa02b150893515533b568a85f8598e53cab70a283fc3/live/_lib/live-page.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6411bb465eed8a48b818b801c414ecb2073bc9e9327170c5b2d9b27e6a90c7ac/live/_lib/live-project-look.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/be913dad39b62857f865f72c1f4887c85221854e2e0e9fa4a103bc3891864bb7/live/_lib/live-viz.css"><link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css"><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
 <style>
 #active { min-height: 182px; }
+/* 开场的字先各自走到位再显，收拢时先淡出再移动，保留逐字顺序及绿灯动效。 */
+#topbar .brand__word .ch {
+  transition-duration: .30s, .14s, .30s;
+  transition-delay: calc(var(--i) * 12ms + 90ms), calc(var(--i) * 12ms + 390ms), calc(var(--i) * 12ms + 90ms);
+}
+#topbar[data-state="compact"] .brand:not(:hover):not(:focus-visible) .ch {
+  transition-delay: calc((var(--n) - 1 - var(--i)) * 12ms + 140ms), calc((var(--n) - 1 - var(--i)) * 12ms), calc((var(--n) - 1 - var(--i)) * 12ms);
+}
+#topbar[data-fit-first] .brand__word .ch { transition: none; }
 .pj-list-group { grid-column:1 / -1; list-style:none; min-width:0; break-inside:avoid; }
 #stage .pj-list-group > details > .live-disclosure { margin-top: 8px; font-size: 13px; font-weight: 400; color: var(--muted); }
 .pj-short > summary { display:flex; align-items:baseline; gap:8px; cursor:pointer; }
@@ -23,20 +32,23 @@
 #frozen .row__title, #changes .row__title { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
 .page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }
 :is(#active, #frozen) .pj-figs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-#active .pj-fig__sub { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-#active .pj-fig__scope { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; max-height: 36px; }
 #active .pj-grid-ghost .fog__text { display: block; white-space: nowrap; overflow: hidden; }
 #active .pj-grid-ghost .pj-fig__v { margin-top: 4px; }
 #activity > .part { margin-left: 0; }
 #board { grid-template-columns: minmax(0, 1fr); }
 #activity { margin-top: 24px; }
-.pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
-#activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 1fr)); }
+.pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, calc(100% - 1060px), 72px); }
+#activity .pj-heat { grid-template-columns: min(170px, calc(100% - 12px * var(--days))) repeat(var(--days), minmax(9px, 1fr)); }
 /* 窗口不到 1280 宽：左右两半放不下 30 天的格子（11-14 往后被截掉），改成上下两半，格子不超过 16px；1440 宽不变（M250） */
 @media (max-width: 1279px) { .pj-heat-halves { grid-template-columns: minmax(0, 1fr); gap: 18px; } #activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 16px)); } }
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
+@media (min-width: 1280px) { #activity .pj-heat-name { justify-content: flex-end; text-align: right; } }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }
+/* 本地还没推的改动多了才分批（R147）：“展开（还有 N 个项目）”在小卡下面，和成品那块“更多成品 ›”一样靠左 */
+#unpushed > .pj-unpushed-more { margin: 12px 0 0; translate: none; }
+#unpushed > .pj-unpushed-more .more__chev { rotate: 90deg; }
+#unpushed > .pj-unpushed-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 .pj-changes-footer { display: grid; gap: 10px; padding-top: 16px; }
 .pj-changes-footer:not(:has(.pj-changes-actions > :not([hidden]), > .row__sub:not([hidden]))) { display: none; }
 .pj-changes-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -65,7 +77,10 @@
 #active .pj-card :is(.pj-fig__link, .pj-fig__k) + .pj-fig__sub { font-size: 14.5px; line-height: 22px; color: #3d3d3a; }
 #active .pj-card .pj-fig__v { margin-top: 6px; font-size: 28px; line-height: 36px; font-weight: 700; letter-spacing: .01em; color: #141413; }
 #active .pj-card .pj-fig__v.is-long { font-size: 19px; line-height: 27px; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-#active .pj-card .pj-fig__scope { -webkit-line-clamp: 1; max-height: 20px; margin-top: 4px; }
+/* 画册卡上代表数下面那句说明、读数名、读取时刻这几行小字照常换行写全，不截成“…”（M880）；卡跟着长，同一排的卡一样高，底下“N 天前改动”照旧对齐 */
+#active .pj-card .pj-fig__scope { margin-top: 4px; }
+/* 说明折行时末尾不单掉一两个字（如“面。”），浏览器自己把上一行匀一个过来 */
+#active .pj-card .pj-fig__scope { text-wrap: pretty; }
 #active .pj-card .pj-recent { order: 9; display: flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 10px; font-size: 13.5px; line-height: 20px; color: #3d3d3a; }
 #active .pj-card .pj-recent::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #00A650; }
 #changes :is(#changes-list, #changes-rest) { gap: 24px; }
@@ -80,7 +95,7 @@
 #active .pj-card .pj-fig__v.is-long .pj-stat-piece { display: inline; white-space: normal; }
 /* 窗口不到 1280 宽时，整句读数不再两行截断，按正文字号写、不加粗；一句短话放不下也换行，不切掉（M248）。1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1279px) { #active .pj-card .pj-fig__v.is-long { display: block; -webkit-line-clamp: unset; font-size: 14px; font-weight: 400; line-height: 21px; } #active .pj-card .pj-fig__v:not(.is-long) { white-space: normal; overflow-wrap: anywhere; } #active .pj-card .pj-fig__v:not(.is-long) .pj-stat-piece { display: inline; white-space: normal; } }
-/* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；最近成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
+/* 下面几块和画册一套：大标题加绿条；本地还没推的改动排成小卡，有没推提交的放大排前；成品按项目一张卡；变化卡片按内容多少自然排两栏。 */
 .pj-extra { margin-top: 44px; }
 .pj-extra > .part, #activity .card__body > .part { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 22px; line-height: 30px; font-weight: 700; letter-spacing: .06em; color: #141413; }
 .pj-extra > .part::before, #activity .card__body > .part::before { content: ""; flex: none; width: 5px; height: 22px; border-radius: 3px; background: #00A650; }
@@ -108,8 +123,6 @@
 /* 排法在 _lib/live-pack.js：每张卡放进最矮的一栏、卡贴着卡排；“再看几个项目”展开后接着上面几栏排，“收起”挪到展开的卡下面（M487） */
 #recent-artifacts .pj-extra__more[open] { position: relative; padding-bottom: 34px; }
 #recent-artifacts .pj-extra__more[open] > summary { position: absolute; left: 0; bottom: 0; }
-#recent-artifacts .pj-extra__all { flex: none; }
-#recent-artifacts .pj-extra__all[hidden] { display: none; }
 .pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
 .pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
 .pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
@@ -122,11 +135,36 @@
 .pj-art__sub { margin: 2px 0 0; font-size: 13.5px; line-height: 20px; color: #4a4944; overflow-wrap: anywhere; }
 .pj-art .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .pj-art__caption { margin-right: 2px; font-size: 13px; color: #6b6a64; }
+.pj-art__time { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .pj-art .pj-at { padding: 0; font-size: 13px; line-height: 22px; color: #6b6a64; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .pj-art > details > .live-disclosure { padding: 4px 0 10px; }
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
 #changes .pj-changes-actions .more { margin: 0; translate: none; }
+/* 冻结入口在偶用那组下面，紧挨左边“展开（还有 N 条）／在用项目名册截至 …”的右边（本人 11-24 20:34，图5 红框那处），左边对齐第二列卡片：
+   “冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。
+   点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
+#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: max-content; max-width: 100%; margin-left: calc((100% - 48px) / 3 + 24px); }
+#frozen-head > .more { height: auto; margin: 0; }
+#frozen-head > .row__sub { margin: 2px 0 0; }
+#frozen-rest { padding-top: 24px; }
+/* 全部变化、成品标题右边的“近 7 天｜近 30 天｜全部”：和智能体页工期、工作量、钩子那三排同一个样子（_lib/live-tape.css 的 .tp-seg，选中绿底白字照 agents/page.css 的 .ag-tseg）。
+   项目页不加载 live-tape.css，只照抄这几条；那边改了样子，这里跟着改。 */
+.pj-tseg { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: auto; padding: 3px; border-radius: 10px; background: rgb(20 20 19 / .05); font-size: 13px; font-weight: 400; line-height: normal; letter-spacing: 0; }
+.pj-tseg button { padding: 4px 12px; border: 0; border-radius: 8px; background: none; font: inherit; font-size: 13px; color: #4a4944; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.pj-tseg button[aria-pressed="true"] { background: #00a650; color: #fff; font-weight: 700; }
+.pj-tseg button:hover { color: var(--ink); }
+.pj-tseg button[aria-pressed="true"]:hover { color: #fff; }
+.pj-tseg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+#recent-artifacts > .pj-extra__next { margin: 10px 0 0; translate: none; }
+#recent-artifacts > .pj-extra__next[hidden] { display: none; }
+/* 名册各组、冻结名册、全部变化每组底下的“展开（还有 N 条）／收起”：点一次多露一批（R97、R147）；字号颜色照原来那行“展开（还有 N 条）”，箭头朝下、露到底变“收起”箭头朝上 */
+#stage .pj-list-group > .pj-step { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
+#changes .pj-list-group > .pj-step { margin: 6px 0 0; }
+.pj-art > .pj-step { margin: 2px 0 8px; font-size: 14px; color: #3d3d3a; }
+#recent-artifacts > .pj-art-more { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
+.pj-step .more__chev { rotate: 90deg; }
+.pj-step[data-open] .more__chev { rotate: -90deg; }
 #changes-more .more__chev { rotate: 90deg; }
 #changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style><meta name="color-scheme" content="only light">
@@ -141,8 +179,8 @@
 <meta property="og:description" content="查看各个项目的当前状态和需要关注的进展。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/07e99b732cb070f44ef45e1ca6e78150bda3515a3dbad6eabfe45dba40e7b7e8/%E5%85%AC%E7%94%A8/fonts/live-aeb0ab9df1959590.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a553c8089783901e20aae6a89a2b5d6398d1152e724936eaf63f42a49aa309d2/%E5%85%AC%E7%94%A8/fonts/ui-17f0446ca64f37aa.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/686c66a1835ffd7bc3de24bc74cb49207ef2429577a6111aa9ea11ea1751c2e6/%E5%85%AC%E7%94%A8/fonts/live-1dc9bd8b0d61740e.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body class="page page--live page--l2"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
@@ -159,14 +197,14 @@
     <button class="more" id="active-more" type="button" hidden></button><div class="fold" id="active-box"><div><ul class="pj-figs" id="active-rest"></ul></div></div>
 </div></section>
 </div>
+<div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><div class="pj-frozen-head" id="frozen-head"><button class="more" id="frozen-more" type="button" hidden></button></div><ul class="pj-figs" id="frozen-list"></ul>
+    <div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
 <section class="pj-sec card" id="activity"><div class="card__glass glass"><div class="card__body"><p class="part">近 30 天项目活跃</p><div id="activity-chart"></div></div></div></section>
-<div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><ul class="pj-figs" id="frozen-list"></ul>
-    <button class="more" id="frozen-more" type="button" hidden></button><div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
-<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>近 7 天全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
+<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
   <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
   <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cbfb461c207f1cabdf7bbc370d596196d4581a294110eddb62867cc498e72d3e/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d8bff377e42d8b7560027dbeed29eea76cdf385b13170c0a25af8e8938c6c4d8/live/_lib/live-header.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bb5ca16c72a70a0e1d902280532aa52e5cdf7c5231d67f8e10baa95fe763d861/live/_lib/live-ui.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ddbdea7edcb9a9f715cef84ac46087b90918f7c877fb1292dc95af11252e0e66/live/_lib/live-chart.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/fd684a78e97fa815770587d286190ae52c0e7ffa0bfaefe72d8c36a276ee5fb4/live/_lib/live-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/95ec03e7ff575d032ccfc3c659495947237163af5abee9b3e1e7524be01bf123/live/_lib/live-project-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ed0bc2287fab6310bf093f782754ea3853dd3e04adf6d8cebf7def34cdf4e01f/live/_lib/live-pack.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/44c24ed573580b4b7eaacd3b9de2c287f4da203babbf07cff36ea1b19e464578/live/projects/page.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8f5f8282413fc3591ebf750f68469bd8e2d2c126079d7743b053f4517745a486/live/_lib/live-client.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d8bff377e42d8b7560027dbeed29eea76cdf385b13170c0a25af8e8938c6c4d8/live/_lib/live-header.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/77aa3e05c43a2338a08dbf259da58570c760eec2d9826aa1e28015c9466d40dc/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ddbdea7edcb9a9f715cef84ac46087b90918f7c877fb1292dc95af11252e0e66/live/_lib/live-chart.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/df72555c3cad1738d7d66a0b6b66841ad515546e3e7ae1b6f117ed0451fe4b36/live/_lib/live-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7ab58ed73047f2a5fa1211e0ff4f9606e8de1a8cf6b36126994dc6324a63bb30/live/_lib/live-project-viz.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/60181e912e5e7f07669cbeee783b5044911e1b065467e7574988f98babba2143/live/_lib/live-project-moments.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ed0bc2287fab6310bf093f782754ea3853dd3e04adf6d8cebf7def34cdf4e01f/live/_lib/live-pack.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dd43f2d28c55f5630b3741055ddd48a5212bcc8a8520ec905205898d4ad8841d/live/projects/page.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body></html>

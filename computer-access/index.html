@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=1440">
 <title>授权与状态</title>
 <!-- 页眉用的是定稿的原件，一个字不改 -->
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/74ed66085284271bb89db946d7f2bfea7fceb8054caa32bdf003a7cd56c0eee5/header/topbar.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9b005e21457339ca36bfc663e9fbf6cf2fda53aae784c4355ec2f5b496970225/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/042ccc54f69b7676e0b0d1239821eeafb9ee81647b5fe21f2723008b74060ea3/header/topbar.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/beded42bc7c9fc4aa1a40ccad62c0a07518f71116bae7e571c42caa61020d887/connect-auth/glass.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
@@ -22,8 +22,8 @@
 <meta property="og:description" content="授权与状态">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9f07073e00bab17f1ec0b3c92c28976b0011c497027f02f6796c334ea8ed61a9/connect-auth/img/pass.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/07e99b732cb070f44ef45e1ca6e78150bda3515a3dbad6eabfe45dba40e7b7e8/%E5%85%AC%E7%94%A8/fonts/live-aeb0ab9df1959590.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a553c8089783901e20aae6a89a2b5d6398d1152e724936eaf63f42a49aa309d2/%E5%85%AC%E7%94%A8/fonts/ui-17f0446ca64f37aa.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/686c66a1835ffd7bc3de24bc74cb49207ef2429577a6111aa9ea11ea1751c2e6/%E5%85%AC%E7%94%A8/fonts/live-1dc9bd8b0d61740e.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body class="page page--auth">
@@ -125,28 +125,30 @@
       <button class="chip" type="button" role="radio" data-h="2" data-mo-press>2 小时</button>
       <button class="chip" type="button" role="radio" data-h="8" data-mo-press>8 小时</button>
       <button class="chip" type="button" role="radio" data-h="24" data-mo-press>24 小时</button>
-      <label class="chip chip--own" role="radio" data-mo-press><input type="text" inputmode="decimal" maxlength="4" autocomplete="off" aria-label="自己填几小时，0.5 到 72">小时</label>
+      <label class="chip chip--own" role="radio" data-mo-press><input type="text" inputmode="decimal" maxlength="5" autocomplete="off" aria-label="自己填几小时，0.5 到 72">小时</label>
     </div>
     <button class="chip chip--fill" type="button" data-mo-press>补充到上限</button>
     <label class="both"><input type="checkbox">两项一起办</label>
     <span class="go__msg" aria-live="polite"></span>
-    <div class="code" role="group" aria-label="6 位码">
-      <input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="第 1 位">
-      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 2 位">
-      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 3 位">
-      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 4 位">
-      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 5 位">
-      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="第 6 位">
-    </div>
-    <div class="go">
-      <button class="btn btn--ink go__btn" type="button" disabled data-mo-press>验证</button>
+    <div class="deal__end">
+      <div class="code" role="group" aria-label="6 位码">
+        <input inputmode="numeric" autocomplete="one-time-code" aria-label="第 1 位">
+        <input inputmode="numeric" autocomplete="off" aria-label="第 2 位">
+        <input inputmode="numeric" autocomplete="off" aria-label="第 3 位">
+        <input inputmode="numeric" autocomplete="off" aria-label="第 4 位">
+        <input inputmode="numeric" autocomplete="off" aria-label="第 5 位">
+        <input inputmode="numeric" autocomplete="off" aria-label="第 6 位">
+      </div>
+      <div class="go">
+        <button class="btn btn--ink go__btn" type="button" disabled data-mo-press>验证</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ead182f536f49339955c3bd7cea114eec7ab19003f5760dded46e4d3cebb2a82/connect-auth/auth.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6b75c068ed2863461ab328f966a7007076a3ca8bc18ab0b8baaabe4b22b8c184/connect-auth/auth.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body>
