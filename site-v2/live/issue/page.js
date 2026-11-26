@@ -12,7 +12,7 @@
   const STEP = { not_fixed: '没修好', deferred: '先放着', superseded: '并进了别的一件', not_done: '没办成' };
   const KIND = { repair: '修理', verify: '验收' };
   const HOST = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
-  let viewer = 'public', item = null, history = [], at = null, repeat, repeatAsked = false, first = true;
+  let viewer = 'public', item = null, history = [], misjudged = [], at = null, repeat, repeatAsked = false, first = true;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
@@ -164,7 +164,7 @@
     // AI 约好的事也带 object（就是那句话），不能拿它判；自动修理查出来的件编号以 auto- 开头
     const fault = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
     if (!fault || repeat === undefined) return '';
-    const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p></section>`;
+    const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
     const rule = `30 天内第 3 次坏，自动修理停手、转给${you()}。`;
     if (!repeat) return card(`近 30 天只坏了这一次。${rule}`);
     const n = Number.isInteger(repeat.broken_30d) ? repeat.broken_30d : null, dates = (repeat.broken_at || []).filter(timed);
@@ -172,6 +172,19 @@
     const said = n != null ? `近 30 天坏了 ${esc(n)} 次${timed(lastAt) ? `，最近一次 ${esc(when(lastAt))}` : ''}。` : Number.isInteger(repeat.reopen_count) ? `修好以后又出现过 ${esc(repeat.reopen_count)} 次。` : '';
     const handed = repeat.handed_to_owner ? `已转给${you()}${site(repeat.owner_href) ? ` ${go(repeat.owner_href, '看那张卡')}` : ''}。` : n != null && n < 3 ? rule : '';
     return said || handed ? card(said + handed) : '';
+  }
+  // 坏了几次的依据（后台 broken_basis，一句话）和误判：近 30 天当时判了坏、现在不算的次数（misjudged_30d），
+  // 单件回包给原记录（misjudged_records：时刻、当时记的、为什么不算、那一轮），收在“另有 N 次是误判”里，点开看。后台没给就什么都不写
+  function basisOf(d) {
+    const pick = key => repeat && repeat[key] != null ? repeat[key] : d[key];
+    const basis = T(pick('broken_basis')), n = Number.isInteger(pick('misjudged_30d')) ? pick('misjudged_30d') : misjudged.length || 0;
+    const rows = misjudged.filter(r => r && (timed(r.at) || T(r.summary)));
+    const line = basis ? `<p class="iss-basis">怎么算坏：${F(nodot(pick('broken_basis')), '怎么算坏')}。</p>` : '';
+    if (!n) return line;
+    const head = `另有 ${esc(n)} 次是误判，没算进去`;
+    if (!rows.length) return `${line}<p class="iss-basis">${head}。</p>`;
+    const row = r => `<li><p><b class="iss-when">${esc(when(r.at))}</b>${T(r.summary) ? F(r.summary, '当时记的') : ''}</p>${T(r.why) || site(r.href) ? `<p class="iss-meta">${[T(r.why) && `不算：${F(r.why, '为什么不算')}`, site(r.href) && go(r.href, goName(r.href))].filter(Boolean).join(' · ')}</p>` : ''}</li>`;
+    return `${line}<details class="iss-more iss-misjudged"><summary>${head}</summary><ol>${rows.map(row).join('')}</ol></details>`;
   }
   // 来源：记下这件事的那场对话；没有对话的写后台给的原因（自动修理自己查出来的那句）
   function sourceCard(d) {
@@ -238,6 +251,7 @@
       if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
       $('rest').hidden = false; ended = false;
       at = meta.at || d.at || null; item = d.item; history = Array.isArray(d.history) ? d.history : [];
+      misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
       render(); loadRepeat();
     },
     link(s) {

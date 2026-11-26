@@ -50,6 +50,14 @@
 /* 右边三张小卡 */
 .iss-side { padding: 18px 24px 20px; }
 .iss-side > p { margin: 0; font-size: 15px; line-height: 25px; color: var(--ink-soft); overflow-wrap: anywhere; }
+/* 反复出现那张卡下面：怎么算坏（小字），误判的原记录收着、点开看 */
+.iss-side > p.iss-basis { margin: 8px 0 0; font-size: 13.5px; line-height: 22px; color: var(--muted); }
+.iss-misjudged > ol { margin: 6px 0 0; padding: 0; list-style: none; }
+.iss-misjudged li { padding: 6px 0; border-top: 1px solid var(--hair); }
+.iss-misjudged li:first-child { border-top: 0; }
+.iss-misjudged li > p { margin: 0; font-size: 14px; line-height: 22px; color: var(--ink-soft); overflow-wrap: anywhere; }
+.iss-misjudged li > p.iss-meta { margin-top: 2px; font-size: 13.5px; color: var(--muted); }
+.iss-misjudged .iss-when { margin-right: 8px; color: var(--ink); }
 .iss-facts.rec-facts { margin: 4px 0 0; border: 0; }
 .iss-facts .rec-fact { grid-template-columns: 104px minmax(0, 1fr); padding: 8px 0; border-top: 1px solid var(--hair); }
 .iss-facts .rec-fact:first-child { border-top: 0; }
