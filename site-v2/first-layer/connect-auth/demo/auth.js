@@ -466,10 +466,27 @@
       if (retry) { go.disabled = busy || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
       go.disabled = busy || !!pending || !keys.every(fresh) || !/^\d{6}$/.test(code()) || minutes === null || !p?.factor?.available || cooldownUntil > clock() || minutes < p.minimum_minutes || keys.some(k => (remainingMinutes(state[fields[k]], clock()) || 0) + minutes > p.maximum_minutes);
     }
+    // 整段码（粘贴、手机键盘的剪贴板条、短信自动填、苹果的一次性码）：格子不限 1 位，整段进来再分到各格。
+    // 够 6 位就从第 1 格填满（在哪一格粘都一样），不够 6 位从这一格往后填；光标停在最后填上的那格。
+    // 全角数字照半角算，空格、横杠去掉；整段短信里有一串正好 6 位的数，就取那一串。
+    const digitsOf = text => String(text || '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\D/g, '');
+    const codeOf = text => { const plain = String(text || '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)); return plain.match(/(?:^|\D)(\d{6})(?!\d)/)?.[1] || digitsOf(plain); };
+    const spread = (i, digits) => {
+      root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; });
+      const from = digits.length >= boxes.length ? 0 : i, part = digits.slice(0, boxes.length - from);
+      [...part].forEach((n, j) => { boxes[from + j].value = n; });
+      const last = boxes[from + part.length - 1]; last.focus(); last.setSelectionRange?.(1, 1); sync();
+    };
     boxes.forEach((box, i) => {
-      box.oninput = () => { if (root.classList.contains('has-error')) { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); } box.value = box.value.replace(/\D/g, '').slice(-1); if (box.value) boxes[i + 1]?.focus(); sync(); };
+      box.oninput = e => {
+        // 一位一位手打：只留这次打的那一位；一次进来不止一位（没走粘贴事件、直接插进格子的整段）：照整段分到各格
+        const typed = /^insert(Text|CompositionText)$/.test(e.inputType || '') ? digitsOf(e.data) : '';
+        if (digitsOf(box.value).length > 1 && typed.length !== 1) return spread(i, codeOf(box.value));
+        if (root.classList.contains('has-error')) { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); }
+        box.value = typed || digitsOf(box.value).slice(-1); if (box.value) boxes[i + 1]?.focus(); sync();
+      };
       box.onkeydown = e => { if (e.key === 'Backspace' && !box.value) boxes[i - 1]?.focus(); if (e.key === 'Enter' && !go.disabled) go.click(); };
-      box.onpaste = e => { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); e.preventDefault(); [...e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6 - i)].forEach((n, j) => { boxes[i + j].value = n; }); sync(); };
+      box.onpaste = e => { e.preventDefault(); const digits = codeOf(e.clipboardData?.getData('text')); if (digits) spread(i, digits); };
     });
     both.onchange = sync;
     // 提交时把光标从码格里拿走：回车提交后格子里不留闪着的光标和黑框（本人 11-24 M800）
