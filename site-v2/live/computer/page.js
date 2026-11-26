@@ -452,6 +452,57 @@
   const appBlock = () => computer?.blocks?.apps_now;
   const appGap = key => appBlock()?.rankings?.[key]?.missing_reason === 'read_failed' ? '这类进程明细读取失败' : '这类没读到进程明细';
   const sampleNote = at => iso(at) ? `${stale(appBlock()) || offline() ? '上次实测' : '采样'} ${U.time(at)}` : '';
+  // 三个榜各先露 3 个（/computer 回包的 apps_now）。后台给了同一次采样的整份榜（computer/processes?group=cpu|gpu|memory，L1）时，
+  // 每个榜底下“再看 10 个”每点一次多摆 10 个，一直能看到底；下一批在点之前先取好，点下去马上接上。换了一次采样就从头重取，已展开的照样展开。
+  // 后台没有这个读口（现役）或第一批就取不到时，照旧只列 3 个，不出按钮。续读的行只有程序名和读数（任务归属只跟着前 3 个）。
+  const APP_FIRST = 3, APP_STEP = 10;
+  const appMore = Object.fromEntries(APPS.map(([k]) => [k, { at: null, rows: null, prev: null, next: null, total: null, shown: APP_FIRST, busy: false, failed: null, gen: 0 }]));
+  let appRedraw = null;
+  function appSample(k, at) {
+    const m = appMore[k];
+    if (at === m.at) return;
+    m.gen += 1; m.at = at; m.prev = m.rows || m.prev; m.rows = null; m.next = null; m.total = null; m.failed = null;
+    if (at) appFill(k);
+  }
+  async function appFill(k) {
+    const m = appMore[k];
+    while (m.at && !m.busy && !m.failed && (m.rows == null || m.rows.length < m.shown + APP_STEP && m.next)) {
+      const gen = m.gen, first = m.rows == null;
+      m.busy = true;
+      let s = null;
+      try {
+        s = await window.Live.get('computer/processes', first ? { group: k, limit: String(Math.min(200, m.shown + APP_STEP)) }
+          : { group: k, limit: String(APP_STEP), cursor: m.next });
+      } catch { s = null; }
+      m.busy = false;
+      if (gen !== m.gen) continue;
+      const d = s?.data;
+      if (!Array.isArray(d?.items)) { m.failed = first ? 'first' : 'page'; break; }
+      m.rows = first ? d.items.map(a => ({ ...a, at: d.source_at })) : [...m.rows, ...d.items.map(a => ({ ...a, at: d.source_at }))];
+      m.next = d.items.length && d.next !== m.next ? d.next : null;
+      m.total = Number.isFinite(d.total) ? d.total : m.rows.length;
+      if (first) m.prev = null;
+    }
+    appRedraw?.();
+  }
+  // 续读的行照前 3 个的写法：访客看不到的名字照样写“仅本人可见”，程序名换成易认的名字
+  function sampleRows(k) {
+    const m = appMore[k], rows = m.rows || m.prev;
+    if (!(m.shown > APP_FIRST && rows)) return null;
+    return rows.slice(0, m.shown).map((a, i) => {
+      const hidden = restricted(a) && netViewer !== 'owner' || a.visibility === 'pending' || a.name && typeof a.name === 'object';
+      const name = hidden ? (typeof a.name === 'object' && a.name ? a.name : { visibility: a.visibility ?? 'owner', hidden_what: a.hidden_what, hidden_block: a.hidden_block }) : (U.programName?.(a.name) ?? a.name);
+      return { key: `${k}-s${i}`, name, value: hidden ? null : a.value, unit: hidden ? null : a.unit, at: hidden ? null : a.at, sub: '' };
+    });
+  }
+  function appMoreButton(k) {
+    const m = appMore[k], total = m.rows ? m.total : null, left = total == null ? 0 : total - m.shown;
+    const waiting = m.rows && m.rows.length < Math.min(total, m.shown) && !m.failed;
+    const hidden = !(m.failed === 'page' || left > 0 || waiting);
+    const text = m.failed === 'page' ? '这一批没读到，点一下再取 <span class="more__chev">›</span>' : waiting ? '正在取…'
+      : left > APP_STEP ? `再看 ${APP_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`;
+    return { hidden, waiting, text };
+  }
   function programRows(k) {
     const rows = new Map();
     for (const [i, a] of (computer?.apps_now?.[k] || []).entries()) {
@@ -479,20 +530,32 @@
     };
   }
   function appsChapter(el) {
-    el.innerHTML = `<div class="grp-trio">${APPS.map(([k, name]) => `<div><span class="grp-trio__k">${name} <small data-sample="${k}"></small></span><div data-x="${k}"></div></div>`).join('')}</div>
+    el.innerHTML = `<div class="grp-trio">${APPS.map(([k, name]) => `<div><span class="grp-trio__k">${name} <small data-sample="${k}"></small></span><div data-x="${k}"></div><button class="more" type="button" data-app-more="${k}" style="margin-top:8px" hidden></button></div>`).join('')}</div>
       <p style="margin:14px 0 0"><a class="more more--link" href="${esc(route('/live/apps/'))}">谁在占 <span class="more__chev">›</span></a></p>`;
     const end = document.createElement('p'); end.className = 'computer-chart-end'; el.prepend(end);
     const ranks = Object.fromEntries(APPS.map(([k]) => [k, V.rank(el.querySelector(`[data-x="${k}"]`), { show: Infinity, mark: true, missing: () => appGap(k), keepNameOnlyRows: true })]));
+    el.addEventListener('click', e => {
+      const btn = e.target.closest('[data-app-more]');
+      if (!btn || btn.disabled) return;
+      const m = appMore[btn.dataset.appMore];
+      if (m.failed === 'page') m.failed = null; else m.shown += APP_STEP;
+      draw(); appFill(btn.dataset.appMore);
+    });
     const draw = () => {
       const entries = APPS.map(([k]) => [k, programRows(k)]), empty = !entries.some(([, rows]) => rows.length);
       el.querySelector('.grp-trio').hidden = empty; end.hidden = !empty || !computer; end.textContent = offline() ? missing() : '这次没读到进程明细';
-      if (!empty) for (const [k, rows] of entries) {
+      if (!empty) for (const [k, preview] of entries) {
+        if (!offline()) appSample(k, preview[0]?.at || null);
+        const rows = sampleRows(k) || preview;
         const at = rows[0]?.at;
         const shared = rows.length > 1 && at && rows.every(row => Date.parse(row.at) === Date.parse(at)) ? sampleNote(at) : '';
         el.querySelector(`[data-sample="${k}"]`).textContent = shared ? ` · ${shared}` : '';
         ranks[k].set(rows.length ? shared ? rows.map(a => ({ ...a, sub: a.gap })) : rows : null);
+        const btn = el.querySelector(`[data-app-more="${k}"]`), state = appMoreButton(k);
+        btn.hidden = state.hidden || offline(); btn.disabled = state.waiting; U.html(btn, state.text);
       }
     };
+    appRedraw = draw;
     draw();
     return { set: draw };
   }
