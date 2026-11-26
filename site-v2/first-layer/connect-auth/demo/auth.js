@@ -58,6 +58,16 @@
     const day = diff <= 0 ? '今天' : diff === 1 ? '明天' : '周' + '日一二三四五六'[d.getUTCDay()];
     return `到${day} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
   }
+  function observation(key, value) {
+    const own = Number.isFinite(value?.observed_at_unix) && value.observed_at_unix > 0 ? value.observed_at_unix * 1000 : null;
+    const at = own ?? (key !== 'win' && value?.state && value.state !== 'unknown' && Date.parse(state?.at));
+    const freshRead = own && online && meta.source === 'net' && Math.abs(clock() - own / 1000) <= 120;
+    const text = Number.isFinite(at) ? window.Live.stamp(at) : '';
+    const note = document.createElement('span');
+    note.className = text && !freshRead ? 'cell__observation is-old' : 'cell__observation';
+    note.textContent = freshRead ? text.slice(-5) + ' 读到' : text ? '最后读到 ' + text : '没读到是几点的';
+    return note;
+  }
   const fresh = key => {
     const at = state?.[fields[key]]?.observed_at_unix ?? Date.parse(meta.at) / 1000;
     return online && meta.source === 'net' && (meta.status === 200 || meta.status === 304)
@@ -525,6 +535,7 @@
         const note = document.createElement('button'); note.type = 'button'; note.className = 'trust-note'; note.dataset.trustView = '';
         note.textContent = '可信设备可见'; stateLine.append(note);
       }
+      if (state && !privateState) stateLine.append(' · ', observation(key, grant));
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
       if (key === 'win' && windowsHint && !windowsHints[windowsHint]()) windowsHint = '';

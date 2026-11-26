@@ -338,6 +338,7 @@ body {
   transition: color .9s ease, opacity .22s ease;
 }
 .cell:not(.is-on):not(.is-private) .cell__state { color: #b0aea6; }
+.cell__observation.is-old { color: var(--muted); }
 
 .cell__acts {
   display: flex;
