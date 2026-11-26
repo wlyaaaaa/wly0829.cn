@@ -70,7 +70,7 @@
         return `<small class="pj-cadence pj-cadence--wrap">${e(measured)}</small>${arrow}`;
       }
       if (hasInterval && !cadence) {
-        return `<small class="pj-cadence pj-cadence--wrap"><span class="pj-no-split">网页每 ${minutes} 分钟刷新一次，</span><wbr><span class="pj-no-split">内容不一定变</span></small>${arrow}`;
+        return `<small class="pj-cadence pj-cadence--wrap pj-cadence--refresh"><span class="pj-no-split">网页每 ${minutes} 分钟刷新一次，</span><wbr><span class="pj-no-split">内容不一定变</span></small>${arrow}`;
       }
     }
     const names = { live: '实时更新', sample: '定时测量', hourly: '每小时更新', daily: '每天更新', nightly: '每晚更新', weekly: '每周更新', monthly: '每月更新', manual: '手动更新', on_change: '变更时更新' };
