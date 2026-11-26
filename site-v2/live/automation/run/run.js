@@ -143,8 +143,6 @@
     .replace('<span class="live-mark__label">访客看不到</span>', '<span class="live-mark__label">访客打不开</span>');
   function made(r) {
     const receipt = r.receipt || {};
-    // 自动修理的业务回执就是“这件修理的全部几轮”那一页，右栏已经有，这里不再放一遍
-    const ownHref = receipt.href && receipt.href !== r.subject?.href;
     // 本人版什么都给全：后台给本人的也只是“仅本人可见……”这类占位话（后台缺数）时，这一行照样在，写清后台没给原文，
     // 不悄悄少一行、不让本人看到的比访客少（私事线 11-26 04:43）。访客版照后台给的字
     const noOriginal = x => viewer === 'owner' && /^仅本人可见/.test(plainOf(x?.title ?? x?.text ?? x));
@@ -155,7 +153,7 @@
     const pointsTo = x => [x?.output_id != null && x.output_id !== '' && `id:${x.output_id}`, T.path(x?.href) && `href:${T.path(x.href)}`, typeof x?.local_path === 'string' && x.local_path && `file:${x.local_path}`].filter(Boolean);
     const sameThing = x => { const keys = pointsTo(x); return keys.length ? keys.some(k => outs.has(k)) : r.outputs.some(o => sameText(o.title, x?.title ?? x?.text ?? x)); };
     const mine = list(receipt.recorded).filter(x => !sameThing(x));
-    if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
+    if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !receipt.href) return '';
     // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；链接访客那边没有的（outputs[].visitor_labels.href = hidden），本人版链接后挂“访客看不到”（主控 11-26 11:02，等后台给）；
     // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
@@ -163,7 +161,7 @@
         : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x?.title ?? x?.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
-      ownHref && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
+      receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
     const count = !rows && r.outputCount > 0 ? `<p class="ar-none">做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。</p>` : '';
     return `<section class="tp-panel ar-card ar-made"><h2>这一轮做成了什么</h2>${rows ? `<ol class="ar-outs">${rows}</ol>` : count}${extra}</section>`;
   }
