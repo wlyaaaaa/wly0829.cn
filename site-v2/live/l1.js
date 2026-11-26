@@ -1298,16 +1298,23 @@
     const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
     return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
   }
+  const stutterGroup = data => data?.groups?.find(g => g.key === 'stutter');
+  const stutterUnread = data => data?.attention_summary?.unread?.find(g => g.key === 'stutter');
+  const stutterReason = value => {
+    const text = sp(U.fieldText(value, viewer)).trim();
+    return /[\u3400-\u9fff]/.test(text) && !/^(?:这项还没有完整读数|本轮没有读到可用记录|没有记录)$/.test(text);
+  };
+  const stutterTimed = row => [row?.recorded_at, row?.observed_at, row?.at].some(timed);
   function stutterGapNote(data) {
-    const row = data.groups?.find(g => g.key === 'stutter');
-    const unread = data.attention_summary?.unread?.find(g => g.key === 'stutter');
-    const reading = { ...row, ...unread };
-    const gaps = [unread?.missing, row?.missing].find(m => m && Object.keys(m).some(k => /[\u3400-\u9fff]/.test(k)));
-    const reasons = gaps ? Object.hasOwn(gaps, '卡顿采样') ? [gaps['卡顿采样']] : Object.values(gaps) : [];
-    const reason = reasons.filter(v => U.fieldText(v, viewer).trim()).map(v => U.fieldHtml(v, { name: '卡顿缺数原因', kind: viewer })).join('、');
-    const hasFrame = Object.hasOwn(reading, 'recorded_at'), last = recordStamp(reading.recorded_at);
-    const until = recordStamp(reading.observed_at ?? row?.at ?? (!hasFrame && reading.at));
-    const why = reading.read_error === true ? '这次读取失败' : reason && (reading.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
+    const row = stutterGroup(data), unread = stutterUnread(data);
+    const gaps = row?.missing || unread?.missing;
+    const reasons = gaps ? [gaps['卡顿采样'], ...Object.values(gaps)] : [];
+    const detail = [row?.read_gap, ...reasons, unread?.reason].find(stutterReason);
+    const reason = detail && U.fieldHtml(detail, { name: '卡顿缺数原因', kind: viewer });
+    const frame = Object.hasOwn(row || {}, 'recorded_at') ? row : unread || {};
+    const hasFrame = Object.hasOwn(frame, 'recorded_at'), last = recordStamp(frame.recorded_at);
+    const until = recordStamp(row?.observed_at ?? row?.at ?? unread?.observed_at ?? (!hasFrame && unread?.at));
+    const why = row?.read_error || unread?.read_error ? reason || '这次读取失败' : reason && (row?.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
     // 原因里已经说了“没有采到合格帧”，后面不再跟一句“没读到合格帧记录”（同一件事说两遍，r83 返修第三轮）
     const times = [hasFrame && (last ? `最后读到 ${last}` : !/合格帧/.test(String(reason)) && '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
     return [why, esc(times)].filter(Boolean).join('；');
@@ -1707,6 +1714,13 @@
       // 真垫底里的计数仍在，没存下来的行列表不一定随包；保留已有行，只补空数组。
       d = { ...d };
       for (const id of HOME_IDS) d[id] = { ...U.withoutSnapshotCutoff(d[id], meta.at), items: Array.isArray(d[id]?.items) ? d[id].items : [] };
+      // 快首页若只返回卡顿缺读占位，沿用同一受众上一次的具体原因和原采时。
+      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
+        const next = stutterGroup(d.computer), unread = stutterUnread(d.computer), previous = stutterGroup(home?.computer);
+        if (previous && stutterTimed(previous) && !stutterTimed(next) && !stutterTimed(unread) && !stutterReason(next?.read_gap) && !stutterReason(unread?.reason)) {
+          d.computer.groups = [...(d.computer.groups || []).filter(g => g.key !== 'stutter'), previous];
+        }
+      }
       const waiting = d.needs.waiting || [], ages = new Map(waiting.map(it => [it.id, it.age_days]));
       d.needs.items = d.needs.items.length ? d.needs.items.map(it => ages.has(it.id) ? { ...it, age_days: ages.get(it.id) ?? it.age_days } : it) : waiting;
       for (const key of ['active', 'recent', 'fallback']) d.chats[key] = Array.isArray(d.chats[key]) ? d.chats[key] : [];
