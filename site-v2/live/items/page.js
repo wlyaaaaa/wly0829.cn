@@ -439,7 +439,6 @@
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });
-    if (viewer === 'owner' && (key === 'closed' || key === 'later')) U.settleItemWrites?.(foundWrite);
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
     if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);
