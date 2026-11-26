@@ -106,6 +106,7 @@
   const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
   // 在干和状态不明的分界照后台 live_chat_board.py 的 status_fields：这一轮没结束、离最后一条记录不到 2 小时算在干（30 分钟起在原因里写“已经 N 分钟没动静”），
   // 满 2 小时还没有这一轮的结束记录就标状态不明、进“停下了，没归档”（M928 机制写清；数字改了要跟着改）
+  // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/live_chat_board.py 的 status_fields 查 idle 与 timedelta(hours=2) 的比较，现满 2 小时无新记录且没结束记录转为状态不明；变了改这句
   const IDLE_LIMIT = '2 小时';
   const UNKNOWN_RULE = `在干的对话超过 ${IDLE_LIMIT}没新记录、也没有这一轮的结束记录，就标状态不明，挪到“停下了，没归档”；读不到记录的也标这个，原因写在各行`;
   // 行首：排序用的时刻（后台 sort_at）＋这一类的动词（“起在做”“问你”“停下”“归档”）；没有时刻写“时刻没读到”（这一行已排在栏底）
