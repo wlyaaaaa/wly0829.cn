@@ -201,3 +201,9 @@
   content: attr(data-count); position: absolute; left: 13px; top: -4px; white-space: nowrap;
   color: var(--ink-soft); font: 11px/14px var(--sans);
 }
+/* “此刻谁在占”往下展开后卡片会拉得很长：画照首批时的高度留在顶上、下沿淡进玻璃，不跟着卡片高度放大（L1） */
+.page--computer .grp.grp--long .card__pic { bottom: auto; height: min(100%, var(--pic-h, 420px));
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%), linear-gradient(180deg, #000 60%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(270deg, #000 0%, #000 30%, rgb(0 0 0 / .93) 38%, rgb(0 0 0 / .78) 47%, rgb(0 0 0 / .55) 56%, rgb(0 0 0 / .32) 65%, rgb(0 0 0 / .14) 74%, rgb(0 0 0 / .04) 82%, transparent 90%), linear-gradient(180deg, #000 60%, transparent);
+  mask-composite: intersect; }

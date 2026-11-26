@@ -538,6 +538,9 @@
       const btn = e.target.closest('[data-app-more]');
       if (!btn || btn.disabled) return;
       const m = appMore[btn.dataset.appMore];
+      // 第一次往下展开前记下卡片这时的高度：画照这个高度留在顶上，不跟着卡片拉长放大（L1）
+      const card = el.closest('.grp');
+      if (card && !card.classList.contains('grp--long')) { card.style.setProperty('--pic-h', `${card.offsetHeight}px`); card.classList.add('grp--long'); }
       if (m.failed === 'page') m.failed = null; else m.shown += APP_STEP;
       draw(); appFill(btn.dataset.appMore);
     });
