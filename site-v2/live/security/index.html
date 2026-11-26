@@ -33,11 +33,21 @@
 .page--security .vz-audit__n > span:last-child { white-space: nowrap; }
 .page--security .vz-audit__n b { display: inline-block; min-width: 44px; text-align: right; }
 .page--security .vz-audit__pills { flex-wrap: wrap; }
+.page--security .grp[data-key="impersonation"] .vz-audit__list { container-type: inline-size; }
+@media (width > 600px) {
+  @container (max-width: 620px) {
+    .page--security .vz-audit__row[data-key="impersonation"] > .vz-audit__head { grid-template-columns: 20px minmax(0, 1fr) auto 20px; gap: 6px 10px; }
+    .page--security .vz-audit__row[data-key="impersonation"] .vz-audit__pills { grid-column: 2 / -2; grid-row: 2; }
+    .page--security .vz-audit__row[data-key="impersonation"] .vz-audit__chev { grid-column: -2; grid-row: 1; }
+    .page--security .vz-audit__row[data-key="impersonation"] .vz-pill { display: inline-block; max-width: 100%; height: auto; min-height: 24px; padding-block: 3px; white-space: normal; overflow-wrap: anywhere; }
+  }
+}
 .page--security .security-audit-link { font-size: 13px; font-weight: 400; color: var(--muted); }
 .page--security .vz-audit__rows > .security-audit-group { display: block; border: 0; padding: 0; }
 .page--security .security-audit-group .vz-audit__rows { margin-left: 0; }
 .page--security .security-audit-group > .vz-note { margin: 12px 0 4px; }
 .page--security .security-clue-why { display: block; margin-left: 0; color: var(--muted); }
+.page--security .security-seg { display: inline-block; max-width: 100%; }
 .page--security .security-life { margin-right: 24px; }
 .page--security .security-life .chart__plot { height: 240px; }
 .page--security .grp[data-key="impersonation"] .grp__chapter { padding-bottom: 12px; }

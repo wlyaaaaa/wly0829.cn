@@ -25,11 +25,7 @@
   // 总表每格最后画成什么（状态、字），左栏“为什么”和右栏“副本旧了”照它说，和总表同一个说法
   const cells = new Map(), cellOf = (id, key) => cells.get(`${id}:${key}`);
   const BAD = ['stale', 'gap', 'mostly', 'partial', 'failed'];
-  // 后台恢复说明换成人话；没对上的原样显示
-  const PLAIN = [[/软件没有列出取回了哪些文件/, '没记取回了哪些文件'], [/恢复结果存在选定的还原目录旁，没有集中记录/, '从这里恢复的文件放在你选的目录旁，没有统一记录'],
-    [/现有记录只覆盖文件恢复操作，离线整机还原没有可查的记录/, '离线整机还原不留记录，这里查不到']];
-  // 访客版不对访客称“你”：“放在你选的目录旁”写成“放在本人选的目录旁”（r83 返修第三轮）
-  const plain = text => { const hit = typeof text === 'string' ? PLAIN.find(([re]) => re.test(text))?.[1] : undefined; return hit && viewer === 'public' ? hit.replaceAll('你', '本人') : hit; };
+  const plain = text => { const note = D.backupRestoreNote(text); return note !== text ? note : ''; };
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
@@ -70,7 +66,7 @@
     const problems = [], fine = [], unchecked = [];
     for (const key of ['g', 'h', 'drive', 'photos']) {
       const c = cellOf(s.id, key); if (!c) continue;
-      const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => Number.isInteger(v);
+      const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => o.exact === true && Number.isInteger(v);
       if (c.state === 'stale') problems.push(`${where}副本旧了${copy.content_at ? `，停在 ${stamp(copy.content_at).trim()}` : ''}`);
       else if (c.state === 'mostly') problems.push(`${where}这轮大部分成功${n(o.failed) ? `，${o.failed} 份没备上` : ''}`);
       else if (c.state === 'partial') problems.push(`${where}这轮部分成功${n(o.ok) && n(o.failed) ? `，备上 ${o.ok} 份、没备上 ${o.failed} 份` : ''}`);
@@ -102,11 +98,11 @@
     const retainedShort = d.at && U.date(d.at) === U.date(Date.now()) ? U.time(d.at) : retainedAt;
     const batchNote = batchFailed ? `<span>${retainedAt ? `下表沿用 ${esc(retainedShort)} 的记录` : '这次没读到，下表是上一次的记录'}。带“上次确认”的是旧数，带“本次没读到”的还等更新。</span>` : '';
     const localCaption = localNote ? `<span>${field(localNote, '本机说明')}</span>` : '';
-    // G、H 盘的“大部分成功／部分成功”怎么分：表里出现这两档时在表头说一次。
+    // 表里出现备份结果分档时，在表头说明确数和估档的区别。
     // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     let tierSeen = false;
     const caption = () => {
-      const tierNote = tierSeen ? '<span>G、H 盘按这一轮备上多少分档：没备上的不超过一半写“大部分成功”（黄），超过一半写“部分成功”（橙），一份也没备上才写“备份失败”（红）。</span>' : '';
+      const tierNote = tierSeen ? '<span>G、H 盘按这一轮备上多少分档：没备上的不超过一半写“大部分成功”（黄），超过一半写“部分成功”（橙），一份也没备上才写“备份失败”（红）。份数没数全时照备份程序报的档位写，比例说不准；一点结果都没收到的，不算失败。</span>' : '';
       return batchNote || localCaption || tierNote ? `<caption class="pj-note">${batchNote}${localCaption}${tierNote}</caption>` : '';
     };
     const refreshLabels = { read: '本次读到清单', failed: '本次没读到', not_recorded: '本次读取未登记', not_applicable: '本次无需读清单' };
@@ -137,7 +133,7 @@
     const copyCell = (s, key) => {
       const copy = s[key], retired = key === 'g' && copy?.retired === true;
       const cloud = key === 'drive' || key === 'photos', original = key === 'local', cold = key === 'h';
-      const cell = (state, label, lines = [], details = '') => `<td data-copy="${key}" data-state="${state}"><b>${tableText(label)}</b>${lines.filter(Boolean).map(text => `<small>${tableText(text)}</small>`).join('')}${details}</td>`;
+      const cell = (state, label, lines = [], details = '', lead = '') => `<td data-copy="${key}" data-state="${state}"><b>${tableText(label)}</b>${lead}${lines.filter(Boolean).map(text => `<small>${tableText(text)}</small>`).join('')}${details}</td>`;
       if (!retired && (copy?.required === false || original && copy?.original_state === 'not_applicable')) return cell('none', '不适用');
       const current = copy?.state, complete = ['ready', 'complete', 'completed'], queued = ['waiting', 'queued', 'stable'];
       const problem = state => ({
@@ -153,6 +149,8 @@
       const confirmedAt = legacyCloud ? copy.checked_at : copy?.confirmed_at;
       const historical = cloud && (copy?.confirmed_state ?? (legacyCloud && (confirmedAt || copy.content_at || batchFailed && retainedAt) ? current : null));
       const confirmed = cold ? confirmedH.has(s.id) : complete.includes(historical);
+      const showConfirmation = cold ? confirmed : cloud ? historical && historical !== 'unknown'
+        : key === 'g' && copy?.confirmed_state === 'complete' && (copy.count == null || stamp(copy.checked_at) !== stamp(confirmedAt));
       const historicalProblem = prior && problem(historical), currentState = current === 'stale' ? 'stale' : anomaly ? 'gap' : '';
       const pending = cloud ? waiting(copy) : null, inQueue = cloud && (pending.count > 0 || queued.includes(current) || prior && queued.includes(historical));
       const knownCloud = cloud && (confirmed || !prior && complete.includes(current));
@@ -176,14 +174,14 @@
         return why && copy[k] == null && (k === 'eligible_at' ? uploads || inQueue : copy.sent != null || copy.total != null) ? [`${name}：${field(reason(why), name)}`] : [];
       });
       // 点开“副本说明”要多给一句原因：取第一句真有内容的（停用的副本 gap 写“没有记录”时用停用原因），只剩“没有记录”“不适用”这种空话的不做成可展开的字。
-      const causes = [[copy?.why, copy?.gap, retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => field(value, '副本说明'))
+      const causes = [[copy?.why, copy?.gap, D.backupFailureReason(copy?.failure_reason), retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => field(value, '副本说明'))
         .concat(details.filter(line => !emptyWord(line.replace(/<[^>]*>/g, '').replace(/^[^：]*：/, ''))));
       const lines = [cold && confirmed && anomaly && hLabel, uploadNote !== label && uploadNote, waitNote !== label && waitNote, unconfirmed,
         cloud && copy?.sent == null && copy?.total != null && `共 ${D.transferCount(copy, 'total', key)}`,
         // 份数是哪一份清单上的：带上清单时刻，和表头“本次读于”分开（M580）。
         !cloud && copy?.count != null && `${D.count(copy, 'count')} 份${copy.checked_at ? ` · 按 ${stamp(copy.checked_at).trim()} 清单` : ''}`,
         copy?.failed > 0 && `失败 ${D.transferCount(copy, 'failed', key)}`,
-        (cold ? confirmed : historical && historical !== 'unknown') && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
+        showConfirmation && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
         // G、H 盘没核实又没有副本日期的，写明副本日期没登记（后台补上日期才判得了齐没齐）
@@ -195,15 +193,34 @@
       // 和计划任务同一套颜色；后台没给分档或分不出的照旧
       const tier = (key === 'g' || cold) && (told || anomaly === problem('failed')) && TIER[copy?.outcome?.state];
       if (tier) {
-        if (['mostly', 'partial'].includes(tier[0])) tierSeen = true;
-        const o = copy.outcome, counts = ['mostly', 'partial'].includes(tier[0]) && Number.isInteger(o.ok) && Number.isInteger(o.failed) ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
+        const o = copy.outcome, exactCounts = o.exact === true && Number.isInteger(o.ok) && Number.isInteger(o.failed);
+        const split = ['mostly', 'partial'].includes(tier[0]) && exactCounts;
+        if (tier[0] !== 'complete') tierSeen = true;
+        const counts = split ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
         // 没备全、失败的那一档，后台给的这一轮说明（如“这轮未备份……”）也写上
         const said = !told && copy.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
+        const narrowFailure = cold && s.id === 'devconfig' && tier[0] === 'failed' && said;
+        const failureNote = narrowFailure ? `<small class="backup-failure-long">${tableText(said)}</small>` : '';
+        const link = narrowFailure ? `<a class="backup-narrow-detail" href="${esc(route('/live/backup/?id=devconfig#copies-section'))}">详情 ›</a>` : '';
+        const note = causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '';
         cells.set(`${s.id}:${key}`, { state: tier[0], label: tier[1] });
-        return cell(tier[0], tier[1], [told !== tier[1] && told, said, counts, ...lines], causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+        return cell(tier[0], tier[1], [told !== tier[1] && told, !narrowFailure && said, counts, ...lines], note + link, failureNote);
       }
-      cells.set(`${s.id}:${key}`, { state: told ? 'gap' : state, label: told || label });
-      return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+      const countReason = copy?.missing?.count;
+      const countCode = countReason?.reason_code || countReason;
+      const countMissing = copy?.count == null && countCode !== 'not_applicable';
+      const gEvidenceOnly = key === 'g' && state === 'complete' && (refresh === 'failed' || countMissing);
+      const gConfirmed = copy?.confirmed_state === 'complete' && confirmedAt;
+      const evidenceLabel = gConfirmed ? '上次确认有副本' : '只核实部分副本';
+      if (gEvidenceOnly) {
+        if (refresh === 'failed') lines.unshift('本次未刷新');
+        const countNote = !countCode || countCode === 'not_recorded' ? '没有记录' : reason(countReason);
+        if (countMissing) lines.unshift(`份数：${U.fieldText(countNote, viewer)}`);
+      }
+      const shownState = told ? 'gap' : gEvidenceOnly ? 'unknown' : state;
+      const shownLabel = told || (gEvidenceOnly && evidenceLabel) || label;
+      cells.set(`${s.id}:${key}`, { state: shownState, label: shownLabel });
+      return cell(shownState, shownLabel, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
     };
     cells.clear();
     const sets = U.mergePrivateRows(byImportance((d.sets || []).filter(s => s.name)), { value: s => s.name, kind: viewer });
@@ -216,7 +233,7 @@
       const why = state.note && (s.why && state.note === field(s.why, '状态说明')
         ? explain(s.why, '备份说明') : `<small>${state.note}</small>`);
       const sizeAt = s.bytes == null ? '' : D.sizeEvidence(s, stamp);
-      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(reason(s.missing?.bytes), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(note, '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
+      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
     U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${[18,18,6,7,7,7,9,9,12,7].map(width => `<col style="width:${width}%">`).join('')}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
@@ -336,7 +353,7 @@
       // 栏底只并写别的恢复说明：“最近一次记录于 …”已写在各自那一行；“没有恢复记录”最上面已经说了
       const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text) && !/^没有恢复(?:过的)?记录[。.]?$/.test(sp(U.fieldText(text, viewer))))
         .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
-      restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
+      restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.map(note => note.replace(/[。.]$/, '')).join('；')}。</p>` : ''}</div>` });
     }
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });

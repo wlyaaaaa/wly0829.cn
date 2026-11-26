@@ -67,7 +67,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-result[data-state="failed"] { color: #a83948; }
 .task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
 /* 部分完成的那一轮和那一天：沿用计划任务列表“要留意”的黄点和字色（M381、M676） */
-.task-mark[data-state="warn"] { background: #e9b714; border-color: transparent; }
+.task-mark:is([data-state="warn"], [data-state="observed-failed"]) { background: #e9b714; border-color: transparent; }
 .task-dot[data-state="warn"] { background: #e9b714; border-color: transparent; }
 .task-result[data-state="warn"] { color: #9a6514; }
 /* 统计格和下面卡片拉开一点，“最近几次”“这个任务”的标题不和统计格挤成一块 */
@@ -88,7 +88,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-stat[data-stat="failure"] { background: #fae8eb; }
 /* “出错”那格跟着后台分档（M779）：大部分成功黄、部分成功橙、全出错红，全成功不上色 */
 .task-stats[data-outcome="ok"] .task-stat[data-stat="failure"] { background: rgb(255 255 255 / .62); }
-.task-stats[data-outcome="mostly"] .task-stat[data-stat="failure"] { background: #fbedbb; }
+.task-stats:is([data-outcome="mostly"], [data-outcome="warn"]) .task-stat[data-stat="failure"] { background: #fbedbb; }
 .task-stats[data-outcome="partial"] .task-stat[data-stat="failure"] { background: #fcdcc4; }
 .task-stats[data-outcome="failed"] .task-stat[data-stat="failure"] { background: #f9d9d6; }
 /* 出错那格读到 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色；后台给了分档仍照分档 */
@@ -121,6 +121,12 @@ h1 .task-provider { margin-left: .6em; }
 .task-row--labels { margin-left: 24px; min-height: 0; color: #545b67; font-size: 13px; }
 /* 计划任务：结果一栏放得下“没记到结束”“结果码没登记” */
 .page--task[data-variant="plan"] .task-row { grid-template-columns: 128px 112px 150px minmax(0, 1fr) auto; }
+@media (max-width: 1199px) {
+  .page--task[data-variant="plan"] .task-row { grid-template-columns: 84px 62px 66px minmax(4em, 1fr) auto; gap: 6px; }
+  .page--task[data-variant="plan"] .task-row > :is(time, .task-row__duration) { white-space: normal; }
+  .page--task[data-variant="plan"] .task-row > .task-row__duration { word-break: keep-all; }
+  .page--task[data-variant="plan"] .task-row > span:nth-child(4) { overflow-wrap: break-word; }
+}
 /* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
 #more-runs { position: relative; }
 #more-runs[open] { padding-bottom: 30px; }

@@ -17,7 +17,6 @@
 #attention .stut { grid-template-columns: repeat(2,minmax(0,1fr)); }
 #attention .stut__card { min-height: 0; grid-template-columns: 80px 136px minmax(0,1fr); align-items: center; }
 #attention .stut__t { grid-row: auto; }
-#attention .stut__card[data-status="unsure"] .stut__s,#attention .stut__card[data-status="not_started"] .stut__s { color: #a36a21; }
 #attention .grp__chapter { min-height: 0; }
 #attention .grp:not(.is-open) .grp__chapter { min-height: 0; }
 #attention .card__glow { opacity: .08; }
@@ -63,7 +62,8 @@
 .page--notifications .notify-took { display: block; color: var(--muted); font-size: 12px; }
 .page--notifications .notify-link .more { margin-left: 0; padding-left: 0; translate: none; }
 .page--notifications .notify-private { color: var(--muted); }
-.delivery-table tr[data-status]:not([data-status="sent"]) .notify-state { color: #a36a21; }
+.page--notifications [data-status="failed"] :is(.stut__s, .notify-state) { color: #c2407f; }
+.page--notifications :is([data-status="unsure"], [data-status="not_started"]) :is(.stut__s, .notify-state) { color: #a36a21; }
 .delivery-table th:nth-child(2) { width: 30%; }
 .notify-all { margin-top: 22px; }
 .notify-all__head { display: flex; align-items: baseline; gap: 18px; padding: 24px 64px; border-radius: var(--radius, 28px); cursor: pointer; list-style: none; transition: background-color .2s; }

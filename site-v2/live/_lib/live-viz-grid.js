@@ -17,6 +17,24 @@
     const files = Number.isFinite(o.source_subset_files) ? ` ${o.source_subset_files.toLocaleString('zh-CN')} 个文件` : '';
     return `上次核对受管源树${files} · ${stamp(o.source_subset_confirmed_at).trim()}`;
   }
+  const BACKUP_FAILURES = {
+    cold_group_failed: '这轮冷备份没备齐',
+    required_backup_previous_file_unavailable: '上一份备份文件读不到，这次没出新包',
+    backup_process_interrupted: '备份做到一半被打断',
+    wechat_hot_resource_busy: '微信正占着文件',
+  };
+  function backupFailureReason(value) {
+    if (typeof value === 'string') return Object.hasOwn(BACKUP_FAILURES, value) ? BACKUP_FAILURES[value] : value;
+    if (value && typeof value === 'object') {
+      const key = typeof value.text === 'string' ? 'text' : typeof value.value === 'string' ? 'value' : '';
+      return key && Object.hasOwn(BACKUP_FAILURES, value[key]) ? { ...value, [key]: BACKUP_FAILURES[value[key]] } : value;
+    }
+    return value;
+  }
+  const backupRestoreNote = value => typeof value === 'string' ? value
+    .replace(/恢复结果存在选定的还原目录旁，没有集中记录(?:，无法判断全部恢复经过)?/, '每次文件恢复的回执放在选定的恢复目录旁，这里查不全')
+    .replace(/软件没有列出取回了哪些文件/, '没记取回了哪些文件')
+    .replace(/现有记录只覆盖文件恢复操作，离线整机还原没有可查的记录/, '离线整机还原的记录在这里查不到') : value;
   const pending = c => { const values = [c.waiting, c.stable].filter(n => n != null); return { count: values.length ? values.reduce((a, n) => a + n, 0) : null, q: values.length < 2 || partial(c, 'waiting') || partial(c, 'stable') ? 'partial' : 'ok' }; };
   function copyState(copy) {
     if (copy?.required === false) return 'none';
@@ -110,5 +128,5 @@
     const ahead = Math.min(v.days_to_full, 60), end = v.days_to_full > 0 && v.free != null && last[1] != null ? last[0] + ahead * 86400 : null;
     return { from: h.from, to: end ? new Date(end * 1000).toISOString() : h.to, series: [{ id: 'free', unit: 'GB', points }, { id: 'forecast', unit: 'GB', points: end ? [[last[0], v.free / 2 ** 30], [end, v.free / 2 ** 30 * (1 - ahead / v.days_to_full)]] : [] }] };
   }
-  window.LiveDataViz = { partial, bytes, count, gap, pair, transferUnit, transferCount, tone, backupText, copyState, protection, backupCounts, backupTotals, grid, cell, progress, spaceData, sizeEvidence, sourceSubset };
+  window.LiveDataViz = { partial, bytes, count, gap, pair, transferUnit, transferCount, tone, backupText, copyState, protection, backupCounts, backupTotals, grid, cell, progress, spaceData, sizeEvidence, sourceSubset, backupFailureReason, backupRestoreNote };
 })();
