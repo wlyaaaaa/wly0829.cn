@@ -291,7 +291,14 @@
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
     $('chat-end-date').textContent = [Number.isFinite(peak?.count) && `峰值 ${peak.count} 个${peak.at ? ` · ${stamp(peak.at)}` : ''}`,
       to && (current?.window?.from ? `${U.date(from)} 至 ${U.date(to)}` : U.date(to))].filter(Boolean).join(' · ');
-    if (!stats || stats.q === 'warming') { plots.style.display = 'none'; U.html($('chat-counts'), `<p class="row__sub">${temporary ? '对话统计暂时读不到' : U.offline?.() ? '这块没存下来，连上后补上。' : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return; }
+    if (!stats || stats.q === 'warming') {
+      plots.style.display = 'none';
+      // 电脑连不上又没存下来：和页上别的空卡一个样子，写卡名“对话统计”加一句（r83 返修第二轮）
+      if (!temporary && stats?.q !== 'warming' && U.offline?.()) { $('chat-counts').dataset.read = 'gone'; U.html($('chat-counts'), '<div class="fog"><p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">对话统计</span></p><p class="fog__say">这块没存下来，连上后补上。</p></div>'); return; }
+      delete $('chat-counts').dataset.read;
+      U.html($('chat-counts'), `<p class="row__sub">${temporary ? '对话统计暂时读不到' : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return;
+    }
+    delete $('chat-counts').dataset.read;
     function n(v, d, key, label) {
       if (d?.q === 'warming') return '<span class="row__sub">正在准备</span>';
       if (!Number.isFinite(v)) return `<span class="row__sub">${v != null ? U.fieldHtml(v, { name: label, place: 'body' }) : U.offline?.() ? '—' : esc(U.collectionText(label, d || stats))}</span>`;
