@@ -70,7 +70,7 @@
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 每段前头画点、和这段字连着（&#8288;），折到行首那个点被裁掉（page.css 的 .ak-line），行尾不悬“·”（和账本列表第二行同一个办法，主控 11-26）
     const segs = [[note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
-    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep]) => `<span class="ak-seg${keep ? ' is-keep' : ''}"><i class="ak-seg__dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join(' ')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
+    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep]) => `<span class="ak-seg${keep ? ' is-keep' : ''}"><i class="ak-seg__dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
       <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
