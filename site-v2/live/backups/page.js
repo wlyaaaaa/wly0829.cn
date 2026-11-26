@@ -66,7 +66,7 @@
     const problems = [], fine = [], unchecked = [];
     for (const key of ['g', 'h', 'drive', 'photos']) {
       const c = cellOf(s.id, key); if (!c) continue;
-      const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => Number.isInteger(v);
+      const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => o.exact === true && Number.isInteger(v);
       if (c.state === 'stale') problems.push(`${where}副本旧了${copy.content_at ? `，停在 ${stamp(copy.content_at).trim()}` : ''}`);
       else if (c.state === 'mostly') problems.push(`${where}这轮大部分成功${n(o.failed) ? `，${o.failed} 份没备上` : ''}`);
       else if (c.state === 'partial') problems.push(`${where}这轮部分成功${n(o.ok) && n(o.failed) ? `，备上 ${o.ok} 份、没备上 ${o.failed} 份` : ''}`);
@@ -149,6 +149,8 @@
       const confirmedAt = legacyCloud ? copy.checked_at : copy?.confirmed_at;
       const historical = cloud && (copy?.confirmed_state ?? (legacyCloud && (confirmedAt || copy.content_at || batchFailed && retainedAt) ? current : null));
       const confirmed = cold ? confirmedH.has(s.id) : complete.includes(historical);
+      const showConfirmation = cold ? confirmed : cloud ? historical && historical !== 'unknown'
+        : key === 'g' && copy?.confirmed_state === 'complete' && (copy.count == null || stamp(copy.checked_at) !== stamp(confirmedAt));
       const historicalProblem = prior && problem(historical), currentState = current === 'stale' ? 'stale' : anomaly ? 'gap' : '';
       const pending = cloud ? waiting(copy) : null, inQueue = cloud && (pending.count > 0 || queued.includes(current) || prior && queued.includes(historical));
       const knownCloud = cloud && (confirmed || !prior && complete.includes(current));
@@ -179,7 +181,7 @@
         // 份数是哪一份清单上的：带上清单时刻，和表头“本次读于”分开（M580）。
         !cloud && copy?.count != null && `${D.count(copy, 'count')} 份${copy.checked_at ? ` · 按 ${stamp(copy.checked_at).trim()} 清单` : ''}`,
         copy?.failed > 0 && `失败 ${D.transferCount(copy, 'failed', key)}`,
-        (cold ? confirmed : historical && historical !== 'unknown') && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
+        showConfirmation && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
         // G、H 盘没核实又没有副本日期的，写明副本日期没登记（后台补上日期才判得了齐没齐）
@@ -191,8 +193,10 @@
       // 和计划任务同一套颜色；后台没给分档或分不出的照旧
       const tier = (key === 'g' || cold) && (told || anomaly === problem('failed')) && TIER[copy?.outcome?.state];
       if (tier) {
-        if (['mostly', 'partial'].includes(tier[0])) tierSeen = true;
-        const o = copy.outcome, counts = ['mostly', 'partial'].includes(tier[0]) && Number.isInteger(o.ok) && Number.isInteger(o.failed) ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
+        const o = copy.outcome, exactCounts = o.exact === true && Number.isInteger(o.ok) && Number.isInteger(o.failed);
+        const split = ['mostly', 'partial'].includes(tier[0]) && exactCounts;
+        if (split) tierSeen = true;
+        const counts = split ? `这轮备上 ${o.ok} 份、没备上 ${o.failed} 份` : '';
         // 没备全、失败的那一档，后台给的这一轮说明（如“这轮未备份……”）也写上
         const said = !told && copy.status_text != null && sp(U.fieldText?.(copy.status_text, viewer) ?? copy.status_text).trim();
         cells.set(`${s.id}:${key}`, { state: tier[0], label: tier[1] });

@@ -60,7 +60,11 @@
       : !published && ['ready', 'complete', 'completed'].includes(current) && !!copy?.content_at;
     const problems = original ? { failed: '原件读取失败', missing: '原件缺失', stale: '原件记录已过期', partial: '只核实部分原件' } : PROTECTION;
     // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state）：少数没备上写“大部分成功”，较多没备上写“部分成功”，和备份总表一个说法（M780）
-    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功（没备上的不超过一半）', partial_success: '部分成功（没备上的超过一半）' })[copy?.outcome?.state];
+    const exact = copy?.outcome?.exact === true;
+    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({
+      mostly_successful: exact ? '大部分成功（没备上的不超过一半）' : '大部分成功',
+      partial_success: exact ? '部分成功（没备上的超过一半）' : '部分成功',
+    })[copy?.outcome?.state];
     // 括号里的分界。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     const anomaly = tier || (copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
       : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : ''));
@@ -79,7 +83,8 @@
       `<span class="backup-evidence-label">${label}：</span>${said(reason, label)}`);
     if (unknown.length) reasons.unshift(`${unknown.join('、').replace(/、([^、]+)$/, '和$1')}尚未核实`);
     // 这次没备份成：回包里给了几点试的、为什么、下一步，放在说明最前面（M376）。
-    const failedAt = anomaly && copy?.last_attempt_at ? `${stamp(copy.last_attempt_at)} 这次没备份成` : '';
+    const failedAt = !original && !tier && (copy?.state === 'failed' || copy?.failed > 0) && copy?.last_attempt_at
+      && copy.last_attempt_at !== copy.last_success_at ? `${stamp(copy.last_attempt_at)} 这次没备份成` : '';
     const cause = anomaly && !(copy?.failure_reason === 'cold_group_failed' && copy.status_text && status) ? D.backupFailureReason(copy?.failure_reason) : null;
     const failure = [failedAt && esc(failedAt) + (cause != null ? '：' + said(cause, '失败原因') : ''),
       !failedAt && cause != null && `<span class="backup-evidence-label">失败原因：</span>${said(cause, '失败原因')}`,
