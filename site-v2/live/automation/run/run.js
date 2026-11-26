@@ -105,8 +105,11 @@
       r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
       r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `AI 实际 ${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
-    const family = !r.who?.program && R.agentsPath(r.family);
-    const who = !r.who?.text ? '' : family ? link(family, `${esc(r.who.text)} ›`) : esc(r.who.text);
+    const d = chat?.data || r.conversation.meta;
+    const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
+    const model = !r.who?.program && !r.who?.short && worker.model ? R.whoOf(worker).short : r.who?.text;
+    const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker));
+    const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
       .map(t => `<span class="ar-tag">${keepDates(t)}</span>`).join('');
   }
@@ -368,14 +371,14 @@
   function conversation(r) {
     const c = r.conversation, d = chat?.data, program = r.who?.program, items = [opening(r, d)];
     const hiddenFromVisitor = !c.available && c.reason === 'private';
+    const waitingForConversation = r.status === 'running' && !d && !program && !hiddenFromVisitor;
     // 被藏的对话照新私事规则写“…仅本人可见”（定稿卡-私事）
     const hiddenText = c.why || '这一轮对话的计划、思考摘要和回复仅本人可见';
     const ai = d ? CV.who(d) || r.who?.text || 'AI' : r.who?.text || 'AI';
     const locked = !!d && U.chatFields.contentLocked(d, viewer);
     let note = '', lastWords = '';
-    if (program) note = '';
-    // 还在跑的那一轮后台没给对话时，不说“没存下来、看结论”（还没有结论，下面是“正在想……”）
-    else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : r.status === 'running' ? '这一轮的对话还没读到。' : '这一轮的对话没存下来，看下面派活程序收到的结论。';
+    if (program || waitingForConversation) note = '';
+    else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : '这一轮的对话没存下来，看下面派活程序收到的结论。';
     else if (!d) note = chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
     else {
       const { out, gap, lastWords: previous } = middle(r, d, ai, locked);
@@ -390,7 +393,9 @@
     // 还在跑：最后一行写它这会儿在干什么；跑完了：派活程序说结论
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
-      items.push({ html: `<li class="ar-msg ar-typing" data-who="ai"><span class="ar-ava" data-who="ai" aria-hidden="true"></span><div class="ar-msg__body"><p class="ar-msg__head"><b>${esc(ai)}</b></p><p class="ar-msg__text"><span class="ar-dots" aria-hidden="true"><i></i><i></i><i></i></span>${now ? `正在${esc(now.replace(/^正在/, ''))}` : '正在想……'}</p></div></li>` });
+      const activity = now ? `正在${esc(now.replace(/^正在/, '').replace(/[。！？]+$/, ''))}` : '';
+      const text = waitingForConversation ? `${activity || '正在跑'}，对话还没传上来，读到就显示在这里。` : activity || '正在想……';
+      items.push({ html: `<li class="ar-msg ar-typing" data-who="ai"><span class="ar-ava" data-who="ai" aria-hidden="true"></span><div class="ar-msg__body"><p class="ar-msg__head"><b>${esc(ai)}</b></p><p class="ar-msg__text"><span class="ar-dots" aria-hidden="true"><i></i><i></i><i></i></span>${text}</p></div></li>` });
     } else items.push(closing(r, lastWords));
 
     // 卡头：这场对话自己的状态（和这一轮的结局分开写）、条数；型号档位、各项时刻、帮手几个、所属项目、App 标签、压缩次数、问情况、打开对话；计划收在“计划”里
