@@ -99,18 +99,33 @@
       const detail = original ? `<details class="row__sub"><summary class="more">帮手原名</summary><p style="overflow-wrap:anywhere">${original}</p></details>` : '';
       return { name, detail, mark };
     }
-    // 什么时候：同一天只写钟点，前一天写“昨天”，再早写日子；断开时也照这样写。整页（页头、帮手、过程记录）只用这一种写法。
-    const activityOf = h => { if (h.state === 'running' || !Number.isFinite(Date.parse(h.at))) return U.chatFields.helperActivity(h, at); const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于'; return `${verb} ${stamp(h.at)}`; };
+    // 什么时候：同一天只写钟点，前一天写“昨天”，再早写日子。
+    const validTime = t => typeof t === 'string' && Number.isFinite(Date.parse(t));
     const dayOf = t => U.date(t), stamp = t => { const now = at || chat?.at, day = dayOf(t); if (!now || !Number.isFinite(Date.parse(t))) return day ? `${day} ${U.time(t)}` : ''; return day === dayOf(now) ? U.time(t) : day === dayOf(new Date(Date.parse(now) - 86400000).toISOString()) ? `昨天 ${U.time(t)}` : `${day} ${U.time(t)}`; };
+    const outcomeVerbs = { done: '完成于', stopped: '停止于', failed: '出错于' };
+    function helperStatus(h) {
+      const kind = U.chatFields.statusKind(h);
+      // 主对话归档会连带标记帮手，只有帮手自己的结局或交回记录才能证明它怎么停下。
+      const parentArchived = kind === 'archived' && h.sort_at_source !== 'delivered_at' && !validTime(h.delivered_at);
+      const outcome = (!kind || parentArchived || kind === 'unknown')
+        && Object.hasOwn(outcomeVerbs, h.state);
+      const label = outcome ? STATE[h.state] : chatState(h);
+      const last = validTime(h.at) ? stamp(h.at) : '';
+      const lastOnly = ['last_event', 'last_activity'].includes(h.sort_at_source);
+      if ((parentArchived && !outcome) || [STATE.unknown, STATE.ended_unknown].includes(label)) {
+        return { label: '没读到结局', activity: last ? `最后一次动静是 ${last}` : '', unknown: true };
+      }
+      if (outcome && last)
+        return { label, activity: `${lastOnly ? '最后一次动静是' : outcomeVerbs[h.state]} ${last}` };
+      return { label, activity: U.chatFields.helperActivity(h, at) };
+    }
 
     // 帮手一行的内容：状态、名字、型号、最后记录时间、帮手原名、帮手详情和能不能点开。两页摆法不同、内容同一份
     function helperRow(d, index, spoken = () => false) {
       const key = d.id || `helper-${index}`;
       if (d.q === 'warming') return { key, warming: true };
-      const { name, detail } = helperWords(d), label = chatState(d);
-      const state = d.state === 'done' && Number.isFinite(Date.parse(d.at)) && [STATE.unknown, STATE.ended_unknown].includes(label) ? STATE.done : label;
+      const { name, detail } = helperWords(d), { label: state, activity } = helperStatus(d);
       const model = who(d), head = name || U.fieldHtml(model || (!state ? '一个帮手' : ''));
-      const activity = activityOf(d);
       const canOpen = !contentLocked(chat, viewer) && !contentLocked(d, viewer);
       const meta = ['帮手', name && model, activity].filter(Boolean).join(' · ');
       const details = { ...d };
@@ -130,7 +145,6 @@
     }
 
     // —— 过程记录：普通对话按已有时刻排，自动任务有逐步记录时一起列出 ——
-    const validTime = t => typeof t === 'string' && Number.isFinite(Date.parse(t));
     const hasNewTimes = () => ['session_started_at', 'turn_started_at', 'source_at'].some(k => Object.hasOwn(chat, k));
     const startTimes = () => (hasNewTimes()
       ? [['session', chat.session_started_at, '对话开始'], ['turn', chat.turn_started_at, '本轮开始']]
@@ -141,7 +155,9 @@
       const reply = [detailReply(chat), chat.latest_reply, chat.reply].filter(v => validTime(v?.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0];
       for (const [i, h] of (Array.isArray(chat.helpers) ? chat.helpers : []).entries()) if (validTime(h.at)) {
         const { name, detail, mark } = helperWords(h, true), model = U.fieldText(U.draw10 ? U.draw10.modelName(h) : h.model, viewer);
-        list.push({ key: `h-${h.id || i}`, at: h.at, word: chatState(h), name: name || U.fieldHtml(model), sub: name ? ['帮手', model].filter(Boolean).join(' · ') : '', detail, clipName: !!name, lamp: U.status(h, { small: true }).lamp, mark });
+        const { label, unknown } = helperStatus(h);
+        const sub = [name && '帮手', name && model, unknown && '最后一次动静'].filter(Boolean).join(' · ');
+        list.push({ key: `h-${h.id || i}`, at: h.at, word: label, name: name || U.fieldHtml(model), sub, detail, clipName: !!name, lamp: U.status(h, { small: true }).lamp, mark });
       }
       for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && validTime(v.at)) {
         const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = logCell(original, label);
@@ -248,7 +264,7 @@
     const blockTag = (key, what) => !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
 
     const api = { marker, model, who, text, pending, field, replyBody, fieldTag, withTag, flatWords, chatCell, said, privateSaid, headerNote, chatTitle, when, projectInfo, actions,
-      privatePlan, wholeOwner, chatState, stepWord, markOf, plainName, marks, visibleText, helperWords, activityOf, dayOf, stamp, helperRow, station,
+      privatePlan, wholeOwner, chatState, stepWord, markOf, plainName, marks, visibleText, helperWords, dayOf, stamp, helperRow, station,
       validTime, hasNewTimes, startTimes, events, recordEnd, workLine, thought, pageMeta, facts, blockTag };
     // 对外的每个函数先现读一次页面当前的 viewer、chat、at，函数之间互相调用时不再重读
     const out = { lockedFields, ACTIVE, STATE };

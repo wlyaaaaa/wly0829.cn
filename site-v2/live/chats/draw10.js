@@ -95,6 +95,7 @@
   const quotaWindow = w => Object.hasOwn(QUOTA_WINDOWS, w) ? QUOTA_WINDOWS[w] : '';
   // 带日期的钟点：今天的只写钟点，别的天前面加“11-24”
   const dayClock = at => Number.isFinite(Date.parse(at)) ? [U.date(at) !== U.date(Date.now()) && U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
+  const quotaRecovery = at => { const when = dayClock(at); return when ? `预计 ${when} 恢复` : '恢复时间未确认'; };
   // 访客版把“你”换成“本人”（同全站“等本人回答”的说法）
   const ownerWords = (text, kind) => kind === 'public' && typeof text === 'string' ? text.replace(/等你/g, '等本人').replace(/问你/g, '问本人').replace(/^你叫停/, '本人叫停') : text;
   const statusKind = d => typeof d?.status_kind === 'string' && Object.hasOwn(KINDS, d.status_kind) ? d.status_kind : '';
@@ -103,10 +104,9 @@
   const helperList = d => Array.isArray(d?.helpers) ? d.helpers : Array.isArray(d?.helpers?.items) ? d.helpers.items : d?.helpers?.active || [];
   function statusLabel(d, kind) {
     const given = d?.status_label != null ? U.fieldText(d.status_label, kind).trim() : '', k = statusKind(d);
-    if (given) return ownerWords(given, kind);
-    if (!k) return '';
-    if (k === 'quota_exhausted') return ['额度用完', quotaWindow(d.quota_window), d.quota_reset_at ? `预计 ${dayClock(d.quota_reset_at)} 恢复` : '宿主没给恢复时间'].filter(Boolean).join(' · ');
-    return ownerWords(KINDS[k].label, kind);
+    if (k === 'quota_exhausted' && (Object.hasOwn(d, 'quota_reset_at') || !given))
+      return `${quotaWindow(d.quota_window) || '额度'}用完了，${quotaRecovery(d.quota_reset_at)}`;
+    return ownerWords(given || KINDS[k]?.label || '', kind);
   }
   function rowState(d, kind) {
     const label = statusLabel(d, kind);
@@ -143,8 +143,17 @@
     const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于';
     return `${verb} ${at}`;
   }
-  U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
-    KINDS, statusKind, statusLabel, quotaWindow, dayClock, ownerWords, sortVerb, helperList };
+  const peopleIn = (rows = []) => (rows || []).reduce((n, c) => n + (c.private_count || 1), 0);
+  const totalOf = col => Number.isInteger(col?.total) ? col.total : null;
+  const listedOf = col => Array.isArray(col?.items) ? peopleIn(col.items) : null;
+  const earlierCount = (rows, state, total) => Number.isInteger(total) ? Math.max(0, peopleIn(rows?.filter(c => c.state === state)) - total) : 0;
+  const bySortAt = rows => {
+    const stamp = row => { const t = Date.parse(row.sort_at); return Number.isFinite(t) ? t : -Infinity; };
+    return [...rows].sort((a, b) => stamp(b) - stamp(a));
+  };
+  const isRunning = row => (statusKind(row) || row.state) === 'running';
+  U.chatFields = { peopleIn, totalOf, listedOf, earlierCount, bySortAt, isRunning, field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
+    KINDS, statusKind, statusLabel, quotaWindow, quotaRecovery, dayClock, ownerWords, sortVerb, helperList };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {
     const { trigger, pre_tokens: tokens, pre_context_ratio: ratio } = event || {};
@@ -276,7 +285,7 @@
     if (missing.length) content.push(`<span style="color:var(--route-muted, #848b87)">${missing.map(esc).join('；')}</span>`);
     return content.length ? `<details class="row__sub"><summary class="more">帮手详情</summary>${content.map(html => `<p style="white-space:pre-wrap;overflow-wrap:anywhere">${html}</p>`).join('')}</details>` : '';
   }
-  function mount({ row, readViewer }) {
+  function mount({ row, readViewer, isPinned }) {
     const hero = document.querySelector('#hero .card__body'), notice = document.createElement('p'); notice.className = 'row__sub'; notice.dataset.official = ''; notice.hidden = true; hero.append(notice);
     const doneTitle = '近 30 天 · 做完的对话';
     const done = Object.assign(document.createElement('section'), { id: 'chat-done30', className: 'card chat-stats', hidden: true });
@@ -294,7 +303,14 @@
         doneRead.set({ ...state, phase: state.phase === 'gone' ? 'gone' : 'none' });
       } else if (Array.isArray(state.data?.items)) { disclosure.hidden = false; doneRead.done(false); }
     }
-    let baseStatus, recentStatus;
+    let baseStatus, recentStatus, history;
+    const drawHistory = (kind = history?.kind) => {
+      if (!history || history.kind !== kind) return;
+      const { items, at, total } = history, visible = items.filter(c => !isPinned(c)), moved = items.length - visible.length;
+      summary.textContent = `${doneTitle}${total == null ? '' : ` · ${total} 个`}${moved ? `（其中 ${moved} 场见置顶）` : ''}`;
+      const rows = visible.length ? visible.map(c => row(c, at, true)) : [{ key: 'empty', cls: 'row__sub', html: moved ? '这些对话已列在置顶区' : '这段时间没有完成的对话' }];
+      U.list(list, rows, { animate: disclosure.open });
+    };
     const drawNotice = () => {
       const message = official({ official_status: baseStatus ?? recentStatus });
       notice.hidden = !message;
@@ -307,6 +323,7 @@
       done.hidden = !Array.isArray(items);
       summary.textContent = `${doneTitle}${done.hidden || d.total == null ? '' : ` · ${d.total} 个`}`;
       if (done.hidden) {
+        history = null;
         U.html(range, '');
         U.list(list, [], { animate: false });
         return;
@@ -317,9 +334,10 @@
       const dates = [from && to && `记录覆盖 ${stamp(from)} 至 ${stamp(to)}`, since && `采集开始 ${stamp(since)}`, d.at && `历史更新 ${stamp(d.at)}`];
       const gap = d.gap ? U.fieldHtml(d.gap, { name: '对话记录范围', kind: meta.viewer.kind }) : '';
       U.html(range, [...dates.filter(Boolean).map(esc), gap].filter(Boolean).join(' · '));
-      const rows = items.length ? items.map(c => row(c, d.at || meta.at, true)) : [{ key: 'empty', cls: 'row__sub', html: '这段时间没有完成的对话' }];
-      U.list(list, rows, { animate: disclosure.open });
+      history = { items, at: d.at || meta.at, total: d.total, kind: meta.viewer?.kind };
+      drawHistory();
     }, link: doneUnavailable });
+    return drawHistory;
   }
   U.draw10 = { badge, detail, compactionDisclosure, official, mount, modelName, bareModel, modelHue, modelRows, modelHtml, sourceHtml, helperDetailHtml };
 })();

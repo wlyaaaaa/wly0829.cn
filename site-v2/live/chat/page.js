@@ -77,12 +77,12 @@
   // —— 正在执行：当前这一步写大，下面是正式摘要、最新回复，各露一句、点开看全文 ——
   function nowText(progress) {
     const { plan, current } = progress, p = plan[current];
-    const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
+    const stillWorking = chat.state === 'done' && !U.chatFields.statusKind(chat) && U.chatFields.workingHelpers(chat);
     return stillWorking ? `后台帮手另在处理（${stillWorking} 个）` : p ? (privatePlan(p) ? U.fieldHtml({ text: null, visibility: 'owner', hidden_what: '这一步' }, { name: '这一步', kind: viewer }) : chatCell(field(p.text, p, chat), '这一步', chat, 0, true)) : esc(chatState(chat));
   }
   function drawNow(progress, facts, currentText) {
-    const { plan, current, label, count } = progress, active = chat.state === 'running', p = plan[current];
-    const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
+    const { plan, current, label, count } = progress, active = U.chatFields.isRunning(chat), p = plan[current];
+    const stillWorking = chat.state === 'done' && !U.chatFields.statusKind(chat) && U.chatFields.workingHelpers(chat);
     U.html($('now-label'), stillWorking ? '对话已结束' : U.offline?.() && active ? '断开前在做' : active ? '正在执行' : '现在');
     const word = p ? stepWord(stepState(p)) : '';
     const step = p ? `${label} · ${esc(word)}` : count;
@@ -184,7 +184,7 @@
       for (const b of document.querySelectorAll(`[data-clip-for="${key}"]`)) if (on) b.hidden = true;
     }
   }
-  function render(kind) {
+  function render(kind, now) {
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
@@ -211,7 +211,7 @@
     const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
     // 设计第 9 节：标签后面接“从几点起”（排序时刻＋这一类的动词，同 AI 对话页行首）和原因；状态旧了 2 分钟以上加“状态是几点读的”。后台没给的那一项不写
     const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
-    const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(at);
+    const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
     const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
       reason && reason !== state && F.ownerWords(reason, viewer),
       Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
@@ -290,7 +290,7 @@
         const offlineChanged = lastOffline !== !!state.offline; lastOffline = !!state.offline;
         if (chat) {
           if (!changed && state.offline && !offlineChanged) return;
-          rec.hidden = false; render(state.viewer?.kind);
+          rec.hidden = false; render(state.viewer?.kind, state.now);
           if (first) { heroRead.done(); recRead.done(); }
           first = changed = false; requestAnimationFrame(lightUp); return;
         }
