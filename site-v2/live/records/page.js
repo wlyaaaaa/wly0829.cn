@@ -17,6 +17,10 @@
   const artifactRecordFields = { freeze_records: 'at', phone_batch: 'last_received_at', inventory_report: 'at', governance: null };
   const recordAt = id === 'pcconfig' && Object.hasOwn(artifactRecordFields, section) && params.get('record');
   const archives = section === 'archives', knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(section);
+  // 只在最外面挂一个（LOOKS1126 ②）：本人版说明书这一类（资料速查除外）类名旁已挂“这一类的认识原文访客看不到”，
+  // 下面各条正文、详细内容再标“访客看不到”的不再重复挂；“对外换了说法”照旧挂。类名本身被标了的，类名旁挂的是那个签，各条照旧挂
+  const quietRows = () => knowledge && recordViewer === 'owner' && section !== 'group-4'
+    && !U.visitorFieldKind(project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section), ['$', 'label']);
   const enc = encodeURIComponent;
   // 只有 403 表示不给公开；404/503 表示这块暂时取不到，不推断为私人内容。
   const locked = s => s.meta?.status === 403 && s.meta?.viewer?.kind === 'public';
@@ -129,7 +133,8 @@
     // 正文里有“〔…省略〕”的：源头导出时就省掉了，后台给缺因（body_gap），紧跟正文写一句为什么
     if (typeof r.body_gap === 'string' && r.body_gap) parts[1] += `<p class="knowledge-prose" style="color:var(--muted, #8f8d86)">${esc(r.body_gap)}</p>`;
     // 后台在这一条的正文、详细内容上标了 visitor_labels 的，紧跟那一段挂签（本人版两种都挂，访客版只挂“对外换了说法”）
-    const textTag = r.text ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
+    const quiet = key => quietRows() && U.visitorFieldKind(r, key) === 'hidden';
+    const textTag = r.text && !quiet('text') ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail && !quiet('detail') ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
     if (textTag) parts[1] += `<p class="knowledge-prose">${textTag}</p>`;
     if (detailTag) parts[3] = parts[3].replace(/^(<div class="knowledge-md">[\s\S]*?<\/div>|<p class="knowledge-prose">[\s\S]*?<\/p>)/, `$1<p class="knowledge-prose">${detailTag}</p>`);
     return parts;
