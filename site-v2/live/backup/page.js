@@ -94,7 +94,9 @@
     const first = anomaly || status ? `${name} ${lead}` : quantity ? `已读 ${name} ${quantity}` : checked || content ? name : '';
     const tone = tier ? copy.outcome.state === 'mostly_successful' ? 'mostly' : 'partial'
       : !retired && (current === 'failed' || copy?.failed > 0) ? 'failed' : '';
-    return { name, text: [first, failureText, checked, content].filter(Boolean).join(' · '), lead: [tone ? `<span class="backup-copy-state" data-state="${tone}">${esc(anomaly)}</span>` : esc(anomaly), ...rest.map(esc)].filter(Boolean).join(' · '), checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
+    const evidence = rest.map(value => value === '上次确认有副本'
+      ? `<span class="backup-evidence-label">${esc(value)}</span>` : esc(value));
+    return { name, text: [first, failureText, checked, content].filter(Boolean).join(' · '), lead: [tone ? `<span class="backup-copy-state" data-state="${tone}">${esc(anomaly)}</span>` : esc(anomaly), ...evidence].filter(Boolean).join(' · '), checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
   }
   function copySummary(d) {
     const copies = PLACES.map(([key, name]) => copyEvidence(d[key], key, name, d.copy_summary));

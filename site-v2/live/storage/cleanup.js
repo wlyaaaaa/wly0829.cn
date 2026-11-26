@@ -382,7 +382,7 @@
     const note = [
       '每 6 小时和开机时各清一轮：登记过的缓存、临时目录、施工产物和旧 AI 对话到期直接删，不进回收站，删了找不回。',
       '回收站另算：每小时看一次，一般的东西留 7 天（G、H 盘也是 7 天），登记过的 AI 产物可以马上清，D 盘不动。',
-    ].map(esc).join('<br>');
+    ].map(esc).join('<br>').replaceAll('登记过', '<span class="live-unit">登记过</span>');
     K.put(document.getElementById('cleanup-note'), note + (withheld ? ` · ${esc(withheld)}` : ''));
     K.put(document.getElementById('cleanup-total'), total(g, viewer));
     K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
