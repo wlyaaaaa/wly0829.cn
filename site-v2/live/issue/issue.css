@@ -53,6 +53,9 @@
 .iss-side > p { margin: 0; font-size: 15px; line-height: 25px; color: var(--ink-soft); overflow-wrap: anywhere; }
 /* 反复出现那张卡下面：怎么算坏（小字），误判的原记录收着、点开看 */
 .iss-side > p.iss-basis { margin: 8px 0 0; font-size: 13.5px; line-height: 22px; color: var(--muted); }
+.iss-misjudged > summary { display: flex; gap: 6px; list-style: none; }
+.iss-misjudged > summary::-webkit-details-marker { display: none; }
+.iss-misjudged[open] > summary > span { rotate: 90deg; }
 .iss-misjudged > ol { margin: 6px 0 0; padding: 0; list-style: none; }
 .iss-misjudged li { padding: 6px 0; border-top: 1px solid var(--hair); }
 .iss-misjudged li:first-child { border-top: 0; }
