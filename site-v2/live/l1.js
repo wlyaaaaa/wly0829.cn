@@ -354,7 +354,7 @@
   const recordStamp = (value, precision) => timed(value) ? join([day(value) !== day(!lastState?.offline && lastState?.now || Date.now()) && U.date(value), U.time(value, precision)]).replace(' · ', ' ') || U.date(value) : '';
   function hasCardData(id, d) {
     if (!d || d.q === 'warming') return false;
-    if (id === 'chats') return d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
+    if (id === 'chats') return d.board?.columns || d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
     if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length || set.failed_points?.length);
     if (id === 'needs') return d.counts != null || (d.items || []).length > 0;
     if (['agents', 'automation', 'ledger'].includes(id)) return true;
@@ -721,7 +721,7 @@
   }
   function chatRow(c, { heading, finished, hint } = {}) {
     const ago = finished || elapsed(c.at), word = U.chatFields.rowState(c, viewer);
-    const quota = U.chatFields.quota(c, viewer);
+    const quota = !U.chatFields.statusKind(c) && U.chatFields.quota(c, viewer);
     const state = quota ? '' : lastState?.offline ? join([`离线前${word}`, ago]) : c.content_locked || ['stopped', 'done', 'running'].includes(c.state) ? join([word, ago]) : word;
     const helperRows = U.chatFields.helperList ? U.chatFields.helperList(c) : Array.isArray(c.helpers) ? c.helpers : c.helpers?.active || [];
     const helpers = U.chatFields.workingHelpers(c);
@@ -763,7 +763,11 @@
     return precision !== 'minute' && precision !== 'date' && /T\d\d:\d\d:\d\d/.test(at) ? `${stamp}:${String(new Date(at).getUTCSeconds()).padStart(2, '0')}` : stamp;
   }
   function chatPreviewRows(chats) {
-    const completion = c => c.state === 'done' ? chatSecondStamp(c.at, c.at_precision) : '';
+    const completion = c => {
+      const kind = U.chatFields.statusKind(c);
+      return kind ? kind === 'archived' && c.sort_at_source === 'archived_at' ? chatSecondStamp(c.sort_at) : ''
+        : c.state === 'done' ? chatSecondStamp(c.at, c.at_precision) : '';
+    };
     const start = c => chatSecondStamp(chatStart(c)[0]);
     const source = c => ({ __proto__: null, manual: '本人发起', scheduled: '定时任务', automation: '自动任务' })[c.source];
     const rows = chats.map(chat => {
@@ -824,6 +828,14 @@
     const stamps = [...new Set([has.running && runningAt, has.waiting && waitingAt, has.done && doneAt].filter(Boolean))], split = stamps.length > 1;
     const recorded = split ? (has.running ? runningAt : waitingAt) : stamps[0] || recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
     const runningText = sample ? `${sample.q === 'partial' ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
+    const { peopleIn, totalOf, listedOf, earlierCount, bySortAt } = U.chatFields;
+    const olderRows = (key, n, at) => {
+      const earlier = earlierCount(d.active, key, n);
+      if (!earlier) return '';
+      const label = key === 'running' ? '在干' : addressed('等你回答');
+      return at && waitingAt && at !== waitingAt ? `${label}名单是 ${waitingAt} 的 ${peopleIn(d.active.filter(c => c.state === key))} 场`
+        : `${label}另有 ${earlier} 场是上次读到的，这次没核对到`;
+    };
     const concurrent = has.running && `${runningText} 个${runningOld && !(split ? runningAt : recorded) ? '当时' : ''}在干`;
     const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
     const done = has.done && `近 72 小时做完 ${quantity(counts, 'done72')} 个`;
@@ -833,13 +845,19 @@
     const marker = typeof d.text === 'object' && d.text;
     // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
-    const colTotal = key => Number.isInteger(board?.columns[key]?.total) ? board.columns[key].total : null, colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
-    const bySort = list => [...list].sort((a, b) => (Number.isFinite(Date.parse(b.sort_at)) - Number.isFinite(Date.parse(a.sort_at))) || Date.parse(b.sort_at) - Date.parse(a.sort_at) || 0);
+    const colTotal = key => totalOf(board?.columns[key]), colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
+    const countNote = key => {
+      const listed = listedOf(board?.columns[key]), n = colTotal(key);
+      return listed > (n ?? 0) ? `${key === 'working' ? '在干' : addressed('等你')}清单列出 ${listed} 场` : '';
+    };
     const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
       `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
     const summary = boardSummary || join(pieces);
     const heading = chatCardHead({ summary, recorded: board ? recordStamp(board.as_of) : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
-    U.html(p.head, heading + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
+    const note = join(board ? ['working', 'waiting'].map(countNote) : [olderRows('running', running.n, runningAt),
+      olderRows('waiting', counts.waiting, recordStamp(counts === d ? observed : counts.at))]);
+    const countLine = note ? `<span class="row__sub chat-count-note" style="flex:1 1 100%;white-space:normal;overflow-wrap:anywhere">${esc(note)}</span>` : '';
+    U.html(p.head, heading + countLine + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
     // 这张卡不列后台的对话（本人定的）；后台自动任务这会儿在跑的另起一行，点了到自动任务页
     const background = !lastState?.offline && window.LiveBatchHome.backgroundRunning(home?.automation);
     p.background.hidden = !(background?.n > 0);
@@ -847,13 +865,13 @@
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.running;
-    const rows = board && Array.isArray(board.columns.working?.items) ? board : null;   // 带行的 board（chats 读口那一份）才拿来列行
+    const rows = board && ['working', 'waiting', 'stopped', 'archived'].some(key => Array.isArray(board.columns[key]?.items));
     // 停下没归档的（出错、叫停、回完了没归档、状态不明）照改前一样列在卡上，排在在干、等你后面；几行露在外面照旧由卡高定，其余进“还有 N 个”
-    const active = rows ? [...bySort([...colItems('working'), ...colItems('waiting')]), ...bySort(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
+    const active = rows ? [...bySortAt([...colItems('working'), ...colItems('waiting')]), ...bySortAt(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
     const working = board ? active.length > 0 || colTotal('working') > 0 || colTotal('waiting') > 0 : active.length > 0 || runningNow > 0 || d.waiting > 0;
-    const all = rows ? (working ? active : bySort(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
+    const all = rows ? (working ? active : bySortAt(colItems('archived'))) : [...new Map((working ? active : [...d.recent || [], ...d.fallback || []]).map(c => [c.id, c])).values()].sort((a, b) => rank(a) - rank(b) || Date.parse(b.at) - Date.parse(a.at));
     const activePreview = working ? all : [];
-    const recent = rows ? bySort(colItems('archived')) : [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
+    const recent = rows ? bySortAt(colItems('archived')) : [...new Map([...(d.recent || []), ...(d.fallback || [])].filter(c => c.state === 'done').map(c => [c.id, c])).values()].sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
     const preview = chatPreviewRows([...activePreview, ...recent.slice(0, 13)]);
     for (const id of expandedReplies) if (!preview.some(row => row.key === id)) expandedReplies.delete(id);
     const activeEnd = activePreview.length;
@@ -862,7 +880,7 @@
     paintList(p['recent-rest'], preview.slice(activeEnd + shown.done), { animate: false });
     chatWorking = working;
     // 列出来的在干行比计数多（比如状态不明的）时按列出来的算，多出来没摆的也写进“还有 N 个”，不悄悄藏掉。
-    chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0) + (rows ? colTotal('stopped') || 0 : 0), all.length) : all.length)
+    chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0) + (Array.isArray(board.columns.stopped?.items) ? colTotal('stopped') || 0 : 0), all.length) : all.length)
       : working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
     fitCard('chats');
     U.html(p['done-label'], recent.length ? '已完成' : '');

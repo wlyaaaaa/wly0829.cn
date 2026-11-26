@@ -143,7 +143,16 @@
     const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于';
     return `${verb} ${at}`;
   }
-  U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
+  const peopleIn = (rows = []) => (rows || []).reduce((n, c) => n + (c.private_count || 1), 0);
+  const totalOf = col => Number.isInteger(col?.total) ? col.total : null;
+  const listedOf = col => Array.isArray(col?.items) ? peopleIn(col.items) : null;
+  const earlierCount = (rows, state, total) => Number.isInteger(total) ? Math.max(0, peopleIn(rows?.filter(c => c.state === state)) - total) : 0;
+  const bySortAt = rows => {
+    const stamp = row => { const t = Date.parse(row.sort_at); return Number.isFinite(t) ? t : -Infinity; };
+    return [...rows].sort((a, b) => stamp(b) - stamp(a));
+  };
+  const isRunning = row => (statusKind(row) || row.state) === 'running';
+  U.chatFields = { peopleIn, totalOf, listedOf, earlierCount, bySortAt, isRunning, field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
     KINDS, statusKind, statusLabel, quotaWindow, dayClock, ownerWords, sortVerb, helperList };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {

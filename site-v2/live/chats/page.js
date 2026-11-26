@@ -103,7 +103,7 @@
     return /^(?:API Error:|Error:)/i.test(text) ? '连接出错，正在重连' : '';
   }
   // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
-  const { KINDS, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
+  const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
   // 在干和状态不明的分界照后台 live_chat_board.py 的 status_fields：这一轮没结束、离最后一条记录不到 2 小时算在干（30 分钟起在原因里写“已经 N 分钟没动静”），
   // 满 2 小时还没有这一轮的结束记录就标状态不明、进“停下了，没归档”（M928 机制写清；数字改了要跟着改）
   const IDLE_LIMIT = '2 小时';
@@ -364,12 +364,11 @@
   function readViewer(meta) {
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
-      homeChats = activeChats = null; recentUsable = false; pages.clear(); archivedPages.clear();
+      homeChats = activeChats = baseBoard = fullBoard = null; recentUsable = false; pages.clear(); archivedPages.clear();
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
     }
     viewer = next;
   }
-  const peopleIn = rows => rows?.reduce((total, row) => total + (row.private_count || 1), 0) ?? 0;
   function chatCount(d, key, observed) {
     if (Number.isFinite(d?.[key])) {
       const text = U.collectionText('', d, d[key], key);
@@ -392,8 +391,8 @@
       U.html($('head'), U.head('AI 对话', { lamp: false }));
       U.html($('chat-note'), '<span class="row__sub">正在准备</span>');
       L.tone($('hero'), 'none');
-    } else if (d && boardOf()) {
-      const status = { ...d, level: d.header_level ?? d.level };
+    } else if (boardOf()) {
+      const status = { ...d, level: d?.header_level ?? d?.level };
       U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
       boardHeading(boardOf());
       L.tone($('hero'), status);
@@ -404,7 +403,8 @@
         const listed = peopleIn(d.active?.filter(c => c.state === key));
         // 后台的件数只算最近一次快读又确认过的（离最新一次 2 分钟内；快读每轮只轮到 4 场），列表还留着上次读到、这次没核对到的那几场；
         // 那几场上次读到时状态就是这一栏的状态，现在还是不是说不准：照实说“上次还在干、这次没核对到”，不替它说已停
-        if (Number.isFinite(d[key]) && d[key] < listed) return `${d[key]} 个${label}（另 ${listed - d[key]} 个上次还${key === 'waiting' ? '在等' : '在干'}，这次没核对到）`;
+        const earlier = earlierCount(d.active, key, d[key]);
+        if (earlier) return `${d[key]} 个${label}（另 ${earlier} 个上次还${key === 'waiting' ? '在等' : '在干'}，这次没核对到）`;
         const count = chatCount(d, key, listed);
         return count && count + label;
       };
@@ -469,9 +469,10 @@
   // —— M915：四栏（在干｜等你，下面整行“停下了，没归档”“做完了 · 已归档”），数据是同一次读到的 board ——
   // 后台：GET chats 的 board = { as_of, columns: { working, waiting, stopped, archived: { items, total, next } }, quota_exhausted, helpers_working, quotas, automation, source_gaps }；
   // 归档往下翻 GET chats?window=72h&state=archived&cursor=<next> 回 { items, total, next, as_of }。首页 chats.board 同口径。
-  let baseBoard = null, quotaPick = null, stoppedCard = null;
+  let baseBoard = null, fullBoard = null, quotaPick = null, stoppedCard = null;
   const archivedPages = new Map();
-  const boardOf = () => baseBoard || (homeChats?.board?.columns && typeof homeChats.board.columns === 'object' ? homeChats.board : null);
+  const readBoard = d => d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
+  const boardOf = () => baseBoard || fullBoard || readBoard(homeChats);
   const BOARD = {
     working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 超过 ${IDLE_LIMIT}没新记录、也没结束记录，就标状态不明、挪到停下那栏` },
     waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
@@ -479,15 +480,14 @@
     archived: { name: '做完了 · 已归档', about: '' },
   };
   const colName = key => key === 'waiting' && viewer === 'public' ? '等本人' : BOARD[key].name;
-  const totalOf = col => Number.isInteger(col?.total) ? col.total : null;
-  // 每栏按“进入现在这一类的时刻”（sort_at）从新到旧；没有时刻的放这一栏最下面，彼此照后台给的先后
-  const bySortAt = items => items.map((c, i) => ({ c, i, t: Date.parse(c.sort_at) })).sort((a, b) =>
-    (Number.isFinite(a.t) ? 0 : 1) - (Number.isFinite(b.t) ? 0 : 1) || (Number.isFinite(a.t) && b.t - a.t) || a.i - b.i).map(x => x.c);
   // 额度条点了哪一家：在干、等你两栏只看被它卡住的（额度用完、过了预计恢复点，或后台标了 quota_affected 的）
   const stuckBy = (c, soft) => String(c.software || /^(claude|codex|antigravity):/i.exec(c.id)?.[1] || '').toLowerCase() === soft &&
     (['quota_exhausted', 'quota_overdue'].includes(statusKind(c)) || !!c.quota_affected);
   function boardHeading(b) {
-    const cols = b.columns || {}, num = key => { const n = totalOf(cols[key]); return n == null ? '没读到' : String(n); };
+    const cols = b.columns || {}, num = key => {
+      const n = totalOf(cols[key]), listed = listedOf(cols[key]);
+      return (n ?? '没读到') + (listed > (n ?? 0) ? `（清单列出 ${listed} 场）` : '');
+    };
     const quota = Number.isInteger(b.quota_exhausted) && b.quota_exhausted > 0 ? `（其中额度用完 ${b.quota_exhausted}）` : '';
     const waitingN = totalOf(cols.waiting), waiting = `${colName('waiting')} ${num('waiting')}`;
     const asOf = Number.isFinite(Date.parse(b.as_of)) ? `截至 ${[U.date(b.as_of) !== U.date(Date.now()) && U.date(b.as_of), clockWithSeconds.format(new Date(b.as_of))].filter(Boolean).join(' ')}` : '';
@@ -551,14 +551,15 @@
     const name = colName(key), extra = [];
     if (key === 'working' && Number.isInteger(b.helpers_working) && b.helpers_working > 0) extra.push(`另有帮手 ${b.helpers_working} 个在做`);
     if (total != null && total > listed) extra.push(`共 ${total} 场，已列出 ${listed} 场`);
+    if (listed > (total ?? 0)) extra.push(`清单列出 ${listed} 场，汇总${total == null ? '没读到' : `只读到 ${total} 场`}`);
     const about = key === 'waiting' && viewer === 'public' ? '要本人回答或选一下才能接着做' : BOARD[key].about;
     U.html(card.title, `<b>${esc(name)}</b><span class="lb-card__count chat-col-count${total == null ? ' is-none' : ''}">${esc(total == null ? '没读到' : String(total))}</span>`, false);
     U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')));
-    const emptyWaiting = key === 'waiting' && total === 0 && !quotaPick;
+    const emptyWaiting = key === 'waiting' && total === 0 && !listed && !quotaPick;
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
     const noRows = !Array.isArray(col?.items) && total > 0;
-    const none = noRows ? '正在读' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
+    const none = noRows ? '暂时只读到数量' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
       : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '暂时只读到数量';
     const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
     const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
@@ -591,12 +592,12 @@
     board.layout(true); even(); recentBoard.layout(true); fitThoughts();
   }
   async function readArchived() {
-    const b = boardOf(), button = $('recent-next'), cursor = b && nextArchived(b.columns?.archived);
+    const b = boardOf(), kind = viewer, button = $('recent-next'), cursor = b && nextArchived(b.columns?.archived);
     if (cursor == null) return;
     button.disabled = true; U.html(button, '正在读…', false);
     try {
-      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor }), kind = viewer;
-      if (!boardOf() || r.meta?.viewer?.kind && r.meta.viewer.kind !== kind) return;
+      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor });
+      if (viewer !== kind || !boardOf() || r.meta?.viewer?.kind && r.meta.viewer.kind !== kind) return;
       // 读的时候名单更新了也照样接上（按编号去重），不让人再点一次（M915：读到第二页不能被更新冲掉）
       if (Array.isArray(r.data?.items)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
       else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
@@ -695,18 +696,22 @@
     const minute = Math.floor(Date.parse(s.now) / 60000), offlineChanged = homeOffline !== !!s.offline; homeOffline = !!s.offline;
     if (homeChats && (offlineChanged || !s.offline && minute !== activityMinute)) { activityMinute = minute; U.anchor(() => render(homeChats, s.now)); }
     setBar(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
-    if (!s.data && !activeChats) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
+    if (!s.data && !activeChats && !boardOf()) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
-  window.Live.watch('home', null, { data(d) { drawBackground(d?.automation); homeFull = d; statLinks(); fitModels(); } });
+  window.Live.watch('home', null, { data(d, meta) {
+    drawBackground(d?.automation); homeFull = d; statLinks(); fitModels();
+    if (meta.viewer?.kind === viewer && (fullBoard = readBoard(d?.chats)) && !baseBoard)
+      U.anchor(() => { render(homeChats, meta.at); renderRecent(); });
+  } });
   window.Live.watch('chats', null, { phase(s) { if (!activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
     readViewer(meta);
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
-    const nextBoard = d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
+    const nextBoard = readBoard(d);
     if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
     baseBoard = nextBoard;
     setBar();
-    if (homeChats || activeChats) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
+    if (homeChats || activeChats || baseBoard) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
   }, link(s) { U.blockNote($('active'), s); } });
   const redrawRecent = () => {
@@ -720,7 +725,7 @@
     const offlineChanged = !!recentState?.offline !== !!s.offline; recentState = s;
     if (offlineChanged && s.data?.stats) renderStats(s.data.stats);
     if (!s.offline && [404, 503].includes(s.meta?.status) && !s.data) { if (!activeChats && (!homeChats || homeChats.q === 'unknown')) { missing('对话暂时读不到', true); heroRead.done(); activeRead.done(); } renderStats(null, true); redrawRecent(); }
-    if (s.offline) { if (!recentUsable) renderStats(null); if (homeChats || activeChats) render(homeChats, homeAt); else missing(U.collectionText()); redrawRecent(); } const usable = Array.isArray(s.data?.items);
+    if (s.offline) { if (!recentUsable) renderStats(null); if (homeChats || activeChats || boardOf()) render(homeChats, homeAt); else missing(U.collectionText()); redrawRecent(); } const usable = Array.isArray(s.data?.items);
     if (usable !== recentUsable) { recentUsable = usable; redrawRecent(); }
     U.blockNote($('recent'), s);
   } });

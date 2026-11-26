@@ -77,12 +77,12 @@
   // —— 正在执行：当前这一步写大，下面是正式摘要、最新回复，各露一句、点开看全文 ——
   function nowText(progress) {
     const { plan, current } = progress, p = plan[current];
-    const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
+    const stillWorking = chat.state === 'done' && !U.chatFields.statusKind(chat) && U.chatFields.workingHelpers(chat);
     return stillWorking ? `后台帮手另在处理（${stillWorking} 个）` : p ? (privatePlan(p) ? U.fieldHtml({ text: null, visibility: 'owner', hidden_what: '这一步' }, { name: '这一步', kind: viewer }) : chatCell(field(p.text, p, chat), '这一步', chat, 0, true)) : esc(chatState(chat));
   }
   function drawNow(progress, facts, currentText) {
-    const { plan, current, label, count } = progress, active = chat.state === 'running', p = plan[current];
-    const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
+    const { plan, current, label, count } = progress, active = U.chatFields.isRunning(chat), p = plan[current];
+    const stillWorking = chat.state === 'done' && !U.chatFields.statusKind(chat) && U.chatFields.workingHelpers(chat);
     U.html($('now-label'), stillWorking ? '对话已结束' : U.offline?.() && active ? '断开前在做' : active ? '正在执行' : '现在');
     const word = p ? stepWord(stepState(p)) : '';
     const step = p ? `${label} · ${esc(word)}` : count;
