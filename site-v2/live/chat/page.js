@@ -150,7 +150,7 @@
     U.html($('log-part'), hasRoundList && list.length ? `${tally}共 ${list.length} 轮` : '');
     const opened = new Set([...$('log').querySelectorAll('.route-round__helpers[open]')].map(el => el.closest('li').dataset.key));
     U.list($('log'), list.slice(0, batch.shown).map(r => {
-      const reply = r.reply ? r.reply + (r.replyAt ? `（${esc(r.replyAt)}）` : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
+      const reply = r.reply ? r.reply + (r.replyAt ? U.nowrap(`（${r.replyAt}）`) : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
       const work = roundWork(r, opened.has(r.key));
       const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], ['交回', reply]];
       const body = fields.map(([label, value, extra = ''], i) => {
@@ -227,14 +227,15 @@
     const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
     const delegated = chat.state === 'done' && (!reason || reason === state) && F.workingHelpers(chat);
     const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
-    const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
-      reason && reason !== state && F.ownerWords(reason, viewer),
-      delegated && `后台帮手另在处理（${delegated} 个）`,
-      Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
+    const unit = text => `<span class="live-unit">${esc(text)}</span>`;
+    const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && unit(`${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`),
+      reason && reason !== state && esc(F.ownerWords(reason, viewer)),
+      delegated && unit(`后台帮手另在处理（${delegated} 个）`),
+      Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && unit(`状态是 ${F.dayClock(chat.status_observed_at)} 读的`)].filter(Boolean).join(' · ') : '';
     // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
     pageWords = new Set();
     for (const words of new Set([title, sp(title), ...sp(title).split(' · '), state])) once(esc(words));
-    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${esc(since)}</span>` : ''));
+    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${since}</span>` : ''));
     part('head').querySelector('.head__lead')?.classList.toggle('rewrite-pending', !locked && pending(name));
     part('privacy').hidden = !locked; U.html(part('privacy'), locked ? `${lockedFields}仅本人可见` : '');
     // 这场对话是哪一轮自动任务开的：后台 automation_run=[类, 轮号]，照等你的事、账本写“来源：…那一轮 ›”，点了到那一轮（验收 11-24 07:28）

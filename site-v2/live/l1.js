@@ -811,7 +811,8 @@
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
     const title = `<span class="chat-head-title"><span class="head__lead">AI 对话</span> <small class="chat-head-scope">不含定时和自动</small>${arrow}</span>`;
     const stamp = recorded ? `<span data-recorded="${esc(recorded)}">${esc(recorded)} 记录：</span> ` : '';
-    const stats = summary ? ` <span class="head__tail chat-head-summary" style="font-size:13.5px;white-space:normal;overflow-wrap:anywhere"${stamps ? ` data-stamps="${esc(stamps.join('|'))}"` : ''}>${stamp}${esc(summary)}</span>` : '';
+    const counts = summary && esc(summary).replace(/截至 (?:\d{1,2}-\d{2} )?\d{2}:\d{2}|近 72 小时/g, '<span class="live-unit">$&</span>');
+    const stats = counts ? ` <span class="head__tail chat-head-summary" style="font-size:13.5px;white-space:normal;overflow-wrap:anywhere"${stamps ? ` data-stamps="${esc(stamps.join('|'))}"` : ''}>${stamp}${counts}</span>` : '';
     const link = url ? `<a class="head__link chat-head-link" href="${esc(url)}">${title}${stats}</a>` : title;
     return link + (marker ? `<span class="head__marker">${U.fieldHtml(marker, { name: 'AI 对话', kind: viewer })}</span>` : '');
   }

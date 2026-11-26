@@ -48,6 +48,7 @@
   .route-cols { grid-template-columns: minmax(0, .94fr) minmax(0, 1.1fr); }
   .route-cols:has(> .route-now[hidden]), .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
   .route-cols > .route-log { grid-column: 1 / -1; }
+  .route-round__line:last-child .route-round__text { text-wrap: balance; }
 }
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
