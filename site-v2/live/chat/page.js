@@ -229,7 +229,7 @@
     const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
     const unit = text => `<span class="live-unit">${esc(text)}</span>`;
     const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && unit(`${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`),
-      reason && reason !== state && esc(F.ownerWords(reason, viewer)),
+      reason && reason !== state && esc(reason),
       delegated && unit(`后台帮手另在处理（${delegated} 个）`),
       Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && unit(`状态是 ${F.dayClock(chat.status_observed_at)} 读的`)].filter(Boolean).join(' · ') : '';
     // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
@@ -271,7 +271,7 @@
   function lightUp() { if (lit) return; lit = true; L.lightUp([hero, $('plan-box'), $('now-box'), $('think-box'), $('helpers-box'), $('log-box'), $('notices')]); }
   function clearRendered() {
     document.title = 'AI 对话 · 实况';
-    const fields = ['head', 'meta', 'say', 'acts', 'privacy'].map(part);
+    const fields = ['head', 'meta', 'say', 'acts', 'privacy', 'source'].map(part);
     ['plan', 'plan-sub', 'plan-note', 'now-step', 'now-text', 'facts', 'thinking',
       'helpers', 'helpers-part', 'helpers-tally', 'helpers-note', 'helpers-more',
       'log', 'log-part', 'log-note', 'log-more'].forEach(id => fields.push($(id)));
@@ -292,7 +292,7 @@
     const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: 'AI 对话' });
     const recRead = U.reading(rec, { ghost: U.ghost.rows(5), slow: false });
     window.Live.watch(`chats/${encodeURIComponent(id)}`, null, {
-      phase(state) { if (!chat) { heroRead.set(state); recRead.set(state); } },
+      phase(state) { if (!chat && !U.chatFields.withdrawal(state)) { heroRead.set(state); recRead.set(state); } },
       data(data, meta) {
         // 自动任务开的对话（后台 automation_run=[类, 轮号]）不在这里摆：转到那一轮的页，内容一样全（施工稿第三节第 6 条，旧链接解析到新页）
         const run = Array.isArray(data?.automation_run) && typeof data.automation_run[0] === 'string' && typeof data.automation_run[1] === 'string' && data.automation_run[1] ? data.automation_run : null;
@@ -303,13 +303,19 @@
       link(state) {
         if (leaving) return;
         try {
-        bar?.set(state); L.offline(state.offline);
+        const withdrawal = U.chatFields.withdrawal(state, '这场对话');
+        bar?.set(withdrawal && !state.offline ? { ...state, text: U.chatFields.withdrawal(state) } : state); L.offline(state.offline);
         U.list($('notices'), state.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(state.text)}</span>` }] : []);
+        if (withdrawal) {
+          chat = null; missing(withdrawal);
+          heroRead.done(false); heroRead.set({ ...state, phase: 'unavailable', say: esc(withdrawal) });
+          recRead.done(false); return;
+        }
         const offlineChanged = lastOffline !== !!state.offline; lastOffline = !!state.offline;
         if (chat) {
           if (!changed && state.offline && !offlineChanged) return;
           rec.hidden = false; render(state.viewer?.kind, state.now);
-          if (first) { heroRead.done(); recRead.done(); }
+          if (first || changed) { heroRead.done(); recRead.done(); }
           first = changed = false; requestAnimationFrame(lightUp); return;
         }
         heroRead.set(state); recRead.set(state);
