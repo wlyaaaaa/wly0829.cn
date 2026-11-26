@@ -321,7 +321,8 @@
       const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
         : `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
       const own = lastRestore(g), from = g.points?.map(pt => pt.history_from).filter(Boolean).sort()[0];
-      const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : '没有恢复过的记录';
+      // 一条恢复记录都没有时，最上面“最近一次恢复：没有恢复过的记录”已经说了，各类下面不再各写一遍
+      const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : latest ? '没有恢复过的记录' : '';
       const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
       const toggle = folded ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
       const subs = [line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
@@ -329,8 +330,8 @@
     }
     if (groups.length) {
       const without = (d.sets || []).filter(s => s.name && !groups.some(g => g.set === s.id && g.points?.length)).length;
-      // 栏底只并写别的恢复说明：“最近一次记录于 …”已写在各自那一行，不再几处并成一句（分不清哪个时刻是哪条）
-      const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text))
+      // 栏底只并写别的恢复说明：“最近一次记录于 …”已写在各自那一行；“没有恢复记录”最上面已经说了
+      const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text) && !/^没有恢复(?:过的)?记录[。.]?$/.test(sp(U.fieldText(text, viewer))))
         .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
       restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
     }
