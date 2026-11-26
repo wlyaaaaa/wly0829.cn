@@ -209,7 +209,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-kv { column-gap: 28px; }
 .pj-card .pj-kv__row { padding: 8px 0; }
 /* 读数下面那句解释照全写，格子窄就折行，不截成“…”（M881） */
-.pj-card .pj-kv__sub { white-space: normal; overflow-wrap: anywhere; }
+.pj-card .pj-kv__sub { white-space: normal; overflow-wrap: break-word; }
 /* “这件事最后一次发生”那一句（M769）：单独一行，格子窄时折行写全，不截成“…” */
 .pj-card .pj-moment { white-space: normal; overflow: visible; text-overflow: clip; }
 .pj-card .list { border-bottom: 0; }
@@ -251,7 +251,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-sec--array > .pj-foot { grid-column: 2; grid-row: 1; margin: -4px -10px 0 0; flex-wrap: nowrap; }
 .pj-card .pj-sec--array > .pj-foot .more { translate: none; height: 28px; }
 .pj-card .pj-sec--array > .pj-foot .more--link .more__chev { color: var(--pj-accent); }
-.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; overflow-wrap: anywhere; }
+.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; overflow-wrap: break-word; }
 .pj-card .pj-sec--array > .pj-note { margin-top: 2px; white-space: normal; overflow-wrap: anywhere; }
 .pj-card .pj-sec--array > .fold > div > .list { margin-top: 6px; }
 .pj-card > .pj-sec:first-of-type.pj-sec--array { padding-top: 0; }

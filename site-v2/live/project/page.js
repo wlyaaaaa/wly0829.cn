@@ -195,7 +195,7 @@
   }
   const subText = text => {
     const pieces = String(text).split(/(<button\b[^>]*>[\s\S]*?<\/button>|<span\b[^>]*>[^<]*<\/span>)/g);
-    return `<span class="pj-note-piece">${pieces.map((part, i) => i % 2 ? part : part.replaceAll(' · ', ' </span><span class="pj-note-piece">· ').replace(/\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|GHz|MHz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条)(?:前|后)?/g, '<span class="pj-unit">$&</span>')).join('')}</span>`;
+    return `<span class="pj-note-piece">${pieces.map((part, i) => i % 2 ? part : part.replaceAll(' · ', ' </span><span class="pj-note-piece">· ').replace(/\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|GHz|MHz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条)(?:前|后)?[。，、；：）]?/g, '<span class="pj-unit">$&</span>')).join('')}</span>`;
   };
   const attention = it => ['waiting', 'pending'].includes(it.state) || ['waiting', 'pending', '在等'].includes(it.state_text);
   const recordKey = it => it.id || it.name || it.label || it.text;
