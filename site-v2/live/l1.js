@@ -699,7 +699,9 @@
   }
   function chatTitle(c, { field, hidden, label } = chatHeading(c)) {
     if (viewer === 'public' && c.content_locked) return c.detail === false ? '<span class="row__title">仅本人可见</span>' : title({ ...c, visibility: 'same' }, '仅本人可见', 'chats');
-    if (hidden) return `<span class="row__title">${U.fieldHtml(field, { name: 'AI 对话', place: 'title', kind: viewer })}</span><span class="row__meta">${U.fieldHtml(field, { name: '对话名', kind: viewer })}</span>`;
+    // 本人版里标题只给本人、后台又没给字（内容锁着的对话）：照 AI 对话页本人版写“无标题”，不拿卡名“AI 对话”当标题（r83 返修第三轮）
+    const untitled = viewer !== 'public' && !field.hidden && field.rewrite !== 'pending' && field.text == null && field.value == null;
+    if (hidden) return `<span class="row__title">${untitled ? '无标题' : U.fieldHtml(field, { name: 'AI 对话', place: 'title', kind: viewer })}</span><span class="row__meta">${U.fieldHtml(field, { name: '对话名', kind: viewer })}</span>`;
     const note = field.visibility === 'rewritten' || field.public === 'rewrite' ? U.fieldHtml({ visibility: 'rewritten' }, { kind: viewer }) : '';
     if (c.detail === false) return `<span class="row__title">${U.fieldHtml(label, { kind: viewer, place: 'title', name: '对话' })}</span>${note}`;
     return `${title(c, label, 'chats')}${note ? ` <span class="head__rewrite">${note}</span>` : ''}`;
