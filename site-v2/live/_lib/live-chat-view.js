@@ -30,6 +30,16 @@
       return v;
     }
     const replyBody = value => U.chatJoinedReply(value, viewer);
+    // 后台把改写标记标在这一块（chat.visitor_labels.summary）或正文对象自己身上（summary.visitor_labels.text）的，在显示这段字的地方挂签；整场藏着的只在页头挂
+    const fieldTag = (keys, what, own) => !chat || U.visitorWholeHidden(chat) ? '' : U.visitorLabel(chat, keys, what, viewer) || (own && typeof own === 'object' ? U.visitorLabel(own, ['$', 'text'], what, viewer) : '');
+    // 签和句末几个字放进同一个不折行的块（现有的 .live-unit），签不单独掉到下一行（不出现末行只剩“到。”加一个签）
+    const withTag = (html, tag) => {
+      if (!html || !tag || /\blive-mark--(?:reworded|rewritten)\b/.test(html)) return html;
+      const tail = /(?:&[a-z0-9#]+;|[^<>&\s]){1,4}$/i.exec(html);
+      return tail ? `${html.slice(0, tail.index)}<span class="live-unit">${tail[0]}${tag}</span>` : html + tag;
+    };
+    // 一段 html 去掉“仅本人可见”“换了说法”这类标记以后的字，拿来比两处是不是一字不差（对话页整页同一段字只摆一次）
+    const flatWords = html => { const el = document.createElement('div'); el.innerHTML = html || ''; el.querySelectorAll('.live-mark').forEach(m => m.remove()); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
     const chatCell = (value, label, parent, limit = 0, card = false) => {
       return U.chatFields.cell(value, label, parent, viewer, limit, card);
     };
@@ -128,8 +138,9 @@
       // 摘要、回复这两行接上已有的原文：本人版整段摆出，访客版先露两行、点“展开”看全；仅本人可见的照常写锁
       for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && v.at) {
         const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = false;
-        const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${body}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
-        list.push({ key, at: v.at, word, name: esc(name), detail });
+        const tag = body ? fieldTag(key === 'summary' ? 'summary' : ['reply', 'latest_reply'], label, v) : '';
+        const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${withTag(body, tag)}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
+        list.push({ key, at: v.at, word, name: esc(name), detail, words: flatWords(body) });
       }
       if (validTime(chat.at) && !list.some(e => Date.parse(e.at) === Date.parse(chat.at))) list.push({ key: 'update', at: chat.at, word: '主对话更新' });
       return list.filter(e => validTime(e.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
@@ -150,17 +161,21 @@
       });
       const say = ['done', 'waiting'].includes(d.state) && d.summary?.text && d.summary.text === d.text ? d.summary : progress ?? reply ?? d.summary;
       const body = replyBody(say === d.summary ? U.chatProgressText(say, d, viewer) : say);
-      return { say: body, latest: chatCell(body, say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展', d) };
+      const what = say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展';
+      const key = say === d.summary ? 'summary' : say === reply ? ['reply', 'latest_reply'] : say === d.doing ? 'doing' : say === d.progress ? 'progress' : 'text';
+      return { say: body, latest: chatCell(body, what, d), tag: say == null ? '' : fieldTag(key, what, say) };
     }
 
-    // 思考摘要：有标题的先写标题；只有外文思考时，后台给缺因（field_gaps.thinking），先说一句为什么是英文，再给原文
-    function thought() {
+    // 思考摘要：有标题的先写标题；只有外文思考时，后台给缺因（field_gaps.thinking），先说一句为什么是英文，再给原文。
+    // keep：页面要整页去重时传进来（对话页的 once），思考摘要、它头上那行任务名跟上面摆过的一字不差就不出；不传照旧都出
+    function thought(keep = () => true) {
       const raw = field(chat.thinking, chat), words = visibleText(raw);
       const heading = field(field(chat.thinking_heading?.title, chat.thinking_heading), chat), head = visibleText(heading);
-      const title = words && head && head !== words && head !== visibleText(field(chat.title, chat)) && chatCell(heading, '任务', chat, 0, true);
-      const thought = chat.thinking ? chatCell(raw, '思考摘要', chat, 0, true) || chatCell(raw, '思考摘要', chat) : '';
+      const drawn = chat.thinking ? chatCell(raw, '思考摘要', chat, 0, true) || chatCell(raw, '思考摘要', chat) : '', thought = drawn && keep(drawn) ? drawn : '';
+      const lead = thought && words && head && head !== words && head !== visibleText(field(chat.title, chat)) && chatCell(heading, '任务', chat, 0, true), title = lead && keep(lead) ? lead : '';
       const gap = thought && typeof chat.field_gaps?.thinking === 'string' ? chat.field_gaps.thinking : '';
-      return { thought, html: thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thought : '' };
+      const head2 = (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '');
+      return { thought, title, gap, head: head2, html: thought ? head2 + thought : '' };
     }
 
     // 页头信息：型号档位、来源、第几步、各项时刻、报了几分钟、历时、实际工时、帮手几个、所属项目、App 标签
@@ -195,27 +210,28 @@
       return { locked, name, hiddenName, title, missingReply, plan, log, progress, rawReply, hasReply, meta, project, app };
     }
 
-    // 正在执行下面那几行：正式摘要、最新回复（没有时写原因）、任务原文；和页头那句一样的不重复
-    function facts(say, rawReply, hasReply, missingReply) {
+    // 正在执行下面那几行：正式摘要、最新回复（没有时写原因）、任务原文。
+    // keep：对话页的整页登记（once），跟上面摆过的（页头、最新进展、这一步）或这几行之间一字不差的不再摆；不传时只在这几行里互相比
+    function facts(rawReply, hasReply, missingReply, keep) {
+      const seen = new Set(), once = keep || (html => { const w = flatWords(html); if (seen.has(w)) return false; if (w) seen.add(w); return true; });
       const facts = [];
-      const shown = value => { const el = document.createElement('div'); el.innerHTML = said(value); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
       const summary = replyBody(U.chatProgressText(chat.summary, chat, viewer)), reply = replyBody(rawReply);
-      if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || shown(summary) !== shown(say))) facts.push(['', chatCell(summary, '正式摘要', chat)]);
+      if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || once(chatCell(summary, '正式摘要', chat, 0, true)))) facts.push(['', withTag(chatCell(summary, '正式摘要', chat), fieldTag('summary', '正式摘要', chat.summary))]);
       const replyContent = hasReply || !!(rawReply && (markOf(rawReply, rawReply) || pending(rawReply) || rawReply.q === 'warming'));
       // M684：最新回复访客那边不一样的（整块 reply / latest_reply，或正文对象里只换了词的 reply.visitor_labels.text），在这一行末挂签
       const replyTag = blockTag(['reply', 'latest_reply'], '最新回复');
       if (!replyContent) facts.push(['最新回复', privateSaid(missingReply, chat), false]);
-      else if (shown(reply) !== shown(say) && shown(reply) !== shown(summary)) {
+      else if (once(privateSaid(reply, chat))) {
         facts.push(['最新回复', privateSaid(reply, chat) + replyTag]);
       }
       const prompt = chatCell(chat.task_prompt, '任务原文', chat);
-      if (prompt && shown(chat.task_prompt) !== shown(say)) facts.push(['', prompt]);
+      if (prompt && once(chatCell(chat.task_prompt, '任务原文', chat, 0, true))) facts.push(['', prompt]);
       return facts;
     }
     // M930：“对外换了说法”访客版同一处也挂（visitorLabel 给访客只出这一种，“访客看不到”照旧只给本人）
     const blockTag = (key, what) => !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
 
-    const api = { marker, model, who, text, pending, field, replyBody, chatCell, said, privateSaid, headerNote, chatTitle, when, projectInfo, actions,
+    const api = { marker, model, who, text, pending, field, replyBody, fieldTag, withTag, flatWords, chatCell, said, privateSaid, headerNote, chatTitle, when, projectInfo, actions,
       privatePlan, wholeOwner, chatState, stepWord, markOf, plainName, marks, visibleText, helperWords, activityOf, dayOf, stamp, helperRow, station,
       validTime, hasNewTimes, startTimes, events, recordEnd, workLine, thought, pageMeta, facts, blockTag };
     // 对外的每个函数先现读一次页面当前的 viewer、chat、at，函数之间互相调用时不再重读

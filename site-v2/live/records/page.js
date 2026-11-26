@@ -128,6 +128,10 @@
     if (r.detail) parts[3] = typeset(r.detail, undefined, s => `<p class="knowledge-prose">${s}</p>`, parts[3]);
     // 正文里有“〔…省略〕”的：源头导出时就省掉了，后台给缺因（body_gap），紧跟正文写一句为什么
     if (typeof r.body_gap === 'string' && r.body_gap) parts[1] += `<p class="knowledge-prose" style="color:var(--muted, #8f8d86)">${esc(r.body_gap)}</p>`;
+    // 后台在这一条的正文、详细内容上标了 visitor_labels 的，紧跟那一段挂签（本人版两种都挂，访客版只挂“对外换了说法”）
+    const textTag = r.text ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
+    if (textTag) parts[1] += `<p class="knowledge-prose">${textTag}</p>`;
+    if (detailTag) parts[3] = parts[3].replace(/^(<div class="knowledge-md">[\s\S]*?<\/div>|<p class="knowledge-prose">[\s\S]*?<\/p>)/, `$1<p class="knowledge-prose">${detailTag}</p>`);
     return parts;
   }
   // 说明书正文里给 AI 回查用的出处注脚：（明示 31）（52fbe706）（OR-444）（〔编号或数额省略〕、…）（某目录 下同前缀文件：…）这类，

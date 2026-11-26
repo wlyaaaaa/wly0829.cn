@@ -91,7 +91,7 @@
     clearTimeout(landedTimer);
     const now = Date.now(), before = landed.size;
     for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
-    if (landed.size !== before) { redrawItems(); drawClosed(); }
+    if (landed.size !== before) { redrawItems(); drawClosed(); if (lastHome) renderHome(...lastHome); }
     if (!landed.size) return;
     const first = Math.min(...[...landed.values()].map(w => w.saved));
     landedTimer = setTimeout(() => window.Live.refresh().finally(followLanded), now - first < 60000 ? 3000 : 15000);
@@ -107,6 +107,8 @@
     // 旧滚动锚点可能正是要撤下的那行，不能再用它锁位置。
     U.anchor.stop();
     redrawItems();
+    // 页头总数和四个数跟着撤下、挪走的卡一起变（M981、M903），不等清单统计重读
+    if (saved && lastHome) renderHome(...lastHome);
     if (reportsData) renderReports(reportsData);
     if (saved?.length) { drawClosed(); followLanded(); }
   });
@@ -122,8 +124,8 @@
     return [...items].sort((a, b) => when(a) - when(b));
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
-  // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做，只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
-  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到日子转成要你做（默认上午 10 点），没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”就下去，不按天数消失。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做（要拍板的转成要你选），只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
+  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到日子转成要你做或选（默认上午 10 点），没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”就下去，不按天数消失。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
@@ -434,7 +436,8 @@
     // 新私事规则（本人 11-24 02:56）：访客版不再按条藏，组标题只数看得到的行，也不再写“另有 N 件仅本人可见”。
     // M973：“近 7 天下去的”数的是读回来多少件，同一句并成一行的（“同一件事关过 N 次”）按原来的件数算，不按摆了几行；两版读回来的一样多，件数就一样
     const pieces = key === 'closed' ? items.reduce((n, it) => n + (it.repeats || 1), 0) : items.length;
-    const count = partial ? key === 'closed' ? '已读 ' + pieces + ' 件' : '已读部分' + (items.length ? ' · ' + items.length + ' 件' : '') : (known ? pieces : '—') + ' 件';
+    const green = n => n > 0 ? '<b class="lb-count__n">' + n + '</b>' : n;   // 加绿（GREENIMG1126）：大于 0 的件数绿
+    const count = partial ? key === 'closed' ? '已读 ' + green(pieces) + ' 件' : '已读部分' + (items.length ? ' · ' + green(items.length) + ' 件' : '') : (known ? green(pieces) : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
@@ -540,7 +543,18 @@
     } });
   }
   const missingHome = text => { U.html($('stats'), ''); U.html($('note'), U.fieldHtml(text, { kind: viewer })); L.tone($('hero'), 'off'); for (const key of Object.keys(KIND)) list(key, null, text); showOpenMore(); };
-  watch('home', (d, meta) => {
+  // M981、M903：回执到了、卡已撤下（或挪进“你放着”）而清单统计还没跟上时，页头“等你 N 件”和四个数照页面上实际摆着的算；
+  // 后台读数跟上以后（这件不在清单里了、或换成新版本）就照后台的数，不再另减另加
+  function movedCounts(rows) {
+    const moved = Object.fromEntries(Object.keys(KIND).map(key => [key, 0]));
+    for (const it of rows || []) if (Object.hasOwn(moved, it.kind) && (hiddenByWrite(it) || U.justSaved(it))) moved[it.kind]--;
+    for (const [id, w] of landed) if (w.key === 'later' && !(rows || []).some(it => it.id === id && it.item_version !== w.version)) moved.later++;
+    return moved;
+  }
+  let lastHome = null;
+  watch('home', renderHome, missingHome);
+  function renderHome(d, meta) {
+    lastHome = [d, meta];
     viewer = meta.viewer?.kind || 'public';
     document.body.dataset.viewer = viewer;   // 本人版标题不收行
     pageTitle(); for (const [kind, c] of cards) c.sub.textContent = hintText(kind);
@@ -563,12 +577,14 @@
         if (partial) counts.q = 'partial';
       }
     }
-    const lower = key => counts?.q === 'partial' && (!Array.isArray(counts.partial) || counts.partial.includes(key));
+    const moved = movedCounts(rows);
+    if (counts && Object.values(moved).some(Boolean)) counts = { ...counts, ...Object.fromEntries(Object.keys(KIND).filter(key => Number.isFinite(counts[key])).map(key => [key, Math.max(0, counts[key] + moved[key])])) };
+    const lower = key =>counts?.q === 'partial' && (!Array.isArray(counts.partial) || counts.partial.includes(key));
     const waiting = (counts?.choose ?? 0) + (counts?.do ?? 0), waitingLower = ['choose', 'do'].some(lower);
     const total = waitingLower ? waiting || null : counts?.choose != null && counts?.do != null ? waiting : null;
     const head = `等${viewer === 'public' ? '本人' : '你'} ${total == null ? U.collectionText() : `${waitingLower ? '至少 ' : ''}${total} 件`}`;
     U.html($('head'), U.status({ ...needs, level: needs.header_level ?? needs.level }).lamp + U.head(head?.replace(/(等你|等本人)\s*·\s*(\d+\s*件)/, '$1 $2'), { lamp: false }));
-    const waits = (rows || []).filter(it => ['choose', 'do'].includes(it.kind)).map(waitingMs).filter(Number.isFinite);
+    const waits = (rows || []).filter(it => ['choose', 'do'].includes(it.kind) && !hiddenByWrite(it) && !U.justSaved(it)).map(waitingMs).filter(Number.isFinite);
     const phone = needs.phone;
     const status = U.status({ ...needs, level: needs.header_level ?? needs.level });
     const listCutoff = page?.items && page.at && Date.parse(page.at) !== Date.parse(sourceAt(needs)) && `名单和统计截至 ${U.date(page.at)} ${U.time(page.at)}`;
@@ -598,7 +614,7 @@
       const value = counts?.[key], bounded = lower(key);
       const shown = value == null || bounded && value === 0 ? '—' : `${bounded ? '至少 ' : ''}${esc(value)}`;
       const pressed = $('kind-pick').value === key && $('state-pick').value !== 'closed';
-      return `<button class="lbp-stat" type="button" data-kind="${key}" aria-controls="groups" aria-pressed="${pressed}">${window.LiveBoard.icon('check')}<b>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></button>`;
+      return `<button class="lbp-stat" type="button" data-kind="${key}" aria-controls="groups" aria-pressed="${pressed}">${window.LiveBoard.icon('check')}<b${typeof value === 'number' && value > 0 ? ' class="is-some"' : ''}>${shown}</b><small>${viewer === 'owner' ? label : label.replaceAll('你', '本人')}</small></button>`;
     }).join(''));
     L.tone($('hero'), { ...needs, level: needs.header_level ?? needs.level });
     for (const key of Object.keys(KIND)) {
@@ -606,7 +622,7 @@
       list(key, rows?.filter(it => it.kind === key).sort(itemOrder), empty, it => row(it, false, shared.get(it)), !meta.firstOpen, partial);
     }
     showOpenMore(); renderSelection();
-  }, missingHome);
+  }
   let closedItems = [], next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
@@ -672,7 +688,7 @@
     const rows = d.items?.filter(it => !hiddenByWrite(it) && !U.justSaved(it) && (!query || matchesQuery(it)) && !closedSince(gone, it.id, it.opened) && !closedSince(gone, it.owner_item || it.item_id || it.item, it.opened) && !pendingItems.has(it.owner_item || it.item_id || it.item || it.id) && !(it.actions || []).some(a => a.href && pendingItems.has(new URL(a.href, location.origin).searchParams.get('id')))).map(reportActions);
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length; filterBoard();
-    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}<span class="lb-count">（${reportCount ?? '—'} 件）</span>`);
+    U.html(cards.get('reports').title, `${viewer === 'owner' ? '等你答的汇报' : '等本人答的汇报'}<span class="lb-count">（${reportCount > 0 ? `<b class="lb-count__n">${reportCount}</b>` : reportCount ?? '—'} 件）</span>`);
     const shown = drawn.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
     U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }

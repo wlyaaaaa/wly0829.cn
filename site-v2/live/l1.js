@@ -729,10 +729,12 @@
     };
     const modern = Object.hasOwn(c, 'worked_seconds');
     const span = sec => [Math.floor(sec / 3600) && `${Math.floor(sec / 3600)} 小时`, Math.floor(sec / 60) % 60 && `${Math.floor(sec / 60) % 60} 分`, (sec % 60 || sec === 0) && `${sec % 60} 秒`].filter(Boolean).join(' ');
-    const timing = [Number.isFinite(c.elapsed_seconds) && `历时 ${span(c.elapsed_seconds)}`, Number.isFinite(c.worked_seconds) && `实际工时 ${span(c.worked_seconds)}`].filter(Boolean).join(' · ');
+    const timings = [Number.isFinite(c.elapsed_seconds) && `历时 ${span(c.elapsed_seconds)}`, Number.isFinite(c.worked_seconds) && `实际工时 ${span(c.worked_seconds)}`].filter(Boolean), timing = timings.join(' · ');
+    // 时长整段不折行（R14-05：“实际工时 4 小时 53 分”的“分”掉到下一行）：每段时长包进现有的 .live-unit，放不下时整段挪到下一行，在“·”处折；AI 对话页同一个办法
+    const keepUnits = (html, parts) => parts.reduce((out, part) => out.replace(esc(part), () => `<span class="live-unit">${esc(part)}</span>`), html);
     const { plan, current, label } = U.chatFields.planInfo(c);
     const locked = viewer === 'public' && c.content_locked;
-    const progress = locked ? esc(label) : c.detail && plan[current] && label ? `<a class="more" href="${esc(route(`/live/chat/?id=${encodeURIComponent(c.id)}`) + '#plan-box')}">${esc(label)} ›</a>` : '', worked = chatWords(timing || (!modern && (Object.hasOwn(c, 'elapsed_seconds') ? gap('elapsed_seconds', '历时') : work || gap('elapsed_seconds', '历时'))) || '', c);
+    const progress = locked ? esc(label) : c.detail && plan[current] && label ? `<a class="more" href="${esc(route(`/live/chat/?id=${encodeURIComponent(c.id)}`) + '#plan-box')}">${esc(label)} ›</a>` : '', worked = keepUnits(chatWords(timing || (!modern && (Object.hasOwn(c, 'elapsed_seconds') ? gap('elapsed_seconds', '历时') : work || gap('elapsed_seconds', '历时'))) || '', c), (timing ? timings : work.split(' · ')).filter(Boolean));
     const progressText = U.chatProgressText(c.text, c, viewer);
     const rawReply = quota || modern ? progressText ?? c.latest_reply : Object.hasOwn(c, 'latest_reply') ? c.latest_reply : progressText;
     const replyField = U.chatPreviewSummary(rawReply, c, viewer);

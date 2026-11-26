@@ -49,7 +49,8 @@
   function appRow(a) {
     const name = a.name, field = name != null && typeof name === 'object', hidden = hiddenName(a) && (viewer !== 'owner' || name == null);
     const rowMark = isPrivate(a) && !isPrivate(name) && name?.visibility !== 'pending' && name?.rewrite !== 'pending';
-    const mark = field && !rowMark ? '' : U.visibilityNote(a, viewer, a.hidden_what || '应用名');
+    // 后台在这一行标了 visitor_labels（应用名换了说法：name=rewritten）的，名字旁挂签；本人版、访客版都挂“对外换了说法”（M930），“访客看不到”只本人版挂
+    const mark = (field && !rowMark ? '' : U.visibilityNote(a, viewer, a.hidden_what || '应用名')) || U.visitorLabel(a, ['$', 'name'], '应用名', viewer);
     const label = hidden && rowMark ? '' : field ? U.fieldHtml(name, { name: '应用名', kind: viewer }) : U.trustText(U.sp(name ?? blank()), viewer);
     const category = publicCategory(a, viewer, hidden ? '—' : blank());
     // 不在装机清单、只在用量记录里出现的（后台标 in_inventory: false）：两样时间本来就没有，写“—”并在名字旁标出来，和表下说明对上（M380）。
