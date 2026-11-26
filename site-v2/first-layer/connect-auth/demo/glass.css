@@ -1032,6 +1032,8 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .cell.is-on .cell__glow { animation: auth-breathe 8s ease-in-out infinite; }
 @keyframes auth-breathe { 50% { background-size: 116% 116%; filter: brightness(1.1) saturate(1.2); } }
 .page--auth .field { animation: auth-drift 8s ease-in-out infinite; }
+/* 光斑漂移会伸出窗口右边，手机上整页能左右挪十来像素：照连接电脑页（M236）只在窗口这一层裁掉，样子不变 */
+html:has(> body.page--auth), body.page--auth { overflow-x: clip; }
 @keyframes auth-drift { 50% { transform: translate3d(34px, -20px, 0) scale(1.04); } }
 
 /* ③ 办成那一刻：绿点荡开光波，卡片泛起绿光，时间数字翻到位（1 秒，一次） */
