@@ -67,12 +67,12 @@
     const interval = T.duration(d.dispatch?.interval_seconds);
     const dispatchNote = id === 'auto-repair' || id === 'message-review'
       ? (interval ? `派活程序每 ${interval}查一次。` : '派活程序多久查一次，这次没读到。') : '';
-    // 关着的类：几格都先说关着、现在不跑，平时怎么开工写成“打开后……”（看图 11-27：页头说关着，下面却像在跑）
+    // 关着的类：“关着”只在页头那个标签说一次；下面几格说各自的事，平时怎么开工写成“打开后……”，不再每格重复关着（看图 11-27：页头说关着，下面却像在跑；复看：一页说了三次关着）
     const off = m === 'off', base = [dispatchNote, g.trigger].filter(Boolean).join(' ');
-    const start = off ? `关着，现在不跑。${g.offStart || (base ? `打开后，${base}` : '')}` : base || g.offStart || '';
+    const start = off ? g.offStart || (base ? `打开后，${base}` : '') : base || g.offStart || '';
     const steps = list(g.steps);
     const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
-    const prompt = c.prompt_template ? `<p>${off ? '这一类关着，现在不交给 AI。打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
+    const prompt = c.prompt_template ? `<p>${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
     const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
