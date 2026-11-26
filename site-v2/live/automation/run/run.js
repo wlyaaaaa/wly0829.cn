@@ -417,7 +417,11 @@
       const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
-      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${keepDates(U.fieldHtml(v, { name: '对话内容', kind: viewer }))}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
+      const facts = m.meta.map(v => keepDates(U.fieldHtml(v, { name: '对话内容', kind: viewer })));
+      if (m.project) facts.push(`所属项目 ${m.project}`);
+      const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
+      if (mark) facts.push(`<span class="live-unit">${facts.pop() || ''}${mark}</span>`);
+      meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${facts.map(v => `<span>${v}</span>`).join('')}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
       plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
     } else {
       // 对话没读到（访客版对话藏着、本人版还在读或读不到）：照后台给的 conversation.metadata 和 message_count 写卡头这一行，正文照旧
