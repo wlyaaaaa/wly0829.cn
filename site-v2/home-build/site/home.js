@@ -318,6 +318,7 @@ function renderScreen(data, meta, pending = false, now) {
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
   const today = beijingDay.format(Date.parse(now) || Date.now());
+  let hasReading = false, shownAt = -Infinity;
   const otherDay = (at) => {
     const time = Date.parse(at);
     return Number.isFinite(time) && beijingDay.format(time) !== today;
@@ -350,6 +351,11 @@ function renderScreen(data, meta, pending = false, now) {
       const stamp = cutoffText(at, now, '截至');
       if (stamp) { view.cutoff = true; view.sub = [view.sub, stamp].filter(Boolean).join('\n'); view.label += `，${stamp}`; }
     }
+    if (down.offline && !view.off && (view.num || id === 'computer' && view.sub.startsWith('开机 '))) {
+      hasReading = true;
+      const stamp = Date.parse(at);
+      if (Number.isFinite(stamp)) shownAt = Math.max(shownAt, stamp);
+    }
     let ring = -1;
     for (const panel of panels) ring = Math.max(ring, paintCell(panel.cells[index], view, fallback, sample, quiet));
     if (id === 'computer') {
@@ -358,6 +364,7 @@ function renderScreen(data, meta, pending = false, now) {
     }
     if (ring >= 0) panelState.pulse[index] = performance.now() + ring;   // 那圈光和字同时出来
   });
+  return { hasReading, cutoff: Number.isFinite(shownAt) ? cutoffText(shownAt, now, '').trim() : '' };
 }
 renderScreen(null, null, true);
 
@@ -830,12 +837,12 @@ function tipText(next) {
   };
 }
 // 家里网站上这台设备的配对失效时，原来顶上那句说明也放在这里（不亮灯）。
-function connectionTip(off, reason, at, sub, pair = '') {
+function connectionTip(off, reason, at, sub, pair = '', hasReading = false) {
   root.classList.toggle('home-off', !!off);           // “实时状态”按钮上那颗点跟着变橙、变回绿（.home-lamp）
   if (off || pair) {
     clearTimeout(tipHide);
     tipText({ pair: !off, say: off ? reason || '连不上实况服务' : pair,
-      at: !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : ' · 右边屏上暂时没有数', sub: off ? sub : '' });
+      at: !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : hasReading ? '' : ' · 右边屏上暂时没有数', sub: off ? sub : '' });
     if (tip.hidden) { tip.hidden = false; void tip.offsetWidth; }
     tip.classList.add('is-shown');
   } else if (tip.classList.contains('is-shown')) {
@@ -857,10 +864,19 @@ const watchScreen = () => window.Live?.watch('screen', {}, {
     for (const panel of panels) for (const { link } of panel.cells) {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
-    connectionTip(state.offline, state.reason, state.pageAtText, '连上就换成最新的', state.pairNotice);
     const paint = () => renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
+    if (state.offline) {
+      paintAfterTip = null;
+      const { hasReading, cutoff } = paint();
+      const offSince = state.link?.offSince;
+      const offAt = state.hostOff && Number.isFinite(Date.parse(offSince)) ? cutoffText(offSince, null, '').trim() : '';
+      const reason = offAt ? `电脑 ${offAt} 关机了` : state.hostOff ? '电脑关机了' : '电脑不在线';
+      connectionTip(true, reason, cutoff, state.hostOff ? '开机后换成最新的' : '连上就换成最新的', '', hasReading);
+      return;
+    }
+    connectionTip(false, '', '', '', state.pairNotice);
     // 接回时先收走断线小签，免得正式数字与旧提示同屏。
-    if (!state.offline && !state.pairNotice && !tip.hidden) paintAfterTip = paint;
+    if (!state.pairNotice && !tip.hidden) paintAfterTip = paint;
     else { paintAfterTip = null; paint(); }
   }
 });
