@@ -280,7 +280,14 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     const c = catOf(d);
-    if (!d || !c) { T.paint(page.root, !d ? T.placeholder(state, '这一类自动任务') : '<p class="tp-placeholder">这一类自动任务没读到。</p>'); page.tick.set([], { off: true }); return; }
+    if (!c) {
+      const phase = state?.phase;
+      const note = phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
+        : phase === 'idle' || phase === 'wait' ? '正在读这一类自动任务…' : d ? '这一类自动任务没读到。' : '';
+      T.paint(page.root, note ? `<p class="tp-placeholder" role="status">${note}</p>` : T.placeholder(state, '这一类自动任务'));
+      page.tick.set([], { off: true });
+      return;
+    }
     document.title = `${U.fieldText(cn(c.title), viewer)} · 自动任务 · 实况`;
     const info = allRuns();
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><strong aria-current="page">${F(cn(c.title), '类别')}</strong></nav>
