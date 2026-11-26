@@ -676,6 +676,11 @@
     cockpit_device_rate_limited: '点得太多了，没保存上。过几分钟再点一次。',
     cockpit_action_missing: '这一下没送到后台，没办；卡还在，可以再点一次（再点沿用原来的编号，后台认得出是同一笔，不会办两次）。',
   };
+  const ITEM_RECEIPT_ACCEPTED = '已收下，还在写', ITEM_RECEIPT_UNKNOWN = '还没查到结果，会接着查这一次';
+  function readableWriteReason(message) {
+    const text = typeof message === 'string' ? message.trim() : '';
+    return /\p{Script=Han}/u.test(text) && !/\b\w+_\w+\b|\bHTTP\s+\d+|提交编号|事项版本格式|写回/u.test(text) ? text : '';
+  }
   const itemWrites = new Set();
   function itemIntent(item, action) {
     if (item.closed || !action || !['copy', 'direct'].includes(action.kind)) return '';
@@ -819,13 +824,13 @@
     const source = trigger?.isConnected ? trigger : document.querySelector(`.lb-item[data-key="${CSS.escape(rows[0].id)}"]`);
     const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]), source);
     try {
-      // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
-      // 回到页面接着查（resume）只看本机记下的结果，查一轮就够：后台没有只读的查回执口，不拿原编号重发
+      // 没结果就按同一编号接着只读查。回到页面恢复时查一轮，留在本页最多再查三轮。
       const saved = [], failed = [], receipts = {};
       let pending = rows;
-      const onAccepted = rows.length === 1 ? () => receipt.set('busy', '已收下，还在写') : null;
+      const allAccepted = items => items.every(item => receipts[item.id]?.status === 'waiting_undo');
+      const onAccepted = rows.length === 1 ? () => receipt.set('busy', ITEM_RECEIPT_ACCEPTED) : null;
       for (let round = 0; pending.length && round < (resume ? 1 : 4); round++) {
-        if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
+        if (round) receipt.set('busy', allAccepted(pending) ? ITEM_RECEIPT_ACCEPTED : ITEM_RECEIPT_UNKNOWN);
         const result = await writeItems(live, pending, wording.action, true, !!resume || round > 0, onAccepted);
         saved.push(...result.saved); failed.push(...result.failed); Object.assign(receipts, result.receipts);
         pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
@@ -842,14 +847,18 @@
       const savedText = remind ? '已放到你放着' + (remind.length === 1 && remind[0] ? `，${remind[0]} 再提醒` : '') : wording.saved;
       if (!left.length) receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
       else {
-        // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”。后台回了“已收下、还在写”（waiting_undo）的照实说
-        const accepted = unsure.length > 0 && unsure.every(item => receipts[item.id]?.status === 'waiting_undo');
-        const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
-          unsure.length && (rows.length > 1 && failed.length ? (accepted ? `还在写的 ${unsure.length} 件：` : `还没确认的 ${unsure.length} 件：`) : '') + (accepted ? '后台已经收下，还在写。' : resume ? '刷新、离开前点的这一下没等到结果。' : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
-        const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && (accepted ? `已收下、还在写 ${unsure.length} 件` : `还没确认 ${unsure.length} 件`)].filter(Boolean).join('，')
-          : failed.length ? (failed[0].error === 'cockpit_action_missing' ? '这一下没送到后台' : '没保存上') : accepted ? '已收下，还在写' : '还没确认保存上';
+        const accepted = unsure.length > 0 && allAccepted(unsure);
+        const waitingText = accepted ? ITEM_RECEIPT_ACCEPTED : ITEM_RECEIPT_UNKNOWN;
+        const reasonFor = failure => readableWriteReason(receipts[failure.item.id]?.message);
+        const failure = failed[0], reason = failure && reasonFor(failure), batch = rows.length > 1;
+        const head = batch ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && (accepted ? `已收下、还在写 ${unsure.length} 件` : `还没确认 ${unsure.length} 件`)].filter(Boolean).join('，')
+          : failure?.error === 'cockpit_action_missing' ? '这一下没送到后台' : failure ? (reason ? `没保存上：${reason}` : '没保存上') : waitingText;
+        const details = batch ? [...failed.map(f => {
+          const detail = reasonFor(f) || FAILED_TEXT[f.error];
+          return `「${f.name}」` + (detail ? '：' + detail : '');
+        }), unsure.length && waitingText] : [nameOf(rows[0]), failure && !reason && FAILED_TEXT[failure.error]];
         receipt.set('fail', head,
-          { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
+          { name: [...details, extra].filter(Boolean).join('\n'), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
         failedReceipts.set(receipt.note, { key: receiptKey(left), close: receipt.close });
       }
       complete(saved);
