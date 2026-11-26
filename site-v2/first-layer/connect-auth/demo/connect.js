@@ -5,6 +5,7 @@
   syncGlow();
 
   let data = null, offlineNote = '', reading = true;   // 第一次回话之前写“正在读…”，不写像没有这种接法的“还没读到”
+  let loadNote = '';   // 共用脚本没下到、又没有随站固定接法时，接法那里写的一句
   const pick = { who: 'chatgpt', pc: 'main' };
   // 固定的接法（地址、认证、客户端 ID、命令）构建时已从现役登记写进页面（组装.py 的 connect_fixed）：
   // 进页先照它画，不等实时读数；读到以后照读到的。没写进来的（试看页）照旧等读数。
@@ -112,7 +113,7 @@
   function build() {
     const plan = plans()[pick.who];
     const out = [];
-    if (!plan) return [el('p', 'say', offlineNote || (reading && !data ? '正在读这个接法…' : '还没读到这个接法。'))];
+    if (!plan) return [el('p', 'say', offlineNote || loadNote || (reading && !data ? '正在读这个接法…' : '还没读到这个接法。'))];
     // Claude、Codex：先写明是哪台上的程序去连
     if (plan.where) {
       const box = el('div', 'rows');
@@ -203,7 +204,30 @@
   // 先画固定的接法，不等实况脚本下载完
   markSegs(true);
   show(false);
-  if (!window.Live) await new Promise((resolve, reject) => { const s = document.createElement('script'); s.src = '/live/_lib/live-client.js'; s.onload = resolve; s.onerror = reject; document.head.append(s); });
+  // 共用的实况脚本第一次没下到（断网、被拦）：已经画好的固定接法照旧留着，能看能复制；
+  // 网络回来或页面回到前台再取一次，取到了照常读实时接法（M983）
+  if (!window.Live) await new Promise(resolve => {
+    let fetching = false;
+    const done = () => {
+      removeEventListener('online', fetchClient);
+      document.removeEventListener('visibilitychange', fetchClient);
+      if (loadNote) { loadNote = ''; reading = true; show(false); }
+      resolve();
+    };
+    function fetchClient(first) {
+      if (window.Live) return done();
+      if (fetching || (document.hidden && first !== true)) return;
+      fetching = true;
+      const s = document.createElement('script');
+      s.src = '/live/_lib/live-client.js';
+      s.onload = done;
+      s.onerror = () => { fetching = false; s.remove(); loadNote = '连接状态还没读到，请重新加载。'; reading = false; show(false); document.body.classList.add('is-ready'); };
+      document.head.append(s);
+    }
+    addEventListener('online', fetchClient);
+    document.addEventListener('visibilitychange', fetchClient);
+    fetchClient(true);
+  });
   function renderLink(s) {
     const at = s.shownAt || s.cutoffAt;
     if (!['idle', 'wait', 'slow'].includes(s.phase)) reading = false;
@@ -221,4 +245,9 @@
 
   const ready = () => document.body.classList.add('is-ready');
   requestAnimationFrame(() => requestAnimationFrame(ready));
-})().catch(() => { document.body.classList.add('is-ready'); document.getElementById('sheet').textContent = '连接状态还没读到，请重新加载。'; });
+})().catch(() => {
+  document.body.classList.add('is-ready');
+  // 已经画出能用的接法就留着，不拿一句“没读到”盖掉
+  const sheet = document.getElementById('sheet');
+  if (!sheet.querySelector('.rows, .cmds')) sheet.textContent = '连接状态还没读到，请重新加载。';
+});
