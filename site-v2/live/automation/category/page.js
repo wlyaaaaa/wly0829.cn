@@ -49,9 +49,10 @@
   }
   const range = r => {
     const a = r.startedAt || r.queuedAt, b = r.finishedAt;
-    if (!T.stamp(a)) return b ? esc(when(b)) : '';
-    if (!T.stamp(b) || T.clock(a) === T.clock(b) && T.dayKey(a) === T.dayKey(b)) return esc(when(a));
-    return `${esc(when(a))}–${esc(T.dayKey(a) === T.dayKey(b) ? T.clock(b) : when(b))}`;
+    const part = value => `<span class="au-nobr">${esc(value)}</span>`;
+    if (!T.stamp(a)) return b ? part(when(b)) : '';
+    if (!T.stamp(b) || T.clock(a) === T.clock(b) && T.dayKey(a) === T.dayKey(b)) return part(when(a));
+    return `${part(when(a))}–<wbr>${part(T.dayKey(a) === T.dayKey(b) ? T.clock(b) : when(b))}`;
   };
   // 一行写两句：上面这一轮干的是哪件事（自动修理写那件活的名字，别的写结果），下面一句交代、谁做的、用了多久
   function runRow(r) {
@@ -87,7 +88,10 @@
   function nowText(d, c, rows) {
     const p = pauseOf(d), pr = c.problem, st = c.state || {}, m = mode(c), live = rows.find(r => r.status === 'running');
     if (p) return ['warn', `停着：${pauseText(p)}`];
-    if (pr && (pr.headline || pr.title || pr.text)) return ['warn', `出毛病 —— ${F(pr.headline || pr.title || pr.text, '哪里坏了')}${pr.repairing === true ? '（AI 在修）' : pr.handler_text ? `（${F(pr.handler_text, '谁在处理')}）` : ''}`];
+    if (pr && (pr.headline || pr.title || pr.text)) {
+      const handler = pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理');
+      return ['warn', `出毛病 —— ${F(pr.headline || pr.title || pr.text, '哪里坏了')}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
+    }
     if (c.running || st.kind === 'running' || live) return ['run', `正在跑${live && T.stamp(live.startedAt) ? `，${esc(T.clock(live.startedAt))} 起` : ''}${live?.activity ? ` —— ${F(live.activity, '正在干什么')}` : ''}`];
     if (m === 'off') return ['off', `关着${id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}`];
     if (m === 'paused') return ['off', esc(pausedText(c.setting?.until_at) || '暂停中')];
@@ -155,7 +159,7 @@
     if (weekly) day.setUTCDate(day.getUTCDate() + (8 - day.getUTCDay()) % 7);
     day.setUTCHours(weekly ? 15 : 6, weekly ? 30 : 10, 0, 0);
     if (+day - bj <= now) day.setUTCDate(day.getUTCDate() + (weekly ? 7 : 1));
-    const at = esc(when(new Date(+day - bj).toISOString()));
+    const at = `<time>${esc(when(new Date(+day - bj).toISOString()))}</time>`;
     return weekly ? `下次周检 ${at}，有改动才跑。` : `急件马上处理，非急件下次从 ${at} 起处理。`;
   }
   function upcoming(d, c) {

@@ -564,6 +564,8 @@
     // 每一截整块不折行（窄栏里“用了 12 分钟”的“钟”会单独掉到下一行）
     return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).map(x => `<span class="au-nobr">${x}</span>`).join('，');
   }
+  const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
+    part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
   function lastCell(c, problem) {
     const r = c.last_result, since = c.recent_stats?.recorded_since;
     if (!r) return `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
@@ -572,8 +574,8 @@
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
     const result = c.id === 'translator' && typeof r.text === 'string'
       ? r.text.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : r.text;
-    const detail = [esc(when(r.at)), todayText(c)].filter(Boolean).join(' · ');
-    return `${duplicate ? '' : F(result, '上次结果')}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
+    return `${duplicate ? '' : keepDates(F(result, '上次结果'))}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
