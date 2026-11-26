@@ -137,7 +137,7 @@
   });
 
   // —— 其余三组：默认各露 5 项，底下“再看 25 项（还有 M 项）”每点一次再露 25 项，一直能看到底（本人 11-26 选 SHIP7 A；全站长列表默认露一部分、逐段打开）。
-  // 设了启用、这次开机没见它启动的（“这次没确认”）不一行行列：每组只留一行“另有 N 项……点开看名单”，点开才列，名单里不再摆“这次开机”那一列（本人选 SHIP8 A）。
+  // 设了启用、这次开机没见它启动的（“这次没确认”）不一行行列：每组在表上方只留一行“另有 N 项……点开看名单”，点开才列，名单里不再摆“这次开机”那一列（本人选 SHIP8 A）。
   // 后台每页给 25 条，按“启动失败、这次没确认、其余按名字”排；手里的不够露就用回包的 next 往下取。
   const GROUP_FIRST = 5, GROUP_STEP = 25;
   const groupEls = {}, groupShown = {}, uncOpen = {}, groupFailed = {};
@@ -196,7 +196,8 @@
     const open = !!uncOpen[key], uncWait = open && unc.length < uncN && !!d.next;
     const uncList = open ? `<div class="su-unc__list">${unc.length ? UNC_COLS + unc.map(r => row(r, s?.boot_at, false)).join('') : ''}${uncWait ? say(groupFailed[key] ? '后面的名单暂时读不到，点上面那行再试一次。' : '正在读…') : ''}</div>` : '';
     const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起），${open ? '收起名单' : '点开看名单'} <span class="more__chev">›</span></button></div>${uncList}` : '';
-    U.html(list, (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + more + uncLine);
+    // “另有 N 项”那一行放在这组的表上方，点开的名单也在表上方
+    U.html(list, uncLine + (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + more);
     U.blockNote(list, links[key]);
   }
   // 手里的不够露（这组露的行数、点开的名单）就接着往下取，取到够或到底为止
