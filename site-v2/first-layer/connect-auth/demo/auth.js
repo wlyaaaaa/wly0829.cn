@@ -23,6 +23,8 @@
   let windowsUnlockCooldown = 0, windowsUnlockReceipt = '', winUnlock = false;
   if (!local) { try { pending = JSON.parse(sessionStorage.getItem(storageKey) || 'null'); } catch {} }
   if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
+  // 锁屏结果还没出来：卡上状态照实留着，“锁屏结果还没确认”写在状态下面那行，直到查到结果
+  if (pending?.action === 'windows') winMessage = '锁屏结果还没确认';
   const clock = () => (serverClock ? Date.parse(serverClock.at) + performance.now() - serverClock.received : Date.now()) / 1000;
   // 照定稿样板：到今天 18:30／到明天 10:04／到周一 10:04，按北京时间换日。
   const BJ = 8 * 3600e3;
@@ -257,7 +259,7 @@
         // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
         message(''); toast(false, '这次请求没发出', errorMessages[value.reason || value.error] || '');
       } else if (value.state === 'cancelled' && !needsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
-      else if (needsQuery(value)) { if (windows) winMessage = '锁屏结果还没确认'; else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
+      else if (needsQuery(value)) { if (windows) { winMessage = '锁屏结果还没确认'; if (openKey === 'win') setOpen(null); } else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
       else {
         if (!value.action && openKey !== key) setOpen(key, false);
         if (openKey === key) message(cooldownText());
@@ -479,7 +481,7 @@
       const stateLine = cell.querySelector('.cell__state');
       const loading = reading && !disconnected && !state;
       stateLine.textContent = disconnected ? '连不上' : loading ? '正在读…' : !state ? missingStatus
-        : privateState ? '' : key === 'win' ? winMessage || ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
+        : privateState ? '' : key === 'win' ? ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
         : active ? untilText(grant.expires_at_unix * 1000) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
       if (privateState && !disconnected) {
         const note = document.createElement('button'); note.type = 'button'; note.className = 'trust-note'; note.dataset.trustView = '';
@@ -488,7 +490,7 @@
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
       if (key === 'win' && windowsHint && !windowsHints[windowsHint]()) windowsHint = '';
-      const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
+      const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || winMessage || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
       result.hidden = disconnected || !(key === 'win' ? winNote : lockedAt[key]); result.replaceChildren();
       if (!result.hidden && key === 'win') result.textContent = winNote;
       else if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
@@ -582,7 +584,7 @@
     }
     render();
   }
-  window.Live.watch('access', {}, { data(value) { state = keepShown(value); winMessage = ''; }, link: renderLink });
+  window.Live.watch('access', {}, { data(value) { state = keepShown(value); if (pending?.action !== 'windows') winMessage = ''; }, link: renderLink });
   // 进场那一下绿点逐个亮起；之后状态变了灯立刻跟着变
   document.body.classList.add('auth-entering'); setTimeout(() => document.body.classList.remove('auth-entering'), 2600);
   render(); document.body.classList.add('is-ready');
