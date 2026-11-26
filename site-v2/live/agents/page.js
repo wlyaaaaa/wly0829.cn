@@ -377,7 +377,7 @@
   function configSection(d) {
     const x = h => hostData(d, h);
     const entries = HOSTS.map(h => x(h).entry || {});
-    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') : '没读到';
+    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope)}</small>` : '') : '没读到';
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
@@ -396,7 +396,7 @@
       row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
         { diff: waits.map(w => !w) }),
       row('谁能自己解开资料锁', HOSTS.map(unlock), { note: link('/rules/topic-authorization.html', '规则 ›') }),
-      row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
+      row('多接的工具', HOSTS.map(tools), { note: ['电脑接口、Google 以外', asof(d.tools_at, d.at)].map(esc).filter(Boolean).join(' · ') }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
