@@ -477,7 +477,7 @@ def main():
             if args.action == "result" and args.report_generator:
                 subprocess.run(["pwsh", "-NoProfile", "-File", str(REPORT), "-ContentPath", str(report),
                                 "-OutputPath", str(folder / "网站更新结果.html"), "-Directory", str(folder),
-                                "-KeepDays", "0", "-NoOpen", "-OwnerAsked", "-Generator", args.report_generator], check=True)
+                                "-KeepDays", "0", "-NoOpen", "-OwnerAsked", "-Generator", args.report_generator, "-Wait"], check=True)
             print(report)
         elif output:
             print(json.dumps(output, ensure_ascii=False))
