@@ -43,6 +43,7 @@
 #upcoming summary { margin-top: 6px; font-size: 13px; }
 .page--tasks .lb-card__sub { display: block; overflow: visible; text-wrap: pretty; }
 .page--tasks .lb-card__sub:empty { display: none; }
+.page--tasks .lb-card[data-key="unregistered"] .lb-card__sub { overflow-wrap: anywhere; }
 .page--tasks .lb-card__head { min-height: 98px; padding-right: calc(34% + 14px); }
 .page--tasks .lb-card__words { padding-right: 0; }
 .page--tasks .lb-card[data-art="daily"] .lb-card__head { padding-right: calc(32% + 10px); }
@@ -69,6 +70,7 @@
 .page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
 .task-compact .lb-cell--time > * { overflow: visible; }
 .task-compact .task-last > span { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
+.page--tasks .lb-card[data-key="disabled"] .task-last > [data-task-state] { white-space: normal; }
 .task-compact .task-last:has(.task-week) { line-height: 14px; }
 .task-compact .task-last .task-week { margin-top: 0; }
 .task-compact .task-last .task-days { gap: 2px; }

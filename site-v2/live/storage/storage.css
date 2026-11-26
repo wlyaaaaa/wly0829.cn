@@ -35,6 +35,11 @@
 .cl-days b { order: 1; width: 72%; max-width: 30px; height: var(--h); border-radius: 5px 5px 2px 2px; background: rgb(0 166 80 / .22); }
 .cl-days .is-today b { background: linear-gradient(#20c06c, #00A650); box-shadow: 0 4px 14px rgb(0 166 80 / .25); }
 .cl-days li > span { order: 2; margin-top: 7px; font-size: 11.5px; line-height: 14px; color: var(--muted); white-space: nowrap; }
+#cleanup-total { container-type: inline-size; }
+@container (max-width: 250px) {
+  .cl-days { height: 132px; padding-bottom: 14px; }
+  .cl-days li:nth-child(even) > span { transform: translateY(14px); }
+}
 .cl-vols { margin: 4px 0 0; padding: 0; list-style: none; }
 .cl-vols li { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(170px, auto); align-items: center; gap: 14px; padding: 7px 0; }
 .cl-vol { font-size: 15px; font-weight: 700; color: var(--ink); }
