@@ -86,7 +86,8 @@
     }
     U.html($('head'), `<span class="head__lead">${num(s.total) ? `${s.total} 项开机自启动` : '开机自启动'}</span>${valid(s.boot_at) ? `<span class="head__tail">这次开机 ${esc(stamp(s.boot_at))}</span>` : ''}`);
     const age = valid(s.checked_at) ? (Date.now() - Date.parse(s.checked_at)) / 86400000 : 0;
-    U.html($('checked'), ['每天零点后查一次', valid(s.checked_at) ? `上次 ${esc(stamp(s.checked_at))} 查完${age > 1.5 ? `<span class="su-old">（${Math.floor(age)} 天没查了）</span>` : ''}` : '还没查过', '当天开机会当场补查'].join(' · '));
+    // 窄了要折行时只在点号处折，不把“补查”这类半句单甩到下一行
+    U.html($('checked'), ['每天零点后查一次', valid(s.checked_at) ? `上次 ${esc(stamp(s.checked_at))} 查完${age > 1.5 ? `<span class="su-old">（${Math.floor(age)} 天没查了）</span>` : ''}` : '还没查过', '当天开机会当场补查'].map(x => `<span class="su-seg">${x}</span>`).join(' · '));
     $('checked').hidden = false;
     const fig = (key, label, v) => `<div data-fig="${key}"><dt>${label}</dt><dd>${num(v) ? `<b>${v}</b><small>项</small>` : '<small>还没读到</small>'}</dd></div>`;
     // 启动失败单列一格、红字，只在后台给的 failed 大于 0 时出；这时“这次没确认”已不含失败的，四格加起来等于总数

@@ -20,6 +20,11 @@
 .su-figs [data-fig="observed"] b { color: #00a650; }
 .su-figs [data-fig="unconfirmed"] b { color: #e07800; }
 .su-figs [data-fig="failed"] b { color: #c8261d; }
+/* 多出“启动失败”第四格时收紧格间距，左边总数和查的时刻照旧各占一行 */
+.su-hero:has(.su-figs > div:nth-child(4)) { column-gap: 28px; }
+.su-figs:has(> div:nth-child(4)) > div { padding-left: 14px; padding-right: 14px; }
+.su-figs:has(> div:nth-child(4)) > div:first-child { padding-left: 0; }
+.page--startup #checked .su-seg { white-space: nowrap; }
 
 /* 三张卡 */
 .su-card .card__glass { padding: 30px 32px 28px; }
