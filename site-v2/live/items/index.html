@@ -15,7 +15,7 @@
 .page--items .lb-rows { gap: 0; }
 .page--items .lb-item { --gut: 0px; }
 /* 标题整句显示，放不下就换行，不收成两行“…”（M760） */
-.page--items .row__title { overflow-wrap: anywhere; }
+.page--items .row__title { overflow-wrap: anywhere; text-wrap: pretty; }   /* 最后一行不单剩一个字（“少了一轮新备／份。”“会不会卡／死”，r83 返修第三轮） */
 .page--items [data-text-open="true"] .row__title,.page--items .is-expanded .row__title,.page--items .row__title { -webkit-line-clamp: unset; }
 .page--items .row__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
 .page--items .row__main .row__title { flex: 1 1 100%; min-width: 0; }
