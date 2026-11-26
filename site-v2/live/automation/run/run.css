@@ -52,10 +52,14 @@
 .ar-talkstate { font-size: 13.5px; color: #6c6b64; }
 .ar-count { margin-left: auto; font-size: 16px; color: #6c6b64; }
 .ar-talk__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin: 10px 0 0; }
-.ar-talk__facts { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; margin: 0 !important; font-size: 13.5px !important; line-height: 22px !important; color: #6c6b64; }
-.ar-talk__facts > span + span::before { content: "·"; margin: 0 7px; color: #b5b3aa; }
+/* 卡头这一行几段用“·”隔开，放不下时只在段与段之间折，行尾行首都不悬“·”：每段前头画一个固定宽的点，整行左移这一截再裁掉，
+   折到行首那一段的点正好落在裁掉的那一截里（和账本列表第二行同一个办法）。签（按钮）没有点，左边让开同样宽 */
+.ar-talk__facts { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; margin: 0 0 0 -21px !important; clip-path: inset(-12px -12px -12px 21px); font-size: 13.5px !important; line-height: 22px !important; color: #6c6b64; }
+.ar-talk__facts > span::before { content: "·"; display: inline-block; width: 21px; text-align: center; color: #b5b3aa; }
+.ar-talk__facts > :not(span) { margin-left: 21px; }
 .ar-talk__facts .chat-tag { margin-right: 8px; }
-.ar-talk__facts > .chat-tag + span::before { content: none; }   /* 软件标签（Claude、Codex）后面直接接型号，不再隔一个“·” */
+.ar-talk__facts > .chat-tag:first-child { margin-left: 21px; }
+.ar-talk__facts > .chat-tag::before, .ar-talk__facts > .chat-tag + span::before { content: none; }   /* 软件标签（Claude、Codex）后面直接接型号，不再隔一个“·” */
 .ar-talk__meta > [data-compaction] { font-size: 13.5px; color: #6c6b64; }
 .ar-talk__meta > [data-compaction] summary { cursor: pointer; }
 .ar-talk__note { margin: 0 !important; font-size: 13.5px !important; color: #6c6b64; }
