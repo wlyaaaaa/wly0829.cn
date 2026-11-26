@@ -623,12 +623,14 @@
       if (!page?.items.length) { publishChanges('下一页暂时读不到，已读到的留在这里。'); return; }
       const extended = extendChanges(changeLog, page);
       if (!extended) { await readChanges(); return; }
+      // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
+      b.reveal ??= new Map(); b.reveal.set('', Math.max(0, changeLog.items.length - (b.groupPreview || 0)) + (b.step || BATCH.rows));
       changeLog = extended; publishChanges();
     } finally { b.page.disabled = false; U.html(b.page, label, false); }
   }
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
-    const shown = b.allDetails?.open ? loaded : preview;
+    const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
     const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
     const available = [shown < loaded && `还有 ${num(loaded - shown)} 条可展开`, Number.isFinite(total) && total > loaded && `另有 ${num(total - loaded)} 条待取`].filter(Boolean).join('，');
     const status = changeIssue || (!changeLog && '正在读改动记录…');
@@ -907,17 +909,17 @@
       const mine = changeLog?.items || [];
       if (mine.length || id === 'agents' && (!changeLog || changeIssue)) {
         const b = block('changes', 'rows'); b.group = 'changes'; b.changes = true; b.el.classList.add('pj-sec--flat', 'pj-sec--timeline');
+        // 一批 10 条往下露；已读到的露完了才出“更早的改动”接着读
+        b.step = BATCH.rows; b.hasNext = !!changeLog?.next;
         b.loaded = changeLog?.loaded === mine.length ? changeLog.loaded : mine.length;
         const preview = changeLog?.shown;
         b.preview = Math.min(b.loaded, Number.isInteger(preview) && preview >= 0 ? preview : SHOW.rows);
         fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '' }, animate);
-        b.allDetails = b.main.querySelector('.pj-list-group > details');
         const changed = !mine.length && proj.changed?.at ? proj.changed : null;
         const hasText = changed?.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(changed.text, projectViewer));
         b.reading.hidden = !changed;
         U.html(b.reading, changed ? `最近一次提交 ${esc(stamp(changed.at))}${hasText ? ` · ${U.fieldHtml(restricted(changed) ? changed : changed.text, { name: '提交说明', kind: projectViewer })}` : ''}` : '');
-        changeCounts(b);
-        b.page.hidden = !changeLog?.next;
+        syncPage(b);
         if (b.page.textContent !== '正在读…') U.html(b.page, '更早的改动 <span class="more__chev">›</span>');
         right.push(b);
       }
