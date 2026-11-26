@@ -62,7 +62,8 @@
     const lift = pageY(head) - pageY(anchor);
     if (lift <= 0) return;
     head.style.marginTop = `${-lift}px`;
-    head.style.minHeight = `${Math.max(0, Math.round($('active').getBoundingClientRect().bottom - anchor.getBoundingClientRect().top))}px`;
+    // 高度也按排版位置量：名册分批展开时那一组正带着位移动效，量屏幕位置会差出几百像素，冻结卡下面空一大块
+    head.style.minHeight = `${Math.max(0, Math.round(pageY($('active')) + $('active').offsetHeight - pageY(anchor)))}px`;
   }
   if ('ResizeObserver' in window) new ResizeObserver(() => alignFrozen()).observe($('active'));
   let disconnected;
