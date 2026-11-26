@@ -686,6 +686,7 @@
   // —— 快讯：只放开始、跑完、停了，不放摘一句（runs.js 里拼）——
   const feed = d => { const got = collect(d); return R.ticker(d, got.legacy ? null : got.rows, viewer); };
 
+  let drawn = false;
   function heading(d) {
     const side = [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ');
     return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
@@ -704,6 +705,7 @@
     T.paint(page.root, R.asOwner(`${heading(d)}
       ${T.stateNote(state)}${pauses(d)}${buttons(d, v)}
       ${all ? `${table(d, v)}<div class="tp-grid au-top">${results(d)}${usage(d)}</div>` : `<div class="au-list">${lists(d, v)}</div>`}`, viewer));
+    drawn = true;
     page.tick.set(feed(d), { off: state.offline });
     // 只在进页那一次按地址里的 #… 滚过去
     if (!landed) { landed = true; if (location.hash) T.reveal(location.hash.slice(1)); }
