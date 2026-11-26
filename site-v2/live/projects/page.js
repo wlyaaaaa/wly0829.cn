@@ -291,6 +291,8 @@
   let lastOverview = null;
   function drawRange(key) { if (key === 'changes') renderChanges(); else drawProjectExtras(lastOverview); }
   $('changes').querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('changes'));
+  // 切时间档还在加载时，“加载中 · 下面先留着…”写在时间按钮下面、列表上面（和成品那块同一个位置），点了马上看得到
+  const changesWaiting = document.createElement('p'); changesWaiting.className = 'pj-extra__note'; changesWaiting.hidden = true; $('changes').querySelector('.part').after(changesWaiting);
   document.addEventListener('click', e => {
     const button = e.target.closest('[data-range-of]');
     if (!button) return;
@@ -324,7 +326,9 @@
     // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
     const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
       ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
-    const note = [kept && waitingNote('changes', picked, kept), gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
+    const waiting = kept ? waitingNote('changes', picked, kept) : '';
+    changesWaiting.hidden = !waiting; U.html(changesWaiting, waiting);
+    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
     changesNote.hidden = !note; U.html(changesNote, note);
   }
   function link(key, s) {
