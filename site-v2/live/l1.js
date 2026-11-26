@@ -1299,7 +1299,16 @@
     const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
     const lackWhy = new Map(), lackOf = g => { const name = sp(U.fieldText(g?.name, viewer)).trim(); return lacking.find(l => name === l || name.startsWith(l)); };
     for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下', lack = lackOf(g); if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, g?.reason); continue; } grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
-    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`).join('；');
+    const grayNames = names => {
+      const format = name => U.fieldHtml(name, { name: '读数名称', kind: viewer });
+      if (id !== 'needs') return names.slice(0, 3).map(format).join('、') + (names.length > 3 ? ` 等 ${names.length} 项` : '');
+      const counts = new Map();
+      for (const name of names.map(format)) counts.set(name, (counts.get(name) || 0) + 1);
+      const groups = [...counts];
+      return groups.slice(0, 3).map(([name, count]) => count > 1 ? `${name} ${count} 项` : name).join('、')
+        + (groups.length > 3 ? ` 等 ${names.length} 项` : '');
+    };
+    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${grayNames(names)}（${esc(why)}）`).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M1010：电脑卡的“N 项要处理”写出是什么事；卡小，一件时写“要处理：”加那句说明（和电脑页页顶同一句，如“有防火墙配置未启用”），没说明写组名，几件时只列组名
     const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
