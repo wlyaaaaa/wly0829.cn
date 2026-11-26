@@ -136,10 +136,10 @@
     btn.textContent = importantOpen ? '收起 ›' : `再看 ${$('important-box').querySelectorAll('[data-more] .su-row').length} 项 ›`;
   });
 
-  // —— 其余三组：默认各露 5 项，底下“再看 25 项（还有 M 项）”每点一次再露 25 项，一直能看到底（本人 11-26 选 SHIP7 A；全站长列表默认露一部分、逐段打开）。
+  // —— 其余三组：默认各露 5 项，底下“再看 25 项（还有 M 项）”通常每次再露 25 项，末尾不到 5 项时并入前一批（本人 11-26 选 SHIP7 A；全站长列表默认露一部分、逐段打开）。
   // 设了启用、这次开机没见它启动的（“这次没确认”）不一行行列：每组在表上方只留一行“另有 N 项……点开看名单”，点开才列，名单里不再摆“这次开机”那一列（本人选 SHIP8 A）。
   // 后台每页给 25 条，按“启动失败、这次没确认、其余按名字”排；手里的不够露就用回包的 next 往下取。
-  const GROUP_FIRST = 5, GROUP_STEP = 25;
+  const GROUP_FIRST = 5, GROUP_STEP = 25, GROUP_TAIL = 4;
   const groupEls = {}, groupShown = {}, uncOpen = {}, groupFailed = {};
   const groupInfo = key => (Array.isArray(summary()?.groups) ? summary().groups : []).find(g => g.id === key) || null;
   // 这次没确认的一共几项：后台汇总给的数为准；没给就数手里的（取到底以后就是全部）
@@ -166,16 +166,16 @@
     $('groups-title').textContent = `其余 ${rest} 项 · 按来源分组`;
     let wrap = box.querySelector(':scope > .su-groups');
     if (!wrap) { box.innerHTML = `<p class="su-sub"></p><div class="su-groups"></div>`; box._html = undefined; wrap = box.querySelector('.su-groups'); }
-    box.querySelector('.su-sub').textContent = `每组先露 ${GROUP_FIRST} 项，每点一次“再看”多露 ${GROUP_STEP} 项。`;
+    box.querySelector('.su-sub').textContent = `每组先露 ${GROUP_FIRST} 项，点“再看”分批展开。`;
     for (const [key, label] of GROUPS) {
       const g = groups.find(x => x.id === key);
       if (!g) { groupEls[key]?.remove(); continue; }
       const el = groupEl(key, label);
       if (el.parentElement !== wrap) wrap.append(el);
-      el.querySelector('.su-bar__n').textContent = num(g.total) ? ` · ${key === 'own' ? '还有 ' : ''}${g.total} 项` : '';
-      const notes = [num(g.attention) && g.attention > 0 ? `<span class="su-bad">${g.attention} 项启动失败</span>` : '',
-        num(g.enabled_unconfirmed) && g.enabled_unconfirmed > 0 ? `<span class="su-warn">${g.enabled_unconfirmed} 项这次没确认</span>` : ''].filter(Boolean);
-      U.html(el.querySelector('.su-bar__state'), notes.length ? notes.join(' · ') : num(g.enabled_unconfirmed) ? '都正常' : '', false);
+      el.querySelector('.su-bar__n').textContent = num(g.total) ? ` · ${g.total} 项` : '';
+      const state = num(g.attention) && g.attention > 0 ? `<span class="su-bad">${g.attention} 项启动失败</span>`
+        : g.enabled_unconfirmed === 0 ? '都正常' : '';
+      U.html(el.querySelector('.su-bar__state'), state, false);
       paintList(key);
     }
   }
@@ -190,14 +190,18 @@
     const vis = d.items.filter(r => !unconfirmed(r)), unc = d.items.filter(unconfirmed), uncN = Math.max(uncTotal(key), unc.length);
     const total = num(d.total) ? d.total : d.items.length, visTotal = Math.max(vis.length, total - uncN);
     const shown = Math.min(groupShown[key], vis.length), left = Math.max(0, visTotal - shown), busy = loading.has(key);
-    const waiting = busy && vis.length < groupShown[key], fetchNext = !!d.next && vis.length < groupShown[key] + GROUP_STEP;
-    const more = left ? `<div class="su-foot"><button class="more su-pill" type="button" data-group-more="${key}"${fetchNext ? ' data-needs-pc' : ''}${waiting ? ' disabled' : ''}>${waiting ? '正在读…'
-      : groupFailed[key] && vis.length < groupShown[key] ? '下一批暂时读不到，再试一次 ›' : left > GROUP_STEP ? `再看 ${GROUP_STEP} 项（还有 ${left} 项）` : `再看剩下 ${left} 项`}</button></div>` : '';
+    const batch = left <= GROUP_STEP + GROUP_TAIL ? left : GROUP_STEP;
+    const waiting = busy && vis.length < groupShown[key], retry = groupFailed[key] && vis.length < groupShown[key];
+    const fetchNext = !!d.next && vis.length < (retry ? groupShown[key] : shown + batch);
+    const more = left ? `<button class="more su-pill" type="button" data-group-more="${key}" value="${retry ? 0 : batch}"${fetchNext ? ' data-needs-pc' : ''}${waiting ? ' disabled' : ''}>${waiting ? '正在读…'
+      : retry ? '下一批暂时读不到，再试一次 ›' : batch < left ? `再看 ${batch} 项（还有 ${left} 项）` : `再看剩下 ${left} 项`}</button>` : '';
+    const less = groupShown[key] > GROUP_FIRST ? `<button class="more su-pill" type="button" data-group-less="${key}">收起 ‹</button>` : '';
+    const foot = more || less ? `<div class="su-foot">${more}${less}</div>` : '';
     const open = !!uncOpen[key], uncWait = open && unc.length < uncN && !!d.next;
     const uncList = open ? `<div class="su-unc__list">${unc.length ? UNC_COLS + unc.map(r => row(r, s?.boot_at, false)).join('') : ''}${uncWait ? say(groupFailed[key] ? '后面的名单暂时读不到，点上面那行再试一次。' : '正在读…') : ''}</div>` : '';
-    const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起），${open ? '收起名单' : '点开看名单'} <span class="more__chev">›</span></button></div>${uncList}` : '';
+    const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起） <span class="su-pill">${open ? '收起名单 ‹' : '点开看名单 ›'}</span></button></div>${uncList}` : '';
     // “另有 N 项”那一行放在这组的表上方，点开的名单也在表上方
-    U.html(list, uncLine + (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + more);
+    U.html(list, uncLine + (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + foot);
     U.blockNote(list, links[key]);
   }
   // 手里的不够露（这组露的行数、点开的名单）就接着往下取，取到够或到底为止
@@ -222,10 +226,18 @@
     paintList(key);
   }
   $('groups-box').addEventListener('click', e => {
-    const more = e.target.closest('[data-group-more]'), unc = e.target.closest('[data-unc]');
-    const key = more?.dataset.groupMore || unc?.dataset.unc;
+    const more = e.target.closest('[data-group-more]'), unc = e.target.closest('[data-unc]'), less = e.target.closest('[data-group-less]');
+    const key = more?.dataset.groupMore || unc?.dataset.unc || less?.dataset.groupLess;
     if (!key || more?.disabled) return;
-    if (more && !groupFailed[key]) groupShown[key] += GROUP_STEP;
+    if (less) {
+      const group = groupEls[key];
+      groupShown[key] = GROUP_FIRST;
+      paintList(key);
+      group.querySelector('[data-group-more]')?.focus({ preventScroll: true });
+      if (group.getBoundingClientRect().top < 85) group.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      return;
+    }
+    if (more) groupShown[key] += Number(more.value);
     if (unc) uncOpen[key] = !uncOpen[key];
     delete groupFailed[key];
     paintList(key); fill(key);
