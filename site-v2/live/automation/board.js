@@ -563,12 +563,16 @@
     // 每一截整块不折行（窄栏里“用了 12 分钟”的“钟”会单独掉到下一行）
     return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).map(x => `<span class="au-nobr">${x}</span>`).join('，');
   }
-  function lastCell(c) {
-    const r = c.last_result;
-    const since = c.recent_stats?.recorded_since;
-    if (!r) return mode(c) === 'off' ? `<span class="tp-muted">关着${c.id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}</span>`
-      : `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
-    return `${F(r.text, '上次结果')}<small>${[esc(when(r.at)), todayText(c)].filter(Boolean).join(' · ')}</small>`;
+  function lastCell(c, problem) {
+    const r = c.last_result, since = c.recent_stats?.recorded_since;
+    if (!r) return `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
+    const headline = problem?.headline || problem?.title || problem?.text;
+    const bare = s => s.trim().replace(/[。.]$/, '');
+    const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
+    const result = c.id === 'translator' && typeof r.text === 'string'
+      ? r.text.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : r.text;
+    const detail = [esc(when(r.at)), todayText(c)].filter(Boolean).join(' · ');
+    return `${duplicate ? '' : F(result, '上次结果')}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
@@ -595,7 +599,7 @@
         const g = G[c.id] || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
           <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
-          <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
+          <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
           <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>
       <p class="tp-small au-foot">点一行看这一类；不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。摘一句每答完一次就跑一下、单独记数，不算在上面“进行中”“近 72 小时跑完的”里。</p>${scheduled(d)}</section>`;
