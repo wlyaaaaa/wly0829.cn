@@ -120,25 +120,26 @@
     if (pageOf(task)) loadOlder(); else { restShown += RUN_BATCH; render(task); }
   });
   const detailPath = () => `tasks/${encodeURIComponent(id)}`;
+  const updating = name => `${name}正在更新访客版，稍后自动补上。`, retryPage = '这一批没读到，点这里再读 ›';
   // 照游标向后台取下一批（每批 50 次）；没读到就在按钮上说一句，再点重读
   function loadOlder() {
-    const cursor = deepCursor !== undefined ? deepCursor : task.runs_page.next_cursor, who = viewer;
+    const cursor = deepCursor !== undefined ? deepCursor : task.runs_page.next_cursor, who = viewer, loaded = olderRuns;
     if (pageLoading || !cursor) return;
     pageLoading = true; pageFailed = false; render(task);
     window.Live.get(detailPath(), { runs_cursor: cursor }).then(state => {
-      if (who !== viewer) return;
+      if (!task || who !== viewer || olderRuns !== loaded) return;
       const rows = state?.data?.runs, page = state?.data?.runs_page;
-      if (!Array.isArray(rows) || !page || state.viewer?.kind !== viewer) { pageFailed = true; return; }
+      if (!Array.isArray(rows) || !page || state.viewer?.kind !== viewer) { pageFailed = state.meta?.publicationRevoked ? updating('最近几次') : retryPage; return; }
       keepRuns(rows); deepCursor = page.next_cursor ?? null;
-    }, () => { pageFailed = true; }).finally(() => { pageLoading = false; if (task) render(task); });
+    }, () => { if (task && olderRuns === loaded) pageFailed = retryPage; }).finally(() => { pageLoading = false; if (task) render(task); });
   }
   // 旧链接要看的那一次不在已取的几批里：带 ?run= 让后台单独给出这一行（selected_run）
   function askPicked() {
     pickAsked = true;
-    const who = viewer;
+    const who = viewer, loaded = olderRuns;
     window.Live.get(detailPath(), { run: legacyRun }).then(state => {
       const row = state?.data?.selected_run;
-      if (who !== viewer || state.viewer?.kind !== viewer || !row || protectedField(row)) return;
+      if (!task || olderRuns !== loaded || who !== viewer || state.viewer?.kind !== viewer || !row || protectedField(row)) return;
       pickedRun = asRun(row);
       if (task) render(task);
     }, () => {});
@@ -479,7 +480,7 @@
     const rest = runs.slice(6), target = old ? rest.indexOf(old) : -1;
     if (!page && target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
     const shown = page ? rest : rest.slice(0, restShown), left = Math.max(0, total - 6 - shown.length - (detached ? 1 : 0));
-    const more = left && (!page || cursor) ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed ? '这一批没读到，点这里再读 ›' : `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›`}</button>` : '';
+    const more = left && (!page || cursor) ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›`}</button>` : '';
     U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
     if (target >= 0 || detached) $('more-runs').open = true;
     write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
@@ -521,10 +522,10 @@
     let changed = false;
     const reading = U.reading(hero.querySelector('.task-hero__copy'), { name: '任务' });
     window.Live.watch(`tasks/${encodeURIComponent(id)}`, null, {
-      phase(state) { if (!task) reading.set(state); },
+      phase(state) { if (!task && !state.meta?.publicationRevoked) reading.set(state); },
       data(d, meta) {
         viewer = meta.viewer?.kind || 'public'; packetAt = meta.at; changed = true;
-        if (olderViewer !== viewer) { olderRuns = new Map(); deepCursor = undefined; pickedRun = null; pickAsked = false; olderViewer = viewer; }
+        if (olderViewer !== viewer || meta.publicationRevoked) { olderRuns = new Map(); deepCursor = undefined; pickedRun = null; pickAsked = pageFailed = false; olderViewer = viewer; }
         else if (pageOf(task)) keepRuns(task.runs);
         task = d;
       },
@@ -539,7 +540,11 @@
         else if (task?.q === 'warming') empty('正在准备任务记录');
         else if (task && (changed || before !== offline)) { render(task); reading.done(); }
         else if (!task && !['idle', 'wait', 'slow'].includes(state.phase)) {
-          empty(state.meta?.status === 404 ? '没有这个任务' : state.say || '任务详情暂时读不到');
+          if (state.meta?.publicationRevoked) {
+            for (const key of ['task-status', 'task-meta', 'task-purpose', 'task-week', 'task-acts', 'crumb-name', 'crumb-group',
+              'task-stats', 'failure-text', 'failure-checks', 'runs', 'runs-rest', 'run-coverage', 'future-runs', 'future-note', 'facts']) $(key).replaceChildren();
+          }
+          empty(state.meta?.publicationRevoked ? updating('任务详情') : state.meta?.status === 404 ? '没有这个任务' : state.say || '任务详情暂时读不到');
           reading.done();
         }
         changed = false;

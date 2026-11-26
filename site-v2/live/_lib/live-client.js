@@ -26,8 +26,6 @@
   // v2：上线时换前缀，各设备上 v1 存下的旧副本（上线前几天的数）一次作废，并顺手删掉
   const prefix = 'wly-live-v2:' + (fixture === null ? 'net' : 'fixture:' + fixture) + ':' + (publicView ? 'public:' : '');
   const visitorNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:/;
-  // 访客也留一份备份总表（backups）：读不到时退回上次读到的那份、标上几点的，不整页变空（M449）。其余访客数据照旧不留。
-  const visitorBackupCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:backups$/;
   const ownerNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):owner:([^?]+)/;
   // 与后台 owner_original_resource 一致：这些详情只在当前页面保留原文。
   const ownerOriginalResource = resource => /^(?:chats|items|reports|projects)\//.test(resource) &&
@@ -40,7 +38,7 @@
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const key = localStorage.key(i);
       const resource = ownerNetCopy.exec(key)?.[1];
-      if (key?.startsWith('wly-live-v1:') || visitorNetCopy.test(key) && !visitorBackupCopy.test(key) || ownerOriginalResource(resource)) localStorage.removeItem(key);
+      if (key?.startsWith('wly-live-v1:') || visitorNetCopy.test(key) || resource === 'backups' || ownerOriginalResource(resource)) localStorage.removeItem(key);
     }
   } catch { /* 浏览器可能禁用存储。 */ }
   // 演示：?fixture&slow=3000 让示意数晚 3 秒到（看加载中）；slow=12000 看“这块要多读一会儿”。真数不认这个开关。
@@ -384,7 +382,7 @@
   let pairing = paired;
   paired?.then(() => { pairing = null; });
   const cacheKey = (e, kind) => e.identity + ':' + kind + ':' + e.path;
-  const canKeepBrowserCopy = e => fixture !== null || e.viewer.kind === 'owner' && !ownerOriginalResource(e.resource) || e.resource === 'backups' && !e.query;
+  const canKeepBrowserCopy = e => e.resource !== 'backups' && (fixture !== null || e.viewer.kind === 'owner' && !ownerOriginalResource(e.resource));
   const visitMetrics = new Set('visitors pageviews daily top_pages devices cohorts dwell speed crawlers'.split(' '));
   const oldVisits = (m, section) => m?.external_visits !== true && (visitMetrics.has(m?.id) || (section === 'more-data' && m?.visibility === 'owner' && m.mode === 'static'));
   function siteVisitScope(e, data) {
@@ -515,7 +513,7 @@
     // shownAt／meta.at 是手上最后一份是几点的
     const failingSince = !publicPaused && failingStamp(e);
     return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead, failingSince,
-      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn }, link, viewer, now,
+      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn, publicationRevoked: !publicPaused && !!e.publicationRevoked }, link, viewer, now,
       shownAt: resourceAt, failingSince, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
       pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
@@ -667,6 +665,7 @@
   }
   function failed(e, status, body, via, offSince) {
     e.status = status; e.warming = false;
+    e.publicationRevoked = status === 503 && body?.error === 'live_publication_revoked';
     // 从几点起读不到：这一串失败里第一次的时刻，读到新的就清（M982）；撤回、无权照旧不记
     if (!e.failSince && ![403, 410].includes(status) && !(status === 404 && body?.error === 'live_missing')) e.failSince = Date.now();
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
@@ -963,7 +962,7 @@
                    (instance && instance !== e.instance) || body.seq >= e.seq)) {
           e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at; renewed = true;
           if (e.path === ACCESS) e.dataRead = id;
-          e.withdrawn = false;
+          e.withdrawn = e.publicationRevoked = false;
           e.instance = instance;
           e.stale_after = body.stale_after; e.refresh_seconds = body.refresh_seconds;
         }
@@ -1087,7 +1086,7 @@
     return (async () => {
       let state = await read(e, true, card);
       for (const wait of [2000, 5000]) {
-        if (state.data != null || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
+        if (state.data != null || state.meta?.publicationRevoked || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
         await new Promise(resolve => later(resolve, wait));
         state = await read(e, true, card);
       }

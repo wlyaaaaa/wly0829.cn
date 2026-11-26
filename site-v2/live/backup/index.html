@@ -22,7 +22,6 @@
 .page--backup :is(#points-result, #coverage) { margin: 0 0 8px; color: var(--ink); }
 .page--backup .dossier__side :is(.fe-l3b-note, .fe-l3b-point-note) { overflow-wrap: anywhere; }
 .page--backup #files-target-label:not([hidden]) + #files-more { margin-left: 8px; }
-.page--backup #files-privacy { margin: 8px 0 0; }
 .page--backup .backup-time { white-space: nowrap; }
 .page--backup .backup-evidence-label { white-space: nowrap; }
 .page--backup .backup-copy-state[data-state="failed"] { color: #a8362c; }
@@ -108,7 +107,6 @@
         <label class="backup-target" id="files-target-label" hidden>去处 <select id="files-target" data-needs-pc><option value="drive">Drive</option><option value="photos">照片云</option></select></label>
         <button class="more fe-l3b-more" type="button" id="files-more" aria-controls="files-fold">看逐项明细 ›</button>
         <span class="fog__note" id="files-status" role="status"></span>
-        <p class="fe-l3b-note" id="files-privacy" hidden></p>
         <div class="fold" id="files-fold"><div id="files"></div></div>
       </section>
       <section class="dossier-card glass" id="media-section" data-mo-rise hidden>

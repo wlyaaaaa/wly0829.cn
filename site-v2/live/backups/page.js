@@ -4,6 +4,7 @@
   const U = window.LiveUI, L = window.LiveLight, D = window.LiveDataViz, $ = id => document.getElementById(id), { esc, sp } = U;
   let disconnected = false;
   const offline = () => U.offline?.() ?? disconnected, missing = (name = '备份') => offline() ? '这块没存下来，连上后补上。' : `${name}暂时读不到`;
+  const updating = '备份总表正在更新访客版，稍后自动补上。';
   const inventoryUnknown = d => !d?.sets?.length && d?.summary?.sets == null && (!d?.summary || d.summary.q === 'unknown');
   const p = new URLSearchParams(location.search), hero = $('hero'), stamp = at => at ? `${U.date(at)} ${U.time(at)}` : offline() ? '' : U.collectionText();
   const route = href => { const u = new URL(href, location.href); if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
@@ -301,9 +302,9 @@
     U.html($('backup-summary'), cards.join('') || `<p class="pj-note">${missing()}</p>`);
     return new Set(hCopies.map(s => s.id));
   }
-  function render(d) {
+  function render(d, revoked = false) {
     data = d; const unavailable = !d || inventoryUnknown(d) && !d.restore?.length; document.querySelector('.l2-board').hidden = $('backup-summary').hidden = $('backup-matrix').hidden = unavailable;
-    if (unavailable) { headline = missing(); U.html($('head'), U.status(d).lamp + U.head(headline, { lamp: false })); U.html($('note'), wrapSummary(U.status(d).note)); $('note').hidden = !U.status(d).note; L.tone(hero, d); if (offline()) homeRead.done(); else homeRead.set({ phase: 'none', data: null }); $('coverage').textContent = ''; return; }
+    if (unavailable) { headline = revoked ? updating : missing(); U.html($('head'), U.status(d).lamp + U.head(headline, { lamp: false })); U.html($('note'), wrapSummary(U.status(d).note)); $('note').hidden = !U.status(d).note; L.tone(hero, d); if (offline() || revoked) homeRead.done(false); else homeRead.set({ phase: 'none', data: null }); $('coverage').textContent = ''; if (revoked) { cells.clear(); for (const id of ['backup-summary', 'backup-matrix', 'sets', 'rest', 'points']) $(id).replaceChildren(); } return; }
     const emptySets = d.summary?.sets === 0 || d.q === 'ok' && d.sets?.length === 0 && !Object.hasOwn(d.summary || {}, 'sets');
     mergedTable(d, summary(d), emptySets);
     // 左栏：只列要留意的几类和一句为什么，其余几类一句话带过（本人 11-25 选 A，样子见 B1）
@@ -361,13 +362,13 @@
     if (!lit) { lit = true; L.lightUp([hero, $('backup-matrix'), $('sets'), $('points')]); }
     U.land({ keepOnBack: true });
   }
-  window.Live.watch('backups', null, { phase(s) { if (s.data == null) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
+  window.Live.watch('backups', null, { phase(s) { if (s.data == null && !s.meta?.publicationRevoked) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
     data(d, meta) {
       const publicNow = viewer !== 'public' && meta.viewer.kind === 'public';
       viewer = meta.viewer.kind;
       if (publicNow) for (const id of ['sets', 'rest', 'points']) $(id).replaceChildren();
-      if (data && !publicNow) U.anchor(() => render(d)); else render(d);
+      if (data && !publicNow) U.anchor(() => render(d, meta.publicationRevoked)); else render(d, meta.publicationRevoked);
       if (d) detailReads.forEach(r => r.done());
-    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (s.data == null && (!s.offline && [404, 503].includes(s.meta?.status) || s.phase === 'none')) { detailReads.forEach(r => r.set(s)); render(null); } else if (s.data && (changed || data == null)) render(s.data); } });
+    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (s.data == null && (!s.offline && [404, 503].includes(s.meta?.status) || s.phase === 'none')) { detailReads.forEach(r => r.set(s)); render(null, s.meta?.publicationRevoked); } else if (s.data && (changed || data == null)) render(s.data); } });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();
