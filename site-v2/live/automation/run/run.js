@@ -152,16 +152,25 @@
     // 回执里记下的这一条和上面做成的某一件是同一件的，不再列一遍；全都一样，“回执里记下的”整块不出。
     // 同一件看指向：后台标的成品号（receipt.recorded[].output_id = 同一回包里 outputs[].id，访客版是换过的那个号）、同一张卡（站内地址）、同一份文件（本机路径），
     // 有指向就只看指向（两版标题可能换了说法、对不上）；三样都没有时才退回比标题字。本人版访客版同一个判定（主控 11-26 11:02、11:2x，后台第 18 轮定的字段名）
-    const outs = new Set(r.outputs.flatMap(o => [o.id != null && o.id !== '' && `id:${o.id}`, o.href && !o.github && `href:${o.href}`, o.file && `file:${o.file}`]).filter(Boolean));
     const pointsTo = x => [x?.output_id != null && x.output_id !== '' && `id:${x.output_id}`, T.path(x?.href) && `href:${T.path(x.href)}`, typeof x?.local_path === 'string' && x.local_path && `file:${x.local_path}`].filter(Boolean);
-    const sameThing = x => { const keys = pointsTo(x); return keys.length ? keys.some(k => outs.has(k)) : r.outputs.some(o => sameText(o.title, x?.title ?? x?.text ?? x)); };
-    const mine = list(receipt.recorded).filter(x => !sameThing(x));
+    const recorded = list(receipt.recorded);
+    const sameThing = (o, x) => {
+      const keys = pointsTo(x), output = pointsTo({ output_id: o.id, href: o.href, local_path: o.file });
+      return keys.length ? keys.some(k => output.includes(k)) : sameText(o.title, x?.title ?? x?.text ?? x);
+    };
+    const mine = recorded.filter(x => !r.outputs.some(o => sameThing(o, x)));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !receipt.href) return '';
     // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；链接访客那边没有的（outputs[].visitor_labels.href = hidden），本人版链接后挂“访客看不到”（主控 11-26 11:02，等后台给）；
     // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
-    const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
-      ${o.href || o.github ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href || o.githubHref)}"${o.github && viewer !== 'owner' ? ' data-need-trusted="看提交"' : ''}>${esc(o.go)} ›</a>${o.github ? cantOpenTag() :U.visitorLabel({ visitor_labels: o.labels }, 'href', '这件东西的链接', viewer)}</span>`
-        : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
+    const rows = r.outputs.map((o, i) => {
+      const matching = recorded.filter(x => sameThing(o, x));
+      const href = o.href || (o.labels?.href !== 'hidden' || viewer === 'owner' ? matching.map(x => T.path(x?.href)).find(Boolean) : '');
+      const file = o.kind === 'document' && viewer === 'owner' && (o.file || matching.find(x => typeof x?.local_path === 'string')?.local_path);
+      const fileName = file && file.split(/[\\/]/).filter(Boolean).at(-1);
+      return `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
+      ${href || o.github ? `<span class="ar-out-go"><a class="tp-link" href="${esc(href || o.githubHref)}"${o.github && viewer !== 'owner' ? ' data-need-trusted="看提交"' : ''}>${esc(o.go)} ›</a>${o.github ? cantOpenTag() : U.visitorLabel({ visitor_labels: o.labels }, 'href', '这件东西的链接', viewer)}</span>`
+        : `<span class="tp-small">${fileName ? esc(fileName) : o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`;
+    }).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x?.title ?? x?.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
