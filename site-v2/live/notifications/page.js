@@ -423,7 +423,8 @@
       return c&&validCount(c.sent)&&!(validCount(c.total)&&c.total===0)?`${label} ${countText(c,'sent',c.sent)} 次`:'';
     }).filter(Boolean).join('、'):'';
     // 后台按“发送批次”数：一次发送可能含两件事，所以写“次”不写“条”；近 24 小时这句写它自己的截止时刻，和下面明细读到的时刻分开（M501、M063）
-    const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
+    // 写“统计截至”：这一句的数是后台按这个时刻统计的，下面“最近一次”是明细里读到的最新一条，可能比它晚
+    const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（统计截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
     headline=!validCount(totals.total)?'近 24 小时发了多少次提醒，还没读到'
       :totals.total===0?`近 24 小时${dayEnd}${scope}没有给${you()}发提醒`
       :`近 24 小时${dayEnd}${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 次提醒${multi} · ${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 次`)}`;
