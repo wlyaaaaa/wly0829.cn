@@ -98,7 +98,11 @@
         known = new Set(keys);
         // 两遍拼起来，滚到一半无缝接回开头；内容不够一屏时多拼几遍
         // 没有快讯时照样滚（动效一直开着），只把字写清：读不到这一页时不说成“没有新消息”
-        track.innerHTML = html || `<span class="tp-ticker__item">${off ? '这一页的读数没读到，快讯先空着' : '这会儿没有新消息'}</span>`;
+        track.innerHTML = html || `<span class="tp-ticker__item">${off ? '这一页这次没读到，下一轮会自动再读' : '最近没有新动静，有新的会马上出现在这里'}</span>`;
+        // 内容不到一屏宽（只有“没消息、读不到”那一句，或快讯很短）：每一份后面空出一整屏宽再接下一份，
+        // 屏上同一时间只露一遍，不再一排重复好几遍（M1008）；照样一直滚。内容够一屏的（多条快讯）照旧
+        const win = bar.querySelector('.tp-ticker__window').clientWidth;
+        if (track.scrollWidth < win) track.innerHTML = `<span style="display:inline-flex;align-items:center;height:100%;padding-right:${win}px">${track.innerHTML}</span>`;
         const one = track.scrollWidth, need = Math.max(2, Math.ceil((bar.clientWidth * 2) / Math.max(1, one)));
         const unit = track.innerHTML;
         track.innerHTML = unit.repeat(need % 2 ? need + 1 : need);
