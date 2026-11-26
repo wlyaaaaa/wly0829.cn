@@ -41,10 +41,61 @@
     ['csrss', ['Windows 客户端/服务器运行时', 'cpu']], ['tailscale-ipn', ['Tailscale 托盘程序', 'network']],
   ]);
 
-  function processes(rows, sampled) {
+  // 正在跑的程序先露 5 个（/computer 回包里笔记本那 5 个）。后台给了同一次采样的整份进程榜（computer/processes?group=laptop，L1）时，
+  // 表下“再看 10 个”每点一次多摆 10 个，一直能看到底；下一批在点之前先取好，点下去马上接上。笔记本换了一次采样就从头重取，已展开的照样展开。
+  // 后台没有这个读口（现役）或第一批就取不到时，照旧只列 5 个，不出按钮。
+  const PROC_FIRST = 5, PROC_STEP = 10;
+  const proc = { at: null, rows: null, prev: null, next: null, total: null, shown: PROC_FIRST, busy: false, failed: null, gen: 0, x: null, sampled: false };
+  const procButton = document.createElement('button');
+  procButton.type = 'button'; procButton.className = 'more'; procButton.hidden = true; procButton.style.marginTop = '10px';
+  $('laptop-apps').closest('table').after(procButton);
+  function procSample(x, sampled) {
+    proc.x = x; proc.sampled = sampled;
+    const at = sampled ? x.cpu_sample_at : null;
+    if (at === proc.at) return;
+    proc.gen += 1; proc.at = at; proc.prev = proc.rows || proc.prev; proc.rows = null; proc.next = null; proc.total = null; proc.failed = null;
+    if (at) procFill();
+  }
+  async function procFill() {
+    while (proc.at && !proc.busy && !proc.failed && (proc.rows == null || proc.rows.length < proc.shown + PROC_STEP && proc.next)) {
+      const gen = proc.gen, first = proc.rows == null;
+      proc.busy = true;
+      let s = null;
+      try {
+        s = await window.Live.get('computer/processes', first ? { group: 'laptop', limit: String(Math.min(200, proc.shown + PROC_STEP)) }
+          : { group: 'laptop', limit: String(PROC_STEP), cursor: proc.next });
+      } catch { s = null; }
+      proc.busy = false;
+      if (gen !== proc.gen) continue;
+      const d = s?.data;
+      if (!Array.isArray(d?.items)) { proc.failed = first ? 'first' : 'page'; break; }
+      proc.rows = first ? d.items : [...proc.rows, ...d.items];
+      proc.next = d.items.length && d.next !== proc.next ? d.next : null;
+      proc.total = Number.isFinite(d.total) ? d.total : proc.rows.length;
+      if (first) proc.prev = null;
+    }
+    drawProc();
+  }
+  function drawProc() {
+    const rows = proc.rows || proc.prev, open = proc.shown > PROC_FIRST && rows;
+    if (open && proc.x) U.html($('laptop-apps'), processes(rows, proc.sampled, proc.shown));
+    const total = proc.rows ? proc.total : null, left = total == null ? 0 : total - proc.shown;
+    const waiting = proc.rows && proc.rows.length < Math.min(total, proc.shown);
+    procButton.hidden = !(proc.failed === 'page' || left > 0 || waiting);
+    procButton.disabled = !!waiting && !proc.failed;
+    U.html(procButton, proc.failed === 'page' ? '这一批没读到，点一下再取 <span class="more__chev">›</span>' : waiting ? '正在取…'
+      : left > PROC_STEP ? `再看 ${PROC_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`);
+  }
+  procButton.addEventListener('click', () => {
+    if (procButton.disabled) return;
+    if (proc.failed === 'page') proc.failed = null; else proc.shown += PROC_STEP;
+    drawProc(); procFill();
+  });
+
+  function processes(rows, sampled, count = PROC_FIRST) {
     if (!Array.isArray(rows)) return `<tr><td colspan="3">${field(rows, '进程占用')}</td></tr>`;
     if (!rows.length) return '<tr><td colspan="3">没有读到正在跑的程序</td></tr>';
-    return [...rows].sort((a, b) => (b.cpu_pct ?? -1) - (a.cpu_pct ?? -1)).slice(0, 5).map(row => {
+    return [...rows].sort((a, b) => (b.cpu_pct ?? -1) - (a.cpu_pct ?? -1)).slice(0, count).map(row => {
       const name = row.process_name;
       if (audience === 'public' && (hidden(row) || hidden(name))) {
         return `<tr><td colspan="3">${field({ visibility: 'owner', hidden_what: '进程名称与占用' }, '进程')}</td></tr>`;
@@ -107,6 +158,7 @@
       : mcp.state === 'offline' ? 'MCP 连不上' : 'MCP 这次没探出通不通',
       mcpAt ? U.esc(`${mcpAt} ${mcp.state === 'unknown' ? '探测' : mcpOld ? '最后测得' : '测得'}`) : '');
     U.html($('laptop-apps'), pending ? '<tr><td colspan="3">正在读</td></tr>' : processes(x?.processes, sampled));
+    if (!pending && x) { procSample(x, sampled); drawProc(); }
 
     const notes = [], add = (text, cls = '') => notes.push(`<li class="${cls}">${text}</li>`);
     const laptopRule = version(x?.rule_version), desktopRule = version(x?.desktop_rule_version);
