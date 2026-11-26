@@ -232,6 +232,9 @@
         const [head, name] = successText(value, before);
         setOpen(null); toast(true, head, name);
         if (!value.action) celebrate(keysOf(value));
+      } else if (value.state === 'cancelled' && value.request_created === false) {
+        // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
+        message(''); toast(false, '这次请求没发出', errorMessages[value.reason || value.error] || '');
       } else if (value.state === 'cancelled' && !grantResultNeedsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
       else if (grantResultNeedsQuery(value)) { if (windows) winMessage = '锁屏结果还没确认'; else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
       else {
@@ -266,9 +269,11 @@
     if (local) return entry();
     if (busy || !pending) return;
     busy = true; if (cancel) actionSequence++; render();
+    const old = pending;
     try {
-      const old = pending, path = '/requests/' + encodeURIComponent(old.request_id);
+      const path = '/requests/' + encodeURIComponent(old.request_id);
       let value = await apiRequest(base, path);
+      if (pending !== old) return;   // 查的途中这次请求已经有了结果（比如“取消请求”先回了话），这次查到的不再算数
       if (old.action && value.error === 'public_request_not_found') return lost(old);
       if (cancel && value.csrf_token) value = await apiRequest(base, path + '/cancel', { method: 'POST', csrf: value.csrf_token, body: {} });
       const awaitingCode = !old.action && old.factor_submitted === false && value.state === 'pending';
@@ -276,6 +281,7 @@
         factor_submitted: value.factor_submitted ?? old.factor_submitted,
         ...(awaitingCode && { error: 'public_factor_not_submitted' }) });
     } catch (error) {
+      if (pending !== old) return;
       if (!pending?.action && canRestartUnsubmittedGrant(pending, null, error)) { message('码还没提交，请重新办。'); remember(null); }
       else if (pending?.action && error?.data?.error === 'public_request_not_found') lost(pending);
       else if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
