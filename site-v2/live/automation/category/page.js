@@ -109,7 +109,7 @@
         ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${F(c.last_result.text, '上次结果')}</p>` : ''}
         <p class="ak-hero__what">${esc(g.short || '')}${g.short ? '。' : ''}${esc(g.when || '')}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
-      </div></section>`;
+      </div><img class="ak-hero__art" alt="" src="/live/automation/category/art-desk.webp"></section>`;
   }
 
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
