@@ -7,7 +7,6 @@
 (() => {
   'use strict';
   const U = window.LiveUI, esc = U.esc;
-  const ABOUT = '把支付宝、微信、信用卡、储蓄卡的账合成一本：每月花多少、花在哪，钱现在大概多少。';
   const DROP = new Set(['freshness', 'coverage', 'more-data', 'spending', 'balance']);   // 这页不按通用卡画的几节
   const DOTS = '<span class="fin-dots">••••</span>';
 
@@ -66,7 +65,7 @@
     };
     const dropped = sections.filter(s => DROP.has(s?.id));
     return {
-      ...raw, about: ABOUT, headline: null, finance,
+      ...raw, headline: null, finance,   // 首格由 strip 画；data.headline 指向的那项在 spending 一节里
       links: (raw.links || []).filter(l => l?.id !== 'spending'),   // “消费记录在我的说明书 ›”不要了（本人批准的图）
       sections: sections.filter(s => !DROP.has(s?.id)),
       hidden: finite(raw.hidden) ? Math.max(0, raw.hidden - dropped.reduce((n, s) => n + (finite(s.hidden) ? s.hidden : 0), 0)) : raw.hidden,
@@ -191,7 +190,7 @@
       ? `<button type="button" class="fin-asof" aria-expanded="false">截止 ${md(at)}<span class="fin-tip" role="tooltip">依据：${esc(basis)}</span></button>`
       : `<span class="fin-asof is-plain">截止 ${md(at)}</span>`;
     const rows = accounts.map(a => `<li><span class="fin-acct__name">${esc(a.name)}</span>${asOf(a.as_of, a.basis)}${a.flag ? `<span class="fin-flag">${esc(a.flag)}</span>` : ''}<span class="fin-acct__amt">${money(a.amount, viewer)}</span></li>`).join('');
-    // 长期分期：同名的几笔合成一项（“信用卡两笔”，剩的、每月的相加，到哪个月取最晚的）；各项截止同一天就在最后写一次，不同就各写各的
+    // 长期分期：同名的几笔合成一项（“信用卡两笔”，剩的、每月的相加，到哪个月取最晚的），一项一行；各项截止同一天就在标题后写一次，不同就各写各的
     const groups = [];
     for (const x of Array.isArray(b.long_term) ? b.long_term : []) {
       if (!x?.name) continue;
@@ -207,14 +206,14 @@
       const to = last ? ` ${differ ? '最晚到' : '到'} ${esc(last)}` : viewer === 'owner' ? '' : ` 到 ${DOTS}`;
       const name = n > 1 ? `${g.name}${n === 2 ? '两' : n <= 10 ? CN[n] : n}笔` : g.name;
       return `<span class="fin-long__item"><b>${esc(name)}</b> 剩 ${money(sum(g.items, 'remaining'), viewer)} 每月 ${money(sum(g.items, 'monthly'), viewer)}${to}${!sameDay && days[i] ? `<small>${esc(cutoff(days[i]))}</small>` : ''}</span>`;
-    }).concat(sameDay ? [`<span class="fin-long__item"><small class="is-common">${esc(cutoff(days[0]))}</small></span>`] : []).join('<span class="fin-sep">·</span>');
+    }).join('');
     const check = b.last_check && md(b.last_check.date)
       ? `上次对账（${md(b.last_check.date)}）：${(b.last_check.diffs || []).filter(x => x?.name).map(x => `${esc(x.name)}差 ${money(x.amount, viewer)}`).join('、') || '各账户都对得上'}`
       : '对账：12月更新个人项目时第一次逐个账户对，以后每月一次';
     const n = accounts.length;
     return `<div class="fin-big">${big}</div>
       ${n ? `<p class="fin-sub">${n <= 10 ? CN[n] : n}行加起来；各行截止的日子不一样，写在每行</p><ul class="fin-accts">${rows}</ul>` : ''}
-      ${long ? `<p class="fin-long"><span class="fin-long__k">长期分期（不算进欠着的）：</span>${long}</p>` : ''}
+      ${long ? `<p class="fin-long"><span class="fin-long__k">长期分期（不算进欠着的）：${sameDay ? `<small>${esc(cutoff(days[0]))}</small>` : ''}</span>${long}</p>` : ''}
       <p class="fin-check">${check}</p>`;
   }
   // 截止日期：鼠标悬停看依据；手机上点一下打开、再点或点别处收起

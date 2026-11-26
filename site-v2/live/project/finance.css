@@ -88,11 +88,10 @@ button.fin-asof:focus-visible { outline: 2px solid var(--fin-green); outline-off
 .fin-tip { position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 6; width: max-content; max-width: 300px; padding: 6px 11px; border-radius: 10px; background: rgb(255 255 255 / .97); box-shadow: 0 0 0 1px rgb(20 20 19 / .06), 0 8px 20px -8px rgb(20 28 36 / .35); font-size: 12.5px; line-height: 18px; color: var(--ink-soft); text-align: left; white-space: normal; text-decoration: none; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s ease, visibility .15s; }
 button.fin-asof:hover .fin-tip, button.fin-asof:focus-visible .fin-tip, button.fin-asof.is-open .fin-tip { opacity: 1; visibility: visible; }
 .fin-flag { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #fbedd2; color: #8a5a00; font-size: 12.5px; white-space: nowrap; }
-.fin-long { margin: 10px 0 0; padding: 9px 14px; border-radius: 12px; background: rgb(255 255 255 / .42); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .65); font-size: 13.5px; line-height: 23px; color: #3d3c38; }
+.fin-long { display: grid; gap: 1px; margin: 10px 0 0; padding: 9px 14px; border-radius: 12px; background: rgb(255 255 255 / .42); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .65); font-size: 13.5px; line-height: 23px; color: #3d3c38; }
 .fin-long__k { color: #5d5c56; }
-.fin-long__item { display: inline-block; }
+.fin-long__k small { margin-left: 2px; font-size: 12px; color: #8f8d86; }
+.fin-long__item { display: block; padding-left: 1em; }   /* 一项一行，真数下四笔也不会挤成一团 */
 .fin-long__item b { font-weight: 600; color: var(--ink); }
 .fin-long__item small { margin-left: 6px; font-size: 12px; color: #8f8d86; white-space: nowrap; }
-.fin-long__item small.is-common { margin-left: 0; }
-.fin-sep { margin: 0 8px; color: #a8a69e; }
 .fin-check { margin: 10px 0 0; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
