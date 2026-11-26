@@ -121,7 +121,8 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-cell__v small { margin-left: 4px; font-size: 13px; font-weight: 400; color: var(--muted); }
 .pj-cell__v .pj-atleast { margin: 0 4px 0 0; }
 .pj-cell__v.is-text, .pj-cell__v.is-text .pj-text { font-size: 17px; font-weight: 600; }
-.pj-cell__v.is-text { white-space: normal; overflow-wrap: anywhere; }
+.pj-cell__v.is-text, .pj-cell__v.is-wrap { white-space: normal; overflow-wrap: anywhere; }
+.pj-cell__v.is-wrap { text-wrap: balance; }
 /* 读数是一整句话的那一格：占两格宽，照正文字号，不当大号粗体 */
 .pj-cell--wide { grid-column: span 2; }
 .pj-cell--wide .pj-cell__v.is-text { margin-top: 4px; font-size: 15px; font-weight: 500; line-height: 23px; }

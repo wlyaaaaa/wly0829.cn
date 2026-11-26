@@ -45,11 +45,21 @@ export async function mountInterface(id, strip) {
 
   const dialog = section.querySelector('dialog');
   const [previous, next] = dialog.querySelectorAll('button');
-  const full = dialog.querySelector('img'), caption = dialog.querySelector('figcaption');
+  const frame = dialog.querySelector('figure');
+  const full = frame.querySelector('img'), caption = frame.querySelector('figcaption');
   let selected = 0;
+  full.onload = () => {
+    const scrollable = shots[selected][3] || full.naturalHeight >= 3 * full.naturalWidth;
+    dialog.style.setProperty('--pj-interface-image-width', full.naturalWidth + 'px');
+    frame.classList.toggle('is-scrollable', scrollable);
+    if (scrollable) frame.tabIndex = 0;
+    else frame.removeAttribute('tabindex');
+    frame.scrollTop = 0;
+  };
   function show(index) {
     const [, original, label] = shots[index];
     selected = index;
+    frame.scrollTop = 0;
     full.removeAttribute('src');
     showImage(full, original);
     full.alt = label;

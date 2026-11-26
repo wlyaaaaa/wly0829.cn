@@ -14,9 +14,9 @@
     ["/live/project/interfaces/proxyclean/03-thumb.webp", "/live/project/interfaces/proxyclean/03.webp", "没找到能自动修的：给出下一步，并写明没重启网卡、没改无线设置（9 月 24 日，这页提示文字后来改过）"]
   ],
   "pcconfig": [
-    ["/live/project/interfaces/pcconfig/01-thumb.webp", "/live/project/interfaces/pcconfig/01.webp", "手机锁屏上的实况通知：电脑这边有事要你知道，直接弹到手机上（11 月 24 日本人截图）"],
-    ["/live/project/interfaces/pcconfig/02-thumb.webp", "/live/project/interfaces/pcconfig/02.webp", "出门在外，手机经 TailSocks 连回家里这台电脑；TailSocks 是别人做的 App，按电脑大本营的设置跑（11 月 24 日本人截图）"],
-    ["/live/project/interfaces/pcconfig/03-thumb.webp", "/live/project/interfaces/pcconfig/03.webp", "手机上的自动宏：收到验证码自动复制、电脑剪贴板推到手机；MacroDroid 是别人做的 App（11 月 24 日本人截图）"]
+    ["/live/project/interfaces/pcconfig/01-thumb.webp", "/live/project/interfaces/pcconfig/01.webp", "手机上弹出来的实况通知：电脑这边有事要你知道，直接弹到手机上（11 月 24 日本人截图）", true],
+    ["/live/project/interfaces/pcconfig/02-thumb.webp", "/live/project/interfaces/pcconfig/02.webp", "出门在外，手机经 TailSocks 连回家里这台电脑；TailSocks 是别人做的 App，按电脑大本营的设置跑（11 月 24 日本人截图）", true],
+    ["/live/project/interfaces/pcconfig/03-thumb.webp", "/live/project/interfaces/pcconfig/03.webp", "手机上的自动宏：收到验证码自动复制、电脑剪贴板推到手机；MacroDroid 是别人做的 App（11 月 24 日本人截图）", true]
   ],
   "pc-panel-hub": [
     ["/live/project/interfaces/pc-panel-hub/01-thumb.webp", "/live/project/interfaces/pc-panel-hub/01.png", "机箱竖屏这一刻的画面：时间天气、CPU、显卡、内存、硬盘读写和最忙的几个程序（11 月 26 日 10:54，程序自己写出的那一帧）"],
@@ -32,11 +32,9 @@
     ["/live/project/interfaces/localocr/02-thumb.webp", "/live/project/interfaces/localocr/02.webp", "本机认出来的结果：六列、五行和合计都对（9 月 3 日实际输出）"]
   ],
   "ai-cli-profile-manager": [
-    ["/live/project/interfaces/ai-cli-profile-manager/01-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/01.png", "选厂商和模型的列表：打开前先写清连哪、用谁（9 月 15 日，列表里 DeepSeek V4 那几条后来下线了）"],
+    ["/live/project/interfaces/ai-cli-profile-manager/01-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/01.webp", "选厂商和模型的列表：打开前先写清连哪、用谁（9 月 15 日，列表里 DeepSeek V4 那几条后来下线了）"],
     ["/live/project/interfaces/ai-cli-profile-manager/02-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/02.webp", "桌面版里选本机 Qwen3.8 27B 回答问题，思考摘要也是中文（9 月 15 日）"],
-    ["/live/project/interfaces/ai-cli-profile-manager/03-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/03.webp", "① 先核对现在生效的规则版本，再读要用的技能说明（9 月 15 日）"],
-    ["/live/project/interfaces/ai-cli-profile-manager/04-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/04.webp", "② 做完个人资料的访问检查，才去查偏好库（9 月 15 日）"],
-    ["/live/project/interfaces/ai-cli-profile-manager/05-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/05.webp", "③ 最后用中文给出回答（9 月 15 日）"]
+    ["/live/project/interfaces/ai-cli-profile-manager/05-thumb.webp", "/live/project/interfaces/ai-cli-profile-manager/05.webp", "最后用中文给出回答：照偏好库里的记录，列出喜欢吃的和口味倾向（9 月 15 日）"]
   ],
   "wly0829.cn": [
     ["/live/project/interfaces/wly0829.cn/01-thumb.webp", "/live/project/interfaces/wly0829.cn/01.webp", "网站首页：机箱、瀑布和几块实时读数（11 月 26 日公网，AI 用无头浏览器截）"],

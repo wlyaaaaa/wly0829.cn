@@ -15,10 +15,14 @@
 .pj-interface-zoom::before { content: ""; position: absolute; top: 4px; left: 4px; width: 13px; height: 13px; border: 2px solid currentColor; border-radius: 50%; }
 .pj-interface-zoom::after { content: ""; position: absolute; top: 16px; left: 16px; width: 7px; height: 2px; border-radius: 2px; background: currentColor; transform: rotate(45deg); transform-origin: left; }
 .pj-interface-view {
-  box-sizing: border-box; width: max-content; max-width: min(1200px, calc(100vw - 48px)); max-height: calc(100dvh - 48px);
+  box-sizing: border-box; flex-direction: column; width: max-content; max-width: min(1200px, calc(100vw - 48px)); max-height: calc(100dvh - 48px);
   padding: 15px; border: 1px solid var(--hair); border-radius: 16px; background: var(--pj-paper); color: var(--ink); overscroll-behavior: contain;
 }
 .pj-interface-view::backdrop { background: rgb(22 23 21 / .66); }
 .pj-interface-view img { display: block; max-width: 100%; max-height: calc(100dvh - 160px); width: auto; height: auto; margin: 0 auto; }
+.pj-interface-view[open]:has(.is-scrollable) { display: flex; width: calc(min(var(--pj-interface-image-width), 720px) + 48px); }
+.pj-interface-view .is-scrollable { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.pj-interface-view .is-scrollable img { max-width: min(100%, 720px); max-height: none; }
+.pj-interface-view .is-scrollable + .pj-interface-controls { flex: none; }
 .pj-interface-view figcaption { text-align: center; }
 .pj-interface-controls { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
