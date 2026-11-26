@@ -127,6 +127,9 @@
     notice?.set(ok ? 'ok' : 'fail', head, { name, hold: ok ? 7000 : 10000 });
   }
   const keysOf = value => ['pd', 'ur'].filter(k => value?.[fields[k]] && value[fields[k]].state !== 'not_requested');
+  // 两项一起办只办成一项（partial）：两项都有了结果就不用再查；还有一项没出结果的照旧查原号
+  const openParts = value => keysOf(value).filter(k => ['unknown', 'pending', 'verifying'].includes(value[fields[k]].state));
+  const needsQuery = value => value?.state === 'partial' && !value.action ? openParts(value).length > 0 : grantResultNeedsQuery(value);
   // 等结果：那一块的边框绕一圈绿光、码格里一道光流过，直到出结果
   function waiting(keys, on) {
     for (const k of Object.keys(cells)) cells[k].classList.toggle('is-waiting', on && keys.includes(k));
@@ -181,7 +184,7 @@
     return ['办好了', ''];
   }
   function remember(value) {
-    pending = value && grantResultNeedsQuery(value) ? { request_id: value.request_id, action: value.action, state: value.state, factor_submitted: value.factor_submitted, request_created: value.request_created, key: openKey || pending?.key || ({ 'personal-data': 'pd', unrestricted: 'ur' }[value.action]) } : null;
+    pending = value && needsQuery(value) ? { request_id: value.request_id, action: value.action, state: value.state, factor_submitted: value.factor_submitted, request_created: value.request_created, key: openKey || pending?.key || ({ 'personal-data': 'pd', unrestricted: 'ur' }[value.action]) } : null;
     // Store no factor, CSRF token or local authority; reload only queries this ID.
     if (pending) sessionStorage.setItem(storageKey, JSON.stringify(pending)); else sessionStorage.removeItem(storageKey);
   }
@@ -232,11 +235,29 @@
         const [head, name] = successText(value, before);
         setOpen(null); toast(true, head, name);
         if (!value.action) celebrate(keysOf(value));
+      } else if (value.state === 'partial' && !value.action) {
+        // 两项一起办只办成一项：办成的那项照回执画上新截止、卡片亮一下，浮窗逐项写哪项办成、哪项没成；
+        // 另一项还没出结果的，只确认办成的那项，另一项写“结果还没确认”，接着查原号
+        // 同一次请求会再查几次，“办成了”不分解锁还是延长（查第二次时卡上已是新截止），卡片只在截止头一回换上时亮一下
+        const keys = keysOf(value), open = openParts(value);
+        const ok = keys.filter(k => value[fields[k]].state === 'succeeded'), drawn = ok.filter(k => value[fields[k]].expires_at_unix > 0);
+        if (drawn.length) {
+          const next = { ...state, state_version: '' };
+          for (const k of drawn) next[fields[k]] = { ...state?.[fields[k]], state: value[fields[k]].current_state || (k === 'pd' ? 'unlocked' : 'active'), expires_at_unix: value[fields[k]].expires_at_unix };
+          const fresh = drawn.filter(k => state?.[fields[k]]?.expires_at_unix !== value[fields[k]].expires_at_unix);
+          shown = { at: clock(), parts: Object.fromEntries(drawn.map(k => [fields[k], next[fields[k]]])) };
+          state = next; celebrate(fresh);
+        }
+        const name = { pd: '个人资料', ur: '无限制授权' };
+        const lines = keys.map(k => ok.includes(k) ? `${name[k]}办成了${drawn.includes(k) ? ' · ' + untilText(value[fields[k]].expires_at_unix * 1000) : ''}`
+          : open.includes(k) ? `${name[k]}结果还没确认` : `${name[k]}没办成`);
+        if (open.length) message(`${lines.join('；')}，页面会自己再核对。`);
+        else { setOpen(null); toast(false, '办成一项，请看各自状态。', lines.join('\n')); }
       } else if (value.state === 'cancelled' && value.request_created === false) {
         // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
         message(''); toast(false, '这次请求没发出', errorMessages[value.reason || value.error] || '');
-      } else if (value.state === 'cancelled' && !grantResultNeedsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
-      else if (grantResultNeedsQuery(value)) { if (windows) winMessage = '锁屏结果还没确认'; else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
+      } else if (value.state === 'cancelled' && !needsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
+      else if (needsQuery(value)) { if (windows) winMessage = '锁屏结果还没确认'; else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
       else {
         if (!value.action && openKey !== key) setOpen(key, false);
         if (openKey === key) message(cooldownText());
