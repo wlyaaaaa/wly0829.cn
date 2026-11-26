@@ -25,11 +25,7 @@
   // 总表每格最后画成什么（状态、字），左栏“为什么”和右栏“副本旧了”照它说，和总表同一个说法
   const cells = new Map(), cellOf = (id, key) => cells.get(`${id}:${key}`);
   const BAD = ['stale', 'gap', 'mostly', 'partial', 'failed'];
-  // 后台恢复说明换成人话；没对上的原样显示
-  const PLAIN = [[/软件没有列出取回了哪些文件/, '没记取回了哪些文件'], [/恢复结果存在选定的还原目录旁，没有集中记录/, '从这里恢复的文件放在你选的目录旁，没有统一记录'],
-    [/现有记录只覆盖文件恢复操作，离线整机还原没有可查的记录/, '离线整机还原不留记录，这里查不到']];
-  // 访客版不对访客称“你”：“放在你选的目录旁”写成“放在本人选的目录旁”（r83 返修第三轮）
-  const plain = text => { const hit = typeof text === 'string' ? PLAIN.find(([re]) => re.test(text))?.[1] : undefined; return hit && viewer === 'public' ? hit.replaceAll('你', '本人') : hit; };
+  const plain = text => { const note = D.backupRestoreNote(text); return note !== text ? note : ''; };
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
@@ -176,7 +172,7 @@
         return why && copy[k] == null && (k === 'eligible_at' ? uploads || inQueue : copy.sent != null || copy.total != null) ? [`${name}：${field(reason(why), name)}`] : [];
       });
       // 点开“副本说明”要多给一句原因：取第一句真有内容的（停用的副本 gap 写“没有记录”时用停用原因），只剩“没有记录”“不适用”这种空话的不做成可展开的字。
-      const causes = [[copy?.why, copy?.gap, retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => field(value, '副本说明'))
+      const causes = [[copy?.why, copy?.gap, D.backupFailureReason(copy?.failure_reason), retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => field(value, '副本说明'))
         .concat(details.filter(line => !emptyWord(line.replace(/<[^>]*>/g, '').replace(/^[^：]*：/, ''))));
       const lines = [cold && confirmed && anomaly && hLabel, uploadNote !== label && uploadNote, waitNote !== label && waitNote, unconfirmed,
         cloud && copy?.sent == null && copy?.total != null && `共 ${D.transferCount(copy, 'total', key)}`,
@@ -216,7 +212,7 @@
       const why = state.note && (s.why && state.note === field(s.why, '状态说明')
         ? explain(s.why, '备份说明') : `<small>${state.note}</small>`);
       const sizeAt = s.bytes == null ? '' : D.sizeEvidence(s, stamp);
-      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(reason(s.missing?.bytes), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(note, '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
+      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
     U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${[18,18,6,7,7,7,9,9,12,7].map(width => `<col style="width:${width}%">`).join('')}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
@@ -336,7 +332,7 @@
       // 栏底只并写别的恢复说明：“最近一次记录于 …”已写在各自那一行；“没有恢复记录”最上面已经说了
       const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text) && !/^没有恢复(?:过的)?记录[。.]?$/.test(sp(U.fieldText(text, viewer))))
         .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
-      restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
+      restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.map(note => note.replace(/[。.]$/, '')).join('；')}。</p>` : ''}</div>` });
     }
     U.list($('points'), restored.length ? restored : empty(restoreText(d)));
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });

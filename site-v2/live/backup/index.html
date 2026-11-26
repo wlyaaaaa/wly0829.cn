@@ -25,6 +25,9 @@
 .page--backup #files-privacy { margin: 8px 0 0; }
 .page--backup .backup-time { white-space: nowrap; }
 .page--backup .backup-evidence-label { white-space: nowrap; }
+.page--backup .backup-copy-state[data-state="failed"] { color: #a8362c; }
+.page--backup .backup-copy-state[data-state="mostly"] { color: #8a6800; }
+.page--backup .backup-copy-state[data-state="partial"] { color: #b14e0a; }
 .page--backup .backup-locator { overflow-wrap: break-word; }
 .page--backup .backup-locations { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
 .page--backup #copies td:has(.backup-time) small { white-space: nowrap; }
@@ -85,7 +88,7 @@
     <aside class="dossier__side">
       <section class="dossier-card dossier-card--restore glass" id="points-section" data-mo-rise>
         <span class="dossier-card__tint" aria-hidden="true"></span>
-        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="restore" aria-hidden="true"></span><span class="rec-part">能退回哪一天</span></h2>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="time" aria-hidden="true"></span><span class="rec-part">能退回哪一天</span></h2>
         <p class="fe-l3b-note" id="points-result" hidden></p>
         <ol class="runs" id="points"></ol>
       </section>
