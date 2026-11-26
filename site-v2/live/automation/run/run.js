@@ -195,7 +195,7 @@
   const clockOf = (r, at) => !T.stamp(at) ? '' : T.dayKey(at) === T.dayKey(r.startedAt || r.queuedAt || at) ? T.clock(at) : `${T.day(at)} ${T.clock(at)}`;
   const GEAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.5 8.8a.5.5 0 0 0 .1.6l2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6a.5.5 0 0 0-.1.6l1.9 3.3c.1.2.4.3.6.2l2.4-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.2.4.5.4h3.8c.3 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.4 1c.2.1.5 0 .6-.2l1.9-3.3a.5.5 0 0 0-.1-.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>';
   // 一条话：派活程序（齿轮）、AI（绿点）；name 是谁说的，at 是钟点，body 是正文，after 挂在正文下面（思考摘要、链接）
-  const joined = html => html.split(/(<[^>]*>)/).map((s, i) => i % 2 ? s : s.replace(/([。！？])[ \t]*(?:[；;][ \t]*|·[ \t]*)/g, '$1 ')).join('');
+  const joined = html => html.split(/(<[^>]*>)/).map((s, i) => i % 2 ? s : s.replace(/([。！？])[ \t]*(?:[；;][ \t]*|·[ \t]*)/g, '$1')).join('');
   const say = ({ who, name: by, at, body = '', after = '', tone = '', cls = '' }) => `<li class="ar-msg${cls ? ` ${cls}` : ''}" data-who="${who}"${tone ? ` data-tone="${tone}"` : ''}><span class="ar-ava" data-who="${who}" aria-hidden="true">${who === 'dispatcher' ? GEAR : ''}</span><div class="ar-msg__body"><p class="ar-msg__head"><b>${by}</b>${at ? `<time>${esc(at)}</time>` : ''}</p>${body ? `<p class="ar-msg__text">${keepDates(joined(body))}</p>` : ''}${after}</div></li>`;
 
   // 思考摘要：引用样子挂在那条话下面。宿主只存了外文的，去掉“宿主存下的外文思考摘要：”那串字，前面标“外文原文”；
@@ -203,8 +203,11 @@
   const FOREIGN = /^宿主(?:存下|只记录)了?的?外文思考(?:摘要)?[：:]\s*/;
   const bodyOf = (v, label) => CV.chatCell(v, label, chat?.data, 0, true) || CV.chatCell(v, label, chat?.data);
   // 旧 Codex 回包有时把多条短思考用空格拼起来。只从另一条思考的开头断开，保留普通的中英文空格。
-  const splitThought = text => text.replace(/[ \t]+(?=(?:我(?:正在|已|先|将|会|在|继续|等待|核对|核查|检查)|正在(?:核对|核查|检查)|[A-Z][a-z]{2,}ing\b[ \t]))/g,
-    (space, at) => /^[我正]/.test(text[at + space.length]) && !/[。！？.!?]$/.test(text.slice(0, at)) ? '。\n' : '\n');
+  function splitThought(text) {
+    const lead = /^[A-Z][a-z]+(?=[ \t])/.exec(text)?.[0];
+    const start = new RegExp(`[ \\t]+(?=(?:我(?:正在|已|先|将|会|在|继续|等待|核对|核查|检查)|正在(?:核对|核查|检查)|(?:[A-Z][a-z]+ing${lead ? `|${lead}` : ''})\\b[ \\t]))`, 'g');
+    return text.replace(start, (space, at) => /^[我正]/.test(text[at + space.length]) && !/[。！？.!?]$/.test(text.slice(0, at)) ? '。\n' : '\n');
+  }
   function quotes(lines, key) {
     let marked = false;
     const items = lines.map(v => {
