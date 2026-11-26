@@ -98,14 +98,22 @@
     }
     return key ? U.visitorLabel({ visitor_labels: r.labels }, key, '这一轮的说法', viewer) : '';
   }
+  const longerThanChat = (r, d) => {
+    const span = R.minutesBetween(d?.turn_started_at, r.finishedAt);
+    return span != null && r.workedMinutes != null && r.workedMinutes - span >= 1;
+  };
   function tags(r) {
+    const d = chat?.data || r.conversation.meta;
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
     const whole = R.minutesBetween(r.queuedAt || r.startedAt, r.finishedAt);
+    // 派活先启动、随后 AI 对话才开始时，不能把含派活启动的时长写成对话处理时间。
+    const runSpan = R.minutesBetween(r.startedAt, r.finishedAt);
+    const workLabel = !longerThanChat(r, d) ? 'AI 实际 ' : T.dec(runSpan) === T.dec(r.workedMinutes)
+      ? `任务运行 ${T.when(r.startedAt)} 起，` : '后台记录用时 ';
     const time = [clockRange(r), whole != null && `整轮 ${T.dec(whole)} 分钟`,
       r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
-      r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `AI 实际 ${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
+      r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `${workLabel}${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
-    const d = chat?.data || r.conversation.meta;
     const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
     const model = !r.who?.program && !r.who?.short && worker.model ? R.whoOf(worker).short : r.who?.text;
     const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker));
@@ -421,7 +429,9 @@
       const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
-      const facts = m.meta.map(v => keepDates(U.fieldHtml(v, { name: '对话内容', kind: viewer })));
+      const longer = longerThanChat(r, d);
+      const facts = m.meta.map(v => keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
+        { name: '对话内容', kind: viewer })));
       if (m.project) facts.push(`所属项目 ${m.project}`);
       const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
       if (mark) facts.push(`<span class="live-unit">${facts.pop() || ''}${mark}</span>`);
