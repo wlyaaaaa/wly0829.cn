@@ -299,8 +299,9 @@
     } else {
       // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
       const plainSummary = typeof r.summary === 'string' && lastWords ? r.summary.replace(SCAN, '').match(/[^。！？\n]+[。！？]*|\n+/g) : null;
-      const heading = plainSummary ? CV.flatWords(title(r)) : '';
-      const summary = plainSummary ? plainSummary.filter(sentence => !alreadySaid(lastWords, sentence) && !alreadySaid(heading, sentence)).join('').trim() : r.summary;
+      // 先按实际显示的称呼比较，访客看到的“要本人选”和对话原文“要你选”是同一句。
+      const compared = [lastWords, plainSummary ? CV.flatWords(title(r)) : ''].map(words => R.asOwner(words, viewer));
+      const summary = plainSummary ? plainSummary.filter(sentence => !compared.some(words => alreadySaid(words, R.asOwner(sentence, viewer)))).join('').trim() : r.summary;
       const shown = F(summary, '这一轮做了什么');
       const result = withoutScan(R.withoutSubject(shown, r.subject ? F(r.subject.title, '这件活') : '') || shown, r);
       const tag = U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer);
