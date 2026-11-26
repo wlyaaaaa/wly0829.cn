@@ -313,7 +313,7 @@
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍</p>${ratioPlot(d)}<p class="tp-small">绿带按估 1 小时以上的画：早 30% 到晚 10% 都算准；1 小时以内的单子是早 15 分钟到晚 5 分钟。</p></div>
+        <div><p class="tp-sub">实际是估的几倍</p>${ratioPlot(d)}<p class="tp-small">绿带只画估 1 小时及以上的单子：实际比估的早 30% 以内、晚 10% 以内都算准，正好在边上也算；不到 1 小时的单子按分钟算，早 15 分钟、晚 5 分钟以内算准。</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
@@ -402,7 +402,7 @@
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
   }
 
   // —— 五、钩子 ——
