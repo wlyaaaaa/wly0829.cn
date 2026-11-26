@@ -386,8 +386,8 @@
     // 头一行段名和一句话；reading 是逐项清单那类读数的一句读数；最后是收起来的“说明”和整张卡都一样的截止时刻
     el.innerHTML = `<p class="pj-part" data-p="head"></p><p class="pj-reading" data-p="reading" hidden></p><p class="pj-note" data-p="cutoff" hidden></p>
       <ul class="${LIST[kind]}" data-p="main"></ul>
-      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a></div>
       <div class="fold" data-p="box"><div><ul class="${LIST[kind]}" data-p="rest"></ul></div></div>
+      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a></div>
       <p class="pj-note" data-p="note" hidden></p>
       <p class="pj-hidden" data-p="hidden" hidden></p>
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
