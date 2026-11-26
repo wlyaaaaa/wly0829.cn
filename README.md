@@ -17,7 +17,7 @@
    - `site-v2/trial/first-projects/表/归属表.md`
    - `site-v2/配置/规则公开改写.json`
 2. 公开审查使用 `E:/PCConfig/registries/site_public_words.json`，规则页默认读取 `E:/.agents` 的现行活动版本。本机字体缺失时，构建按 `site-v2/site-assembly/素材/字体/登记.json` 取回登记字节并核 SHA-256。
-3. 本地组装把规则本人稿写到本轮私有临时目录。普通预览可省略实况备用包和正式回执映射。制作发布成品时，按 [发布与扫描](docs/publish-and-scan.md) 配置同版备用包，并把配套映射中的 `files/.publish/private/live-project.json` 放到本轮相同相对位置（去掉 `files/`），核其中 `public`、`owner` 的绝对路径指向两份登记的实况来源。
+3. 本地组装把规则本人稿写到本轮私有临时目录。普通预览可省略实况备用包。制作发布成品时，按 [发布与扫描](docs/publish-and-scan.md) 配置同版备用包。本人独立组装且要把成品登记到实况时，加 `npm run build -- --record-local`，可同传 `--dist`。
 
 ```powershell
 python -m pip install -r site-v2/requirements.txt

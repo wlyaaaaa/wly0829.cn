@@ -304,7 +304,7 @@ python -B -X utf8 tools/update.py --batch $batch result
 - **压图。** 组装时 `压图.py` 清理未引用素材，把实际采用的静态无损正文 WebP 按原尺寸压小（质量 90，保留透明度和色彩描述），已是有损 WebP 的图按原字节沿用。也可在提交前用 `python -B -X utf8 site-v2/site-assembly/压图.py '@图清单.txt'` 压本次采用的图源，清单每行写一个 WebP 路径。图源只存一份现用 WebP，临时 PNG 用完删。
 - **OSS、Pages：** HTML 交 GitHub Pages，图片、字体、脚本、样式交 OSS，见 [OSS 资源契约](oss-publication.md)。
 - **发布、回读：** 从第十三节的批次入口执行。上线与清理状态看各自回执，第 7 步汇总进本轮记录。
-- **私有输入。** 在本轮网站工作副本的根目录运行以下命令，从现有登记照原相对路径复制三张共用表、规则公开改写和流水线工具。所需稿件可重复传 `--project <项目ID>`。准备正式发布时沿用 README 登记的 `.publish/private/live-project.json`。
+- **私有输入。** 在本轮网站工作副本的根目录运行以下命令，从现有登记照原相对路径复制三张共用表、规则公开改写和流水线工具。所需稿件可重复传 `--project <项目ID>`。发布器成功回读后，按 PCConfig 的来源登记写回实况。
 
 ```powershell
 $worktree = (Get-Location).Path
