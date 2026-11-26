@@ -220,10 +220,8 @@
     }
     if (Number.isFinite(value.cooldown_until_unix)) cooldownUntil = value.cooldown_until_unix;
     const lockedKey = ({ 'personal-data': 'pd', unrestricted: 'ur' })[value.action];
-    if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') {
-      const d = new Date(Date.now() + BJ);
-      lockedAt[lockedKey] = `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
-    }
+    // 没配对的设备看不到真状态，锁上／结束成功后卡上记一笔“已锁上／已结束”。电脑的回执不带办理时刻，就不写时刻，不拿浏览器时间补
+    if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') lockedAt[lockedKey] = true;
     {
       waiting([], false);
       const windows = value.action === 'windows';
@@ -493,7 +491,7 @@
       const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || winMessage || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
       result.hidden = disconnected || !(key === 'win' ? winNote : lockedAt[key]); result.replaceChildren();
       if (!result.hidden && key === 'win') result.textContent = winNote;
-      else if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
+      else if (!result.hidden) { const title = document.createElement('strong'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; result.append(title); }
       const acts = cell.querySelector('.cell__acts'); acts.replaceChildren();
       cell.querySelector('.cell__inline')?.remove();
       const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? [['锁屏', 'close'], ['解锁', 'unlock']]
