@@ -533,14 +533,14 @@
     // 只有它们有上次的数、页里各块全没存下来时，照全空说（r83 返修第二轮）
     const bodyUpTo = latestStamp(connectionEntries().filter(e => isMain(e) || e.resource !== 'home' && e.resource !== 'computer/hardware').map(dataAt));
     const rest = bodyUpTo ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
-    const home = main?.path === 'home' || main?.resource === 'home' && main.query.includes('project=');
+    const home = main?.resource === 'home' && !new URLSearchParams(main.query).has('view');
     const showing = (whole, part) => ` · ${home ? '有记录的卡片显示' + part : '下面是' + whole}`;
     const mainAt = main && dataAt(main), atLine = mainAt ? showing(` ${shortStamp(mainAt)} 的数据`, ` ${shortStamp(mainAt)} 读到的内容`) : rest;
     // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
     const since = main && failingStamp(main);
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
       ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
-          : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online' };
+          : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online', shownAt: mainAt };
     const link = latestConnection();
     if (!hostOffline(link)) {
       // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”。
