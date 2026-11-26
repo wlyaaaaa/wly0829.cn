@@ -75,6 +75,13 @@
 .ak-run__body b a { color: inherit; text-decoration: none; }
 .ak-run__body b a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .ak-run__body small { display: block; margin-top: 2px; font-size: 13px; line-height: 20px; color: #6c6b64; }
+/* 下面那句几段：只在段与段之间折，每段前头的“·”折到行首时落在左边裁掉的那一截里；后面的签和“去那张卡”不画点，左边让开同样宽 */
+.ak-run__body small:has(> .ak-line) { overflow-x: clip; }
+.ak-line { display: block; margin-left: -1.1em; }
+.ak-seg__dot { display: inline-block; width: 1.1em; text-align: center; font-style: normal; }
+.ak-seg.is-keep { white-space: nowrap; }
+.ak-tail { margin-left: 1.1em; }
+.ak-line #live-privacy-note { margin-left: 1.1em; }
 .tp a.ak-run__go { font-size: 14.5px; font-weight: 700; line-height: 22px; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
 .tp a.ak-run__go:hover { text-decoration: underline; text-underline-offset: 3px; }
 .ak-more { margin: 10px 0 0; padding: 4px 0; border: 0; background: none; font: inherit; font-size: 17px; font-weight: 800; color: var(--tp-green-ink); cursor: pointer; }

@@ -65,12 +65,15 @@
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
     const nth = r.subject && known(r.subject.round) && r.subject.round > 0 ? `第 ${int(r.subject.round)} 轮` : '';
     const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `<span class="au-nw">跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}</span>` : '') : known(r.minutes) ? `<span class="au-nw">用了 ${minutes(r.minutes * 60)}</span>` : '';
-    const meta = [note, nth, r.who?.text ? esc(r.who.text) : '', ran].filter(Boolean).join(' · ');
     // 本人版：整轮对访客藏着的挂“访客看不到”、换了说法的挂“对外换了说法”（私事线 11-26）
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
+    // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
+    // 每段前头画点、和这段字连着（&#8288;），折到行首那个点被裁掉（page.css 的 .ak-line），行尾不悬“·”（和账本列表第二行同一个办法，主控 11-26）
+    const segs = [[note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
+    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep]) => `<span class="ak-seg${keep ? ' is-keep' : ''}"><i class="ak-seg__dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join(' ')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
-      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}${why}</small>` : why ? `<small>${why}</small>` : ''}</div>
+      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
       ${r.href ? `<a class="ak-run__go" href="${esc(r.href)}">看这一轮 <span aria-hidden="true">›</span></a>` : ''}</li>`;
   }
   const allRuns = () => {
