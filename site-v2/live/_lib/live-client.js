@@ -535,9 +535,10 @@
     if (!hostOffline(link)) {
       // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”。
       // 只看本页主数据：别的块退到那份、主数据手上是这个窗口刚读到的时，不说“这台浏览器没存过”（D6，项目总表页顶前后打架）
-      const release = !!main && (main.backupFrom === 'release' && onBackup(main) || main.backupMeta?.from === 'release');
-      const at = main && onBackup(main) ? ` · 下面是${releaseName()}`
-        : !mainAt && !shownUpTo() && main?.backupMeta ? ` · ${releaseName()}只记了时刻，没存内容` : atLine;
+      // 随站那份只记了时刻、没存内容时（下面各块都写没存下来）：页顶照全空写“这页的数据没存下来”，第二句说那份只记了时刻，不说“先显示那份”（D6 复查：前后打架）
+      const release = !!main && main.backupFrom === 'release' && onBackup(main);
+      const releaseMeta = !!main && !mainAt && !onBackup(main) && main.backupMeta?.from === 'release';
+      const at = main && onBackup(main) ? ` · 下面是${releaseName()}` : atLine;
       // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
       const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
       // 怎么才算连不上（M928）：本页主数据连续 3 次读不到（头两次隔 2、4 秒重读；接口回得快时约 10 秒，超时的每次要等 15 秒）、别的读口也没读到新的才报；之后每 10 秒重读一次
@@ -545,6 +546,7 @@
       return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at,
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
           : release ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，先显示${releaseName()}`
+          : releaseMeta ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，${releaseName()}只记了时刻、没存内容；连上后自动显示`
           : `${rule}电脑没确认关机，先留着这份；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份` };
     }
     // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；说法照本人 11-25 23:19 选的图（OFFLINE1125 A）写“电脑 HH:MM 起离线”。
