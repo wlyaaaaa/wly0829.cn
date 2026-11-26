@@ -53,9 +53,10 @@ def update(args, result, log):
         log.write("+ " + subprocess.list2cmdline([str(arg) for arg in cmd]) + "\n")
         return run(cmd, cwd, env=env, output=log, capture=capture)
 
+    python_exe = sys.executable.replace("pythonw.exe", "python.exe")
+
     def python(path, *options):
-        command(sys.executable.replace("pythonw.exe", "python.exe"), "-B", "-X", "utf8", path, *options,
-                cwd=worktree, env=env)
+        command(python_exe, "-B", "-X", "utf8", path, *options, cwd=worktree, env=env)
 
     def lock(mode):
         command("pwsh", "-NoProfile", "-File", "E:/.agents/tools/Invoke-ShortLock.ps1", "-Mode", mode,
@@ -75,19 +76,14 @@ def update(args, result, log):
         worktree, dist = scratch / "src", scratch / "dist"
         previous = scratch / "previous.json"
         previous.write_text(json.dumps(prior, ensure_ascii=False), "utf-8")
+        pcconfig = args.pcconfig.resolve()
+        exporter = pcconfig / "tools/remote-computer-mcp/export_public_fallback.py"
         fallback = scratch / "fallback.json"
-        expected = prior["oss"]["objects"]["live/_fallback.json"]
-        local = Path(saved["dist_root"]) / "live/_fallback.json"
-        raw = local.read_bytes() if local.is_file() else b""
-        if hashlib.sha256(raw).hexdigest() != expected["sha256"]:
-            raw = public(expected["url"])
-        if hashlib.sha256(raw).hexdigest() != expected["sha256"]:
-            raise ValueError("实况垫底文件与上次成功发布不一致")
-        fallback.write_bytes(raw)
-        env = dict(os.environ, WLY_RULES_RELEASE=active, WLY_LIVE_PCCONFIG_ROOT=str(args.pcconfig),
+        env = dict(os.environ, WLY_RULES_RELEASE=active, WLY_LIVE_PCCONFIG_ROOT=str(pcconfig),
                    WLY_OWNER_RULES_OUT=str(PRIVATE_OWNER_PAGES if args.publish else scratch / "owner"),
                    WLY_LIVE_FALLBACK_CMD=f'copy /b /y "{fallback}" "{{out}}"')
         env.pop("WLY_RULES_SIGNED_PAGES", None)
+        command(python_exe, "-B", "-X", "utf8", exporter, "--strict", "--out", fallback, env=env)
         command("git", "worktree", "add", "--detach", worktree, source)
         try:
             python(args.prepare, "prepare", "--worktree", worktree)
@@ -112,7 +108,8 @@ def update(args, result, log):
             documents = plan["site_dist"]["changed_files"]
             unexpected = [p for p in documents if not (rule_page(p) or p in CONTROL_FILES)]
             assets = plan["planned_assets"] + plan["planned_origin_readbacks"]
-            unexpected += [p for p in assets if not p.startswith(("rules/", "公用/assets/fonts/", "公用/fonts/"))]
+            unexpected += [p for p in assets if p != "live/_fallback.json"
+                           and not p.startswith(("rules/", "公用/assets/fonts/", "公用/fonts/"))]
             result.update(pages=[p for p in documents if rule_page(p)], assets=len(assets),
                           control_files=sorted(set(documents) & CONTROL_FILES), unexpected=unexpected)
             if unexpected:
