@@ -335,11 +335,45 @@
   // 最后是这一段的小字和“另有 N 项仅本人可见”
   const LIST = { figs: 'pj-figs', kv: 'pj-kv', rows: 'rows list' };
   const SHOW = { figs: 8, kv: 5, rows: 5 };
-  function groupedRows(rows, preview = SHOW.rows, expanded = false) {
+  // 分批展开（R147）：先露 SHOW 那几条，点“展开（还有 N 条）”一次多露一批，露到底变“收起”；一批多少按排版定
+  const BATCH = { figs: 8, kv: 10, rows: 10 };
+  // reveal：这一块每组已多露了几条（组名 → 条数），重画时照着露；more(key)：这一组读完了、后面还能接着读（更早的改动、更多产物），这时不写“收起”，由那颗按钮接着读
+  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null) {
     const groups = new Map();
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
-    return [...groups].map(([key, items]) => ({ key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview))}${items.length > preview ? `<details${expanded ? ' open' : ''}><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${items.length - preview} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${list(items.slice(preview))}</details>` : ''}` }));
+    return [...groups].map(([key, items]) => {
+      const extra = Math.max(0, items.length - preview), open = Math.min(extra, reveal.get(key) || 0), left = extra - open;
+      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
+    });
+  }
+  // 点了分组底下那颗“展开（还有 N 条）／收起”：只重画这一块，不重摆两栏（免得卡片在眼前换栏）
+  function stepGroup(b, key, close) {
+    b.reveal ??= new Map();
+    b.reveal.set(key, close ? 0 : (b.reveal.get(key) || 0) + (b.step || BATCH.rows));
+    drawGroups(b);
+  }
+  function drawGroups(b) {
+    if (!b.groupSrc?.length) return;
+    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore), { animate: false });
+    syncPage(b);
+  }
+  // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
+  function syncPage(b) {
+    if (!b.changes && !b.artifacts) return;
+    const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - (b.reveal?.get('') || 0));
+    b.page.hidden = !b.hasNext || left > 0;
+    if (b.changes) changeCounts(b);
+  }
+  // 卡里收着的读数（数字格、两列小表）：同样一批一批露
+  function drawRest(b, animate) {
+    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0, n = Math.min(all.length, b.restShown || 0), left = all.length - n;
+    U.list(b.rest, [...all.slice(0, n), ...(open && !left ? unread : [])], { animate });
+    b.box.classList.toggle('is-open', open); b.box.inert = !open; b.box.setAttribute('aria-hidden', String(!open));
+    b.more.setAttribute('aria-expanded', String(open && !left));
+    const closed = [left && `展开（还有 ${num(left)} 条）`, !left && !open && !U.offline?.() && unread.length && U.collectionText('其余项目')].filter(Boolean).join(' · ');
+    U.html(b.more, `${closed || '收起'} <span class="more__chev">›</span>`);
   }
   const blocks = new Map();
   function block(key, kind) {
@@ -359,8 +393,13 @@
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
       <div class="pj-tail"><details class="pj-notes"><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
     b = { key, kind, el, ...Object.fromEntries([...el.querySelectorAll('[data-p]')].map((n) => [n.dataset.p, n])) };
-    U.fold(b.more, b.box);
-    b.more.addEventListener('click', () => U.html(b.more, `${b.more.getAttribute('aria-expanded') === 'true' ? '收起' : b.closed} <span class="more__chev">›</span>`));
+    b.box.inert = true; b.box.setAttribute('aria-hidden', 'true');
+    b.more.setAttribute('aria-expanded', 'false');
+    b.more.addEventListener('click', () => {
+      const all = b.restRows?.length || 0, shown = Math.min(all, b.restShown || 0);
+      b.restShown = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
+      drawRest(b, true);
+    });
     b.page.addEventListener('click', () => b.changes ? loadChanges(b) : loadArtifacts(b));
     blocks.set(key, b);
     return b;
@@ -403,16 +442,20 @@
     b.headOnly = headOnly;
     b.head.hidden = !label && !about;
     U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${U.fieldHtml(about)}</span>` : ''}`);
-    const rowCount = rows.length; if (b.kind === 'rows' && rows.length) rows = groupedRows(rows, b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows, b.changes && b.allDetails?.open);
+    const rowCount = rows.length;
+    if (b.kind === 'rows') {
+      b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
+      b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
+      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore);
+    }
     const show = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
     const shown = rows.length ? rows.slice(0, show) : unread.length || (hidden && !hiddenText) ? [] : [{ key: 'none', cls: b.kind === 'rows' ? 'row row--flat row--empty' : 'pj-empty', html: `${b.kind === 'rows' ? '<span></span>' : ''}<p class="row__sub">${U.fieldHtml(metricText(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(empty || '') ? '这块没存下来，连上后补上。' : hiddenText || empty))}</p>` }];
     if (b.artifacts && rows.length) clearArtifactEmpty(b);
     U.list(b.main, shown, { animate });
-    U.list(b.rest, [...rows.slice(show), ...unread], { animate });
+    b.restRows = rows.slice(show); b.unread = unread;
+    drawRest(b, animate);
     const rest = Math.max(0, rows.length - show);
     b.more.hidden = !rest && !unread.length;
-    b.closed = [rest && `展开（还有 ${rest} 条）`, !U.offline?.() && unread.length && U.collectionText('其余项目')].filter(Boolean).join(' · ');
-    U.html(b.more, `${b.more.getAttribute('aria-expanded') === 'true' ? '收起' : b.closed} <span class="more__chev">›</span>`);
     b.link.hidden = !link;
     if (link) { b.link.href = link.href; U.html(b.link, `${esc(link.text)} <span class="more__chev">›</span>`); }
     b.foot.hidden = !rest && !unread.length && !link;
@@ -652,11 +695,10 @@
   function setAll(c, list) {
     const content = list.filter(b => !b.headOnly && !b.quiet), rows = content.filter(b => !b.array);
     let pick = null;
+    // 右上角“看全部 ›”只用来去逐项明细；原地展开的改成卡里一批一批露（R147），右上角不再一下全摊开
     for (const b of rows) {
       if (b.allHref) { pick = { href: b.allHref, b }; break; }
-      if (b.allFold && !b.more.hidden) { pick = { fold: b.more, b }; break; }
-      const det = b.allDetails?.isConnected ? b.allDetails : b.main?.querySelector?.(b.artifacts ? '.pj-list-group > details' : 'details');
-      if (det) { pick = { details: det, b }; break; }
+      if (b.allFold && !b.more.hidden || b.main?.querySelector?.('.pj-step, details') || b.allDetails?.isConnected) break;
     }
     if (!pick && !rows.length && content.length === 1 && content[0].allHref) pick = { href: content[0].allHref, b: content[0] };
     // 右上角接管了的那个“展开”不再在卡底重复露一次
@@ -1155,6 +1197,15 @@
     requestAnimationFrame(go);
   }
 
+  // 分组底下的“展开（还有 N 条）／收起”
+  board.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
+    if (!b) return;
+    const close = btn.hasAttribute('data-open'), sec = b.el;
+    stepGroup(b, btn.dataset.step, close);
+    // 收起后卡头跑到屏幕上面去了：滚回这一块的开头，不让人找不到刚才看的地方
+    if (close && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏
