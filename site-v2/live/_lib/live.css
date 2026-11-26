@@ -428,6 +428,8 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
   box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1), 0 2px 6px rgb(20 20 19 / .04);
   transition: left var(--live-at-t) var(--live-at-ease), right var(--live-at-t) var(--live-at-ease), background .2s ease;
 }
+/* 刚建出来还没有字（数据没回、也没到 2.5 秒写“正在读”）时先不占位，免得页头挂一个空白小胶囊 */
+.topbar .live-at:empty { display: none; }
 .topbar .live-at:hover { background: transparent; box-shadow: none; color: #141413; }
 .topbar .live-at:hover::before { background: rgb(255 255 255 / .94); }
 .live-refresh-icon { position: absolute; left: 15px; top: calc(50% - 8px); display: block; width: 16px; height: 16px; transition: left var(--live-at-t) var(--live-at-ease); }
