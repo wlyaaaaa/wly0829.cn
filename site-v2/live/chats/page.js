@@ -103,7 +103,7 @@
     return /^(?:API Error:|Error:)/i.test(text) ? '连接出错，正在重连' : '';
   }
   // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
-  const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, quotaWindow, sortVerb, helperList } = U.chatFields;
+  const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, quotaWindow, quotaRecovery, sortVerb, helperList } = U.chatFields;
   // 在干和状态不明的分界照后台 live_chat_board.py 的 status_fields：这一轮没结束、离最后一条记录不到 2 小时算在干（30 分钟起在原因里写“已经 N 分钟没动静”），
   // 满 2 小时还没有这一轮的结束记录就标状态不明、进“停下了，没归档”（M928 机制写清；数字改了要跟着改）
   // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/live_chat_board.py 的 status_fields 查 idle 与 timedelta(hours=2) 的比较，现满 2 小时无新记录且没结束记录转为状态不明；变了改这句
@@ -116,7 +116,7 @@
     return ok ? `<span class="chat-when"><b>${esc(U.time(at))}</b><small>${esc(day + ownerWords(sortVerb(c), viewer))}</small></span>`
       : '<span class="chat-when chat-when--none"><small>时刻没读到</small></span>';
   }
-  function statusPill(c, label = rowState(c, viewer)) {
+  function statusPill(c, label = boardRowState(c)) {
     const kind = statusKind(c), k = KINDS[kind] || KINDS.unknown;
     const mark = kind === 'archived' ? `${window.LiveBoard.icon('check', 'chat-status__ico')}` : '';
     return `<span class="chat-status" data-tone="${k.tone}"${kind === 'running' ? ' data-breathe' : ''}${kind === 'unknown' ? ` title="${esc(UNKNOWN_RULE)}"` : ''}>${mark}${esc(label)}</span>`;
@@ -478,8 +478,25 @@
   // 归档往下翻 GET chats?window=72h&state=archived&cursor=<next> 回 { items, total, next, as_of }。首页 chats.board 同口径。
   let baseBoard = null, fullBoard = null, quotaPick = null, stoppedCard = null;
   const archivedPages = new Map();
-  const readBoard = d => d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
+  function readBoard(d) {
+    const b = d?.board;
+    if (!b?.columns || typeof b.columns !== 'object') return null;
+    if (!Array.isArray(b.quotas)) return b;
+    const rows = [...b.columns.working?.items || [], ...b.pinned || []];
+    // 同一额度窗口的结构化恢复时间打架，两处都不报时刻。
+    const quotas = b.quotas.map(q => {
+      const at = Date.parse(q?.reset_at);
+      const conflict = q?.window && Number.isFinite(at) && rows.some(c => c.software === q.software && c.quota_window === q.window &&
+        statusKind(c) === 'quota_exhausted' && Number.isFinite(Date.parse(c.quota_reset_at)) && Date.parse(c.quota_reset_at) !== at);
+      return conflict ? { ...q, reset_at: null } : q;
+    });
+    return { ...b, quotas };
+  }
   const boardOf = () => baseBoard || fullBoard || readBoard(homeChats);
+  function boardRowState(c) {
+    const q = statusKind(c) === 'quota_exhausted' && boardOf()?.quotas?.find(row => row?.software === c.software);
+    return rowState(q?.state === 'denied' && q.window && q.window === c.quota_window ? { ...c, quota_reset_at: q.reset_at } : c, viewer);
+  }
   const BOARD = {
     working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 超过 ${IDLE_LIMIT}没新记录、也没结束记录，就标状态不明、挪到停下那栏` },
     waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
@@ -520,7 +537,7 @@
     const rows = (id, name) => {
       const group = pinRows.filter(c => c.software === id);
       const cards = group.map(c => {
-        const word = rowState(c, viewer), label = short[statusKind(c)] || word;
+        const word = boardRowState(c), label = short[statusKind(c)] || word;
         const note = [who(c, 'body', true), label !== word && esc(word), dayClock(c.sort_at) && esc(`${dayClock(c.sort_at)} ${ownerWords(sortVerb(c), viewer)}`)].filter(Boolean).join(' · ');
         return `<li>${statusPill(c, label)}<div>${chatTitle(c).title}${statusReason(c, note)}</div></li>`;
       });
@@ -548,7 +565,7 @@
         return `<div class="chat-quota__cell" data-state="unknown"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没读到 · ${esc(why || '后台没给原因')}</span></div>`;
       }
       const stuck = [Number.isInteger(q.chat_count) && q.chat_count > 0 && `${q.chat_count} 场对话`, Number.isInteger(q.automation_count) && q.automation_count > 0 && `${q.automation_count} 个自动任务`].filter(Boolean);
-      const words = ['额度用完', quotaWindow(q.window), q.reset_at ? `预计 ${dayClock(q.reset_at)} 恢复` : '宿主没给恢复时间', stuck.length && `卡住 ${stuck.join('、')}`].filter(Boolean);
+      const words = ['额度用完', quotaWindow(q.window), quotaRecovery(q.reset_at), stuck.length && `卡住 ${stuck.join('、')}`].filter(Boolean);
       const body = `<span class="chat-quota__dot"></span><b>${name}</b><span>· <em>${words[0]}</em>${words.slice(1).map(w => ` · ${esc(w)}`).join('')}</span>`;
       return stuck.length ? `<button type="button" class="chat-quota__cell" data-state="denied" data-soft="${id}" aria-pressed="${quotaPick === id}">${body} <span class="more__chev" aria-hidden="true">›</span></button>`
         : `<div class="chat-quota__cell" data-state="denied">${body}</div>`;
@@ -590,7 +607,7 @@
     if (listed > (total ?? 0)) extra.push(`清单列出 ${listed} 场，汇总${total == null ? '没读到' : `只读到 ${total} 场`}`);
     const about = key === 'waiting' && viewer === 'public' ? '要本人回答或选一下才能接着做' : BOARD[key].about;
     U.html(card.title, `<b>${esc(name)}</b><span class="lb-card__count chat-col-count${total == null ? ' is-none' : ''}">${esc(total == null ? '没读到' : String(total))}</span>`, false);
-    U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')));
+    U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')).replace(/\d+ 场/g, '<span class="live-unit">$&</span>'));
     const emptyWaiting = key === 'waiting' && total === 0 && !listed && !quotaPick;
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
