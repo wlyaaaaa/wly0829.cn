@@ -170,7 +170,7 @@
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, asof(s.at, summaryAt))}
       ${chips()}
       ${rows.length ? bars(rows, hs, s, w) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
-      <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
+      <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；')).replace(/\d{2}-\d{2} 起才有记录/g, '<span class="ag-keep">$&</span>')}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {
     html(d, kind, opts = {}) {

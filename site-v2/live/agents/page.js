@@ -107,6 +107,7 @@
   const drawn = new Set();       // 图只在第一次出现时描线、长柱
   const cellsBefore = new Map(); // 钩子格上一轮的次数：变了闪一下
   const F = (v, name) => field(v, viewer, name);
+  const keep = html => `<span class="ag-keep">${html}</span>`;
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
@@ -294,8 +295,7 @@
         <p class="tp-small">后台正在把这三个数分开算，每个带口径和件数；出数以前不比哪种更准。</p>`;
     }
     const share = r => r.hits / r.samples;
-    // 三条口径后半句往往一字不差（“与另两种估法同看 N 件，……不计。”）：每条下面只留各自不同的前半句，相同的后半句在底下写一次，
-    // 这一栏短下来，和左边“超时原因”分量匀一些（本人 16:35：“右多左少，看看能不能优化一下”）。不是普通文字或找不到相同的后半句，照原样每条写全
+    // 三条口径的相同后半句只在底下写一次，找不到就逐条写全。
     const split = (() => {
       const texts = BASES.map(([id]) => find(rows, id)?.basis);
       if (!texts.every(t => typeof t === 'string' && t)) return null;
@@ -317,7 +317,7 @@
       : `同一批 ${int(p.samples)} 件里，实际报的比程序推荐的${gap > 0 ? '多' : '少'}对上 ${int(Math.abs(gap))} 件（${int(a.hits)} 对 ${int(p.hits)}）。`;
     const per = HOSTS.map(h => ({ h, r: b.hosts?.[h.id]?.rows })).filter(x => BASES.every(([id]) => known(find(x.r, id)?.hits)));
     const scope = mine ? `${HOSTS.find(h => h.id === only).name} 的 ${int(p.samples)} 件` : only ? `${HOSTS.find(h => h.id === only).name} 单独的数还没出，这里是三家合起来的` : b.scope ? F(b.scope, '口径') : `同一批 ${int(p.samples)} 件`;
-    return `<p class="tp-sub">三种估法各对上几件 <small>${scope}，落在允许范围内算对上${asof(b.at, d.work_stats?.as_of) ? ` · ${esc(asof(b.at, d.work_stats?.as_of))}` : ''}</small></p>
+    return `<p class="tp-sub">三种估法各对上几件 <small>${scope.replace(/完工记录/g, keep)}，落在允许范围内算对上${asof(b.at, d.work_stats?.as_of) ? ` · ${esc(asof(b.at, d.work_stats?.as_of))}` : ''}</small></p>
       <div class="tp-bars">${BASES.map(bar).join('')}</div>
       <p class="ag-say">${say}</p>
       ${per.length ? `<p class="tp-small">${per.map(({ h, r }) => `<span class="ag-perhost${dim(h.id)}"><span data-host="${h.id}" class="tp-hostname">${h.name}</span> ${BASES.map(([id, label]) => `${esc(name(label).replace('（对照）', ''))} ${int(find(r, id).hits)}/${int(find(r, id).samples)}`).join(' · ')}</span>`).join('<br>')}</p>` : ''}
@@ -400,12 +400,12 @@
   function configSection(d) {
     const x = h => hostData(d, h);
     const entries = HOSTS.map(h => x(h).entry || {});
-    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope).replace(/为准|未计入/g, '<span class="ag-keep">$&</span>')}</small>` : '') : '没读到';
-    const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
+    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => `<span class="ag-tool-name">${F(t.name)}</span>`).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope).replace(/为准|未计入/g, keep)}</small>` : '') : '没读到';
+    const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')).replace(/验证有效期/g, keep) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
     // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
-    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
+    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，${keep('设成')}用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
       : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
       : '查不到准数（见过一次约 510K）';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
@@ -441,17 +441,17 @@
       const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
       const status = station === 'error' && ABSENT[h.id]?.error
         ? `<small class="ag-errorstatus">${F(hostData(d, h).error_stop?.status) || '没读到'}</small>` : '';
-      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}${status}</td>`;
+      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why).replace(/模型/g, keep)}${status}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
     const key = `${station}/${h.id}`, flashKey = `${p}/${key}`, before = cellsBefore.get(flashKey);   // 切时间段不闪，同一段次数变了才闪
     const flash = before != null && before !== cell.runs ? ' tp-flash' : '';
     cellsBefore.set(flashKey, cell.runs);
-    const runs = known(cell.runs) ? `${int(cell.runs)} 次` : '次数还没采上';
+    const runs = known(cell.runs) ? keep(`${int(cell.runs)} 次`) : '次数还没采上';
     const badges = [known(cell.blocked) && cell.blocked > 0 && `<span class="ag-badge" data-tone="repair">拦 ${int(cell.blocked)}</span>`,
       known(cell.errors) && cell.errors > 0 && `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>`].filter(Boolean).join('');
     return `<td class="ag-heat${flash}${dim(h.id)}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
-      <span>${hooks.length} 条 · ${runs}${known(cell.median_ms) ? ` · ${ms(cell.median_ms)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
+      <span>${keep(`${hooks.length} 条 ·`)} ${runs}${known(cell.median_ms) ? ` ${keep(`· ${ms(cell.median_ms)}`)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
   }
   function ruleLink(rule) {
     const base = typeof rule === 'string' ? rule.split('/').at(-1) : '';
@@ -501,10 +501,14 @@
       const t = totals[h.id] || {};
       const parts = [`${int(t.hooks)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
         known(t.blocked) ? `拦 ${int(t.blocked)} 次` : '', known(t.errors) ? `出错 ${int(t.errors)} 次` : '',
-        outcomeShort(t) && `<small>拦、错只算记了的 ${int(t.blocked_samples)} 次</small>`].filter(Boolean);
+        outcomeShort(t) && `<small>拦、错只算记了的 ${keep(`${int(t.blocked_samples)} 次`)}</small>`].filter(Boolean);
       return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
+      if (id === 'error') {
+        const rows = HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('');
+        return `<tr id="hooks-error"><th scope="row">${label}<small>推手机</small></th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机，${keep('不算哪一家的钩子。')}<span class="ag-errorhosts">${rows}</span></td></tr>`;
+      }
       const open = expanded?.startsWith(id + '/') ? expanded.split('/')[1] : '';
       const host = HOSTS.find(h => h.id === open);
       const detail = host ? list(d.hooks).filter(r => r.host === host.name && stationOf(r) === id).map(hook => hookDetail(d, hook, p)).join('') : '';

@@ -15,6 +15,8 @@
 .ag-score > header small { font-size: 12.5px; opacity: .92; }
 .ag-score > header a.ag-rulever { color: inherit; text-decoration: underline; text-decoration-color: rgb(255 255 255 / .6); text-underline-offset: 3px; white-space: nowrap; }
 @media (max-width: 1024px) {
+  .ag-ok { text-wrap: balance; }
+  .ag-heat button:has(.ag-badge + .ag-badge) { column-gap: 3px; padding-inline: 8px; }
   #estimate .ag-est { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ag-est > :nth-child(2) { grid-area: 2 / 1 / auto / -1; border: 0; padding-left: 0; }
 }
@@ -108,10 +110,10 @@
 .ag-config td.ag-same { text-align: left; color: #3d3d3a; }
 .ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
+.ag-tool-name { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
 .ag-keep { white-space: nowrap; }
 .ag-foot { margin: 12px 0 0; }
 
-/* 五、钩子 */
 /* 标题“钩子”、时间那排、说明一行排开，截至靠右（照 16:35 点头的图） */
 .ag-hookhead { justify-content: flex-start; align-items: center; flex-wrap: wrap; row-gap: 8px; }
 .ag-hookhead .ag-hooklead { margin: 0; font-size: 15px; font-weight: 500; color: #6c6b64; }
@@ -124,8 +126,7 @@
 .ag-hooktable { table-layout: fixed; }
 .ag-hooktable tbody th { width: 130px; }
 .ag-heat { padding: 0 !important; background: color-mix(in srgb, var(--host) calc(var(--heat, 0) * 100%), #fff); border-left: 2px solid #fff; }
-.ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; }
-.ag-heat button { transition: background .15s ease; }
+.ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s ease; }
 .ag-heat button:hover { background: rgb(20 20 19 / .07); }
 .ag-heat button:hover .tp-chev { color: var(--ink); }
 .ag-heat button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
