@@ -26,6 +26,14 @@
     return v;
   }
   const replyBody = value => U.chatJoinedReply(value, viewer);
+  // 后台把改写标记标在这一块（chat.visitor_labels.summary）或正文对象自己身上（summary.visitor_labels.text）的，在显示这段字的地方挂签；整场藏着的只在页头挂
+  const fieldTag = (keys, what, own) => !chat || U.visitorWholeHidden(chat) ? '' : U.visitorLabel(chat, keys, what, viewer) || (own && typeof own === 'object' ? U.visitorLabel(own, ['$', 'text'], what, viewer) : '');
+  // 签和句末几个字放进同一个不折行的块（现有的 .live-unit），签不单独掉到下一行（不出现末行只剩“到。”加一个签）
+  const withTag = (html, tag) => {
+    if (!html || !tag || /\blive-mark--(?:reworded|rewritten)\b/.test(html)) return html;
+    const tail = /(?:&[a-z0-9#]+;|[^<>&\s]){1,4}$/i.exec(html);
+    return tail ? `${html.slice(0, tail.index)}<span class="live-unit">${tail[0]}${tag}</span>` : html + tag;
+  };
   const chatCell = (value, label, parent, limit = 0, card = false) => {
     return U.chatFields.cell(value, label, parent, viewer, limit, card);
   };
@@ -212,7 +220,8 @@
     // 摘要、回复这两行接上已有的原文：本人版整段摆出，访客版先露两行、点“展开”看全；仅本人可见的照常写锁
     for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && v.at) {
       const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = false;
-      const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${body}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
+      const tag = body ? fieldTag(key === 'summary' ? 'summary' : ['reply', 'latest_reply'], label, v) : '';
+      const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${withTag(body, tag)}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
       list.push({ key, at: v.at, word, name: esc(name), detail });
     }
     if (validTime(chat.at) && !list.some(e => Date.parse(e.at) === Date.parse(chat.at))) list.push({ key: 'update', at: chat.at, word: '主对话更新' });
@@ -243,7 +252,9 @@
     });
     const say = ['done', 'waiting'].includes(d.state) && d.summary?.text && d.summary.text === d.text ? d.summary : progress ?? reply ?? d.summary;
     const body = replyBody(say === d.summary ? U.chatProgressText(say, d, viewer) : say);
-    return { say: body, latest: chatCell(body, say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展', d) };
+    const what = say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展';
+    const key = say === d.summary ? 'summary' : say === reply ? ['reply', 'latest_reply'] : say === d.doing ? 'doing' : say === d.progress ? 'progress' : 'text';
+    return { say: body, latest: chatCell(body, what, d), tag: say == null ? '' : fieldTag(key, what, say) };
   }
   function drawThought() {
     const node = $('thinking'), box = $('think-box');
@@ -313,7 +324,7 @@
       if (compact && !compact.hidden) compact.insertAdjacentHTML('beforeend', `<span data-opening> · ${opening}</span>`);
       else { part('meta').insertAdjacentHTML('beforeend', `<span data-opening>${opening}</span>`); part('meta').hidden = false; }
     }
-    const { say, latest } = locked ? { latest: '' } : workLine(chat, rawReply), note = locked ? '' : headerNote(chat, latest);
+    const { say, latest, tag: sayTag = '' } = locked ? { latest: '' } : workLine(chat, rawReply), note = locked ? '' : headerNote(chat, latest);
     const F = U.chatFields, sk = F.statusKind(chat);
     // 后台给了 status_kind 就只认那一套标签（同 AI 对话页）；旧回包才照“额度用完”的进展原文写
     const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
@@ -332,7 +343,7 @@
     const runLabel = run && [LR?.categoryName(run[0], viewer) || '自动任务', runAt && LR ? `${LR.when(runAt)} 那一轮` : '那一轮'].join(' · ');
     part('source').hidden = !run;
     U.html(part('source'), run ? `来源：<a href="${esc(route(`/live/automation/run/?type=${encodeURIComponent(run[0])}&run=${encodeURIComponent(run[1])}`))}">${esc(runLabel)} ›</a>` : '');
-    part('say').hidden = !latest; U.html(part('say'), latest);
+    part('say').hidden = !latest; U.html(part('say'), withTag(latest, sayTag));
     U.html(part('acts'), locked ? '' : actions(chat)); part('acts').hidden = !part('acts').textContent;
     rec.classList.toggle('route-body--locked', locked);
     $('now-box').hidden = $('log-box').hidden = locked;
@@ -349,7 +360,7 @@
     const facts = [];
     const shown = value => { const el = document.createElement('div'); el.innerHTML = said(value); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
     const summary = replyBody(U.chatProgressText(chat.summary, chat, viewer)), reply = replyBody(rawReply);
-    if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || shown(summary) !== shown(say))) facts.push(['', chatCell(summary, '正式摘要', chat)]);
+    if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || shown(summary) !== shown(say))) facts.push(['', withTag(chatCell(summary, '正式摘要', chat), fieldTag('summary', '正式摘要', chat.summary))]);
     const replyContent = hasReply || !!(rawReply && (markOf(rawReply, rawReply) || pending(rawReply) || rawReply.q === 'warming'));
     // M684：最新回复访客那边不一样的（整块 reply / latest_reply，或正文对象里只换了词的 reply.visitor_labels.text），在这一行末挂签
     const blockTag = (key, what) => !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';

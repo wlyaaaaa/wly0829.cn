@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const U=window.LiveUI, V=window.LiveViz, C=window.LiveChart;
-  function taskRows(d) {
+  function taskRows(d, viewer) {
     const items = d?.task_readings?.items;
     if (!items) {
       const confirmed = new Map();
@@ -12,16 +12,18 @@
       }
       return [...confirmed.values()].map(row => taskRow(row, false));
     }
-    return items.map(row => taskRow(row, true));
+    return items.map(row => taskRow(row, true, viewer));
   }
-  function taskRow(row, withResources) {
+  function taskRow(row, withResources, viewer) {
     const reading = (key, unit) => Number.isFinite(row[key]) ? C.value(row[key], unit) : '没有记录';
     const cpu = reading('cpu', '%');
     const processIo = `进程读 / 写 ${reading('read_bytes_per_second', 'B/s')} / ${reading('write_bytes_per_second', 'B/s')}`;
     const network = ['receive_bytes_per_second', 'send_bytes_per_second'].some(key => Object.hasOwn(row, key))
       ? `网络收 / 发 ${reading('receive_bytes_per_second', 'B/s')} / ${reading('send_bytes_per_second', 'B/s')}` : '';
     const resources = withResources ? `CPU ${cpu} · 内存 ${reading('memory', 'B')}` : '';
+    // 后台在任务名上标了 visitor_labels.name（rewritten：访客看到的是换过的说法）的，名字那一行挂现有的小签；访客版也挂“对外换了说法”（M930）
     return { key: row.id, name: row.name, value: row.cpu, text: Number.isFinite(row.cpu) ? cpu : '', hue: '#00A650',
+      name_tag: U.visitorLabel(row, ['$', 'name'], '任务名', viewer),
       sub: [resources, processIo, network].filter(Boolean).join(' · '), hasIo: true };
   }
   function batchRows(d, names = new Map()) {
@@ -34,7 +36,7 @@
     const card=document.createElement('section'); card.className='card chat-stats'; card.hidden=true; card.id='apps-tasks'; card.style.margin='32px 0'; card.innerHTML='<div class="card__glass glass"><div class="card__body"><p class="part">按正在干的事看</p><p class="row__sub" data-task-scope>仅列出已明确对上任务的程序读数</p><p class="row__sub" data-task-note hidden></p><p class="row__sub" data-task-io hidden>进程读 / 写包含文件、网络和设备</p><div data-tasks></div><ul class="rows list" data-batches></ul></div></div>'; document.getElementById('board').before(card);
     const tasks=V.rank(card.querySelector('[data-tasks]'),{show:Infinity,top:false}); let current=null, viewer=null, names=new Map(), requested=false;
     function draw() {
-      const rows=taskRows(current), batch=batchRows(current,names), reading=current?.task_readings;
+      const rows=taskRows(current, viewer), batch=batchRows(current,names), reading=current?.task_readings;
       const note=card.querySelector('[data-task-note]');
       const seconds = (Date.parse(reading?.at) - Date.parse(reading?.from)) / 1000;
       const timing = seconds > 0 && rows.length ? `CPU 和读写取最近 ${Number(seconds.toFixed(1))} 秒的平均` : '';
