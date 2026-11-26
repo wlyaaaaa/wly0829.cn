@@ -23,6 +23,9 @@
 .route-mid[hidden] { display: none; }
 .route-log .route-foot:empty { display: none; }
 #plan-box { scroll-margin-top: 70px; }
+/* “现在”那张卡收掉跟页头重复的字以后一个字不剩时整张不出（page.js drawNow），剩下的栏照原来的比例排开 */
+.route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+.route-cols:has(> .route-now[hidden]):has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
