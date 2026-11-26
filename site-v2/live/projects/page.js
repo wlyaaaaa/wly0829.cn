@@ -266,16 +266,24 @@
   const pick = { changes: '7d', artifacts: '7d' }, ranged = { changes: {}, artifacts: {} };
   const rangeWord = (key, range, state) => { const what = `${range === 'all' ? '全部时间' : rangeLabel(range)}的${key === 'changes' ? '变化' : '成品'}`;
     return state === 'loading' ? `正在读${what}…` : `${what}后台还没送来，先看“近 7 天”。`; };
+  // 切档等数时，上一份画好的照旧留在页上，标“加载中 · 下面先留着近 7 天的”；同一档重读写“正在刷新”（页面说明：切换立即标亮，加载旧行保留并标当前读数范围）
+  const shown = { changes: null, artifacts: null };
+  const waitingNote = (key, range, kept) => kept.range === range ? '正在刷新' : `加载中 · 下面先留着${rangeLabel(kept.range)}的${key === 'changes' ? '变化' : '成品'}`;
   async function loadRange(key, range) {
-    const had = ranged[key][range]?.state;
-    if (had !== 'loading') ranged[key][range] = { state: 'loading' };
+    const had = ranged[key][range]?.state, prev = had === 'ok' ? ranged[key][range] : ranged[key][range]?.prev;
+    if (had !== 'loading') ranged[key][range] = { state: 'loading', prev };
     drawRange(key);
     if (had === 'loading') return;
     let s = null;
     try { s = await window.Live.get(key === 'changes' ? 'projects/changes' : 'projects/artifacts', { range }); } catch { /* 读不到按还没送来写 */ }
     const d = s?.data;
-    ranged[key][range] = d && Array.isArray(d.items) && d.range === range ? { state: 'ok', data: d, rows: d.items, next: d.next || null } : { state: 'missing' };
+    ranged[key][range] = d && Array.isArray(d.items) && d.range === range ? { state: 'ok', data: d, rows: d.items, next: d.next || null } : prev || { state: 'missing' };
     if (pick[key] === range) drawRange(key);
+  }
+  // 后台有了新的一份（近 7 天那份换了时刻）：近 30 天、全部存着的旧档作废，正看着的那档重读一次，读到前旧行照留（P5 那版拉过一次就一直用旧的）
+  function refreshRanges(key) {
+    for (const range of Object.keys(ranged[key])) if (range !== pick[key] && ranged[key][range]?.state !== 'loading') delete ranged[key][range];
+    if (pick[key] !== '7d' && ranged[key][pick[key]]?.state === 'ok') loadRange(key, pick[key]);
   }
   let lastOverview = null;
   function drawRange(key) { if (key === 'changes') renderChanges(); else drawProjectExtras(lastOverview); }
@@ -291,7 +299,10 @@
     if (range === '7d' || ranged[key][range]?.state === 'ok') drawRange(key); else loadRange(key, range);
   });
   function renderChanges() {
-    const range = pick.changes, own = range === '7d' ? { data: changes, rows: changeRows, next } : ranged.changes[range] || { state: 'loading' };
+    const picked = pick.changes, mine = picked === '7d' ? { data: changes, rows: changeRows, next } : ranged.changes[picked] || { state: 'loading' };
+    const kept = mine.state === 'loading' && (mine.prev ? { range: picked, own: mine.prev } : shown.changes);
+    const range = kept ? kept.range : picked, own = kept ? kept.own : mine;
+    if (!kept && own.state !== 'loading' && own.state !== 'missing' && own.rows) shown.changes = { range, own };
     const roster = p.has('fixture') ? home?.items || [] : ['active', 'frozen'].flatMap(key => {
       const state = states.get(key);
       return state?.viewer?.kind === changeViewer ? state.data?.items || [] : [];
@@ -303,11 +314,11 @@
     const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
     if (['loading', 'missing'].includes(own.state)) fill('changes', [], rangeWord('changes', range, own.state));
     else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : quiet);
-    $('next').hidden = !own.next;
+    $('next').hidden = !!kept || !own.next;
     // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
     const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
       ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
-    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
+    const note = [kept && waitingNote('changes', picked, kept), gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
     changesNote.hidden = !note; U.html(changesNote, note);
   }
   function link(key, s) {
@@ -372,7 +383,9 @@
   let extraLanded = false;
   function renderOverview(d) {
     if (frozenOnly) return;
+    const fresh = lastOverview && d?.recent_artifacts?.at !== lastOverview.recent_artifacts?.at;
     lastOverview = d; drawProjectExtras(d);
+    if (fresh) refreshRanges('artifacts');
     const target = /^#(?:unpushed|recent-artifacts)$/.test(location.hash) && $(location.hash.slice(1));
     if (!extraLanded && target && !target.hidden) {
       extraLanded = true;
@@ -446,8 +459,11 @@
       watchBands(box);
     };
     const range = pick.artifacts, own = ranged.artifacts[range] || { state: 'loading' };
-    const recent = range === '7d' ? d?.recent_artifacts : own.state === 'ok' ? { ...own.data, items: own.rows, next: own.next, page_gap: own.pageGap } : { state: own.state };
-    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(recent && { ...recent, range }, section, field, viewer, d?.items);
+    const asRecent = (r, o) => r === '7d' ? d?.recent_artifacts : o.state === 'ok' ? { ...o.data, items: o.rows, next: o.next, page_gap: o.pageGap } : { state: o.state };
+    const kept = range !== '7d' && own.state === 'loading' && (own.prev ? { range, recent: asRecent(range, own.prev) } : shown.artifacts);
+    let recent = kept ? { ...kept.recent, range: kept.range, waiting: waitingNote('artifacts', range, kept) } : asRecent(range, own);
+    if (!kept && recent && !recent.state) shown.artifacts = { range, recent };
+    drawUnpushed(d?.unpushed, section, field); drawRecentArtifacts(recent && { range, ...recent }, section, field, viewer, d?.items);
   }
   async function moreArtifacts(button) {
     const range = pick.artifacts, own = ranged.artifacts[range];
@@ -582,7 +598,7 @@
     const quiet = !items.length && !recent?.hidden && !missing && (range !== '7d' || recent?.total > 0)
       ? range === 'all' ? '还没有登记过成品' : `${rangeLabel(range)}没有新登记的成品` : '';
     const note = ['loading', 'missing'].includes(recent?.state) ? rangeWord('artifacts', range, recent.state) : items.length || recent?.hidden || missing || quiet ? [
-      recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品', quiet,
+      recent.waiting, recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品', quiet,
       // 近 30 天、全部一页没列完：写清列了几件、这一档一共几件，下面“更多成品 ›”接着翻
       recent.next && Number.isInteger(count) && `已列出 ${items.length} 件，${rangeLabel(range)}共 ${count} 件`, recent.page_gap,
     ].filter(Boolean).join(' · ') : '';
@@ -614,7 +630,9 @@
       if (d.items == null || kind !== changeViewer || !changeAt(d) || changeAt(d) !== changeAt(changes) || changes?.next !== d.next) {
         changeRows = d.items; next = d.next;
       }
+      const fresh = changes && changeAt(d) !== changeAt(changes);
       changes = d; changeViewer = kind; renderChanges();
+      if (fresh) refreshRanges('changes');
     });
     reads.changes.done();
   }), link: s => link('changes', s) };
