@@ -28,8 +28,8 @@
   }
   function withLook(key, rows) {
     return rows.map(row => {
-      // 名字不公开的项目不放画（只铺占位色），免得从画认出是哪个项目。
-      const look = row.secret ? null : window.LiveProjectLook?.of(row.project || row.key, looks);
+      // 名字不公开的项目放项目页通用的那张画（没登记专门画的项目本来就用它），认不出是哪个项目，也不再是一块像没加载出来的空底（M1007）。
+      const look = window.LiveProjectLook?.of(row.secret ? '' : row.project || row.key, looks);
       if (key === 'changes') return { ...row, band: band(look, row.href, 'pj-band--strip') };
       return { ...row, cls: `${row.cls} pj-card`, html: `${band(look, row.href, 'pj-band--card', true)}<div class="pj-card__body">${row.html}</div>` };
     });
@@ -410,9 +410,9 @@
   }
   // 下面两块（本地还没推的改动、成品）和上面画册一套：大标题加绿条，白卡、深色正文，配项目小图。
   const secretName = (field, kind = viewer) => kind === 'public' && !!field && typeof field === 'object' && !!(field.hidden || field.hidden_block || field.visibility === 'owner' || field.public === 'owner' || field.visibility === 'pending' || field.rewrite === 'pending');
-  // 项目小图：名字不公开的不放图（只铺占位色），免得认出是哪个项目；外观表没到也先铺占位色。
+  // 项目小图：名字不公开的放通用的那张画，认不出是哪个项目（M1007，和画册卡同一张）；外观表没到先铺占位色。
   function miniPic(id, nameField, kind = viewer) {
-    const secret = !id || secretName(nameField, kind), look = !secret && window.LiveProjectLook?.of(id, looks);
+    const secret = !id || secretName(nameField, kind), look = window.LiveProjectLook?.of(secret ? '' : id, looks);
     const ready = looksReady && look, bg = ready ? `linear-gradient(135deg,${look.glow[0]},${look.glow[1]})` : 'linear-gradient(135deg,#f1ece2,#ebe8f0)';
     return `<span class="pj-mini__pic" style="background:${bg}" aria-hidden="true">${ready ? lazyImg(look.thumb, 160) : ''}</span>`;
   }
