@@ -129,6 +129,7 @@
       hero: (lv) => (['yellow', 'red'].includes(lv) && series('disk-free')?.points?.some(p => p[1] != null) ? 'free' : 'rw'),
       line: (s) => { const r = sumOf(s, 'disk-read'), l = sumOf(s, 'disk-latency'); return r ? `${r.avg < 20 * 2 ** 20 ? '读写很少' : '读写不少'}，最忙是 ${clock(r.maxAt)}，读到 ${Chart.value(r.max, 'B/s')}${l ? `，响应最慢 ${Chart.value(l.max, 'ms')}` : ''}` : ''; } },
     { key: 'network', group: '网络', name: '网络', pic: '/live/img/grp-network.webp', palette: ['teal', 'pink'],
+      hasOther: () => !!computer?.traffic?.program_table?.separate || exitRows(exits?.items || computer?.exits, exits?.state).some(r => !['还没读到', '没有记录'].includes(r.status)),
       figures: [{ key: 'down', label: '下载', line: 'download' }, { key: 'up', label: '上传', line: 'upload' }, { key: 'ping', label: '延迟', line: 'net-ping' }],
       chips: [
         { key: 'rate', label: '全网速率', lines: [L('download', '下载'), L('upload', '上传')] },
