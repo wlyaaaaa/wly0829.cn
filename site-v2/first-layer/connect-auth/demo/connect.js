@@ -44,12 +44,16 @@
 
   function markSegs(instant) {
     const supported = pc => known()?.endpoints?.[pc]?.plans?.[pick.who];
-    if (known() && !supported(pick.pc)) pick.pc = supported('main') ? 'main' : 'sub';
+    // 两台都没有这家的接法：不把选中推到副机冒充能选；两格都置灰、黑块收起，下面照实写“还没读到这个接法。”
+    const none = !!known() && !supported('main') && !supported('sub');
+    if (known() && !none && !supported(pick.pc)) pick.pc = supported('main') ? 'main' : 'sub';
     for (const [name, seg] of Object.entries(segs)) {
+      const empty = name === 'pc' && none;
+      seg.classList.toggle('is-none', empty);
       for (const opt of seg.querySelectorAll('.seg__opt')) {
-        const v = opt.dataset.v;
-        opt.setAttribute('aria-checked', String(pick[name] === v));
-        opt.tabIndex = pick[name] === v ? 0 : -1;
+        const v = opt.dataset.v, on = pick[name] === v && !empty;
+        opt.setAttribute('aria-checked', String(on));
+        opt.tabIndex = on ? 0 : -1;
         if (name === 'pc') opt.disabled = !!known() && !supported(v);
       }
       place(seg, instant);
@@ -185,6 +189,7 @@
     seg.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       const opts = [...seg.querySelectorAll('.seg__opt:not(:disabled)')];
+      if (!opts.length) return;
       const i = opts.findIndex((o) => o.dataset.v === pick[name]);
       const next = opts[(i + (e.key === 'ArrowRight' ? 1 : -1) + opts.length) % opts.length];
       e.preventDefault();

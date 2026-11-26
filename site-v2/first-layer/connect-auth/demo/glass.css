@@ -624,6 +624,8 @@ body {
   transition: transform .5s var(--ease), width .5s var(--ease);
 }
 .seg__thumb.is-instant { transition: none; }
+/* 两台都接不了这家：没有选中的那格，黑块收起 */
+.seg.is-none .seg__thumb { opacity: 0; }
 
 .seg__opt {
   position: relative;
