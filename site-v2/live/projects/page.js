@@ -604,13 +604,13 @@
     section('recent-artifacts', '成品', cards.slice(0, cardsShown), note, []);
     const box = $('recent-artifacts');
     if (box) {
-      // 项目卡先 9 张，“再看 N 个项目”一次再露 6 张（两排），露到底变“收起”；读到的都露完了才出“更多成品 ›”接着读
+      // 项目卡先 9 张，“展开（还有 N 个项目）”一次再露 6 张（两排），露到底变“收起”；读到的都露完了才出“更多成品 ›”接着读。说法和同页活跃、未推那两颗一样，箭头前的空也一样
       let more = box.querySelector(':scope > .pj-art-more');
       if (cards.length <= CARDS) more?.remove();
       else {
         if (!more) { more = document.createElement('button'); more.type = 'button'; more.className = 'more pj-step pj-art-more'; more.dataset.stepOf = 'artcards'; more.dataset.step = ''; box.querySelector(':scope > .pj-extra__list').after(more); }
         more.toggleAttribute('data-open', !cardsLeft);
-        U.html(more, `${cardsLeft ? `再看 ${cardsLeft} 个项目` : '收起'} <span class="more__chev">›</span>`);
+        U.html(more, `${cardsLeft ? `展开（还有 ${cardsLeft} 个项目）` : '收起'} <span class="more__chev">›</span>`);
       }
     }
     if ($('artifacts-next')) $('artifacts-next').hidden = !recent?.next || cardsLeft > 0;
