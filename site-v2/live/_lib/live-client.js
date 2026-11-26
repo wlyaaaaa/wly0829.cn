@@ -1250,7 +1250,7 @@
     }
     return changed;
   }
-  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
+  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome, clock,
     get, refreshPath, reconnectMain, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {

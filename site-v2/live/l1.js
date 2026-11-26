@@ -498,7 +498,7 @@
   const tags = (list) => list.filter(Boolean).map(([t, cls]) => `<span class="tag${cls ? ' ' + cls : ''}">${t}</span>`).join('');
   const join = (list) => list.filter(Boolean).map(sp).join(' · ');
   const title = (it, text, resource) => { const own = resource === 'chats' ? 'AI 对话' : '事项', field = { visibility: it.visibility, public: it.public, rewrite: it.rewrite, hidden_what: it.hidden_what, ...(text && typeof text === 'object' ? text : { text }) }, hidden = viewer === 'public' && (field.visibility === 'owner' || field.public === 'owner' || field.hidden), words = U.fieldHtml(field, { name: own, place: 'title', kind: viewer }) || (lastState?.offline ? '' : U.collectionText()), note = hidden || (field.rewrite === 'pending' || field.hidden) && !field.text && !field.value ? U.fieldHtml(field, { name: field.hidden_what || (resource === 'chats' ? '这场对话的内容' : '这件事'), kind: viewer }) : ''; return (hidden ? `<span class="row__title">${words}</span>` : `<a class="row__title home-detail-link" href="${esc(route(`/live/${resource === 'chats' ? 'chat' : 'item'}/?id=${encodeURIComponent(it.id)}`))}">${words}</a>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
-  let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner';
+  let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner', laptopState;
   let aiMessages = null;   // 首页的 AI 留言（ai-messages 读口），画在页顶那张卡里
   const newMarks = new Map();
   const fresh = (scope, born, readAt = at, readSource = source) => {
@@ -924,7 +924,8 @@
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
     U.html(p.head, cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }));
-    const devices = [...(d.devices || [])];
+    const devices = (d.devices || []).map(U.laptopConnection);
+    laptopState = devices.find(x => x.id === 'secondary_laptop')?.state;
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
     if (phone && !devices.some(x => x.id === 'phone')) devices.push({ id: 'phone' });
     const diskGrowth = x => x.growth == null ? '' : x.growth === 0 ? '本周已用无变化'
@@ -1741,6 +1742,11 @@
       if (changed && home) {
         const render = () => { balanceHome(); renderCards(home); };
         if (!settling() && !firstLink) U.anchor(render); else render();
+      }
+      const laptop = home?.computer?.devices?.find(x => x.id === 'secondary_laptop');
+      if (!changed && laptop && home.computer.q !== 'warming' && U.laptopConnection(laptop).state !== laptopState) {
+        const render = () => renderComputer(home.computer, home.screen, home.phone);
+        if (firstLink || settling()) render(); else U.anchor(render);
       }
       renderNotices(state);
       if (home && !changed && !state.offline && timed(state.now) && Math.floor(Date.parse(oldNow) / 60000) !== Math.floor(Date.parse(state.now) / 60000)) {

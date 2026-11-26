@@ -107,24 +107,24 @@
   }
 
   function render(x, state = {}) {
+    x = U.laptopConnection(x);
     const pending = !x && !state.offline && (!state.phase || ['idle', 'wait', 'slow'].includes(state.phase));
     const now = Date.parse(state.now) || Date.now(), last = time(x?.at, now);
-    // 在不在线只看连接那组（state、availability、observed_at），过没过期由后台按 observed_at 判好，和电脑页同一判断；
-    // 库存那组（at、read_error）只说下面读数是几点的，电量和 MCP 各看自己的时间（M253、M319）
+    // 三页用同一份笔记本连接回执；库存那组（at、read_error）只说下面读数是几点的，电量和 MCP 各看自己的时间（M253、M319）。
     const fresh = (stamp, limit) => !!at(stamp) && !(finite(limit) && (now - Date.parse(stamp)) / 1000 > limit);
     const seen = at(x?.observed_at);
-    const checked = x?.state === 'online' && x.availability !== 'unavailable' && !!seen && !state.offline;
+    const checked = x?.state === 'online';
     const disconnected = state.offline || x?.state === 'offline';
     const readingsOld = !!last && (!!x.read_error || !fresh(x.at, x.stale_after));
     const note = x?.read_error_reason ?? x?.missing_reason ?? (typeof x?.read_error === 'string' ? x.read_error : null);
     page.dataset.deviceState = checked ? 'online' : pending ? 'loading' : 'offline';
-    // 台式机这头读不到（整页连不上、电脑离线）时不知道笔记本怎样，不说成“笔记本连不上”，照“未重新确认”写、带最后确认在线的时刻（D6）
+    // 缺这一轮连接回执时不说“笔记本连不上”。
     headline = checked ? '在线' : pending ? '正在读笔记本' : x?.state === 'offline' ? '笔记本连不上'
       : seen || at(x?.last_online) ? '笔记本在线状态未重新确认' : x ? '笔记本在线状态这次没读到' : '电脑状态这次没带回笔记本读数';
     // 笔记本确认离线时：写从几点起连不上（后台 offline_since，M918）；observed_at 这时是确认离线那次探测，
     // 不能当“最后确认在线”，改用 last_online，不然会出现“自 22:10 起连不上 · 最后确认在线 22:40”打架
     const laptopOff = x?.state === 'offline' && !checked, offSince = laptopOff ? time(x.offline_since, now) : '';
-    const confirmed = time(laptopOff ? x.last_online : seen || x?.last_online, now);
+    const confirmed = time(checked ? seen : x?.last_online, now);
     const stamp = (offSince ? ` · 自 ${offSince} 起` : '') + (confirmed ? ` · ${checked ? '最近确认' : '最后确认在线'} ${confirmed}` : disconnected && !last ? ' · 没有留存读数' : '');
     const readings = readingsOld && last !== confirmed ? ` · 下面的读数是 ${last} 的` : '';
     // 怎么判在不在线（M928，数照后台回包里这台笔记本的 refresh_seconds、stale_after，不写死）：
