@@ -203,7 +203,8 @@
             if (page.at !== snap) { page.gen += 1; page.at = snap; page.rows = null; page.next = null; page.total = null; page.failed = null; if (!U.offline?.()) fetch.push(key); }
           }
           const detail = [countBasis(basis, true), key === 'impersonation' && when && `统计范围：${when}`, key === 'crashes' && stats?.events != null && `整个时段 ${stats.events} 次事件`,
-            stats?.truncated && !(paged && auditPages[key]?.rows) && `仅显示已返回的${registry ? '登记' : '程序'}`].filter(Boolean).join('；');
+            // 后台只给了前一部分（又没有分批读口、或读口还没取到）：照实写列了前几个、一共几个（看图的人说“仅显示已返回的”是技术话）
+            stats?.truncated && !(paged && auditPages[key]?.rows) && (rows.length ? `只列出了前 ${rows.length} ${registry ? '条登记' : '个程序'}${Number.isFinite(stats.total) && stats.total > rows.length ? `，共 ${stats.total} ${registry ? '条' : '个'}` : ''}` : `仅显示已返回的${registry ? '登记' : '程序'}`)].filter(Boolean).join('；');
           const top = [...rows].sort((a, b) => b.count - a.count);
           const gap = [...new Set(rows.filter(r => r.count == null || S.has(r)).map(r => r.gap || (r.count == null && !U.offline?.() ? U.collectionText('有程序计数') : '')).filter(Boolean))].join('；');
           const badges = top.slice(0, 3);
