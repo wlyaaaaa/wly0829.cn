@@ -327,6 +327,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
+.pj-viz > .pj-rank-step, [data-visit-rank] > .pj-rank-step { margin: 2px 0 0; translate: -10px 0; }
+.pj-rank-step[data-open] .more__chev { rotate: 90deg; }
 #site-visitors .pj-note { overflow-wrap: anywhere; }
 .page--project .pj-card :is(.knowledge-prose small, .pj-viz > .pj-note) { color: #68665f; }
 .pj-cadence { margin-inline-start: 0.5em; color: #68665f; font-size: 12px; font-weight: 400; white-space: nowrap; }

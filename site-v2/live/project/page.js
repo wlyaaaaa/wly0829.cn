@@ -669,17 +669,27 @@
     if (!b.viz) { b.viz = document.createElement('div'); b.viz.className = 'pj-viz'; b.cutoff.after(b.viz); }
     drawRecordCutoff(b); return b;
   }
+  // 热门页榜：先读第一页、先露 5 行，往下一批一批露，露完了再读下一页（R147）；每天的柱子图仍读全再画
+  const PAGE_NAMES = { '/': '首页', '/live/': '实况', '/skills/': '技能', '/projects/': '项目', '/rules/': '规则' };
+  function pageRankRow(r) {
+    const V = window.LiveProjectViz, partial = V.lower(r, 'opens');
+    return { key: r.page, name: r.title || r.name || PAGE_NAMES[r.page] || r.page, value: r.opens, text: r.opens == null ? U.collectionText('打开次数', r) : partial ? `至少 ${r.opens} 次` : undefined, sub: partial ? V.gap(r) : r.note, hue: 'blue' };
+  }
   async function loadGraph(b, m) {
     b.metric = m;
+    const paged = m.id === 'top_pages' && window.ProjectSiteReadings?.pagedRank;
+    const read = cursor => window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
     let rows = [], cursor = null, result, staleAt = null;
     do {
-      result = await window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
+      result = await read(cursor);
       if (!result.data || !Array.isArray(result.data.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
       if (isStale(result.data)) staleAt ||= result.data.at || result.meta.at;
       rows.push(...(result.data.items || [])); cursor = result.data.next;
-    } while (cursor);
+    } while (cursor && !paged);
     b.recordStaleAt = staleAt; drawRecordCutoff(b);
-    window.LiveProjectViz.chart(b.viz, m.id, rows);
+    const after = next => next ? async () => { const page = await read(next); return page.data && Array.isArray(page.data.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
+    if (paged) window.ProjectSiteReadings.pagedRank(b.viz, { rows: rows.map(pageRankRow), total: result.data.total, load: after(cursor), rank: { unit: '次', empty: '这段时间没有打开记录' } });
+    else window.LiveProjectViz.chart(b.viz, m.id, rows);
     const { line, extra } = lineOf(m);
     b.note.hidden = !line; U.html(b.note, line ? subText(line) : '');
     b.explain.hidden = !extra.length; U.html(b.explain, extra.join('<br>'));
