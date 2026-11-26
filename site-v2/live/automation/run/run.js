@@ -6,7 +6,8 @@
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
-  const category = R.CATS.includes(params.get('type')) ? params.get('type') : '', id = params.get('run') || '';
+  // 认 NAMES 里有名字的类别：现役七类，加上已退役、后台还留着历史轮次的（笔记本每周巡检）；分类按钮和列表筛选照旧只用 CATS
+  const category = Object.hasOwn(R.NAMES, params.get('type') || '') ? params.get('type') : '', id = params.get('run') || '';
   // 从自动任务页点进来的，返回回进来时那个网址，三家、状态这些筛选原样留着（验收 11-24 06:40）；
   // 那一页没筛这一类时，返回链接写“自动任务”，不写这一类的名字
   const fromList = (() => {
