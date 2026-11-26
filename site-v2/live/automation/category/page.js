@@ -90,7 +90,9 @@
     if (p) return ['warn', `停着：${pauseText(p)}`];
     if (pr && (pr.headline || pr.title || pr.text)) {
       const handler = pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理');
-      return ['warn', `出毛病 —— ${F(pr.headline || pr.title || pr.text, '哪里坏了')}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
+      const problem = F(pr.headline || pr.title || pr.text, '哪里坏了').replace(/<[^>]*>|运行证据/g,
+        part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
+      return ['warn', `出毛病 —— ${problem}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
     }
     if (c.running || st.kind === 'running' || live) return ['run', `正在跑${live && T.stamp(live.startedAt) ? `，${esc(T.clock(live.startedAt))} 起` : ''}${live?.activity ? ` —— ${F(live.activity, '正在干什么')}` : ''}`];
     if (m === 'off') return ['off', `关着${id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}`];
@@ -106,7 +108,7 @@
       : `<span class="tp-muted">${c.recent_stats?.recorded_since ? `${esc(when(c.recent_stats.recorded_since))} 起还没跑过` : '还没跑过'}</span>`;
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
-    const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
+    const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>

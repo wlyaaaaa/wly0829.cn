@@ -34,20 +34,15 @@
 .page--items .brief > summary::-webkit-details-marker { display: none; }
 .page--items .lb-item > .row__acts .btn { width: auto; padding: 0 10px; gap: 4px; font-size: 12.5px; letter-spacing: .03em; }
 .page--items .lb-item > .row__acts .btn::before { display: none; }
-/* 电脑窗口窄、卡跟着窄到标题挤成几个字一行时：这一行的按钮折到标题下面一行，从左排、各列照旧对齐，标题照常横排；宽窗口（1440 及以上）不变（M853）。
-   折不折看这张卡的按钮有多宽：有“去办”链接又有“晚点提醒”的卡一排窄于 740 就折（这种卡一行四颗钮加多选框，1440 宽时标题只剩约 200 像素、断成四行，所以 1440 宽也折，标题占一行、按钮在下，M962），有“晚点提醒”的 520，别的 420（只剩“近 7 天下去的”一张占整宽、两列排时按 860）。
-   折下来一排还摆不下这些按钮时，按钮自己换行。 */
+/* 长标题需要整行时把按钮排到正文下方，从左起；保留现有的四种折行阈值。 */
 .page--items .lb-card--items .lb-rows { container-type: inline-size; }
-@container (max-width: 419px) { .page--items #groups .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
-@container (max-width: 519px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
-@container (max-width: 739px) { .page--items #groups .lb-card:has([data-slot="later"]):has([data-slot="go"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
-@container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
-@container (max-width: 439px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
-@container (max-width: 259px) { .page--items #groups .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
-/* 同上那种窄卡里带绿色“去办”按钮的一行：按钮间距、内边距和勾选框各收一点，勾选框跟在“晚点提醒”后面，不单独掉一行 */
+@container (max-width: 419px) { .page--items #groups .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 519px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 739px) { .page--items #groups .lb-card:has([data-slot="later"]):has([data-slot="go"]) .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
+@container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; margin: var(--item-action-gap) 0 0; padding-left: 0; } }
 @container (max-width: 439px) {
-  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) { column-gap: 6px; }
-  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) > [data-slot="go"] { margin-right: 0; }
+  /* 按钮行能借用卡片右边的留白，正文宽度和勾选框的点击范围不变。 */
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) { margin-inline-end: calc(-1 * var(--item-action-gap)); max-width: none; }
   .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) .btn { padding: 0 9px; }
   .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) > [data-slot="pick"] { width: 22px; }
 }
@@ -129,7 +124,7 @@
 .items-selection .items-selection__clear { background:transparent; box-shadow:none; color:var(--muted); }
 .items-selection .items-selection__clear:hover { background:rgb(20 20 19 / .05); color:var(--ink); box-shadow:none; }
 body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
-.items-choice { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:9px; cursor:pointer; }
+.items-choice { display:inline-grid; align-items:center; justify-items:start; width:28px; height:28px; border-radius:9px; cursor:pointer; }
 .items-choice:hover { background:rgb(20 20 19 / .05); }
 .items-choice input { -webkit-appearance:none; appearance:none; width:18px; height:18px; margin:0; border-radius:6px; background:rgb(255 255 255 / .85); box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .24); cursor:pointer; transition:background-color .15s ease, box-shadow .15s ease; }
 .items-choice input:hover { box-shadow:inset 0 0 0 1.5px rgb(20 20 19 / .46); }
@@ -142,7 +137,7 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
 /* 卡展开后最后一行绿字“看这件的详情 ›”，单占一行，跟上面的字左边对齐 */
-.row__detail .item-open { display:flex; width:fit-content; height:auto; margin:8px 0 0; padding:0; translate:none; color:#00A650; font-weight:600; line-height:22px; }
+.row__detail .item-open { display:flex; width:fit-content; height:auto; margin:var(--item-action-gap) 0 0; padding:0; translate:none; color:#00A650; font-weight:600; line-height:22px; }
 .row__detail .item-open:hover { background:none; color:#00A650; text-decoration:underline; }
 </style></head><body class="page page--live page--l2 page--board page--items"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#needs" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>

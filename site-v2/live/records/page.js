@@ -566,7 +566,7 @@
       bar: skills ? num(r.count) : null,
     };
   }
-  // 点开一行看到的：接口给的那句说明；技能还把 Claude、Codex 各自的次数和最近一次摆出来（只摆接口给了的字段）
+  // 点开一行看到的：接口给的那句说明，以及各家已有的技能次数和最近一次
   function detailOf(r) {
     // 接口那句只是“名字：近 30 天（有）N 次（记录）”、和次数那一列同一个数时不再重复写；空格、冒号写法不同也算同一句
     const squash = s => U.sp(String(s)).replace(/\s+/g, '').replace(/：/g, ':');
@@ -575,9 +575,11 @@
         .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
     const say = !duplicate && r.text && (r.name || r.label) && text(r.text) !== marker(r, recordViewer) ? `<p>${text(r.text)}</p>` : '';
     if (!skills) return say;
-    const n = v => `${Number(v).toLocaleString('zh-CN')} 次`;
-    const hosts = [['claude', 'Claude'], ['codex', 'Codex']].map(([k, label]) => {
-      const parts = [k in r && `近 30 天 ${r[k] == null ? U.collectionText() : n(r[k])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
+    const hosts = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']].map(([k, label]) => {
+      const lowerBound = k === 'antigravity';
+      const d30 = lowerBound ? 'antigravity_d30' : k;
+      const n = v => `${lowerBound ? '至少 ' : ''}${Number(v).toLocaleString('zh-CN')} 次`;
+      const parts = [d30 in r && `近 30 天 ${r[d30] == null ? U.collectionText() : n(r[d30])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
         `${k}_total` in r && `累计 ${r[`${k}_total`] == null ? U.collectionText() : n(r[`${k}_total`])}`, `${k}_last` in r && `最近 ${r[`${k}_last`] == null ? U.collectionText() : stamp(r[`${k}_last`])}`].filter(Boolean);
       return parts.length ? `<span class="book-detail__host"><b>${label}</b><span class="book-detail__metrics">${parts.map(s => `<span class="book-detail__metric">${text(s)}</span>`).join('')}</span></span>` : '';
     }).join('');
