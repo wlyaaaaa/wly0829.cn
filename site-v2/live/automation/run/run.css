@@ -55,6 +55,7 @@
 .ar-talk__facts { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; margin: 0 !important; font-size: 13.5px !important; line-height: 22px !important; color: #6c6b64; }
 .ar-talk__facts > span + span::before { content: "·"; margin: 0 7px; color: #b5b3aa; }
 .ar-talk__facts .chat-tag { margin-right: 8px; }
+.ar-talk__facts > .chat-tag + span::before { content: none; }   /* 软件标签（Claude、Codex）后面直接接型号，不再隔一个“·” */
 .ar-talk__meta > [data-compaction] { font-size: 13.5px; color: #6c6b64; }
 .ar-talk__meta > [data-compaction] summary { cursor: pointer; }
 .ar-talk__note { margin: 0 !important; font-size: 13.5px !important; color: #6c6b64; }
