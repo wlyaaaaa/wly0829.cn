@@ -195,13 +195,15 @@
     const fetchNext = !!d.next && vis.length < (retry ? groupShown[key] : shown + batch);
     const more = left ? `<button class="more su-pill" type="button" data-group-more="${key}" value="${retry ? 0 : batch}"${fetchNext ? ' data-needs-pc' : ''}${waiting ? ' disabled' : ''}>${waiting ? '正在读…'
       : retry ? '下一批暂时读不到，再试一次 ›' : batch < left ? `再看 ${batch} 项（还有 ${left} 项）` : `再看剩下 ${left} 项`}</button>` : '';
-    const less = groupShown[key] > GROUP_FIRST ? `<button class="more su-pill" type="button" data-group-less="${key}">收起 ‹</button>` : '';
+    const chevron = '<span class="more__chev" aria-hidden="true">›</span>';
+    const less = groupShown[key] > GROUP_FIRST ? `<button class="more su-pill" type="button" data-group-less="${key}">收起${chevron}</button>` : '';
     const foot = more || less ? `<div class="su-foot">${more}${less}</div>` : '';
     const open = !!uncOpen[key], uncWait = open && unc.length < uncN && !!d.next;
     const uncList = open ? `<div class="su-unc__list">${unc.length ? UNC_COLS + unc.map(r => row(r, s?.boot_at, false)).join('') : ''}${uncWait ? say(groupFailed[key] ? '后面的名单暂时读不到，点上面那行再试一次。' : '正在读…') : ''}</div>` : '';
-    const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起） <span class="su-pill">${open ? '收起名单 ‹' : '点开看名单 ›'}</span></button></div>${uncList}` : '';
+    const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起） <span class="su-pill">${open ? '收起名单' : '点开看名单'}${chevron}</span></button></div>${uncList}` : '';
     // “另有 N 项”那一行放在这组的表上方，点开的名单也在表上方
     U.html(list, uncLine + (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + foot);
+    list.querySelector('[data-unc]')?.setAttribute('aria-expanded', String(open));
     U.blockNote(list, links[key]);
   }
   // 手里的不够露（这组露的行数、点开的名单）就接着往下取，取到够或到底为止

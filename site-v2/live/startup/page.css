@@ -85,6 +85,8 @@
 .su-unc .more { height: auto; gap: 10px; padding: 0; background: transparent; font-size: 15px; line-height: 22px; text-align: left; }
 .su-unc .su-pill { display: inline-flex; align-items: center; border-radius: 999px; white-space: nowrap; }
 .su-unc .more:hover .su-pill { background: rgb(255 255 255 / .85); }
+.su-unc .more[aria-expanded="true"] .more__chev,
+[data-group-less] .more__chev { rotate: -90deg; }
 .su-unc__list { margin: 0 14px 16px; padding: 8px 0; border-radius: 8px; background: rgb(228 230 248 / .72); }
 .su-group .fold > div { padding: 0 6px 6px; }
 .su-group .su-cols { margin-top: 2px; }
