@@ -61,6 +61,7 @@
 .lg-line { display: block; margin-left: -1.1em; }
 .lg-dot { display: inline-block; width: 1.1em; text-align: center; font-style: normal; }
 .lg-seg.is-keep { white-space: nowrap; }
+.lg-line #live-privacy-note { margin-left: 1.1em; }   /* 点开签的说明在这一行里另起一块，躲开左边裁掉的那一截 */
 .lg-running { background: var(--tp-green) !important; color: #fff; text-decoration: none; }
 .lg-over { color: var(--tp-amber); }
 .lg-lane { position: relative; align-self: center; height: 26px; }
