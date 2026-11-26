@@ -215,7 +215,7 @@
     const rowY = i => pad.t + (i + .5) * h / 3;
     let out = `<rect class="tp-band" x="${x(.7)}" y="${pad.t - 6}" width="${x(1.1) - x(.7)}" height="${h + 6}" rx="3"/>
       <line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>
-      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">允许范围</text>`;
+      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">估 1 小时以上</text>`;
     for (let v = .5; v <= hi + 1e-9; v += .5) out += `<text x="${x(v)}" y="${H - 8}" text-anchor="middle">${dec(v)}×</text><line class="tp-gridline" x1="${x(v)}" x2="${x(v)}" y1="${pad.t}" y2="${pad.t + h}"/>`;
     SIZES.forEach(([size, label], i) => {
       const y0 = rowY(i);
@@ -313,7 +313,7 @@
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍 <small>点在绿带里算准</small></p>${ratioPlot(d)}<p class="tp-small">绿带按估 1 小时以上的画：早 30% 到晚 10% 都算准；1 小时以内的单子是早 15 分钟到晚 5 分钟。</p></div>
+        <div><p class="tp-sub">实际是估的几倍</p>${ratioPlot(d)}<p class="tp-small">绿带按估 1 小时以上的画：早 30% 到晚 10% 都算准；1 小时以内的单子是早 15 分钟到晚 5 分钟。</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
