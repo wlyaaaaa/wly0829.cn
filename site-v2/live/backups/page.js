@@ -315,18 +315,21 @@
     for (const g of groups) {
       // 和详情页一样新的在前（M419）
       const newest = U.mergePrivateRows([...(g.points || [])].sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0)), { value: pt => pt.scope || pt, kind: viewer });
-      const dates = newest.map((pt, i) => `<li${i ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
-        : `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>`}</li>`).join('');
+      // 说明只剩“最近一次记录于 …”的（后台标了这条记录旧了），写在它自己那一行下面：“旧了 · 最近一次记录于 …”，不并到栏底；这样的一条不收进“展开”，一眼看得到是哪条旧了
+      const oldNote = item => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了 · ${esc(sp(item.gap).replace(/[。.]$/, ''))}</small>` : '';
+      let folded = 0;
+      const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
+        : `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
       const own = lastRestore(g), from = g.points?.map(pt => pt.history_from).filter(Boolean).sort()[0];
       const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : '没有恢复过的记录';
       const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
-      const toggle = newest.length > 1 ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${newest.length - 1} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
-      restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${line ? `<p class="row__sub">${line}</p>` : ''}</div>` });
+      const toggle = folded ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
+      const subs = [line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
+      restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${subs}</div>` });
     }
     if (groups.length) {
       const without = (d.sets || []).filter(s => s.name && !groups.some(g => g.set === s.id && g.points?.length)).length;
-      // 只有“最近一次记录于 …”的说明不并进这句：恢复点上的这个时刻就是该恢复点自己的时间（后台按通用陈旧规则写进 gap），上面已按日期列出；
-      // 几处的时刻并成一句会写成“最近一次记录于 A；最近一次记录于 B”，看不出哪个时间是哪个
+      // 栏底只并写别的恢复说明：“最近一次记录于 …”已写在各自那一行，不再几处并成一句（分不清哪个时刻是哪条）
       const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text))
         .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
       restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
