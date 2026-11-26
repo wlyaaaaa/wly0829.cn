@@ -32,7 +32,8 @@
 .ak-hero__ctl small { display: inline; min-height: 0; margin: 0; }
 .tp a.ak-how { font-size: 16px; font-weight: 800; color: var(--tp-green-ink); text-decoration: none; }
 .tp a.ak-how:hover { text-decoration: underline; text-underline-offset: 3px; }
-.ak-hero__art { align-self: end; width: 100%; height: auto; margin: -6px 0 -24px; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%), linear-gradient(180deg, transparent 0%, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, #000 22%), linear-gradient(180deg, transparent 0%, #000 16%); mask-composite: intersect; }
+/* 插画铺满大卡右边一整栏（上下贴边、不留空白，本人 11-26 19:38 选“右边铺满”）：不占格子里的高度，按右下角裁，笔记本和绿植都在 */
+.ak-hero__art { position: absolute; top: 0; right: 0; bottom: 0; width: 520px; height: 100%; object-fit: cover; object-position: 100% 100%; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%), linear-gradient(180deg, transparent 0%, #000 16%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, #000 22%), linear-gradient(180deg, transparent 0%, #000 16%); mask-composite: intersect; }
 
 /* 四个数 */
 .ak-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 0 0 6px; }
