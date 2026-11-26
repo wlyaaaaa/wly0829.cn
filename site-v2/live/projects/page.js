@@ -439,14 +439,38 @@
     // 有没推提交的排前面、放大；零值不写，只写有的。
     const items = (unpushed?.items || []).filter(it => it.commits > 0 || it.files > 0)
       .sort((a, b) => (b.commits > 0) - (a.commits > 0) || (b.commits || 0) - (a.commits || 0) || (b.files || 0) - (a.files || 0));
-    section('unpushed', '本地还没推的改动', items.map(it => {
+    const rows = items.map(it => {
       const seconds = it.age_seconds, mins = Math.floor(seconds / 60), remainder = seconds % 60;
       const age = Number.isInteger(seconds) && seconds >= 0 && (mins < 60 && remainder ? [mins && `${mins} 分`, `${remainder} 秒`].filter(Boolean).join(' ') : U.minutes(Math.round(seconds / 60)));
       const hot = it.commits > 0;
       const words = [it.files > 0 && `${it.files} 个文件没提交`, age && `已放 ${age}`, it.local_only === true && '按你说的只留本地', it.note && it.note !== '按你说的只留本地' && field(it.note)].filter(Boolean);
       const lead = hot ? `<p class="pj-mini__big"><b>${esc(it.commits)}</b> 个提交没推</p>` : '';
       return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
-    }), unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '');
+    });
+    // 多了才分批（R147、X4 第 111 项）：一排四格，有没推提交的大卡占两格、排在前面；先露两排（八格），点“展开（还有 N 个项目）”再露两排，到底变“收起”。两排放得下就不出按钮，样子照旧。
+    const UNITS = 8, units = it => it.commits > 0 ? 2 : 1, total = items.reduce((n, it) => n + units(it), 0);
+    const shown = total <= UNITS ? UNITS : Number($('unpushed')?.dataset.shown) || UNITS;
+    let cut = 0;
+    for (let used = 0; cut < items.length && used + units(items[cut]) <= shown; cut++) used += units(items[cut]);
+    section('unpushed', '本地还没推的改动', rows.slice(0, Math.max(cut, 1)), unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '');
+    const box = $('unpushed');
+    if (!box) return;
+    box.dataset.shown = shown;
+    let more = box.querySelector(':scope > .pj-unpushed-more');
+    if (total <= UNITS) { more?.remove(); return; }
+    if (!more) {
+      more = document.createElement('button'); more.type = 'button'; more.className = 'more pj-unpushed-more';
+      more.addEventListener('click', () => {
+        box.dataset.shown = more.getAttribute('aria-expanded') === 'true' ? UNITS : Number(box.dataset.shown) + UNITS;
+        box.redrawUnpushed();
+        if (more.getBoundingClientRect().top < 0) more.scrollIntoView({ block: 'center' });
+      });
+    }
+    box.redrawUnpushed = () => drawUnpushed(unpushed, section, field);
+    box.querySelector(':scope > .pj-extra__list').after(more);
+    const left = items.length - Math.max(cut, 1);
+    more.setAttribute('aria-expanded', String(!left));
+    U.html(more, `${left ? `展开（还有 ${left} 个项目）` : '收起'} <span class="more__chev">›</span>`);
   }
   function drawRecentArtifacts(recent, section, field, audience = 'public', roster = []) {
     const concealed = v => v?.visibility === 'pending' || v?.rewrite === 'pending' || audience === 'public' && (v?.hidden || v?.hidden_block || v?.visibility === 'owner' || v?.public === 'owner');

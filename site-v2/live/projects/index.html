@@ -40,6 +40,10 @@
 #activity .pj-heat-more { margin-top: 6px; }
 #activity .pj-heat-more .more__chev { rotate: 90deg; }
 #activity .pj-heat-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
+/* 本地还没推的改动多了才分批（R147）：“展开（还有 N 个项目）”在小卡下面，和成品那块“更多成品 ›”一样靠左 */
+#unpushed > .pj-unpushed-more { margin: 12px 0 0; translate: none; }
+#unpushed > .pj-unpushed-more .more__chev { rotate: 90deg; }
+#unpushed > .pj-unpushed-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 .pj-changes-footer { display: grid; gap: 10px; padding-top: 16px; }
 .pj-changes-footer:not(:has(.pj-changes-actions > :not([hidden]), > .row__sub:not([hidden]))) { display: none; }
 .pj-changes-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
