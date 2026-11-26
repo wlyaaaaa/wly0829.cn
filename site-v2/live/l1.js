@@ -583,6 +583,8 @@
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760）
     if (U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), Infinity, true)]);
+    // 后面还接“ · ”的一段，句尾“。”去掉，不写成“约好的办理时间到了。 · 社区与网站查询”（和等你的事页同一个规矩，r83 返修第三轮复看）
+    if (sub) sub = String(sub).replace(/。((?:<\/[a-z]+>)*) · /g, '$1 · ');
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
