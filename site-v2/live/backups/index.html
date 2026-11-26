@@ -35,6 +35,10 @@
 /* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
 .page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
 .page--backups .backup-at > span { white-space: nowrap; }
+@media (min-width: 1280px) {
+  .page--backups .backup-grid col:nth-child(-n+2) { width: 15.25% !important; }
+  .page--backups .backup-grid col:nth-child(3) { width: 11.5% !important; }
+}
 /* 窗口不到 1440 宽：大小列放不下整个时刻（“11-16 07:38”伸出灰底），日期和钟点分两行；1440 宽不变（M781） */
 @media (max-width: 1439px) { .page--backups .backup-grid td:nth-child(3) .backup-at { white-space: normal; } }
 .page--backups .backup-grid b { font-weight: 400; }

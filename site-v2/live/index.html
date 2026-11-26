@@ -15,6 +15,12 @@
 .live-first-read .board { visibility: hidden; }
 .live-first-status { display: none; }
 .live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
+/* 和电脑页一样，滚过正文时底色随顶栏移动，只淡出导航字。 */
+#topbar[data-state="compact"] .topbar__glass { background-color: var(--paper); }
+#topbar[data-state="compact"] { opacity: 1; }
+#topbar[data-state="compact"] :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+#topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav #topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
 .page--live :is(.row, .project-cell):has(.home-detail-link) { position: relative; }
 .page--live .home-detail-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
 .page--live .home-detail-link:focus-visible { outline: none; }
@@ -104,7 +110,8 @@
 .page--live #automation .auto-a-row .auto-tag { margin-top: 1px; }
 .page--live #backups .restore__line { font-weight: 400; }
 .page--live #backups .restore__line .row__title { margin-right: 8px; }
-.page--live #phone .head__lead { white-space: nowrap; font-size: clamp(24px, 1.75vw, 34px); }
+.page--live #phone .head__lead { white-space: nowrap; }
+.page--live:not(.live-empty-home) #phone .head__lead { font-size: clamp(24px, 1.75vw, 34px); }
 .page--live .board .row__title { word-break: normal; }
 /* 等你的事、AI 对话两张卡的标题：只在空格和标点处折行，连着的中文不从中间断开（“解锁”不拆成“解／锁”）；一段长过整行才硬断（M743） */
 .page--live .board :is(#needs, #chats) .row__title { word-break: keep-all; overflow-wrap: break-word; }
@@ -131,7 +138,12 @@
 .page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
-.page--live.live-unreadable #phone .head__lead { font-size: 18px; }
+.page--live.live-unreadable:not(.live-empty-home) #phone .head__lead { font-size: 18px; }
+/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+.page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
+.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
+.live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
@@ -197,7 +209,7 @@
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
-.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
+.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"],.live-fallback-note,.chat-background) { margin-inline-start: 25px; }
 .page--live #projects .card__body { padding-right: 0; }
 .page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
 .page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
@@ -218,18 +230,18 @@
 .page--live #projects .project-cell:has(.project-recent) { background: #f0f8ff; }
 .page--live :is(#computer,#phone) :is(.row__sub,.card__note,[data-part="why"]) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .page--live #phone .card__note:has(> .btn) { display: flex; align-items: center; overflow: visible; }
-.page--live #phone .card__note-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.page--live #phone :is(.card__note,.card__note-text) { min-width: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #phone .card__note > .btn { flex: none; }
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
 .page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
 .page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
 .page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
-.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
+.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
 .page--live #chats .chat-head-title > .head__lead { white-space: nowrap; }
 .page--live #chats .chat-head-scope { color: var(--muted); font-size: 13px; }
-.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: nowrap; overflow-wrap: normal; margin-left: 0; font-size: min(13.5px, 2.28cqi); letter-spacing: 0; }
+.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: normal; overflow-wrap: anywhere; text-wrap: pretty; margin-left: 0; font-size: 13.5px; letter-spacing: 0; }
 .page--live #phone .phone-head-cutoffs.row__sub { white-space: normal; }
 .page--live #phone .phone-reading-time { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
@@ -250,7 +262,10 @@
 .page--live .card--empty { --headline-lamp-top: 6px; }
 .page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) > :is(.head__marker,.head__cutoff,.row__sub) { margin-left: 0; }
 @media (max-width: 1200px) {
- .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live:not(.live-unreadable) #phone .card__head,
+ .page--live #phone :is(.kv__row dd:has(.phone-reading-time), .card__note, [data-missing-groups="yes"]) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live #phone .phone-head-tail { max-width: 100%; white-space: normal; }
+ .page--live #phone .phone-head-tail > .head__tail:first-child { white-space: normal; overflow-wrap: anywhere; }
 }
 /* 电脑窗口窄（如 1024 宽）：AI 对话行尾两个按钮挪到这一行下面，标题和型号用整行宽（M498） */
 @media (max-width: 1279px) {

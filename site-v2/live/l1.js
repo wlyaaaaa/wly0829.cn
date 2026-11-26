@@ -884,6 +884,13 @@
     if (!old && (status?.state === 'online' || !status && device?.state === 'online')) return '手机调试已连接，线路未记录';
     return d?.received?.last_at || d?.metrics?.some(v => v.id === 'battery' && v.value != null) ? '手机连接线路未记录' : null;
   }
+  function computerTemperature(data) {
+    const reading = data?.metrics?.find(m => m.id === 'cpu-temp');
+    if (reading) return reading;
+    if (Object.hasOwn(data || {}, 'cpu_c')) return { value: data.cpu_c, at: data.cpu_at, q: data.cpu_q };
+    const legacy = typeof data?.text === 'string' && data.text.match(/(?:CPU\s*)?(-?\d+(?:\.\d+)?)\s*(?:℃|°C)/)?.[1];
+    return legacy ? { value: Number(legacy) } : null;
+  }
   function renderComputer(d, screen, phoneData) {
     const trafficBytes = bytes => U.trafficBytes(bytes);  // 按 1024 进位，和海外流量页同一个函数
     const p = parts.computer;
@@ -914,8 +921,7 @@
     const uptime = screen?.uptime ?? m.uptime?.value;
     const summary = typeof d.text === 'string' ? d.text : '';
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
-    const cpu = m['cpu-temp'] ?? (Object.hasOwn(d, 'cpu_c') ? { value: d.cpu_c, at: d.cpu_at, q: d.cpu_q } : null), legacyTemp = summary.match(/(?:CPU\s*)?(-?\d+(?:\.\d+)?)\s*(?:℃|°C)/)?.[1];
-    const temperature = cpu ? val(cpu, x => quantity(x, 'value', fmtTemp)) : legacyTemp != null ? fmtTemp(Number(legacyTemp)) : null;
+    const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
     U.html(p.head, cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }));
     const devices = [...(d.devices || [])];
@@ -1053,7 +1059,9 @@
       const reading = `${html}${cutoff ? ` <small>${cutoff}</small>` : ''}`;
       return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${group ? `<a class="kv__link" href="${esc(href('phone'))}#grp-${group}" aria-label="${esc(label)}，查看详情">${reading}</a>` : reading}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
     }).join(''));
-    const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), received?.last_at ? `${lastState?.offline ? U.time(received.last_at) : U.ago(received.last_at, lastState?.now || at)}收到` : '还没收到数据', received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
+    const receivedAt = received?.last_at;
+    const arrival = receivedAt ? lastState?.offline ? `上次收到 ${recordStamp(receivedAt)}` : `${U.ago(receivedAt, lastState?.now || at)}收到` : '还没收到数据';
+    const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), arrival, received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
     p.note.hidden = !note;
     U.html(p.note, `${reason && !offline ? lamp(received?.gap) : ''}<span class="card__note-text">${reason && !offline && connection ? esc(connection) + ' · ' : ''}${U.fieldHtml(typeof note === 'string' ? note.replace(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, (_, m, d) => `${m.padStart(2, '0')}-${d.padStart(2, '0')}`) : note, { name: '手机情况', kind: viewer })}</span>${reason ? U.actions({ id: 'phone', text: reason }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}`);
   }
@@ -1296,10 +1304,23 @@
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
     // 电脑、手机卡上“读数暂缺”已经点过名的组（卡顿、程序身份筛查……），“读不准”里不再写一遍；它的原因并到“读数暂缺”那一项后面（一项只说一次，不把要紧数往下压）
-    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
-    const lackWhy = new Map(), lackOf = g => { const name = sp(U.fieldText(g?.name, viewer)).trim(); return lacking.find(l => name === l || name.startsWith(l)); };
-    for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下', lack = lackOf(g); if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, g?.reason); continue; } grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
-    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`).join('；');
+    const temperatureShown = id === 'computer' && computerTemperature(data)?.value != null;
+    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureShown && name === 'CPU 温度')))] : [];
+    const plain = text => sp(String(text).replace(/<[^>]*>/g, '')).trim();
+    const savedReading = text => plain(text).match(/^(最近一次记录于\s+(?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)(?:[，,](?:此后没有新读数))?[。.]?$/)?.[1] || '';
+    const oldDetails = new Set();
+    const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
+    const lackWhy = new Map();
+    for (const g of gray || []) {
+      const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
+      const recorded = savedReading(reason), lack = lacking.find(label => name === label || name.startsWith(label));
+      if (recorded) oldDetails.add(recorded);
+      const why = id === 'computer' && recorded ? recorded.replace(/^最近一次记录于/, '上次读到') : reason;
+      if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
+      const detail = describedAt && U.sameCutoffNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
+      grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
+    }
+    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}${why ? `（${esc(why)}）` : ''}`).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M1010：电脑卡的“N 项要处理”写出是什么事；卡小，一件时写“要处理：”加那句说明（和电脑页页顶同一句，如“有防火墙配置未启用”），没说明写组名，几件时只列组名
     const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
@@ -1318,10 +1339,14 @@
     // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
     const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
     p.head.querySelector(':scope > .lamp')?.remove();
-    if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
+    if (state.lamp) {
+      p.head.insertAdjacentHTML('afterbegin', state.lamp);
+      if (id === 'phone' && lastState?.offline) p.head.firstElementChild.dataset.tone = 'gray';
+    }
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
+    const alreadyDated = text => [...oldDetails].some(reason => U.sameCutoffNote(reason, plain(text)));
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, cutoff].filter(Boolean).join(' · ');
+      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => !alreadyDated(text) && (!(existing || cutoff) || !matchesCutoff(plain(text))) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
@@ -1409,10 +1434,8 @@
   // —— 出事时才有的横条 ——
   function renderNotices(state) {
     const rows = [];
-    if (state.offline || (!home && state.text && state.phase === 'none')) {
-      // 实况在线、只是首页这一份读不到：说清是哪几块（计划任务单独读）
-      const text = state.offline || !/读不到/.test(state.text) ? state.text : '首页这一份暂时读不到：除计划任务外各块先空着，正在重读';
-      rows.push({ key: 'link', cls: home ? 'notice glass' : 'l1-unreadable-note', html: `${home ? '<span class="lamp" aria-hidden="true"></span>' : ''}<span>${U.fieldHtml(text, { name: '连接情况', kind: viewer })}</span>` });
+    if (!state.offline && state.conn?.stage !== 'retrying' && !home && state.text && state.phase === 'none') {
+      rows.push({ key: 'link', cls: 'l1-unreadable-note', html: U.fieldHtml(state.text, { name: '连接情况', kind: viewer }) });
     }
     if (project) {
       const f = home?.filter || { name: home?.projects.items.find(it => it.id === project)?.name || project, count: home?.needs.items.filter(it => it.project === project && ['choose', 'do'].includes(it.kind)).length };
@@ -1632,6 +1655,10 @@
     document.body.classList.add('live-unreadable');
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
+    if (lastState?.conn?.emptyHome) for (const id of IDS) {
+      U.html(parts[id].head, U.head(NAME[id], { lamp: false, href: href(id) }));
+      labelCard(cards[id]);
+    }
     balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
     Light.offline(!!lastState?.offline);
     showHome();
@@ -1701,13 +1728,14 @@
       if (!home && ['none', 'gone'].includes(state.phase)) { unreadable(); return; }
       if (!home) {
         for (const id of HOME_IDS) reads[id].set(state);
-        if (['wait', 'slow'].includes(state.phase)) showHome();
+        if ((state.meta?.status === 503 && state.conn?.stage === 'retrying') || ['wait', 'slow'].includes(state.phase)) showHome();
       }
     },
     link(state) {
       // 第一次画的时候没有“正在看的那一行”，不锚视口；锚了会跟着页顶横条长出来往下滚，把横条和页眉标题挤走
       const changed = !!lastState?.offline !== !!state.offline, firstLink = !lastState, oldNow = lastState?.now;
       lastState = state;
+      document.body.classList.toggle('live-empty-home', !!state.conn?.emptyHome);
       bar?.set(state);
       Light.offline(state.offline);
       if (changed && home) {

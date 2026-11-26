@@ -273,6 +273,7 @@ function paintCell(cell, view, href, sample, quiet) {
 const down = { offline: false, hostOff: false, silent: false, paused: false };
 const lastReadings = new Map();
 let lastViewer;
+const beijingDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' });
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
 function cutoffText(at, now, prefix) {
   try {
@@ -315,11 +316,19 @@ function renderScreen(data, meta, pending = false, now) {
   lastViewer = viewer;
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
+  const today = beijingDay.format(Date.parse(now) || Date.now());
+  const otherDay = (at) => {
+    const time = Date.parse(at);
+    return Number.isFinite(time) && beijingDay.format(time) !== today;
+  };
   cellTargets.forEach(([id, fallback], index) => {
     let source = data?.cells?.find((item) => item.id === id);
     let at = source?.source_at ?? source?.at ?? meta?.at;
     const waiting = source?.q === 'warming';
-    const facts = cellFacts(id, waiting || source?.q === 'unknown' ? null : source);
+    // “今天”的维护数不能沿用跨日的回包或页面内副本。其余读数继续沿用各自的上一次。
+    const maintenance = id === 'maintenance';
+    if (maintenance && otherDay(lastReadings.get(id)?.at)) lastReadings.delete(id);
+    const facts = cellFacts(id, waiting || source?.q === 'unknown' || (maintenance && otherDay(at)) ? null : source);
     const read = (entry, values, info) => id === 'ai' ? aiCellView(entry, info, owner, pending, now)
       : cellView(id, values, owner, pending || waiting, down);
     let view = read(source, facts, meta);
@@ -790,7 +799,7 @@ const tip = element('div', 'home-conn', pane);
 tip.setAttribute('role', 'status'); tip.hidden = true;
 tip.innerHTML = '<p class="home-conn__line"><b></b><span class="home-conn__at"></span></p><p class="home-conn__sub"></p>';
 const [tipSay, tipAt, tipSub] = ['b', '.home-conn__at', '.home-conn__sub'].map((selector) => tip.querySelector(selector));
-let tipHide = 0, tipNext = null, tipSize = null;
+let tipHide = 0, tipNext = null, tipSize = null, paintAfterTip = null;
 function tipWrite({ pair, say, at, sub }) {
   tip.classList.toggle('is-pair', pair);
   tipSay.textContent = say; tipAt.textContent = at; tipSub.textContent = sub;
@@ -827,11 +836,15 @@ function connectionTip(off, reason, at, sub, pair = '') {
     tip.classList.add('is-shown');
   } else if (tip.classList.contains('is-shown')) {
     tip.classList.remove('is-shown');
-    tipHide = setTimeout(() => { tip.hidden = true; }, 900);   // 收走的动画（style.css 里 0.8 秒）走完再拿掉
+    tipHide = setTimeout(() => {
+      tip.hidden = true;
+      paintAfterTip?.();
+      paintAfterTip = null;
+    }, 900);   // 收走的动画（style.css 里 0.8 秒）走完再拿掉
   }
 }
 liveClient.src = '/live/_lib/live-client.js';
-liveClient.onload = () => window.Live.watch('screen', {}, {
+const watchScreen = (recovering = false) => window.Live?.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
     down.silent = !!state.silent;
@@ -842,14 +855,41 @@ liveClient.onload = () => window.Live.watch('screen', {}, {
     }
     // 失败后先隔 2、4、8 秒各再试一次，之后跟着每分钟重读一起试（live-client.js 的 retryFailure 和 startPolling）。
     connectionTip(state.offline, state.reason, state.pageAtText, '每分钟自动再试，连上就换成最新的', state.pairNotice);
-    renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
+    const paint = () => {
+      recovering = false;
+      renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
+    };
+    // 补回脚本时先收走“右边屏上暂时没有数”，免得新数和这句同屏。
+    if (recovering && !state.offline && !state.pairNotice && !tip.hidden) paintAfterTip = paint;
+    else { paintAfterTip = null; paint(); }
   }
 });
-// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。这时页面不会自己再试。
+liveClient.onload = () => watchScreen();
+// 实况那份脚本没取到（断网、被拦）：没有数可等了，按连不上算，别让四格一直空着。
+// 之后网络回来、页面回到前台，或在前台每过一分钟，再取一次同一份脚本；取到了照常订阅，签和四格自己接上（M983）。
+let clientRetry = 0, clientFetching = false;
+function fetchClientAgain() {
+  if (window.Live || clientFetching || document.hidden) return;
+  clientFetching = true;
+  const again = document.createElement('script');
+  again.src = liveClient.src;
+  again.onload = () => {
+    clientFetching = false;
+    clearInterval(clientRetry);
+    removeEventListener('online', fetchClientAgain);
+    document.removeEventListener('visibilitychange', fetchClientAgain);
+    watchScreen(true);
+  };
+  again.onerror = () => { clientFetching = false; again.remove(); };
+  document.head.append(again);
+}
 liveClient.onerror = () => {
   down.offline = true;
   connectionTip(true, '连不上实况服务', '', '刷新这一页再试，连上就换成最新的');
   renderScreen(null, null);
+  clientRetry = setInterval(fetchClientAgain, 60000);
+  addEventListener('online', fetchClientAgain);
+  document.addEventListener('visibilitychange', fetchClientAgain);
 };
 document.head.append(liveClient);
 })();
