@@ -234,7 +234,8 @@
     U.html($('rates-note'),[...new Set(notes)].map(v=>typeof v==='string'?esc(plainGap(v)):shown(v,'记录范围')).join(' · '));
     $('rates-note').hidden=!$('rates-note').innerHTML;
   }
-  const plainGap=v=>v.replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'次').replace(/批/g,'次');
+  // 后台的记录范围说明对谁都写“你”（“事项原文和你是否读过”）：访客版照别处写“本人”
+  const plainGap=v=>v.replace(/你是否读过/g,`${you()}是否读过`).replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'次').replace(/批/g,'次');
   function emailGapRows(rows,scope=emailScope){
     return scope?(rows||[]).filter(r=>isMail(r)&&r.status!=='sent'&&parse(at(r))>=scope.from&&parse(at(r))<=scope.to):[];
   }
