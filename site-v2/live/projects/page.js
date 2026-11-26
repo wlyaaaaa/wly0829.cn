@@ -459,7 +459,8 @@
       watchBands(box);
     };
     const range = pick.artifacts, own = ranged.artifacts[range] || { state: 'loading' };
-    const asRecent = (r, o) => r === '7d' ? d?.recent_artifacts : o.state === 'ok' ? { ...o.data, items: o.rows, next: o.next, page_gap: o.pageGap } : { state: o.state };
+    // 名册到了却没带成品这一块：写“成品暂时读不到”，不整块消失（页面说明第 12 条）
+    const asRecent = (r, o) => r === '7d' ? d?.recent_artifacts || (d && !U.offline?.() ? { state: 'unread' } : undefined) : o.state === 'ok' ? { ...o.data, items: o.rows, next: o.next, page_gap: o.pageGap } : { state: o.state };
     const kept = range !== '7d' && own.state === 'loading' && (own.prev ? { range, recent: asRecent(range, own.prev) } : shown.artifacts);
     let recent = kept ? { ...kept.recent, range: kept.range, waiting: waitingNote('artifacts', range, kept) } : asRecent(range, own);
     if (!kept && recent && !recent.state) shown.artifacts = { range, recent };
@@ -495,7 +496,11 @@
     const shown = total <= UNITS ? UNITS : Number($('unpushed')?.dataset.shown) || UNITS;
     let cut = 0;
     for (let used = 0; cut < items.length && used + units(items[cut]) <= shown; cut++) used += units(items[cut]);
-    section('unpushed', '本地还没推的改动', rows.slice(0, Math.max(cut, 1)), unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '');
+    // 读不到和真没有分开（页面说明第 12 条）：名册到了、这一块没给或标了读不到，又一项改动都没读到，就写“本地改动暂时读不到”和后台给的原因；真没有改动不留空卡
+    const unread = !items.length && (!unpushed || unpushed.q === 'unknown' || unpushed.q === 'error' || isStale(unpushed) || !Array.isArray(unpushed.items)) && !U.offline?.();
+    const note = unread ? ['本地改动暂时读不到', unpushed?.gap && field(unpushed.gap), unpushed?.at && `上次读到 ${stamp(unpushed.at)}`].filter(Boolean).join(' · ')
+      : unpushed?.items?.length ? [unpushed.at && `数据截至 ${stamp(unpushed.at)}`, unpushed.gap && field(unpushed.gap)].filter(Boolean).join(' · ') : '';
+    section('unpushed', '本地还没推的改动', rows.slice(0, Math.max(cut, 1)), note);
     const box = $('unpushed');
     if (!box) return;
     box.dataset.shown = shown;
@@ -597,7 +602,7 @@
     // 这一档一件都没有、但别的档有（或是近 30 天、全部）时照样留着这块，写一句没有，切换还点得到
     const quiet = !items.length && !recent?.hidden && !missing && (range !== '7d' || recent?.total > 0)
       ? range === 'all' ? '还没有登记过成品' : `${rangeLabel(range)}没有新登记的成品` : '';
-    const note = ['loading', 'missing'].includes(recent?.state) ? rangeWord('artifacts', range, recent.state) : items.length || recent?.hidden || missing || quiet ? [
+    const note = recent?.state === 'unread' ? '成品暂时读不到' : ['loading', 'missing'].includes(recent?.state) ? rangeWord('artifacts', range, recent.state) : items.length || recent?.hidden || missing || quiet ? [
       recent.waiting, recent.at && `成品数据截至 ${stamp(recent.at)}`, missing || recent.q === 'partial' && '只列已读到的成品', quiet,
       // 近 30 天、全部一页没列完：写清列了几件、这一档一共几件，下面“更多成品 ›”接着翻
       recent.next && Number.isInteger(count) && `已列出 ${items.length} 件，${rangeLabel(range)}共 ${count} 件`, recent.page_gap,
