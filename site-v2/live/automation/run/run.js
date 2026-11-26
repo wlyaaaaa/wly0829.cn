@@ -18,6 +18,9 @@
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   const F = (v, name) => T.field(v, viewer, name);
+  // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
+  const said = v => U.fieldText(v ?? '', viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
+  const sameText = (a, b) => !!said(a) && said(a) === said(b);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
 
@@ -86,7 +89,8 @@
       ${o.href ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
         : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
     const receipt = r.receipt || {};
-    const recorded = list(receipt.recorded).map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('');
+    // 回执里记下的和上面做成的东西名字一样的不再列一遍；全都一样，“回执里记下的”整块不出
+    const recorded = list(receipt.recorded).filter(x => !r.outputs.some(o => sameText(o.title, x.title ?? x.text ?? x))).map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('');
     const extra = [recorded && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${recorded}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');

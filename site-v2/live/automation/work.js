@@ -30,6 +30,9 @@
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const asOwner = html => audience === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
   const field = (value, name) => U.fieldHtml(value, { kind: audience, name });
+  // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（同一句只显示一次，主控 11-26 10:02）
+  const said = v => U.fieldText(v ?? '', audience).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
+  const sameText = (a, b) => !!said(a) && said(a) === said(b);
   const words = (...values) => values.filter(Boolean).map(value => field(value)).join(' · ');
   const instant = value => {
     const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value || NaN);
@@ -283,7 +286,9 @@
     // M767：所属项目在访客版看不到的（后台在这件活上标 visitor_labels.project_name），本人版在项目名后挂签
     const projectMark = U.visitorLabel?.(row, 'project_name', '所属项目', audience) || '';
     const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}${kind === '所属项目' && projectMark ? ` ${projectMark}` : ''}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');
-    const overview = row.summary || list(data.facts).find(fact => fact.label === '问题')?.text;
+    // 相邻或上下级的两处字一样只显示一次：标题下那行小字和大标题一样、或和“为什么要办”里“问题”一样的不画
+    const problem = list(data.facts).find(fact => fact.label === '问题')?.text, lead = row.summary || problem;
+    const overview = said(lead) && ![row.title, problem].some(v => sameText(v, lead)) ? lead : '';
     const chip = `<p class="aw-chip">${lamp(row) || '<span class="aw-slot-dot"></span>'}一件活</p>`;
     return `<section class="glass aw-hero aw-work-hero"><img alt="" src="${esc(dossier)}" class="aw-art"><div class="aw-lead">${chip}<h1>${rowTitle(row, '这件活的标题')}</h1>
       ${overview ? `<p class="automation-lead">${field(overview, '这件活的说明')}</p>` : ''}<p class="aw-work-where">${words(data.type_title, row.project_name, at(row.first_at) && `${when(row.first_at)} 发现`)}</p></div></section>`
