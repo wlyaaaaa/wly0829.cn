@@ -49,11 +49,12 @@
     const kind = OUTPUT[o?.kind] ? o.kind : 'document', meta = OUTPUT[kind];
     const action = str(o?.action_text) || (o?.action === 'created' ? '新建了' : o?.action === 'updated' ? '更新了' : '');
     const where = viewer === 'owner' ? meta.where : meta.where.replace('等你的事', '等本人的事');
-    // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
+    // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版 href 不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）。
+    // githubHref 两版都留着原地址：一轮页访客版照样摆同一颗“看提交 ›”，点了由可信设备说明框拦下、不跳走（本人 11-26 改选）；自动任务页的卡片仍只认 href
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
     // file：成品的本机文件（local_path，一轮页拿它和回执里记下的那条对是不是同一份文件）
     return { kind, id: o?.id, title: o?.title, labels: o?.visitor_labels, action, where: str(o?.card_text) || where, version: o?.version, file: str(o?.local_path),
-      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
+      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, githubHref: github ? o.href : '', go: meta.go };
   }
 
   // 列表一行
