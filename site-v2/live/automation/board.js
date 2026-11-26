@@ -315,13 +315,14 @@
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
     const x = d.dispatch;
-    if (!x) return '';
-    const every = known(x.interval_seconds) && x.interval_seconds > 0 ? Math.round(x.interval_seconds / 60) : null;
+    if (!x) return '<span class="au-warn">派活程序的读数没收到</span>';
+    const interval = x.interval_seconds;
+    const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
     if (!T.stamp(tick)) return '<span class="au-warn">派活程序几点转的没读到</span>';
     const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
-    return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转${every ? `（该每 ${every} 分钟一次）` : ''}</span>`
-      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every} 分钟一次` : ''}`;
+    return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
+      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，派活间隔没读到'}`;
   }
 
   // —— 上半部 ——
@@ -541,16 +542,17 @@
     if (!Array.isArray(items)) return null;
     const mine = items.filter(it => it.state && [it.registered_by, it.registered_by_text]
       .every(v => U.fieldText(v ?? '', viewer).trim() !== '自动修理'));
-    const full = it => known(it.check_count) && it.check_count >= (it.check_limit || 3);
+    const full = it => known(it.check_count) && Number.isInteger(it.check_limit) && it.check_limit > 0 && it.check_count >= it.check_limit;
     const next = mine.filter(it => it.state !== 'working' && !full(it)).map(it => it.next_at || it.wait?.at)
       .filter(at => T.stamp(at) > Date.now()).sort((a, b) => T.stamp(a) - T.stamp(b))[0];
     return { count: mine.length, next };
   }
   // “现在”那格（照第一屏图）：灯＋一句话，下面一行小字。先后：停等（登录过期、额度用完）＞出毛病＞正在跑＞关着＞暂停到＞空着等下次
   function nowCell(d, c, v) {
-    const g = G[c.id] || {}, p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
+    const p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
     const live = v.live.find(x => x.category === c.id)?.run, since = T.stamp(live?.startedAt);
-    let tone = 'idle', main, sub = esc(g.when || '');
+    const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
+    let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
     else if (pr && (pr.headline || pr.title || pr.text)) {
       tone = 'warn'; main = `出毛病：${F(pr.headline || pr.title || pr.text, '哪里坏了')}`;
@@ -560,7 +562,7 @@
       const ran = since ? `<span data-since="${since}">已 ${minutes((Date.now() - since) / 1000)}</span>` : known(st.elapsed_seconds) ? `已 ${minutes(st.elapsed_seconds)}` : '';
       const doing = live && (F(live.activity, '正在干什么') || (live.subject ? F(live.subject.title, '这件活') : ''));
       main = `正在跑${ran ? ` · ${ran}` : ''}`; sub = doing ? `${doing.replace(/^正在/, '')}` : sub;
-    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = c.id === 'weekly-live' ? '网站上线收尾做完再开' : sub; }
+    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = waiting || sub; }
     else if (m === 'paused') { tone = 'off'; main = esc(pausedText(c.setting?.until_at) || '暂停中'); }
     else if (c.id === 'excerpt') main = excerptToday?.data && known(excerptToday.data.total) ? `今天摘了 ${int(excerptToday.data.total)} 句` : '空着';
     else if (c.id === 'ai-commitments') {
@@ -570,7 +572,8 @@
       if (owed) sub = link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
     } else {
       const next = st.next_at || c.next_at;
-      main = next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`;
+      main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着';
+      if (T.stamp(next) == null && !waiting && !sub) sub = '下次开工时间和触发条件没读到。';
     }
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
   }
@@ -599,7 +602,7 @@
     const days = list(c.daily_30d), s = c.recent_stats || {};
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
-    const nums = known(s.success) ? `成 ${int(s.success)} · 坏 ${int(s.failed)}` : '还没采上';
+    const nums = known(s.success) || known(s.failed) ? `成 ${known(s.success) ? int(s.success) : '没读到'} · 坏 ${known(s.failed) ? int(s.failed) : '没读到'}` : '成败轮数没读到';
     return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
@@ -688,7 +691,7 @@
 
   let drawn = false;
   function heading(d) {
-    const side = [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ');
+    const side = d ? [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
     return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
       <p class="au-crosslinks">也看：${link('/live/chats/', 'AI 对话 ›')} · ${link('/live/agents/', '智能体 ›')}</p></div>
       ${side ? `<p class="tp-head__side"><span>${side}</span></p>` : ''}</div>`;
@@ -697,7 +700,7 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) {
-      T.paint(page.root, heading({}) + buttons({}, { counts: {} }) + T.placeholder(state, '自动任务'));
+      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(state, '自动任务'));
       page.tick.set([], { off: true });
       return;
     }

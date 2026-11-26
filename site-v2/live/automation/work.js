@@ -266,9 +266,9 @@
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
-  // 修理路线和这件的结果：照后台详情给的 repair_route、result_text 两段写；后台没给路线时写现行说法
+  // 修理路线和结果分别读这件的回执。
   function repairRoute(data) {
-    const route = field(data.repair_route, '修理路线') || `同一件修两轮还没好，由做事的 AI 判断值不值得让${own()}知道或请${own()}选，不用的只记在账本里。`;
+    const route = field(data.repair_route, '修理路线') || '没读到这件活的修理和验收安排。';
     const result = field(data.result_text, '这件的结果');
     return `<p class="aw-path-note">修理路线：${route}</p>${result ? `<p class="aw-path-note">结果：${result}</p>` : ''}`;
   }

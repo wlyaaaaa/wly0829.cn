@@ -93,11 +93,12 @@
       return ['warn', `出毛病 —— ${F(pr.headline || pr.title || pr.text, '哪里坏了')}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
     }
     if (c.running || st.kind === 'running' || live) return ['run', `正在跑${live && T.stamp(live.startedAt) ? `，${esc(T.clock(live.startedAt))} 起` : ''}${live?.activity ? ` —— ${F(live.activity, '正在干什么')}` : ''}`];
-    if (m === 'off') return ['off', `关着${id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}`];
+    const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
+    if (m === 'off') return ['off', waiting ? `关着 · ${waiting}` : '关着'];
     if (m === 'paused') return ['off', esc(pausedText(c.setting?.until_at) || '暂停中')];
     if (id === 'excerpt') return ['idle', excerptToday?.data && known(excerptToday.data.total) ? `空着 · 今天摘了 ${int(excerptToday.data.total)} 句` : '空着'];
     const next = st.next_at || c.next_at;
-    return ['idle', next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`];
+    return ['idle', T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着'];
   }
   function hero(d, c, rows) {
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
@@ -107,11 +108,12 @@
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
+    const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
         ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${F(c.last_result.text, '上次结果')}</p>` : ''}
-        <p class="ak-hero__what">${esc(g.short || '')}${g.short ? '。' : ''}${esc(g.when || '')}</p>
+        <p class="ak-hero__what">${description}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div><img class="ak-hero__art" alt="" src="/live/automation/category/art-desk.webp"></section>`;
   }
@@ -119,7 +121,7 @@
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
   function stats(c) {
     const w = c.week;
-    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">近 7 天几轮后台这版还没给。</p></section>`;
+    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这类近 7 天的执行轮数没读到。</p></section>`;
     const from = T.stamp(w.from), late = from && from > Date.now() - 6.5 * 86400000;
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p><p class="ak-stat__tail">${tail}</p></div>`;
@@ -153,37 +155,32 @@
   const catNext = () => { const c = catOf(state?.data); return c?.state?.next_at || c?.next_at || list(c?.upcoming)[0]?.at; };
 
   // —— 接下来几次 ——
-  function nextCheck() {
-    const now = Date.now(), bj = 8 * 3600000, day = new Date(now + bj);
-    const weekly = id === 'weekly-rules';
-    if (!weekly && id !== 'auto-repair') return '';
-    if (weekly) day.setUTCDate(day.getUTCDate() + (8 - day.getUTCDay()) % 7);
-    day.setUTCHours(weekly ? 15 : 6, weekly ? 30 : 10, 0, 0);
-    if (+day - bj <= now) day.setUTCDate(day.getUTCDate() + (weekly ? 7 : 1));
-    const at = `<time>${esc(when(new Date(+day - bj).toISOString()))}</time>`;
-    return weekly ? `下次周检 ${at}，有改动才跑。` : `急件马上处理，非急件下次从 ${at} 起处理。`;
-  }
   function upcoming(d, c) {
-    const rows = list(c.upcoming).filter(u => T.stamp(u.at));
+    const rows = list(c.upcoming).filter(u => T.stamp(u.at) > Date.now());
     const next = c.state?.next_at || c.next_at;
+    const schedule = F(c.schedule_text, '排期说明');
     const queue = id === 'auto-repair' && known(d.counts?.queue) ? `<p class="ak-queue">现在排着等修的：<b>${int(d.counts.queue)} 件</b></p>` : '';
     const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不排下一次。</p>'
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
-      : rows.length ? `<p class="ak-up__how">${esc(g.when || '')}</p><ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
+      : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
-        : (mode(c) === 'on' && nextCheck()) || esc(g.when || '') || F(c.waiting_for, '在等什么') || '没有排好的钟点。'}</p>`;
+        : F(c.state?.waiting_for ?? c.waiting_for, '在等什么') || schedule || '下次开工时间和触发条件没读到。'}</p>`;
     return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>${body}${queue}</section>`;
   }
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
-    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到'}（跟着模型清单走）`], ['什么时候跑', esc(g.when || '')]];
+    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到模型清单给这一类的型号'}`],
+      ['什么时候跑', F(c.schedule_text, '排期说明') || '没读到这一类的排期和触发条件。']];
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
       return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}${noteFor(sub.id)}</span>`;
     }).join('')}</div>`]);
-    if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：第 ${int(p.version)} 版 · ${esc(when(p.published_at))} · ${p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的'}</li>`).join('')}</ul>`]);
+    if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：${[
+      known(p.version) ? `第 ${int(p.version)} 版` : '版本没读到', when(p.published_at) ? esc(when(p.published_at)) : '发布时间没读到',
+      known(p.uncertain_count) ? p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的' : '拿不准的条数没读到',
+    ].join(' · ')}</li>`).join('')}</ul>`]);
     if (list(c.weekly_runs).length) rows.push(['每周一行', `<ul class="ak-list">${list(c.weekly_runs).map(w => {
       const sep = /[。！？；]$/u.test(U.fieldText(w.summary, viewer).trim()) ? ' ' : ' · ';
       return `<li>${esc(T.day(w.scheduled_at))} · ${F(w.summary, '这周结论')}${known(w.elapsed_seconds) ? sep + esc(minutes(w.elapsed_seconds)) : ''}</li>`;
