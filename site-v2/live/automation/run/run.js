@@ -340,8 +340,12 @@
         const words = CV.visibleText(d.thinking), split = splitThought(words);
         msgs[msgs.length - 1].thoughtHtml = t.head + (typeof d.thinking === 'string' && split !== words ? bodyOf(split, '思考摘要') : t.thought);
       }
-      for (const m of msgs) out.push({ at: m.at, html: say({ who: 'ai', name: esc(ai), at: clockOf(r, m.at), body: m.body + (m.label ? `<small class="ar-msg__label">${m.label}</small>` : ''),
-        after: quotes(m.quotes, m.key) + (m.thoughtHtml ? `<blockquote class="ar-quote">${m.thoughtHtml}</blockquote>` : '') }) });
+      for (const m of msgs) {
+        const label = m.label ? `<small class="ar-msg__label">${m.label}</small>` : '';
+        const body = m.label === '最新回复' && m.words ? CV.withTag(m.body, label) : m.body + label;
+        out.push({ at: m.at, html: say({ who: 'ai', name: esc(ai), at: clockOf(r, m.at), body,
+          after: quotes(m.quotes, m.key) + (m.thoughtHtml ? `<blockquote class="ar-quote">${m.thoughtHtml}</blockquote>` : '') }) });
+      }
     }
     // 帮手：默认收成一行，点“展开”看这个帮手的全部（逐步记录、帮手原名、帮手详情、打开对话）；内容和顶层页的帮手行用同一个函数出
     const helpers = Array.isArray(d.helpers) ? d.helpers : locked ? list(d.helpers?.active) : [];
@@ -458,7 +462,7 @@
     const look = li && [li.look ? `第 ${int(li.look)} 次看` : '', !li.look && li.lookMax ? `最多看 ${int(li.lookMax)} 次` : '', group].filter(Boolean).join('，');
     const doing = [li?.title && (li.href ? `<a href="${esc(li.href)}">属于账本：${F(li.title, '账本那件')} <i>›</i></a>` : `<p>属于账本：${F(li.title, '账本那件')}</p>`), look && `<p>${look}</p>`,
       r.subject?.href && `<a href="${esc(r.subject.href)}">这件修理的全部几轮 <i>›</i></a>`,
-      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：${esc(r.who.text)}` : ''}</p>`].filter(Boolean);
+      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：${esc(r.who.text).replace(/ · /g, '&nbsp;·&nbsp;')}` : ''}</p>`].filter(Boolean);
     return `<aside class="ar-side">${doing.length ? `<section class="tp-panel ar-sidecard"><h2>这一轮在办</h2>${doing.join('')}</section>` : ''}
       <section class="tp-panel ar-sidecard"><a href="${esc(T.path('/live/automation/', { category }))}">${esc(name())} <i>›</i></a>${retired ? '' : `<a href="${esc(T.path('/live/automation/', { type: category }) + `#cat-${category}`)}">这一类怎么干 <i>›</i></a>`}</section>
       <section class="tp-panel ar-sidecard"><p class="ar-steps">${step(prevId, '上一轮', true)}${step(nextId, '下一轮', false)}</p></section></aside>`;

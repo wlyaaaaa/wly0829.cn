@@ -180,7 +180,7 @@
         : p.handler ? `${p.repairing && !/^已交|在修/.test(p.handler) ? '已交' : ''}${p.handler}` : p.repairing ? 'AI 在修' : '还没人接手';
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
       const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
-        : part.replace(/验收|太久/g, '<span class="live-unit">$&</span>')).join('');
+        : part.replace(/验收|太久|回复/g, '<span class="live-unit">$&</span>')).join('');
       const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
       // 大字：今天跑完几轮（点了到自动任务页今天跑完的）；下面“其中几轮没做成 ›”，0 轮照写 0、不带链接
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
@@ -199,7 +199,7 @@
       };
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
-      const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 ${num(w.repaired)} 件&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
+      const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 <span class="live-unit">${num(w.repaired)} 件</span>&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
       return { tone, head, body: toPublic(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
         <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`) };
     }
