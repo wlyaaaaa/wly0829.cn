@@ -49,7 +49,7 @@
       const word = EVIDENCE.find(([re]) => re.test(proof?.launch_text || r.launch_text || ''))?.[1] || '起来了';
       return { tone: 'green', cls: 'ok', text: [clock(r.launch_at), word].filter(Boolean).join(' '), title: said.join('；') };
     }
-    if (enabledAny(r)) return { tone: 'amber', cls: 'wait', text: '本次未确认', title: said.join('；') || '这次开机没找到它启动过的证据' };
+    if (enabledAny(r)) return { tone: 'amber', cls: 'wait', text: '这次没确认', title: said.join('；') || '这次开机没找到它启动过的证据' };
     return { tone: '', cls: 'none', text: '—', title: '设成停用，这次不该自己启动' };
   }
   function row(r, bootAt) {
@@ -60,7 +60,7 @@
       `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span></div>`;
   }
   // “这次开机”那一列几种说法是什么意思（本人要页面上讲清机制，M928）：后台按哪种证据认的照实写
-  const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“本次未确认”是设了启用、这次没找到它启动过的证据。</p>';
+  const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“这次没确认”是设了启用、这次没找到它启动过的证据。</p>';
   const cols = '<div class="su-cols" aria-hidden="true"><span>软件</span><span>从哪自启</span><span>设了自启</span><span>这次开机</span></div>';
   const say = text => `<p class="su-say">${esc(text)}</p>`;
 
@@ -89,7 +89,7 @@
     U.html($('checked'), ['每天零点后查一次', valid(s.checked_at) ? `上次 ${esc(stamp(s.checked_at))} 查完${age > 1.5 ? `<span class="su-old">（${Math.floor(age)} 天没查了）</span>` : ''}` : '还没查过', '当天开机会当场补查'].join(' · '));
     $('checked').hidden = false;
     const fig = (key, label, v) => `<div data-fig="${key}"><dt>${label}</dt><dd>${num(v) ? `<b>${v}</b><small>项</small>` : '<small>还没读到</small>'}</dd></div>`;
-    U.html($('figs'), fig('observed', '这次起来了', s.observed) + fig('disabled', '停用', s.disabled) + fig('unconfirmed', '启用了却没确认', s.enabled_unconfirmed));
+    U.html($('figs'), fig('observed', '这次起来了', s.observed) + fig('disabled', '停用', s.disabled) + fig('unconfirmed', '这次没确认', num(s.unconfirmed) ? s.unconfirmed : s.enabled_unconfirmed));
     $('figs').hidden = false;
   }
 
@@ -165,7 +165,7 @@
       if (el.parentElement !== wrap) wrap.append(el);
       el.querySelector('.su-bar__n').textContent = num(g.total) ? ` · ${key === 'own' ? '还有 ' : ''}${g.total} 项` : '';
       const notes = [num(g.attention) && g.attention > 0 ? `<span class="su-bad">${g.attention} 项启动失败</span>` : '',
-        num(g.enabled_unconfirmed) && g.enabled_unconfirmed > 0 ? `<span class="su-warn">${g.enabled_unconfirmed} 项启用了却没确认</span>` : ''].filter(Boolean);
+        num(g.enabled_unconfirmed) && g.enabled_unconfirmed > 0 ? `<span class="su-warn">${g.enabled_unconfirmed} 项这次没确认</span>` : ''].filter(Boolean);
       U.html(el.querySelector('.su-bar__state'), notes.length ? notes.join(' · ') : num(g.enabled_unconfirmed) ? '都正常' : '', false);
       paintList(key);
     }
@@ -235,7 +235,7 @@
 
   // —— 整页 ——
   const hero = $('hero'), cards = [...document.querySelectorAll('.su-card')];
-  const bar = U.topbar({ ask: () => '帮我看看电脑的开机自启动：哪些这次没起来、哪些启用了却没确认、最近有什么变化。' });
+  const bar = U.topbar({ ask: () => '帮我看看电脑的开机自启动：哪些这次没起来、哪些这次没确认、最近有什么变化。' });
   L.add(hero); cards.forEach(c => L.add(c, { defer: true }));
   let lit = false;
   function paint() {
