@@ -45,7 +45,7 @@
 
   function markSegs(instant) {
     const supported = pc => known()?.endpoints?.[pc]?.plans?.[pick.who];
-    // 两台都没有这家的接法：不把选中推到副机冒充能选；两格都置灰、黑块收起，下面照实写“还没读到这个接法。”
+    // 两台都没有这家的接法：不把选中推到副机冒充能选；两格都置灰、黑块收起，下面照实写两台都接不了这个软件
     const none = !!known() && !supported('main') && !supported('sub');
     if (known() && !none && !supported(pick.pc)) pick.pc = supported('main') ? 'main' : 'sub';
     for (const [name, seg] of Object.entries(segs)) {
@@ -113,7 +113,12 @@
   function build() {
     const plan = plans()[pick.who];
     const out = [];
-    if (!plan) return [el('p', 'say', offlineNote || loadNote || (reading && !data ? '正在读这个接法…' : '还没读到这个接法。'))];
+    if (!plan) {
+      // 读到了、两台都没有这家的接法：照实说接不了，别写成像还在读（访客会干等）
+      const none = !!known() && !known().endpoints?.main?.plans?.[pick.who] && !known().endpoints?.sub?.plans?.[pick.who];
+      const label = segs.who?.querySelector(`.seg__opt[data-v="${pick.who}"]`)?.textContent.trim();
+      return [el('p', 'say', offlineNote || loadNote || (reading && !data ? '正在读这个接法…' : none && label ? `两台电脑现在都接不了“${label}”。` : '还没读到这个接法。'))];
+    }
     // Claude、Codex：先写明是哪台上的程序去连
     if (plan.where) {
       const box = el('div', 'rows');
