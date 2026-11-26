@@ -267,7 +267,8 @@
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
-    let title, body = '', meta;
+    // rounds：自动修理一件之前几轮的小条，放在原因那行下面（原因紧跟大字，主控 11-26 复查）
+    let title, body = '', meta, rounds = '';
     if (c.kind === 'repair') {
       // 第几轮只用后台给的 subject.round；没给就不写，不按列表里排第几自己编（列表和详情要对得上，验收 11-24 07:15）
       const nth = x => known(x.subject?.round) && x.subject.round > 0 ? x.subject.round : null;
@@ -283,7 +284,7 @@
       // 之前几轮一律写成“第 N 轮 · 几点 · 结果 ›”：结果只写一个词（跑完／没做成／暂时不修），这一轮的说明点进去看，不塞进条里截成“…”。
       // 后台没给轮号的（比如派出去没人接的那一轮）写“未编号”，不按排第几自己编。同一件下后台有时分两串编号（同一张卡里出现两个“第 1 轮”），靠后面的时刻分开
       const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
-      if (earlier.length) body += `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
+      if (earlier.length) rounds = `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
     else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
@@ -298,7 +299,7 @@
     // 私事线 11-26：整轮藏的挂“访客看不到”（点开写是哪一种情况），换了说法的挂“对外换了说法”
     meta += R.roundTag(r, viewer);
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
-      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}<p class="au-card__meta">${meta}</p></div>${go(r.href)}</article>`;
+      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}<p class="au-card__meta">${meta}</p>${rounds}</div>${go(r.href)}</article>`;
   }
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {

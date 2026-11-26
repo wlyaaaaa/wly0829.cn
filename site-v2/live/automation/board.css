@@ -63,6 +63,9 @@
 .au-row > * { transition: background .15s ease; }
 .au-row:hover > * { background: #f3f3ee; }
 .au-row[data-mode="off"] > :not(.au-switchcell):not(.au-nowcell) { color: var(--tp-gray); }
+/* 关着的那一行整行灰，里面的链接（用谁、怎么干、类名）也跟着灰，点了照样能跳；鼠标移上去恢复本色 */
+.tp .au-row[data-mode="off"] > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-gray); }
+.tp .au-row[data-mode="off"]:hover > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-green-ink); }
 .au-name { display: grid; gap: 1px; color: inherit; text-decoration: none; }
 .au-name b { font-size: 17px; font-weight: 800; }
 .au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
