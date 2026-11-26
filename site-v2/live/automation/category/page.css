@@ -121,3 +121,13 @@
 .ak-sub small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
 .ak-sub small[data-tone="bad"] { color: var(--tp-red); }
 .ak-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; }
+
+@media (max-width: 1050px) {
+  .ak-hero { grid-template-columns: minmax(0, 1fr) 38%; }
+  .ak-hero__art { width: 38%; }
+  .ak-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+  .ak-run { grid-template-columns: 14px 100px 78px minmax(0, 1fr) auto; column-gap: 7px; }
+  .ak-run__body { overflow-wrap: anywhere; }
+  .ak-run__tag i { flex: 0 0 10px; }
+  .ak-sub b { white-space: normal; }
+}

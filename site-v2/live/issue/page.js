@@ -12,7 +12,7 @@
   const STEP = { not_fixed: '没修好', deferred: '先放着', superseded: '并进了别的一件', not_done: '没办成' };
   const KIND = { repair: '修理', verify: '验收' };
   const HOST = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
-  let viewer = 'public', item = null, history = [], misjudged = [], at = null, repeat, repeatAsked = false, first = true;
+  let viewer = 'public', item = null, history = [], misjudged = [], at = null, policy, repeat, repeatAsked = false, first = true;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
@@ -30,6 +30,8 @@
   // 那一轮还是那场对话：看地址是自动任务的一轮还是对话页
   const goName = href => /^\/live\/chat\//.test(href) ? `${HOST[(new URL(href, location.origin).searchParams.get('id') || '').split(':')[0]] || ''} 那场对话`.trim() : '那一轮';
   const titleOf = d => T(d.plain_title) ? d.plain_title : T(d.title) ? d.title : d.text;
+  const positive = n => Number.isInteger(n) && n > 0;
+  const faultOf = d => T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
 
   // 左上照定稿图是面包屑“实况 › AI 自动任务账本 › 这件”（主控 04:5x 定）；点“AI 自动任务账本”回账本页原来的位置
   for (const a of document.querySelectorAll('.iss-crumb a')) a.href = route(a.getAttribute('href'));
@@ -118,7 +120,8 @@
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
-    const limit = d.check_limit || 3, looked = Number.isInteger(d.check_count) ? d.check_count : null, full = looked != null && looked >= limit;
+    const limit = positive(d.check_limit) ? d.check_limit : null, looked = Number.isInteger(d.check_count) ? d.check_count : null;
+    const full = looked != null && limit != null && looked >= limit;
     const waitOf = s.group === 'parked' ? d.park?.text != null ? d.park : d.wait : s.group === 'owed' && !s.late ? d.fixer?.text != null ? d.fixer : d.wait : null;
     const wait = waitOf?.text ?? null;
     // 在等什么这句对外换了说法的，原位挂“对外换了说法”（两版都挂，M930；“接下来”那格是同一句时也挂）
@@ -127,7 +130,8 @@
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
     const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手`
       : nextAt ? `<span>${s.late ? `到点没看，原定 ${clock(nextAt)}` : `下次 ${clock(nextAt)} 看`}</span>` : '';
-    const nth = s.closed || full || looked == null ? '' : nextAt ? `第 ${esc(looked + 1)} 次看，最多 ${esc(limit)} 次` : `看过 ${esc(looked)} 次，最多 ${esc(limit)} 次`;
+    const maxChecks = limit == null ? '这件的复看上限没读到' : `最多 ${esc(limit)} 次`;
+    const nth = s.closed || full || looked == null ? '' : `${nextAt ? `第 ${esc(looked + 1)} 次看` : `看过 ${esc(looked)} 次`}，${maxChecks}`;
     // “等约好的时间再看”和后面“下次几点看”是一回事，有钟点时不写这半句
     const dateOnly = (d.park?.kind || d.wait?.kind) === 'wait_date' && nextAt;
     const bits = [`${st.lamp}<b>${esc(s.label)}</b>`, !dateOnly && T(wait) && nodot(T(wait)) !== nodot(T(next)) && F(nodot(wait), '在等什么') + waitTag, look, nth,
@@ -175,24 +179,27 @@
     if (first) { first = false; requestAnimationFrame(() => L.lightUp([hero])); }
   }
 
-  // 反复出现：只对自动修理查出来的故障。近 30 天坏了几次从账本的“反复出现”里取（单件读口没给）；不在那里面就是这 30 天只坏了这一次
+  // 先取单件的当前故障次数。老读口缺这项时，可用账本里同一件的数补齐。
+  const faults = d => Number.isInteger(d.broken_30d) ? d : repeat;
   function repeatCard(d) {
-    // AI 约好的事也带 object（就是那句话），不能拿它判；自动修理查出来的件编号以 auto- 开头
-    const fault = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
-    if (!fault || repeat === undefined) return '';
+    if (!faultOf(d)) return '';
     const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
-    const rule = `30 天内第 3 次坏，自动修理停手、转给${you()}。`;
-    if (!repeat) return card(`近 30 天只坏了这一次。${rule}`);
-    const n = Number.isInteger(repeat.broken_30d) ? repeat.broken_30d : null, dates = (repeat.broken_at || []).filter(timed);
-    const lastAt = dates.length ? dates.at(-1) : repeat.last_at;
-    const said = n != null ? `近 30 天坏了 ${esc(n)} 次${timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。` : Number.isInteger(repeat.reopen_count) ? `修好以后又出现过 ${esc(repeat.reopen_count)} 次。` : '';
-    const handed = repeat.handed_to_owner ? `已转给${you()}${site(repeat.owner_href) ? ` ${go(repeat.owner_href, '看那张卡')}` : ''}。` : n != null && n < 3 ? rule : '';
-    return said || handed ? card(said + handed) : '';
+    const f = faults(d), handoff = policy?.repeat_handoff_count, windowDays = policy?.repeat_window_days;
+    const days = positive(windowDays) ? windowDays : 30;
+    const rule = positive(handoff) && positive(windowDays)
+      ? `${esc(days)} 天内第 ${esc(handoff)} 次坏，自动修理停手、转给${you()}。` : '重复故障的停手条件没读到。';
+    const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
+    const lastAt = dates.at(-1) || f?.last_at;
+    const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`
+      : Number.isInteger(f?.reopen_count) ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '这件的故障次数没读到。';
+    const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
+    return card(said + handed);
   }
   // 坏了几次的依据（后台 broken_basis，一句话）和误判：近 30 天当时判了坏、现在不算的次数（misjudged_30d），
   // 单件回包给原记录（misjudged_records：时刻、当时记的、为什么不算、那一轮），收在“另有 N 次是误判”里，点开看。后台没给就什么都不写
   function basisOf(d) {
-    const pick = key => repeat && repeat[key] != null ? repeat[key] : d[key];
+    const f = faults(d);
+    const pick = key => f?.[key] ?? d[key];
     const basis = T(pick('broken_basis')), n = Number.isInteger(pick('misjudged_30d')) ? pick('misjudged_30d') : misjudged.length || 0;
     const rows = misjudged.filter(r => r && (timed(r.at) || T(r.summary)));
     const line = basis ? `<p class="iss-basis">怎么算坏：${F(nodot(pick('broken_basis')), '怎么算坏')}。</p>` : '';
@@ -245,14 +252,14 @@
       <dl class="rec-facts">${rows}</dl></details>`;
   }
 
-  // 反复出现那张卡要的数在账本列表里：读一次，不跟着每轮刷新
+  // 单件的现行读口已带齐时，省掉对账本列表的补读。
   async function loadRepeat() {
-    if (repeatAsked || !item) return;
+    if (repeatAsked || !item || !faultOf(item) || Number.isInteger(item.broken_30d) && policy) return;
     repeatAsked = true;
-    if (Number.isInteger(item.broken_30d)) { repeat = item; render(); return; }
     const want = item, kind = viewer;
     const r = await window.Live.get('ledger', null).catch(() => null);
     if (item !== want && item?.id !== want.id || kind !== viewer) { repeatAsked = false; return; }
+    policy ??= r?.data?.policy;
     const rows = r?.data?.repeat_fixes?.items;
     repeat = Array.isArray(rows) ? rows.find(x => x && (x.id === item.id || x.issue && x.issue === item.issue)) || null : undefined;
     if (item) render();
@@ -272,10 +279,10 @@
     phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
-      if (kind !== viewer) { viewer = kind; repeat = undefined; repeatAsked = false; }
+      if (kind !== viewer) { viewer = kind; policy = undefined; repeat = undefined; repeatAsked = false; }
       if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
       $('rest').hidden = false; ended = false;
-      at = meta.at || d.at || null; item = d.item; history = Array.isArray(d.history) ? d.history : [];
+      at = meta.at || d.at || null; item = d.item; policy = d.policy ?? policy; history = Array.isArray(d.history) ? d.history : [];
       misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
       render(); loadRepeat();
     },

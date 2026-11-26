@@ -39,15 +39,6 @@
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
   };
-  // 设置表“对话装多满会压缩”写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
-  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。钩子卡里的数由规则仓给，见下面 hookDetail 里的快核。
-  // Claude 上下文窗口 1,000K 和先留给回复的 20K（设置表小字直接显示，也用来算约 490K）。按需更新快核（M928）核法：Claude 对话记录
-  // E:/Data/AppData/Claude/profiles/pro/projects/**/*.jsonl 里每次自动压缩的 compactMetadata.preTokens，近 7 天中位数应≈(窗口−留量)×回包百分比，
-  // 现 1,000K 窗口、先留 20K（11-26 核：220 次，中位 491K，十分位 490,000；窗口也可对钩子程序 claude_root_runtime_module.py 里登记的型号窗口）；变了改这句
-  const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
-  const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
-  const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
-    : h.id === 'codex' && known(hostData(d, h).compact_tokens) ? hostData(d, h).compact_tokens : null;
   const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
   const WHY = {
     C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
@@ -114,9 +105,18 @@
   const chips = (hint = true) => `<p class="ag-mlegend"><button type="button" class="ag-chip ag-chip--all${only ? '' : ' is-on'}" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
     `<button type="button" class="ag-chip${only === h.id ? ' is-on' : only ? ' is-off' : ''}" data-pick="${h.id}" aria-pressed="${only === h.id}" style="--host:${h.color}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}
     ${hint ? `<span class="ag-mhint">${only ? `整页只看 ${HOSTS.find(h => h.id === only).name}，按它自己的数画 · 再点一次或点“全部”回到三家` : '点一家，整页只看它'}</span>` : ''}</p>`;
+  const familyHeading = h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><button type="button" class="ag-hpick" data-pick="${h.id}" aria-pressed="${only === h.id}"><i class="tp-swatch"></i>${h.name}</button></th>`;
   const hostData = (d, h) => d.hosts?.[h.name] || {};
+  function compactConfig(d, h) {
+    const host = hostData(d, h), ratio = Number(host.compact_percent);
+    const threshold = known(host.compact_tokens) && host.compact_tokens > 0 ? host.compact_tokens : null;
+    const percent = ratio > 0 && ratio <= 100 ? `压缩比例设为 ${ratio}%` : '';
+    const point = threshold ? `${h.id === 'claude' ? '约 ' : ''}${kTok(threshold)}` : '';
+    return { contextWindow: host.context_window, point, percent };
+  }
   const keyOf = hook => String(hook.key || '').replace(/:external$/, '');
-  const nameOf = hook => F(hook.title, '钩子名称') || esc(NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调');
+  const fallbackName = hook => NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调';
+  const nameOf = hook => F(hook.title, '钩子名称') || esc(fallbackName(hook));
   const stationOf = hook => STATION_OF[keyOf(hook)] || 'other';
   const firstTime = id => { const fresh = !drawn.has(id); drawn.add(id); return fresh; };
 
@@ -133,7 +133,7 @@
     const eager = typeof x.approval === 'string' && /EAGER/.test(x.approval);
     add(x.waits_for_owner === false || eager ? true : x.waits_for_owner === true ? false : null, '动手前不停下等批准', '动手前会停下等批准，和规矩不一样');
     for (const hook of list(d.hooks).filter(row => row.host === h.name)) {
-      const name = NAMES[keyOf(hook)] || keyOf(hook);
+      const name = U.fieldText(hook.title, viewer) || fallbackName(hook);
       if (hook.id) add(Boolean(hook.installed), `钩子「${name}」装着`, `钩子「${name}」定稿要装，还没装上`, { href: `#hooks-${stationOf(hook)}` });
       else if (hook.installed) add(false, '', `钩子「${name}」装着，说明表里没写`, { href: `#hooks-${stationOf(hook)}` });
       // 近 7 天出过的错是历史，不算“现在差几处”（数据约定第 10 节：当前差几处从 health 的清单取，旧错在历史）；钩子表里照样标“错 N”
@@ -162,9 +162,9 @@
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
       <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
-        <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
+        <p class="tp-small">${c.pass === c.total ? `${c.total} 项都照规矩` : `${c.total} 项里 ${c.pass} 项照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : c.unknown ? '' : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
   // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
@@ -187,7 +187,7 @@
   };
   const est = (d, h) => inPeriod(d, estPeriod, h)?.estimate || {};
   // 有派单却一件开工都没记下，是采集没采上，不是没干活（本人 11-23 08:11：“我最近肯定是和 antigravity 有对话的”）。按全部记录判断，近 7 天没开工不算没采上
-  const missing = (d, h) => { const w = stats(d, h).work || {}; return !d.work_stats || w.starts === 0 || w.starts == null; };
+  const missing = (d, h) => { const w = stats(d, h).work || {}; return w.starts == null || w.starts === 0 && (w.work_orders ?? w.orders) > 0; };
   // 最上面一行“全部”：三家合起来准不准，和三家同一种写法、字更大（本人 16:35 照图点头）。件数按各家的件数加起来，比例按件数重算，不是三个百分比取平均
   function accuracyAll(d) {
     const rows = HOSTS.filter(h => !missing(d, h)).map(h => est(d, h)).filter(e => e.samples && known(e.accuracy));
@@ -206,16 +206,16 @@
       return `<div class="ag-acc__row${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
     }).join('')}</div>`;
   }
-  function ratioPlot(d) {
+  function ratioPlot(d, band) {
     const W = 470, H = 214, pad = { l: 46, r: 16, t: 26, b: 28 }, w = W - pad.l - pad.r, h = H - pad.t - pad.b;
     const values = HOSTS.flatMap(hh => SIZES.map(([s]) => est(d, hh).size_ratios?.[s]).filter(r => r?.samples))
       .flatMap(r => [r.actual_over_estimate, r.p75]).filter(known);
-    const lo = .4, hi = Math.max(2, Math.ceil((Math.max(...values, 1) + .2) * 2) / 2);
+    const lo = Math.min(.4, band?.[0] ?? .4), hi = Math.max(2, Math.ceil((Math.max(...values, band?.[1] ?? 1) + .2) * 2) / 2);
     const x = v => pad.l + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * w;
     const rowY = i => pad.t + (i + .5) * h / 3;
-    let out = `<rect class="tp-band" x="${x(.7)}" y="${pad.t - 6}" width="${x(1.1) - x(.7)}" height="${h + 6}" rx="3"/>
-      <line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>
-      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">允许范围</text>`;
+    let out = band ? `<rect class="tp-band" x="${x(band[0])}" y="${pad.t - 6}" width="${x(band[1]) - x(band[0])}" height="${h + 6}" rx="3"/>
+      <text x="${(x(band[0]) + x(band[1])) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">允许范围</text>` : '';
+    out += `<line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>`;
     for (let v = .5; v <= hi + 1e-9; v += .5) out += `<text x="${x(v)}" y="${H - 8}" text-anchor="middle">${dec(v)}×</text><line class="tp-gridline" x1="${x(v)}" x2="${x(v)}" y1="${pad.t}" y2="${pad.t + h}"/>`;
     SIZES.forEach(([size, label], i) => {
       const y0 = rowY(i);
@@ -309,17 +309,25 @@
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
     const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${asof(ws.as_of) ? `<span class="tp-asof">${esc(asof(ws.as_of))}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
+    const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
+    const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;
+    const limit = band ? T.duration(splitAt * 60) : '';
+    const bandNote = band ? `绿带按估 ${limit}及以上画，允许早 ${pct(long.early_fraction)}、晚 ${pct(long.late_fraction)}。` : '这轮没读到估算程序的允许范围。';
+    const shortNote = limit && [short?.early_minutes, short?.late_minutes].every(known)
+      ? `估时不足 ${limit}，允许早 ${int(short.early_minutes)} 分钟、晚 ${int(short.late_minutes)} 分钟。` : '';
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍 <small>点在绿带里算准</small></p>${ratioPlot(d)}<p class="tp-small">绿带按估 1 小时以上的画：早 30% 到晚 10% 都算准；1 小时以内的单子是早 15 分钟到晚 5 分钟。</p></div>
+        <div><p class="tp-sub">实际是估的几倍${band ? ' <small>点在绿带里算准</small>' : ''}</p>${ratioPlot(d, band)}<p class="tp-small">${bandNote}${shortNote}</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
   }
 
   // —— 三、报了估时的活（原名“三家各干了多少活”，本人 11-26 04:27 选 A 改名；和工期放一起） ——
+  // 按需更新快核（派单型号的显示写法）核法：用 E:/PCConfig/tools/remote-computer-mcp/agent_work_stats.py 的 _summarize、_work_periods 所给 work_models ID，和 E:/.agents/config/model-roster.json 的 routing.model_families 对照正式名称。
+  // 现显示 Claude 系列名加点分版本、GPT 版本加型号、Gemini 系列加型号。标题「报了估时的活」为本人 11-26 04:27 选 A 的现行说法。
   const MODEL = id => {
     const m = /^(claude|gpt|gemini)-(.+)$/.exec(String(id || ''));
     if (!m) return String(id || '');
@@ -327,15 +335,15 @@
     if (m[1] === 'gpt') { const [ver, ...name] = m[2].split('-'); return `GPT-${ver} ${name.map(s => s[0].toUpperCase() + s.slice(1)).join(' ')}`; }
     return 'Gemini ' + m[2].split('-').map(s => /^\d/.test(s) ? s : s[0].toUpperCase() + s.slice(1)).join(' ');
   };
-  const summaryModel = row => /^gpt-6-luna$/.test(row.model) && row.effort === 'low';
   // 时间那排“全部｜近 7 天｜近 30 天”（本人 16:35 选 B：只改时间那排、不加“全部”卡）。开工、总工时、派出去、型号都读 periods.<段>.hosts.<家>.work；
   // 总工时照旧是登记的完工用时（R56 对这张卡只说改时间选项），和右边按周的柱子同一种算法；按实际干活时间算的是上面“三家干了多少”和首页智能体卡。
   // 后台还没给这一段（旧后台每家只有五个数）就是 null，每格写“后台还没送来”
   const workFor = (d, h) => inPeriod(d, period, h)?.work || null;
   function workCard(d, h) {
     const w = workFor(d, h), lost = missing(d, h);
-    const models = list(w?.models).filter(m => !summaryModel(m)).sort((a, b) => b.count - a.count);
-    const orders = !w ? null : known(w.work_orders) ? w.work_orders : known(w.orders) ? w.orders - list(w.models).filter(summaryModel).reduce((s, m) => s + m.count, 0) : null;
+    const orders = known(w?.work_orders) ? w.work_orders : null;
+    const workModels = w?.work_models ?? (orders != null && orders === w?.orders ? w.models : null);
+    const models = [...list(workModels)].sort((a, b) => b.count - a.count);
     // 一件没开工、也没有完工用时，就是 0 小时，不写“没读到”（沿 r79）
     const minutes = !w ? null : known(w.actual_minutes) ? w.actual_minutes : w.starts === 0 ? 0 : null;
     const cell = (label, value, unit, key, fmt) => `<div class="ag-work__row"><span>${label}</span>${!w ? '<b class="tp-fog">后台还没送来</b>' : lost && key !== 'orders' ? `<b class="tp-fog">还没采上</b>`
@@ -345,7 +353,8 @@
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
-      <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
+      <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>`
+        : `<p class="tp-muted ag-models__none">${orders === 0 ? '没有派单' : '施工派单的型号这一轮没读到'}</p>`}${more}</div>
       ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
@@ -381,26 +390,30 @@
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `无法设置${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
-    // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
-    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
-      : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
-      : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
-    const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
-    const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
+    const compact = h => {
+      const { contextWindow, point, percent } = compactConfig(d, h);
+      const info = [point && percent, known(contextWindow) && `配置的上下文窗口是 ${kTok(contextWindow)}`,
+        !point && percent && '具体词元数没读到'].filter(Boolean).join(' · ');
+      const value = point ? `${point}就压缩` : percent;
+      if (!value && h.id === 'antigravity') return '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
+      return `${value || '没读到'}${info ? `<small>${info}</small>` : ''}`;
+    };
+    const waits = HOSTS.map(h => /EAGER/.test(String(x(h).approval || '')) ? false : x(h).waits_for_owner);
+    const version = entries.map(e => e.version ? [ruleVer(e.version), e.current === true ? '当前版' : e.current === false ? '版本未对上' : '当前状态没读到'].join(' · ') : '没读到');
     const rows = [
       row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
       row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
       row('对话装多满会压缩', HOSTS.map(compact)),
-      row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
-        { diff: waits.map(w => !w) }),
+      row('动手前停不停下等批准', waits.map(w => w === false ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>`
+        : w === true ? '会停下等批准' : '没读到'), { diff: waits.map(w => w === true) }),
       row('谁能自己解开资料锁', HOSTS.map(unlock), { note: link('/rules/topic-authorization.html', '规则 ›') }),
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
-      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
+      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(familyHeading).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
   }
@@ -415,7 +428,9 @@
     const cell = hv.cells?.[station]?.[h.id] || {}, hooks = list(d.hooks).filter(r => r.host === h.name && stationOf(r) === station);
     const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => hv.cells?.[s]?.[hh.id]?.runs).filter(known)));
     if (!hooks.length) {
-      const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
+      const key = { compact: 'pre_compact', helper: 'subagent_start' }[station];
+      const observed = key && U.fieldText(hostData(d, h).unavailable_hooks?.[key], viewer);
+      const why = observed || ABSENT[h.id]?.[station] || '这个当口没装钩子';
       return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
@@ -438,15 +453,12 @@
     const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
-    // 页面不另算、也不在“为什么要它”里再写一遍。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
-    // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
-    // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
-    // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
-    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；前端“为什么要它”不写这个数；
-    // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
-    //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
-    const facts = [['什么时候跑', F(hook.when)], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
+    // 钩子机制和运行参数以回包的 when、what 等字段为准。
+    const host = T.hostOf(hook.host);
+    const compact = keyOf(hook) === 'PreCompact' && host ? compactConfig(d, host) : null;
+    const auto = compact?.point ? `当前自动压缩线 ${compact.point}`
+      : compact?.percent ? `自动${compact.percent}，具体词元数没读到` : '';
+    const facts = [['什么时候跑', [F(hook.when), auto].filter(Boolean).join(' · ')], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
       known(m.blocked) ? `拦 ${int(m.blocked)} 次` : !known(m.errors) && '拦和错还没采上', known(m.errors) && `出错 ${int(m.errors)} 次`,
@@ -490,7 +502,7 @@
     return `<section class="tp-panel" id="hooks">${top}
       <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${short
         ? '<p class="tp-small">旧日志只记了次数和耗时，没记拦没拦、错没错；拦和错只按记了的那部分算，更早的那部分没采上，不算 0。</p>' : ''}
-      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
+      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(familyHeading).join('')}</tr></thead><tbody>${body}</tbody></table>
       <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
   }
 
@@ -551,7 +563,10 @@
       if (next === only) return;
       const el = set || pick, sec = el.closest('section[id]');
       // 点了哪个按钮，重画后这个按钮停在原处；柱段这类不是按钮的，停住这一块的标题
-      const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]` : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend [data-${set ? 'only' : 'pick'}="${set ? set.dataset.only : pick.dataset.pick}"]` : `#${sec.id} .tp-panel__head`;
+      const stableButton = set ? `[data-only="${set.dataset.only}"]` : `[data-pick="${pick.dataset.pick}"]`;
+      const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]`
+        : el.closest('thead') ? `#${sec.id} thead ${stableButton}`
+        : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend ${stableButton}` : `#${sec.id} .tp-panel__head`;
       only = next;
       if (only && expanded && expanded.split('/')[1] !== only) expanded = null;   // 别家展开着的钩子格收起来
       T.keep(page.root, anchor, draw);

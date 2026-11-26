@@ -79,12 +79,14 @@
 .ag-work__row .tp-fog { font-size: 14px; }
 /* 卡片竖排：三行大数在上，型号清单接在下面，“另 N 种”贴在清单末尾；同一排三张卡一样高 */
 .ag-works { align-items: stretch; }
+.ag-works:has(.ag-more[aria-expanded="true"]) { align-items: start; }
 .ag-work { display: flex; flex-direction: column; }
 .ag-modelbox { margin: 10px 14px 12px; }
 .ag-models__head { margin: 0 0 4px; font-size: 12.5px; color: var(--muted); }
 .ag-models { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; color: #3d3d3a; }
 .ag-models li { display: flex; justify-content: space-between; gap: 8px; min-width: 0; }
 .ag-models li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ag-modelbox:has(.ag-more[aria-expanded="true"]) .ag-models li span { white-space: normal; overflow-wrap: anywhere; }
 .ag-models li b { flex: none; font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
 .ag-models__none { margin: 0; font-size: 13px; }
 .ag-more { display: inline-flex; align-items: center; gap: 6px; margin: 6px 0 0 -8px; padding: 3px 8px; border: 0; border-radius: 7px; background: none; font: inherit; font-size: 13px; font-weight: 700; color: var(--tp-green-ink); cursor: pointer; transition: background .15s ease; }
@@ -98,14 +100,13 @@
 
 /* 四、设置表 */
 .ag-config th[data-host], .ag-hooktable th[data-host] { color: var(--host); }
+:is(.ag-config, .ag-hooktable) .ag-hpick { color: inherit; }
 .ag-config { table-layout: fixed; }
 .ag-config thead th:first-child, .ag-config tbody th { width: 190px; }
 /* 合成一格的和单格一样靠左；开头小字写哪几家一样，读起来是“三家一样  E493 当前版” */
 .ag-config td.ag-same { text-align: left; color: #3d3d3a; }
 .ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
-/* Claude 压缩线那行小字比格子宽一点点，折行后“复”字会单独掉到第三行：“先留…给回复”整句不拆，要折就在逗号后折 */
-.ag-config td small .ag-keep { white-space: nowrap; }
 .ag-foot { margin: 12px 0 0; }
 
 /* 五、钩子 */

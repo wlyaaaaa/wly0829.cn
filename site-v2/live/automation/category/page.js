@@ -17,7 +17,7 @@
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   // 最近几轮：先摆 5 轮，“再看 N 轮”每次多摆 20 轮，读到的不够就往后翻一页（长列表全站一个规则，本人 11-26 02:12）
   const FIRST = 5, STEP = 20;
-  let shown = FIRST, more = [], cursor, paging = false;
+  let shown = FIRST, more = [], cursor, paging = false, pageFailed = false;
   const F = (v, name) => T.field(v, viewer, name);
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
@@ -95,11 +95,12 @@
       return ['warn', `出毛病 —— ${problem}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
     }
     if (c.running || st.kind === 'running' || live) return ['run', `正在跑${live && T.stamp(live.startedAt) ? `，${esc(T.clock(live.startedAt))} 起` : ''}${live?.activity ? ` —— ${F(live.activity, '正在干什么')}` : ''}`];
-    if (m === 'off') return ['off', `关着${id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}`];
+    const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
+    if (m === 'off') return ['off', waiting ? `关着 · ${waiting}` : '关着'];
     if (m === 'paused') return ['off', esc(pausedText(c.setting?.until_at) || '暂停中')];
     if (id === 'excerpt') return ['idle', excerptToday?.data && known(excerptToday.data.total) ? `空着 · 今天摘了 ${int(excerptToday.data.total)} 句` : '空着'];
     const next = st.next_at || c.next_at;
-    return ['idle', next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`];
+    return ['idle', T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着'];
   }
   function hero(d, c, rows) {
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
@@ -109,11 +110,12 @@
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
+    const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
         ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${F(c.last_result.text, '上次结果')}</p>` : ''}
-        <p class="ak-hero__what">${esc(g.short || '')}${g.short ? '。' : ''}${esc(g.when || '')}</p>
+        <p class="ak-hero__what">${description}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div><img class="ak-hero__art" alt="" src="/live/automation/category/art-desk.webp"></section>`;
   }
@@ -121,7 +123,7 @@
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
   function stats(c) {
     const w = c.week;
-    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">近 7 天几轮后台这版还没给。</p></section>`;
+    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这类近 7 天的执行轮数没读到。</p></section>`;
     const from = T.stamp(w.from), late = from && from > Date.now() - 6.5 * 86400000;
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p><p class="ak-stat__tail">${tail}</p></div>`;
@@ -139,52 +141,48 @@
     // 右上角的总数：列表里除了叫 AI 跑的轮次，还有程序自己空查的、程序直接办没叫 AI 的；后台给了 counts 就分开写，免得和上面四个数里的“几轮”对不上
     const n = info.counts || {}, ai = known(n.runs) ? n.runs : null, checks = known(n.checks) ? n.checks : 0;
     const other = known(info.total) && ai != null ? info.total - ai - checks : 0;
-    const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} 轮`
+    const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
     const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
-    if (!runs?.data && !(runs?.phase === 'none' || runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
+    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
     if (!rows.length) {
       const next = catNext();
       return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? `还没跑过${next ? `，${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : ''}。` : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
     }
     const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
-    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '正在读…' : `再看 ${int(rest == null ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
-    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}</section>`;
+    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '正在读…' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
+    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}
+      ${pageFailed ? '<p class="tp-small" role="status">这一批没读到，可以再点一次。</p>' : ''}</section>`;
   }
   const catNext = () => { const c = catOf(state?.data); return c?.state?.next_at || c?.next_at || list(c?.upcoming)[0]?.at; };
 
   // —— 接下来几次 ——
-  function nextCheck() {
-    const now = Date.now(), bj = 8 * 3600000, day = new Date(now + bj);
-    const weekly = id === 'weekly-rules';
-    if (!weekly && id !== 'auto-repair') return '';
-    if (weekly) day.setUTCDate(day.getUTCDate() + (8 - day.getUTCDay()) % 7);
-    day.setUTCHours(weekly ? 15 : 6, weekly ? 30 : 10, 0, 0);
-    if (+day - bj <= now) day.setUTCDate(day.getUTCDate() + (weekly ? 7 : 1));
-    const at = `<time>${esc(when(new Date(+day - bj).toISOString()))}</time>`;
-    return weekly ? `下次周检 ${at}，有改动才跑。` : `急件马上处理，非急件下次从 ${at} 起处理。`;
-  }
   function upcoming(d, c) {
-    const rows = list(c.upcoming).filter(u => T.stamp(u.at));
+    const rows = list(c.upcoming).filter(u => T.stamp(u.at) > Date.now());
     const next = c.state?.next_at || c.next_at;
+    const schedule = F(c.schedule_text, '排期说明');
     const queue = id === 'auto-repair' && known(d.counts?.queue) ? `<p class="ak-queue">现在排着等修的：<b>${int(d.counts.queue)} 件</b></p>` : '';
     const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不排下一次。</p>'
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
-      : rows.length ? `<p class="ak-up__how">${esc(g.when || '')}</p><ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
+      : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
-        : (mode(c) === 'on' && nextCheck()) || esc(g.when || '') || F(c.waiting_for, '在等什么') || '没有排好的钟点。'}</p>`;
+        : F(c.state?.waiting_for ?? c.waiting_for, '在等什么') || schedule || '下次开工时间和触发条件没读到。'}</p>`;
     return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>${body}${queue}</section>`;
   }
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
-    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到'}（跟着模型清单走）`], ['什么时候跑', esc(g.when || '')]];
+    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到模型清单给这一类的型号'}`],
+      ['什么时候跑', F(c.schedule_text, '排期说明') || '没读到这一类的排期和触发条件。']];
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
       return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}${noteFor(sub.id)}</span>`;
     }).join('')}</div>`]);
-    if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：第 ${int(p.version)} 版 · ${esc(when(p.published_at))} · ${p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的'}</li>`).join('')}</ul>`]);
+    if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：${[
+      known(p.version) ? `第 ${int(p.version)} 版` : '版本没读到', when(p.published_at) ? esc(when(p.published_at)) : '发布时间没读到',
+      known(p.uncertain_count) ? p.uncertain_count ? `${int(p.uncertain_count)} 条拿不准` : '没有拿不准的' : '拿不准的条数没读到',
+    ].join(' · ')}</li>`).join('')}</ul>`]);
     if (list(c.weekly_runs).length) rows.push(['每周一行', `<ul class="ak-list">${list(c.weekly_runs).map(w => {
       const sep = /[。！？；]$/u.test(U.fieldText(w.summary, viewer).trim()) ? ' ' : ' · ';
       return `<li>${esc(T.day(w.scheduled_at))} · ${F(w.summary, '这周结论')}${known(w.elapsed_seconds) ? sep + esc(minutes(w.elapsed_seconds)) : ''}</li>`;
@@ -244,7 +242,9 @@
     }
     draw();
     const fb = feedback;
-    Live.refresh().then(() => { if (feedback === fb && fb.want) { fb.reread = true; draw(); } });
+    Live.get('automation', {}).then(read => {
+      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+    });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
   dialog.querySelector('[data-cancel]').addEventListener('click', () => dialog.close());
@@ -254,16 +254,22 @@
     if (!(until > Date.now())) from.setUTCMinutes(0, 0, 0);
     const days = Array.from({ length: 14 }, (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + i)));
     const key = x => `${x.getUTCFullYear()}-${pad(x.getUTCMonth() + 1)}-${pad(x.getUTCDate())}`;
+    if (key(from) > key(days.at(-1))) days.push(from);
     form.elements.day.innerHTML = days.map((x, i) => `<option value="${key(x)}">${x.getUTCMonth() + 1}月${x.getUTCDate()}日 周${WEEK[x.getUTCDay()]}${['（今天）', '（明天）', '（后天）'][i] || ''}</option>`).join('');
     form.elements.hour.innerHTML = Array.from({ length: 24 }, (_, h) => `<option value="${pad(h)}">${pad(h)} 点</option>`).join('');
-    form.elements.minute.innerHTML = Array.from({ length: 12 }, (_, m) => `<option value="${pad(m * 5)}">${pad(m * 5)} 分</option>`).join('');
-    form.elements.day.value = key(from); form.elements.hour.value = pad(from.getUTCHours()); form.elements.minute.value = pad(Math.floor(from.getUTCMinutes() / 5) * 5);
+    const minute = from.getUTCMinutes();
+    const choices = [...new Set([...Array.from({ length: 12 }, (_, m) => m * 5), minute])].sort((a, b) => a - b);
+    form.elements.minute.innerHTML = choices.map(m => `<option value="${pad(m)}">${pad(m)} 分</option>`).join('');
+    form.elements.day.value = key(from); form.elements.hour.value = pad(from.getUTCHours()); form.elements.minute.value = pad(minute);
+    form.dataset.originalUntil = until > Date.now() ? untilIso(untilAt) : '';
   }
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!pausing || busy) return;
     const x = pausing, result = form.querySelector('[data-result]');
-    const until = `${form.elements.day.value}T${form.elements.hour.value}:${form.elements.minute.value}:00+08:00`;
+    const selected = `${form.elements.day.value}T${form.elements.hour.value}:${form.elements.minute.value}:00+08:00`;
+    const original = form.dataset.originalUntil;
+    const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
     result.textContent = '正在保存…';
     feedback = { id: x, text: '正在保存…', pending: true };
@@ -299,22 +305,30 @@
   }
 
   // 再往后翻一页：第一页没摆完先摆，摆完了才去读下一页
+  const runPageKey = st => `${T.viewerOf(st)}|${st?.data?.items?.[0]?.run_id || ''}`;
   async function loadMore() {
     const info = allRuns();
     if (shown + STEP <= info.rows.length || !info.more) { shown += STEP; draw(); return; }
     const next = cursor !== undefined ? cursor : runs?.data?.next;
     if (next == null || paging) return;
-    paging = true; draw();
+    const first = runPageKey(runs);
+    paging = true; pageFailed = false; draw();
     const s = await Live.get('automation/runs', { category: id, cursor: next }).catch(() => null);
     paging = false;
-    if (Array.isArray(s?.data?.items)) { more.push(...s.data.items); cursor = s.data.next ?? null; }
-    shown += STEP; draw();
+    if (first !== runPageKey(runs)) { draw(); return; }
+    if (Array.isArray(s?.data?.items) && s.data.next !== next) {
+      more.push(...s.data.items); cursor = s.data.next ?? null; shown += STEP;
+    } else pageFailed = true;
+    draw();
   }
 
   const page = T.boot({ resource: 'automation', back: '/live/automation/',
     ask: () => `请看实况自动任务里“${g.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
     onState(next) { state = next; schedule(); } });
-  Live.watch('automation/runs', { category: id }, { phase(st) { if (st.data?.items?.[0]?.run_id !== runs?.data?.items?.[0]?.run_id) { more = []; cursor = undefined; } runs = st; schedule(); } });
+  Live.watch('automation/runs', { category: id }, { phase(st) {
+    if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; }
+    runs = st; schedule();
+  } });
   if (id === 'excerpt') Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } });
   page.root.addEventListener('click', async e => {
     const toggle = e.target.closest('[data-toggle]'), pause = e.target.closest('[data-pause]');
