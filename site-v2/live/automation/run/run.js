@@ -32,8 +32,8 @@
     // 不是正在跑、又没有结束时刻和用时（没有收尾回执）：照实写没记到结束，不写用时
     return r.status !== 'running' && r.minutes == null ? `${when(a)} 开始 · 没记到结束` : `${when(a)} 起`;
   };
-  // 标题里的日期（11-23、2026-11-23）不从中间断行：只包字，不碰标签和属性
-  const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])/g, '<span class="live-unit">$&</span>')).join('');
+  // 标题里的日期、时刻（11-23、2026-11-23、10:18）不从中间断行：只包字，不碰标签和属性
+  const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])|(?<![\d:])\d{1,2}:\d{2}(?::\d{2})?(?![\d:])/g, '<span class="live-unit">$&</span>')).join('');
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   function title(r) {
