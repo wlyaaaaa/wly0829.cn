@@ -278,7 +278,7 @@
         else { setOpen(null); toast(false, '办成一项，请看各自状态。', lines.join('；')); }
       } else if (value.state === 'cancelled' && value.request_created === false) {
         // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
-        message(''); toast(false, '这次请求没发出', errorMessages[value.reason || value.error] || '');
+        const why = errorMessages[value.reason || value.error]; message(''); toast(false, '那次请求没发出去，不用再取消', why ? '没发出的原因：' + why : '');
       } else if (value.state === 'cancelled' && !needsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
       else if (needsQuery(value)) { if (windows) { winMessage = '锁屏结果还没确认'; if (openKey === 'win') setOpen(null); } else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
       else {
