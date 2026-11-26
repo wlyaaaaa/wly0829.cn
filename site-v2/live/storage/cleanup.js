@@ -325,10 +325,16 @@
     const lift = fresh.length ? Math.max(0, Math.max(...fresh.map(f => f.y)) - (H - B - 4)) : 0;
     for (const f of fresh) svg.push(`<text class="cl-newtxt" x="${f.x.toFixed(1)}" y="${(f.y - lift + 4).toFixed(1)}" text-anchor="end" fill="${f.s.color}">${esc(`${K.letter(f.s.v)} 盘刚开始记`)}</text>`);
     ends.sort((a, b) => a.y - b.y);
-    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
-    // 最下面那个盘的字母不压到底线、不贴着横轴日期：字的底边至少留在底线上方 4 像素；从下往上，只把挤到的那几个往上收，别的照旧贴着自己的线（M1009）
-    for (let i = ends.length - 1; i >= 0; i--) ends[i].y = Math.min(ends[i].y, i === ends.length - 1 ? H - B - 8 : ends[i + 1].y - 17);
-    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.y + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
+    // 盘符贴着各自的线尾、互相不压：挨得近的几个合成一串，以它们线尾的平均位置为中心、彼此隔 17px 排开；
+    // 整串不出图顶，最下面那个字母的底边留在底线上方 4px，不贴横轴日期（M1009）
+    const gap = 17, floor = H - B - 8, runs = ends.map(e => ({ items: [e], at: e.y }));
+    const place = r => { const n = r.items.length; r.at = Math.max(T, Math.min(floor - (n - 1) * gap, r.items.reduce((s, e, i) => s + e.y - i * gap, 0) / n)); };
+    for (let merged = true; merged;) {
+      merged = false; runs.forEach(place);
+      for (let i = 1; i < runs.length && !merged; i++) if (runs[i].at < runs[i - 1].at + runs[i - 1].items.length * gap) { runs[i - 1].items.push(...runs.splice(i, 1)[0].items); merged = true; }
+    }
+    runs.forEach(r => r.items.forEach((e, i) => { e.ly = r.at + i * gap; }));
+    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.ly + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
     const big = [...data.marks].sort((a, b) => b.bytes - a.bytes);
     big.forEach((m, i) => {
       const mx = x(m.t), my = y(m.v);
