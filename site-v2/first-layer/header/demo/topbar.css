@@ -74,6 +74,13 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
     0 16px 36px -24px rgb(20 28 36 / .42);
 }
 
+/* 滑过正文时底板挡住下层文字；滑回的过程只让导航字淡入。 */
+.topbar[data-state="compact"] { opacity: 1; }
+.topbar[data-state="compact"] .topbar__glass { background-color: var(--paper, #faf9f5); }
+.topbar[data-state="compact"] :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+.topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav .topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
+
 .topbar[data-style="float"] .topbar__glass {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / .85),

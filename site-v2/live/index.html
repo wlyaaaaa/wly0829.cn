@@ -15,12 +15,6 @@
 .live-first-read .board { visibility: hidden; }
 .live-first-status { display: none; }
 .live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
-/* 和电脑页一样，滚过正文时底色随顶栏移动，只淡出导航字。 */
-#topbar[data-state="compact"] .topbar__glass { background-color: var(--paper); }
-#topbar[data-state="compact"] { opacity: 1; }
-#topbar[data-state="compact"] :is(.topbar__group, .brand) { transition: opacity .28s ease; }
-#topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
-.mo-vt-nav #topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
 .page--live :is(.row, .project-cell):has(.home-detail-link) { position: relative; }
 .page--live .home-detail-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
 .page--live .home-detail-link:focus-visible { outline: none; }
