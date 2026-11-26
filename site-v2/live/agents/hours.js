@@ -110,7 +110,7 @@
       const one = v => v < 10 ? T.dec(Math.round(v * 10) / 10) : T.int(Math.round(v));
       const notes = [
         mine.total > 0 && span >= .25 && `这 ${one(span)} 小时里平均同时 ${one(mine.total / 60 / span)} 个在干`,
-        mine.split && '自动任务工时包含各家自带的定时和后台程序开的对话。自动任务页按每次登记的运行回执统计',
+        mine.split && '自动任务这一行还算了各家自带的定时和后台程序开的对话；自动任务页只算派活程序派出的每一轮，所以两边的数可能对不上',
         mine.total != null && !mine.split && '这一段后台还没分出普通对话、子代理、自动任务，只有合计',
         mine.split && mine.rest >= 3 && `另有 ${hrs(mine.rest)} 小时没分出是哪一类，算在合计里`,
         mine.running > 0 && `现在还在干的 ${T.int(mine.running)} 件算到此刻`,

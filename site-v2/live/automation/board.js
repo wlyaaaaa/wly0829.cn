@@ -317,14 +317,14 @@
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
     const x = d.dispatch;
-    if (!x) return '<span class="au-warn">派活程序的读数没收到</span>';
+    if (!x) return '<span class="au-warn">派活程序的状态这次没读到</span>';
     const interval = x.interval_seconds;
     const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
     if (!T.stamp(tick)) return '<span class="au-warn">派活程序几点转的没读到</span>';
     const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
     return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
-      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，派活间隔没读到'}`;
+      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，多久转一圈没读到'}`;
   }
 
   // —— 上半部 ——
@@ -379,7 +379,7 @@
     const missing = affected(v.missing) || (!running && v.pageFailed);
     const legacy = v.legacy && cards.length
       ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
-    const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿读不到${cards.length ? '一部分' : ''}${running ? '进行中' : '跑完'}的记录。</p>` : '';
+    const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
     if (filter.view === 'running') {
       const next = shownCats(d).filter(c => c.next_at).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
       const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
@@ -575,7 +575,8 @@
     } else {
       const next = st.next_at || c.next_at;
       main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着';
-      if (T.stamp(next) == null && !waiting && !sub) sub = '下次开工时间和触发条件没读到。';
+      if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
+      if (T.stamp(next) == null && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
     if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
@@ -607,7 +608,7 @@
     const days = list(c.daily_30d), s = c.recent_stats || {};
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
-    const nums = known(s.success) || known(s.failed) ? `成 ${known(s.success) ? int(s.success) : '没读到'} · 坏 ${known(s.failed) ? int(s.failed) : '没读到'}` : '成败轮数没读到';
+    const nums = known(s.success) || known(s.failed) ? `成 ${known(s.success) ? int(s.success) : '没读到'} · 坏 ${known(s.failed) ? int(s.failed) : '没读到'}` : '成了几轮、坏了几轮没读到';
     return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字

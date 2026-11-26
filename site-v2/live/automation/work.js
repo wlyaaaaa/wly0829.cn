@@ -268,7 +268,7 @@
   }
   // 修理路线和结果分别读这件的回执。
   function repairRoute(data) {
-    const route = field(data.repair_route, '修理路线') || '没读到这件活的修理和验收安排。';
+    const route = field(data.repair_route, '修理路线') || '这次没读到，下一轮会自动再读。';
     const result = field(data.result_text, '这件的结果');
     return `<p class="aw-path-note">修理路线：${route}</p>${result ? `<p class="aw-path-note">结果：${result}</p>` : ''}`;
   }

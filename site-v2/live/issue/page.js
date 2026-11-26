@@ -130,7 +130,7 @@
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
     const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手`
       : nextAt ? `<span>${s.late ? `到点没看，原定 ${clock(nextAt)}` : `下次 ${clock(nextAt)} 看`}</span>` : '';
-    const maxChecks = limit == null ? '这件的复看上限没读到' : `最多 ${esc(limit)} 次`;
+    const maxChecks = limit == null ? '最多看几次没读到' : `最多 ${esc(limit)} 次`;
     const nth = s.closed || full || looked == null ? '' : `${nextAt ? `第 ${esc(looked + 1)} 次看` : `看过 ${esc(looked)} 次`}，${maxChecks}`;
     // “等约好的时间再看”和后面“下次几点看”是一回事，有钟点时不写这半句
     const dateOnly = (d.park?.kind || d.wait?.kind) === 'wait_date' && nextAt;
@@ -187,11 +187,11 @@
     const f = faults(d), handoff = policy?.repeat_handoff_count, windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
     const rule = positive(handoff) && positive(windowDays)
-      ? `${esc(days)} 天内第 ${esc(handoff)} 次坏，自动修理停手、转给${you()}。` : '重复故障的停手条件没读到。';
+      ? `${esc(days)} 天内第 ${esc(handoff)} 次坏，自动修理停手、转给${you()}。` : `坏几次会停手转给${you()}，这次没读到。`;
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
     const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`
-      : Number.isInteger(f?.reopen_count) ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '这件的故障次数没读到。';
+      : Number.isInteger(f?.reopen_count) ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '这件坏了几次，这次没读到。';
     const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
     return card(said + handed);
   }

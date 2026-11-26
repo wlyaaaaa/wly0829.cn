@@ -172,10 +172,10 @@
     const judged = s.catalog && hs.every(h => w.complete.has(h.id));
     const unused = judged ? s.catalog.filter(n => !every.includes(n)) : [];
     const lower = hs.filter(h => s.lower[h.id]).map(h => h.name);
-    const unusedLabel = lower.length ? '没记到使用' : '没用过';
+    const unusedLabel = lower.length ? '没记到用过' : '没用过';
     const missing = hs.filter(h => !known(w.v[h.id]) && !w.own[h.id]?.length).map(h => h.name);
     const total = f ? w.v[f] : null;
-    const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : `${fam(f).name} 这段时间的技能没采到`;
+    const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : rows.length ? `${fam(f).name} 这段时间的技能没采到` : '';
     const hidden = Math.max(0, every.length - TOP) + unused.length;
     const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">${unusedLabel}的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
@@ -183,16 +183,17 @@
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const behind = hs.filter(h => Date.parse(s.readAt) - Date.parse(s.through[h.id]) > 864e5).map(h => `${h.name} 只记到 ${T.when(s.through[h.id])}`);
     const lag = behind.length ? `${behind.join('、')}，之后用的还没入账` : '';
-    const unverified = hs.filter(h => s.unverified[h.id] > 0).map(h => `${h.name} 有 ${int(s.unverified[h.id])} 个来源未能确认`);
+    const unverified = hs.filter(h => s.unverified[h.id] > 0).map(h => `${h.name} 有 ${int(s.unverified[h.id])} 份记录读不出来，里面用过的技能没算进来`);
+    // 全都没读到时上面空着那句已经说了，这里不再写一遍
     const notes = [line, lag, ...later, ...unverified, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
-      missing.length ? `${missing.join('、')} 的技能这段时间还没采到` : '', lower.length ? `${lower.join('、')} 只记得到能确认的，写的是至少` : '',
+      missing.length && missing.length < hs.length ? `${missing.join('、')} 的技能这段时间还没采到` : '', lower.length ? `${lower.join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
     const interval = s.refresh > 0 && (s.refresh % 60 ? `${int(s.refresh)} 秒` : T.duration(s.refresh));
-    const reading = [interval && `约每 ${interval}汇总已有记录`, s.latest && `最近一条使用记于 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
+    const reading = [interval && `约每 ${interval}汇总一次`, s.latest && `最近一次用技能在 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, reading)}
       ${chips()}
       ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels })
-        : `<p class="tp-empty">${missing.length === hs.length ? '这段时间的技能没读到。' : '这段时间没有采到技能使用记录。'}</p>`}${never}${more}
+        : `<p class="tp-empty">${missing.length === hs.length ? '这段时间的技能记录这次没读到，下一轮会自动再读。' : '这段时间没记到用过技能。'}</p>`}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {

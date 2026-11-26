@@ -34,7 +34,7 @@
   // check_count 是已经看过的次数；看满了 AI 停手
   const positive = n => Number.isInteger(n) && n > 0;
   const full = it => known(it.check_count) && positive(it.check_limit) && it.check_count >= it.check_limit;
-  const maxChecks = it => positive(it.check_limit) ? `最多 ${int(it.check_limit)} 次` : '这件的复看上限没读到';
+  const maxChecks = it => positive(it.check_limit) ? `最多 ${int(it.check_limit)} 次` : '最多看几次没读到';
   const checkText = it => !known(it.check_count) ? '' : full(it) ? `<b class="lg-over">${int(it.check_limit)} 次看满了，AI 停手</b>`
     : `下次是第 ${int(it.check_count + 1)} 次看，${maxChecks(it)}`;
   const span = (a, b) => a === b || !b ? when(a) : T.dayKey(a) === T.dayKey(b) ? `${when(a)}–${T.clock(b)}` : `${when(a)} – ${when(b)}`;
@@ -178,7 +178,7 @@
     };
     return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件<span class="lg-live">实时</span><small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
       ${board('owed', '没有在修的事。')}</section>
-      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '派活程序的修理或复看上限没读到。'}</small></h2></div>
+      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '最多修几轮、最多看几次，这次没读到。'}</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
   }
   // “现在”竖线跟着时间往右走
@@ -261,7 +261,7 @@
     const summary = summaryItem(d, picked), fresh = pickedState?.data?.item;
     const it = pickedState?.pending || pickedState?.failed ? summary || fresh || {} : { ...summary, ...fresh };
     if (!it.id) return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2></div><p class="tp-empty">${!picked ? '点左边或上面任一件，这里看它的经过。'
-      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。' : '这一件的详情没读到。'}</p></section>`;
+      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。' : '这一件的详情这次没读到，再点一次可以重试。'}</p></section>`;
     const events = list(pickedState?.data?.history).length ? list(pickedState.data.history) : list(d.history).filter(r => (r.issue || r.id) === (it.issue || it.id));
     const sorted = [...events].sort((a, b) => (stamp(a.at) || 0) - (stamp(b.at) || 0));
     const groups = merge(sorted);
@@ -284,7 +284,7 @@
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
     const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
-      ? `逐轮经过这次没读到${oldAt ? `，保留 ${esc(oldAt)} 的记录` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
+      ? `逐轮经过这次没读到${oldAt ? `，下面先列 ${esc(oldAt)} 读到的` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : known(it.reopen_count) && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
@@ -303,7 +303,7 @@
     const r = d.repeat_fixes || {}, now = Date.now(), days = repeatDays(d), from = now - days * DAY;
     const handoff = d.policy?.repeat_handoff_count;
     const rule = positive(handoff) && positive(d.policy?.repeat_window_days)
-      ? `${int(days)} 天内第 ${int(handoff)} 次坏，自动修理停手、转给${you()}` : '重复故障的停手条件没读到';
+      ? `${int(days)} 天内第 ${int(handoff)} 次坏，自动修理停手、转给${you()}` : `坏几次会停手转给${you()}，这次没读到`;
     const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
     const reopened = it => Number.isInteger(it.reopen_count) && it.reopen_count > 0 ? it.reopen_count : null;
     // 后台给了“近 30 天坏了几次”就只列坏了 2 次以上的（或已转给本人的）；没给这个数的（比如约好再查的那几件只记了重开）不算坏，不进这一块

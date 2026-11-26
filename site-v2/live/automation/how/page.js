@@ -25,24 +25,24 @@
   function timing(policy) {
     const p = policy || {}, duration = T.duration;
     if (id === 'auto-repair' && [p.ai_timeout_seconds, p.idle_seconds, p.daily_ai_seconds, p.workspace_lookback_seconds].every(T.known)) {
-      return `一轮最多 ${duration(p.ai_timeout_seconds)}，${duration(p.idle_seconds)}没动静就停。查近期施工时看过去 ${duration(p.workspace_lookback_seconds)} 的记录。和 AI 约好的事共用每天 ${duration(p.daily_ai_seconds)}。`;
+      return `一轮最多 ${duration(p.ai_timeout_seconds)}，${duration(p.idle_seconds)}没动静就停；查有没有人在修同一处时，翻最近 ${duration(p.workspace_lookback_seconds)}的记录。每天和“AI 约好的事”合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
     }
     if (id === 'ai-commitments' && T.known(p.daily_ai_seconds)) {
-      return `与自动修理共用每天 ${duration(p.daily_ai_seconds)} 的 AI 时间。`;
+      return `每天和自动修理合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
     }
-    if (T.known(p.ai_timeout_seconds)) return `一次等 AI 最多 ${duration(p.ai_timeout_seconds)}。`;
-    return '没从自动任务的执行设置里读到这类时限。';
+    if (T.known(p.ai_timeout_seconds)) return `一次最多等 AI ${duration(p.ai_timeout_seconds)}。`;
+    return '这一类最多跑多久，这次没读到。';
   }
   function failurePolicy(p = {}) {
     if (id === 'auto-repair') {
       const {repair_limit, repeat_window_days, repeat_handoff_count, urgent_wait_seconds, normal_wait_seconds} = p;
       if (![repair_limit, repeat_window_days, repeat_handoff_count, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
-        return '没从自动修理的执行设置里读到限次和转交条件。';
+        return '最多修几轮、坏几次转给本人，这次没读到。';
       }
-      return `同一件最多派修 ${repair_limit} 轮。近 ${repeat_window_days} 天第 ${repeat_handoff_count} 次坏时转给本人。急件等 ${T.duration(urgent_wait_seconds)}、普通件等 ${T.duration(normal_wait_seconds)}还没人接就记派活故障。`;
+      return `同一件最多派 AI 修 ${repair_limit} 轮。同一处 ${repeat_window_days} 天内第 ${repeat_handoff_count} 次坏，自动修理停手、转给本人。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
-      ? `同一件约定最多复看 ${p.check_limit} 次。` : '没从约定的执行设置里读到复看上限。';
+      ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';
     return '';
   }
   function draw() {
@@ -54,16 +54,16 @@
     document.title = `${U.fieldText(cn(c.title || g.title), viewer)}怎么干 · 自动任务 · 实况`;
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const pill = m === 'on' ? ['on', '开着'] : m === 'off' ? ['off', '关着'] : m === 'paused' ? ['paused', pausedText(c.setting?.until_at)] : ['', '没读到开没开'];
-    const schedule = c.schedule_text ? F(c.schedule_text, '开工条件') : '没从派活读数里读到这类的开工条件。';
+    const schedule = c.schedule_text ? F(c.schedule_text, '开工条件') : '几点跑、什么情况下跑，这次没读到。';
     const interval = T.duration(d.dispatch?.interval_seconds);
     const dispatchNote = id === 'auto-repair' || id === 'message-review'
-      ? (interval ? `派活程序每 ${interval}查一次。` : '没从派活读数里读到检查间隔。') : '';
+      ? (interval ? `派活程序每 ${interval}查一次。` : '派活程序多久查一次，这次没读到。') : '';
     const start = [dispatchNote, g.trigger].filter(Boolean).join(' ');
     const steps = list(g.steps);
     const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
     const prompt = c.prompt_template ? `<p>派活程序每一轮把下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
-      : '<p>没从自动任务读数里读到交给 AI 的固定起步话。</p>';
+      : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
     const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><a href="${esc(T.path('/live/automation/category/', { type: id }))}">${name}</a><strong aria-current="page">怎么干</strong></nav>
       <div class="ah-head"><div><h1>${name}怎么干</h1><p>${esc(g.short || '')}${g.short ? '。' : ''}${schedule}</p></div>

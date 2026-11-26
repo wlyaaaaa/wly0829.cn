@@ -110,7 +110,7 @@
   function compactConfig(d, h) {
     const host = hostData(d, h), ratio = Number(host.compact_percent);
     const threshold = known(host.compact_tokens) && host.compact_tokens > 0 ? host.compact_tokens : null;
-    const percent = ratio > 0 && ratio <= 100 ? `压缩比例设为 ${ratio}%` : '';
+    const percent = ratio > 0 && ratio <= 100 ? `设成上下文用到 ${ratio}%` : '';
     const point = threshold ? `${h.id === 'claude' ? '约 ' : ''}${kTok(threshold)}` : '';
     return { contextWindow: host.context_window, point, percent };
   }
@@ -312,9 +312,10 @@
     const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
     const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;
     const limit = band ? T.duration(splitAt * 60) : '';
-    const bandNote = band ? `绿带按估 ${limit}及以上画，允许早 ${pct(long.early_fraction)}、晚 ${pct(long.late_fraction)}。` : '这轮没读到估算程序的允许范围。';
+    const bandNote = band ? `绿带按估 ${limit}及以上的单子画：比估的早 ${pct(long.early_fraction)} 到晚 ${pct(long.late_fraction)} 都算准。`
+      : '估算程序定的允许范围这一轮没读到，绿带先不画，下一轮会自动再读。';
     const shortNote = limit && [short?.early_minutes, short?.late_minutes].every(known)
-      ? `估时不足 ${limit}，允许早 ${int(short.early_minutes)} 分钟、晚 ${int(short.late_minutes)} 分钟。` : '';
+      ? `估不到 ${limit}的单子，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
@@ -354,7 +355,7 @@
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>`
-        : `<p class="tp-muted ag-models__none">${orders === 0 ? '没有派单' : '施工派单的型号这一轮没读到'}</p>`}${more}</div>
+        : `<p class="tp-muted ag-models__none">${orders === 0 ? '没有派单' : '这一轮没读到，下一轮会自动再读'}</p>`}${more}</div>
       ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
@@ -392,14 +393,14 @@
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
     const compact = h => {
       const { contextWindow, point, percent } = compactConfig(d, h);
-      const info = [point && percent, known(contextWindow) && `配置的上下文窗口是 ${kTok(contextWindow)}`,
-        !point && percent && '具体词元数没读到'].filter(Boolean).join(' · ');
-      const value = point ? `${point}就压缩` : percent;
+      const info = [point && percent, known(contextWindow) && `上下文一共 ${kTok(contextWindow)}`,
+        !point && percent && '折合多少词元没读到'].filter(Boolean).join(' · ');
+      const value = point ? `${point}就压缩` : percent && `${percent}就压缩`;
       if (!value && h.id === 'antigravity') return '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
       return `${value || '没读到'}${info ? `<small>${info}</small>` : ''}`;
     };
     const waits = HOSTS.map(h => /EAGER/.test(String(x(h).approval || '')) ? false : x(h).waits_for_owner);
-    const version = entries.map(e => e.version ? [ruleVer(e.version), e.current === true ? '当前版' : e.current === false ? '版本未对上' : '当前状态没读到'].join(' · ') : '没读到');
+    const version = entries.map(e => e.version ? [ruleVer(e.version), e.current === true ? '当前版' : e.current === false ? '不是当前版' : '是不是当前版没读到'].join(' · ') : '没读到');
     const rows = [
       row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
@@ -456,8 +457,8 @@
     // 钩子机制和运行参数以回包的 when、what 等字段为准。
     const host = T.hostOf(hook.host);
     const compact = keyOf(hook) === 'PreCompact' && host ? compactConfig(d, host) : null;
-    const auto = compact?.point ? `当前自动压缩线 ${compact.point}`
-      : compact?.percent ? `自动${compact.percent}，具体词元数没读到` : '';
+    const auto = compact?.point ? `现在对话装到${compact.point}就自动压缩`
+      : compact?.percent ? `现在${compact.percent}就自动压缩，折合多少词元没读到` : '';
     const facts = [['什么时候跑', [F(hook.when), auto].filter(Boolean).join(' · ')], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,

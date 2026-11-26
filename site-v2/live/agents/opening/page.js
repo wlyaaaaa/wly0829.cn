@@ -262,7 +262,7 @@
       return `按 Antigravity 设置页自己的算法：每份按 UTF-8 字节数 ÷ 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
     }
     if (r.method === 'o200k_base_estimate') return `token 是用 GPT 的分词表估的，${h.name} 自己的计数没拿到，所以都写“约”。`;
-    return 'token 的计数方法这一轮没读到。';
+    return 'token 是怎么算出来的这一轮没读到，下一轮会自动再读。';
   }
   function filesCard(m, h) {
     const o = modeOf(m), r = o.hosts[h.id];
@@ -316,7 +316,7 @@
   }
   function body(m, h) {
     const on = Boolean(m.modes), r = on && modeOf(m).hosts[h.id];
-    if (on ? !r : !h.present) return `<p class="tp-empty">${h.name} 这一轮没读到这种开法的规矩原文。</p>`;
+    if (on ? !r : !h.present) return `<p class="tp-empty">${h.name} 这种开法要读的规矩原文这一轮没读到，下一轮会自动再读。</p>`;
     const globals = new Map(h.files.filter(f => f.path).map(f => [pathKey(f.path), f]));
     const files = on ? r.files.map(f => {
       const doc = f.doc || globals.get(pathKey(f.path)) || globals.get(pathKey(f.resolved));
@@ -340,10 +340,11 @@
   function refillText(h) {
     const when = station => [...new Set(h.triggers.filter(r => r.station === station)
       .map(r => plain(r.when).trim().replace(/。$/, '')).filter(Boolean))].map(esc).join('，');
-    const configured = [when('start'), when('message')].filter(Boolean);
+    const start = when('start'), message = when('message');
+    const configured = [start && `${start}时补这几行`, message && `${message}时另补几行状态`].filter(Boolean);
     const sample = [
-      h.compact && `压缩后最近一次在 ${stampText(h.compact)} 补了 ${int(h.compact.chars)} 字`,
-      h.message && `收到消息相关的最近一次在 ${stampText(h.message)} 补了 ${int(h.message.chars)} 字`,
+      h.compact && `压缩后最近一次在 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字`,
+      h.message && `另补状态最近一次在 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字`,
     ].filter(Boolean);
     return [...configured, ...sample, link('/live/agents/#hooks-message', '原样在智能体页 ›')].join(' · ');
   }

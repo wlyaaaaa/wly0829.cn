@@ -123,7 +123,7 @@
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
   function stats(c) {
     const w = c.week;
-    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这类近 7 天的执行轮数没读到。</p></section>`;
+    if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这一类近 7 天跑了几轮，这次没读到。</p></section>`;
     const from = T.stamp(w.from), late = from && from > Date.now() - 6.5 * 86400000;
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p><p class="ak-stat__tail">${tail}</p></div>`;
@@ -166,14 +166,14 @@
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
       : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
-        : F(c.state?.waiting_for ?? c.waiting_for, '在等什么') || schedule || '下次开工时间和触发条件没读到。'}</p>`;
+        : F(c.state?.waiting_for ?? c.waiting_for, '在等什么') || schedule || '几点跑、什么情况下跑，这次没读到。'}</p>`;
     return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>${body}${queue}</section>`;
   }
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
-    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '没读到模型清单给这一类的型号'}`],
-      ['什么时候跑', F(c.schedule_text, '排期说明') || '没读到这一类的排期和触发条件。']];
+    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '这一类用哪个型号没读到'}`],
+      ['什么时候跑', F(c.schedule_text, '排期说明') || '这次没读到，下一轮会自动再读。']];
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
