@@ -594,11 +594,13 @@
     // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
     const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
     const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
+    const heading = title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items');
+    const headingWords = viewer === 'owner' ? heading.replace(/副号(?![^<>]*>)/g, '<span class="l1-unit">副号</span>') : heading;
     return {
       key: it.id,
       cls: 'row',
       html: `${lamp({ ...it, level: it.light })}<div class="row__text">
-          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items')}${fresh}${marks}</p>
+          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${headingWords}${fresh}${marks}</p>
           ${sub ? `<p class="row__sub">${sub}</p>` : ''}${detail}
         </div><div class="row__acts">${U.goActions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
     };
@@ -1098,7 +1100,8 @@
     const own = /\/backup\//.test(link || '') ? '资料' : /\/issue\//.test(link || '') ? 'AI 事项' : /\/project\//.test(link || '') ? '项目变化' : '自动任务';
     const fields = (Array.isArray(it.name) ? it.name : [it.name || it.text || it]).map(v => ({ visibility: it.visibility, public: it.public, rewrite: it.rewrite, ...(v && typeof v === 'object' ? v : { text: v }) }));
     const names = fields.map((field, i) => U.fieldHtml(field, { name: fields.length > 1 ? i ? '变化' : '项目' : own, place: 'label', kind: viewer })).join(' · '), hidden = viewer === 'public' && fields.some(f => f.visibility === 'owner' || f.public === 'owner' || f.hidden);
-    const label = hidden ? `<span class="row__title">${names}</span>` : link ? `<a class="home-detail-link" href="${esc(route(link))}">${names} ›</a>` : names;
+    const linkedNames = own === '资料' ? names.replace(/(AI 恢复上下文|&[\w#]+;|.)?$/u, '<span class="l1-unit">$1 ›</span>') : `${names} ›`;
+    const label = hidden ? `<span class="row__title">${names}</span>` : link ? `<a class="home-detail-link" href="${esc(route(link))}">${linkedNames}</a>` : names;
     const notes = fields.map(field => U.fieldHtml({ ...field, value: null, text: null, label: null }, { name: own, kind: viewer })).filter(Boolean);
     const note = [...new Set(notes)].join(' '), subHtml = (Array.isArray(sub) ? sub : [sub]).filter(Boolean).map(v => U.fieldHtml(v, { name: '说明', kind: viewer })).join(' · ');
     return { key: it.id, cls: 'row row--flat', html: `${lamp(status)}<div class="row__text"><p class="row__main">${label}${note ? ` <span class="head__rewrite">${note}</span>` : ''}${mark}</p>${subHtml ? `<p class="row__sub">${subHtml}</p>` : ''}</div><div class="row__acts">${U.actions(it, ask && !it.actions?.length ? [{ kind: 'copy', label: '问情况', intent: 'ask' }] : it.actions)}</div>` };

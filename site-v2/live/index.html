@@ -170,6 +170,9 @@
 .page--live :is(#computer .kv__row:last-child, #phone .kv__row) dt a:hover { text-decoration: underline; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, max-content) auto; justify-content: start; }
 .page--live #backups .row__acts { padding-left: 10px; }
+@media (max-width: 960px) {
+ .page--live #backups [data-part="main"] .row { margin-inline-end: -24px; }
+}
 .page--live #backups .row > .lamp { scale: .6; transform-origin: left center; }
 .page--live #backups [data-part="restore"] .row { border-top: 1px solid var(--hair); padding: 8px 0; }
 .page--live #backups [data-part="restore"] .row__sub { display: block; white-space: normal; }

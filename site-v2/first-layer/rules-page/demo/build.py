@@ -277,8 +277,9 @@ def make_toc(doc, config):
     for tag, label, level in toc_entries(doc, items):
         major += level == 1  # 只给大项编号，小项缩进、不编号
         mark = f'<span class="toc-number">{major:02}</span>' if level == 1 else ''
+        label_html = escape(label).replace("要什么", '<span class="toc-phrase">要什么</span>')
         result.append(f'<li class="toc-level-{level}"><a href="#{escape(tag["id"], quote=True)}">'
-                      f'{mark}<span class="toc-label">{escape(label)}</span></a></li>')
+                      f'{mark}<span class="toc-label">{label_html}</span></a></li>')
     return "\n".join(result)
 
 
