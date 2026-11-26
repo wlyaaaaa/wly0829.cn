@@ -49,17 +49,20 @@
     const kind = OUTPUT[o?.kind] ? o.kind : 'document', meta = OUTPUT[kind];
     const action = str(o?.action_text) || (o?.action === 'created' ? '新建了' : o?.action === 'updated' ? '更新了' : '');
     const where = viewer === 'owner' ? meta.where : meta.where.replace('等你的事', '等本人的事');
-    // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
+    // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版 href 不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）。
+    // githubHref 两版都留着原地址：一轮页访客版照样摆同一颗“看提交 ›”，点了由可信设备说明框拦下、不跳走（本人 11-26 改选）；自动任务页的卡片仍只认 href
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
-    return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version,
-      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
+    // file：成品的本机文件（local_path，一轮页拿它和回执里记下的那条对是不是同一份文件）
+    return { kind, id: o?.id, title: o?.title, labels: o?.visitor_labels, action, where: str(o?.card_text) || where, version: o?.version, file: str(o?.local_path),
+      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, githubHref: github ? o.href : '', go: meta.go };
   }
 
   // 列表一行
   function run(raw, viewer) {
     const r = raw || {}, category = str(r.category), status = ['running', 'completed', 'incomplete'].includes(r.status) ? r.status : 'unknown';
     const who = whoOf(r.worker), started = r.started_at || r.queued_at;
-    const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at || r.last_activity_at) : null);
+    // 用了多久只认后台的用时或结束时刻；没有收尾回执的轮次后台如实留空，不拿最后一条记录凑出“用了 1 秒”（一轮页写“没记到结束”）
+    const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at) : null);
     // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 outcome deferred，status 有时是 incomplete、有时是 completed。
     // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
     // status 照后台原样；自动任务页“只看跑完的”“只看没做成的”两个筛选都不含暂缓的轮次（board.js）。
@@ -74,7 +77,12 @@
       conversation: r.conversation_available === true, receipt: r.receipt_available === true,
       // M684：本人读口给的访客差异标记（conversation 标的是这轮所挂的对话），原样带着给页面挂签
       labels: r.visitor_labels && typeof r.visitor_labels === 'object' ? r.visitor_labels : null,
+      // 整轮对访客藏着（对话标了 private，或 visitor_labels 标了对话 hidden）；hiddenWhy 是后台写的哪一种情况（本人版才有原因）
+      hidden: r.conversation?.unavailable_reason === 'private' || r.visitor_labels?.conversation === 'hidden', hiddenWhy: str(r.conversation?.hidden_why),
       href: runPath(category, r.run_id),
+      // 这一轮的状态标签（后台第 12 轮起给，列表和详情同源）：行上直接写 label 和 reason；登录失效、转给你有事项时 statusHref 能点；
+      // 列表按 sortAt 从新到旧排。没给时为空，页面照原来的写法
+      statusKind: str(r.status_kind), statusLabel: r.status_label, statusReason: r.status_reason, statusHref: T.path(r.status_href), sortAt: r.sort_at,
     };
   }
 
@@ -120,7 +128,9 @@
     return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
       href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
       // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
-      reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why) };
+      reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why),
+      // 卡头的事实：几条消息，和对话的软件、型号档位、状态、时刻、第几步、帮手数（metadata，有记录才给）；对话对访客藏着时两版也都给
+      count: num(conv?.message_count), meta: conv?.metadata && typeof conv.metadata === 'object' ? conv.metadata : null };
   }
   // 一轮的详情
   function detail(raw, viewer) {
@@ -131,8 +141,14 @@
       // 暂缓那一轮的“暂时不修”一步是灰点：后台对记成没做成的给 warn（这里落成灰），记成跑完的却给 ok（绿），这里一律落成灰（主控 11-25）
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
-      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told },
+      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
+      // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、
+      // AI 约好的事是谁约的（promised_by）。后台没给的是 null，页面照现在的样子退回
+      headline: d.headline, three: d.three && typeof d.three === 'object' ? d.three : null,
+      stop: d.stop && typeof d.stop === 'object' ? { kind: str(d.stop.kind), text: d.stop.text, step: d.stop.step, until: d.stop.until_at } : null,
+      ledger: d.ledger_item && typeof d.ledger_item === 'object' ? { title: d.ledger_item.title, href: T.path(d.ledger_item.href), look: num(d.ledger_item.look), lookMax: num(d.ledger_item.look_max), group: str(d.ledger_item.group) } : null,
+      promisedBy: d.promised_by && typeof d.promised_by === 'object' ? { title: d.promised_by.title, href: T.path(d.promised_by.href), host: str(d.promised_by.host) } : null,
     };
   }
 
@@ -177,8 +193,29 @@
       }
     }
     for (const p of list(d?.provider_pauses)) out.push({ at: p.started_at, actor: list(p.categories).map(title).join('、'), html: `<span><em>停了</em>：${p.reason === 'login' ? '登录过期' : '额度用完'}</span>`, tone: 'bad' });
-    return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30);
+    return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30)
+      .map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
   }
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject };
+  // 本人版的签（私事线 11-26）：整轮对访客藏着的挂“访客看不到”，点开写后台给的是哪一种情况；只换了说法的挂“对外换了说法”，访客版也挂这一种（M930）
+  const HIDDEN_NOTE = '计划、思考摘要和回复仅本人可见';
+  function roundTag(r, viewer) {
+    if (viewer !== 'owner') return U.visitorLabel({ visitor_labels: r.labels }, ['summary', 'title', 'activity', '$'], '这一轮的说法', viewer);
+    if (r.hidden) return U.visitorHiddenTag('这一轮的标题和对话', r.hiddenWhy && r.hiddenWhy !== HIDDEN_NOTE ? r.hiddenWhy : '', viewer);
+    return U.visitorLabel({ visitor_labels: r.labels }, ['summary', 'title', 'activity', '$'], '这一轮的说法', viewer);
+  }
+
+  // 文档后面补的“第 N 版”：后台的标题里已经写了这一版（“《他要什么》第 15 版”）就不再补，免得“第 15 版 第 15 版”
+  function versionTail(o, viewer) {
+    if (!o?.version) return '';
+    const title = U.fieldText(o.title, viewer).replace(/\s+/g, ''), v = String(o.version).replace(/\s+/g, '');
+    return title.includes(`第${v}版`) ? '' : ` 第 ${U.esc(String(o.version))} 版`;
+  }
+
+  // 访客版称呼：页面上指本人的“你”写“本人”（私事线 11-26：替本人看新消息、转给本人、等本人打开、需要本人操作）。
+  // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
+  const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
+  const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
+
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, asOwner, roundTag, versionTail };
 })();

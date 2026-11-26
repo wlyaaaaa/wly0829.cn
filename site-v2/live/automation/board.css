@@ -40,27 +40,57 @@
 @keyframes au-now { 50% { background: rgb(0 166 80 / .15); } }
 .au-steps-bar b { justify-self: end; font-size: 13.5px; font-weight: 700; color: #3d3d3a; white-space: nowrap; }
 
-/* 八行总表 */
-.au-table thead th:nth-child(1) { width: 20%; }
-.au-table thead th:nth-child(2) { width: 15%; }
-.au-table thead th:nth-child(3) { width: 12%; }
-.au-table thead th:nth-child(5) { width: 205px; }
-.au-table thead th:nth-child(6) { width: 140px; }
-.au-table td, .au-table th { padding-top: 12px; padding-bottom: 12px; }
+/* 七类表（照第一屏图）：任务和怎么干、现在、上次结果、近 30 天、用谁、开关、› */
+.au-views { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 6px 0 20px; }
+.au-view { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 24px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fff; font: inherit; font-size: 17px; font-weight: 700; color: #3d3d3a; cursor: pointer; box-shadow: 0 1px 2px rgb(20 20 19 / .05), 0 6px 16px -12px rgb(20 20 19 / .3); transition: background .25s ease, color .25s ease, border-color .25s ease, transform .15s ease; }
+.au-view b { font-family: var(--mono); font-weight: 600; color: #57564f; transition: color .25s ease; }
+.au-view:hover { border-color: rgb(20 20 19 / .3); color: var(--ink); }
+.au-view:active { transform: scale(.97); }
+.au-view[aria-pressed="true"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; }
+.au-view[aria-pressed="true"] b { color: #fff; }
+.au-view:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.au-board { padding-top: 10px; }
+.au-table { table-layout: fixed; }
+.au-table thead th:nth-child(1) { width: 15%; }
+.au-table thead th:nth-child(2) { width: 22%; }
+.au-table thead th:nth-child(3) { width: 19%; }
+.au-table thead th:nth-child(4) { width: 166px; }
+.au-table thead th:nth-child(5) { width: 15%; }
+.au-table thead th:nth-child(6) { width: 196px; }
+.au-table thead th:nth-child(7) { width: 30px; }
+.au-table td, .au-table th { padding-top: 12px; padding-bottom: 12px; vertical-align: middle; }
 .au-row { cursor: pointer; }
 .au-row > * { transition: background .15s ease; }
 .au-row:hover > * { background: #f3f3ee; }
-.au-row:hover .tp-chev { color: var(--ink); }
-.au-row.is-open > * { background: var(--tp-green-soft); border-bottom-color: transparent; }
-.au-row[data-mode="off"] > :not(.au-switchcell) { color: var(--tp-gray); }
-.au-name { display: grid; gap: 2px; width: 100%; padding: 0; border: 0; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; }
-.au-name b { font-size: 16.5px; font-weight: 800; }
+.au-row[data-mode="off"] > :not(.au-switchcell):not(.au-nowcell) { color: var(--tp-gray); }
+/* 关着的那一行整行灰，里面的链接（用谁、怎么干、类名）也跟着灰，点了照样能跳；鼠标移上去恢复本色 */
+.tp .au-row[data-mode="off"] > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-gray); }
+.tp .au-row[data-mode="off"]:hover > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-green-ink); }
+.au-name { display: grid; gap: 1px; color: inherit; text-decoration: none; }
+.au-name b { font-size: 17px; font-weight: 800; }
 .au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
-.au-name .tp-chev { margin-top: 2px; color: var(--tp-green-ink); }
-.au-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
-.au-model { white-space: nowrap; }
+.au-name:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.au-name:focus-visible, .au-how:focus-visible, .au-go a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+.tp a.au-how { display: inline-block; margin-top: 2px; font-size: 13.5px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; }
+.tp a.au-how:hover { text-decoration: underline; text-underline-offset: 3px; }
+.au-now { display: grid; grid-template-columns: 12px minmax(0, 1fr); align-items: start; gap: 10px; }
+.au-now__dot { width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: #c9c7bf; }
+.au-now[data-tone="run"] .au-now__dot { background: var(--tp-green); animation: tp-breathe 1.6s ease-out infinite; }
+.au-now[data-tone="warn"] .au-now__dot { background: #f0b400; }
+.au-now p { margin: 0; }
+.au-now b { display: block; font-size: 14.5px; line-height: 21px; font-weight: 700; color: var(--ink); }
+.au-now[data-tone="warn"] b a.tp-link { color: var(--tp-amber); }
+.au-now small { display: block; margin-top: 2px; font-size: 12.5px; line-height: 18px; color: #6c6b64; }
+.au-now small a.tp-link { font-weight: 700; }
+.au-last { font-size: 14px; line-height: 21px; }
+.au-last small { display: block; margin-top: 2px; font-size: 12.5px; color: #6c6b64; }
+.au-go { text-align: right; }
+.tp .au-go a { display: inline-block; padding: 4px 2px; font-size: 22px; font-weight: 700; line-height: 1; color: #8a8981; text-decoration: none; transition: color .15s ease, transform .15s ease; }
+.au-row:hover .au-go a { color: var(--tp-green-ink); transform: translateX(3px); }
+.au-model, .tp .au-model .tp-link { white-space: normal; }
 .au-warn { color: var(--tp-amber); font-weight: 700; }
 .au-warn a.tp-link { color: var(--tp-amber); white-space: normal; }
+.tp a.tp-link.au-warn { white-space: normal; }
 .au-ok { color: var(--tp-green-ink); font-weight: 700; }
 .au-trend { display: grid; gap: 2px; justify-items: start; }
 .au-trend > span { font-size: 12.5px; color: #57564f; white-space: nowrap; }
@@ -80,18 +110,18 @@
 .au-switchcell small { display: block; min-height: 19px; margin-top: 4px; max-width: 190px; font-size: 12.5px; color: #57564f; white-space: normal; }
 .au-switchcell small[data-tone="ok"], .au-subs small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
 .au-switchcell small[data-tone="bad"], .au-subs small[data-tone="bad"] { color: var(--tp-red); }
-/* 电脑上把窗口拉窄（1400 以下）时：任务名、用谁、近 30 天、开关几栏不再死撑一行，柱图跟着栏宽缩，“暂停到…”换到开关下面，
-   把宽度让给“什么时候跑”“上次结果”，免得这两栏挤成一字一行（M902）。1440 宽和手机（按 1440 等比缩小）不受影响 */
+/* 电脑上把窗口拉窄（1400 以下）时：栏不再死撑一行，柱图跟着栏宽缩，“暂停到…”换到开关下面，免得“现在”“上次结果”挤成一字一行（M902）。
+   1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1399px) {
-  .au-table thead th:nth-child(1) { width: 14%; }
-  .au-table thead th:nth-child(2) { width: 17%; }
-  .au-table thead th:nth-child(3) { width: 10%; }
-  .au-table thead th:nth-child(5) { width: 18%; }
-  .au-table thead th:nth-child(6) { width: 96px; }
+  .au-table thead th:nth-child(4) { width: 15%; }
+  .au-table thead th:nth-child(6) { width: 110px; }
   .au-table tbody th, .au-model, .au-trend > span, .au-switchcell { white-space: normal; }
   .au-trend { justify-items: stretch; }
   .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }
   .au-pausebtn { margin: 6px 0 0; }
+  /* 成坏数后面的“几号起记”整段换到下一行，不留打头的“·”，也不把“记”字单独甩下去 */
+  .au-table .au-trend > span small { display: block; white-space: nowrap; }
+  .au-table .au-trend > span small i { display: none; }
 }
 .au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
 .au-state[data-mode="off"] { background: var(--tp-gray); }
@@ -99,6 +129,7 @@
 .au-foot { margin: 12px 0 0; }
 .au-sched { margin: 18px 0 0; }
 .au-sched .au-recent small { margin-left: 8px; font-size: 12.5px; color: #6c6b64; }
+.au-sched .au-recent small.au-wake { display: block; margin: 2px 0 0 90px; }
 
 /* 一类的机制 */
 .au-mechrow > td { padding: 0 !important; background: #fbfbf9; }
@@ -125,6 +156,11 @@
 .au-stat p { margin: 0; font-size: 14px; color: #57564f; }
 .au-stat .tp-big { font-size: 48px; color: var(--ink); }
 .au-extra { margin: 0 0 12px; }
+/* 各家自带的定时：和上面表下那行小字隔开（.au-extra 写在后面，会把 .au-sched 的上间距盖成 0） */
+.au-extra.au-sched { margin: 18px 0 12px; }
+.au-nw { white-space: nowrap; }
+/* 一段字的最后一行不只剩一个字（复查 11-26 挑过“钟”字掉行）：这几页的字都按 pretty 折行 */
+.tp { text-wrap: pretty; }
 .au-subs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
 .au-subs .tp-pill[data-mode="off"] { color: var(--tp-gray); }
 /* 小类开关旁那行小字（正在保存…／已保存／没存上：原因），字号颜色照主开关下面那行 */
@@ -154,18 +190,12 @@
 .au-use__since .au-use__more { font-size: 13px; }
 .au-use__since span + .au-use__more { margin-left: 12px; }
 .au-trend > span small { display: inline; color: #8a8981; }
+.au-trend > span small i { font-style: normal; }
 .au-basis { max-width: 230px; margin-top: 4px; }
 p.au-basis { max-width: none; margin: -6px 0 14px; }
 
 /* ============ 上半部：照 AI 对话页的用法（本人 11-24 01:36 FEDQ1 选 A） ============ */
-/* 一排分类按钮：全部 + 八类，后面跟着这一类在上半部有几张卡；摘一句只写今天几句 */
-.au-cats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 2px 0 22px; }
-.au-cat { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border: 1px solid var(--tp-line); border-radius: 999px; background: #fff; font: inherit; font-size: 14px; font-weight: 600; color: #3d3d3a; cursor: pointer; box-shadow: 0 1px 2px rgb(20 20 19 / .05); transition: background .2s ease, color .2s ease, border-color .2s ease; }
-.au-cat b { font-family: var(--mono); font-weight: 600; color: #6c6b64; transition: color .2s ease; }
-.au-cat:hover { border-color: rgb(20 20 19 / .3); color: var(--ink); }
-.au-cat[aria-pressed="true"] { background: var(--tp-green); border-color: var(--tp-green); color: #fff; }
-.au-cat[aria-pressed="true"] b { color: #fff; }
-.au-cat:focus-visible, .au-chip button:focus-visible, .au-older__toggle:focus-visible, .au-day:focus-visible, .au-sec__back:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.au-chip button:focus-visible, .au-older__toggle:focus-visible, .au-day:focus-visible, .au-sec__back:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .au-chip { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 6px 0 12px; border-radius: 999px; background: var(--tp-green-soft); font-size: 13.5px; font-weight: 700; color: var(--tp-green-ink); }
 .au-chip button { width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; font: inherit; font-size: 15px; line-height: 22px; color: inherit; cursor: pointer; }
 .au-chip button:hover { background: rgb(0 166 80 / .16); }
@@ -190,6 +220,7 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .au-card__title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
 .au-card__outs { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 4px 0 0; font-size: 14px; line-height: 21px; }
 .au-card__outs > span { color: #3d3d3a; }
+.tp .au-card__outs .tp-link { min-width: 0; white-space: normal; }
 .au-card__meta { margin: 4px 0 0; font-size: 14px; line-height: 21px; color: #57564f; }
 /* 总表“AI 约好的事”那行“今天做完 1 件，用了 12 分钟”：每一截整块换行，不把“钟”单独甩到下一行 */
 .au-nobr { white-space: nowrap; }
@@ -202,6 +233,9 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .tp a.au-card__go { display: inline-flex; align-items: center; gap: 4px; padding: 6px 4px 6px 12px; font-size: 15px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
 .tp a.au-card__go:hover { text-decoration: underline; text-underline-offset: 3px; }
 .au-capped { margin: -10px 0 16px 2px; }
+.au-roundsnote { margin: -4px 0 12px 2px; }
+.au-kindsnote { margin: -4px 0 12px 2px; }
+.au-kindsnote + .au-roundsnote { margin-top: -8px; }
 
 /* 更早的 · 近 30 天按天看 */
 .au-older { margin: 4px 0 30px; text-align: center; }
@@ -217,11 +251,31 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .au-day[aria-pressed="true"] { border-color: var(--tp-green); background: var(--tp-green-soft); }
 .au-day:disabled { cursor: default; opacity: .55; }
 
-/* 下半部：这周做成了多少、八类总表 */
-.au-lower { margin-top: 8px; padding-top: 26px; border-top: 1px solid var(--tp-line); }
 
 /* 一类怎么干里“为什么这样做”“坏了怎么办”两块直接摊开，不做收起（本人 11-24 02:03：收起两个字被挤成竖排，建议不要收起） */
 .au-block { border: 1px solid var(--tp-hair); border-radius: 9px; background: #fafaf8; }
 .au-block__title { margin: 0; padding: 9px 14px 0; font-size: 13.5px; font-weight: 700; color: #3d3d3a; }
 /* 提示词原文仍收着（太长）。它的 summary 带 live-disclosure，躲开实况第二层通用的“展开后把 ::after 转 90 度”（那条会把“收起”转成竖排）；字也不许折行 */
 .au-more .tp-details > summary::after { flex: none; white-space: nowrap; }
+
+/* 出毛病的：按天排一长列（本人 11-24 选的 03 那种），每天一条灰底日期，下面一行一处 */
+.au-probday { margin: 0 0 18px; }
+.au-probday h3 { margin: 0 0 4px; padding: 8px 18px; border-radius: 10px; background: #efeee9; font-family: var(--black); font-size: 20px; line-height: 28px; }
+.au-probday ul { margin: 0; padding: 0; list-style: none; }
+.au-prob { display: grid; grid-template-columns: 12px 56px 150px minmax(0, 1fr) minmax(0, 220px) auto; align-items: center; gap: 0 16px; padding: 13px 18px; border-bottom: 1px solid var(--tp-hair); font-size: 15px; line-height: 22px; }
+.au-prob__dot { width: 11px; height: 11px; border-radius: 50%; background: #f0b400; }
+.au-prob time { font-family: var(--mono); font-weight: 600; }
+.au-prob__cat { padding-left: 14px; border-left: 1px solid var(--tp-line); color: #57564f; }
+.au-prob__cat a.tp-link { color: inherit; font-weight: 500; }
+.au-prob__what { font-weight: 700; }
+.au-prob__who { font-size: 14px; color: #57564f; }
+.tp a.au-prob__go { font-weight: 700; color: var(--tp-green-ink); text-decoration: none; white-space: nowrap; }
+.tp a.au-prob__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+.au-probnote { margin: 4px 0 24px 2px; }
+.au-list { min-height: 280px; }
+/* 停等条：哪几类停着（黄）、几点接上（绿） */
+.au-pause[data-tone="ok"] { background: var(--tp-green-soft); color: var(--tp-green-ink); }
+.au-more-btn { display: flex; align-items: baseline; justify-content: center; gap: 8px; width: 100%; margin: 4px 0 0; padding: 12px; border: 1px dashed var(--tp-line); border-radius: var(--tp-r); background: #fff; font: inherit; font-size: 16px; font-weight: 800; color: var(--tp-green-ink); cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.au-more-btn small { font-size: 13px; font-weight: 500; color: #6c6b64; }
+.au-more-btn:hover { border-color: var(--tp-green); background: var(--tp-green-soft); }
+.au-more-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
