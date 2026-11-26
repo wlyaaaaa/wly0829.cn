@@ -144,9 +144,10 @@
     return [`派了 ${helpers.length} 个帮手，${lead}${reasons}${summary}`, disclosure];
   }
   function drawLog() {
-    const list = V.rounds(), batch = R.batch('log', list.length, { first: LOG_FIRST, step: 20, unit: '轮' });
+    const { rows: list, hasRoundList } = V.rounds();
+    const batch = R.batch('log', list.length, { first: LOG_FIRST, step: 20, unit: '轮' });
     const tally = list.length > batch.shown ? `${batch.open ? '已显示' : '最近'} ${batch.shown} 轮 · ` : '';
-    U.html($('log-part'), list.length ? `${tally}共 ${list.length} 轮` : '');
+    U.html($('log-part'), hasRoundList && list.length ? `${tally}共 ${list.length} 轮` : '');
     const opened = new Set([...$('log').querySelectorAll('.route-round__helpers[open]')].map(el => el.closest('li').dataset.key));
     U.list($('log'), list.slice(0, batch.shown).map(r => {
       const reply = r.reply ? r.reply + (r.replyAt ? `（${esc(r.replyAt)}）` : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';

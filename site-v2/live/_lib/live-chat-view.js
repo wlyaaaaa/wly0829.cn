@@ -175,7 +175,7 @@
         const round = explicit || (h.turn_id == null && byTime(h.started_at || h.dispatched_at));
         if (round && (explicit || !Array.isArray(round.record.helper_ids))) round.helpers.push(h);
       }
-      return list.map(r => {
+      const rows = list.map(r => {
         const origin = U.chatFields.originLabel({ ...chat, source: r.record.source, dispatched_by: r.record.dispatched_by });
         const provider = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' }[chat.software || chat.id?.split(':')[0]];
         const start = r.record.source === 'manual' && !r.record.dispatched_by && provider ? `本人问 ${provider}` : origin;
@@ -186,6 +186,7 @@
           title: [Number.isInteger(r.number) && r.number > 0 ? `第 ${r.number} 轮` : r.record.word || '本轮开始', start === '来源没认出' ? '' : start].filter(Boolean).join(' · '),
           replyAt: validTime(replyAt) ? U.time(replyAt) : '' };
       });
+      return { rows, hasRoundList: typed };
     }
     function roundHelper(h) {
       const { label, activity, unknown } = helperStatus(h), kind = U.chatFields.statusKind(h);
