@@ -798,6 +798,7 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
   font-size: 12.5px;
   letter-spacing: .05em;
 }
+.copy.is-failed { color: #ad6248; }
 .copy.is-done {
   background: var(--ink);
   color: #fff;

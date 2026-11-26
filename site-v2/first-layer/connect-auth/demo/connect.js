@@ -79,7 +79,8 @@
     }
   }
 
-  function copyBtn(text) {
+  // 浏览器不让写剪贴板：按钮上照实说没复制上，并把那段原文选中，按 Ctrl+C 就能手动复制
+  function copyBtn(text, source) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'btn copy';
@@ -87,14 +88,15 @@
     b.textContent = '复制';
     b.addEventListener('click', async () => {
       const ok = await writeClip(text);
-      if (!ok) return;
       clearTimeout(b._t);
-      b.textContent = '已复制';
-      b.classList.add('is-done');
+      b.textContent = ok ? '已复制' : '没复制上，请手动复制';
+      b.classList.toggle('is-done', ok);
+      b.classList.toggle('is-failed', !ok);
+      if (!ok && source) getSelection()?.selectAllChildren(source);
       b._t = setTimeout(() => {
         b.textContent = '复制';
-        b.classList.remove('is-done');
-      }, 1600);
+        b.classList.remove('is-done', 'is-failed');
+      }, ok ? 1600 : 4000);
     });
     return b;
   }
@@ -122,9 +124,9 @@
     if (plan.rows) {
       const box = el('div', 'rows');
       for (const [k, v, copy, word] of plan.rows) {
-        const row = el('div', 'row');
-        row.append(el('span', 'row__k', k), el('span', word ? 'row__v row__v--word' : 'row__v', v));
-        row.append(copy ? copyBtn(v) : el('span'));
+        const row = el('div', 'row'), value = el('span', word ? 'row__v row__v--word' : 'row__v', v);
+        row.append(el('span', 'row__k', k), value);
+        row.append(copy ? copyBtn(v, value) : el('span'));
         box.append(row);
       }
       out.push(box);
@@ -132,8 +134,8 @@
     if (plan.cmds) {
       const box = el('div', 'cmds');
       for (const c of plan.cmds) {
-        const row = el('div', 'cmd');
-        row.append(el('pre', 'cmd__v', c), copyBtn(c));
+        const row = el('div', 'cmd'), value = el('pre', 'cmd__v', c);
+        row.append(value, copyBtn(c, value));
         box.append(row);
       }
       out.push(box);
