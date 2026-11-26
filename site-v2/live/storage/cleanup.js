@@ -52,12 +52,13 @@
     const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: 0, runs: 0 }; });
     for (const r of week) { const day = days.find(x => x.key === K.dayKey(at(r.finished_at))); if (day) { day.bytes += num(r.freed_bytes) || 0; day.runs++; } }
     const errors = week.filter(r => r.result === 'error'), deleted = week.reduce((n, r) => n + (num(r.protected_deleted) || 0), 0);
-    // 按需更新快核（M928）核法：E:/PCConfig/tools/Register-AutomaticCleanupTask.ps1 的 TimeTrigger.Repetition.Interval，现 PT6H（每 6 小时）；变了改这处和下面 render 的缺数后备值
-    const hours = num(c.interval_hours) || 6;
+    // 按需更新快核（M928）：对照任务触发器的 Repetition.Interval 和接口 cleanup.interval_hours。
+    const hours = c.interval_hours > 0 ? num(c.interval_hours) : null;
+    const running = runs[0]?.result === 'running' ? runs[0] : null;
     let next = at(c.next_run_at), estimated = false;
-    if (!next && last) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
-    const overdue = !!last && now - at(last.finished_at) > lateHours(hours) * 3600000;
-    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running: runs[0]?.result === 'running' ? runs[0] : null };
+    if (!next && last && hours && !running) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
+    const overdue = !!(!running && hours && last && now - at(last.finished_at) > lateHours(hours) * 3600000);
+    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running };
   }
 
   // 按需更新快核（M928）核法：“没按时跑”由下面 lateHours 计算，现两轮间隔再加 1 小时（间隔取 cleanup.interval_hours，现 6 小时，合计 13 小时）；变了核对“下次”那格
@@ -79,6 +80,7 @@
     if (g.last?.result === 'error') return '<span class="cl-pill" data-tone="amber"><i></i>上一轮出错</span>';
     if (g.overdue) return '<span class="cl-pill" data-tone="amber"><i></i>没按时跑</span>';
     if (g.running) return '<span class="cl-pill" data-tone="green"><i></i>正在跑</span>';
+    if (!g.hours) return `<span class="cl-pill" data-tone="gray"><i></i>上次 ${esc(hm(g.last.finished_at))} 跑完</span>`;
     return '<span class="cl-pill" data-tone="green"><i></i>运行正常</span>';
   }
 
@@ -206,7 +208,7 @@
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
-      g.last && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
+      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     // 按需更新快核（M928）核法：E:/PCConfig/tools/auto_cleanup_conversations.py 的 preserve_quotes，现 Codex、Claude 清前确认原话已存，缺时补存并回读，通过才继续；变了改下方提示
     const kept = num(g.last?.skipped_unsaved_conversations);
@@ -375,10 +377,10 @@
     if (!card) return;
     const g = digest(d);
     K.put(document.getElementById('cleanup-pill'), pill(g));
-    const hours = g?.hours || 6;
+    const schedule = g?.hours ? `每 ${g.hours} 小时一轮 · ` : '';
     // 按需更新快核（M928）核法：E:/PCConfig/registries/automatic_cleanup.json 的 rules[].days、protection、conversation_cleanup.main_body_days，现常见网站和 AI 临时目录 1 天、主对话正文 45 天。
     // 到期的候选过保护检查才直接删，执行方式见 E:/PCConfig/tools/automatic_cleanup.py 的 process_candidate 和 remove_tree；变了改这句后备说明
-    const note = K.field(g?.c?.summary, '自动清理说明', viewer) || `每 ${hours} 小时一轮 · 到期的缓存、临时目录、施工产物和旧 AI 对话直接永久删`;
+    const note = K.field(g?.c?.summary, '自动清理说明', viewer) || schedule + '到期的缓存、临时目录、施工产物和旧 AI 对话直接永久删';
     K.put(document.getElementById('cleanup-note'), esc([note, withheld].filter(Boolean).join(' · ')));
     K.put(document.getElementById('cleanup-total'), total(g, viewer));
     K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
