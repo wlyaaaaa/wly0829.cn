@@ -272,6 +272,12 @@
     const key = say === d.summary ? 'summary' : say === reply ? ['reply', 'latest_reply'] : say === d.doing ? 'doing' : say === d.progress ? 'progress' : 'text';
     return { say: body, latest: chatCell(body, what, d), tag: say == null ? '' : fieldTag(key, what, say) };
   }
+  // 思考摘要一行几段用“ · ”接的（后台把英文原句和中文译文接成“原句 · 译文”）：每段包成一块，短的不从中间拆、要折在“ · ”处折，
+  // 一段本身比一行还长的照常在块里折、不伸出去（主控 11-26 10:43，同首页时长不拆、账本那行的办法；样式在 index.html）。只拆字的部分，后面挂的签留在最后一块
+  function thoughtSegments(html) {
+    const cut = html.indexOf('<'), words = cut < 0 ? html : html.slice(0, cut), rest = cut < 0 ? '' : html.slice(cut), parts = words.split(' · ');
+    return parts.length < 2 ? html : parts.map((part, i) => `<span class="route-think__seg">${part}${i < parts.length - 1 ? ' ·' : rest}</span>`).join(' ');
+  }
   function drawThought() {
     const node = $('thinking'), box = $('think-box');
     if (!node || !box) return;
@@ -286,7 +292,7 @@
     // M684：思考摘要访客那边不一样的，在这块标题后挂签（整场藏着的只在页头挂）
     const thinkHead = box.querySelector('.route-h__text');
     if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
-    U.html(node, thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thought : '');
+    U.html(node, thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thoughtSegments(thought) : '');
   }
   // 本人版给全文：页头那句、思考摘要、过程记录和帮手的每一行都不收、不截；访客版照旧一句收起
   function fullText(on) {

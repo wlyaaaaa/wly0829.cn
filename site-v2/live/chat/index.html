@@ -29,6 +29,8 @@
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* 思考摘要“原句 · 译文”每段一块（page.js thoughtSegments）：放得下整段挪到下一行，比一行还长的在块里照常折 */
+.route-think__seg { display: inline-block; max-width: 100%; }
 /* 对话来自某一轮自动任务时，头卡里写“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，样子跟等你的事一样 */
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
