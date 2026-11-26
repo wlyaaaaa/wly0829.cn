@@ -56,10 +56,11 @@
 .lg-item__text .lg-title { font-size: 15px; line-height: 22px; margin-right: 8px; }
 .lg-item__text .tp-tag { vertical-align: 1px; }
 .lg-item__text p { margin: 3px 0 0; font-size: 13px; line-height: 20px; color: #6c6b64; }
-/* 第二行几段：只在段与段之间折行，短的几段整段走；每段前头的“·”折到行首时落在左边裁掉的那一截里，看不见 */
+/* 第二行几段：只在段与段之间折行，短的几段整段走。每段左边让开 1.3em、中间画一个点，整行左移这一截再裁掉：折到行首那段的点落在裁掉的那一截里，看不见。
+   box-decoration-break: clone 让一段自己折下去的每一行也先让开这一截，开头的字不被裁（主控 11-26 11:17） */
 .lg-item__text p { overflow-x: clip; }
 .lg-line { display: block; margin-left: -1.3em; }
-.lg-dot { display: inline-block; width: 1.3em; text-align: center; font-style: normal; }
+.lg-seg { padding-left: 1.3em; -webkit-box-decoration-break: clone; box-decoration-break: clone; background: radial-gradient(circle, currentColor 1.1px, transparent 1.5px) 0 50% / 1.3em 100% no-repeat; }
 .lg-seg.is-keep { white-space: nowrap; }
 .lg-line #live-privacy-note { margin-left: 1.3em; }   /* 点开签的说明在这一行里另起一块，躲开左边裁掉的那一截 */
 .lg-running { background: var(--tp-green) !important; color: #fff; text-decoration: none; }

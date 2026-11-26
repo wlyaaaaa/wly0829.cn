@@ -118,11 +118,11 @@
       : nx ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`) : '';
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
     // 这一行放不下时只在“ · ”处折，段内不拆（“最多 3 次”“下次 12:35 看”“12-02 10:00”整段走）：谁记的、几点看、第几次这几段短的不断行，
-    // 后台原句（为什么放着、在等什么、到点还没了结）太长照常折。“·”打在每段前头、和这段字连着（&#8288; 不让它们分开），
-    // 折到下一行开头的那个“·”被裁掉（board.css 的 .lg-line），行尾不悬一个“·”、行首也不冒一个（主控 11-26 10:27）。
-    // 段与段之间用零宽空格（能在这里折、不占宽），“·”左右只靠点那一格居中留白，两边一样宽（主控 11-26 11:02：原来左边多一个空格）
+    // 后台原句（为什么放着、在等什么、到点还没了结）太长照常折，接下去那行开头的字不被裁。“·”画在每段左边让开的那一截里（board.css 的 .lg-seg），
+    // 折到下一行开头的那个“·”被裁掉，行尾不悬一个“·”、行首也不冒一个（主控 11-26 10:27、11:17）。
+    // 段与段之间用零宽空格（能在这里折、不占宽），“·”左右一样宽（主控 11-26 11:02：原来左边多一个空格）
     const segs = [[recorder(it), true], [why, false], [time, !late], [count, true]].map(([s, keep]) => [s.replace(/。$/, ''), keep]).filter(([s]) => s);
-    return `<span class="lg-line">${segs.map(([s, keep]) => `<span class="lg-seg${keep ? ' is-keep' : ''}"><i class="lg-dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join('&#8203;')}</span>`;
+    return `<span class="lg-line">${segs.map(([s, keep]) => `<span class="lg-seg${keep ? ' is-keep' : ''}">${s}</span>`).join('&#8203;')}</span>`;
   }
   function track(d) {
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
