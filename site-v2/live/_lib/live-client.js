@@ -487,7 +487,8 @@
     // shownAt／meta.at 是手上最后一份是几点的
     const failingSince = !publicPaused && failingStamp(e);
     return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead, failingSince,
-      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn, publicationRevoked: !publicPaused && !!e.publicationRevoked }, link, viewer, now,
+      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn,
+      publicationRevoked: !publicPaused && e.status === 503 && !!e.publicationRevoked }, link, viewer, now,
       shownAt: resourceAt, failingSince, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
       pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
@@ -639,7 +640,7 @@
     if (status === 403) {
       audience(e, { kind: 'public', device: 'invalid' });
     }
-    e.error = status === 403 ? '这部分只对本人开放' : body?.error === 'live_publication_revoked' ? '这块的公开判定正在更新，稍后自动补上'
+    e.error = status === 403 ? '这部分只对本人开放' : e.publicationRevoked ? '这块正在更新访客版，稍后自动补上。'
       : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
     markOld(e);
     // 明确关机连翻页读口也可证实，普通翻页失败仍只管自己这一块。

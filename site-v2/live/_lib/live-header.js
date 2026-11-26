@@ -3,7 +3,7 @@
   const PROBE_MS = 30000;
   const ready = (data, meta) => data != null && meta.status >= 200 && meta.status < 400;
   const unsupported = status => [400, 404, 405, 422, 501].includes(status);
-  function watch(query, callbacks) {
+  function watch(query, callbacks, { keepRevoked = false } = {}) {
     const { Live } = window;
     let header, full, timer, stopped = false;
     function schedule() {
@@ -17,6 +17,11 @@
         link(s) {
           if (stopped || switching) return;
           const { status } = s.meta;
+          if (keepRevoked && s.meta.publicationRevoked) {
+            if (full) { full.stop(); full = null; }
+            callbacks.link?.(s);
+            return;
+          }
           const denied = s.publicPaused || status === 401 || status === 403;
           if (full && (denied || ready(s.data, s.meta))) {
             full.stop();

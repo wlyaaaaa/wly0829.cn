@@ -343,7 +343,7 @@
   const reads = Object.fromEntries(HOME_IDS.map((id) => {
     const body = cards[id].querySelector('.card__body');
     if (id === 'ledger' || id === 'projects') body.classList.add('fog-bare');   // 没灯的卡：雾里也不摆灯
-    return [id, U.reading(body, { ghost: U.ghost.card(LINES[id] || 2), name: NAME[id], publicName: id === 'needs' ? '等本人的事' : '', slow: id === 'needs' })];
+    return [id, U.reading(body, { ghost: U.ghost.card(LINES[id] || 2), name: NAME[id], publicName: id === 'needs' ? U.addressed(NAME[id], 'public') : '', slow: id === 'needs' })];
   }));
 
   // 灯由后端给定；行灯使用该行自己的状态。
@@ -665,7 +665,7 @@
   function closedNoticeRow({ id, item, closed }) {
     const outcome = closed?.text || CLOSED[closed?.kind];
     if (!outcome || !Number.isFinite(Date.parse(closed.at))) return null;
-    const label = U.fieldHtml(typeof outcome === 'string' ? addressed(outcome) : U.itemClosingText(outcome, viewer), { name: '了结情况', kind: viewer });
+    const label = U.fieldHtml(typeof outcome === 'string' ? addressed(outcome) : outcome, { name: '了结情况', kind: viewer });
     const link = title({ ...item, id: item?.id || id }, item?.text || '查看原事项', 'items');
     return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }

@@ -776,14 +776,10 @@
     .replace(/<span class="live-unit">((?:\d{4}-)?\d{1,2}-\d{2})<\/span>( +)<span class="live-unit">(\d{1,2}:\d{2}(?::\d{2})?)<\/span>/g, '$1$2$3')
     .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|上午|本人选|核对|问情况|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
       (value, tag) => tag || `<span class="live-unit">${value}</span>`);
-  // 老记录可能同时保留界面生成的结局和正文；这里只按受众换结局的称呼。
-  function itemClosingText(value, kind) {
-    if (kind !== 'public') return value;
-    if (typeof value === 'string') return value.replace(/^你(?=办完了|说不办了)/u, '本人');
-    if (!value || typeof value !== 'object') return value;
-    const key = ['value', 'text', 'label'].find(key => value[key] != null);
-    return key ? { ...value, [key]: itemClosingText(value[key], kind) } : value;
-  }
+  // 固定模板按受众取字，正文和引用走回包字段。
+  const addressed = (text, kind = viewer) => kind === 'owner' ? text : text.replaceAll('你', '本人');
+  const publicationNote = (name, meta) => meta?.publicationRevoked ? `${name}正在更新访客版，稍后自动补上。` : '';
+  const itemTitleField = item => item.text && typeof item.text === 'object' ? { ...item, ...item.text } : item.text == null && item.title != null ? { ...item, text: item.title } : item;
   function itemReceipt(head = '正在保存…', detail = '', trigger = null) {
     const lane = document.getElementById('item-action-receipts');
     const ownSpace = lane && document.body.matches('.page--items, .page--live:has(#needs)');
@@ -1906,5 +1902,5 @@
       unavailable_since: row.unavailable_since || expired,
       last_online: row.last_online || (row.state === 'online' && age >= 0 ? row.observed_at : null) };
   }
-  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemClosingText, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();
