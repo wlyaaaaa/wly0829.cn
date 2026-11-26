@@ -58,7 +58,7 @@
       return { ...s, label, hue, ...(graded ? { min_ms: min, max_ms: max } : {}) };
     }) };
   }
-  const board = V.board(document.getElementById('board'), { key: 'smooth', sync, onCount(c) {
+  const board = V.board(document.getElementById('board'), { key: 'smooth', sync, edgeDotLines: ['current'], onCount(c) {
     LiveDetail.count(c);
     const hero = document.getElementById('hero');
     const count = hero.querySelector('[data-part="count"]'), n = data?.attention_count ?? data?.attention_groups;
@@ -288,7 +288,11 @@
     const usage = data?.usage, active = coveredSeconds(usage, s => s.id === 'active' || /^(?:在用|正常使用|正常工作)$/.test(U.sp(s.label)));
     const desktop = desktopFrame(data), desktopRate = desktop === 'desktop_duplication_frame';
     const desktopStill = desktop === 'desktop_duplication_still';
-    const fpsCutoff = (desktopRate || desktopStill && data.fps.series?.some(measured)) && cutoff(data.fps.at);
+    let fpsCutoff = desktopRate && cutoff(data.fps.at);
+    if (desktopStill) {
+      const at = Math.max(...(data.fps.series || []).map(line => C.sum(line)?.lastAt ?? -Infinity));
+      if (Number.isFinite(at)) fpsCutoff = cutoff(new Date(at * 1000).toISOString());
+    }
     const fpsLine = desktopRate ? '桌面实测帧率' : desktopStill ? '本次采集正常，画面没变' : '';
     const fpsTime = fpsCutoff && `${desktopStill ? '历史帧率截至' : '截至'} ${fpsCutoff}`;
     const out = [
