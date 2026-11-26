@@ -107,7 +107,8 @@
     function helperRow(d, index) {
       const key = d.id || `helper-${index}`;
       if (d.q === 'warming') return { key, warming: true };
-      const { name, detail } = helperWords(d), state = chatState(d);
+      const { name, detail } = helperWords(d), label = chatState(d);
+      const state = d.state === 'done' && Number.isFinite(Date.parse(d.at)) && [STATE.unknown, STATE.ended_unknown].includes(label) ? STATE.done : label;
       const model = who(d), head = name || U.fieldHtml(model || (!state ? '一个帮手' : ''));
       const activity = activityOf(d);
       const canOpen = !contentLocked(chat, viewer) && !contentLocked(d, viewer);
