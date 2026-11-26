@@ -457,9 +457,13 @@
     // 钩子机制和运行参数以回包的 when、what 等字段为准。
     const host = T.hostOf(hook.host);
     const compact = keyOf(hook) === 'PreCompact' && host ? compactConfig(d, host) : null;
-    const auto = compact?.point ? `现在对话装到${compact.point}就自动压缩`
-      : compact?.percent ? `现在${compact.percent}就自动压缩，折合多少词元没读到` : '';
-    const facts = [['什么时候跑', [F(hook.when), auto].filter(Boolean).join(' · ')], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
+    // 压缩前那条：后台的 when 只写“宿主开始压缩之前”，这里照程序实际做法写全：自动压缩的线（读到词元数才写 K）、也能手动压缩、开压前最多等它 45 秒（看图 02）。
+    // 按需更新快核（M928）：45 秒是 Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现都是 45；
+    // 两处 PreCompact 都没写 matcher，手动和自动压缩都会跑。变了改这句。
+    const point = compact?.point ? `${/^\d/.test(compact.point) ? ' ' : ''}${compact.point}` : '';
+    const line = point ? `现在对话装到${point}就自动压缩` : compact?.percent ? `现在${compact.percent} 就自动压缩，折合多少词元没读到` : '自动压缩的线没读到';
+    const runsAt = compact ? `${line}；${T.you(viewer)}也可以手动压缩。不论哪种，开始压缩前先跑这条，最多等 45 秒；什么时候压缩由 ${esc(host.name)} 的设置决定，这条不管。` : F(hook.when);
+    const facts = [['什么时候跑', runsAt], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
       known(m.blocked) ? `拦 ${int(m.blocked)} 次` : !known(m.errors) && '拦和错还没采上', known(m.errors) && `出错 ${int(m.errors)} 次`,

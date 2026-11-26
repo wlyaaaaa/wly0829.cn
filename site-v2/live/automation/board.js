@@ -668,23 +668,29 @@
     const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     // 上次跑：定时唤醒的那一场对话（后台 last_wake：时刻、对话标题、对话链接），点回原对话（M921“跑完能找回原对话”）；
     // 访客看不到的那场后台给标题“仅本人可见”、链接为空，照写
-    const wake = r => {
+    // 同一行左边已经写了这个时刻（没认出周期时左边写的就是上次跑的时刻），这里只留对话链接，不把同一时刻再写一遍（看图 24）
+    const wake = (r, shown = '') => {
       const w = r.last_wake;
       if (!w || !T.stamp(w.at)) return '';
-      const title = F(w.chat_title, '那一场对话');
-      return `<small class="au-wake">上次跑：${esc(when(w.at))}${title ? ` · ${T.path(w.chat_href) ? link(w.chat_href, `${title} ›`) : title}` : ''}</small>`;
+      const title = F(w.chat_title, '那一场对话'), at = when(w.at);
+      const chat = title ? (T.path(w.chat_href) ? link(w.chat_href, `${title} ›`) : title) : '';
+      if (at === shown) return chat ? `<small class="au-wake">上次跑的对话：${chat}</small>` : '';
+      return `<small class="au-wake">上次跑：${esc(at)}${chat ? ` · ${chat}` : ''}</small>`;
     };
     const item = r => {
       const when1 = plan(r);
       const name = `<span class="au-schedule-name">${link(r.href, label(r))}</span>`;
-      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${name}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
+      const left = when(r.next_at || r.at);
+      if (!when1) return `<li><b>${esc(left)}</b>${name}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}</small>${wake(r, left)}</li>`;
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
       // 不然“每周二 00:00”后面跟一句“预计 11 月 30 日 23:55”（早 5 分钟跨过半夜成了周一）读着像矛盾（复查 11-26）
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
       // 差几分钟按显示出来的两个钟点（都截到分钟）相减，不拿带秒的差值四舍五入：预计 23:55:54、原定 00:00 写“早 5 分钟”，和后面写的 23:55 对得上
       const off = est != null && nominal != null ? Math.floor(est / 60000) - Math.floor(nominal / 60000) : 0;
-      const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
-      return `<li><b>${keepBj(esc(when1))}</b>${name}<small>${[F(r.state_text), keepBj(esc(late))].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
+      // 预计的日期和钟点整块不折行：名字一长，这一栏变窄，“11 月”会和“30 日”拆成两行（看图 24）
+      const estAt = `<span class="au-nobr">${esc(zhAt(r.next_estimated_at))}</span>`;
+      const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${estAt}` : `这次预计 ${estAt}`;
+      return `<li><b>${keepBj(esc(when1))}</b>${name}<small>${[F(r.state_text), late].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍
     const scope = {};

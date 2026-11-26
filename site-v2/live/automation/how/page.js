@@ -80,7 +80,7 @@
         <p class="ah-pills">${model ? `<span class="ah-pill">${model}</span>` : ''}<span class="ah-pill" data-mode="${pill[0]}">${esc(pill[1])}</span></p></div>
       <div class="ah-grid"><div class="ah-main">
         ${card('什么时候开始', `<p>${esc(start)}</p>`)}
-        ${steps.length ? card('一轮怎么走', flow) : ''}
+        ${steps.length ? card(off ? '打开后一轮这样走' : '一轮怎么走', flow) : ''}
         ${card('交给 AI 的话', prompt, ' id="words"')}
         ${why ? card('为什么这样设计', `<div class="ah-why">${why}</div>`) : ''}
         ${g.failure ? card('坏了会怎样', `<p>${esc([failurePolicy(c.execution_policy || {}), g.failure].filter(Boolean).join(' '))}</p>`) : ''}

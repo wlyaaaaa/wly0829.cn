@@ -94,7 +94,9 @@
     if (!mine.length) return null;
     const last = T.stamp(mine[0].at), group = mine.filter(r => last - T.stamp(r.at) <= 120000).reverse();
     const text = group.map(r => plain(r.text)).filter(s => s.trim()).join('\n');
-    return text ? { at: mine[0].at, text, hooks: group.map(r => r.hook || r.event).filter(Boolean),
+    // 补了多少字：后台给了 characters 就用它，没给就数这一组原文的字（本人版就是原样补进去的那几行；访客版数的是换过说法的那份）
+    const chars = group.reduce((s, r) => s + (num(r.characters) ?? plain(r.text).length), 0);
+    return text ? { at: mine[0].at, text, chars, hooks: group.map(r => r.hook || r.event).filter(Boolean),
       triggers: [...new Set(group.map(r => TRIGGERS[r.trigger]).filter(Boolean))] } : null;
   }
   const TRIGGERS = { startup: '开对话时', resume: '恢复时', compact: '压缩后' };
@@ -350,9 +352,9 @@
   }
   function contextHtml(h) {
     const c = h.context, refill = refillText(h);
-    const what = c?.triggers?.length ? `（${c.triggers.join('、')}补的）` : '';
+    const what = c?.triggers?.length ? `（${c.triggers.join('、')}）` : '';
     return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
+      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
       : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变
@@ -377,7 +379,7 @@
   function feed(m) {
     const rows = [];
     for (const h of m.hosts) if (h.context) rows.push({ at: h.context.at, actor: h.name,
-      text: `开场时补了 ${int(h.context.text.length)} 字${h.context.hooks.length ? `（${[...new Set(h.context.hooks.map(k => HOOK_NAMES[k] || k))].join('、')}）` : ''}`,
+      text: `开场时补了 ${int(h.context.chars)} 字${h.context.hooks.length ? `（${[...new Set(h.context.hooks.map(k => HOOK_NAMES[k] || k))].join('、')}）` : ''}`,
       href: T.path('/live/agents/opening/', { family: h.id }) + '#startup', tone: 'info' });
     for (const h of m.hosts) if (h.present) rows.push({ actor: h.name, html: h.current === false ? `<em>不是当前版</em> · ${esc(h.version || '')}` : `<em>${esc(h.version || '')}</em> · ${words(h.characters)} · 只它有的 ${h.only.length} 段`,
       href: T.path('/live/agents/opening/', { family: h.id }), tone: h.current === false ? 'repair' : 'ok' });
