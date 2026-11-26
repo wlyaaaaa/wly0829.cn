@@ -22,7 +22,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/651af9cea87f0585eb04cb52434d81157f572ef3ca5858071b6412b7f6951d75/%E5%85%AC%E7%94%A8/fonts/ui-d8177ee5d7539841.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23bc4a497356f19ba42d49bee4df747e8f7589ef41cb1d509cf9f4589c23ba49/%E5%85%AC%E7%94%A8/fonts/article-aed77005f894a8b4.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ea5ee0d70fe3fa2f2a0ed6a2601f4ed7e895b0aceaa3f16e92eeb8eb62eb01ff/%E5%85%AC%E7%94%A8/fonts/article-1cec3b6fe1a37b32.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E507" data-rule-page="topic-context-sources">
+<main class="rules-page" data-rule-release="E510" data-rule-page="topic-context-sources">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="事实来源与任务上下文">事实来源与任务上下文</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span><span class="rules-public-mark__note">个别内容仅本人可见</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#事实找谁"><span class="toc-number">01</span><span class="toc-label">事实找谁</span></a></li>
@@ -207,12 +207,13 @@
 </ul>
 <p><strong>什么能删。</strong> 重复、过时或 AI 自己加的做法可以自主删改；本人仍然要的结果、禁令和授权范围，不因挪到专题、技能或项目就变成 AI 可以取消的；本人定过的纯技术做法，前提变了或有明显更好的，照约法直接改并说清改了什么；涉及取舍、花钱、删唯一数据的，带着建议请他定。施工碰到和约法打架的具体做法，按约法顺手改掉，说清改了哪句。</p>
 <p id="怎么写规矩本人定的原文原在约法"><strong>怎么写规矩（本人定的原文，原在约法）。</strong></p>
+<p><strong>先判断有没有意义、有没有必要：</strong> 加或改一句规则之前，先想清这句让我得到什么、不写会出什么事、有没有更省的办法（比如改一句现有的就够），说不出来就不写；我要求加的也一样，判断不该加就当场说清为什么，我听完还坚持的照写；给我看拟的句子时，用“有意义”“有必要”或“没意义”“没必要”把结论说出来。</p>
 <p><strong>要求加在做那件事的必经之路上，AI 走到那一步一定读得到：</strong> 我的事实记个人项目；某个项目的记那个项目；工具怎么用记技能，技能的一句话简介要写清，让 AI 进入那件事必定发现；这一代模型的毛病写结尾那段，模型清单 <code>E:\.agents\config\model-roster.json</code> 的 <code>limits</code> 记一行。不图省事加进这一页或全局规则：几乎每次都用得上、放到私人聊天、正式文书、修 bug、做视频都不带偏的才写进这一页，跨项目又没有更近必经之路的才写进全局规则；挪走会影响 AI 判断或比较重要的不挪。要加，给我看那句时说清必经之路是哪、为什么那里不够。要限制模型能力的话，写明限制哪个型号，句子放结尾那段或做那件事时读得到的地方（派活技能、程序说的话），模型清单 limits 记一行指过去；有我的原话或证据说明不限制大概率出问题、这句大概率解决得了，才写。值得写的主要是三种：模型不可能知道的事（关于我、我的电脑和工具、哪些要我点头）；我要的做法和厂商默认不一样、又能挂在一个看得见的动作上的（比如验证过就直接提交推送、代码施工按模型清单「写代码、改脚本、修 bug、排障」一行）；撤不回的事的把关。劝它想得更全、更谨慎、更独立的话不写，厂商已经在推的方向也不重复写：写了改变不了它，还占地方、留借口，这类毛病靠我当场一句话，或者换做法。写规矩写我要的结果和为什么（我定的句子留半句为什么，免得后来的 AI 改回去），界线尽量交给模型临场判断，别靠列情况、写死步骤去补（写死的总有没想到的情况）；条件、门槛、例外只写在一处，别处要提就指过去，写节名不写条号；同一句话两家读法不一样：GPT 往严了读，“别……”和门槛会被它放大，要它做的得正面写出来；Claude 往宽了读，例外和“可以”会被它放大，例外要写窄。共用的句子两种读法各过一遍，只关某一家的（那家型号自己的毛病、那家独有的机制）才只写进那家的结尾（本人 2026-11-19：没点名哪一家的要求三家都照做）；也别写成到哪都算的绝对话；也别把规矩的说法绑在哪个程序眼下怎么做上（谁出数、用哪条命令、怎么算），我话里提到程序也一样：程序随时会改，规矩只写要的结果，做法写在程序自己的说明里。写之前先读那个地方，已有同一件事的就改原句，同一件事写在几处的一起改，没有才补必要的一句。新句要和别处的规矩对得上。新句和旧句打架，一般新句优先，AI 自己裁定，别一打架就停下来等我。旧句让路是因为新句优先，不是认定旧句错；看旧句本身和它留的半句为什么就行，不用去翻它当初怎么定的。讲的是同一件事，就改掉或删掉旧句；新句是一个全面范围、旧句是其中的例外，一般带着旧句，写成新句的例外。旧句看起来也有道理、拿不准该不该让它让路，用选项问我，不依赖它的接着做。动禁令和授权范围照样先问我。我原话说清了的直接记，做完说一声；这一页和结尾那段例外，先给我看这句，我点头才上。你另加的要求、新程序、改变适用范围的，也先给我看。原话程序自动存档，不用你抄。</p>
 <p id="写进哪一层"><strong>写进哪一层：</strong></p>
 <ul>
 <li>话里提到某个项目自己的东西（这个视频、这份材料、这个网站、这个仓库），写进那个项目的 AGENTS.md 或项目文档。</li>
 <li>只讲 AI 怎么说话、怎么干活、怎么用工具和模型，不涉及哪个项目的东西，写进本仓库对应专题：改源码，随任务收尾按<a href="topic-rule-release.html">规则发布</a>发布；要改开场那一页和各家入口结尾那段的，先给本人看这句，他点头才上。</li>
-<li>拿不准就放说这句话的那个项目。放窄了，别的项目最多再犯一次、本人再说一次；放宽了，所有项目都会被误伤。同一件事在第二个项目又说到，或者本人说了“所有项目”“以后都”，挪到做那件事时一定读得到的更近的地方：工具用法进那个技能，没有更近的才进全局规则。挪完删掉项目里那条。</li>
+<li>拿不准就放说这句话的那个项目。放窄了，别的项目最多再犯一次、本人再说一次；放宽了，所有项目都会被误伤。同一件事在第二个项目又说到，或者本人说了“所有项目”“以后都”，挪到做那件事时一定读得到的更近的地方：工具用法进那个技能，没有更近的才进全局规则。挪完删掉项目里那条。对 AI 做的东西说的审美上的话不往外挪，照约法审美那句办。</li>
 </ul>
 <p><strong>出了错修根因，不记错误。</strong> 出了错默认查清根因并修掉，本人说“只需要快速恢复”这类话时才只做恢复；向本人提修复办法时先说是根治还是缓解，缓解要说为什么值得先做。本人的纠正和抱怨（“怎么又出问题了”）、具体出了什么错，都不另外记录，原话存档里有。防再犯先分清是下面哪一类，按那一类办，不是越往程序里修越好：</p>
 <ul>
@@ -266,8 +267,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E507</dd></div>
-        <div><dt>发布</dt><dd>2026-11-25 22:35 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E510</dd></div>
+        <div><dt>发布</dt><dd>2026-11-26 05:38 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -281,7 +282,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 7,531 字<br>事实来源与任务上下文 7,248 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 7,897 字<br>事实来源与任务上下文 7,396 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
       </dl>
     </aside>
