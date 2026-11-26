@@ -63,9 +63,9 @@
 .su-pill:hover { background: rgb(255 255 255 / .85); }
 .su-pill[disabled] { cursor: default; opacity: .7; }
 
-/* 其余三组：一组一条，点开看这组的表 */
+/* 其余三组 */
 .su-groups { display: grid; gap: 10px; margin-top: 20px; }
-.su-group { border: 1px solid rgb(95 103 96 / .13); border-radius: 14px; background: rgb(255 255 255 / .46); }
+.su-group { scroll-margin-top: 85px; border: 1px solid rgb(95 103 96 / .13); border-radius: 14px; background: rgb(255 255 255 / .46); }
 .su-group.is-open { background: rgb(255 255 255 / .58); }
 .su-bar { display: flex; align-items: baseline; gap: 6px; width: 100%; min-height: 50px; padding: 13px 20px; border: 0; border-radius: 14px; background: transparent; font: inherit; text-align: left; color: var(--ink); cursor: pointer; }
 .su-bar:hover { background: rgb(255 255 255 / .5); }
@@ -73,7 +73,6 @@
 .su-bar b { font-size: 17.5px; font-weight: 700; letter-spacing: .02em; }
 .su-bar__n { font-size: 16px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .su-bar__state { margin-left: auto; font-size: 15px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
-.su-bar__state .su-warn { color: #e07800; }
 .su-bar__state .su-bad { color: #c8261d; }
 .su-bar__chev { display: inline-block; margin-left: 8px; color: var(--muted); transition: rotate calc(200ms * var(--sp)) ease; }
 .su-bar[aria-expanded="true"] .su-bar__chev { rotate: 90deg; }
@@ -82,11 +81,18 @@
 .su-bar--static:hover { background: transparent; }
 .su-group .su-list { padding: 0 6px 6px; }
 /* “另有 N 项设了启用，这次开机没见它启动……点开看名单”那一行和点开后的名单 */
-.su-unc .more { height: auto; min-height: 30px; padding: 4px 10px; font-size: 15px; line-height: 22px; text-align: left; }
-.su-group .su-unc { margin: 6px 8px 4px; }
-.su-unc__list { margin: 0 0 14px; padding-bottom: 6px; border-bottom: 1px solid rgb(95 103 96 / .14); }
+.su-group .su-foot.su-unc { margin: 2px 14px 8px 26px; }
+.su-unc .more { height: auto; gap: 10px; padding: 0; background: transparent; font-size: 15px; line-height: 22px; text-align: left; }
+.su-unc .su-pill { display: inline-flex; align-items: center; border-radius: 999px; white-space: nowrap; }
+.su-unc .more:hover .su-pill { background: rgb(255 255 255 / .85); }
+.su-unc .more[aria-expanded="true"] .more__chev,
+[data-group-less] .more__chev { rotate: -90deg; }
+.su-unc__list { margin: 0 14px 16px; padding: 8px 0; border-radius: 8px; background: rgb(228 230 248 / .72); }
 .su-group .fold > div { padding: 0 6px 6px; }
 .su-group .su-cols { margin-top: 2px; }
+.su-group :is(.su-cols, .su-row) { grid-template-columns: minmax(0, 364fr) minmax(0, 247fr) minmax(0, 120fr) minmax(0, 234fr); }
+.su-unc__list :is(.su-cols, .su-row) { grid-template-columns: minmax(0, 344fr) minmax(0, 330fr) minmax(0, 140fr); }
+.su-group .su-row .su-name { overflow-wrap: break-word; text-wrap: pretty; }
 .su-group .su-row:last-of-type { border-bottom: 0; }
 .su-group .su-foot { margin: 8px 8px 10px; }
 
