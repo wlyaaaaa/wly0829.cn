@@ -316,7 +316,9 @@
     const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
     if (['loading', 'missing'].includes(own.state)) fill('changes', [], rangeWord('changes', range, own.state));
     else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : quiet);
-    $('next').hidden = !!kept || !own.next;
+    // 读到的项目组都露完了才出“更多变化 ›”接着读（和成品那块“更多成品 ›”一样）
+    const groupsLeft = !$('changes-more').hidden && $('changes-more').getAttribute('aria-expanded') !== 'true';
+    $('next').hidden = !!kept || !own.next || groupsLeft;
     // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
     const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
       ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
@@ -681,7 +683,7 @@
         const cursor = own.next, source = changeAt(own.data), s = await window.Live.get('projects/changes', { range, cursor });
         if (cursor !== own.next || ranged.changes[range] !== own) return;
         if (s.data?.items && s.data.range === range && source === changeAt(s.data) && s.data.next !== cursor) {
-          own.rows = [...new Map([...own.rows, ...s.data.items].map(it => [it.id, it])).values()]; own.next = s.data.next;
+          own.rows = [...new Map([...own.rows, ...s.data.items].map(it => [it.id, it])).values()]; own.next = s.data.next; groupsShown += GROUPS.more;   // 新读到的组接着露一批
           if (pick.changes === range) U.anchor(renderChanges);
         } else { changesNote.hidden = false; U.html(changesNote, '下一页暂时读不到，已读到的留在这里。'); }
         return;
@@ -689,7 +691,7 @@
       const cursor = next, source = changeAt(changes), s = await window.Live.get('projects/changes', { cursor });
       if (cursor !== next || source !== changeAt(changes)) return;
       if (s.data?.items && (s.meta.viewer?.kind || 'public') === changeViewer && source === changeAt(s.data) && s.data.next !== cursor) {
-        U.anchor(() => { changeRows = [...new Map([...changeRows, ...s.data.items].map(it => [it.id, it])).values()]; next = s.data.next; if (pick.changes === '7d') renderChanges(); });
+        U.anchor(() => { changeRows = [...new Map([...changeRows, ...s.data.items].map(it => [it.id, it])).values()]; next = s.data.next; groupsShown += GROUPS.more; if (pick.changes === '7d') renderChanges(); });
       } else { changesNote.hidden = false; U.html(changesNote, '下一页暂时读不到，已读到的留在这里。'); }
     } finally { button.disabled = false; button.textContent = label; }
   });
