@@ -115,18 +115,28 @@
     return ok ? `<span class="chat-when"><b>${esc(U.time(at))}</b><small>${esc(day + ownerWords(sortVerb(c), viewer))}</small></span>`
       : '<span class="chat-when chat-when--none"><small>时刻没读到</small></span>';
   }
-  function statusPill(c) {
-    const kind = statusKind(c), k = KINDS[kind] || KINDS.unknown, label = rowState(c, viewer);
+  function statusPill(c, label = rowState(c, viewer)) {
+    const kind = statusKind(c), k = KINDS[kind] || KINDS.unknown;
     const mark = kind === 'archived' ? `${window.LiveBoard.icon('check', 'chat-status__ico')}` : '';
     return `<span class="chat-status" data-tone="${k.tone}"${kind === 'running' ? ' data-breathe' : ''}${kind === 'unknown' ? ` title="${esc(UNKNOWN_RULE)}"` : ''}>${mark}${esc(label)}</span>`;
   }
   // 标签下面的小字：后台给的原因（“Codex 不记是谁按的停止”“实况读不到 Antigravity 的归档”这类），状态旧了 2 分钟以上加“状态是 16:40 读的”
-  function statusReason(c) {
+  function statusReason(c, extra = '') {
     const words = c.status_reason != null ? U.fieldText(c.status_reason, viewer).trim() : '';
     const seen = Date.parse(c.status_observed_at), asOf = Date.parse(boardOf()?.as_of);
     const old = Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 ? `状态是 ${dayClock(c.status_observed_at)} 读的` : '';
-    const text = [words && words !== rowState(c, viewer) ? ownerWords(words, viewer) : '', old].filter(Boolean).join(' · ');
-    return text ? `<p class="row__sub chat-reason">${esc(text)}</p>` : '';
+    const reason = words && words !== rowState(c, viewer) ? esc(ownerWords(words, viewer)) : '';
+    const text = [extra, reason, esc(old)].filter(Boolean).join(' · ');
+    return text ? `<p class="row__sub chat-reason">${text}</p>` : '';
+  }
+  function chatTitle(c) {
+    const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
+    const displayName = typeof name.text === 'string' ? { ...name, value: plain(name.text), text: plain(name.text) } : name;
+    const titleHtml = contentLocked(c, viewer) ? '仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
+    const href = c.detail ? detailHref(c.id) : '';
+    const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
+      : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
+    return { name, marked, title, href };
   }
   function chat(c, at, completed = false, column = '') {
     if (c.private_count) return { key: c.key || c.id, cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.privateSummary(c.private_count, { unit: '场对话' })}</p>` };
@@ -142,12 +152,7 @@
     // 这一行不在一段中间折（R14-05 同类：“2 小时前在动”的“2”和“小时”也会拆开）：“·”隔开的每一段包进现有的 .live-unit，放不下时整段挪到下一行，只在“·”处折；
     // 在干、等你那格和停下、做完那行同一份；实况首页同一个办法
     const timingHtml = timing.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ');
-    const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
-    const displayName = typeof name.text === 'string' ? { ...name, value: plain(name.text), text: plain(name.text) } : name;
-    const titleHtml = locked ? '仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
-    const href = c.detail ? detailHref(c.id) : '';
-    const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
-      : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
+    const { name, marked, title, href } = chatTitle(c);
     // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
     const titleMark = locked || U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = !column && c.state === 'waiting' && stateText(c);
@@ -365,6 +370,7 @@
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
       homeChats = activeChats = baseBoard = fullBoard = null; recentUsable = false; pages.clear(); archivedPages.clear();
+      pinRows = []; $('chat-pins').hidden = true; U.html($('chat-pins'), '');
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
     }
     viewer = next;
@@ -500,11 +506,38 @@
   // 三家额度条：每格写“没有额度用完的记录”或“额度用完 · 5 小时额度 · 预计 19:00 恢复 · 卡住 3 场对话、1 个自动任务 ›”，读不到写“没读到”和原因。
   // 不写“正常”，不写剩多少（设计第 4 节第 2 条）。
   const SOFT = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']];
+  let pinRows = [], refreshHistory, pinsOffline;
+  const isPinned = c => pinRows.some(p => p.id === c.id);
+  function drawPins(b) {
+    const host = $('chat-pins'), sources = b?.pin_sources;
+    const pins = Array.isArray(b?.pinned) ? b.pinned : [];
+    pinRows = bySortAt(pins).filter(c => c.pinned === true && c.id && SOFT.some(([id]) => id === c.software));
+    const complete = id => Array.isArray(b?.pinned) && sources?.[id] === true && !U.offline?.();
+    const allRead = SOFT.every(([id]) => complete(id));
+    const retry = '这次没读到，下一轮自动再读';
+    const short = { quota_exhausted: '额度用完', waiting_owner: viewer === 'public' ? '等本人' : '等你', archived: '做完' };
+    const rows = (id, name) => {
+      const group = pinRows.filter(c => c.software === id);
+      const cards = group.map(c => {
+        const word = rowState(c, viewer), label = short[statusKind(c)] || word;
+        const note = [who(c, 'body', true), label !== word && esc(word), dayClock(c.sort_at) && esc(`${dayClock(c.sort_at)} ${ownerWords(sortVerb(c), viewer)}`)].filter(Boolean).join(' · ');
+        return `<li>${statusPill(c, label)}<div>${chatTitle(c).title}${statusReason(c, note)}</div></li>`;
+      });
+      return `<div data-pin-source="${id}"><h3>${name}</h3>${cards.length ? `<ul>${cards.join('')}</ul>` : ''}${!complete(id) || !cards.length ? `<p>${complete(id) ? '现在没有置顶的对话' : cards.length ? '这次没读全，下一轮自动再读' : retry}</p>` : ''}</div>`;
+    };
+    const full = pinRows.length > 0 || !allRead && SOFT.some(([id]) => complete(id));
+    const whoPinned = viewer === 'public' ? '本人' : '你';
+    const note = pinRows.length ? `${allRead ? whoPinned + '置顶的对话' : '已读到的置顶对话'}在这里，点一条进这场对话；下面各栏不再重复列这几场`
+      : allRead ? `现在没有置顶的对话。${whoPinned}在 Claude、Codex 或 Antigravity 置顶一场，就会出现在这里。` : retry;
+    U.html(host, `<header><h2>置顶</h2>${pinRows.length ? `<small>${pinRows.length} 场</small>` : ''}<p>${note}</p></header>${full ? `<div class="chat-pins__grid">${SOFT.map(([id, name]) => rows(id, name)).join('')}</div>` : ''}`, false);
+    host.hidden = false;
+    refreshHistory?.(viewer);
+  }
   function drawQuota(b) {
     let host = $('chat-quota');
     const quotas = Array.isArray(b.quotas) ? Object.fromEntries(b.quotas.filter(q => q && typeof q.software === 'string').map(q => [q.software, q])) : null;
     if (!quotas) { if (host) host.hidden = true; return; }
-    if (!host) { host = Object.assign(document.createElement('section'), { id: 'chat-quota', className: 'chat-quota' }); host.setAttribute('aria-label', '三家额度'); $('hero').after(host); }
+    if (!host) { host = Object.assign(document.createElement('section'), { id: 'chat-quota', className: 'chat-quota' }); host.setAttribute('aria-label', '三家额度'); $('chat-pins').after(host); }
     host.hidden = false;
     const cells = SOFT.map(([id, name]) => {
       const q = quotas[id] || {}, state = ['denied', 'no_denial', 'unknown'].includes(q.state) ? q.state : 'unknown';
@@ -545,12 +578,14 @@
   function fillColumn(card, key, col, b) {
     const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? laterArchived(b) : [])]
       .filter((c, i, list) => list.findIndex(x => (x.id ?? x.key) === (c.id ?? c.key)) === i));
-    const picked = quotaPick && (key === 'working' || key === 'waiting') ? all.filter(c => stuckBy(c, quotaPick)) : all;
-    const total = totalOf(col), listed = peopleIn(all), completed = key === 'stopped' || key === 'archived';
+    const matched = quotaPick && (key === 'working' || key === 'waiting') ? all.filter(c => stuckBy(c, quotaPick)) : all;
+    const picked = matched.filter(c => !isPinned(c));
+    const total = totalOf(col), listed = peopleIn(all), moved = peopleIn(all.filter(isPinned)), completed = key === 'stopped' || key === 'archived';
     const rows = picked.map(c => chat(c, b.as_of, completed, key));
     const name = colName(key), extra = [];
     if (key === 'working' && Number.isInteger(b.helpers_working) && b.helpers_working > 0) extra.push(`另有帮手 ${b.helpers_working} 个在做`);
     if (total != null && total > listed) extra.push(`共 ${total} 场，已列出 ${listed} 场`);
+    if (moved) extra.push(`其中 ${moved} 场见置顶`);
     if (listed > (total ?? 0)) extra.push(`清单列出 ${listed} 场，汇总${total == null ? '没读到' : `只读到 ${total} 场`}`);
     const about = key === 'waiting' && viewer === 'public' ? '要本人回答或选一下才能接着做' : BOARD[key].about;
     U.html(card.title, `<b>${esc(name)}</b><span class="lb-card__count chat-col-count${total == null ? ' is-none' : ''}">${esc(total == null ? '没读到' : String(total))}</span>`, false);
@@ -559,7 +594,7 @@
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
     const noRows = !Array.isArray(col?.items) && total > 0;
-    const none = noRows ? '暂时只读到数量' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
+    const none = matched.length > picked.length && !picked.length ? '这些对话已列在置顶区' : noRows ? '暂时只读到数量' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
       : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '暂时只读到数量';
     const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
     const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
@@ -710,10 +745,16 @@
     const nextBoard = readBoard(d);
     if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
     baseBoard = nextBoard;
+    if (!meta.warming && d?.q !== 'warming') drawPins(baseBoard);
     setBar();
     if (homeChats || activeChats || baseBoard) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
-  }, link(s) { U.blockNote($('active'), s); } });
+  }, link(s) {
+    if (!s.data && (s.offline || s.meta?.status >= 400 || ['none', 'gone'].includes(s.phase))) drawPins(null);
+    else if (!$('chat-pins').hidden && s.offline !== pinsOffline) drawPins(baseBoard);
+    pinsOffline = s.offline;
+    U.blockNote($('active'), s);
+  } });
   const redrawRecent = () => {
     const draw = () => { renderRecent(); renderHeading(activeChats || homeChats); };
     if (firstRecent) draw(); else U.anchor(draw);
@@ -743,6 +784,6 @@
       else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }));
     } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
   });
-  U.draw10?.mount({ row: chat, readViewer });
+  refreshHistory = U.draw10?.mount({ row: chat, readViewer, isPinned });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

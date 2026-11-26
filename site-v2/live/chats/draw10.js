@@ -285,7 +285,7 @@
     if (missing.length) content.push(`<span style="color:var(--route-muted, #848b87)">${missing.map(esc).join('；')}</span>`);
     return content.length ? `<details class="row__sub"><summary class="more">帮手详情</summary>${content.map(html => `<p style="white-space:pre-wrap;overflow-wrap:anywhere">${html}</p>`).join('')}</details>` : '';
   }
-  function mount({ row, readViewer }) {
+  function mount({ row, readViewer, isPinned }) {
     const hero = document.querySelector('#hero .card__body'), notice = document.createElement('p'); notice.className = 'row__sub'; notice.dataset.official = ''; notice.hidden = true; hero.append(notice);
     const doneTitle = '近 30 天 · 做完的对话';
     const done = Object.assign(document.createElement('section'), { id: 'chat-done30', className: 'card chat-stats', hidden: true });
@@ -303,7 +303,14 @@
         doneRead.set({ ...state, phase: state.phase === 'gone' ? 'gone' : 'none' });
       } else if (Array.isArray(state.data?.items)) { disclosure.hidden = false; doneRead.done(false); }
     }
-    let baseStatus, recentStatus;
+    let baseStatus, recentStatus, history;
+    const drawHistory = (kind = history?.kind) => {
+      if (!history || history.kind !== kind) return;
+      const { items, at, total } = history, visible = items.filter(c => !isPinned(c)), moved = items.length - visible.length;
+      summary.textContent = `${doneTitle}${total == null ? '' : ` · ${total} 个`}${moved ? `（其中 ${moved} 场见置顶）` : ''}`;
+      const rows = visible.length ? visible.map(c => row(c, at, true)) : [{ key: 'empty', cls: 'row__sub', html: moved ? '这些对话已列在置顶区' : '这段时间没有完成的对话' }];
+      U.list(list, rows, { animate: disclosure.open });
+    };
     const drawNotice = () => {
       const message = official({ official_status: baseStatus ?? recentStatus });
       notice.hidden = !message;
@@ -316,6 +323,7 @@
       done.hidden = !Array.isArray(items);
       summary.textContent = `${doneTitle}${done.hidden || d.total == null ? '' : ` · ${d.total} 个`}`;
       if (done.hidden) {
+        history = null;
         U.html(range, '');
         U.list(list, [], { animate: false });
         return;
@@ -326,9 +334,10 @@
       const dates = [from && to && `记录覆盖 ${stamp(from)} 至 ${stamp(to)}`, since && `采集开始 ${stamp(since)}`, d.at && `历史更新 ${stamp(d.at)}`];
       const gap = d.gap ? U.fieldHtml(d.gap, { name: '对话记录范围', kind: meta.viewer.kind }) : '';
       U.html(range, [...dates.filter(Boolean).map(esc), gap].filter(Boolean).join(' · '));
-      const rows = items.length ? items.map(c => row(c, d.at || meta.at, true)) : [{ key: 'empty', cls: 'row__sub', html: '这段时间没有完成的对话' }];
-      U.list(list, rows, { animate: disclosure.open });
+      history = { items, at: d.at || meta.at, total: d.total, kind: meta.viewer?.kind };
+      drawHistory();
     }, link: doneUnavailable });
+    return drawHistory;
   }
   U.draw10 = { badge, detail, compactionDisclosure, official, mount, modelName, bareModel, modelHue, modelRows, modelHtml, sourceHtml, helperDetailHtml };
 })();
