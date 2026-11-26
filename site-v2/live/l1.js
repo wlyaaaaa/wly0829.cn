@@ -680,7 +680,8 @@
   function chatShortName(c) {
     const projectItem = home?.projects?.items?.find(p => p.id === c.project);
     const extra = projectItem && !projectItem.hidden && !projectItem.hidden_block && !(viewer === 'public' && (projectItem.visibility === 'owner' || projectItem.public === 'owner')) ? [chatField(projectItem.name, projectItem)] : [];
-    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || 'AI 对话';
+    // 什么都取不出时不写“AI 对话”（跟卡名撞），交给下面写“无标题”，和 AI 对话页同一条对话叫法一样（r83 返修第二轮）
+    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || '';
     const short = value => {
       if (value?.hidden || value?.hidden_block || value?.rewrite === 'pending' || value?.visibility === 'pending' || viewer === 'public' && (value?.visibility === 'owner' || value?.public === 'owner')) return '';
       const line = U.fieldText(value, viewer).trim().split(/[\n。！？]/, 1)[0];
