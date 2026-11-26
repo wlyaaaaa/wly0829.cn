@@ -56,7 +56,8 @@
     const n = now(r, bootAt), raw = [...new Set(sourcesOf(r).map(s => s.raw_name).filter(Boolean))].join('\n');
     const set = SETTINGS[r.enabled] || sp(r.state_text || '') || '不清楚';
     return `<div class="su-row"><span class="su-name"${raw ? ` title="${esc(raw)}"` : ''}>${esc(sp(r.name || r.raw_name || '没有名字'))}</span>` +
-      `<span class="su-from">${esc(from(r))}</span><span class="su-set${r.enabled === 'disabled' ? ' su-set--off' : ''}">${esc(set)}</span>` +
+      // 几个来源各成一段，折行时整段换到下一行，不把“（启用）”这类拆成两半
+      `<span class="su-from">${from(r).split('、').map((t, i, a) => `<span class="su-part">${esc(t)}${i < a.length - 1 ? '、' : ''}</span>`).join('')}</span><span class="su-set${r.enabled === 'disabled' ? ' su-set--off' : ''}">${esc(set)}</span>` +
       `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span></div>`;
   }
   // “这次开机”那一列几种说法是什么意思（本人要页面上讲清机制，M928）：后台按哪种证据认的照实写

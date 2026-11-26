@@ -3,7 +3,10 @@
 
 /* 页头：左边总数和查的时刻，右边三个数 */
 .page--startup #hero { --gut: 0px; }
-.page--startup #hero .card__body { padding-right: calc(var(--win) * .5); }
+/* 画照本人选的那张图：钟楼瀑布，只占卡右边约 200px、铺满卡高，左边约一半慢慢淡进玻璃；右边那排数字跟着靠右，最右一格的字离画能看到的地方留约 20px */
+.page--startup #hero[data-pic] { --win: 200px; }
+.page--startup #hero .card__pic { -webkit-mask-image: linear-gradient(270deg, #000 0 50%, rgb(0 0 0 / .8) 62%, rgb(0 0 0 / .55) 74%, rgb(0 0 0 / .3) 85%, rgb(0 0 0 / .12) 93%, transparent 100%); mask-image: linear-gradient(270deg, #000 0 50%, rgb(0 0 0 / .8) 62%, rgb(0 0 0 / .55) 74%, rgb(0 0 0 / .3) 85%, rgb(0 0 0 / .12) 93%, transparent 100%); }
+.page--startup #hero .card__body { padding-right: 160px; }
 .su-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 40px; }
 .su-hero__main { min-width: 0; }
 .page--startup #hero .head__tail { white-space: nowrap; }
@@ -32,25 +35,26 @@
 .su-card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .72); }
 .su-card--short[data-pic] { --win: clamp(160px, 14%, 200px); }
 .su-title { margin: 0; font-family: var(--black); font-weight: 900; font-size: 28px; line-height: 36px; letter-spacing: .02em; color: var(--ink); }
-.su-sub { margin: 6px 0 0; font-size: 14.5px; line-height: 22px; letter-spacing: .03em; color: var(--muted); }
+.su-sub { margin: 8px 0 0; font-size: 17px; line-height: 26px; letter-spacing: .03em; color: var(--muted); }
 .su-say { margin: 14px 0 0; font-size: 14px; line-height: 22px; color: var(--muted); }
 .su-box > .su-say:first-child { margin-top: 10px; }
 .su-legend { margin-top: 12px; font-size: 13px; line-height: 20px; }
 
-/* 一张表：软件、从哪自启、设了自启、这次开机 */
-.su-cols, .su-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.45fr) 96px minmax(0, 1.05fr); column-gap: 18px; align-items: baseline; }
-.su-cols { margin-top: 22px; padding: 0 14px 8px; font-size: 14px; letter-spacing: .04em; color: var(--muted); }
-.su-row { padding: 7px 14px; border-bottom: 1px solid rgb(95 103 96 / .1); font-size: 15.5px; line-height: 23px; color: var(--ink); }
+/* 一张表：软件、从哪自启、设了自启、这次开机。字号、列位置、粗细照本人选的那张图（软件名粗、其余常规） */
+.su-cols, .su-row { display: grid; grid-template-columns: minmax(0, 267fr) minmax(0, 299fr) minmax(0, 160fr) minmax(0, 239fr); column-gap: 18px; align-items: baseline; }
+.su-cols { margin-top: 22px; padding: 0 14px 8px 26px; font-size: 17.5px; letter-spacing: .04em; color: var(--muted); }
+.su-row { padding: 6px 14px 6px 26px; border-bottom: 1px solid rgb(95 103 96 / .1); font-size: 18.5px; line-height: 25px; color: var(--ink); }
 .su-row > span { min-width: 0; overflow-wrap: anywhere; }
-.su-name { font-weight: 500; }
+.su-name { font-weight: 600; }
 .su-from { color: var(--ink-soft); }
+.su-part { display: inline-block; max-width: 100%; }
 .su-set--off { color: var(--muted); }
 .su-now { display: inline-flex; align-items: baseline; gap: 8px; font-variant-numeric: tabular-nums; }
 .su-now > .lamp { align-self: center; }
 .su-now--none { color: var(--muted); }
 .su-now--wait { color: #c86400; }
 .su-now--bad { color: #b0150f; }
-.su-band { margin-top: 12px; padding: 6px 14px; border-radius: 8px; background: rgb(228 230 248 / .72); font-size: 15px; line-height: 20px; letter-spacing: .03em; color: var(--ink-soft); }
+.su-band { margin-top: 12px; padding: 6px 14px; border-radius: 8px; background: rgb(228 230 248 / .72); font-size: 17.5px; line-height: 24px; letter-spacing: .03em; color: var(--ink-soft); }
 .su-cols + .su-band { margin-top: 0; }
 .su-band b { font-weight: 600; color: var(--ink); }
 .su-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
