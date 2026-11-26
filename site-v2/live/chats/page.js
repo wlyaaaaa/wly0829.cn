@@ -362,6 +362,12 @@
   }
   let viewer = 'public', activeChats = null, activeAt = null, homeChats = null, homeAt = null, recentAt = null, recentUsable = false, recentWarming = false, recentState = null, firstRecent = true;
   const pages = new Map();
+  function newerReading(primary, other, time) {
+    if (!primary) return other;
+    return other && (Date.parse(time(other)) || 0) > (Date.parse(time(primary)) || 0) ? other : primary;
+  }
+  const listTime = reading => reading.source_at ?? reading.at ?? (reading === activeChats ? activeAt : homeAt);
+  const currentList = home => newerReading(activeChats, Array.isArray(home?.active) || !activeChats ? home : null, listTime);
   let homeSources, recentSources;
   function drawSources() {
     const record = [homeSources, recentSources].find(r => r?.viewer === viewer && r.data && Object.hasOwn(r.data, 'unconnected_source_count'));
@@ -370,7 +376,7 @@
   function readViewer(meta) {
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
-      homeChats = activeChats = baseBoard = fullBoard = null; recentUsable = false; pages.clear(); archivedPages.clear();
+      homeChats = activeChats = baseBoard = fullBoard = fullBoardStatus = null; recentUsable = false; pages.clear(); archivedPages.clear();
       pinRows = []; $('chat-pins').hidden = true; U.html($('chat-pins'), '');
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
     }
@@ -392,17 +398,19 @@
     return { rows, count, at, total: pack?.[key], label: chatCount(pack, key, count) };
   }
   function renderHeading(d) {
-    const temporary = d?.q === 'unknown' && !U.offline?.() && [404, 503].includes(recentState?.meta?.status);
+    const board = boardOf();
+    const temporary = !board && d?.q === 'unknown' && !U.offline?.() && [404, 503].includes(recentState?.meta?.status);
     if (temporary) missing('对话暂时读不到', true);
-    else if (d?.q === 'warming') {
+    else if (board) {
+      const reading = (board === fullBoard ? fullBoardStatus : board === baseBoard ? activeChats : homeChats) ?? d;
+      const status = { ...reading, level: reading?.header_level ?? reading?.level };
+      U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
+      boardHeading(board);
+      L.tone($('hero'), status);
+    } else if (d?.q === 'warming') {
       U.html($('head'), U.head('AI 对话', { lamp: false }));
       U.html($('chat-note'), '<span class="row__sub">正在准备</span>');
       L.tone($('hero'), 'none');
-    } else if (boardOf()) {
-      const status = { ...d, level: d?.header_level ?? d?.level };
-      U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
-      boardHeading(boardOf());
-      L.tone($('hero'), status);
     } else if (d) {
       const status = { ...d, level: d.header_level ?? d.level };
       U.html($('head'), U.status(status).lamp + U.head('AI 对话', { lamp: false }));
@@ -418,7 +426,7 @@
       const running = current('running', U.isStale(d) || U.offline?.() ? '当时在干' : '在干');
       const waiting = current('waiting', viewer === 'public' ? '等本人回答' : '等你回答');
       const done = chatCount(d, 'done72', 0), active = [running, waiting].filter(Boolean).join(' · ');
-      const seen = readAt(d.source_at ?? (activeChats ? activeAt : d.at ?? homeAt)), cutoff = readAt(d.window?.to || d.at || (activeChats ? activeAt : homeAt));
+      const seen = readAt(listTime(d)), cutoff = readAt(d.window?.to ?? d.at ?? (d === activeChats ? activeAt : homeAt));
       const sameTime = active && done && seen && seen === cutoff;
       const reading = text => `<span class="live-unit">（${esc(text)}）</span>`;
       const notes = [active && U.nowrap(active) + (seen && !sameTime ? reading(seen) : ''),
@@ -430,13 +438,13 @@
     return temporary;
   }
   function render(d, at) {
-    const list = activeChats || d, temporary = renderHeading(list);
+    const list = currentList(d), temporary = renderHeading(list);
     if (boardOf()) { drawBoard(boardOf()); U.land(); activeRead.done(); return; }
     if (!list) return;
     if (list.q === 'warming') U.list($('active-list'), wait('正在准备'));
     else if (!temporary || activeChats) {
       const none = list.active?.length || list.hidden ? null : list.active == null || list.q === 'unknown' ? U.collectionText() : U.offline?.() ? '断开前没有在干或等着的对话' : '没有在干或等着的对话';
-      drawActive(list, list.source_at ?? (activeChats ? activeAt : d?.at || homeAt || at), none);
+      drawActive(list, listTime(list) ?? at, none);
       U.land();
     }
     activeRead.done();
@@ -476,7 +484,7 @@
   // —— M915：四栏（在干｜等你，下面整行“停下了，没归档”“做完了 · 已归档”），数据是同一次读到的 board ——
   // 后台：GET chats 的 board = { as_of, columns: { working, waiting, stopped, archived: { items, total, next } }, quota_exhausted, helpers_working, quotas, automation, source_gaps }；
   // 归档往下翻 GET chats?window=72h&state=archived&cursor=<next> 回 { items, total, next, as_of }。首页 chats.board 同口径。
-  let baseBoard = null, fullBoard = null, quotaPick = null, stoppedCard = null;
+  let baseBoard = null, fullBoard = null, fullBoardStatus = null, quotaPick = null, stoppedCard = null;
   const archivedPages = new Map();
   function readBoard(d) {
     const b = d?.board;
@@ -492,7 +500,13 @@
     });
     return { ...b, quotas };
   }
-  const boardOf = () => baseBoard || fullBoard || readBoard(homeChats);
+  function boardOf() {
+    if (!baseBoard) return fullBoard || readBoard(homeChats);
+    // 页眉和完整首页可能先后送数。只有明细覆盖相同的首页包才替换专用清单。
+    const hasRows = fullBoard && Object.keys(baseBoard.columns).every(key =>
+      !Array.isArray(baseBoard.columns[key]?.items) || Array.isArray(fullBoard.columns[key]?.items));
+    return newerReading(baseBoard, hasRows ? fullBoard : null, board => board.as_of);
+  }
   function boardRowState(c) {
     const q = statusKind(c) === 'quota_exhausted' && boardOf()?.quotas?.find(row => row?.software === c.software);
     return rowState(q?.state === 'denied' && q.window && q.window === c.quota_window ? { ...c, quota_reset_at: q.reset_at } : c, viewer);
@@ -708,7 +722,7 @@
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有可回看的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
     U.list($('recent-rest'), []);
-    U.html($('recent-note'), esc(total != null && total > count ? `已列出 ${count} 个` : '') + (pages.get('')?.hidden ? ` ${U.hiddenMore?.(pages.get('').hidden, '场', pages.get('').hidden_what || '对话') || ''}` : ''));
+    U.html($('recent-note'), esc([label && readAt(at), total != null && total > count ? `已列出 ${count} 个` : ''].filter(Boolean).join(' · ')) + (pages.get('')?.hidden ? ` ${U.hiddenMore?.(pages.get('').hidden, '场', pages.get('').hidden_what || '对话') || ''}` : ''));
     $('recent-next').hidden = nextRecentCursor() == null; U.html($('recent-next'), '继续读 ›');
     if (recentUsable) recentRead.done();
     recentBoard.layout(true);
@@ -756,8 +770,14 @@
   } });
   window.Live.watch('home', null, { data(d, meta) {
     drawBackground(d?.automation); homeFull = d; statLinks(); fitModels();
-    if (meta.viewer?.kind === viewer && (fullBoard = readBoard(d?.chats)) && !baseBoard)
+    if (meta.viewer?.kind !== viewer) return;
+    const before = boardOf();
+    fullBoardStatus = d?.chats ?? null;
+    fullBoard = readBoard(fullBoardStatus);
+    if (boardOf() !== before) {
+      setBar();
       U.anchor(() => { render(homeChats, meta.at); renderRecent(); });
+    }
   } });
   window.Live.watch('chats', null, { phase(s) { if (!activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
     readViewer(meta);
@@ -776,7 +796,7 @@
     U.blockNote($('active'), s);
   } });
   const redrawRecent = () => {
-    const draw = () => { renderRecent(); renderHeading(activeChats || homeChats); };
+    const draw = () => { renderRecent(); renderHeading(currentList(homeChats)); };
     if (firstRecent) draw(); else U.anchor(draw);
   };
   window.Live.watch('chats', { window: '72h' }, { phase(s) { if (!recentUsable) recentRead.set(s); }, data(d, meta) {

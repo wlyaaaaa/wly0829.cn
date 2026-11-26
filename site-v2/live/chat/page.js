@@ -184,7 +184,7 @@
       for (const b of document.querySelectorAll(`[data-clip-for="${key}"]`)) if (on) b.hidden = true;
     }
   }
-  function render(kind) {
+  function render(kind, now) {
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
@@ -211,7 +211,7 @@
     const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
     // 设计第 9 节：标签后面接“从几点起”（排序时刻＋这一类的动词，同 AI 对话页行首）和原因；状态旧了 2 分钟以上加“状态是几点读的”。后台没给的那一项不写
     const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
-    const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(at);
+    const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
     const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
       reason && reason !== state && F.ownerWords(reason, viewer),
       Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
@@ -290,7 +290,7 @@
         const offlineChanged = lastOffline !== !!state.offline; lastOffline = !!state.offline;
         if (chat) {
           if (!changed && state.offline && !offlineChanged) return;
-          rec.hidden = false; render(state.viewer?.kind);
+          rec.hidden = false; render(state.viewer?.kind, state.now);
           if (first) { heroRead.done(); recRead.done(); }
           first = changed = false; requestAnimationFrame(lightUp); return;
         }
