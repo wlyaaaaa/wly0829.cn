@@ -45,7 +45,7 @@ function fitPictures() {
 }
 const notes = pictures.querySelector(':scope > .owner-note, :scope > .owner-notes');
 const firstPicture = pictures.querySelector('[data-initial-cover]');
-let active, opener, originalRect;
+let active, opener, originalRect, openedId;
 data.forEach((item,index) => {
   const figure = (!index && firstPicture) || document.createElement('section'); figure.className = 'picture';figure.id = item.id;
   figure.classList.toggle('buttons-below',!!item.buttonsBelow);
@@ -158,6 +158,7 @@ function openDetails(item,button) {
     return;
   }
   const wasOpen = dialog.open && state === 'open';
+  if (!wasOpen) openedId = item.id;
   fillDetails(item);
   document.body.classList.add('reading');document.body.dataset.detailState = 'open';document.body.dataset.activePicture = item.id;
   if (!dialog.open) dialog.showModal();
@@ -178,6 +179,8 @@ function closeDetails() {
   document.body.dataset.detailState = 'closing';dialog.classList.remove('open');
   shot.style.setProperty('--shot-x',`${originalRect.left}px`);shot.style.setProperty('--shot-y',`${originalRect.top-document.querySelector('.site-header').offsetHeight}px`);shot.style.setProperty('--shot-scale',originalRect.width/active.width);
   dialog.close();document.body.classList.remove('reading');document.body.dataset.detailState = 'closed';delete document.body.dataset.activePicture;
+  // 没有动效时也停在收起前正在看的那张（M723）：翻过张的，页面挪到那张；没翻过的不挪，停在原处
+  if (active.id !== openedId) document.getElementById(active.id)?.scrollIntoView({block:'start',behavior:'instant'});
   opener.setAttribute('aria-expanded','false');opener.focus({preventScroll:true});
 }
 closeButton.addEventListener('click',closeDetails);
