@@ -270,7 +270,8 @@
     const oldest = v.oldest, limit = count(oldest?.check_limit) && oldest.check_limit > 0 ? oldest.check_limit : 3;
     const looked = !count(oldest?.check_count) ? '' : oldest.check_count >= limit ? `${esc(limit)} 次看满了` : `第 ${esc(oldest.check_count + 1)} 次看`;
     const next = R.timed(oldest?.next_at) ? `下次 ${esc(U.date(oldest.next_at))}` : '';
-    const last = oldest ? `<p class="b6-last">跟得最久：${goWrap(oldest.href, field(oldest.title, '事项标题').replace(/。$/, ''))}${titleTag(oldest)}`
+    const oldestTitle = oldest ? field(oldest.title, '事项标题') : '';
+    const last = oldest ? `<p class="b6-last">跟得最久：${goWrap(oldest.href, looked || next ? oldestTitle.replace(/。((?:<\/[a-z]+>)*)\s*$/, '$1') : oldestTitle)}${titleTag(oldest)}`
       + `${looked ? `&nbsp;· <span class="live-unit">${looked}</span>` : ''}${next ? `&nbsp;· <span class="live-unit">${next}</span>` : ''}</p>` : '';
     return { tone, head, body: toPublic(`${top}${bar}<div class="b6-lg-list">${list}</div>${last}${foot}`) };
   }
