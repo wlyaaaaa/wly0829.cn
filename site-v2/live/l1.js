@@ -1327,6 +1327,10 @@
     const cardCutoff = text => shortEnd && (U.sameCutoffNote(shortEnd, text) || U.sameCutoffNote(endNote, text));
     const sameNote = (a, b) => (!cardReading || sameSample) && (U.sameCutoffNote(a, b) || cardCutoff(a) && cardCutoff(b));
     const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
+    const describedReading = `最后读到 ${describedAt}`;
+    // 备份名册的原采时和卡底截至可以落在同一分钟。昨日前的独立截至保留日期，告警和灰项的同源时刻仍只报一次。
+    const datedBackupCutoff = id === 'backups' && !sameSample && timed(data?.at) && timed(end) &&
+      day(data.at) === day(end) && stamp !== U.time(end, data.at_precision) && cardCutoff(describedReading);
     const matchesCutoff = text => endNote && U.sameCutoffNote(endNote, text);
     const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
     const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
@@ -1335,7 +1339,7 @@
     const existing = endNote && (chatReading === stamp || chatStamps.includes(stamp) || [p.head, p.note].some(el => el && !el.hidden &&
       [...el.querySelectorAll('.head__cutoff'), el].some(node => node.textContent.split(' · ').some(matchesCutoff))));
     const difference = Date.parse(home?.at ?? at) - Date.parse(end);
-    const cutoff = endNote && !existing && !cardCutoff(`最后读到 ${describedAt}`) && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
+    const cutoff = endNote && !existing && (datedBackupCutoff || !cardCutoff(describedReading)) && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
     const temperature = id === 'computer' && computerTemperature(data);
@@ -1359,7 +1363,8 @@
       const latest = name === 'CPU 温度' && recordStamp(computerSampleAt(temperature));
       const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
-      const detail = describedAt && sameNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
+      const repeatsReading = sameNote(recorded, describedReading) || datedBackupCutoff && U.sameCutoffNote(recorded, describedReading);
+      const detail = describedAt && repeatsReading ? '' : why;
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
     }
     const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}${why ? `（${esc(why)}）` : ''}`).join('；');

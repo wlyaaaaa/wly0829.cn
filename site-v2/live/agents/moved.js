@@ -159,7 +159,7 @@
       <p class="tp-small ag-mnote">按原话存档里${you()}发给每家的消息算，一条算一句，北京时间零点分天。${days.length && w.start && days[0].date > w.start ? `按天的柱子从 ${esc(md(days[0].date))} 起，更早的只算在合计里。` : ''}${t.gaps.length ? `${esc(t.gaps.join('、'))} 有几个月的档案缺了或读不了，这几家写的是至少。` : ''}</p></section>`;
   }
   // —— 二、三家常用的技能 ——
-  function skillSection(s) {
+  function skillSection(s, summaryAt) {
     const key = 'skills', p = period[key], w = s.win[p], f = only;
     // 三家合起来：按三家加起来的次数排；点了一家：换成这一家自己的技能、按它的次数排，别家那几段不画。先列前 5 个，展开看全部
     const every = f ? (w.own[f] || []) : [...w.rows.values()].sort((a, b) => sum(b.v, HOSTS) - sum(a.v, HOSTS)).map(r => r.name);
@@ -180,7 +180,7 @@
     const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, asof(s.at))}
+    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, asof(s.at, summaryAt))}
       ${chips()}
       ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels }) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
@@ -188,7 +188,7 @@
   window.AgentsMoved = {
     html(d, kind, opts = {}) {
       viewer = kind; only = opts.only || null; chips = opts.chips || (() => ''); if (opts.asof) asof = opts.asof;
-      return [d.message_stats && talkSection(talkModel(d.message_stats), d.at), d.skill_stats && skillSection(skillModel(d.skill_stats))].filter(Boolean).join('');
+      return [d.message_stats && talkSection(talkModel(d.message_stats), d.at), d.skill_stats && skillSection(skillModel(d.skill_stats), d.at)].filter(Boolean).join('');
     },
     // 点了切换时段或技能展开：返回要停住的位置；不是这两块的点击返回 null（点哪一家归 page.js）
     click(target) {
