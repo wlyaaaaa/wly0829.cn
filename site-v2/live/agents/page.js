@@ -21,9 +21,17 @@
     SessionCostTurn: '花费面板 · 每轮开始', SessionCostChange: '花费面板 · 更新', SessionCostRender: '花费面板 · 画出来' };
   // 某家宿主没有这个当口时写原因和用什么兜（定稿卡-钩子清单 三家差异表）
   const ABSENT = {
-    codex: { idle: '宿主没有空等当口，靠派单完工回执叫醒原对话' },
-    antigravity: { message: '宿主没有“收到消息”当口，叫模型前补同样几行', compact: '宿主没有压缩当口，叫模型前每次都递一遍状态',
-      helper: '宿主没有派帮手当口，由派单的 AI 把状态写进任务说明', idle: '宿主没有空等当口，靠派单完工回执叫醒原对话' },
+    codex: {
+      idle: '宿主没有空等当口。派出去的单做完，后台等候能拿到结果，也可以回来看任务记录。你在汇报页交了答复，由汇报页的收件程序叫醒原对话，再由“收到消息时补状态”递上正文。',
+      error: '宿主没有出错当口。出错停下由实况程序看对话记录发现，再推手机。',
+    },
+    antigravity: {
+      message: '宿主没有“收到消息”当口。“叫模型前补状态”每次叫模型前核一遍，有变化才递时间、资料状态、你的新消息和没答的题。',
+      compact: '宿主没有压缩当口。“叫模型前补状态”发现新的压缩摘要时，查摘要里还有没有《他要什么》的位置，缺了才补；它自己会自动压缩，什么时候压查不到准数；见过一次，是在上下文约 51 万词元（510K）时压的。',
+      helper: '宿主没有派帮手当口。派非图片的帮手时，“动工具前检查”自动在任务说明末尾补上北京时间、资料状态、派单人型号和工程位置。',
+      idle: '宿主没有空等当口。派出去的单：挂了后台等候，做完就会叫醒原对话；没挂时，结果留在任务里。你在汇报页交了答复，由后台的汇报页收件程序叫醒原对话，再由“叫模型前补状态”递上正文。',
+      error: '宿主没有出错当口。实况会看对话是不是出错停下，确认停住、过一会儿还没恢复，就会尝试推手机。',
+    },
   };
   const RULES = new Map([
     ['agents.claude-adapter.md', ['Claude 适配', 'claude-adapter']], ['agents.codex-adapter.md', ['Codex 适配', 'codex-adapter']],
@@ -416,7 +424,9 @@
     const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => hv.cells?.[s]?.[hh.id]?.runs).filter(known)));
     if (!hooks.length) {
       const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
-      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}</td>`;
+      const status = station === 'error' && ABSENT[h.id]?.error
+        ? `<small class="ag-errorstatus">${F(hostData(d, h).error_stop?.status) || '没读到'}</small>` : '';
+      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}${status}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
     const key = `${station}/${h.id}`, flashKey = `${p}/${key}`, before = cellsBefore.get(flashKey);   // 切时间段不闪，同一段次数变了才闪
@@ -439,14 +449,16 @@
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
     // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
-    // 页面不另算、也不在“为什么要它”里再写一遍。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
+    // 页面不另算。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
     // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
     // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
     // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
-    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；前端“为什么要它”不写这个数；
+    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；
     // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
     //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
-    const facts = [['什么时候跑', F(hook.when)], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
+    const what = F(hook.what, '干什么').split(/\r?\n/).filter(line => line.trim());
+    const whatList = what.length ? `<ul class="ag-hook__what">${what.map(line => `<li>${line}</li>`).join('')}</ul>` : '';
+    const facts = [['什么时候跑', F(hook.when)], ['干什么', whatList], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
       known(m.blocked) ? `拦 ${int(m.blocked)} 次` : !known(m.errors) && '拦和错还没采上', known(m.errors) && `出错 ${int(m.errors)} 次`,
@@ -465,7 +477,7 @@
   function hooksSection(d) {
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
@@ -477,10 +489,6 @@
       return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
-      if (id === 'error') {
-        const rows = HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('');
-        return `<tr id="hooks-error"><th scope="row">${label}<small>推手机</small></th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机，不算哪一家的钩子。<span class="ag-errorhosts">${rows}</span></td></tr>`;
-      }
       const open = expanded?.startsWith(id + '/') ? expanded.split('/')[1] : '';
       const host = HOSTS.find(h => h.id === open);
       const detail = host ? list(d.hooks).filter(r => r.host === host.name && stationOf(r) === id).map(hook => hookDetail(d, hook, p)).join('') : '';
