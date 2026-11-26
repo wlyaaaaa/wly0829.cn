@@ -55,7 +55,7 @@
     const rows = [];
     const rounds = (Array.isArray(d.rounds) ? d.rounds : []).filter(r => r && (timed(r.end_at) || timed(r.at)));
     // 修理、验收的小签只给自动修理那几件；AI 约好的事每一轮都是到点去看一次，不写“修理”。访客版那一轮的字被藏（只剩“仅本人可见”）就不写字，原因写在下面
-    for (const r of rounds) rows.push({ at: r.end_at || r.at, start: r.at || r.end_at, round: true, kind: repair ? KIND[r.kind] || '' : '', live: !r.end_at,
+    for (const r of rounds) rows.push({ at: r.end_at || r.at, start: r.at || r.end_at, round: true, kind: repair ? KIND[r.kind] || '' : '', live: !r.end_at, outcome: r.verdict,
       text: (t => /^仅本人可见[。.]?$/.test(T(t)) ? null : t)(r.deliverable ?? r.summary),
       who: [r.actual_model || r.executor, r.actual_effort || r.requested_effort].filter(Boolean).join(' · '), href: site(r.source_href), why: r.source_unavailable_reason, tag: hiddenTag(r) });
     const roundOf = t => rows.filter(r => r.round && ms(t) >= ms(r.start) - 2000 && ms(t) <= ms(r.at) + 600000)
@@ -76,9 +76,12 @@
       const out = e.resolution === 'recovered' ? 'recovered' : e.outcome, kind = SETTLED[out] ? (out === 'to_owner' ? `转给${you()}` : SETTLED[out]) : STEP[out] || '';
       // 同一时刻那一轮已经有一行：不另起一行，这一步的结果（先放着、修好了……）挂在那一轮“修理”“验收”后面
       const own = rows.find(r => r.round && [r.at, r.checkAt].some(hits(e.at)));
-      if (own) { if (kind && kind !== own.kind) own.step ||= kind; continue; }
+      if (own) {
+        if (kind && kind !== own.kind && !own.step) Object.assign(own, { step: kind, outcome: out });
+        continue;
+      }
       if (near(e.at)) continue;
-      rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind,
+      rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind, outcome: out,
         who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
     }
     return rows.sort((a, b) => ms(a.at) - ms(b.at));
@@ -137,14 +140,15 @@
 
     // 每看一次
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
-    const row = (r, dotKind) => {
+    const row = r => {
+      const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
       const meta = [r.who && esc(r.who), r.href && go(r.href, goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
       return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
       : T(wait) ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>下一次：${F(wait, '在等什么')}</p></div></li>` : '';
-    const html = rows.map(r => row(r, 'done')).join('') + nextRow;
+    const html = rows.map(row).join('') + nextRow;
     put($('steps'), html || `<li class="run run--empty"><p class="run__none">还没看过。</p></li>`);
     $('looks').hidden = false;
     const foot = $('steps-foot');

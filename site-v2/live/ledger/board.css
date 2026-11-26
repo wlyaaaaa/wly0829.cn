@@ -112,6 +112,7 @@
 .lg-steps::before { content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px; border-left: 2px solid var(--tp-line); }
 .lg-steps li { position: relative; margin: 0 0 10px; font-size: 14px; line-height: 21px; color: #3d3d3a; }
 .lg-steps li::before { content: ""; position: absolute; left: -21px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: 2px solid #fff; box-sizing: content-box; }
+.lg-steps li[data-tone="bad"]::before { background: var(--tp-red); }
 .lg-steps li b { display: block; font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: #6c6b64; }
 .lg-steps li.is-next::before { background: #fff; border: 2px solid var(--ink); width: 8px; height: 8px; }
 .lg-steps li.is-next { color: #6c6b64; }

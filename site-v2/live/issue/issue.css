@@ -30,10 +30,11 @@
 .iss-cell h2, .iss-side h2 { margin: 0 0 8px; font-size: 21px; line-height: 30px; font-weight: 800; letter-spacing: .02em; color: var(--ink); }
 .iss-cell p { margin: 0; font-size: 15.5px; line-height: 27px; color: var(--ink-soft); white-space: pre-line; overflow-wrap: anywhere; }
 
-/* 每看一次：一条竖线串起来，每一次一块淡紫底；做完的一次实心绿点，下一次空心圈，到点没看橙点 */
+/* 每看一次：一条竖线串起来，每一次一块淡紫底；做完是绿点，失败是红点，下一次空心圈，到点没看橙点 */
 .iss-grid { grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); }
 .dossier .run.iss-step > .run__main { display: block; padding: 12px 18px; }
 .dossier .run.iss-step:not(:has(> .lamp)) > .run__main::before { border: 0; background: #00A650; box-shadow: 0 0 0 3px rgb(0 166 80 / .16); }
+.dossier .run.iss-step[data-dot="bad"]:not(:has(> .lamp)) > .run__main::before { background: var(--dossier-bad); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dossier-bad) 16%, transparent); }
 .dossier .run.iss-step[data-dot="late"]:not(:has(> .lamp)) > .run__main::before { background: #ef8f16; box-shadow: 0 0 0 3px rgb(239 143 22 / .16); }
 .dossier .run.iss-step[data-dot="next"]:not(:has(> .lamp)) > .run__main::before { border: 2px solid #8a8f8c; background: #fff; box-shadow: none; }
 .iss-step .run__main > p { margin: 0; font-size: 15.5px; line-height: 26px; color: var(--ink); overflow-wrap: anywhere; }

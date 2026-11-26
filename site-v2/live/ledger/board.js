@@ -9,7 +9,7 @@
   const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
   const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner' };
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
-  const ROUND = { not_fixed: '这一轮没修好', deferred: '先放一放', superseded: '并进了别的一件' };
+  const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
   let state, viewer = 'public', filter = params.get('outcome') || '', kind = ['promised', 'repair'].includes(params.get('kind')) ? params.get('kind') : '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
   let older = [], olderNext, olderBusy = false;
@@ -256,7 +256,9 @@
     const sorted = [...events].sort((a, b) => (stamp(a.at) || 0) - (stamp(b.at) || 0));
     const groups = merge(sorted);
     const lines = groups.map(g => {
-      const a = g.rows[0], z = g.rows.at(-1), n = g.rows.length, out = outcomeOf(a), label = SETTLED[out] ? settledLabel(out) : ROUND[out] || ROUND[a.to] || EVENT[a.event] || '记了一笔';
+      const a = g.rows[0], z = g.rows.at(-1), n = g.rows.length, out = outcomeOf(a);
+      const round = ROUND[out] ? out : a.to, label = SETTLED[out] ? settledLabel(out) : ROUND[round] || EVENT[a.event] || '记了一笔';
+      const failed = !SETTLED[out] && (round === 'not_fixed' || round === 'not_done');
       const gaps = g.rows.slice(1).map((r, i) => stamp(r.at) - stamp(g.rows[i].at));
       const even = n > 2 && gaps.every(x => Math.abs(x - gaps[0]) < 60000) ? gaps[0] : null;
       const every = even ? (even % 3600000 === 0 ? (even === 3600000 ? '每小时' : `每 ${even / 3600000} 小时`) : `每 ${Math.round(even / 60000)} 分钟`) : '';
@@ -268,7 +270,7 @@
       const why = g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
       const hidden = g.rows.flatMap(r => list(r.rounds)).find(x => x?.visitor_labels?.conversation === 'hidden');
       const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}`;
-      return `<li><b>${head}</b>${body}${go}</li>`;
+      return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it);
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
