@@ -657,7 +657,9 @@
     if (!item?.detail_text || viewer === 'public' && (item.visibility === 'owner' || item.public === 'owner')) return '';
     const detail = U.fieldHtml(U.capText(item.detail_text, Infinity), { name: '事项详情', kind: viewer });
     const opened = parts.needs.main.querySelector(`[data-key="${CSS.escape(item.id)}"] .notice-detail`)?.open;
-    return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p style="white-space: pre-line">${detail}</p></details>` : '';
+    // 展开里最后一行“看这件的详情 ›”，进这件事自己的详情页（和等你的事页卡展开后那行同一处；本人 SHIP10 选 A）
+    const open = `<a class="more item-open" href="${esc(route('/live/item/?id=' + encodeURIComponent(item.id)))}">看这件的详情 ›</a>`;
+    return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p style="white-space: pre-line">${detail}</p>${open}</details>` : '';
   }
 
   // —— AI 对话 ——

@@ -141,6 +141,9 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 /* 卡上的“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，点了到那一轮 */
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
+/* 卡展开后最后一行绿字“看这件的详情 ›”，单占一行，跟上面的字左边对齐 */
+.row__detail .item-open { display:flex; width:fit-content; height:auto; margin:8px 0 0; padding:0; translate:none; color:#00A650; font-weight:600; line-height:22px; }
+.row__detail .item-open:hover { background:none; color:#00A650; text-decoration:underline; }
 </style></head><body class="page page--live page--l2 page--board page--items"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#needs" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
 <ul class="site-notices" id="item-action-receipts"></ul>

@@ -228,13 +228,17 @@
           phase(s) { if (s.data == null) reading.set(s); },
           link(s) { if (s.data == null && ['none', 'gone'].includes(s.phase)) { reading.set(s); if (s.phase === 'none') U.html(target, `<p class="row__sub">${s.offline || U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText()}</p>`); finish(false); } U.blockNote(target, s); },
           data(d) { if (!d) return;
-            if (viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner')) { U.html(target, `<p class="row__line">${U.visibilityNote({ visibility: 'owner' }, viewer, '这件事的内容')}</p>`); reading.done(); finish(true); return; }
+            // 展开里最后一行“看这件的详情 ›”，进这件事自己的详情页（和“近 7 天下去的”点标题进的是同一页；本人 SHIP10 选 A）。
+            // 访客能看到这张卡就能进，那页里只给本人看的照那页原来的权限
+            const openLink = `<a class="more item-open" href="${esc(closedHref({ ...d, id: btn.dataset.detail }))}">看这件的详情 ›</a>`;
+            if (viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner')) { U.html(target, `<p class="row__line">${U.visibilityNote({ visibility: 'owner' }, viewer, '这件事的内容')}</p>${openLink}`); reading.done(); finish(true); return; }
             U.html(target, (d.detail_text ? `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(d.detail_text, Infinity), { kind: viewer })}</p>` : '') + (d.questions || []).map(q => `<p class="row__line" style="white-space: pre-line">${U.fieldHtml(U.capText(q.text && typeof q.text === 'object' ? q.text : q, Infinity), { kind: viewer })} </p><div class="item-options">${optionActions(d, q)}</div>`).join('') + (d.history || []).filter(h => !ledgerOnly(h)).map(h => `<p class="row__sub">${U.date(h.occurred_at || h.at)} ${U.time(h.occurred_at || h.at)} · ${U.fieldHtml(h.text, { kind: viewer })}</p>`).join('') + (d.origin?.href ? `<a class="more" href="${esc(route(d.origin.href))}">${U.fieldHtml(U.originName(d.origin, d) || '打开来源', { name: '来源', place: 'label', kind: viewer })} ›</a>` : ''));
             reading.done(); finish(true);
             if (d.rewrite === 'pending' && itemText(d) != null && itemText(d) !== '') target.insertAdjacentHTML('afterbegin', `<p class="row__line">${U.fieldHtml(d.text && typeof d.text === 'object' ? { ...d, ...d.text } : d, { kind: viewer })}${d.at ? ` · ${U.date(d.at)} ${U.time(d.at)}` : ''}</p>`);
             if (d.origin && !d.origin.href && U.originName(d.origin, d)) target.insertAdjacentHTML('beforeend', `<p class="row__sub">来源：${U.fieldHtml({ ...d.origin, text: U.originName(d.origin, d) }, { kind: viewer })}</p>`);
             if (!row.querySelector('.item-source')) target.insertAdjacentHTML('beforeend', runSource(d));
             if (d.closed) target.insertAdjacentHTML('beforeend', `<p class="row__sub">${U.fieldHtml(closedText(d), { kind: viewer })} · ${U.date(d.closed.at)} ${U.time(d.closed.at)}</p>${d.closed.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(d.closed.to)))}">看并入的事 ›</a>` : ''}`);
+            target.insertAdjacentHTML('beforeend', openLink);
           },
         });
       }));

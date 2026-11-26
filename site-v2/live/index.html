@@ -257,6 +257,8 @@
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
 .page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
 .page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
+.page--live #needs .notice-detail .item-open { display: flex; width: fit-content; height: auto; margin: 6px 0 0; padding: 0; translate: none; color: #00A650; font-weight: 600; line-height: 22px; }
+.page--live #needs .notice-detail .item-open:hover { background: none; color: #00A650; text-decoration: underline; }
 .page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
 /* 等你的事、计划任务、备份卡的每条标题整句显示，放不下就换行，不收成两行“…”（M760） */
 .page--live .board :is(#needs,#tasks,#backups) .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
