@@ -916,7 +916,7 @@
       if (!notes.length) return text;
       const same = notes.length === sources.length && notes.every(([, sample]) => sample.key === notes[0][1].key);
       const detail = same ? notes[0][1].text : join(notes.map(([label, sample]) => `${label} ${sample.text}`));
-      return text + `<small>${computerTimes(esc(detail))}</small>`;
+      return text + `<small>${esc(detail)}</small>`;
     };
     const uptime = screen?.uptime ?? m.uptime?.value;
     const summary = typeof d.text === 'string' ? d.text : '';
@@ -924,7 +924,7 @@
     const cpu = m['cpu-temp'] ?? (Object.hasOwn(d, 'cpu_c') ? { value: d.cpu_c, at: d.cpu_at, q: d.cpu_q } : null), legacyTemp = summary.match(/(?:CPU\s*)?(-?\d+(?:\.\d+)?)\s*(?:℃|°C)/)?.[1];
     const temperature = cpu ? val(cpu, x => quantity(x, 'value', fmtTemp)) : legacyTemp != null ? fmtTemp(Number(legacyTemp)) : null;
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    U.html(p.head, cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }));
+    U.html(p.head, U.itemTextUnits(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') })));
     const devices = [...(d.devices || [])];
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
     if (phone && !devices.some(x => x.id === 'phone')) devices.push({ id: 'phone' });
@@ -937,7 +937,7 @@
     else if (Number.isFinite(growthTop?.bytes)) {
       const until = timed(growthTop.at) && `截至 ${U.date(growthTop.at)} ${U.time(growthTop.at)}`;
       growthReading = (growthTop.bytes > 0 ? `${fileGrowth(growthTop.name)} · 多占 ${U.nowrap(U.gb(growthTop.bytes))}` : '已测类别都没有增加')
-        + (until ? `<small>${computerTimes(esc(until))}</small>` : '');
+        + (until ? `<small>${esc(until)}</small>` : '');
     }
     // 读数不是今天的（离线旧页过了半夜）写日期，不叫“今天”（M062）
     const trafficAt = traffic?.from || traffic?.to, trafficDay = timed(trafficAt) && day(trafficAt) !== day(!lastState?.offline && lastState?.now || Date.now()) ? U.date(trafficAt) : '今天';
@@ -951,9 +951,9 @@
       ['显卡', withReadings(join([val(m.gpu, x => (text => Number(x?.value) < 90 ? `<span class="kv-good">${text}</span>` : text)(quantity(x, 'value', n => `${Math.round(n)}%`))), val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))]) || null, ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
-      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${computerTimes(esc(diskTime))}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
+      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
-      ['海外流量', traffic ? `<span class="traffic-day">${U.nowrap(trafficText)}</span>` + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${computerTimes(esc(trafficTime))}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
+      ['海外流量', traffic ? `<span class="traffic-day">${U.nowrap(trafficText)}</span>` + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
@@ -968,7 +968,7 @@
         return `<span>${esc(name + status)}</span>`;
       }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
     ];
-    const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : value;
+    const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : U.itemTextUnits(value);
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
     computerStability(p.why, d.stability_note);
     const it = d.interrupt;
@@ -977,7 +977,6 @@
     U.html(p.note, U.fieldHtml(note, { name: '运行情况', kind: viewer }));
   }
 
-  const computerTimes = html => html.replace(/\b\d\d-\d\d(?: \d\d:\d\d(?::\d\d)?)?(?![^<]*>)/g, '<span class="live-unit">$&</span>');
   function computerStability(host, note) {
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
     host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
@@ -1343,7 +1342,8 @@
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
-    const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
+    const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
+    const statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
     p.status.hidden = !note; U.html(p.status, statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }

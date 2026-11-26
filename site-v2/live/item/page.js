@@ -34,6 +34,9 @@
   try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/items/', '/live/ledger/', '/live/project/', '/live/automation/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
   back.href = from ? from.pathname + from.search + from.hash : route(issue ? '/live/ledger/' : '/live/items/');
   back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 自动任务账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 自动任务账本' : '等你的事';
+  const itemsBack = new URL(back.href).pathname === '/live/items/';
+  const nameBack = kind => { if (itemsBack) back.textContent = kind === 'owner' ? '等你的事' : '等本人的事'; };
+  nameBack('public');
   back.addEventListener('click', U.restoreBack);
   const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '这件事' });
   const detailsRead = U.reading($('rec'), { ghost: U.ghost.rows(4), slow: false });
@@ -394,6 +397,7 @@
       const kind = meta.viewer?.kind || 'public';
       if (kind !== viewer) clearRecord();
       viewer = kind;
+      nameBack(viewer);
       if (!d) { clearRecord(); return; }
       if (d?.q === 'warming') { record = d; empty('正在准备'); return; }
       at = meta.at;

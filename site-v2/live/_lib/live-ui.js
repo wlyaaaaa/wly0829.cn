@@ -752,8 +752,33 @@
   const confirmedItemState = item => CONFIRM_ITEM[savedWrite(item)?.intent]?.state || '';
   // 回执弹窗（定稿：异步的成功失败回执；本人 11-23 11:51 要弹窗告诉他保存成功还是失败）：先写“正在保存…”，后台真结果回来再换；失败的留着，能再点一次。
   // 用全站共用的通知浮窗（trust-modal.js 的 SiteNotice），列表还是 #item-action-receipts，等你的事页在它上面听 item-write。
-  function itemReceipt(head = '正在保存…', detail = '') { return window.SiteNotice(head, detail, 'item-action-receipts'); }
-  function itemFeedback(trigger, message) { itemReceipt().set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
+  const itemTextUnits = html => html
+    .replace(/<span class="live-unit">((?:\d{4}-)?\d{1,2}-\d{2})<\/span>( +)<span class="live-unit">(\d{1,2}:\d{2}(?::\d{2})?)<\/span>/g, '$1$2$3')
+    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
+      (value, tag) => tag || `<span class="live-unit">${value}</span>`);
+  function itemReceipt(head = '正在保存…', detail = '', trigger = null) {
+    const lane = document.getElementById('item-action-receipts');
+    const ownSpace = lane && document.body.matches('.page--items, .page--live:has(#needs)');
+    // 清单滚到某组才操作时，胶囊在那组的标题与事项之间占位，保持原来的通知样式。
+    const groups = ownSpace && document.querySelector('.page--items #groups');
+    const card = trigger?.closest('.lb-card');
+    if (groups) (card?.id === 'reports' ? groups : card?.querySelector('.lb-rows') || groups).before(lane);
+    const receipt = window.SiteNotice(head, detail, 'item-action-receipts');
+    const format = () => {
+      for (const text of receipt.note.querySelectorAll('.site-notice__head, .site-notice__name')) text.innerHTML = itemTextUnits(esc(text.textContent));
+    };
+    const reveal = () => { if (ownSpace) lane.scrollIntoView({ block: 'nearest' }); };
+    format(); reveal();
+    return { ...receipt, set(...args) {
+      const box = receipt.note.getBoundingClientRect(), visible = box.bottom > 0 && box.top < innerHeight;
+      // 结束最后一份普通汇报、或者改变筛选时，回执不能留在收起的卡里。
+      const moved = groups && lane.closest('[hidden], .is-away');
+      if (moved) groups.before(lane);
+      receipt.set(...args); format();
+      if (visible || moved) reveal();
+    } };
+  }
+  function itemFeedback(trigger, message) { itemReceipt(undefined, '', trigger).set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
   // 再点一次用页面上最新的那份（版本变了的卡，重读后按新版本提交）。
   const latestItem = item => [...actionSets.values()].reverse().find(it => it.id === item.id && it.item_version) || item;
   // 点了确认、还没回结果就刷新或离开：记下这次办的是哪几件（30 分钟），回到同一页按同一次操作接着查、照常弹回执；有了结果的就不再记（M945）
@@ -812,7 +837,8 @@
       const previous = failedReceipts.get(note);
       if (previous?.key === key) previous.close();
     }
-    const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
+    const source = trigger?.isConnected ? trigger : document.querySelector(`.lb-item[data-key="${CSS.escape(rows[0].id)}"]`);
+    const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]), source);
     try {
       // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
       // 回到页面接着查（resume）只看本机记下的结果，查一轮就够：后台没有只读的查回执口，不拿原编号重发
@@ -1838,5 +1864,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, savedWrite, savedAcknowledgements, savedReminder, confirmedItemState, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, savedWrite, savedAcknowledgements, savedReminder, confirmedItemState, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

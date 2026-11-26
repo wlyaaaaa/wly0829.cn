@@ -319,7 +319,7 @@
   const PLAN_TO = { ack: '我知道了', later: '晚点提醒（挪到“你放着”）', decline: '不办了', decline_copy: '不办了（有后续，复制给 AI）', close_report: '关掉' };
   function confirmPlan(trigger, all, { start, done, complete }) {
     const live = window.Live, plan = all.filter(p => p.intent);
-    const notice = (state, head, name = '') => window.SiteNotice(head, '', 'item-action-receipts').set(state, head, { name });
+    const notice = (state, head, name = '') => U.itemReceipt(head, '', trigger).set(state, head, { name });
     if (!plan.length || plan.some(p => U.itemWriting(p.item.id)) || document.querySelector('.live-item-confirm[open]')) return;
     if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else notice('fail', '不是可信设备'); return; }
     const intentOf = p => p.intent === 'decline' && p.item.decline_followup ? 'decline_copy' : p.intent;
@@ -421,13 +421,13 @@
     const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), it._landed && !it.closed?.at ? '时刻还没确认' : U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
     if (closed && KIND[it.kind]) sub.unshift('原分类：' + (viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]));
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
-    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
+    const titleText = U.itemTextUnits(U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer }));
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
     const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${detailTitle(titleText)}</button>` : `<span class="row__title">${titleText}</span>`;
     const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => {
-      let html = U.fieldHtml(s, { kind: viewer });
+      let html = U.itemTextUnits(U.fieldHtml(s, { kind: viewer }));
       if (s === closing) html = html.replace(/(?:自动任务页|跟进(?=[。<]|$))(?![^<]*>)/g, '<span class="live-unit">$&</span>');
       if (i < all.length - 1) html = html.replace(/。((?:<\/[a-z]+>)*)$/, '$1');
       return `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d|同一件事关过 )/.test(sp(s)) ? ' item-keep' : ''}">${html}</span>`;
