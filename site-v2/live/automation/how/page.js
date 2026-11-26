@@ -25,10 +25,17 @@
   function timing(policy) {
     const p = policy || {}, duration = T.duration;
     if (id === 'auto-repair' && [p.ai_timeout_seconds, p.idle_seconds, p.daily_ai_seconds, p.workspace_lookback_seconds].every(T.known)) {
-      return `一轮最多 ${duration(p.ai_timeout_seconds)}，${duration(p.idle_seconds)}没动静就停；查有没有人在修同一处时，翻最近 ${duration(p.workspace_lookback_seconds)}的记录。每天和“AI 约好的事”合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
+      // construction_window_seconds 是“有没有人在修”看多久内的施工动静，后台给了才写
+      const busy = T.known(p.construction_window_seconds) ? `看有没有人在修时，查最近 ${duration(p.construction_window_seconds)}有没有施工动静；` : '';
+      return `一轮最多 ${duration(p.ai_timeout_seconds)}，${duration(p.idle_seconds)}没动静就停。${busy}开工后把最近 ${duration(p.workspace_lookback_seconds)}的对话和提交交给 AI 参考。每天和“AI 约好的事”合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
     }
     if (id === 'ai-commitments' && T.known(p.daily_ai_seconds)) {
       return `每天和自动修理合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
+    }
+    // reply_wait_seconds 是 AI 回复的手机通知最多等摘要多久（从回复结束算），后台给了才写
+    if (id === 'excerpt' && T.known(p.ai_timeout_seconds)) {
+      const reply = T.known(p.reply_wait_seconds) ? `AI 回复的手机通知，最多等摘要到回复结束后 ${duration(p.reply_wait_seconds)}；` : '';
+      return `${reply}每次叫 AI 摘最多等 ${duration(p.ai_timeout_seconds)}。`;
     }
     if (T.known(p.ai_timeout_seconds)) return `一次最多等 AI ${duration(p.ai_timeout_seconds)}。`;
     return '这一类最多跑多久，这次没读到。';

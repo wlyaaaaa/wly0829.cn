@@ -314,6 +314,11 @@
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
       <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p>${rounds}</div>${go(r.href)}</article>`;
   }
+  // 派活程序超过两轮半没转：各类的下次时间算不出来（和页头那句警告同一个判断）
+  const stalled = d => {
+    const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+  };
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
     const x = d.dispatch;
@@ -574,9 +579,9 @@
       if (owed) sub = link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
     } else {
       const next = st.next_at || c.next_at;
-      main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着';
+      main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : stalled(d) ? '空着 · 派活程序没按时跑，下次几点暂时算不出' : waiting ? `空着 · ${waiting}` : '空着';
       if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
-      if (T.stamp(next) == null && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
+      if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
     if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;

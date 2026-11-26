@@ -191,7 +191,7 @@
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
     const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`
-      : Number.isInteger(f?.reopen_count) ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '这件坏了几次，这次没读到。';
+      : Number.isInteger(f?.reopen_count) ? f.reopen_count > 0 ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '修好以后没再出现过。' : '这件坏了几次，这次没读到。';
     const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
     return card(said + handed);
   }

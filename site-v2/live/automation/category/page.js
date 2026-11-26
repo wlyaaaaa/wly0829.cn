@@ -85,6 +85,11 @@
 
   // —— 页头大卡 ——
   // 现在怎样：停等＞出毛病＞正在跑＞关着＞暂停到＞空着等下次（和自动任务页“现在”那格同一个先后）
+  // 派活程序超过两轮半没转：下次时间算不出来（和总表页头那句警告同一个判断）
+  const stalled = d => {
+    const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+  };
   function nowText(d, c, rows) {
     const p = pauseOf(d), pr = c.problem, st = c.state || {}, m = mode(c), live = rows.find(r => r.status === 'running');
     if (p) return ['warn', `停着：${pauseText(p)}`];
@@ -100,7 +105,7 @@
     if (m === 'paused') return ['off', esc(pausedText(c.setting?.until_at) || '暂停中')];
     if (id === 'excerpt') return ['idle', excerptToday?.data && known(excerptToday.data.total) ? `空着 · 今天摘了 ${int(excerptToday.data.total)} 句` : '空着'];
     const next = st.next_at || c.next_at;
-    return ['idle', T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : waiting ? `空着 · ${waiting}` : '空着'];
+    return ['idle', T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : stalled(d) ? '空着 · 派活程序没按时跑，下次几点暂时算不出' : waiting ? `空着 · ${waiting}` : '空着'];
   }
   function hero(d, c, rows) {
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
@@ -166,6 +171,7 @@
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
       : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
+        : stalled(d) ? '派活程序这会儿没按时跑，下次几点暂时算不出；它恢复后会重新排。'
         : F(c.state?.waiting_for ?? c.waiting_for, '在等什么') || schedule || '几点跑、什么情况下跑，这次没读到。'}</p>`;
     return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>${body}${queue}</section>`;
   }

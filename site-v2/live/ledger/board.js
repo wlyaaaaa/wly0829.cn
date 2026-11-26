@@ -53,13 +53,15 @@
     const unit = peak >= 1 ? { per: 1, name: '天' } : peak * 24 >= 1 ? { per: 24, name: '小时' } : { per: 1440, name: '分钟' };
     // 跟得最久：后台只挑 AI 正在跟的事；一件都没有时 oldest 是 null，空着时先照写后台给的 oldest_text，没给再用原来那句。
     // 手上还有事（open 大于 0）时 oldest_text“现在没有 AI 正在跟的事”和“AI 手上 N 件”打架，不照写，写“最早那件没读到”（M675）
+    // 了结的记录不满 7 天（coverage.q=partial，from 晚于 7 天前）：写清从几点起才有，不拿不全的数比进出
+    const cov = d.coverage, covFrom = cov?.q === 'partial' && T.stamp(cov.from) > Date.now() - 7 * DAY ? cov.from : null;
     const oldest = s.oldest || null;
     const dots = oldest && known(oldest.check_count) && known(oldest.check_limit)
       ? `<span class="lg-dots">${Array.from({ length: oldest.check_limit }, (_, i) => `<i${i < oldest.check_count ? ' class="is-on"' : ''}></i>`).join('')}</span>看过 ${int(oldest.check_count)} 次 · 最多 ${int(oldest.check_limit)} 次` : '';
     return `<div class="tp-grid lg-top">
       <section class="tp-panel lg-cell"><h2>AI 手上</h2><p class="tp-big lg-hand">${big(open, 'open')}<small>件</small></p><p class="tp-small">${known(s.oldest_days) ? `最早一件记下 ${int(s.oldest_days)} 天了` : ''}</p></section>
       <section class="tp-panel lg-cell"><h2>近 7 天 · 新进 ${known(s.opened_7d ?? s.new7) ? int(s.opened_7d ?? s.new7) : '··'} · 了结 ${known(s.closed_7d) ? int(s.closed_7d) : '··'}</h2>${pair}
-        <p class="tp-legend"><span><i class="tp-swatch" style="background:#7a63e8"></i>新进</span><span><i class="tp-swatch" style="background:#00a650"></i>了结</span>${known(s.opened_7d) && known(s.closed_7d) ? `<span>${s.opened_7d > s.closed_7d ? '进的比出的多，在堆' : '出的不比进的少'}</span>` : ''}</p></section>
+        <p class="tp-legend"><span><i class="tp-swatch" style="background:#7a63e8"></i>新进</span><span><i class="tp-swatch" style="background:#00a650"></i>了结</span>${covFrom ? `<span>了结从 ${esc(when(covFrom))} 起才有记录，进出先不比</span>` : known(s.opened_7d) && known(s.closed_7d) ? `<span>${s.opened_7d > s.closed_7d ? '进的比出的多，在堆' : '出的不比进的少'}</span>` : ''}</p></section>
       <section class="tp-panel lg-cell"><h2>平均多久了结</h2><p class="tp-big">${known(avg) ? `${big(avg * unit.per, 'avg', unit.per === 1440 ? 'int' : 'dec')}<small>${unit.name}</small>` : '<span class="tp-fog">还没采上</span>'}</p>
         ${trend.filter(x => known(x.days)).length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => known(x.days) ? x.days * unit.per : null) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => (x.days || 0) * unit.per), 1)), fmt: v => dec(v), draw: !drawn }) + `<p class="tp-small">每天往前 7 天的平均，单位${unit.name}；没有了结的日子空着。</p>` : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
       <section class="tp-panel lg-cell lg-oldest"><h2>跟得最久</h2>${oldest ? `<p class="lg-oldest__t">${link(oldest.href, F(titleOf(items.find(it => it.id === oldest.id) || oldest), '事项标题'))}</p>
@@ -176,7 +178,7 @@
       return items.length ? `<div class="lg-board"><div class="lg-head"><span></span>${axis}</div><ul class="lg-list">${shown.map(it => row(it, group)).join('')}</ul><div class="lg-now" style="--x:${x(now)}" data-from="${from}" data-span="${span}"><span>现在</span></div></div>${more}${keyIn === group ? legend : ''}`
         : `<p class="tp-empty">${kind ? `“${KINDS.find(([k]) => k === kind)[1]}”里` : 'AI 手上'}${empty}</p>`;
     };
-    return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件<span class="lg-live">实时</span><small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件${U.isStale(d) || U.offline() ? '' : '<span class="lg-live">实时</span>'}<small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
       ${board('owed', '没有在修的事。')}</section>
       <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '最多修几轮、最多看几次，这次没读到。'}</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
@@ -286,7 +288,7 @@
     const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
       ? `逐轮经过这次没读到${oldAt ? `，下面先列 ${esc(oldAt)} 读到的` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
-    const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : known(it.reopen_count) && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
+    const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
       <p class="lg-detail__t">${F(titleOf(it), '事项标题')}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
       ${it.progress_summary || it.outcome_text ? `<p class="tp-small">${F(it.progress_summary || it.outcome_text, '进展')}</p>` : ''}
