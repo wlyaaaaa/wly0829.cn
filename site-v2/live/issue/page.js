@@ -199,7 +199,7 @@
     const head = `另有 ${esc(n)} 次是误判，没算进去`;
     if (!rows.length) return `${line}<p class="iss-basis">${head}。</p>`;
     const row = r => `<li><p><b class="iss-when">${esc(when(r.at))}</b>${T(r.summary) ? F(r.summary, '当时记的') : ''}</p>${T(r.why) || site(r.href) ? `<p class="iss-meta">${[T(r.why) && `不算：${F(r.why, '为什么不算')}`, site(r.href) && go(r.href, goName(r.href))].filter(Boolean).join(' · ')}</p>` : ''}</li>`;
-    return `${line}<details class="iss-more iss-misjudged"><summary class="iss-go">${head}<span aria-hidden="true">›</span></summary><ol>${rows.map(row).join('')}</ol></details>`;
+    return `${line}<details class="iss-more iss-misjudged"><summary class="iss-go live-disclosure">${head}<span aria-hidden="true">›</span></summary><ol>${rows.map(row).join('')}</ol></details>`;
   }
   // 来源：记下这件事的那场对话；没有对话的写后台给的原因（自动修理自己查出来的那句）
   function sourceCard(d) {
@@ -240,7 +240,7 @@
       + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
     if (!rows) return '';
     return `<details class="dossier-card dossier-card--raw glass" id="raw"${$('raw')?.open ? ' open' : ''}>
-      <summary class="dossier-card__title dossier-fold"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></summary>
+      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></summary>
       <dl class="rec-facts">${rows}</dl></details>`;
   }
 
