@@ -91,12 +91,16 @@
   const groupOf = it => it.group === 'owed' || it.group === 'parked' ? it.group : it.running || it.state === 'working' || it.overdue ? 'owed' : 'parked';
   // 谁记的：后台给了记下这件事的那场对话或那一轮的地址（registered_by_href）就做成链接；没有地址照原样写字，打不开的原因放在悬停说明里。
   // 没记下是谁登记的（registered_by 空，后台 registered_by_text 写“登记人未记下”）照现在的样子不写这一段
+  const RECORDER_HIDDEN = '访客能看到是谁记的，但那场对话的内容看不到。';
   function recorder(it) {
     const name = it.registered_by_text ?? it.registered_by;
     if (!U.fieldText(name ?? '', viewer).trim() || !U.fieldText(it.registered_by ?? '', viewer).trim() && !T.path(it.registered_by_href)) return '';
     const label = `${typeof name === 'string' ? esc(name) : F(name, '谁记的')} 记的`;
-    // 本人能点开原来源、访客看不到那段文字的（registered_by_visitor_labels.conversation = hidden），本人版在后面挂全站同一个“访客看不到”
-    const tag = U.visitorLabel({ visitor_labels: it.registered_by_visitor_labels }, 'conversation', '记下这件事的那场对话', viewer);
+    // 本人能点开原来源、访客点进那场对话看不到内容的（registered_by_visitor_labels.conversation = hidden），本人版紧挨着链接挂全站同一个“访客看不到”；
+    // “谁记的”访客照样看得到（访客版同一行也写“Codex 记的”），签只说那场对话的内容看不到，点开的说明照这个意思写，免得读成谁记的被藏了（主控 11-26 10:27）
+    const mark = U.visitorFieldKind({ visitor_labels: it.registered_by_visitor_labels }, 'conversation');
+    const tag = mark === 'hidden' ? U.visitorHiddenTag('记下这件事的那场对话', '', viewer).replace(/data-trust-explanation="[^"]*"/, `data-trust-explanation="${esc(RECORDER_HIDDEN)}"`)
+      : U.visitorLabel({ visitor_labels: it.registered_by_visitor_labels }, 'conversation', '记下这件事的那场对话', viewer);
     if (T.path(it.registered_by_href)) return link(it.registered_by_href, `${label} ›`) + tag;
     const why = U.fieldText(it.registered_by_unavailable_reason ?? '', viewer).trim();
     return (why ? `<span title="${esc(why)}">${label}</span>` : label) + tag;
@@ -111,7 +115,11 @@
     const time = full(it) ? `<b class="lg-over">${limit} 次看满了，AI 停手</b>` : late ? F(it.fixer.text, '到点还没了结')
       : nx ? (over ? `<b class="lg-over">该看了</b> 原定 ${esc(when(nextOf(it)))}` : `下次 ${esc(when(nextOf(it)))} 看`) : '';
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
-    return [recorder(it), why, time, count].map(s => s.replace(/。$/, '')).filter(Boolean).join(' · ');
+    // 这一行放不下时只在“ · ”处折，段内不拆（“最多 3 次”“下次 12:35 看”“12-02 10:00”整段走）：谁记的、几点看、第几次这几段短的不断行，
+    // 后台原句（为什么放着、在等什么、到点还没了结）太长照常折。“·”打在每段前头、和这段字连着（&#8288; 不让它们分开），
+    // 折到下一行开头的那个“·”被裁掉（board.css 的 .lg-line），行尾不悬一个“·”、行首也不冒一个（主控 11-26 10:27）
+    const segs = [[recorder(it), true], [why, false], [time, !late], [count, true]].map(([s, keep]) => [s.replace(/。$/, ''), keep]).filter(([s]) => s);
+    return `<span class="lg-line">${segs.map(([s, keep]) => `<span class="lg-seg${keep ? ' is-keep' : ''}"><i class="lg-dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join(' ')}</span>`;
   }
   function track(d) {
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
