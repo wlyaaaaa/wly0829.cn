@@ -52,7 +52,7 @@
     // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
     return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version,
-      href: T.path(o?.href) || (github ? o.href : ''), github, go: meta.go };
+      href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
   }
 
   // 列表一行
@@ -80,26 +80,24 @@
 
   // 暂缓的轮次标题一律短：只写“暂时不修”，说明不进标题（主控 11-25：同一种暂缓轮次只留一种排法）。
   // 说明：summary 去掉这件活的名字（标题前半已写过）和打头的“暂时不修”后剩下的；后台的 reason 写了“暂时不修”以外的原因、summary 又是空的，就用 reason。
-  // 一轮页“这一轮做成了什么”写全文；列表卡那行小字只取一句。F 是页面的转义写法
+  // 一轮页“这一轮做成了什么”写全文，列表卡那行小字也照它写（见下）。F 是页面的转义写法
   function deferredNote(r, F) {
     const summary = F(r.summary, '结果'), thing = r.subject ? F(r.subject.title, '这件活') : '', reason = F(r.reason, '原因');
     let note = thing ? withoutSubject(summary, thing) : summary;
     for (const lead of [reason, '暂时不修']) if (lead && note.startsWith(lead)) note = note.slice(lead.length).replace(/^\s*[·:：。]\s*/, '');
     return note || (reason && reason !== '暂时不修' ? reason : '');
   }
-  // 列表卡那行小字里的一句短原因：后台 reason 写了真原因就用它；否则从说明里挑一句。
-  // 后台没给自己的结论、只拼了“暂时不修 · 这件活。交代”的（summary 里带着这件活的名字），交代的最后一句是现在卡在哪；
-  // 后台给了结论的，结论在第一句。超过 32 个字截断加省略号，全文在一轮页
+  // 列表卡那行小字：为什么放着、现在在等什么（本人要知道为什么放着、在等什么，R53）。
+  // 后台 reason 写了真原因就用它；否则用说明全文，整段照给、能换行，不截断。卡顶那行已经说过的句子不再写
   function deferredWhy(r, F) {
-    // 卡片上面那行已经写了这件活的名字：原因和它一样（后台常把名字原样填进 reason）就不再写一遍
-    const thing = r.subject ? F(r.subject.title, '这件活') : '', same = x => !x || x === thing || x === '暂时不修';
+    // 卡片上面那行已经写了这件活的名字：原因或其中一句的意思已经包含在那行里（去掉标点、空格再比），就不再写一遍
+    const thing = r.subject ? F(r.subject.title, '这件活') : '', bare = x => String(x || '').replace(/[\s\p{P}\p{S}]/gu, '');
+    const same = x => !bare(x) || x === '暂时不修' || !!thing && bare(thing).includes(bare(x));
     const reason = F(r.reason, '原因');
     if (!same(reason)) return reason;
-    // 按句号分句，分号不拆：“网络服务窗口已恢复；自动连接未通过，暂用手动连接”整句才看得出为什么放着
-    const parts = deferredNote(r, F).split(/[。]+/).map(x => x.trim()).filter(x => x && !same(x));
-    if (!parts.length) return '';
-    const one = thing && F(r.summary, '结果').includes(thing) ? parts.at(-1) : parts[0];
-    return [...one].length > 32 ? [...one].slice(0, 31).join('') + '…' : one;
+    // 按句分开（句号、问号、叹号，分号不拆），去掉卡顶那行已经说过的句子，剩下的连成一段，末尾的句号去掉（后面还接着“ · 几点”）
+    const parts = deferredNote(r, F).split(/(?<=[。！？])/).map(x => x.trim()).filter(x => x && !same(x));
+    return parts.join('').replace(/[。！？\s]+$/, '');
   }
 
   // 后台的 summary 常把这件活的名字再写一遍（“转给你 · 收拾仓库……”“暂时不修 · 内存守护……。独立复核通过……”）。

@@ -105,11 +105,12 @@
 
   // 首页整包没读到（实况在线、只是 home 这一项读不到，或电脑连不上又没存下来）时，l1.js 给的是空的：
   // 和别的卡一样只写一句“××暂时读不到”（电脑连不上时写“这块没存下来”），不画一张没有数的卡
-  const MISSING = { agents: '智能体', automation: '自动任务', ledger: 'AI 账本' };
+  // 卡名和有数时的标题一样（账本卡叫“AI 自动任务账本”）；电脑连不上时这句不再带卡名，标题已经写了
+  const MISSING = { agents: '智能体', automation: '自动任务', ledger: 'AI 自动任务账本' };
   function render(id, data, options) {
     const { viewer, route, href, offline, now } = options;
     if (data == null && MISSING[id]) {
-      const name = MISSING[id], say = offline ? `${name}：这块没存下来，连上后补上。` : `${name}暂时读不到`;
+      const name = MISSING[id], say = offline ? '这块没存下来，连上后补上。' : `${name}暂时读不到`;
       return { tone: 'off', head: cardTitle(name, href, 'off', '') + `<br><span class="row__sub">${esc(say)}</span>`, body: '' };
     }
     const own = viewer === 'owner' ? '你' : '本人', field = (v, name) => U.fieldHtml(v, { name, kind: viewer });

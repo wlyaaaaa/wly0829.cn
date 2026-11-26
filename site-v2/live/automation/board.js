@@ -201,7 +201,7 @@
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
-    let title, body = '', meta;
+    let title, body = '', meta, why = '';
     if (c.kind === 'repair') {
       // 第几轮只用后台给的 subject.round；没给就不写，不按列表里排第几自己编（列表和详情要对得上，验收 11-24 07:15）
       const nth = x => known(x.subject?.round) && x.subject.round > 0 ? x.subject.round : null;
@@ -225,13 +225,15 @@
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
       body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
-      meta = [r.deferred && R.deferredWhy(r, F), range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
+      // 暂缓的为什么放着、在等什么单独一行；下面那行照别的卡只写几点、谁、为什么开这一轮
+      why = r.deferred ? R.deferredWhy(r, F) : '';
+      meta = [range(r), who(r), F(r.trigger, '为什么开这一轮'), chain(r, v)].filter(Boolean).join(' · ');
     }
     if (c.kind === 'repair' && c.subject.href) meta += ` · ${link(c.subject.href, '这件的全部经过 ›')}`;
     // M684：本人版这一轮所挂的对话访客那边不一样的（visitor_labels.conversation），在这行末挂签
     meta += U.visitorLabel({ visitor_labels: r.labels }, 'conversation', '这一轮的对话', viewer);
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
-      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}<p class="au-card__meta">${meta}</p></div>${go(r.href)}</article>`;
+      <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p></div>${go(r.href)}</article>`;
   }
   function problemCard(d, p) {
     const href = T.path(p.href) || (p.run_id ? R.runPath(p.category, p.run_id) : '');
@@ -279,7 +281,9 @@
     // 这一节的名字照列表里实际有的几种写：绿点“跑完”、红点“没做成”、灰点“暂时不修”，和筛选按钮、卡上的说法一样；
     // 筛了“只看跑完的”“只看没做成的”就只剩那一种。列表空着时照筛选写（主控 11-25：原来不管筛什么都写“跑完的”，下面一列红点对不上）
     const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
-    const doneWhat = `${doneKinds.length ? doneKinds.join('、') : filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
+    // 几种各带“的”、最后一种用“和”接（“跑完的和没做成的”），不写成“跑完、没做成的”（读着像“跑完了但没做成”）
+    const doneNames = (doneKinds.length ? doneKinds : [filter.status === 'incomplete' ? '没做成' : '跑完']).map(k => `${k}的`);
+    const doneWhat = doneNames.length > 1 ? `${doneNames.slice(0, -1).join('、')}和${doneNames.at(-1)}` : doneNames[0];
     const doneName = `${filter.date ? day : '近 72 小时'}${doneWhat}`;
     // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
     // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
@@ -310,7 +314,7 @@
     return `<div class="au-older"><button type="button" class="au-older__toggle" data-older aria-expanded="${olderOpen}">更早的 · 近 30 天按天看 <span aria-hidden="true">${olderOpen ? '‹' : '›'}</span></button>${olderOpen ? grid : ''}</div>`;
   }
 
-  // —— 下半部：这周替你做成了 ——
+  // —— 下半部：近 7 天替你做成了（和右边“近 7 天后台 AI 共用了”同一个说法）——
   function results(d) {
     const r = d.results_7d || {};
     // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句，不写“还没采上”
@@ -318,7 +322,7 @@
       ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}`
         : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
     const translatorWhy = F(r.translator_versions_missing ?? list(d.categories).find(c => c.id === 'translator')?.result_7d?.missing_reason, '为什么空着');
-    return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>这周替${you()}做成了<small>近 7 天</small></h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
+    return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>近 7 天替${you()}做成了</h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
       <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', basis(r.repaired_basis), 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
       ${cell('规矩改好', r.rules_fixed, '处', '', 'rules')}${cell('翻译官出了', r.translator_versions, '版', '', 'translator', translatorWhy)}</div>${missingWeek(d)}</section>`;
   }
@@ -432,7 +436,8 @@
   function todayText(c) {
     if (c.id !== 'ai-commitments') return '';
     const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
-    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).join('，');
+    // 每一截整块不折行（窄栏里“用了 12 分钟”的“钟”会单独掉到下一行）
+    return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).map(x => `<span class="au-nobr">${x}</span>`).join('，');
   }
   function lastCell(c) {
     const r = c.last_result;
@@ -496,12 +501,16 @@
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
     const hosts = ['Claude', 'Codex', 'Antigravity'];
     for (const r of rows) if (r.producer && !hosts.includes(r.producer)) hosts.push(r.producer);
+    // 定时的名字只有一个数字（如 Codex、Antigravity 里叫“1”的那个）时，写成“名为“1”的定时”，不单摆一个看不出是什么的数字
+    const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     const item = r => {
       const when1 = plan(r);
-      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
+      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, label(r))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
-      const late = est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000) ? `预计 ${zhAt(r.next_estimated_at)}` : '';
-      return `<li><b>${esc(when1)}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small></li>`;
+      // 调度器预计的下一次和按周期推的原定不在同一分钟（如原定周二 00:00、预计周一 23:55）：不写“每周二 00:00”，免得和预计的日期对不上；照后台的周期原文写，再写下次预计几点
+      if (est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000))
+        return `<li><b>${F(r.period)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(`下次预计 ${zhAt(r.next_estimated_at)}`)].filter(Boolean).join(' · ')}</small></li>`;
+      return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${F(r.state_text)}</small></li>`;
     };
     // Claude 只接本机执行的定时（本人 11-25 22:13 定），claude.ai 上建的不接：在 Claude 那行写明
     const scope = { Claude: d.scheduled_sources?.claude?.scope === 'local_execution' ? '这里只列本机执行的定时，claude.ai 上建的看不到' : '' };

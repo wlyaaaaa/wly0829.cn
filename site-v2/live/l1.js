@@ -327,14 +327,16 @@
     card.classList.add('card--empty'); card.classList.toggle('card--warming', warming);
     const named = id === 'chats', name = NAME[id];
     const caption = id === 'needs' && d ? addressed('等你的事 · 没有记录') : d?.text || `${name}暂时读不到`;
-    const text = warming ? '正在准备' : lastState?.offline ? `${name}：这块没存下来，连上后补上。` : caption;
-    U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>` : cardHead(text, name));
+    // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
+    const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
+    U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
+      : gone ? U.head(name) + `<br><span class="row__sub">${esc(text)}</span>` : cardHead(text, name));
     for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (!el.querySelector?.('[data-part]')) U.html(el, ''); el.hidden = true; }
     paintStatus(id, d);
   }
 
   // —— 加载中（雾里显影，_lib/live-ui.js 的 reading）：第一次读、手上还没有数时七张卡各自进雾，数到了由糊变清；
-  //    电脑不在线、又没存下来时每张卡收成一句话（名字 + “电脑不在线，这块没存下来，开机后自动补上”） ——
+  //    电脑不在线、又没存下来时每张卡收成卡名加一句灰色小字“这块没存下来，连上后补上。” ——
   const NAME = Object.fromEntries(PAGES.map(p => [p.id, p.name || p.id]));
   let projectLooks = null;
   const LINES = { needs: 3, chats: 3, computer: 3 };
@@ -678,7 +680,8 @@
   function chatShortName(c) {
     const projectItem = home?.projects?.items?.find(p => p.id === c.project);
     const extra = projectItem && !projectItem.hidden && !projectItem.hidden_block && !(viewer === 'public' && (projectItem.visibility === 'owner' || projectItem.public === 'owner')) ? [chatField(projectItem.name, projectItem)] : [];
-    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || 'AI 对话';
+    // 什么都取不出时不写“AI 对话”（跟卡名撞），交给下面写“无标题”，和 AI 对话页同一条对话叫法一样（r83 返修第二轮）
+    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || '';
     const short = value => {
       if (value?.hidden || value?.hidden_block || value?.rewrite === 'pending' || value?.visibility === 'pending' || viewer === 'public' && (value?.visibility === 'owner' || value?.public === 'owner')) return '';
       const line = U.fieldText(value, viewer).trim().split(/[\n。！？]/, 1)[0];
@@ -865,7 +868,7 @@
     const stamp = recordStamp(status?.at || link?.at || blockAt(d) || d?.received?.last_at);
     const old = lastState?.offline || (status ? status.state !== 'online' || oldReading(status) : oldReading(d)) || oldReading(link);
     // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
-    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
+    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机调试连接上次未连通${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';   // 旧记录照原意说是那一次调试连接没连上，免得旁边手机卡有新读数时读成手机现在离线（r83 返修第二轮）
     if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
     // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
     if (d?.presence?.state === 'unknown') return lastState?.offline ? `上次读不到手机连接状态${stamp ? `（${stamp} 记录）` : ''}` : '手机连接状态暂时读不到';
@@ -941,13 +944,14 @@
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
         // 笔记本连不上时和旁边手机一样写从几点起（后台 offline_since，M918）
         const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
-          ? ` · ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
+          ? `\u00a0· ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
-        const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? ` · 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
+        // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和后一台包在一起，一行放不下时连着后一台折下去，不单独占一行
+        const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? `\u00a0· 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
         const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
-      }).join(' · '), null, '', '/live/computer/'],
+      }).map((html, i) => i ? `<span>·\u00a0${html}</span>` : html).join(''), null, '', '/live/computer/'],
     ];
     const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : value;
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
@@ -1124,7 +1128,7 @@
     const d = state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
+      : [state.offline ? '这块没存下来，连上后补上。' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
         // 这一样回“公开判定更新中”时写明为什么（M970）
         : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);

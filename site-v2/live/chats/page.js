@@ -53,7 +53,10 @@
   L.add($('hero')); U.fold($('recent-more'), $('recent-box'));
   document.querySelectorAll('#active > .part, #recent > .part').forEach(el => el.setAttribute('data-keep', ''));
   const heroRead = U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: 'AI 对话' });
-  const activeRead = U.reading($('active'), { ghost: U.ghost.rows(3), slow: false }), recentRead = U.reading($('recent'), { ghost: U.ghost.rows(4) });
+  const activeRead0 = U.reading($('active'), { ghost: U.ghost.rows(3), slow: false }), recentRead = U.reading($('recent'), { ghost: U.ghost.rows(4) });
+  // 在干的列表不在卡里：电脑连不上又没存下来时，页头卡已经写了“这块没存下来”，这一栏整栏先收起，不在卡外再写一遍、也不留没字的空卡（r83 返修）
+  const activeRead = { set(s) { const gone = !!s?.offline && s.data == null; $('active').hidden = gone; if (gone) activeRead0.done(false); else activeRead0.set(s); },
+    done(...a) { $('active').hidden = false; return activeRead0.done(...a); }, get phase() { return activeRead0.phase; } };
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
   const field = (value, item, parent) => U.chatFields.field(value, item, parent);
@@ -288,7 +291,14 @@
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
     $('chat-end-date').textContent = [Number.isFinite(peak?.count) && `峰值 ${peak.count} 个${peak.at ? ` · ${stamp(peak.at)}` : ''}`,
       to && (current?.window?.from ? `${U.date(from)} 至 ${U.date(to)}` : U.date(to))].filter(Boolean).join(' · ');
-    if (!stats || stats.q === 'warming') { plots.style.display = 'none'; U.html($('chat-counts'), `<p class="row__sub">${temporary ? '对话统计暂时读不到' : U.offline?.() ? '这块没存下来，连上后补上。' : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return; }
+    if (!stats || stats.q === 'warming') {
+      plots.style.display = 'none';
+      // 电脑连不上又没存下来：和页上别的空卡一个样子，写卡名“对话统计”加一句（r83 返修第二轮）
+      if (!temporary && stats?.q !== 'warming' && U.offline?.()) { $('chat-counts').dataset.read = 'gone'; U.html($('chat-counts'), '<div class="fog"><p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">对话统计</span></p><p class="fog__say">这块没存下来，连上后补上。</p></div>'); return; }
+      delete $('chat-counts').dataset.read;
+      U.html($('chat-counts'), `<p class="row__sub">${temporary ? '对话统计暂时读不到' : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return;
+    }
+    delete $('chat-counts').dataset.read;
     function n(v, d, key, label) {
       if (d?.q === 'warming') return '<span class="row__sub">正在准备</span>';
       if (!Number.isFinite(v)) return `<span class="row__sub">${v != null ? U.fieldHtml(v, { name: label, place: 'body' }) : U.offline?.() ? '—' : esc(U.collectionText(label, d || stats))}</span>`;
@@ -632,7 +642,7 @@
     fitRecent();
     U.land();
   }
-  function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }
+  function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), U.offline?.() ? [] : wait(text)); }
   renderStats(null); missing('正在读'); U.list($('recent-list'), wait('正在读'));
   let first = true, activityMinute = null, homeOffline = false;
   // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页。

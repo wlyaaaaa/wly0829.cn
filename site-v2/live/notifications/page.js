@@ -234,7 +234,8 @@
     U.html($('rates-note'),[...new Set(notes)].map(v=>typeof v==='string'?esc(plainGap(v)):shown(v,'记录范围')).join(' · '));
     $('rates-note').hidden=!$('rates-note').innerHTML;
   }
-  const plainGap=v=>v.replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'次').replace(/批/g,'次');
+  // 后台的记录范围说明对谁都写“你”（“事项原文和你是否读过”）：访客版照别处写“本人”
+  const plainGap=v=>v.replace(/你是否读过/g,`${you()}是否读过`).replace(/^发送日志未覆盖完整七天或有不完整记录，只统计(?:有记录|已读)的批次$/,'记录不满 7 天或有残缺，只算有记录的').replace('只统计已读批次','只算有记录的').replace(/批次/g,'次').replace(/批/g,'次');
   function emailGapRows(rows,scope=emailScope){
     return scope?(rows||[]).filter(r=>isMail(r)&&r.status!=='sent'&&parse(at(r))>=scope.from&&parse(at(r))<=scope.to):[];
   }
@@ -423,7 +424,8 @@
       return c&&validCount(c.sent)&&!(validCount(c.total)&&c.total===0)?`${label} ${countText(c,'sent',c.sent)} 次`:'';
     }).filter(Boolean).join('、'):'';
     // 后台按“发送批次”数：一次发送可能含两件事，所以写“次”不写“条”；近 24 小时这句写它自己的截止时刻，和下面明细读到的时刻分开（M501、M063）
-    const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
+    // 写“统计截至”：这一句的数是后台按这个时刻统计的，下面“最近一次”是明细里读到的最新一条，可能比它晚
+    const dayEnd=summary&&Number.isFinite(parse(summary.to))?`（统计截至 ${stamp(summary.to)}）`:'',most=Math.max(1,...recent.map(r=>Number.isFinite(r.count)?r.count:1)),multi=most>1?`（有的一次含 ${most} 件事）`:'';
     headline=!validCount(totals.total)?'近 24 小时发了多少次提醒，还没读到'
       :totals.total===0?`近 24 小时${dayEnd}${scope}没有给${you()}发提醒`
       :`近 24 小时${dayEnd}${scope}给${you()}发了 ${countText(summary||d,'total',totals.total)} 次提醒${multi} · ${perChannel||(allArrived?'全部到了':`到了 ${validCount(totals.sent)?countText(summary||d,'sent',totals.sent):U.collectionText()} 次`)}`;
@@ -452,7 +454,9 @@
     U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几次 ›</a>`:'');
     U.html($('latest'),row?`最近一次：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
     const attentionNote=$('attention-note');
-    U.html(attentionNote,[header.note].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
+    // 后台在读数停了、停之前是红灯时写“最后读到 11-25 11:43 时通知发送失败”（时刻是那次告警的时刻），读着不知道在说什么：显示时改成说红灯从哪来
+    const redNote=typeof header.note==='string'?header.note.replace(/^最后读到 ((?:\d{2}-\d{2} )?\d{2}:\d{2}) 时/,'亮红灯是因为 $1 记到'):header.note;
+    U.html(attentionNote,[redNote].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
     attentionNote.hidden=!attentionNote.innerHTML;
     U.html($('coverage-note'),coverageNotes.map(v=>typeof v==='string'?esc(plainGap(v)):shown(v,'记录范围')).filter(Boolean).join(' · '));
     $('coverage-note').hidden=!$('coverage-note').innerHTML;

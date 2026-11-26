@@ -146,9 +146,15 @@
     }
     shown.forEach(([,c],i) => { c.el.dataset.itemsCol = ''; c.el.style.setProperty('--items-column', picked ? '1 / -1' : best & (1 << i) ? '1' : '2'); });
     // “近 7 天下去的”放进短的那一栏，接在那一栏最后一组下面；只剩它一张时占整宽
-    const left = heights.reduce((sum, h, i) => sum + (best & (1 << i) ? h : 0), 0), wide = !!picked || !shown.length;
-    closed.dataset.itemsCol = ''; closed.toggleAttribute('data-wide', wide);
-    closed.style.setProperty('--items-column', wide ? '1 / -1' : left * 2 <= heights.reduce((sum, h) => sum + h, 0) ? '1' : '2');
+    // 它本身很长（如 900 宽时有几十条）、放进短栏后比两栏原来的差还多出一大截（一栏排到底、另一栏空一大片）时，改放到两栏下面占整宽，行分两列排
+    const total = heights.reduce((sum, h) => sum + h, 0), left = heights.reduce((sum, h, i) => sum + (best & (1 << i) ? h : 0), 0);
+    const gap = Math.abs(total - 2 * left), column = left * 2 <= total ? '1' : '2';
+    closed.dataset.itemsCol = ''; closed.toggleAttribute('data-wide', false); closed.style.setProperty('--items-column', column);
+    const own = closed.hidden ? 0 : closed.getBoundingClientRect().height + 22;
+    // 只在窄窗（窗口不到 1200 宽）这样挪；1440 这类宽窗照原来接短栏（主控只指了 900，r83 返修第二轮）
+    const wide = !!picked || !shown.length || innerWidth < 1200 && Math.abs(own - gap) > gap + 400;
+    closed.toggleAttribute('data-wide', wide);
+    closed.style.setProperty('--items-column', wide ? '1 / -1' : column);
     board.layout();
     if (!picked) requestAnimationFrame(() => shown.sort(([,a],[,b]) => a.el.offsetTop - b.el.offsetTop || a.el.offsetLeft - b.el.offsetLeft).forEach(([kind]) => { const stat = $('stats').querySelector(`[data-kind="${kind}"]`); if (stat) $('stats').append(stat); }));
   }
@@ -631,6 +637,7 @@
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
+    requestAnimationFrame(() => balanceBoard(true));   // 条数变了，重新看放短栏还是两栏下面
   }
   // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
   function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }

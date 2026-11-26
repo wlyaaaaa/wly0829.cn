@@ -1269,6 +1269,7 @@
       const upTo = window.Live?.upTo?.() || state.shownAt;
       put(link.querySelector('b'), '已连上');
       put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
+      put(link.querySelector('.live-conn__why'), '');   // 断线时那句（“先留着这份一直重试”之类）连上了就不留在“已连上”下面
       connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
     }
     const pair = state.publicPaused ? '' : state.pairNotice || '';

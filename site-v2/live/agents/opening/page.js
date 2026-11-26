@@ -272,7 +272,7 @@
     if (known(r.limit)) {
       const over = known(r.tokens) && r.tokens > r.limit, load = r.files.length && r.files.every(f => f.load === 'observed') ? 'observed' : 'inferred';
       const left = over ? `<em data-tone="over">超了 ${int(r.tokens - r.limit)}</em>` : known(r.left) ? `<em>还剩 ${T.big(r.left, `op-left-${h.id}`)}</em>` : '';
-      sum = `<p class="op-files__sum">规则 <b>${known(r.tokens) ? T.big(r.tokens, `op-tok-${h.id}`) : '没算出'}</b> / ${int(r.limit)}${left}${ev(load)}</p>
+      sum = `<p class="op-files__sum">规则 <b>${known(r.tokens) ? T.big(r.tokens, `op-tok-${h.id}`) : '没算出'}</b> / ${int(r.limit)} token${left}${ev(load)}</p>
         ${known(r.tokens) ? `<div class="op-gauge"${over ? ' data-tone="over"' : ''}><i style="width:${Math.min(100, r.tokens / r.limit * 100).toFixed(1)}%"></i></div>` : ''}`;
     } else {
       const base = m.modes.find(x => x.id === 'no_project')?.hosts[h.id], more = o.id !== 'no_project' && base ? r.count - base.count : null;
@@ -363,7 +363,7 @@
   function cmpNum(m, h) {
     if (!m.modes) return `<span class="op-cmp__num">${h.present ? `${words(h.characters)} · 只它有的 ${h.only.length} 段` : '这一轮没读到'}</span>`;
     const r = modeOf(m).hosts[h.id];
-    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? 'token 没算出' : known(r.limit) ? `${int(r.tokens)} / ${int(r.limit)}` : `${approx(r) ? '约 ' : ''}${int(r.tokens)} token`}`;
+    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? 'token 没算出' : known(r.limit) ? `${int(r.tokens)} / ${int(r.limit)} token` : `${approx(r) ? '约 ' : ''}${int(r.tokens)} token`}`;
     return `<span class="op-cmp__num">${size}</span>${h.present ? `<span class="op-cmp__num">只它有的 ${h.only.length} 段</span>` : ''}`;
   }
   function compare(m) {

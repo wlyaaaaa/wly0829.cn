@@ -40,14 +40,14 @@
   };
   const grantKeys = (key, combined) => combined ? ['pd', 'ur'] : [key];
   // Windows 那一格：读到状态后“锁屏”“解锁”两个按钮一直并排都在（本人 11-26 04:27：“能不能锁屏和解锁按钮同时显示呢”）。
-  // 点了先看两分钟内的读数：不用办的（没锁点解锁、已锁点锁屏，解锁时没有登录会话、后台没开远程解锁）不开码格，卡上直接说一句（本人 04:34：“点解锁就提示一个东西就行了”）；
+  // 点了先看两分钟内的读数：不用办的（没锁点解锁、已锁点锁屏、没有登录会话、后台没开远程解锁）不开码格，卡上直接说一句（本人 04:34：“点解锁就提示一个东西就行了”）；
   // 锁着、读数旧了或读不准的照常开码格，由电脑那头按真状态办（电脑本来没锁时后台直接回已解锁，不提交密码；没有登录会话时不核码）
   const windowsIs = s => state?.windows?.state === s && Math.abs(clock() - state.windows.observed_at_unix) <= 120;
   const windowsReadAs = s => state?.policy?.actions?.unlock_windows === true && windowsIs(s);
-  const noSessionText = '电脑现在没有登录会话，解不了锁';
+  const noSessionText = '登录界面还没就绪，稍后再试';   // no_session 只说明 Windows 眼下给不出可用的控制台；登录界面起来、还没人签入时照样能解锁（后台 11-26 08:03）
   const windowsHints = {
     unlock: () => windowsIs('unlocked') ? '电脑现在没锁，不用解锁' : windowsIs('no_session') ? noSessionText : state?.policy?.actions?.unlock_windows !== true ? '远程解锁没开' : '',
-    close: () => windowsIs('locked') ? '电脑已经锁着' : '',
+    close: () => windowsIs('locked') ? '电脑已经锁着' : windowsIs('no_session') ? '电脑现在没有登录会话，不用锁屏' : '',
   };
   const canOfferWindowsUnlock = () => !windowsHints.unlock();
   let windowsHint = '';   // 卡上那句提示是点哪个按钮给的（unlock／close）；读数变了、那句不再成立就收掉，开码格、点别的也收掉
@@ -484,7 +484,7 @@
         else if (kind === 'open' && !privateState) b.setAttribute('aria-expanded', String(openKey === key && !deals[key].root.classList.contains('is-lock')));
         else if (kind === 'close') b.setAttribute('aria-expanded', String(openKey === key && deals[key].root.classList.contains('is-lock') && !unlocking()));
         b.onclick = () => {
-          // Windows：读数说不用办（没锁点解锁、已锁点锁屏，解锁时没有登录会话、后台没开远程解锁），收起码格，卡上说一句
+          // Windows：读数说不用办（没锁点解锁、已锁点锁屏、没有登录会话、后台没开远程解锁），收起码格，卡上说一句
           if (key === 'win' && windowsHints[kind]?.()) { setOpen(null); windowsHint = kind; render(); cells.win.querySelector(`[data-kind="${kind}"]`)?.focus(); return; }
           if (inline) {
             const again = inlineAction?.key === key && inlineAction?.kind === kind;
