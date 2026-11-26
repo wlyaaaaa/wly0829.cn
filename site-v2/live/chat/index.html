@@ -32,6 +32,12 @@
 .route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
 .route-cols:has(> .route-now[hidden]):has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
+/* 窄窗口把过程记录移到下一排，给时刻、事件名和说明足够的行宽。 */
+@media (max-width: 1080px) {
+  .route-cols { grid-template-columns: minmax(0, .94fr) minmax(0, 1.1fr); }
+  .route-cols:has(> .route-now[hidden]), .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
+  .route-cols > .route-log { grid-column: 1 / -1; }
+}
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
 /* 思考摘要“原句 · 译文”每段一块（page.js thoughtSegments）：放得下整段挪到下一行，比一行还长的在块里照常折 */
