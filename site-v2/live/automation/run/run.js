@@ -219,6 +219,10 @@
     return out.join('\n');
   }
   const norm = s => String(s || '').replace(/\s+/g, '').replace(/[。．.！!？?；;]+$/, '');
+  const alreadySaid = (previous, words) => {
+    const part = loose(words);
+    return part.length >= 6 && loose(previous).includes(part);
+  };
 
   // AI 一条条说的话：有逐步记录（automation_steps）就照它，一条话下面挂紧跟着的思考摘要；连着两条一样的只留一条
   function stepMessages(steps, prefix) {
@@ -255,7 +259,7 @@
   }
 
   // 最后派活程序说结论：做完的照这一轮的结局，暂缓的写为什么先放着，没做成的照真原因（stop：停在哪一步、几点再接着做）
-  function closing(r) {
+  function closing(r, lastWords) {
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
     let body, tone;
@@ -272,8 +276,12 @@
       body = `没收到结论：${why}${/[。！？]$/.test(why) ? '' : '。'}${step}${until}`; tone = 'bad';
     } else {
       // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
-      const result = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : '') || F(r.summary, '这一轮做了什么'), r);
-      body = `收到结论：${result ? withTag(result, U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer)) : '跑完了'}`; tone = 'ok';
+      const plainSummary = typeof r.summary === 'string' && lastWords ? r.summary.replace(SCAN, '').match(/[^。！？\n]+[。！？]*|\n+/g) : null;
+      const summary = plainSummary ? plainSummary.filter(sentence => !alreadySaid(lastWords, sentence)).join('').trim() : r.summary;
+      const shown = F(summary, '这一轮做了什么');
+      const result = withoutScan(R.withoutSubject(shown, r.subject ? F(r.subject.title, '这件活') : '') || shown, r);
+      const tag = U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer);
+      body = result ? `收到结论：${withTag(result, tag)}` : `收到结论${lastWords ? '。' : '：跑完了'}${tag}`; tone = 'ok';
     }
     return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: later, tone, cls: 'ar-end' }) };
   }
@@ -281,7 +289,7 @@
   // 中间：AI 一条条说、帮手一行行，按时刻排
   function middle(r, d, ai, locked) {
     const out = [];
-    let gap = '';
+    let gap = '', lastWords = '';
     if (!locked) {
       const steps = list(d.automation_steps);
       const msgs = steps.length ? stepMessages(steps, 'ai') : [];
@@ -297,7 +305,7 @@
         const body = raw ? lines.map(x => esc(x)).join('<br>') : bodyOf(v, label);
         if (!body) return;
         lines.forEach(x => seen.push(norm(x)));
-        msgs.push({ at, words: lines.join(''), body, quotes: [], key: `${label}-${msgs.length}`, label });
+        msgs.push({ at, words: lines.join('\n'), body, quotes: [], key: `${label}-${msgs.length}`, label });
       };
       const reply = U.chatFields.detailReply(d);
       // 没有逐步记录（后台在 field_gaps.automation_steps 写原因）：退回顶层页同样的内容——最新进展、正式摘要、最新回复、思考摘要
@@ -309,6 +317,7 @@
       add(CV.replyBody(U.chatProgressText(d.summary, d, viewer)), '正式摘要', d.summary?.at);
       add(CV.replyBody(reply), '最新回复', reply?.at);
       msgs.sort((a, b) => (T.stamp(a.at) ?? Infinity) - (T.stamp(b.at) ?? Infinity));
+      lastWords = msgs.findLast(m => m.words)?.words || '';
       // 对话最后的思考摘要（顶层页“思考摘要”那块）：逐步记录里已经有的不再挂
       const t = CV.thought();
       if (t.thought && !seenThought.has(norm(CV.visibleText(d.thinking)))) {
@@ -321,15 +330,17 @@
     // 帮手：默认收成一行，点“展开”看这个帮手的全部（逐步记录、帮手原名、帮手详情、打开对话）；内容和顶层页的帮手行用同一个函数出
     const helpers = Array.isArray(d.helpers) ? d.helpers : locked ? list(d.helpers?.active) : [];
     helpers.forEach((h, i) => {
-      const row = CV.helperRow(h, i);
+      const messages = locked ? [] : stepMessages(list(h.automation_steps), `h${i}`);
+      const last = messages.findLast(m => m.words)?.words;
+      const row = CV.helperRow(h, i, words => alreadySaid(last, words));
       if (row.warming) return;
-      const own = locked ? '' : stepMessages(list(h.automation_steps), `h${i}`).map(m => say({ who: 'ai', name: esc(row.model || '帮手'), at: clockOf(r, m.at), body: m.body, after: quotes(m.quotes, m.key) })).join('');
+      const own = messages.map(m => say({ who: 'ai', name: esc(row.model || '帮手'), at: clockOf(r, m.at), body: m.body, after: quotes(m.quotes, m.key) })).join('');
       const line = [row.state && `<b class="ar-helper__state">${esc(row.state)}</b>`, row.name || (row.state ? '' : row.head)].filter(Boolean).join('：');
       const inside = `${own ? `<ol class="ar-chat ar-chat--sub">${own}</ol>` : ''}<p class="ar-helper__meta">${U.fieldHtml(row.meta, { name: '对话内容', kind: viewer })}</p>${row.detail}${row.more}${row.canOpen ? `<div class="ar-helper__acts">${CV.actions(h)}</div>` : ''}`;
       out.push({ at: h.at, html: `<li class="ar-msg ar-helper" data-who="helper"><details class="ar-helper__fold" id="ar-h-${esc(row.key)}"><summary class="live-disclosure"><span class="ar-helper__hook" aria-hidden="true"></span><span class="ar-ava" data-who="helper" aria-hidden="true"></span><b class="ar-helper__who">帮手${row.model ? ` · ${esc(row.model)}` : ''}</b>${T.stamp(h.at) ? `<time>${esc(clockOf(r, h.at))}</time>` : ''}<span class="ar-helper__line">${line}</span><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><div class="ar-helper__body">${inside}</div></details></li>` });
     });
     out.sort((a, b) => (T.stamp(a.at) ?? Infinity) - (T.stamp(b.at) ?? Infinity));
-    return { out, gap };
+    return { out, gap, lastWords };
   }
 
   // 计划：和顶层页同一份 plan，每一步的状态照数据（做完、在干、没开始），当前这一步标出。
@@ -352,13 +363,14 @@
     const hiddenText = c.why || '这一轮对话的计划、思考摘要和回复仅本人可见';
     const ai = d ? CV.who(d) || r.who?.text || 'AI' : r.who?.text || 'AI';
     const locked = !!d && U.chatFields.contentLocked(d, viewer);
-    let note = '';
+    let note = '', lastWords = '';
     if (program) note = '';
     // 还在跑的那一轮后台没给对话时，不说“没存下来、看结论”（还没有结论，下面是“正在想……”）
     else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : r.status === 'running' ? '这一轮的对话还没读到。' : '这一轮的对话没存下来，看下面派活程序收到的结论。';
     else if (!d) note = chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
     else {
-      const { out, gap } = middle(r, d, ai, locked);
+      const { out, gap, lastWords: previous } = middle(r, d, ai, locked);
+      lastWords = previous;
       // 整场对访客锁着：照顶层页写哪几样仅本人可见，帮手照列（型号、状态）
       if (locked) items.push({ html: `<li class="ar-gap">${CV.lockedFields}仅本人可见</li>` });
       else if (gap && out.length) items.push({ html: `<li class="ar-gap">${esc(gap)}，下面是这场对话的摘要和回复。</li>` });
@@ -370,7 +382,7 @@
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
       items.push({ html: `<li class="ar-msg ar-typing" data-who="ai"><span class="ar-ava" data-who="ai" aria-hidden="true"></span><div class="ar-msg__body"><p class="ar-msg__head"><b>${esc(ai)}</b></p><p class="ar-msg__text"><span class="ar-dots" aria-hidden="true"><i></i><i></i><i></i></span>${now ? `正在${esc(now.replace(/^正在/, ''))}` : '正在想……'}</p></div></li>` });
-    } else items.push(closing(r));
+    } else items.push(closing(r, lastWords));
 
     // 卡头：这场对话自己的状态（和这一轮的结局分开写）、条数；型号档位、各项时刻、帮手几个、所属项目、App 标签、压缩次数、问情况、打开对话；计划收在“计划”里
     // 访客版对话藏着时后台不给 state，看 metadata 里记的状态

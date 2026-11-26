@@ -104,7 +104,7 @@
     const dayOf = t => U.date(t), stamp = t => { const now = at || chat?.at, day = dayOf(t); if (!now || !Number.isFinite(Date.parse(t))) return day ? `${day} ${U.time(t)}` : ''; return day === dayOf(now) ? U.time(t) : day === dayOf(new Date(Date.parse(now) - 86400000).toISOString()) ? `昨天 ${U.time(t)}` : `${day} ${U.time(t)}`; };
 
     // 帮手一行的内容：状态、名字、型号、最后记录时间、帮手原名、帮手详情和能不能点开。两页摆法不同、内容同一份
-    function helperRow(d, index) {
+    function helperRow(d, index, spoken = () => false) {
       const key = d.id || `helper-${index}`;
       if (d.q === 'warming') return { key, warming: true };
       const { name, detail } = helperWords(d), label = chatState(d);
@@ -113,7 +113,13 @@
       const activity = activityOf(d);
       const canOpen = !contentLocked(chat, viewer) && !contentLocked(d, viewer);
       const meta = ['帮手', name && model, activity].filter(Boolean).join(' · ');
-      return { key, name, detail, state, model, head, activity, canOpen, meta, running: d.state === 'running', lamp: U.status(d, { small: true }).lamp, more: U.draw10?.helperDetailHtml?.(d, viewer, chat) || '' };
+      const details = { ...d };
+      if (spoken(visibleText(d.localized?.summary?.text ? d.localized.summary : d.summary))) {
+        details.summary = null;
+        if (d.localized?.summary) details.localized = { ...d.localized, summary: null };
+      }
+      if (spoken(visibleText(d.reply ?? d.latest_reply))) details.reply = details.latest_reply = null;
+      return { key, name, detail, state, model, head, activity, canOpen, meta, running: d.state === 'running', lamp: U.status(d, { small: true }).lamp, more: U.draw10?.helperDetailHtml?.(details, viewer, chat) || '' };
     }
 
     // 计划的一步：不改名、不加项；只照数据画勾和“在做”，当前这一步按 step_index 标出
