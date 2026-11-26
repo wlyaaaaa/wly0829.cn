@@ -201,8 +201,12 @@
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
   const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${U.fieldHtml(part, { name: '项目读数', kind: viewer })}</span>`).join('');
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
+  // 名册按组排：日用、个人（带 group: "personal" 的在用项目，本人 11-27 批准）、偶用，读不到分档的放最后；组内照旧按最近改动
+  const PHASE_GROUPS = { daily: '日用', personal: '个人', occasional: '偶用' };
+  const groupOf = it => it.group === 'personal' && it.phase !== 'archived' ? 'personal' : it.phase;
+  const groupRank = it => { const i = Object.keys(PHASE_GROUPS).indexOf(groupOf(it)); return i < 0 ? 9 : i; };
   function renderActive(items) {
-    fill('active', items?.filter(it => it.name || it.label).sort((a, b) => (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
+    fill('active', items?.filter(it => it.name || it.label).sort((a, b) => groupRank(a) - groupRank(b) || (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
       const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
@@ -237,7 +241,7 @@
       const valueLine = rule ? `<a class="pj-fig__link pj-fig__v" title="${esc(text)}" href="/rules/">${valueHtml}</a>`
         : `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const reading = (hasText ? labelLine + labelMark + valueLine : '') + (hasText || through ? scopeHtml + readAt : '');
-      return { key: it.id, href: it.href, secret: hidden, group: ({ daily: '日用', occasional: '偶用' })[it.phase] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
+      return { key: it.id, href: it.href, secret: hidden, group: PHASE_GROUPS[groupOf(it)] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
   }
   function shortText(value, { keepChangeWords = false, ...options }) {

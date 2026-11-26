@@ -387,18 +387,20 @@
   const statContainers = d => [d, d?.counts, d?.summary, d?.summary?.drive, d?.traffic, d?.storage_growth_top, d?.outcomes7, ...(d?.metrics || [])].filter(Boolean);
   const cardTone = (id, d, status = U.status(d)) => ['ledger', 'projects'].includes(id) ? 'none' : status.tone;
   function projectGroups(items = []) {
-    const groups = { daily: [], occasional: [], archived: [], unknown: [] };
-    for (const item of items) groups[['daily', 'occasional', 'archived'].includes(item.phase) ? item.phase : 'unknown'].push(item);
-    const daily = groups.daily;
+    // 带 group: "personal" 的在用项目进“个人”组，排在日用、偶用之间（本人 11-27 批准）；其余照旧按 phase
+    const groups = { daily: [], personal: [], occasional: [], archived: [], unknown: [] };
+    // 这几对在分组前对调位置，日用前排照旧露这几个；其中一个分进个人组时，另一个仍站它原来的位子
+    const list = [...items];
     for (const [first, second] of [
       ['ai-cli-profile-manager', 'pcconfig'],
       ['career-development', 'passwordcenter'],
       ['codex-memory', 'localocr'],
     ]) {
-      const a = daily.findIndex(item => item.id === first);
-      const b = daily.findIndex(item => item.id === second);
-      if (a >= 0 && b >= 0) [daily[a], daily[b]] = [daily[b], daily[a]];
+      const a = list.findIndex(item => item.id === first);
+      const b = list.findIndex(item => item.id === second);
+      if (a >= 0 && b >= 0) [list[a], list[b]] = [list[b], list[a]];
     }
+    for (const item of list) groups[item.group === 'personal' && item.phase !== 'archived' ? 'personal' : ['daily', 'occasional', 'archived'].includes(item.phase) ? item.phase : 'unknown'].push(item);
     return groups;
   }
   function projectIcon(it) {
@@ -467,7 +469,8 @@
     projectExtraLinks(data);
     const limit = defaultCounts.projectGroup;
     const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more')?.open ? ' open' : '';
-    const groups = projectGroups(data.items), labels = { daily: ['日用', '🖥️'], occasional: ['偶用', '🌐'], unknown: ['分档还没读到', ''] };
+    const person = '<svg class="project-group__icon" viewBox="0 0 24 24" width="1.3em" height="1.3em" fill="none" stroke="#e8913a" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-4 3.9-6.5 7.5-6.5s6.7 2.5 7.5 6.5"/></svg>';
+    const groups = projectGroups(data.items), labels = { daily: ['日用', '🖥️'], personal: ['个人', person], occasional: ['偶用', '🌐'], unknown: ['分档还没读到', ''] };
     U.html(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
     const count = Number.isFinite(data.frozen) ? quantity(data, 'frozen') : null;
     U.html(parts.projects.frozen, `${count == null ? '看冻结项目' : `冻结 ${count} 个`} ›`);
