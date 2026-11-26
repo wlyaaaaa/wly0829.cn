@@ -24,6 +24,8 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents']);
+  let interfaceLoad;
   const artifactVersion = id === 'agents' && /^E\d+$/.test(params.get('artifact') || '') && params.get('artifact');
   function projectLookKey(id) {
     let hash = 0x811c9dc5;
@@ -1098,7 +1100,8 @@
       const v = value(m), { line: said, moment, cadence } = lineOf(m, v), line = [said, moment].filter(Boolean).join(' · ');
       // 读数是一句字、超过 11 个字的（“10-04（52 天前）”，项目页卡 is-long 也从 11 个字起）：和整句读数一样占两格、一行写全，不截成“10-04（5…”
       const words = v.long || /class="pj-text"/.test(v.html) && [...v.plain].length > 11;
-      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
+      const wrap = id === 'video-scaffold' && m.id === 'films' || id === 'pc-panel-hub' && m.id === 'updated';
+      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : wrap ? 'wrap' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
       const cutoff = d.changes7_stale && d.changes7_at && esc(`上次记录截至 ${stamp(d.changes7_at)}`);
@@ -1146,6 +1149,10 @@
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
     U.html(strip, html);
+    if (interfaceProjects.has(id) && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip))
+        .catch(() => { interfaceLoad = null; });
+    }
   }
   // 名字旁边：项目介绍（外链）、问情况
   function projectItemReferences(action) {

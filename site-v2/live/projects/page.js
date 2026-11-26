@@ -385,7 +385,8 @@
     }
     // 文档字数、代码行数和代码字数用 code_size（数据约定第 10 节：同一份只算在用项目的合计）；它还没出数的那几项照旧用 summary
     const size = d?.code_size && Object.fromEntries(['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars', 'covered', 'active'].filter(k => Number.isFinite(d.code_size[k])).map(k => [k, d.code_size[k]]));
-    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer); renderActivity(d?.activity, d?.items);
+    const sizeDate = ['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars'].some(k => Number.isFinite(size?.[k])) ? stamp(d.code_size.date) : '';
+    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer, sizeDate); renderActivity(d?.activity, d?.items);
     if (!U.offline?.() && !d?.summary) U.html($('pj-summary'), '<span class="pj-summary-none">近 7 天、文档、代码暂时读不到</span>');
     $('activity').querySelector('.part').hidden = !U.offline?.() && !d?.activity;
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');

@@ -5,6 +5,15 @@
 <link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-project-look.css"><link rel="stylesheet" href="/live/_lib/live-viz.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
 <style>
 #active { min-height: 182px; }
+/* 开场的字先各自走到位再显，收拢时先淡出再移动，保留逐字顺序及绿灯动效。 */
+#topbar .brand__word .ch {
+  transition-duration: .30s, .14s, .30s;
+  transition-delay: calc(var(--i) * 12ms + 90ms), calc(var(--i) * 12ms + 390ms), calc(var(--i) * 12ms + 90ms);
+}
+#topbar[data-state="compact"] .brand:not(:hover):not(:focus-visible) .ch {
+  transition-delay: calc((var(--n) - 1 - var(--i)) * 12ms + 140ms), calc((var(--n) - 1 - var(--i)) * 12ms), calc((var(--n) - 1 - var(--i)) * 12ms);
+}
+#topbar[data-fit-first] .brand__word .ch { transition: none; }
 .pj-list-group { grid-column:1 / -1; list-style:none; min-width:0; break-inside:avoid; }
 #stage .pj-list-group > details > .live-disclosure { margin-top: 8px; font-size: 13px; font-weight: 400; color: var(--muted); }
 .pj-short > summary { display:flex; align-items:baseline; gap:8px; cursor:pointer; }
@@ -28,11 +37,12 @@
 #activity > .part { margin-left: 0; }
 #board { grid-template-columns: minmax(0, 1fr); }
 #activity { margin-top: 24px; }
-.pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
-#activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 1fr)); }
+.pj-heat-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, calc(100% - 1060px), 72px); }
+#activity .pj-heat { grid-template-columns: min(170px, calc(100% - 12px * var(--days))) repeat(var(--days), minmax(9px, 1fr)); }
 /* 窗口不到 1280 宽：左右两半放不下 30 天的格子（11-14 往后被截掉），改成上下两半，格子不超过 16px；1440 宽不变（M250） */
 @media (max-width: 1279px) { .pj-heat-halves { grid-template-columns: minmax(0, 1fr); gap: 18px; } #activity .pj-heat { grid-template-columns: 170px repeat(var(--days), minmax(9px, 16px)); } }
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
+@media (min-width: 1280px) { #activity .pj-heat-name { justify-content: flex-end; text-align: right; } }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }
 /* 本地还没推的改动多了才分批（R147）：“展开（还有 N 个项目）”在小卡下面，和成品那块“更多成品 ›”一样靠左 */
