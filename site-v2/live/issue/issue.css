@@ -66,3 +66,5 @@
 .iss-facts .rec-fact > dd { font-size: 15px; line-height: 24px; overflow-wrap: anywhere; }
 .iss-facts .rec-fact > dd small { display: block; margin: 2px 0 0; }
 .iss-facts .rec-fact > dd a.iss-go { color: #00A650; }
+#raw[open] .dossier-fold__chev { rotate: -90deg; }
+#raw .rec-fact > dd { white-space: pre-wrap; overflow-wrap: anywhere; }

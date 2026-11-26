@@ -25,6 +25,7 @@
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
   const nodot = v => typeof v === 'string' ? v.trim().replace(/[。.]$/u, '') : v;
   const go = (href, text) => site(href) ? `<a class="iss-go" href="${esc(route(site(href)))}">${text}&nbsp;›</a>` : text;
+  const fact = (k, v) => v ? `<div class="rec-fact"><dt>${k}</dt><dd>${v}</dd></div>` : '';
   // 那一轮还是那场对话：看地址是自动任务的一轮还是对话页
   const goName = href => /^\/live\/chat\//.test(href) ? `${HOST[(new URL(href, location.origin).searchParams.get('id') || '').split(':')[0]] || ''} 那场对话`.trim() : '那一轮';
   const titleOf = d => T(d.plain_title) ? d.plain_title : T(d.title) ? d.title : d.text;
@@ -156,7 +157,7 @@
     foot.hidden = !foot.textContent;
 
     // 右边三张小卡
-    const side = [repeatCard(d), sourceCard(d), factsCard(d, s, repair, who, born)].filter(Boolean);
+    const side = [repeatCard(d), sourceCard(d), factsCard(d, s, repair, who, born), rawCard(d)].filter(Boolean);
     put($('side'), side.join(''));
     $('grid').dataset.shape = side.length ? 'two' : 'main';
     heroRead.done(); restRead.done();
@@ -200,7 +201,6 @@
   }
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {
-    const fact = (k, v) => v ? `<div class="rec-fact"><dt>${k}</dt><dd>${v}</dd></div>` : '';
     // 谁记的：后台给了那一轮的地址就点得进去（对话被藏的那一轮访客也打得开）；后台给了原因（如“这一轮的对话仅本人可见。”）照字写在下面；
     // 本人版：记下它的那一轮对话访客看不到，挂“访客看不到”
     const reg = site(d.registered_by_href);
@@ -214,6 +214,7 @@
       fact('谁记的', whoHtml),
       fact('记下', timed(born) ? esc(when(born)) : ''),
       fact('AI 接手', repair && timed(d.accepted) && d.accepted !== born ? esc(when(d.accepted)) : ''),
+      fact('重开次数', Number.isInteger(d.reopen_count) ? esc(d.reopen_count) : ''),
       fact('谁在修', fixer),
       fact('怎么算办完', T(d.done_when) ? F(d.done_when, '怎么算办完') : ''),
       fact('结局', s.closed ? esc(s.label) + (site(d.owner_href) ? ` ${go(d.owner_href, `已放进等${you()}的事`)}` : '') : ''),
@@ -222,6 +223,15 @@
       fact('关联任务', T(d.task_name) ? F(d.task_name, '关联任务') : ''),
     ].join('');
     return `<section class="dossier-card glass iss-side"><h2>这件事</h2><dl class="rec-facts iss-facts">${rows}</dl></section>`;
+  }
+
+  function rawCard(d) {
+    const rows = fact('原文', F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项'))
+      + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
+    if (!rows) return '';
+    return `<details class="dossier-card dossier-card--raw glass" id="raw"${$('raw')?.open ? ' open' : ''}>
+      <summary class="dossier-card__title dossier-fold"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></summary>
+      <dl class="rec-facts">${rows}</dl></details>`;
   }
 
   // 反复出现那张卡要的数在账本列表里：读一次，不跟着每轮刷新
