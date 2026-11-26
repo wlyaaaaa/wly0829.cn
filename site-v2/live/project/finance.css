@@ -4,7 +4,7 @@
 
 /* 关键数字第一格：格名后面挂“访客看不到” */
 .fin-cell .pj-cell__k { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; }
-.fin-dots { letter-spacing: .14em; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fin-dots { font-family: "Segoe UI", Arial, Helvetica, sans-serif; letter-spacing: .08em; font-weight: 700; color: var(--ink); white-space: nowrap; }   /* 中文字体里的 • 是全角，点会散开；用西文字体的半角点 */
 .pj-cell__v .fin-dots { font-size: clamp(17px, 1.8cqi, 21px); }
 .fin-miss { font-size: 13px; font-weight: 400; color: #8f8d86; }
 
@@ -39,6 +39,8 @@
 .fin-bar[aria-pressed="true"] .fin-bar__stack { outline-color: var(--fin-green); }
 .fin-bar[aria-pressed="true"] .fin-bar__x { color: var(--ink); font-weight: 600; }
 /* 本月没过完：浅色虚线柱，单独放在最右，和整月隔开一点 */
+/* 没法按类拆的月：一整根浅灰带细斜纹，和“没分清”的灰分得开 */
+.fin-bar.is-gap .fin-bar__stack > i { background: repeating-linear-gradient(135deg, #e4e3e9 0 5px, #d6d5dc 5px 10px); }
 .fin-bar.is-current { margin-left: 6px; }
 .fin-bar.is-current .fin-bar__stack { border: 1.5px dashed rgb(20 20 19 / .3); background: rgb(255 255 255 / .5); }
 .fin-bar.is-current .fin-bar__stack > i { opacity: .5; }
@@ -91,5 +93,6 @@ button.fin-asof:hover .fin-tip, button.fin-asof:focus-visible .fin-tip, button.f
 .fin-long__item { display: inline-block; }
 .fin-long__item b { font-weight: 600; color: var(--ink); }
 .fin-long__item small { margin-left: 6px; font-size: 12px; color: #8f8d86; white-space: nowrap; }
+.fin-long__item small.is-common { margin-left: 0; }
 .fin-sep { margin: 0 8px; color: #a8a69e; }
 .fin-check { margin: 10px 0 0; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
