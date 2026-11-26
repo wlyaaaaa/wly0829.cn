@@ -323,12 +323,13 @@
   }
   // 四个按钮（照第一屏图）：全部＝七类表，进行中、出毛病的、近 72 小时跑完的换成下面的列表。
   // 件数：两张总列表读到了，进行中、跑完的就是各自回包的 total（按轮数）；还没读到先用 automation 里的 board_counts；
-  // 只看一家、一种结局、某一天时照下面实际列出的数。全部＝board_counts.all（几类）；老后台没给时照下面列表有几张（三样加起来）。列表还在读时不写数
+  // 只看一家、一种结局、某一天时照下面实际列出的数。全部＝几类（board_counts.all，没给时数七类表的行）。列表还在读时不写数
   function buttons(d, v) {
     const bc = d.board_counts || {}, plain = !filter.family && !filter.status && !filter.date;
     const count = key => v.counts[key] ?? (plain && known(bc[key]) ? bc[key] : null);
     const btn = (key, label, n) => `<button type="button" class="au-view" data-view="${key}" aria-pressed="${(filter.view || 'all') === key}">${label}${n != null ? ` <b>${int(n)}</b>` : ''}</button>`;
-    const all = known(bc.all) ? bc.all : v.waiting && !v.total ? null : v.total;
+    // 全部＝下面七类表有几类（后台 board_counts.all 同一个数）；后台没给时数表里实际几行，不再把三张列表加起来
+    const all = known(bc.all) ? bc.all : shownCats(d).length || null;
     return `<nav class="au-views" aria-label="看哪些">${btn('all', '全部', all)}${btn('running', '进行中', count('running'))}${btn('problems', '出毛病的', v.problems.length)}${btn('done', '近 72 小时跑完的', count('finished'))}${chips(d)}</nav>`;
   }
   const sec = (id, name, n, html, extra = '') => `<section class="au-sec" id="${id}"><h2 class="au-sec__head">${name}${n != null ? `<b> · ${int(n)}</b>` : ''}${extra}</h2>${html}</section>`;
