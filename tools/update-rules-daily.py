@@ -34,6 +34,15 @@ def rule_page(path):
     return path.startswith("rules/") and path.endswith(".html")
 
 
+def stage_live_project_settings(worktree, pcconfig):
+    registry = read(pcconfig / 'registries/dashboard_sources.json')
+    sources = registry['project_sources']['wlyaaaaa/wly0829.cn']['sources']
+    paths = {audience: sources[f'website.{audience}']['path'] for audience in ('public', 'owner')}
+    config = worktree / '.publish/private/live-project.json'
+    config.parent.mkdir(parents=True, exist_ok=True)
+    config.write_text(json.dumps(paths, ensure_ascii=False), 'utf-8')
+
+
 def run(args, cwd, *, env=None, output=None, capture=False):
     return subprocess.run([str(arg) for arg in args], cwd=cwd, env=env, check=True, text=True,
                           encoding="utf-8", errors="replace", stdout=subprocess.PIPE if capture else output,
@@ -120,6 +129,7 @@ def update(args, result, log):
                     current = json.loads(public(ORIGIN + "release-identity.json"))["release_id"]
                     if current != prior["release_id"] or read(pointer)["manifest"]["release_id"] != current:
                         raise ValueError("预演后有其他版本上线，本轮停止发布")
+                    stage_live_project_settings(worktree, args.pcconfig)
                     python(*publish)
                 finally:
                     lock("Release")
