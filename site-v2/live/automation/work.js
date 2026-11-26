@@ -26,7 +26,13 @@
   let audience = 'public';
   const list = v => Array.isArray(v) ? v : [];
   const own = () => audience === 'owner' ? '你' : '本人';
+  // 访客版称呼：后台字里指本人的“你”换成“本人”（和 runs.js 的 asOwner 同一套说法；私事线 11-26），引号里别人说的“你好”这类不碰
+  const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
+  const asOwner = html => audience === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
   const field = (value, name) => U.fieldHtml(value, { kind: audience, name });
+  // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（同一句只显示一次，主控 11-26 10:02）
+  const said = v => U.fieldText(v ?? '', audience).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
+  const sameText = (a, b) => !!said(a) && said(a) === said(b);
   const words = (...values) => values.filter(Boolean).map(value => field(value)).join(' · ');
   const instant = value => {
     const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value || NaN);
@@ -207,8 +213,11 @@
       ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
       ? `<details class="aw-past"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
-    const sources = list(data.sources);
-    const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty('这里还看不到'), { symbol: 'search' })}
+    // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。
+    // 已撤的类不再收活，照实说；没撤的照常写这里还看不到
+    const sources = list(data.sources).filter(row => row && (row.label ?? row.title) !== '这里还看不到');
+    const noSource = retired(data.id) ? '这一类已撤，不再收新活；撤之前从哪里收的活，这里没留记录' : '这里还看不到这一类从哪里收活';
+    const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty(noSource), { symbol: 'search' })}
       ${panel('结果和趋势 · 近 7 天', results(data, rows), { symbol: 'check', cls: readOnly ? 'aw-wide' : '' })}${readOnly ? '' : panel('设置记录', settingLog(data), { symbol: 'gear' })}</div>`;
     return head + lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : '');
   }
@@ -277,7 +286,9 @@
     // M767：所属项目在访客版看不到的（后台在这件活上标 visitor_labels.project_name），本人版在项目名后挂签
     const projectMark = U.visitorLabel?.(row, 'project_name', '所属项目', audience) || '';
     const relations = related.map(([href, kind, label]) => `<li><a href="${esc(href)}">${icon('doc')}<span><small>${kind}</small><b>${field(label)}${kind === '所属项目' && projectMark ? ` ${projectMark}` : ''}</b></span><span class="aw-chev" aria-hidden="true">›</span></a></li>`).join('');
-    const overview = row.summary || list(data.facts).find(fact => fact.label === '问题')?.text;
+    // 相邻或上下级的两处字一样只显示一次：标题下那行小字和大标题一样、或和“为什么要办”里“问题”一样的不画
+    const problem = list(data.facts).find(fact => fact.label === '问题')?.text, lead = row.summary || problem;
+    const overview = said(lead) && ![row.title, problem].some(v => sameText(v, lead)) ? lead : '';
     const chip = `<p class="aw-chip">${lamp(row) || '<span class="aw-slot-dot"></span>'}一件活</p>`;
     return `<section class="glass aw-hero aw-work-hero"><img alt="" src="${esc(dossier)}" class="aw-art"><div class="aw-lead">${chip}<h1>${rowTitle(row, '这件活的标题')}</h1>
       ${overview ? `<p class="automation-lead">${field(overview, '这件活的说明')}</p>` : ''}<p class="aw-work-where">${words(data.type_title, row.project_name, at(row.first_at) && `${when(row.first_at)} 发现`)}</p></div></section>`
@@ -313,7 +324,7 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data), false);
+    U.html(root, asOwner(work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data)), false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;

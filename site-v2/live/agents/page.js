@@ -525,7 +525,14 @@
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     page.tick.set(feed(d), { off: state.offline });
-    if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));
+    if (!landed && location.hash === '#hours') {
+      const section = document.getElementById('hours');
+      // 跨页过渡期间下一帧可能晚于锚点定位。工时区画出来就滚到同一个锚点。
+      if (section) {
+        section.scrollIntoView({ block: 'start' });
+        landed = true;
+      }
+    } else if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));
   }
   let landed = false;
   const page = T.boot({ resource: 'agents', ask: () => '请看实况智能体页：三家规则、钩子和设置有没有对上，工期估得准不准。先用大白话说，别动手。',

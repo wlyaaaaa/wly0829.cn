@@ -48,6 +48,17 @@
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
   // 平台名：三家都认（Antigravity 的定时详情 11-25 起也走这一页，M921）
   const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
+  // 各家自带的定时：后台给了下一次的北京星期和时刻，重复周期就照它写成“每周二 00:00（北京）”，不写外国时区名（M921；自动任务页“各家自带的定时”同一个写法）
+  const bjSchedule = d => {
+    const p = typeof d.schedule === 'string' ? d.schedule.trim() : '', m = p.match(/^每\s*(\d*)\s*(周|天)/);
+    const wd = typeof d.next_beijing_weekday === 'string' ? d.next_beijing_weekday.replace(/^星期/, '周') : '';
+    const at = typeof d.next_beijing_time === 'string' && /^\d{2}:\d{2}$/.test(d.next_beijing_time) ? d.next_beijing_time : '';
+    if (!m || !wd || !at) return null;
+    const n = m[1] && m[1] !== '1' ? ` ${m[1]} ` : '';
+    return m[2] === '周' ? `${n ? `每${n}周的${wd}` : `每${wd}`} ${at}（北京）` : `每${n}天 ${at}（北京）`;
+  };
+  // 定时任务后台读到了、但一次都还没跑（运行记录读到的是空的，上次开始结束都没有）：写“还没跑过”，不写“未读到”
+  const neverRan = (d, kind) => kind === 'schedule' && Array.isArray(d.runs) && !d.runs.length && !(d.runs_summary?.total > 0) && d.last && d.last.start == null && d.last.end == null;
   const provider = v => {
     const name = text(v), id = typeof name === 'string' ? name.toLowerCase() : '';
     return Object.hasOwn(PROVIDERS, id)
@@ -290,7 +301,7 @@
     if (kind === 'plan' && d.state === 'never' && showLast) U.html($('task-status'), `${$('task-status').innerHTML}<small class="task-status__note">Windows 名册记的是“还没运行过”（列表照这个写“没跑过”），上面是 Windows 日志里读到的运行</small>`, false);
     const group = GROUP[d.group], mode = stopped ? '' : d.schedule ?? (kind === 'plan' && !resident && triggerLine(d) || MODE[d.mode]);
     const info = kind === 'plan' ? [mode, d.scheduler === 'windows' && 'Windows 计划任务', group && `分组为${group}`]
-      : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', d.schedule];
+      : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', bjSchedule(d) ?? d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
     write($('task-purpose'), marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途'));
     write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
@@ -320,7 +331,8 @@
       ['做什么', marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途')],
       ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
-        : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field(d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
+        : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field((kind === 'schedule' ? bjSchedule(d) : null) ?? d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
+      kind === 'schedule' && typeof d.enabled === 'boolean' && ['开没开', d.enabled ? '开着' : '关着（不会按时间安排启动）'],
       kind !== 'plan' && ['谁来做', provider(d.executor ?? d.scheduler)],
       ['怎么停', marked(field(d.stop, '停止办法'), d, 'stop', '停止办法')],
       ['停了会怎样', marked(field(d.stop_effect, '停止影响'), d, 'stop_effect', '停止影响')],
@@ -355,7 +367,7 @@
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
   function history(d, rows, kind, open, heads = true) {
-    if (!rows.length) return d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
+    if (!rows.length) return neverRan(d, kind) ? '<p>还没跑过，跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
@@ -435,11 +447,16 @@
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
     const { rows, coverage, covered } = metrics(d, runs, kind);
-    const quiet = quietWeek(d, runs, kind, covered);
+    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? `还没跑过${upcoming[0] ? `，第一次在 ${stamp(upcoming[0], true)}` : ''}` : '');
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     // “出错”那格照后台对这些轮次的分档上色（runs_summary.outcome，没有就看近 7 天 week_outcome）：大部分成功黄、部分成功橙、全出错红、全成功不上色；没给分档照旧粉色（M779）
     $('task-stats').dataset.outcome = TIER[(d.runs_summary?.outcome ?? d.week_outcome)?.state]?.[0] || '';
-    write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => `<div class="glass task-stat" data-stat="${key}"><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(reason || '未读到')}</dd></div>`).join(''), false);
+    // “已读部分没有”要和格名连着读：合成一整句（“已读部分没有出错”）写在一行，格名不再另起一行（主控 11-26 看 07a、07b：原来拆成“已读部分没有／出错”两行）。
+    // 出错那格读到的是 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色，0 次和“全成功不上色”同一个意思（M779）
+    write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => {
+      const whole = !number && reason === '已读部分没有', none = key === 'failure' && (whole || number === count(0, true));
+      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
+    }).join(''), false);
     const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
     const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
     const second = r => Math.floor(runTime(r) / 1000);

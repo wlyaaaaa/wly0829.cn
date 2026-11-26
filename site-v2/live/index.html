@@ -367,6 +367,7 @@
 .b6-metrics > a:last-child { border-right: 0; }
 .b6-metrics > a:hover { background: rgb(255 255 255 / .6); }
 .b6-last { color: #44504c; }
+#ledger .b6-last { text-wrap: pretty; }
 .b6-foot--go { padding-top: 9px; margin-bottom: 0; }
 /* AI 对话卡：后台另有 N 个在跑（AI 对话不列后台的对话，本人定的）。和上一行小字、下面对话标题同一条左边线（让出灯那一栏），自己占一行、上下留空（M709） */
 .page--live #chats .chat-background { margin: 4px 0 8px var(--gut); font-size: 13.5px; line-height: 20px; }
@@ -386,6 +387,43 @@
 /* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }
 @media (max-width: 1279px) { .b6-metrics > a { padding: 0 9px; } }
+/* 自动任务卡、账本卡（照“首页自动任务卡-v2”“首页账本卡-v1”，本人 11-26 01:04 批照图施工）：一个深绿大数；0–24 点时间条只这两张卡用 */
+.b6-big--runs { margin: 6px 0 0; }
+.b6-big--runs > a { display: inline-flex; align-items: baseline; gap: 14px; color: inherit; text-decoration: none !important; }
+.b6-big--runs em, .b6-lg__owed em { font-style: normal; font-family: var(--black); font-size: 54px; line-height: 1.05; font-weight: 900; color: #0a532b; letter-spacing: -.02em; }
+.b6-big--runs span { font-size: 19px; font-weight: 650; color: #3a4642; }
+.b6-body p.b6-fail { margin: 0 0 2px; font-size: 16px; font-weight: 650; color: #3a4642; }
+.b6-lines p { font-size: 14.5px; }
+#automation .b6-body p { text-wrap: pretty; }
+.page--live:not(.live-unreadable) .b6-card .b6-lines > p > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
+.b6-lg { display: flex; align-items: center; gap: 22px; margin: 8px 0 0; }
+.b6-lg__owed { display: inline-flex; align-items: baseline; gap: 10px; font-size: 22px; font-weight: 700; color: #20302b !important; text-decoration: none !important; }
+.b6-lg__sep { width: 1px; align-self: stretch; margin: 12px 0; background: #293c4126; }
+.b6-lg__parked { font-size: 19px; font-weight: 650; color: #5f6966 !important; white-space: nowrap; }
+.b6-lg__parked b { margin: 0 3px; font-weight: 700; }
+.b6-lg__chev { margin-left: 8px; color: #00A650; font-weight: 800; }
+.b6-tb { position: relative; margin: 6px 0 4px; padding: 22px 0 21px; }
+.b6-tb__from, .b6-tb__to { position: absolute; top: 2px; font-size: 13px; line-height: 18px; color: #4a5756; }
+.b6-tb__from { left: 0; }
+.b6-tb__to { right: 0; }
+.b6-tb__line { position: relative; height: 2px; margin: 7px 0; border-radius: 2px; background: #d6dad7; }
+.b6-tb__dot { position: absolute; top: 50%; width: 9px; height: 9px; translate: -50% -50%; box-sizing: border-box; border-radius: 50%; background: #00A650; box-shadow: 0 0 0 1.5px #fff; }
+.b6-tb__dot[data-kind="bad"], .b6-tb__dot[data-kind="late"], .b6-dot[data-kind="late"] { background: #ef8f16; }
+.b6-tb__dot[data-kind="next"] { border: 2px solid #6c7370; background: #fff; }
+#ledger .b6-tb__dot { width: 13px; height: 13px; }
+a.b6-tb__dot::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
+a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166 80 / .2); outline: none; }
+.b6-tb__now { position: absolute; top: 50%; width: 2px; height: 26px; translate: -50% -50%; border-radius: 2px; background: #00A650; pointer-events: none; }
+.b6-tb__now b, .b6-tb__now small { position: absolute; left: 50%; translate: -50% 0; white-space: nowrap; font-size: 13px; line-height: 18px; font-weight: 600; color: #3a4642; }
+.b6-tb__now b { bottom: calc(100% + 1px); }
+.b6-tb__now small { top: calc(100% + 1px); font-variant-numeric: tabular-nums; }
+.b6-lg-list { margin: 4px 0 8px; }
+.b6-lg-item { position: relative; margin: 9px 0; }
+.page--live .b6-lg-item > .b6-dot { position: absolute; left: -25px; top: .5em; margin: 0; }
+.b6-body .b6-lg-item > p { margin: 0; font-size: 15px; line-height: 1.45; }
+.b6-lg-item > small { display: block; margin-top: 1px; }
+.b6-body p.b6-lg-none { margin: 8px 0 10px; }
+.b6-lg-foot b { color: #0a532b; }
 </style>
 </head>
 <body class="page page--live live-first-read">
