@@ -1728,7 +1728,7 @@
       if (!home && ['none', 'gone'].includes(state.phase)) { unreadable(); return; }
       if (!home) {
         for (const id of HOME_IDS) reads[id].set(state);
-        if (['wait', 'slow'].includes(state.phase)) showHome();
+        if ((state.meta?.status === 503 && state.conn?.stage === 'retrying') || ['wait', 'slow'].includes(state.phase)) showHome();
       }
     },
     link(state) {
