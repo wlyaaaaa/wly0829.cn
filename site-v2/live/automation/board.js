@@ -645,6 +645,8 @@
   // 后台没给 next_beijing_* 这几个字段、或周期认不出（cron 原文、“每小时”这类）时照原来的写法。
   const zhDate = at => { const t = T.stamp(at); if (t == null) return ''; const d = new Date(t + 8 * 3600000); return `${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`; };
   const zhAt = at => `${zhDate(at)} ${clock(at)}（北京）`;
+  // 末尾的“（北京）”和前面的钟点粘在一起，不单独折到下一行（M1031）
+  const keepBj = html => html.replace(/(\d{1,2}:\d{2}(?: 左右)?（北京）)$/, '<span class="au-nobr">$1</span>');
   function plan(r) {
     const p = typeof r.period === 'string' ? r.period.trim() : '', due = r.next_nominal_at || r.next_at;
     if (p === '一次性' || p === '单次运行') return due && T.stamp(due) != null ? zhAt(due) : '';
@@ -683,7 +685,7 @@
       // 差几分钟按显示出来的两个钟点（都截到分钟）相减，不拿带秒的差值四舍五入：预计 23:55:54、原定 00:00 写“早 5 分钟”，和后面写的 23:55 对得上
       const off = est != null && nominal != null ? Math.floor(est / 60000) - Math.floor(nominal / 60000) : 0;
       const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
-      return `<li><b>${esc(when1)}</b>${name}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
+      return `<li><b>${keepBj(esc(when1))}</b>${name}<small>${[F(r.state_text), keepBj(esc(late))].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍
     const scope = {};

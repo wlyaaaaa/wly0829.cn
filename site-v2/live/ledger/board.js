@@ -315,10 +315,12 @@
     if (!rows.length) return '';
     const said = it => broke(it) != null ? `近 ${int(days)} 天坏了 ${int(broke(it))} 次` : reopened(it) != null ? `修好后又出现 ${int(reopened(it))} 次` : '';
     const ticks = [...new Set(Array.from({ length: 7 }, (_, i) => Math.round(i * days / 6)))];
+    let dotted = 0;   // 图上实际画了几个时点，脚注照这个说
     return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 ${int(days)} 天坏了不止一次的；${rule}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
         const times = at.map(stamp).filter(t => t && t >= from && t <= now);
+        dotted += times.length;
         // 从现在往回每 24 小时一格，同一格里的点合在格子正中。
         const slots = new Map();
         for (const t of times) { const k = Math.min(days - 1, Math.floor((now - t) / DAY)); slots.set(k, [...(slots.get(k) || []), t]); }
@@ -326,7 +328,7 @@
         const handed = it.handed_to_owner ? ` ${it.owner_href ? link(it.owner_href, `已转给${you()} ›`) : `已转给${you()}`}` : '';
         return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">${said(it)}${handed}</span>
           <div class="lg-rep__axis">${ticks.map(n => `<span style="left:${n / days * 100}%"${n === 0 ? ' data-edge="start"' : n === days ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${dots}</div></li>`;
-      }).join('')}</ul>${rows.some(it => list(it.broken_at).length || list(it.reopen_at).length) ? '' : '<p class="tp-small">每次坏的日子还没采上，先画第一次和最近一次。</p>'}</section>`;
+      }).join('')}</ul>${rows.some(it => list(it.broken_at).length || list(it.reopen_at).length) ? '' : `<p class="tp-small">${dotted ? '每次坏的日子还没采上，图上只画第一次和最近一次。' : `每次坏的日子还没采上；第一次和最近一次也不在这 ${int(days)} 天里，所以图上没有点。`}</p>`}</section>`;
   }
 
   // —— 快讯 ——
