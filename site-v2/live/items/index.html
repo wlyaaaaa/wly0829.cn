@@ -22,7 +22,9 @@
 .page--items .row__meta { margin-left: 0; }
 .page--items .item-expand { margin: 0; padding: 0; min-height: 20px; font-size: 12px; }
 .page--items .item-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.page--items .item-options > .btn { display: block; max-width: 100%; height: auto; min-height: 28px; padding-block: 5px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
 .page--items .row__sub>.item-bit { display: inline; }
+.page--items #closed .row__sub { text-wrap: pretty; }
 .page--items .item-bit+.item-bit:before { content: '\00a0· '; }   /* “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看） */
 /* 时刻、“约 N 分钟”这类不断开的短段（item-keep）原来是行内块，连同前面的“ · ”粘住前一个字一起折，剩“微／信”“到／了。”这种断法；改成行内不断开、“ · ”处可以折 */
 .page--items .row__sub > .item-keep { display: inline; }
@@ -53,6 +55,9 @@
 /* 卡窄到卡头说明一行放不下时（卡头内宽约 590 以下）：说明换行写全、不收成一行“…”，字停在右边插画淡入的地方，不压到画上；宽卡不变 */
 .page--items .lb-card__head { container-type: inline-size; }
 @container (max-width: 589px) { .page--items .lb-card__words { padding-right: 45%; } .page--items .lb-card__sub { -webkit-line-clamp: unset; } }
+@media (min-width: 1280px) {
+  @container (width > 589px) { .page--items :is(#later, #know) .lb-card__sub { -webkit-line-clamp: 2; } }
+}
 .page--items .lb-card__more { display: block; text-align: center; }
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }

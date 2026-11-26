@@ -97,15 +97,17 @@ class Preview(SimpleHTTPRequestHandler):
         path, _, query = self.path.partition('?')
         path = unquote(path)
         live = re.fullmatch(r'/__live/([A-Za-z0-9_-]+(?:/[A-Za-z0-9_.:-]+)*)', path)
-        computer = re.fullmatch(r'/__computer/(cockpit-device/pair|cockpit/open|cockpit/automation-settings|cockpit/actions|cockpit/report/[A-Za-z0-9_.:-]{1,256})', path)
+        computer = re.fullmatch(r'/__computer/(cockpit-device/pair|cockpit/open|cockpit/automation-settings|cockpit/actions(?:/receipt)?|cockpit/report/[A-Za-z0-9_.:-]{1,256})', path)
         if not (live or computer) or any(part in {'.', '..'} for part in path.split('/')): return self.send_error(404)
         target = '/computer-access/' + ('live/v1/' + live[1] if live else 'api/' + computer[1])
-        methods = {'GET', 'HEAD'} if live or computer[1].startswith('cockpit/report/') else {'POST'}
+        receipt = computer and computer[1] == 'cockpit/actions/receipt'
+        methods = {'GET'} if receipt else {'GET', 'HEAD'} if live or computer[1].startswith('cockpit/report/') else {'POST'}
         if self.command not in methods: return self.send_error(405)
         home = self.owner_lan()
         home_proxy = getattr(self.server, 'owner_lan', False)
-        if computer and computer[1] == 'cockpit/actions':
-            if not self.physical_lan() or self.public_view() or self.headers.get('Origin') != 'http://' + self.headers.get('Host', ''):
+        if computer and computer[1] in {'cockpit/actions', 'cockpit/actions/receipt'}:
+            origin = self.headers.get('Origin')
+            if not self.physical_lan() or self.public_view() or (not receipt or origin is not None) and origin != 'http://' + self.headers.get('Host', ''):
                 return self.live_reply(403, b'{"status":"error","error":"public_origin_not_allowed"}')
             if not DEVICE.fullmatch(self.headers.get('X-Cockpit-Device', '')):
                 return self.live_reply(403, b'{"status":"error","error":"cockpit_owner_required"}')

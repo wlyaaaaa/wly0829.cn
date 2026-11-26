@@ -601,18 +601,25 @@
     };
   }
 
+  const savedNeed = item => viewer === 'owner' && U.justSaved(item);
   function renderNeeds(d, target, end = d.at) {
     const p = parts.needs;
     if (!project && viewer === 'owner') U.pruneReceipts(d.items);
-    const scoped = project ? d.items.filter(it => it.project === project) : d.items;
-    const focus = target?.section === 'needs' ? target : null;
+    const counts = { ...d.counts };
+    const scoped = (project ? d.items.filter(it => it.project === project) : d.items).filter(it => {
+      if (!savedNeed(it)) return true;
+      if (Number.isInteger(counts[it.kind])) counts[it.kind] = Math.max(0, counts[it.kind] - 1);
+      if (Number.isInteger(counts.later) && U.savedReminder(it)) counts.later++;
+      return false;
+    });
+    const focus = target?.section === 'needs' && (target.closed || !savedNeed(target.item)) ? target : null;
     const extra = !focus?.closed && ['choose', 'do'].includes(focus?.item?.kind) && !scoped.some(it => it.id === focus.id) ? focus.item : null;
     const by = k => scoped.filter(it => it.kind === k);
-    const { count, exact, text } = waitingCount(d.counts, extra ? [...scoped, extra] : scoped);
+    const { count, exact, text } = waitingCount(counts, extra ? [...scoped, extra] : scoped);
     U.html(p.head, U.head(addressed(text), { href: href('needs') }).replace(/(<span class="live-unit">(?:至少 )?)(\d+)/, '$1<span class="needs-num">$2</span>') + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
     // 刚在本页点过、已经办成的，后台读数跟上前先不显示
-    const all = [...by('choose').sort(newest), ...by('do').sort(newest)].filter(it => !U.justSaved(it));
+    const all = [...by('choose').sort(newest), ...by('do').sort(newest)];
     const rows = needsPreview(all).map(it => needRow(it, focus && it.id === focus.id ? noticeDetail(focus.item) : '', end));
     const closed = focus && closedNoticeRow(focus), targetIndex = rows.findIndex(row => row.key === focus?.id);
     const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, noticeDetail(focus.item), end));
@@ -626,7 +633,7 @@
     paintList(p.main, rows, { animate: false });
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
-    U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(d.counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
+    U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
     p.closed.hidden = p.foot.hidden = !(project && !all.length);
     if (!p.closed.hidden) { U.html(p.closed, `近 7 天下去的 ${quantity(d, 'closed7')} 条`); p.closed.onclick = () => { location.href = href('needs') + '#closed'; }; }
   }
@@ -942,7 +949,7 @@
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    U.html(p.head, cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }));
+    U.html(p.head, U.itemTextUnits(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') })));
     const devices = [...(d.devices || [])];
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
     if (phone && !devices.some(x => x.id === 'phone')) devices.push({ id: 'phone' });
@@ -986,7 +993,7 @@
         return `<span>${esc(name + status)}</span>`;
       }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
     ];
-    const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : value;
+    const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : U.itemTextUnits(value);
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
     computerStability(p.why, d.stability_note);
     const it = d.interrupt;
@@ -1311,7 +1318,8 @@
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
-    const matchesCutoff = text => endNote && U.sameCutoffNote(endNote, text);
+    const timeNote = id === 'needs' && timed(end) && U.time(end, data?.at_precision);
+    const matchesCutoff = text => endNote && (U.sameCutoffNote(endNote, text) || timeNote && U.sameCutoffNote(`数据截至 ${timeNote}`, text));
     const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
     const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
     // 卡头分时写的（在干、等回答、做完数各自几点）：截止时刻卡头里有就不重复；读不全的说明不再说“先显示几点的统计”
@@ -1339,7 +1347,16 @@
       const detail = describedAt && U.sameCutoffNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
     }
-    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}${why ? `（${esc(why)}）` : ''}`).join('；');
+    const grayNames = names => {
+      const format = name => U.fieldHtml(name, { name: '读数名称', kind: viewer });
+      if (id !== 'needs') return names.slice(0, 3).map(format).join('、') + (names.length > 3 ? ` 等 ${names.length} 项` : '');
+      const counts = new Map();
+      for (const name of names.map(format)) counts.set(name, (counts.get(name) || 0) + 1);
+      const groups = [...counts];
+      return groups.slice(0, 3).map(([name, count]) => count > 1 ? `${name} ${count} 项` : name).join('、')
+        + (groups.length > 3 ? ` 等 ${names.length} 项` : '');
+    };
+    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${grayNames(names)}${why ? `（${esc(why)}）` : ''}`).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M1010：电脑卡的“N 项要处理”写出是什么事；卡小，一件时写“要处理：”加那句说明（和电脑页页顶同一句，如“有防火墙配置未启用”），没说明写组名，几件时只列组名
     const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
@@ -1369,7 +1386,8 @@
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
-    const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
+    const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
+    const statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
     p.status.hidden = !note; U.html(p.status, statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
@@ -1521,6 +1539,8 @@
   async function focusItem() {
     const focus = home?.focus, id = focus?.id || focusId;
     if (!home || !id || focused) return;
+    const target = noticeFocus(home, viewer);
+    if (target?.section === 'needs' && !target.closed && savedNeed(target.item)) return;
     focused = true;
     const row = [...document.querySelectorAll('[data-key]')].find(el => el.dataset.key === id && !el.hidden);
     if (!row) { const page = { chats: 'chat', tasks: 'task', ledger: 'issue' }[focus?.section] || 'item'; location.assign(route(`/live/${page}/?id=${encodeURIComponent(id)}`)); return; }
@@ -1644,6 +1664,14 @@
     card.classList.add('card--link'); card.tabIndex = 0; card.setAttribute('role', 'link');
     card.setAttribute('aria-label', `${link.textContent.replace(/›/g, '').trim()}，查看详情`);
   }
+  const redrawNeeds = () => U.anchor(() => {
+    renderHomeNeeds(home);
+    labelCard(cards.needs);
+    balanceHome();
+  });
+  document.getElementById('item-action-receipts')?.addEventListener('item-write', ({ detail }) => {
+    if (home && viewer === 'owner' && detail.saved?.length) redrawNeeds();
+  });
   function watchNotice(data) {
     const focus = data.focus, id = focus?.id || focusId;
     if (!id) return;
@@ -1661,11 +1689,7 @@
         current.detail = detail;
         current.kind = meta.viewer?.kind;
         if (!home || current !== notice || current.kind !== viewer) return;
-        U.anchor(() => {
-          renderHomeNeeds(home);
-          labelCard(cards.needs);
-          balanceHome();
-        });
+        redrawNeeds();
         if ((detail?.kind || detail?.closed) && !focused && home.needs.q !== 'warming') requestAnimationFrame(focusItem);
       }
     });

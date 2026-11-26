@@ -812,6 +812,21 @@ span.fog__slow { margin: 0 0 0 8px; }
 
 /* 窄电脑窗口：只收紧实况新增的按钮；灯固定在标题第一行，长标题在灯右边换行。 */
 .live-unit { display: inline; white-space: nowrap; }
+
+/* 首页、清单的回执和事项详情的失败回执在正文里占位。 */
+:is(.page--items, .page--live:has(#needs)) #item-action-receipts,
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-fail) { position: relative; inset: auto; transform: none; margin: 10px auto 14px; max-width: min(480px, 100%); scroll-margin-top: calc(var(--bar-bottom, 70px) + 12px); }
+:is(.page--items, .page--live:has(#needs)) #item-action-receipts::before,
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-fail)::before { top: -8px; height: 8px; }
+#item-action-receipts .site-notice { min-width: min(300px, 100%); }
+#item-action-receipts .site-notice__head, #item-action-receipts .site-notice__name { text-wrap: pretty; }
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-ok:only-child) { top: 72px; }
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-ok:only-child)::before { top: -5px; height: 5px; }
+#item-action-receipts > .site-notice.is-ok { padding-block: 6px 10px; }
+#item-action-receipts .is-ok .site-notice__head { line-height: 18px; }
+#item-action-receipts .is-ok .site-notice__name { line-height: 16px; }
+#item-action-receipts .is-ok .site-notice__line { bottom: 4px; }
+#item-action-receipts .is-ok .site-notice__x { top: 50%; translate: 0 -50%; }
 @media (max-width: 1440px) {
   .live-unit { display: inline; white-space: nowrap; }
   .page--live .row__kind { white-space: nowrap; }

@@ -1137,6 +1137,8 @@
     if (!token || token !== viewerToken) return { ok: false, text: site ? '请先连接电脑，再打开这项内容' : '本机预览不能打开电脑上的文件，请从正式实况打开' };
     if (!itemId || !target) return { ok: false, text: '没有可打开的目标，请重读后再试' };
     const antigravity = target === 'conversation' && /^antigravity:/i.test(itemId);
+    const itemPage = /^\/live\/(?:items?\/)?$/.test(location.pathname);
+    const unconfirmed = { ok: false, text: '电脑还没确认打开结果，请先在电脑上核对' };
     try {
       const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/open' : '/__computer/cockpit/open';
       const response = await fetch(url, { method: 'POST', cache: 'no-store', credentials: 'omit',
@@ -1153,13 +1155,15 @@
       }
       const antigravityError = typeof body?.error === 'string' && body.error.startsWith('antigravity_');
       const fixed = response.status === 503 && target === 'conversation' && antigravityError && antigravityOpenMessages[body.error];
+      if (itemPage && (body?.completion_unknown === true || response.ok && body?.status !== 'pass' ||
+          response.status >= 500 && !fixed && body?.status !== 'error')) return unconfirmed;
       const text = fixed ? fixed.find(message => message === body.message?.replaceAll?.('主驾驶', '台式机')) || fixed[0]
         : !antigravity && !antigravityError && ![404, 503].includes(response.status) && typeof body?.message === 'string' && /[一-鿿]/.test(body.message) ? body.message : '';
       return { ok: response.ok, text: text || (response.ok ? '已在电脑上打开'
         : response.status === 403 ? '设备已失效，没打开，请重新连接电脑'
         : response.status === 404 ? '目标已不存在，没打开，请重读后再试'
         : response.status === 429 ? '点得太快了，没打开，稍后再试' : '电脑没打开，稍后再试') };
-    } catch { return { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
+    } catch { return itemPage ? unconfirmed : { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
   }
   async function automationSetting(data) {
     await pairing;
@@ -1221,16 +1225,18 @@
   }
   // 回到页面接着查：按原提交编号只读查回这一笔，不发写请求。没有这笔先隔 5 秒再查一次（刚刷新时原请求可能还在路上）再下结论；
   // 后台已收下、还在写的，照办理回查的节奏接着查（前一分钟每 3 秒，之后每 15 秒，最多两分半）；查到结果记下，下回不再查
-  async function checkKeptWrite(token, key, kept) {
+  const writeHasResult = result => result && !['waiting_undo', 'missing', 'unknown'].includes(result.status);
+  async function checkKeptWrite(token, kept, accepted = null, onAccepted) {
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms)), id = kept.data.idempotency_key;
-    let result = await lookUpOwnerAction(token, id);
+    let result = accepted || await lookUpOwnerAction(token, id);
     if (result?.status === 'missing' && device() === token) { await wait(5000); result = await lookUpOwnerAction(token, id); }
+    if (result?.status === 'waiting_undo') onAccepted?.();
     const started = Date.now();
     while (result?.status === 'waiting_undo' && device() === token && Date.now() - started < 150000) {
       await wait(Date.now() - started < 60000 ? 3000 : 15000);
-      result = await lookUpOwnerAction(token, id) ?? result;
+      const read = await lookUpOwnerAction(token, id);
+      if (read && read.status !== 'missing') result = read;
     }
-    if (result && !['waiting_undo', 'missing'].includes(result.status)) keepWrite(key, { data: kept.data, at: kept.at, result });
     return result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
   }
   // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
@@ -1278,11 +1284,11 @@
       return (site || Boolean(lanBase)) && fixture === null && !publicView && !offline() &&
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
-    async applyOwnerItems(items, action, followReceipt = false, resume = false) {
+    async applyOwnerItems(items, action, followReceipt = false, resume = false, onAccepted) {
       const saved = [], receipts = {};
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
-        const result = await window.Live.ownerAction(item, action, followReceipt, resume);
+        const result = await window.Live.ownerAction(item, action, followReceipt, resume, onAccepted);
         receipts[item.id] = result;   // 后台回执原样带回（下去的时刻、几点再提醒），页面照它写
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
@@ -1292,16 +1298,22 @@
       }
       return { saved, pending, unconfirmed, message, error, receipts };
     },
-    async ownerAction(item, action, followReceipt = false, resume = false) {
+    async ownerAction(item, action, followReceipt = false, resume = false, onAccepted) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
       const token = device();
       const key = JSON.stringify([token, item.id, item.item_version, action]);
       let write = ownerWrites.get(key);
+      // 刷新、返回或继续等同一次操作，只查原编号。即使该请求仍留在本页也不重发。
+      if (resume) {
+        const kept = keptWrites()[key] || write;
+        if (!kept?.data) return { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+        if (kept.result) return kept.result;
+        const result = await checkKeptWrite(token, kept, null, onAccepted);
+        if (writeHasResult(result)) { ownerWrites.delete(key); keepWrite(key, { data: kept.data, at: kept.at, result }); }
+        return result;
+      }
       if (!write) {
         const kept = keptWrites()[key];
-        // 回到页面接着查（resume）不拿原编号再发一遍：原请求要是没到，重发就成了没人点的一笔新操作（本人 11-26 00:13）。
-        // 本机记下过结果就用那次的；没记下就按原编号只读查回执（checkKeptWrite）
-        if (resume) return kept?.result || (kept?.data ? checkKeptWrite(token, key, kept) : { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' });
         // 本人在页面上再点一次同一件：接着用刷新、离开前那一次的编号，后台按编号认出是同一笔，不会写两次
         if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
       }
@@ -1315,23 +1327,14 @@
       }
       write.request ||= (async () => {
         let result = await sendOwnerAction(token, write.data);
-        // 后端按原请求编号先查回执，事项已经变动也仍能确认原操作；没回或还在写，就拿同一编号接着查。
-        if (followReceipt) {
-          const started = Date.now();
-          let lastReply = started;
-          // 读数卡住时页面会显示连不上，这里照样拿同一编号去查；最多查两分半钟。
-          while ((!result || result.status === 'waiting_undo') && device() === token && Date.now() - lastReply < 90000 && Date.now() - started < 150000) {
-            await new Promise(resolve => setTimeout(resolve, Date.now() - started < 60000 ? 3000 : 15000));
-            if (device() !== token) break;
-            result = await sendOwnerAction(token, write.data);
-            if (result) lastReply = Date.now();
-          }
-          if (result?.status === 'waiting_undo' || result?.error === 'cockpit_owner_required') result = null;
+        // 留在当前页等，也和刷新后一样只读查同一张回执。
+        if (followReceipt && (!result || result.status === 'waiting_undo')) {
+          result = await checkKeptWrite(token, write, result, onAccepted);
         } else if (!result && device() === token && window.Live.canOwnerAct()) {
           result = await sendOwnerAction(token, write.data);
         }
         write.request = null;
-        if (result && result.status !== 'waiting_undo') { ownerWrites.delete(key); keepWrite(key, { data: write.data, at: write.at, result }); }
+        if (writeHasResult(result)) { ownerWrites.delete(key); keepWrite(key, { data: write.data, at: write.at, result }); }
         return result || { status: 'unknown', message: followReceipt
           ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' };
       })();

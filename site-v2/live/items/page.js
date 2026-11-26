@@ -7,7 +7,7 @@
   let at = null, viewer = 'public', pendingItems = new Set(), reportsData = null, reportCount = null, openTrend = null, recentClosed = null;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (params.has('fixture') && u.pathname.startsWith('/live/')) u.searchParams.set('fixture', params.get('fixture')); return u.pathname + u.search + u.hash; };
   // M567：同一件事了结后又重新打开时编号不变；关闭清单的链接带上那次了结的时刻，详情页才找得到当时的结局。
-  const closedHref = it => route('/live/item/?id=' + encodeURIComponent(it.id) + (it.closed?.at ? '&closed=' + encodeURIComponent(it.closed.at) : ''));
+  const closedHref = it => route('/live/item/?id=' + encodeURIComponent(it.id) + (!it._landed && it.closed?.at ? '&closed=' + encodeURIComponent(it.closed.at) : ''));
   const actions = it => {
     // M458：卡上不单独放“复制给 AI”，问情况就是复制给 AI（定稿卡-等你的事 开头，本人 11-22 16:04）
     const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
@@ -24,7 +24,7 @@
     }
     return stamp(b.episode_at || b.born) - stamp(a.episode_at || a.born);
   }
-  const KIND = { do: '要你做', choose: '要你选', later: '你放着', know: '要你知道' }, CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 判断不用办了', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
+  const KIND = { do: '要你做', choose: '要你选', later: '你放着', know: '要你知道' }, CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 已关闭这条事项', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   const wait = text => [{ key: 'empty', cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(text) ? '这块没存下来，连上后补上。' : text)}</p>` }];
   const itemText = it => sp(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it);
   const closedText = it => it.closed?.kind === 'unknown' || it.closed?.text === '本人关掉了这份汇报' ? it.closed.text || '' : viewer === 'public' && ['done', 'declined'].includes(it.closed?.kind) ? CLOSED[it.closed.kind].replace(/^你/, '本人') : CLOSED[it.closed?.kind] || '';
@@ -43,7 +43,6 @@
   const titleParts = [document.querySelector('.lbp-title h1'), document.querySelector('.lbp-title p > span')].filter(Boolean).map(el => [el, el.textContent]);
   const pageTitle = (kind = viewer) => titleParts.forEach(([el, text]) => { el.textContent = kind === 'public' ? text.replaceAll('你', '本人') : text; });
   const pairedHere = (() => { try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || '') && !window.LiveView?.isPublic?.(); } catch { return false; } })();
-  pageTitle(pairedHere ? 'owner' : 'public');
   L.add($('hero'));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
@@ -63,10 +62,14 @@
   // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
   const landed = new Map(), writeStarted = new Map();
   const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
+  const LANDED_KEEP_MS = 150000;
+  let closedItems = [], next = null;
+  const closeThreshold = (receipt, fallback) => Date.parse(receipt?.created_at) || (fallback - 120000);
+  const hasClosed = (rows, id, kind, since) => rows.some(it => it.id === id && it.closed?.kind === kind && Date.parse(it.closed?.at) >= since);
   function landItem(item, intent, receipt) {
     // 本人 11-26 00:13：先摆上的那条只写后台回执里有的，不拿浏览器的钟算。下去的时刻用回执的 created_at（后台收下这一笔的时刻）；
     // 晚点提醒几点再提醒用回执的 until，回执没给就写“提醒时间还没确认”，等清单读回来换成后台那条
-    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? Date.now()), saved: Date.now(), version: item.item_version };
+    const at = receipt?.created_at || null, base = { since: closeThreshold(receipt, writeStarted.get(item.id) ?? receipt?.at ?? Date.now()), saved: receipt?.at ?? Date.now(), version: item.item_version };
     // 先摆上的“你放着”和后台那条一个样子：只留问情况、不办了和网站链接，不再挂“晚点提醒”
     if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: receipt?.until || null, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
     else if (intent === 'close_report') {
@@ -76,11 +79,11 @@
   }
   // 后台读数已经有这一次的结果，就不再摆先放上去的那条
   function withLanded(key, rows) {
-    if (!Array.isArray(rows) || !landed.size) return rows;
+    if (viewer !== 'owner' || !Array.isArray(rows) || !landed.size) return rows;
     const extra = [];
     for (const [id, w] of landed) {
       if (w.key !== key) continue;
-      const seen = key === 'closed' ? rows.some(it => it.id === id && Date.parse(it.closed?.at) >= w.since - 120000)
+      const seen = key === 'closed' ? hasClosed(rows, id, w.row.closed.kind, w.since)
         : [...collections].some(([k, c]) => k !== 'closed' && k !== 'reports' && c.items?.some(it => it.id === id && it.item_version !== w.version));
       if (seen) landed.delete(id); else extra.push(w.row);
     }
@@ -90,7 +93,7 @@
   function followLanded() {
     clearTimeout(landedTimer);
     const now = Date.now(), before = landed.size;
-    for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
+    for (const [id, w] of landed) if (now - w.saved > LANDED_KEEP_MS) landed.delete(id);
     if (landed.size !== before) { redrawItems(); drawClosed(); if (lastHome) renderHome(...lastHome); }
     if (!landed.size) return;
     const first = Math.min(...[...landed.values()].map(w => w.saved));
@@ -112,10 +115,10 @@
     if (reportsData) renderReports(reportsData);
     if (saved?.length) { drawClosed(); followLanded(); }
   });
-  // 还没确认的那几次（M945，主持 11-26 01:24）：读回来的退出记录里有这件、时刻不早于点的时候（留两分钟钟差），或晚点提醒的这件换了新版本到了“你放着”，就是办成了
-  const foundWrite = (item, intent, since) => intent === 'later'
+  // 已有成功回执时，核对读数是不是这一次。老回执没给后台时刻才和本机时间留钟差。
+  const foundWrite = (item, intent, receipt) => intent === 'later'
     ? collections.get('later')?.items?.find(it => it.id === item.id && !it._landed && it.item_version !== item.item_version)
-    : closedItems.find(it => it.id === (intent === 'close_report' ? item.owner_item || item.item_id || item.item || item.id : item.id) && Date.parse(it.closed?.at) >= since - 120000);
+    : hasClosed(closedItems, item.id, LANDED_KIND[intent], closeThreshold(receipt, receipt.at));
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -125,7 +128,7 @@
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
   // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做（要拍板的转成要你选），只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
-  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到日子转成要你做或选（默认上午 10 点），没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”就下去，不按天数消失。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到时间转成要你做或要你选，并在手机上提醒你一次；只写了日期的按当天上午 10 点算，没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”或事情本身了结才下去，不会过几天自己消失（以前登记时写了期限的，照期限）。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintText = (kind, as = viewer) => as === 'public' ? hints[kind].replaceAll('你', '本人') : hints[kind];
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
@@ -133,6 +136,8 @@
     c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hintText(kind, pairedHere ? 'owner' : 'public'); cards.set(kind, c);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
+  titleParts.push([$('kind-pick').querySelector('option[value="reports"]'), labels.reports]);
+  pageTitle(pairedHere ? 'owner' : 'public');
   const closedCard = cards.get('closed');
   closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
@@ -162,12 +167,13 @@
   }
   function filterBoard() {
     const picked = $('kind-pick').value, status = $('state-pick').value;
+    cards.get('reports').sub.hidden = reportCount === 0;
     $('stats').querySelectorAll('[data-kind]').forEach(button => {
       button.setAttribute('aria-pressed', String(status !== 'closed' && button.dataset.kind === picked));
     });
     for (const [kind, c] of cards) {
       c.el.hidden = kind === 'closed' && status === 'closed' ? picked === 'reports' :
-        (kind === 'reports' && reportCount === 0) || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
+        (kind === 'reports' && reportCount === 0 && picked !== 'reports') || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
     }
     redrawClosed();
     board.only(picked && picked !== 'closed' && status !== 'closed' ? picked : null);
@@ -181,7 +187,11 @@
     if ($('state-pick').value === 'closed') $('state-pick').value = '';
     filterBoard();
   });
-  document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => { if (reportCount !== 0) return; e.preventDefault(); $('kind-pick').value = 'reports'; filterBoard(); }));
+  document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => {
+    if (!$('reports').hidden) return;
+    e.preventDefault(); $('state-pick').value = ''; $('kind-pick').value = 'reports'; filterBoard();
+    $('reports').scrollIntoView({ block: 'start' });
+  }));
   $('search').addEventListener('submit', e => e.preventDefault());
   $('q').addEventListener('input', () => { query = $('q').value.trim().toLowerCase(); redrawItems(); if (reportsData) renderReports(reportsData); });
   const readers = { home: [U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: '等你的事' }), ...Object.keys(KIND).map(key => U.reading($(key), { ghost: U.ghost.rows(2), slow: false }))], 'items/closed': [U.reading($('closed'), { ghost: U.ghost.rows(4) })], reports: [U.reading($('reports'), { ghost: U.ghost.rows(3) })] };
@@ -317,7 +327,7 @@
   const PLAN_TO = { ack: '我知道了', later: '晚点提醒（挪到“你放着”）', decline: '不办了', decline_copy: '不办了（有后续，复制给 AI）', close_report: '关掉' };
   function confirmPlan(trigger, all, { start, done, complete }) {
     const live = window.Live, plan = all.filter(p => p.intent);
-    const notice = (state, head, name = '') => window.SiteNotice(head, '', 'item-action-receipts').set(state, head, { name });
+    const notice = (state, head, name = '') => U.itemReceipt(head, '', trigger).set(state, head, { name });
     if (!plan.length || plan.some(p => U.itemWriting(p.item.id)) || document.querySelector('.live-item-confirm[open]')) return;
     if (!live?.canOwnerAct?.()) { if (viewer !== 'owner') window.TrustModal?.show(); else notice('fail', '不是可信设备'); return; }
     const intentOf = p => p.intent === 'decline' && p.item.decline_followup ? 'decline_copy' : p.intent;
@@ -417,22 +427,26 @@
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
     const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), it._landed && !it.closed?.at ? '时刻还没确认' : U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
-    if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
+    if (closed && KIND[it.kind]) sub.unshift('原分类：' + (viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]));
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
-    const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
+    const titleText = U.itemTextUnits(U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer }));
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
     const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${detailTitle(titleText)}</button>` : `<span class="row__title">${titleText}</span>`;
-    const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${i < all.length - 1 ? U.fieldHtml(s, { kind: viewer }).replace(/。((?:<\/[a-z]+>)*)$/, '$1') : U.fieldHtml(s, { kind: viewer })}</span>`).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
+    const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => {
+      let html = U.itemTextUnits(U.fieldHtml(s, { kind: viewer }));
+      if (s === closing) html = html.replace(/(?:自动任务页|跟进(?=[。<]|$))(?![^<]*>)/g, '<span class="live-unit">$&</span>');
+      if (i < all.length - 1) html = html.replace(/。((?:<\/[a-z]+>)*)$/, '$1');
+      return `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d|同一件事关过 )/.test(sp(s)) ? ' item-keep' : ''}">${html}</span>`;
+    }).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });
     const detail = shared && (note === shared || note.startsWith(`${shared} · `)) ? note.slice(shared.length + 3) : note;
-    return { key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${runSource(it)}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
+    return { key: it.historyKey || it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${runSource(it)}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });
-    if (viewer === 'owner' && (key === 'closed' || key === 'later')) U.settleItemWrites?.(foundWrite);
     const known = Array.isArray(items);
     const closedKind = key === 'closed' ? $('kind-pick').value : '';
     if (key !== 'closed' && key !== 'reports') items = withLanded(key, items);
@@ -445,7 +459,7 @@
     // M973：“近 7 天下去的”数的是读回来多少件，同一句并成一行的（“同一件事关过 N 次”）按原来的件数算，不按摆了几行；两版读回来的一样多，件数就一样
     const pieces = key === 'closed' ? items.reduce((n, it) => n + (it.repeats || 1), 0) : items.length;
     const green = n => n > 0 ? '<b class="lb-count__n">' + n + '</b>' : n;   // 加绿（GREENIMG1126）：大于 0 的件数绿
-    const count = partial ? key === 'closed' ? '已读 ' + green(pieces) + ' 件' : '已读部分' + (items.length ? ' · ' + green(items.length) + ' 件' : '') : (known ? green(pieces) : '—') + ' 件';
+    const count = partial ? key === 'closed' ? '下去了 ' + green(pieces) + ' 件' : '已读部分' + (items.length ? ' · ' + green(items.length) + ' 件' : '') : (known ? green(pieces) : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
@@ -570,6 +584,15 @@
     const needs = d.needs; if (d.q === 'warming' || needs?.q === 'warming') { missingHome('正在准备'); return; } if (!needs) { missingHome(U.collectionText()); return; }
     const embedded = Object.hasOwn(needs, 'items'), page = !embedded && openRows?.kind === viewer ? openRows : null;
     const rows = embedded ? needs.items : page?.items;
+    // 刷新仍读到旧清单时，按同一份成功回执接回刚移走的那条。
+    let restored = false;
+    if (viewer === 'owner') for (const item of rows || []) {
+      const saved = U.savedWrite(item);
+      if (!saved || landed.has(item.id) || Date.now() - saved.at > LANDED_KEEP_MS) continue;
+      if ((saved.intent === 'later' || LANDED_KIND[saved.intent]) && !foundWrite(item, saved.intent, saved)) {
+        landItem(item, saved.intent, saved); restored = true;
+      }
+    }
     const partial = embedded ? needs.q === 'partial' : page?.cursor != null || page?.incomplete;
     openTrend = needs.open_trend7; renderSide();
     pendingItems = new Set((rows || []).map(it => it.id)); if (reportsData) renderReports(reportsData);
@@ -629,9 +652,9 @@
       const empty = rows == null ? U.collectionText() : partial ? '事项名单尚未读全' : `没有${viewer === 'public' ? KIND[key].replaceAll('你', '本人') : KIND[key]}的事`;
       list(key, rows?.filter(it => it.kind === key).sort(itemOrder), empty, it => row(it, false, shared.get(it)), !meta.firstOpen, partial);
     }
+    if (restored) { drawClosed(); followLanded(); }
     showOpenMore(); renderSelection();
   }
-  let closedItems = [], next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
@@ -639,18 +662,29 @@
   // 已关掉的事：后台标题带“当时记录：”，去掉直接说是什么事；本人版同一句关过几次的并成一条，写关过几次（本人 11-23 11:54）
   const unprefix = v => typeof v === 'string' ? v.replace(/^当时记录[：:]\s*/, '') : v && typeof v === 'object' ? { ...v, ...Object.fromEntries(['value', 'text'].filter(k => typeof v[k] === 'string').map(k => [k, v[k].replace(/^当时记录[：:]\s*/, '')])) } : v;
   function closedRows(items) {
-    const seen = new Map();
+    const seen = new Map(), ids = new Set();
     for (const raw of items) {
       // 访客版也并：看得到的同一句并成一条；仅本人可见的各算各的，件数照旧
       const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, shown = U.fieldText(it.text ?? it.title, viewer) || '';
       const hiddenRow = viewer !== 'owner' && (it.visibility === 'owner' || it.public === 'owner' || it.text?.visibility === 'owner' || /仅本人可见/.test(shown));
       const key = hiddenRow || !shown ? it.id : it.kind + '|' + shown.replace(/\s+/g, '').replace(/[。.]$/, '');
-      if (seen.has(key)) seen.get(key).repeats++; else seen.set(key, { ...it, repeats: 1 });
+      if (seen.has(key)) seen.get(key).repeats++;
+      else {
+        seen.set(key, { ...it, repeats: 1, historyKey: ids.has(it.id) ? `${it.id}:${it.closed?.at || seen.size}` : it.id });
+        ids.add(it.id);
+      }
     }
     return [...seen.values()];
   }
   function renderClosed(d, append = false) {
-    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
+    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [`${it.id}:${it.closed?.at || ''}`, it])).values()] : d.items || [];
+    let restored = false;
+    if (viewer === 'owner' && d.items != null) for (const saved of U.savedItemClosures()) {
+      const item = saved.exit || saved.ack;
+      if (Date.now() - saved.at > LANDED_KEEP_MS || project && item.project !== project || landed.has(item.id)) continue;
+      if (foundWrite(item, saved.intent, saved)) continue;
+      landItem(item, saved.intent, saved); restored = true;
+    }
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
@@ -662,6 +696,7 @@
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
     requestAnimationFrame(() => balanceBoard(true));   // 条数变了，重新看放短栏还是两栏下面
+    if (restored) followLanded();
   }
   // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
   function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }
