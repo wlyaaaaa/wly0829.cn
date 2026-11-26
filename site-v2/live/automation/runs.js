@@ -51,7 +51,8 @@
     const where = viewer === 'owner' ? meta.where : meta.where.replace('等你的事', '等本人的事');
     // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
-    return { kind, id: o?.id, title: o?.title, labels: o?.visitor_labels, action, where: str(o?.card_text) || where, version: o?.version,
+    // file：成品的本机文件（local_path，一轮页拿它和回执里记下的那条对是不是同一份文件）
+    return { kind, id: o?.id, title: o?.title, labels: o?.visitor_labels, action, where: str(o?.card_text) || where, version: o?.version, file: str(o?.local_path),
       href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
   }
 
