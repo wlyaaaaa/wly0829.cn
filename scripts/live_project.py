@@ -5,10 +5,12 @@ import json
 import msvcrt
 from pathlib import Path
 import subprocess
+from tempfile import TemporaryDirectory
 import xml.etree.ElementTree as ET
 
 
 BEIJING = timezone(timedelta(hours=8))
+DASHBOARD_REGISTRY = Path('E:/PCConfig/registries/dashboard_sources.json')
 
 
 def read(path):
@@ -35,8 +37,33 @@ def read_live_paths(root, *, require_registered=False, registered_paths=None):
     return paths
 
 
+def dashboard_paths():
+    sources = read(DASHBOARD_REGISTRY)['project_sources']['wlyaaaaa/wly0829.cn']['sources']
+    return {audience: sources[f'website.{audience}']['path'] for audience in ('public', 'owner')}
+
+
+def point_build_alias(index, folder):
+    if not index.is_file():
+        raise FileNotFoundError(index)
+    alias = folder / 'local-build'
+    if alias.is_symlink() and alias.resolve() == index.parent:
+        return
+    with TemporaryDirectory(dir=folder, prefix='.local-build-') as temporary:
+        link = Path(temporary) / 'target'
+        link.symlink_to(index.parent, target_is_directory=True)
+        previous = Path(temporary) / 'previous'
+        if alias.is_symlink():
+            alias.rename(previous)
+        try:
+            link.rename(alias)
+        except OSError:
+            if previous.is_symlink():
+                previous.rename(alias)
+            raise
+
+
 def save(root, kind, metrics, at, scope, artifact=None, version=None, routes=(), *,
-         visitor_launch_at=None, require_registered=False, registered_paths=None):
+         visitor_launch_at=None, require_registered=False, registered_paths=None, build_index=None):
     paths = read_live_paths(root, require_registered=require_registered, registered_paths=registered_paths)
     lock = Path(paths.get('public') or Path(root) / '.live/public.json').with_suffix('.lock')
     lock.parent.mkdir(parents=True, exist_ok=True)
@@ -47,13 +74,13 @@ def save(root, kind, metrics, at, scope, artifact=None, version=None, routes=(),
         try:
             if kind == 'visitors':
                 metrics = visitor_metrics(metrics, published_routes(root, paths))
-            save_views(root, paths, kind, metrics, at, scope, artifact, version, routes, visitor_launch_at)
+            save_views(root, paths, kind, metrics, at, scope, artifact, version, routes, visitor_launch_at, build_index)
         finally:
             handle.seek(0)
             msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
 
 
-def save_views(root, paths, kind, metrics, at, scope, artifact, version, routes, visitor_launch_at=None):
+def save_views(root, paths, kind, metrics, at, scope, artifact, version, routes, visitor_launch_at=None, build_index=None):
     for audience in ('public', 'owner'):
         path = Path(paths.get(audience) or Path(root) / '.live' / (audience + '.json'))
         data = read(path) if path.is_file() else dict(v=1, metrics={}, times={}, scopes={}, artifacts=[], versions={})
@@ -76,6 +103,9 @@ def save_views(root, paths, kind, metrics, at, scope, artifact, version, routes,
         data.pop('routes', None)
         if kind == 'build':
             data['build_routes'] = sorted(set(routes))
+            if audience == 'owner' and build_index:
+                point_build_alias(build_index, path.parent)
+                data['build_index'] = str(build_index)
         if kind == 'publication':
             routes = set(routes)
             data['published_routes'] = sorted(routes)
@@ -112,7 +142,7 @@ def package(manifest, prefix):
         resource_bytes=sum(o['bytes'] for o in oss['objects'].values()), index_bytes=files['index.html']['bytes']).items()}
 
 
-def build(root, dist, receipt):
+def build(root, dist, receipt, *, record_local=False):
     if receipt.get('status') != 'built':
         return
     manifest = read(dist / 'release-manifest.json')
@@ -125,21 +155,26 @@ def build(root, dist, receipt):
         pages=len(ET.parse(dist / 'sitemap.xml').findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')),
         projects=sum(k.endswith('/project.html') for k in manifest['files']),
         skills=sum(r['状态'] == '做完' for r in skills))
-    artifact = dict(at=receipt['prepared_at_beijing'], kind='local-build', title=f"本地组装完成：{metrics['pages']} 个正式页面",
+    at = datetime.fromisoformat(receipt['prepared_at_beijing']).astimezone(BEIJING).isoformat()
+    artifact = dict(at=at, kind='local-build', title=f"本地组装完成：{metrics['pages']} 个正式页面",
         recent_title='网站本地组装成品', recent_detail=f"这次组装输出了 {metrics['pages']} 个正式页面。",
         status='completed', public='owner', open=dict(source='website.build-ready'))
-    save(root, 'build', metrics, receipt['prepared_at_beijing'], '本地成品；含已冻结项目的既成页面，图片按亮暗及尺寸分别计文件。', artifact, manifest['release_id'], manifest['routes'])
+    save(root, 'build', metrics, at, '本地成品；含已冻结项目的既成页面，图片按亮暗及尺寸分别计文件。',
+         artifact, manifest['release_id'], manifest['routes'], require_registered=record_local,
+         registered_paths=dashboard_paths() if record_local else {}, build_index=(dist / 'index.html').resolve(strict=True) if record_local else None)
 
 
 def publication(root, record):
     if record.get('schema') != 'wly.site-publication.v1' or not record.get('deployment'):
         return
-    at, manifest = record['verified_at_beijing'], record['manifest']
+    at = datetime.fromisoformat(record['verified_at_beijing']).astimezone(BEIJING).isoformat()
+    manifest = record['manifest']
     metrics = package(manifest, 'published_') | dict(published=at[:16].replace('T', ' ').removeprefix('2026-') + ' 成功发布并回读')
     artifact = dict(at=at, kind='published-site', title=f"已发布网站：{metrics['published_html_files']} 个 HTML 文件",
         recent_title='已发布的网站', recent_detail=f"本次发布包含 {metrics['published_html_files']} 个网页文件，入口可查看网站首页。",
         status='completed', public='same', open=dict(source='website.published-ready', href='https://wly0829.cn/'))
-    save(root, 'publication', metrics, at, '上次成功发布基线；HTML 文件含跳转和功能页，不等于正文篇数。', artifact, manifest['release_id'], manifest['routes'])
+    save(root, 'publication', metrics, at, '上次成功发布基线；HTML 文件含跳转和功能页，不等于正文篇数。',
+         artifact, manifest['release_id'], manifest['routes'], require_registered=True, registered_paths=dashboard_paths())
 
 
 def published_routes(root, paths):
@@ -212,8 +247,8 @@ def visitors(root, result, at, *, require_registered=False, registered_paths=Non
          require_registered=require_registered, registered_paths=registered_paths)
 
 
-def record(kind, *args):
+def record(kind, *args, **kwargs):
     try:
-        globals()[kind](*args)
+        globals()[kind](*args, **kwargs)
     except (OSError, ValueError, KeyError, IndexError) as error:
         print(json.dumps(dict(live_snapshot='failed', producer=kind, error_type=type(error).__name__)), file=__import__('sys').stderr)
