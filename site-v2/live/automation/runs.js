@@ -123,11 +123,15 @@
 
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
   function chatOf(conv) {
-    const href = str(conv?.href);
-    const id = /\/chats\/([^/?#]+)/.exec(href)?.[1] || (/^\/live\/chat\/\?(?:.*&)?id=([^&#]+)/.exec(href)?.[1]);
-    const chat = id ? decodeURIComponent(id) : '';
+    const chatId = href => {
+      const id = /\/chats\/([^/?#]+)/.exec(href)?.[1] || (/^\/live\/chat\/\?(?:.*&)?id=([^&#]+)/.exec(href)?.[1]);
+      return id ? decodeURIComponent(id) : '';
+    };
+    const chat = chatId(str(conv?.href));
+    const header = conv?.content_locked === true ? chatId(str(conv.header_href)) : '';
     return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
       href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
+      headerHref: header ? T.path('/live/chat/', { id: header }) : '',
       // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
       reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why),
       // 卡头的事实：几条消息，和对话的软件、型号档位、状态、时刻、第几步、帮手数（metadata，有记录才给）；对话对访客藏着时两版也都给
