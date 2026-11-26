@@ -377,7 +377,7 @@
   function configSection(d) {
     const x = h => hostData(d, h);
     const entries = HOSTS.map(h => x(h).entry || {});
-    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope)}</small>` : '') : '没读到';
+    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope).replace(/为准|未计入/g, '<span class="ag-keep">$&</span>')}</small>` : '') : '没读到';
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
