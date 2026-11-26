@@ -205,6 +205,10 @@
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="ask"] { grid-column: ask; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="close"] { grid-column: close; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="later"] { grid-column: later; margin-right: 0; }
+/* 这件没有绿色“去办”时，“问情况”从最左边起，后面几颗跟着往左挪，不在左边空出一颗按钮的宽（r83 返修第二轮） */
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="ask"] { grid-column: go; }
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="close"] { grid-column: ask; }
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="later"] { grid-column: close; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="pick"] { grid-column: end; }
 .page--live #needs [data-part="main"] > .row > .row__acts > :not([data-slot]) { grid-column: 1 / -1; grid-row: 2; }
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
