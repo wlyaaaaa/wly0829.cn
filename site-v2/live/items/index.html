@@ -23,7 +23,7 @@
 .page--items .item-expand { margin: 0; padding: 0; min-height: 20px; font-size: 12px; }
 .page--items .item-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .page--items .row__sub>.item-bit { display: inline; }
-.page--items .item-bit+.item-bit:before { content: ' · '; }
+.page--items .item-bit+.item-bit:before { content: '\00a0· '; }   /* “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看） */
 /* 时刻、“约 N 分钟”这类不断开的短段（item-keep）原来是行内块，连同前面的“ · ”粘住前一个字一起折，剩“微／信”“到／了。”这种断法；改成行内不断开、“ · ”处可以折 */
 .page--items .row__sub > .item-keep { display: inline; }
 .page--items .row__sub > .item-bit + .item-keep::before { white-space: normal; }
