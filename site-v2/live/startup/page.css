@@ -77,6 +77,13 @@
 .su-bar__state .su-bad { color: #c8261d; }
 .su-bar__chev { display: inline-block; margin-left: 8px; color: var(--muted); transition: rotate calc(200ms * var(--sp)) ease; }
 .su-bar[aria-expanded="true"] .su-bar__chev { rotate: 90deg; }
+/* 三组默认各露 5 项：组头只是标题，不能点开收起；列表常开 */
+.su-bar--static { cursor: default; }
+.su-bar--static:hover { background: transparent; }
+.su-group .su-list { padding: 0 6px 6px; }
+/* “另有 N 项设了启用，这次开机没见它启动……点开看名单”那一行和点开后的名单 */
+.su-unc .more { height: auto; min-height: 30px; padding: 4px 10px; font-size: 15px; line-height: 22px; text-align: left; }
+.su-unc__list { margin-top: 4px; }
 .su-group .fold > div { padding: 0 6px 6px; }
 .su-group .su-cols { margin-top: 2px; }
 .su-group .su-row:last-of-type { border-bottom: 0; }

@@ -52,17 +52,19 @@
     if (enabledAny(r)) return { tone: 'amber', cls: 'wait', text: '这次没确认', title: said.join('；') || '这次开机没找到它启动过的证据' };
     return { tone: '', cls: 'none', text: '—', title: '设成停用，这次不该自己启动' };
   }
-  function row(r, bootAt) {
+  function row(r, bootAt, withNow = true) {
     const n = now(r, bootAt), raw = [...new Set(sourcesOf(r).map(s => s.raw_name).filter(Boolean))].join('\n');
     const set = SETTINGS[r.enabled] || sp(r.state_text || '') || '不清楚';
     return `<div class="su-row"><span class="su-name"${raw ? ` title="${esc(raw)}"` : ''}>${esc(sp(r.name || r.raw_name || '没有名字'))}</span>` +
       // 几个来源各成一段，折行时整段换到下一行，不把“（启用）”这类拆成两半
       `<span class="su-from">${from(r).split('、').map((t, i, a) => `<span class="su-part">${esc(t)}${i < a.length - 1 ? '、' : ''}</span>`).join('')}</span><span class="su-set${r.enabled === 'disabled' ? ' su-set--off' : ''}">${esc(set)}</span>` +
-      `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span></div>`;
+      (withNow ? `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span>` : '') + '</div>';
   }
   // “这次开机”那一列几种说法是什么意思（本人要页面上讲清机制，M928）：后台按哪种证据认的照实写
   const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“这次没确认”是设了启用、这次没找到它启动过的证据；“启动失败”是这次开机或登录时系统去启动它、结果报了错。</p>';
   const cols = '<div class="su-cols" aria-hidden="true"><span>软件</span><span>从哪自启</span><span>设了自启</span><span>这次开机</span></div>';
+  // “这次没确认”的名单：这一列全是同一句，上面那行已经说了这次开机没见它启动，所以不摆这一列
+  const UNC_COLS = '<div class="su-cols" aria-hidden="true"><span>软件</span><span>从哪自启</span><span>设了自启</span></div>';
   const say = text => `<p class="su-say">${esc(text)}</p>`;
 
   // —— 读数没到：照全站的写法（在读起雾、连不上写没存下来）；后台还没给这几段时写“还没读到” ——
@@ -134,17 +136,20 @@
     btn.textContent = importantOpen ? '收起 ›' : `再看 ${$('important-box').querySelectorAll('[data-more] .su-row').length} 项 ›`;
   });
 
-  // —— 其余三组：一组一条；点开先看一页（后台每页 25 条），每点一次多看一页，用回包的 next 往下取，一直能看到底 ——
-  const groupEls = {};
+  // —— 其余三组：默认各露 5 项，底下“再看 25 项（还有 M 项）”每点一次再露 25 项，一直能看到底（本人 11-26 选 SHIP7 A；全站长列表默认露一部分、逐段打开）。
+  // 设了启用、这次开机没见它启动的（“这次没确认”）不一行行列：每组只留一行“另有 N 项……点开看名单”，点开才列，名单里不再摆“这次开机”那一列（本人选 SHIP8 A）。
+  // 后台每页给 25 条，按“启动失败、这次没确认、其余按名字”排；手里的不够露就用回包的 next 往下取。
+  const GROUP_FIRST = 5, GROUP_STEP = 25;
+  const groupEls = {}, groupShown = {}, uncOpen = {}, groupFailed = {};
+  const groupInfo = key => (Array.isArray(summary()?.groups) ? summary().groups : []).find(g => g.id === key) || null;
+  // 这次没确认的一共几项：后台汇总给的数为准；没给就数手里的（取到底以后就是全部）
+  const uncTotal = key => { const g = groupInfo(key), d = data[key]; return num(g?.enabled_unconfirmed) ? g.enabled_unconfirmed : Array.isArray(d?.items) ? d.items.filter(unconfirmed).length : 0; };
   function groupEl(key, label) {
     if (groupEls[key]) return groupEls[key];
     const el = document.createElement('div');
-    el.className = 'su-group'; el.dataset.group = key;
-    el.innerHTML = `<button class="su-bar" type="button" aria-expanded="false" aria-controls="group-${key}"><b>${esc(label)}</b><span class="su-bar__n"></span><span class="su-bar__state"></span><span class="su-bar__chev" aria-hidden="true">›</span></button><div class="fold" id="group-${key}"><div class="su-list"></div></div>`;
-    const bar = el.querySelector('.su-bar'), box = el.querySelector('.fold');
-    U.fold(bar, box);
-    bar.addEventListener('click', () => { el.classList.toggle('is-open', bar.getAttribute('aria-expanded') === 'true'); paintList(key); });
-    el.classList.toggle('is-open', bar.getAttribute('aria-expanded') === 'true');
+    el.className = 'su-group is-open'; el.dataset.group = key;
+    el.innerHTML = `<div class="su-bar su-bar--static"><b>${esc(label)}</b><span class="su-bar__n"></span><span class="su-bar__state"></span></div><div class="su-list" id="group-${key}"></div>`;
+    groupShown[key] ??= GROUP_FIRST;
     return groupEls[key] = el;
   }
   function paintGroups(s) {
@@ -157,11 +162,11 @@
     }
     const groups = Array.isArray(s.groups) ? s.groups : null;
     if (!groups) { $('groups-title').textContent = '其余 · 按来源分组'; U.html(box, say('分组还没读到。')); return; }
-    const rest = groups.reduce((n, g) => n + (num(g.total) ? g.total : 0), 0), page = pageSize();
+    const rest = groups.reduce((n, g) => n + (num(g.total) ? g.total : 0), 0);
     $('groups-title').textContent = `其余 ${rest} 项 · 按来源分组`;
     let wrap = box.querySelector(':scope > .su-groups');
     if (!wrap) { box.innerHTML = `<p class="su-sub"></p><div class="su-groups"></div>`; box._html = undefined; wrap = box.querySelector('.su-groups'); }
-    box.querySelector('.su-sub').textContent = `点开一组先看 ${page} 项，每点一次多看 ${page} 项。`;
+    box.querySelector('.su-sub').textContent = `每组先露 ${GROUP_FIRST} 项，每点一次“再看”多露 ${GROUP_STEP} 项。`;
     for (const [key, label] of GROUPS) {
       const g = groups.find(x => x.id === key);
       if (!g) { groupEls[key]?.remove(); continue; }
@@ -174,32 +179,55 @@
       paintList(key);
     }
   }
-  const firstPage = {}, pageSize = () => Math.max(0, ...Object.values(firstPage)) || 25;
   function paintList(key) {
     const el = groupEls[key];
-    if (!el || el.querySelector('.su-bar').getAttribute('aria-expanded') !== 'true') return;
+    if (!el) return;
     const list = el.querySelector('.su-list'), d = data[key], s = summary();
     if (!Array.isArray(d?.items)) {
       U.html(list, say(phases[key] === 'none' ? '这一组还没读到。' : offline() ? '这一组没存下来，连上后补上。' : '正在读…'));
       return;
     }
-    const total = num(d.total) ? d.total : d.items.length, left = Math.max(0, total - d.items.length), page = pageSize();
-    const more = d.next ? `<div class="su-foot"><button class="more su-pill" type="button" data-next="${key}" data-needs-pc${loading.has(key) ? ' disabled' : ''}>${loading.has(key) ? '正在读…' : list.dataset.failed ? '下一页暂时读不到，再试一次 ›' : left > page ? `再看 ${page} 项 · 还剩 ${left} 项` : `再看剩下的 ${left || page} 项`}</button></div>` : '';
-    U.html(list, d.items.length ? cols + d.items.map(r => row(r, s?.boot_at)).join('') + more : say('这一组没有自启动。') + more);
+    const vis = d.items.filter(r => !unconfirmed(r)), unc = d.items.filter(unconfirmed), uncN = Math.max(uncTotal(key), unc.length);
+    const total = num(d.total) ? d.total : d.items.length, visTotal = Math.max(vis.length, total - uncN);
+    const shown = Math.min(groupShown[key], vis.length), left = Math.max(0, visTotal - shown), busy = loading.has(key);
+    const waiting = busy && vis.length < groupShown[key], fetchNext = !!d.next && vis.length < groupShown[key] + GROUP_STEP;
+    const more = left ? `<div class="su-foot"><button class="more su-pill" type="button" data-group-more="${key}"${fetchNext ? ' data-needs-pc' : ''}${waiting ? ' disabled' : ''}>${waiting ? '正在读…'
+      : groupFailed[key] && vis.length < groupShown[key] ? '下一批暂时读不到，再试一次 ›' : left > GROUP_STEP ? `再看 ${GROUP_STEP} 项（还有 ${left} 项）` : `再看剩下 ${left} 项`}</button></div>` : '';
+    const open = !!uncOpen[key], uncWait = open && unc.length < uncN && !!d.next;
+    const uncList = open ? `<div class="su-unc__list">${unc.length ? UNC_COLS + unc.map(r => row(r, s?.boot_at, false)).join('') : ''}${uncWait ? say(groupFailed[key] ? '后面的名单暂时读不到，点上面那行再试一次。' : '正在读…') : ''}</div>` : '';
+    const uncLine = uncN ? `<div class="su-foot su-unc"><button class="more" type="button" data-unc="${key}" aria-expanded="${open}"${uncWait ? ' data-needs-pc' : ''}>另有 ${uncN} 项设了启用，这次开机没见它启动（多半是用到时才起），${open ? '收起名单' : '点开看名单'} <span class="more__chev">›</span></button></div>${uncList}` : '';
+    U.html(list, (vis.length ? cols + vis.slice(0, shown).map(r => row(r, s?.boot_at)).join('') : uncN || d.next ? '' : say('这一组没有自启动。')) + more + uncLine);
     U.blockNote(list, links[key]);
   }
-  $('groups-box').addEventListener('click', async e => {
-    const btn = e.target.closest('[data-next]');
-    if (!btn) return;
-    const key = btn.dataset.next, current = data[key], list = groupEls[key]?.querySelector('.su-list');
-    if (!current?.next || loading.has(key) || offline()) return;
-    loading.add(key); delete list.dataset.failed; paintList(key);
-    try {
-      const s = await window.Live.get(recordResource(key, current.next), { section: sections[key], cursor: current.next });
-      if (data[key] !== current) return;
-      if (Array.isArray(s.data?.items)) data[key] = { ...current, ...s.data, items: [...current.items, ...s.data.items] };
-      else list.dataset.failed = '1';
-    } finally { loading.delete(key); paintList(key); }
+  // 手里的不够露（这组露的行数、点开的名单）就接着往下取，取到够或到底为止
+  async function fill(key) {
+    if (loading.has(key) || offline()) return;
+    const short = () => {
+      const d = data[key];
+      if (!d?.next || !Array.isArray(d.items) || groupFailed[key]) return false;
+      const unc = d.items.filter(unconfirmed).length;
+      return d.items.length - unc < groupShown[key] || uncOpen[key] && unc < uncTotal(key);
+    };
+    while (short()) {
+      const current = data[key];
+      loading.add(key); paintList(key);
+      let s = null;
+      try { s = await window.Live.get(recordResource(key, current.next), { section: sections[key], cursor: current.next }); } catch { s = null; }
+      loading.delete(key);
+      if (data[key] !== current) break;
+      if (Array.isArray(s?.data?.items)) data[key] = { ...current, ...s.data, items: [...current.items, ...s.data.items] };
+      else groupFailed[key] = true;
+    }
+    paintList(key);
+  }
+  $('groups-box').addEventListener('click', e => {
+    const more = e.target.closest('[data-group-more]'), unc = e.target.closest('[data-unc]');
+    const key = more?.dataset.groupMore || unc?.dataset.unc;
+    if (!key || more?.disabled) return;
+    if (more && !groupFailed[key]) groupShown[key] += GROUP_STEP;
+    if (unc) uncOpen[key] = !uncOpen[key];
+    delete groupFailed[key];
+    paintList(key); fill(key);
   });
 
   // —— 变化记录：先摆最近 10 条，每点一次多看 25 条，手里的看完了用 next 接着取；第一次比较没有变化时照实写 ——
@@ -261,8 +289,8 @@
     data(d) {
       data[key] = d && typeof d === 'object' ? d : undefined;
       if (key === 'changes') { changesShown = FIRST_CHANGES; changesFailed = false; }
-      else if (key !== 'summary' && data[key]?.next && Array.isArray(data[key].items) && data[key].items.length) firstPage[key] = data[key].items.length;
       paint();
+      for (const [k] of GROUPS) if (groupEls[k] && (k === key || key === 'summary')) { if (k === key) delete groupFailed[k]; fill(k); }
     },
     link(s) {
       links[key] = s;
@@ -273,7 +301,7 @@
         paint();
       } else if (s.offline) paint();
       else if (key === 'changes') U.blockNote($('changes-body'), s);
-      else paintList(key);
+      else { paintList(key); fill(key); }
     },
   });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
