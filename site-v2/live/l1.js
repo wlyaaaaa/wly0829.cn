@@ -1288,7 +1288,8 @@
     if (sure.length && sure.length === data.attention_count && state.note) {
       const name = g => U.fieldHtml(g.name, { name: '检测分组', kind: viewer });
       const said = g => { const why = g.reason ?? g.why; return sp(U.fieldText(why, viewer) || '').trim() ? U.fieldHtml(why, { name: '异常说明', kind: viewer }) : name(g); };
-      const text = sure.length === 1 ? `要处理：${said(sure[0])}` : `${sure.length} 项要处理：${sure.slice(0, 3).map(name).join('、')}${sure.length > 3 ? ' 等' : ''}`;
+      // 这一句用电脑页页顶“已确认异常”那行同一个颜色和字重，一眼看得出；旁边的说明照旧浅灰
+      const text = `<b>${sure.length === 1 ? `要处理：${said(sure[0])}` : `${sure.length} 项要处理：${sure.slice(0, 3).map(name).join('、')}${sure.length > 3 ? ' 等' : ''}`}</b>`;
       state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : part).join(' · ');
     }
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
