@@ -91,7 +91,8 @@ h1 .task-provider { margin-left: .6em; }
 .task-stat[data-stat="today"] { background: linear-gradient(114deg, #fff, #e9daf8); box-shadow: inset 0 0 0 1px #d8c3f2; }
 .task-stat[data-stat="today"] dd { font-size: 33px; }
 .task-columns { display: grid; align-items: start; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: 18px; }
-.task-stats[hidden] + .task-columns { margin-top: 13px; }
+/* 四格不出时（比如还没跑过）下面一块不贴着大图：四格和“上次为什么出错”之间夹着一个 section，“+”选不到，按实际跟在后面的那块补间距 */
+.task-stats[hidden] + .task-columns, .task-stats[hidden] + .task-failure:not([hidden]), .task-stats[hidden] + .task-failure[hidden] + .task-columns { margin-top: 13px; }
 .task-aside { display: grid; gap: 12px; }
 .task-card { padding: 11px 22px 15px; background: rgb(255 255 255 / .58); min-width: 0; }
 .task-card header { display: flex; gap: 11px; align-items: center; margin-bottom: 8px; }

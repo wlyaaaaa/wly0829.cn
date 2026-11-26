@@ -20,7 +20,12 @@
   const back = fromList ? fromList.pathname + fromList.search + fromList.hash : T.path('/live/automation/', { category });
   const listLabel = fromList && fromList.searchParams.get('category') !== category ? '自动任务' : '';
   let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
+  // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
+  const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   const F = (v, name) => T.field(v, viewer, name);
+  // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
+  const said = v => U.fieldText(v ?? '', viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
+  const sameText = (a, b) => !!said(a) && said(a) === said(b);
   const you = () => T.you(viewer);
   const name = () => R.catName(category, viewer, list(board?.data?.categories).find(c => c.id === category)?.title);
 
@@ -31,8 +36,15 @@
   const clockRange = r => {
     const a = r.startedAt || r.queuedAt, b = r.finishedAt;
     if (!T.stamp(a)) return '';
-    return T.stamp(b) ? `${whenDay(a)}–${T.dayKey(a) === T.dayKey(b) ? T.clock(b) : whenDay(b)}` : `${whenDay(a)} 起`;
+    if (T.stamp(b)) return `${whenDay(a)}–${T.dayKey(a) === T.dayKey(b) ? T.clock(b) : whenDay(b)}`;
+    // 不是正在跑、又没有结束时刻和用时（没有收尾回执）：照实写没记到结束，不写用时
+    return r.status !== 'running' && r.minutes == null ? `${whenDay(a)} 开始 · 没记到结束` : `${whenDay(a)} 起`;
   };
+  // 标题里的日期、时刻（11-23、2026-11-23、10:18）不从中间断行：只包字，不碰标签和属性
+  const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])|(?<![\d:])\d{1,2}:\d{2}(?::\d{2})?(?![\d:])/g, '<span class="live-unit">$&</span>')).join('');
+  // 标题后面的签不单独掉到下一行：和标题最后两个字（或最后那个日期时刻）连在一起换行
+  const withTag = (html, tag) => !tag ? html : /<span class="live-unit">[^<]*<\/span>$/.test(html) ? html.replace(/(<span class="live-unit">[^<]*<\/span>)$/, `<span class="ar-tail">$1${tag}</span>`)
+    : /(?:&[#\w]+;|[^<>&\s]){1,2}$/.test(html) ? html.replace(/((?:&[#\w]+;|[^<>&\s]){1,2})$/, `<span class="ar-tail">$1${tag}</span>`) : html + tag;
   const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   // 回执里“这次带入：……读到……”那串明细（receipt.scan）不进大标题和结论，挪到对话卡头（主控 11-26）
@@ -75,6 +87,12 @@
     // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
     return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
   }
+  // 标题后半写的是哪一个字段，访客那边换了说法（或看不到）就在标题后挂全站同一个签；暂缓、在跑又有这件活名字的后半不取后台字段，不挂。
+  // 后台的 headline 自成一句、拿来当了大标题时，看 headline 那个键
+  function titleTag(r) {
+    const key = ownHeadline(r) ? 'headline' : r.deferred ? '' : r.status === 'incomplete' ? 'reason' : r.status === 'running' && r.subject ? '' : 'summary';
+    return key ? U.visitorLabel({ visitor_labels: r.labels }, key, '这一轮的说法', viewer) : '';
+  }
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
     const time = [clockRange(r), minutes != null && (r.status === 'running' ? `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>` : `用了 ${span(minutes)}`)].filter(Boolean).join(' · ');
@@ -113,18 +131,21 @@
   // 提交在 GitHub 上：本人版给链接并标“访客看不到”，访客版写已提交、为什么不放链接（后台没标仓库公开还是私有）
   const GITHUB_WHY = '本人的 GitHub 仓库有一部分是私有的，访客点开会打不开';
   function made(r) {
-    const receipt = r.receipt || {}, recorded = list(receipt.recorded);
+    const receipt = r.receipt || {};
     // 自动修理的业务回执就是“这件修理的全部几轮”那一页，右栏已经有，这里不再放一遍
     const ownHref = receipt.href && receipt.href !== r.subject?.href;
     // 本人版什么都给全：后台给本人的也只是“仅本人可见……”这类占位话（后台缺数）时，这一行照样在，写清后台没给原文，
     // 不悄悄少一行、不让本人看到的比访客少（私事线 11-26 04:43）。访客版照后台给的字
     const noOriginal = x => viewer === 'owner' && /^仅本人可见/.test(plainOf(x?.title ?? x?.text ?? x));
-    const mine = recorded;
+    // 回执里记下的和上面做成的东西名字一样的不再列一遍；全都一样，“回执里记下的”整块不出（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
+    const mine = list(receipt.recorded).filter(x => !r.outputs.some(o => sameText(o.title, x?.title ?? x?.text ?? x)));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
-    const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
+    // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；
+    // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
+    const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
       ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
-        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
-    const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x.title ?? x.text ?? x, '记下的事')}</li>`).join('')}</ul>`,
+        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
+    const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x?.title ?? x?.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       ownHref && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
     const count = !rows && r.outputCount > 0 ? `<p class="ar-none">做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。</p>` : '';
@@ -325,7 +346,8 @@
     } else items.push(closing(r));
 
     // 卡头：这场对话自己的状态（和这一轮的结局分开写）、条数；型号档位、各项时刻、帮手几个、所属项目、App 标签、压缩次数、问情况、打开对话；计划收在“计划”里
-    const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state] || '';
+    // 访客版对话藏着时后台不给 state，看 metadata 里记的状态
+    const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state || c.meta?.state] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；标 rewritten 的挂“对外换了说法”（M684）
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
     const tag = viewer !== 'owner' ? (c.reason === 'private' || c.why || labeled !== 'rewritten' ? '' : U.visitorRewrittenTag('这一轮的对话', '', viewer)) : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
@@ -340,8 +362,25 @@
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
       plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
-    } else if (scanLine) meta = `<div class="ar-talk__meta">${scanLine}</div>`;
+    } else {
+      // 对话没读到（访客版对话藏着、本人版还在读或读不到）：照后台给的 conversation.metadata 和 message_count 写卡头这一行，正文照旧
+      const facts = program ? '' : talkFacts(c.meta, c.count);
+      if (facts || scanLine) meta = `<div class="ar-talk__meta">${facts ? `<p class="ar-talk__facts">${facts}</p>` : ''}${scanLine}</div>`;
+    }
     return `<section class="tp-panel ar-card ar-talk"><div class="ar-talk__head"><h2>这一轮的对话</h2>${tag}${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-count">共 ${count} 条</span></div>${meta}${plan}<ol class="ar-chat">${items.map(x => x.html).join('')}</ol></section>`;
+  }
+  // 卡头那一行在对话没读到时：哪家软件、型号档位、原有几条消息、第几步、开始和最后动静、几个帮手。
+  // 写法照 AI 对话详情页（/live/chat/）页头，和读到对话时那一行同一个样子；后台没给这两个字段就不写（照原来的样子）。
+  // 读到对话时卡头右边的“共 N 条”数的是下面摆出来的话，这里写“原有”，说的是那场对话本来有几条
+  function talkFacts(m, count) {
+    if (!m && !known(count)) return '';
+    const CF = U.chatFields, row = m || {};
+    const who = [U.fieldText(U.draw10?.bareModel ? U.draw10.bareModel(row) : row.model, viewer), U.fieldText(row.effort, viewer)].filter(Boolean).join(' · ');
+    const plan = CF.planInfo(row), helpers = CF.helperTotal(row);
+    const start = T.stamp(row.session_started_at) ? `对话开始 ${when(row.session_started_at)}` : T.stamp(row.born) ? `本次记录起于 ${when(row.born)}` : '';
+    const parts = [who, known(count) && `原有 ${int(count)} 条消息`, plan.label || plan.count, start, T.stamp(row.at) && `主对话更新 ${when(row.at)}`,
+      helpers === 0 ? '没有派帮手' : known(helpers) && `帮手 ${int(helpers)} 个`].filter(Boolean);
+    return CF.appTag(row) + parts.map(v => `<span>${esc(v)}</span>`).join('');
   }
 
   // —— 右栏：这一轮在办（属于账本哪件、第几次看、欠着还是放着；这件修理的全部几轮；谁约的→谁做的）、这一类和怎么干、上一轮和下一轮（带钟点） ——
@@ -378,7 +417,9 @@
     watchChat(r.who?.program ? {} : r.conversation);
     // 压缩次数和顶层页同一个画法（draw10.detail 挂在卡头信息后面）；整块重画时留住展开没有
     const compactOpen = page.root.querySelector('[data-compaction] details')?.open;
-    T.paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i>${title(r)}</h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
+    // 大标题：日期、时刻不从中间断开；访客那边换了说法的挂签，签和标题最后几个字连着换行（标题和签包在一个 span 里，不让 h1 的 flex 把它们拆成几块）
+    // 访客版画之前把指本人的“你”换成“本人”（paint）
+    paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const host = page.root.querySelector('.ar-talk__facts');
