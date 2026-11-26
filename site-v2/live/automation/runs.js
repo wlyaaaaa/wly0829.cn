@@ -37,7 +37,8 @@
   }
   const runPath = (category, id) => category && id ? T.path('/live/automation/run/', { type: category, run: id }) : '';
   // “用谁”点进智能体页看这一家干了多少：落在“三家各干了多少活”那块、亮出这一家（和首页智能体卡同一个落点，只看一家一律 ?family=）
-  const agentsPath = family => FAMILIES[family] ? `/live/agents/?family=${family}#work` : '';
+  const agentsPath = (family, today = false) => !FAMILIES[family] ? '' : today
+    ? `/live/agents/?hours=today&family=${family}#hours` : `/live/agents/?family=${family}#work`;
   const minutesBetween = (a, b) => { const x = T.stamp(a), y = T.stamp(b); return x != null && y != null && y >= x ? (y - x) / 60000 : null; };
   const OUTPUT = {
     owner_item: { where: '等你的事那张卡', go: '去那张卡' },

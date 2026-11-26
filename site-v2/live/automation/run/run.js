@@ -116,7 +116,7 @@
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
     const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
     const model = !r.who?.program && !r.who?.short && worker.model ? R.whoOf(worker).short : r.who?.text;
-    const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker));
+    const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker), true);
     const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
       .map(t => `<span class="ar-tag"><span>${keepDates(t)}</span></span>`).join('');
@@ -431,8 +431,13 @@
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
       const longer = longerThanChat(r, d);
-      const facts = m.meta.map(v => keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
-        { name: '对话内容', kind: viewer })));
+      const family = R.familyOf({ host: d.software, model: CV.visibleText(d.model) }) || r.family;
+      const facts = m.meta.map((v, i) => {
+        const words = keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
+          { name: '对话内容', kind: viewer }));
+        const modelHref = i === 0 && v === CV.who(d, true) && R.agentsPath(family, true);
+        return modelHref ? link(modelHref, `${words} ›`) : words;
+      });
       if (m.project) facts.push(`所属项目 ${m.project}`);
       const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
       if (mark) facts[0] = `<span class="live-unit">${facts[0] || ''}${mark}</span>`;

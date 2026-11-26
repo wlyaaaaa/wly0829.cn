@@ -108,7 +108,7 @@
       : `<span class="tp-muted">${c.recent_stats?.recorded_since ? `${esc(when(c.recent_stats.recorded_since))} 起还没跑过` : '还没跑过'}</span>`;
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
-    const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
+    const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
