@@ -163,13 +163,14 @@
   }
   function backupHistory(runs) {
     if (!runs.length) return '';
-    const label = run => `<time datetime="${esc(run.at)}">${esc(stamp(run.at))}</time> · ${run.target === 'drive' ? '云端' : ''}${RUN_STATUS[run.status]}`;
-    const tags = runs.map(run => `<li data-state="${run.status}">${label(run)}</li>`);
+    const time = run => `<time datetime="${esc(run.at)}">${esc(stamp(run.at))}</time>`;
+    const result = run => `${run.target === 'drive' ? '云端' : ''}${RUN_STATUS[run.status]}`;
+    const tags = runs.map(run => `<li data-state="${run.status}">${time(run)}${result(run)}</li>`);
     const reasons = runs.map(run => {
       const reason = D.backupFailureReason(run.reason_code);
       const detail = reason && reason !== run.reason_code ? reason
         : reason ? `记录的原因代码是 ${reason}` : run.status === 'failed' ? '没有记录失败原因' : '';
-      return detail && `<p class="fe-l3b-note">${label(run)}：${said(detail, '备份原因')}</p>`;
+      return detail && `<p class="fe-l3b-note">${time(run)} · ${result(run)}：${said(detail, '备份原因')}</p>`;
     }).join('');
     return `<div class="dossier-card__part backup-history"><p class="dossier-card__sub">最近几次备份</p><ul aria-label="最近几次备份">${tags.join('')}</ul>${reasons}</div>`;
   }
