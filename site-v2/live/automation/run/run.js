@@ -86,8 +86,13 @@
   }
   // 标题后半写的是哪一个字段，访客那边换了说法（或看不到）就在标题后挂全站同一个签；暂缓、在跑又有这件活名字的后半不取后台字段，不挂。
   // 后台的 headline 自成一句、拿来当了大标题时，看 headline 那个键
+  // summary 的签说的是整段换了说法；标题只留了第一句时，换掉的可能在后半句，签挂到写全这段的“收到结论”上（主控 11-26 11:02，331 轮）
   function titleTag(r) {
     const key = ownHeadline(r) ? 'headline' : r.deferred ? '' : r.status === 'incomplete' ? 'reason' : r.status === 'running' && r.subject ? '' : 'summary';
+    if (key === 'summary') {
+      const whole = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : ''), r);
+      if (whole && firstSentence(whole) !== whole.replace(/。$/, '')) return '';
+    }
     return key ? U.visitorLabel({ visitor_labels: r.labels }, key, '这一轮的说法', viewer) : '';
   }
   function tags(r) {
@@ -247,7 +252,7 @@
     } else {
       // “这次带入：……”那串明细在对话卡头写了，结论里不再写一遍
       const result = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : '') || F(r.summary, '这一轮做了什么'), r);
-      body = `收到结论：${result || '跑完了'}`; tone = 'ok';
+      body = `收到结论：${result ? withTag(result, U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer)) : '跑完了'}`; tone = 'ok';
     }
     return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: later, tone, cls: 'ar-end' }) };
   }
