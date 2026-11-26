@@ -79,8 +79,10 @@
       .filter(([k]) => copy?.[k] == null && (k !== 'checked_at' || !checked)).map(([k, label]) => [label, absentReason(copy, k)]);
     const unknown = unverified.filter(([, reason]) => !reason).map(([label]) => label);
     if (!confirmed && !anomaly && !retired) unknown.push(original ? '原件' : '完整性');
-    const reasons = unverified.filter(([, reason]) => reason).map(([label, reason]) =>
-      `<span class="backup-evidence-label">${label}：</span>${said(reason, label)}`);
+    const reasons = unverified.filter(([, reason]) => reason).map(([label, reason]) => {
+      const text = reason === '没有记录' ? '<span class="backup-evidence-label">没有记录</span>' : said(reason, label);
+      return `<span class="backup-evidence-label">${label}：</span>${text}`;
+    });
     if (unknown.length) reasons.unshift(`${unknown.join('、').replace(/、([^、]+)$/, '和$1')}尚未核实`);
     // 这次没备份成：回包里给了几点试的、为什么、下一步，放在说明最前面（M376）。
     const failedAt = !original && !tier && (copy?.state === 'failed' || copy?.failed > 0) && copy?.last_attempt_at

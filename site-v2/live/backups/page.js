@@ -36,7 +36,7 @@
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”“没核实”连在一起（M781）；
   // 时刻里的日期和钟点各包一层，窄窗口的大小列放不下整个时刻时只在两者之间折行（见页内样式）；时刻后面紧跟的句号、逗号等一起包进去，折行时不剩一个“。”在下一行开头
-  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, m => /^(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?$/.test(m) ? `<span class="backup-unit backup-at"><span>${m.replace(' ', '</span> <span>')}</span></span>` : `<span class="backup-unit">${m}</span>`)
+  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|没有记录|\d+ 项读数不完整/g, m => /^(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?$/.test(m) ? `<span class="backup-unit backup-at"><span>${m.replace(' ', '</span> <span>')}</span></span>` : `<span class="backup-unit">${m}</span>`)
     .replace(/^([^\s<\d][^<]{0,8}?) (?=<span class="backup-unit[^"]*">(?:<span>)?\d)/, '<span class="backup-unit">$1</span> ').replace(/ (份 · 按) /, ' <span class="backup-unit">$1</span> ').replace(/没核实/g, '<span class="backup-unit">$&</span>').replace(/ 清单$/, ' <span class="backup-unit">清单</span>');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
