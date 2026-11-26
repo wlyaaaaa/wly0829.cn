@@ -74,6 +74,8 @@
 #active .pj-card .pj-fig__v.is-long { font-size: 19px; line-height: 27px; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 /* 画册卡上代表数下面那句说明、读数名、读取时刻这几行小字照常换行写全，不截成“…”（M880）；卡跟着长，同一排的卡一样高，底下“N 天前改动”照旧对齐 */
 #active .pj-card .pj-fig__scope { margin-top: 4px; }
+/* 说明折行时末尾不单掉一两个字（如“面。”），浏览器自己把上一行匀一个过来 */
+#active .pj-card .pj-fig__scope { text-wrap: pretty; }
 #active .pj-card .pj-recent { order: 9; display: flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 10px; font-size: 13.5px; line-height: 20px; color: #3d3d3a; }
 #active .pj-card .pj-recent::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #00A650; }
 #changes :is(#changes-list, #changes-rest) { gap: 24px; }

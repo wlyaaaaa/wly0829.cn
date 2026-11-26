@@ -220,7 +220,9 @@
       if (it.id === 'ai-cli-profile-manager' && h?.id === 'latest_agent' && label === '最后一次实战（含旧版）') label = '最近一次让 AI 真干活的测试';
       if (it.id === 'video-scaffold' && h?.id === 'films' && typeof scope === 'string') scope = scope.replace(/^已选的 (\d+) 组本地完整长版及各自成片目录；不是全历史或发布总数。.*$/s, '只算这台电脑上存着成片的 $1 部，不是做过的全部片子，也不是发出去的数量。');
       const labelHtml = label ? U.fieldHtml(label, { name: '项目读数', place: 'label', kind: viewer }) : '', labelBody = label ? U.fieldHtml(label, { kind: viewer }) : '';
-      const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${U.fieldHtml(scope, { name: '项目说明', kind: viewer })}</small>` : '';
+      // 说明里的日期连成一段，折行时不拆成“2026-11-／24”（只动标签外面的字）
+      const keepDates = html => html.replace(/(^|>)([^<]+)/g, (m, a, t) => a + t.replace(/\d{4}-\d{2}-\d{2}|\d{1,2}-\d{2}(?:\s+\d{1,2}:\d{2})?/g, '<span class="live-unit">$&</span>'));
+      const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${keepDates(U.fieldHtml(scope, { name: '项目说明', kind: viewer }))}</small>` : '';
       // 代表数的时刻是“这件事最后一次发生”的：写那一句，不写“读取于”（M769）
       const moment = !marked && window.LiveProjectMoments?.headline(it);
       const readAt = moment ? `<small class="pj-fig__sub">${esc(moment)}</small>`
