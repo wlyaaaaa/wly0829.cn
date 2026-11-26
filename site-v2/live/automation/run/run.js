@@ -163,7 +163,8 @@
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
       receipt.href && `<p>${link(receipt.href, '打开业务回执 ›')}</p>`].filter(Boolean).join('');
     const count = !rows && r.outputCount > 0 ? `<p class="ar-none">做出 ${int(r.outputCount)} 样，后台这一版没列出是哪几样。</p>` : '';
-    return `<section class="tp-panel ar-card ar-made"><h2>这一轮做成了什么</h2>${rows ? `<ol class="ar-outs">${rows}</ol>` : count}${extra}</section>`;
+    const empty = !rows && !count && !list(receipt.recorded).length && (r.status === 'running' ? '还在跑，做完再写。' : '这一轮没做出要记下的东西。');
+    return `<section class="tp-panel ar-card ar-made"><h2>这一轮做成了什么</h2>${rows ? `<ol class="ar-outs">${rows}</ol>` : count}${empty ? `<p class="ar-none">${empty}</p>` : ''}${extra}</section>`;
   }
 
   // —— 这一轮的对话：拿这一轮的对话号去读 chats/{id}，和顶层对话页读同一份、用同一份显示逻辑 ——
