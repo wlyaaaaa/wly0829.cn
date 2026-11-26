@@ -451,7 +451,12 @@
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     // “出错”那格照后台对这些轮次的分档上色（runs_summary.outcome，没有就看近 7 天 week_outcome）：大部分成功黄、部分成功橙、全出错红、全成功不上色；没给分档照旧粉色（M779）
     $('task-stats').dataset.outcome = TIER[(d.runs_summary?.outcome ?? d.week_outcome)?.state]?.[0] || '';
-    write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => `<div class="glass task-stat" data-stat="${key}"><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(reason || '未读到')}</dd></div>`).join(''), false);
+    // “已读部分没有”要和格名连着读：合成一整句（“已读部分没有出错”）写在一行，格名不再另起一行（主控 11-26 看 07a、07b：原来拆成“已读部分没有／出错”两行）。
+    // 出错那格读到的是 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色，0 次和“全成功不上色”同一个意思（M779）
+    write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => {
+      const whole = !number && reason === '已读部分没有', none = key === 'failure' && (whole || number === count(0, true));
+      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
+    }).join(''), false);
     const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
     const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
     const second = r => Math.floor(runTime(r) / 1000);

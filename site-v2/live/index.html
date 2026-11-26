@@ -125,6 +125,8 @@
 .live-unreadable .board__wide { grid-column: auto; }
 .page--live.live-unreadable .board .card .card__glass { min-height: 0; padding: 14px 20px; }
 .live-unreadable .card__body { padding: 0 !important; }
+/* 电脑连不上、各卡收成一两行时，长的那行（计划任务）也在画淡进来之前换行，不伸到右边插画下面（r83 返修） */
+.page--live.live-unreadable .board .card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .6) !important; }
 .live-unreadable .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
 .page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
@@ -203,6 +205,10 @@
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="ask"] { grid-column: ask; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="close"] { grid-column: close; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="later"] { grid-column: later; margin-right: 0; }
+/* 这件没有绿色“去办”时，“问情况”从最左边起，后面几颗跟着往左挪，不在左边空出一颗按钮的宽（r83 返修第二轮） */
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="ask"] { grid-column: go; }
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="close"] { grid-column: ask; }
+.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="later"] { grid-column: close; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="pick"] { grid-column: end; }
 .page--live #needs [data-part="main"] > .row > .row__acts > :not([data-slot]) { grid-column: 1 / -1; grid-row: 2; }
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
@@ -227,7 +233,7 @@
 .page--live #projects .project-cell { position: relative; min-height: 88px; padding: 12px 14px; border: 1px solid rgb(255 255 255 / .8); background: rgb(255 255 255 / .68); border-radius: 14px; display: flex; flex-direction: column; justify-content: flex-start; }
 .page--live #projects .project-cell > a { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: inherit; text-decoration: none; }
 .page--live #projects .project-icon { width: 20px; height: 20px; flex: 0 0 20px; }
-.page--live #projects .project-cell > small { font-size: 13px; line-height: 21px; overflow-wrap: anywhere; }
+.page--live #projects .project-cell > small { font-size: 13px; line-height: 21px; overflow-wrap: anywhere; text-wrap: pretty; }   /* 最后一行不单剩一个字（“显示／器”“6171／份”，r83 返修第二轮） */
 .page--live #projects .project-cell > a + small { margin-top: 3px; }
 .page--live #projects .project-cell > .project-changed { font-size: 11px; color: #575b55; }
 .page--live #projects .project-recent { display: inline-block; margin-inline-start: 4px; font-size: 11px; color: #37749a; background: #e6f3ff; border-radius: 5px; padding: 0 5px; white-space: nowrap; }
