@@ -1300,24 +1300,20 @@
   }
   const stutterGroup = data => data?.groups?.find(g => g.key === 'stutter');
   const stutterUnread = data => data?.attention_summary?.unread?.find(g => g.key === 'stutter');
-  const stutterReason = value => {
-    const text = sp(U.fieldText(value, viewer)).trim();
-    return /[\u3400-\u9fff]/.test(text) && !/^(?:这项还没有完整读数|本轮没有读到可用记录|没有记录)$/.test(text);
-  };
-  const stutterTimed = row => [row?.recorded_at, row?.observed_at, row?.at].some(timed);
+  const noStutterFrames = (row, unread) => [row?.missing?.['卡顿采样'], unread?.missing?.['卡顿采样'], unread?.reason]
+    .some(value => sp(U.fieldText(value, viewer)).trim() === '最近一段在用时没有采到合格帧');
+  const stutterThrough = (row, unread) => [row?.observed_at, row?.at, unread?.observed_at,
+    !Object.hasOwn(unread || {}, 'recorded_at') && unread?.at].find(timed);
   function stutterGapNote(data) {
     const row = stutterGroup(data), unread = stutterUnread(data);
-    const gaps = row?.missing || unread?.missing;
-    const reasons = gaps ? [gaps['卡顿采样'], ...Object.values(gaps)] : [];
-    const detail = [row?.read_gap, ...reasons, unread?.reason].find(stutterReason);
-    const reason = detail && U.fieldHtml(detail, { name: '卡顿缺数原因', kind: viewer });
-    const frame = Object.hasOwn(row || {}, 'recorded_at') ? row : unread || {};
-    const hasFrame = Object.hasOwn(frame, 'recorded_at'), last = recordStamp(frame.recorded_at);
-    const until = recordStamp(row?.observed_at ?? row?.at ?? unread?.observed_at ?? (!hasFrame && unread?.at));
-    const why = row?.read_error || unread?.read_error ? reason || '这次读取失败' : reason && (row?.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
-    // 原因里已经说了“没有采到合格帧”，后面不再跟一句“没读到合格帧记录”（同一件事说两遍，r83 返修第三轮）
-    const times = [hasFrame && (last ? `最后读到 ${last}` : !/合格帧/.test(String(reason)) && '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
-    return [why, esc(times)].filter(Boolean).join('；');
+    const last = [row?.recorded_at, unread?.recorded_at].find(timed), until = stutterThrough(row, unread);
+    const unit = text => `<span class="live-unit">${esc(text)}</span>`;
+    if (row?.read_error || unread?.read_error) {
+      if (last) return until ? `${unit('卡顿这次没读到')} · ${unit(`上次有效帧 ${U.time(last)}，`)}${unit(`数据到 ${U.time(until)}`)}` : '';
+    } else if (noStutterFrames(row, unread)) {
+      return until ? `${unit('卡顿判不了：这段前台程序没出合格的帧')} · ${unit(`数据到 ${U.time(until)}`)}` : '';
+    } else if (last || until) return '';
+    return '<span title="这次没读到卡顿记录，手上也没有上次的。" class="live-unit">读数暂缺 · 卡顿</span>';
   }
   function paintStatus(id, data) {
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
@@ -1347,6 +1343,9 @@
     if (id === 'computer') temperatureCurrent = temperatureFresh;
     // 旧值可以显示，但只有温度本身有有效的新读数才收起它的缺读说明。
     const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureFresh && name === 'CPU 温度')))] : [];
+    const stutterMissing = id === 'computer' && lacking.includes('卡顿');
+    const stutterNote = stutterMissing ? stutterGapNote(data) : '';
+    if (stutterMissing) lacking.splice(lacking.indexOf('卡顿'), 1);
     const plain = text => sp(String(text).replace(/<[^>]*>/g, '')).trim();
     const savedReading = text => plain(text).match(/^(最近一次记录于\s+(?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)(?:[，,](?:此后没有新读数))?[。.]?$/)?.[1] || '';
     const oldDetails = new Set();
@@ -1354,6 +1353,7 @@
     for (const g of gray || []) {
       const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
       if (name === 'CPU 温度' && temperatureFresh) continue;
+      if (stutterMissing && name.startsWith('卡顿')) continue;
       const recorded = savedReading(reason), lack = lacking.find(label => name === label || name.startsWith(label));
       if (recorded) oldDetails.add(recorded);
       const latest = name === 'CPU 温度' && recordStamp(computerSampleAt(temperature));
@@ -1374,9 +1374,8 @@
       state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : part).join(' · ');
     }
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
-    const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
     // 相邻几组原因一样时并成一句，写在最后一组后面（“CPU 温度、磁盘余量、网络丢包（最近一次记录于 10:26，此后没有新读数）”），不每组各写一遍（r83 返修第三轮）
-    const lackReasons = lacking.map(name => name === '卡顿' && stutterNote ? stutterNote : lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
+    const lackReasons = lacking.map(name => lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
     const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map((name, i) => esc(name) + (lackReasons[i] && lackReasons[i] !== lackReasons[i + 1] ? `（${lackReasons[i]}）` : '')).join('、')}` : '';
     // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
     const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
@@ -1392,8 +1391,8 @@
       return alreadyDated(value) || (existing || cutoff) && matchesCutoff(value) || cutoff && cardCutoff(value);
     };
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
-    p.status.dataset.missingGroups = lackNote ? 'yes' : '';
+      : [lackNote, stutterNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !((lackNote || stutterMissing) && /^缺：/.test(text)) && !saidInLack(text)), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
+    p.status.dataset.missingGroups = lackNote || stutterNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
@@ -1725,11 +1724,12 @@
       // 真垫底里的计数仍在，没存下来的行列表不一定随包；保留已有行，只补空数组。
       d = { ...d };
       for (const id of HOME_IDS) d[id] = { ...U.withoutSnapshotCutoff(d[id], meta.at), items: Array.isArray(d[id]?.items) ? d[id].items : [] };
-      // 快首页若只返回卡顿缺读占位，沿用同一受众上一次的具体原因和原采时。
+      // 快首页若只返回卡顿缺读占位，保留同一受众上一次的有效帧和覆盖截止。
       if ((meta.viewer?.kind || 'owner') === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
         const next = stutterGroup(d.computer), unread = stutterUnread(d.computer), previous = stutterGroup(home?.computer);
-        if (previous && stutterTimed(previous) && !stutterTimed(next) && !stutterTimed(unread) && !stutterReason(next?.read_gap) && !stutterReason(unread?.reason)) {
-          d.computer.groups = [...(d.computer.groups || []).filter(g => g.key !== 'stutter'), previous];
+        if (timed(previous?.recorded_at) && stutterThrough(previous) && !stutterThrough(next, unread) &&
+            !timed(next?.recorded_at) && !timed(unread?.recorded_at) && !noStutterFrames(next, unread)) {
+          d.computer.groups = [...(d.computer.groups || []).filter(g => g.key !== 'stutter'), { ...previous, read_error: true }];
         }
       }
       const waiting = d.needs.waiting || [], ages = new Map(waiting.map(it => [it.id, it.age_days]));
