@@ -89,6 +89,7 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-hero-fold:not(.is-open) .trust-note { visibility: hidden; }
 .pj-hero-fold .pj-facts { margin: 10px 0 2px; }
 .pj-hero-fold .pj-facts .kv__row { grid-template-columns: 0 108px minmax(0, 1fr); }
+.pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {

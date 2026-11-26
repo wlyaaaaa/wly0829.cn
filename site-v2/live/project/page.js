@@ -1208,10 +1208,12 @@
     const quiet = d.changes7 == null && Number.isFinite(Date.parse(ch?.at)) && (Date.parse(d.at || at) || Date.now()) - Date.parse(ch.at) > 7 * 86400000;
     // 后台说了为什么没数（changes7_gap）就只写原因，不再前面摆“没有记录”；数没核全（changes7_complete 为 false）写“至少”
     const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : `${d.changes7_complete === false ? '至少 ' : ''}${num(d.changes7)} 次`, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).join(' · ');
+    const impactNote = !window.ProjectAdditions?.personalDetail(id) && Number.isFinite(d.changes7) && Number.isFinite(d.changes7_missing_note)
+      ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在下面。</small>' : '';
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
-    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${changes}</dd></div>${sized ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
+    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${impactNote}${changes}</dd></div>${sized ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
     part('detail').hidden = false;
     renderStrip(d);
     let cover = $('pj-cover');
