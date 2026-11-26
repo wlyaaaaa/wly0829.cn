@@ -121,6 +121,9 @@
     return head && tail ? `${head}${/[。！？；]$/.test(head) ? '' : ' · '}${tail}` : head || tail;
   }
 
+  // 翻译官早先几轮的结果把同一版说了两遍（“写好了《他要什么》第 18 版。《他要什么》第18版已写好，还有……”），后半那遍去掉；后来的轮次后台只写一遍，不受影响
+  const oneVersion = s => typeof s === 'string' ? s.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : s;
+
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
   function chatOf(conv) {
     const chatId = href => {
@@ -223,5 +226,5 @@
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, asOwner, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, roundTag, versionTail };
 })();

@@ -125,8 +125,8 @@
 @media (max-width: 1050px) {
   .ak-hero { grid-template-columns: minmax(0, 1fr) 38%; }
   .ak-hero__art { width: 38%; }
-  .ak-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
-  .ak-run { grid-template-columns: 14px 100px 78px minmax(0, 1fr) auto; column-gap: 7px; }
+  /* 窄窗（900 左右）放不下左右两栏：“最近几轮”占满一行，每条照 1440 的列宽排开；“接下来几次”“这一类”接在下面（M902） */
+  .ak-grid { grid-template-columns: minmax(0, 1fr); }
   .ak-run__body { overflow-wrap: anywhere; }
   .ak-run__tag i { flex: 0 0 10px; }
   .ak-sub b { white-space: normal; }

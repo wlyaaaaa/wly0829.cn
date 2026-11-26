@@ -297,7 +297,7 @@
       const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
       if (earlier.length) rounds = `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
-    else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
+    else title = R.oneVersion(F(r.summary, '这一轮做了什么')) || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = Fm(r.activity, '正在干什么');
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
@@ -601,8 +601,7 @@
     const headline = problem?.headline || problem?.title || problem?.text;
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
-    const result = c.id === 'translator' && typeof r.text === 'string'
-      ? r.text.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : r.text;
+    const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
     const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;

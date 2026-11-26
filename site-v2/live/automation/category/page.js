@@ -57,9 +57,9 @@
   // 一行写两句：上面这一轮干的是哪件事（自动修理写那件活的名字，别的写结果），下面一句交代、谁做的、用了多久
   function runRow(r) {
     const t = tag(r), thing = r.subject ? F(r.subject.title, '这件活') : '';
-    const summary = F(r.summary, '这一轮做了什么'), reason = F(r.statusReason || r.reason, '原因');
+    const summary = R.oneVersion(F(r.summary, '这一轮做了什么')), reason = F(r.statusReason || r.reason, '原因');
     // 没有那件活的名字时：结果的第一句当标题，其余放下面小字；第一句太长就截一段当标题，整句照放小字里，不丢字
-    const plain = U.fieldText(r.summary, viewer).trim(), first = plain.split(/(?<=[。；！？])/)[0] || '';
+    const plain = R.oneVersion(U.fieldText(r.summary, viewer).trim()), first = plain.split(/(?<=[。；！？])/)[0] || '';
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
     const title = thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
     const note = thing ? R.withoutSubject(summary, thing) || reason

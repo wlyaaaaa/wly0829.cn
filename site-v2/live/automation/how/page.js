@@ -65,10 +65,12 @@
     const interval = T.duration(d.dispatch?.interval_seconds);
     const dispatchNote = id === 'auto-repair' || id === 'message-review'
       ? (interval ? `派活程序每 ${interval}查一次。` : '派活程序多久查一次，这次没读到。') : '';
-    const start = [dispatchNote, g.trigger].filter(Boolean).join(' ');
+    // 关着的类：几格都先说关着、现在不跑，平时怎么开工写成“打开后……”（看图 11-27：页头说关着，下面却像在跑）
+    const off = m === 'off', base = [dispatchNote, g.trigger].filter(Boolean).join(' ');
+    const start = off ? `关着，现在不跑。${g.offStart || (base ? `打开后，${base}` : '')}` : base || g.offStart || '';
     const steps = list(g.steps);
     const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
-    const prompt = c.prompt_template ? `<p>派活程序每一轮把下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
+    const prompt = c.prompt_template ? `<p>${off ? '这一类关着，现在不交给 AI。打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
     const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
@@ -85,7 +87,7 @@
         ${g.cost ? card('花多少时间', `<p>${esc(`${timing(c.execution_policy)} ${g.cost}`)}</p>`) : ''}
         ${g.result ? card('结果去哪', `<p>${esc(g.result)}</p>`) : ''}
       </div><aside class="tp-panel ah-side"><a href="${esc(T.path('/live/automation/category/', { type: id }))}">这一类的页 <i>›</i></a><a href="/live/automation/">自动任务 <i>›</i></a><a href="/live/ledger/">AI 自动任务账本 <i>›</i></a></aside></div>
-      <p class="ah-foot">用谁：${esc(g.who || '')}${model ? `现在是 ${model}，换代跟着模型清单走。` : ''}</p>`);
+      <p class="ah-foot">用谁：${esc(g.who || '')}${model ? `${off ? '打开后用' : '现在是'} ${model}，换代跟着模型清单走。` : ''}</p>`);
     if (!landed) { landed = true; if (location.hash) T.reveal(location.hash.slice(1)); }
   }
   let queued = 0;
