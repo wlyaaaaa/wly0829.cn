@@ -24,7 +24,7 @@
     }
     return stamp(b.episode_at || b.born) - stamp(a.episode_at || a.born);
   }
-  const KIND = { do: '要你做', choose: '要你选', later: '你放着', know: '要你知道' }, CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 判断不用办了', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
+  const KIND = { do: '要你做', choose: '要你选', later: '你放着', know: '要你知道' }, CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 已关闭这条事项', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   const wait = text => [{ key: 'empty', cls: 'row row--flat row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(text) ? '这块没存下来，连上后补上。' : text)}</p>` }];
   const itemText = it => sp(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it);
   const closedText = it => it.closed?.kind === 'unknown' || it.closed?.text === '本人关掉了这份汇报' ? it.closed.text || '' : viewer === 'public' && ['done', 'declined'].includes(it.closed?.kind) ? CLOSED[it.closed.kind].replace(/^你/, '本人') : CLOSED[it.closed?.kind] || '';
@@ -417,14 +417,19 @@
     if (typeof closing === 'string' && it.closed?.kind === 'expired') closing = closing.replace(expiredText, '展示期已到');
     const mobile = it.mobile && typeof it.mobile === 'object' ? it.mobile : ({ phone: '手机能办', computer: '要在电脑上办', in_person: '要本人到场' })[it.mobile];
     const sub = closed ? [...(sameStart(closing, closedText(it)) || it.closed?.kind === 'expired' && expiredText.test(sp(closing)) ? [closing] : [closedText(it), closing]), it._landed && !it.closed?.at ? '时刻还没确认' : U.date(it.closed?.at), it.repeats > 1 && `同一件事关过 ${it.repeats} 次`] : [U.capText(it.now, 60, true), it.kind !== 'know' && mobile, it.kind !== 'know' && it.minutes != null ? `约 ${sp(it.minutes)} 分钟` : '', itemAge(it) || (it.kind === 'know' ? U.ago(it.episode_at || it.born, states.get('home')?.now || at) : waited(it)), deadline, U.originName(it.origin, it) && U.capText(U.originName(it.origin, it), Infinity, true)];
-    if (closed && KIND[it.kind]) sub.unshift(viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]);
+    if (closed && KIND[it.kind]) sub.unshift('原分类：' + (viewer === 'public' ? KIND[it.kind].replaceAll('你', '本人') : KIND[it.kind]));
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760，同 M690：字数上限是给写的人的，不是显示时省略）
     const titleText = U.fieldHtml(hidden ? { visibility: 'owner' } : U.capText(flags, Infinity, true), { name: closed ? '已关闭事项' : '待办事项', place: 'title', kind: viewer });
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
     const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${detailTitle(titleText)}</button>` : `<span class="row__title">${titleText}</span>`;
-    const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${i < all.length - 1 ? U.fieldHtml(s, { kind: viewer }).replace(/。((?:<\/[a-z]+>)*)$/, '$1') : U.fieldHtml(s, { kind: viewer })}</span>`).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
+    const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => {
+      let html = U.fieldHtml(s, { kind: viewer });
+      if (s === closing) html = html.replace(/自动任务页(?![^<]*>)/g, '<span class="live-unit">自动任务页</span>');
+      if (i < all.length - 1) html = html.replace(/。((?:<\/[a-z]+>)*)$/, '$1');
+      return `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${html}</span>`;
+    }).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });
     const detail = shared && (note === shared || note.startsWith(`${shared} · `)) ? note.slice(shared.length + 3) : note;

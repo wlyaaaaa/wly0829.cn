@@ -234,7 +234,8 @@
 .page--live #phone .phone-reading-time { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
 .page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
-.page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
+body.page--live #needs .row.notice-target { outline-offset: -2px; }
+.page--live #needs .notice-detail[open] > p { color: var(--ink-soft); overflow-wrap: anywhere; }
 .page--live #needs .notice-detail .item-open { display: flex; width: fit-content; height: auto; margin: var(--item-action-gap) 0 0; padding: 0; translate: none; color: #00A650; font-weight: 600; line-height: 22px; }
 .page--live #needs .notice-detail .item-open:hover { background: none; color: #00A650; text-decoration: underline; }
 .page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
