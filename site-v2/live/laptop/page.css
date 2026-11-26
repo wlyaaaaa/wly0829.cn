@@ -43,6 +43,7 @@
 .laptop-panel table { width: calc(100% - 60px); margin: 0 30px 16px; table-layout: fixed; font-variant-numeric: tabular-nums; }
 .laptop-panel th:first-child { width: 55%; }
 .laptop-panel td { overflow-wrap: anywhere; }
+.laptop-panel > .more { align-self: flex-start; margin: 0 0 16px 46px; }
 .laptop-panel td, .laptop-panel th { padding: 9px 16px; }
 .laptop-panel td { height: 43px; font-size: 17px; }
 .laptop-program { display: flex; align-items: center; gap: 13px; }
