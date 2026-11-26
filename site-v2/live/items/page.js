@@ -166,12 +166,13 @@
   }
   function filterBoard() {
     const picked = $('kind-pick').value, status = $('state-pick').value;
+    cards.get('reports').sub.hidden = reportCount === 0;
     $('stats').querySelectorAll('[data-kind]').forEach(button => {
       button.setAttribute('aria-pressed', String(status !== 'closed' && button.dataset.kind === picked));
     });
     for (const [kind, c] of cards) {
       c.el.hidden = kind === 'closed' && status === 'closed' ? picked === 'reports' :
-        (kind === 'reports' && reportCount === 0) || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
+        (kind === 'reports' && reportCount === 0 && picked !== 'reports') || !!picked && picked !== kind || !!status && (status === 'closed' ? kind !== 'closed' : kind === 'closed');
     }
     redrawClosed();
     board.only(picked && picked !== 'closed' && status !== 'closed' ? picked : null);
@@ -185,7 +186,11 @@
     if ($('state-pick').value === 'closed') $('state-pick').value = '';
     filterBoard();
   });
-  document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => { if (reportCount !== 0) return; e.preventDefault(); $('kind-pick').value = 'reports'; filterBoard(); }));
+  document.querySelectorAll('a[href="#reports"]').forEach(a => a.addEventListener('click', e => {
+    if (!$('reports').hidden) return;
+    e.preventDefault(); $('state-pick').value = ''; $('kind-pick').value = 'reports'; filterBoard();
+    $('reports').scrollIntoView({ block: 'start' });
+  }));
   $('search').addEventListener('submit', e => e.preventDefault());
   $('q').addEventListener('input', () => { query = $('q').value.trim().toLowerCase(); redrawItems(); if (reportsData) renderReports(reportsData); });
   const readers = { home: [U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: '等你的事' }), ...Object.keys(KIND).map(key => U.reading($(key), { ghost: U.ghost.rows(2), slow: false }))], 'items/closed': [U.reading($('closed'), { ghost: U.ghost.rows(4) })], reports: [U.reading($('reports'), { ghost: U.ghost.rows(3) })] };
