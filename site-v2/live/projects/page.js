@@ -301,6 +301,10 @@
     const fallbackNote = /^数据截止\s/.test(fallback) && (key === 'home' ? s.shownAt : s.data?.at) ? '' : fallback;
     U.blockNote(key === 'home' ? hero.querySelector('.card__body') : $(key), { fallbackNote: key === 'home' && fallbackNote ? `页头 · ${fallbackNote}` : fallbackNote });
   }
+  // 项目行分批露出（R147、X4 第 113 项）：左右两半各先露 HEAT_STEP 行，点“展开（还有 N 个项目）”两半各再露一批，到底变“收起”；一半不到一批就不出按钮、照旧全画。
+  // 热图本身是共用的 live-project-viz.js，不动它：画好后把没轮到的行藏起来，时间轴、图例和点格子照旧。名册约每分钟重画一次，露到第几批跟着留住。
+  const HEAT_STEP = 8;
+  let heatShown = HEAT_STEP;
   function renderActivity(data) {
     const host = $('activity-chart'), rows = data?.items || [];
     if (!data || rows.length < 2 || U.offline?.() && !rows.some(r => r.commits?.some(Number.isFinite))) {
@@ -313,7 +317,30 @@
     const footer = host.lastElementChild;
     footer.append(...[...halves[0].children].slice(1));
     [...halves[1].children].slice(1).forEach(el => el.remove());
-    window.LiveProjectViz.bindHeat(host);
+    // 两半各自管点格子（heatmap 里已接好）；整块只留一格选中：点了这半的格子，另一半选着的那格取消。
+    // 原来在整块上再接一遍 bindHeat，点右半的格子时左半同一位置会多冒一个读数小条。
+    halves.forEach((half, i) => half.addEventListener('click', e => { if (e.isTrusted && e.target.closest('button.pj-heat-cell')) halves[1 - i].querySelector('button.pj-heat-cell.is-picked')?.click(); }));
+    if (midpoint <= HEAT_STEP) return;
+    const more = document.createElement('button');
+    more.type = 'button'; more.className = 'more pj-heat-more';
+    footer.before(more);
+    const paint = () => {
+      const shown = Math.min(heatShown, midpoint), left = rows.length - shown - Math.min(shown, rows.length - midpoint);
+      // 一行是项目名加后面一排格子；没轮到的整行藏起来
+      for (const half of halves) [...half.querySelectorAll('.pj-heat > .pj-heat-name')].forEach((name, r) => {
+        for (let el = name; el && (el === name || el.matches('button.pj-heat-cell')); el = el.nextElementSibling) el.classList.toggle('is-folded', r >= shown);
+      });
+      // 选中的那格被收进去了就取消选中，旁边的读数跟着收掉
+      host.querySelector('button.pj-heat-cell.is-picked.is-folded')?.click();
+      more.setAttribute('aria-expanded', String(!left));
+      U.html(more, `${left ? `展开（还有 ${left} 个项目）` : '收起'} <span class="more__chev">›</span>`);
+    };
+    more.addEventListener('click', () => {
+      heatShown = more.getAttribute('aria-expanded') === 'true' ? HEAT_STEP : Math.min(heatShown, midpoint) + HEAT_STEP;
+      paint();
+      if (more.getBoundingClientRect().top < 0) more.scrollIntoView({ block: 'center' });
+    });
+    paint();
   }
   let extraLanded = false;
   function renderOverview(d) {
