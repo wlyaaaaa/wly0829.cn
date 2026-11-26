@@ -26,7 +26,18 @@
 #log-more .route-more:not(.route-more--quiet) .route-ico { color: inherit; }
 #log [data-clip] { display: block; -webkit-line-clamp: unset; }
 #log [data-clip]:not(.is-open) { max-height: 4lh; overflow: hidden; }
-#log .route-row__line > .lamp { align-self: flex-start; margin-top: 7px; }
+#log .route-round { margin-top: 10px; padding: 12px; border: 1px solid var(--route-rule); border-radius: 14px; background: rgb(255 255 255 / .58); }
+.route-round__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 14px; padding-bottom: 7px; border-bottom: 1px solid var(--route-rule); font-size: 15px; }
+.route-round__head time { color: var(--route-muted); font-size: 13px; white-space: nowrap; }
+.route-round__line { display: grid; grid-template-columns: 3em minmax(0, 1fr); align-items: start; gap: 8px; margin-top: 8px; font-size: 14px; line-height: 22px; }
+.route-round__line > b { text-align: center; border-radius: 999px; background: var(--route-chip-bg); color: var(--route-muted); white-space: nowrap; }
+.route-round__line:nth-child(3) > b { background: #e4effc; color: #245890; }
+.route-round__line:nth-child(4) > b { background: var(--route-accent-soft); color: var(--route-accent-deep); }
+.route-round__text, .route-round__helper { white-space: pre-line; overflow-wrap: anywhere; }
+.route-round__helper { margin-top: 4px; color: var(--route-muted); }
+.route-round .is-failed { color: #b52929; }
+.route-round__helpers summary { display: inline-block; }
+.route-round__helpers:not([open]) summary span:last-child, .route-round__helpers[open] summary span:first-child { display: none; }
 #plan-box { scroll-margin-top: 70px; }
 /* “现在”那张卡收掉跟页头重复的字以后一个字不剩时整张不出（page.js drawNow），剩下的栏照原来的比例排开 */
 .route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }

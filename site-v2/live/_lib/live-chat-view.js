@@ -150,6 +150,55 @@
       ? [['session', chat.session_started_at, '对话开始'], ['turn', chat.turn_started_at, '本轮开始']]
       : [['born', chat.born, '本次记录起于']]).filter(([, t]) => validTime(t));
     const logCell = (value, label) => chatCell(value, label, chat, 0, true) || chatCell(value, label, chat);
+    function rounds() {
+      // 逐轮回包的字段只在这里读。旧回包只从实际记下的开始时刻中取轮，不拿最后动静当作派工时间。
+      const typed = Array.isArray(chat.turns) && chat.turns.length > 0;
+      const records = typed ? chat.turns : startTimes().map(([key, started_at, word]) => ({
+        id: key, started_at, word, source: key === 'turn' && chat.session_started_at !== started_at ? undefined : chat.source,
+        dispatched_by: chat.dispatched_by, question: key === 'session' ? chat.task_prompt : null,
+      }));
+      const sorted = records.filter(r => validTime(r?.started_at)).sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at));
+      const fallback = new Set();
+      const list = sorted.filter(r => typed || !fallback.has(Date.parse(r.started_at)) && fallback.add(Date.parse(r.started_at))).map((r, i) => ({
+        id: r.id, key: `round-${Date.parse(r.started_at)}-${encodeURIComponent(r.id ?? i)}`, at: r.started_at, number: r.number, record: r, helpers: [],
+        question: r.question, summary: r.summary, reply: r.reply, pending: ACTIVE.includes(r.state) || !typed && i === 0 && ACTIVE.includes(chat.state),
+        knownEmpty: Array.isArray(r.helper_ids) && r.helper_ids.length === 0 || !typed && countHelpers(chat) === 0,
+      }));
+      const latest = list[0], byTime = t => validTime(t) && list.find(r => Date.parse(t) >= Date.parse(r.at));
+      if (!typed && latest) {
+        for (const [key, value] of [['summary', chat.summary], ['reply', detailReply(chat)]])
+          if (byTime(value?.at) === latest) latest[key] = value;
+      }
+      for (const h of U.chatFields.helperList(chat)) {
+        const explicit = list.find(r => h.turn_id != null && h.turn_id === r.id ||
+          h.id && Array.isArray(r.record.helper_ids) && r.record.helper_ids.includes(h.id));
+        const round = explicit || (h.turn_id == null && byTime(h.started_at || h.dispatched_at));
+        if (round && (explicit || !Array.isArray(round.record.helper_ids))) round.helpers.push(h);
+      }
+      return list.map(r => {
+        const origin = U.chatFields.originLabel({ ...chat, source: r.record.source, dispatched_by: r.record.dispatched_by });
+        const provider = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' }[chat.software || chat.id?.split(':')[0]];
+        const start = r.record.source === 'manual' && !r.record.dispatched_by && provider ? `本人问 ${provider}` : origin;
+        const body = (key, label) => r[key] == null ? '' : logCell(field(r[key], typed ? r.record : chat, chat,
+          !typed && key === 'question' ? 'task_prompt' : key), label);
+        const replyAt = r.record.replied_at || r.reply?.at;
+        return { ...r, question: body('question', '任务原文'), summary: body('summary', '正式摘要'), reply: body('reply', '最新回复'),
+          title: [Number.isInteger(r.number) && r.number > 0 ? `第 ${r.number} 轮` : r.record.word || '本轮开始', start === '来源没认出' ? '' : start].filter(Boolean).join(' · '),
+          replyAt: validTime(replyAt) ? U.time(replyAt) : '' };
+      });
+    }
+    function roundHelper(h) {
+      const { label, activity, unknown } = helperStatus(h), kind = U.chatFields.statusKind(h);
+      const failed = kind === 'failed' || label === STATE.failed;
+      const stopped = kind === 'interrupted' || kind.endsWith('_stopped') || label === STATE.stopped;
+      const state = unknown ? 'unknown' : failed ? 'failed' : stopped ? 'stopped' : kind === 'archived' ? 'done' :
+        h.state === 'failed' ? label : h.state;
+      const words = who(h);
+      const name = U.fieldText(model(h), viewer);
+      const modelLabel = name && words ? words.replace(/^型号没记下(?= · |$)/, '型号没读到') : ['型号没读到', h.effort].filter(Boolean).join(' · ');
+      const reason = failed && !contentLocked(h, viewer) ? chatCell(field(h.failure_reason, h, chat), '出错原因', chat, 0, true) : '';
+      return { state, failed, model: modelLabel, name: helperWords(h).name, reason, result: [label, activity].filter(Boolean).join(unknown ? '，' : ' · ') };
+    }
     function events({ includeSteps = false } = {}) {
       const list = startTimes().map(([key, at, word]) => ({ key, at, word, name: esc(U.chatFields.originLabel(chat)) }));
       const reply = [detailReply(chat), chat.latest_reply, chat.reply].filter(v => validTime(v?.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0];
@@ -265,7 +314,7 @@
 
     const api = { marker, model, who, text, pending, field, replyBody, fieldTag, withTag, flatWords, chatCell, said, privateSaid, headerNote, chatTitle, when, projectInfo, actions,
       privatePlan, wholeOwner, chatState, stepWord, markOf, plainName, marks, visibleText, helperWords, dayOf, stamp, helperRow, station,
-      validTime, hasNewTimes, startTimes, events, recordEnd, workLine, thought, pageMeta, facts, blockTag };
+      validTime, hasNewTimes, startTimes, events, rounds, roundHelper, recordEnd, workLine, thought, pageMeta, facts, blockTag };
     // 对外的每个函数先现读一次页面当前的 viewer、chat、at，函数之间互相调用时不再重读
     const out = { lockedFields, ACTIVE, STATE };
     for (const [key, fn] of Object.entries(api)) out[key] = (...args) => { sync(); return fn(...args); };
