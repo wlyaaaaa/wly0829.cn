@@ -1,11 +1,11 @@
 // 真状态由共享读层提供；写操作复用原授权模型及 Cookie 会话。
 (async () => {
   // 第一次共用脚本（授权模块、实况脚本）没下到（断网、被拦）：先挂一句“授权状态还没读到，请重新加载。”；
-  // 网络回来或页面回到前台再取一次没下到的那份，取到了收起这句、照常往下走（M983）。模块失败过浏览器会记着，再取时带个序号
+  // 网络回来、页面回到前台，或在前台每过一分钟，再取一次没下到的那份，取到了收起这句、照常往下走（M983）。模块失败过浏览器会记着，再取时带个序号
   const MODEL = '/app/computer-access-model.js';
   let model = null, tries = 0;
   await new Promise(resolve => {
-    let fetching = false, note = null;
+    let fetching = false, note = null, retry = 0;
     const script = src => new Promise((ok, fail) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => { s.remove(); fail(); }; document.head.append(s); });
     async function fetchShared(first) {
       if (fetching || (document.hidden && first !== true)) return;
@@ -14,11 +14,11 @@
         model ||= await import(tries ? `${MODEL}?retry=${tries}` : MODEL);
         if (!window.Live) await script('/live/_lib/live-client.js');
       } catch {
-        tries++; fetching = false;
+        tries++; fetching = false; retry ||= setInterval(fetchShared, 60000);
         if (!note) { note = document.createElement('p'); note.textContent = '授权状态还没读到，请重新加载。'; document.getElementById('stage').prepend(note); document.body.classList.add('is-ready'); }
         return;
       }
-      removeEventListener('online', fetchShared); document.removeEventListener('visibilitychange', fetchShared);
+      clearInterval(retry); removeEventListener('online', fetchShared); document.removeEventListener('visibilitychange', fetchShared);
       note?.remove(); resolve();
     }
     addEventListener('online', fetchShared); document.addEventListener('visibilitychange', fetchShared);

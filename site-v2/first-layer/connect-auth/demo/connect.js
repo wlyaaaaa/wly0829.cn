@@ -205,10 +205,11 @@
   markSegs(true);
   show(false);
   // 共用的实况脚本第一次没下到（断网、被拦）：已经画好的固定接法照旧留着，能看能复制；
-  // 网络回来或页面回到前台再取一次，取到了照常读实时接法（M983）
+  // 网络回来、页面回到前台，或在前台每过一分钟，再取一次，取到了照常读实时接法（M983）
   if (!window.Live) await new Promise(resolve => {
-    let fetching = false;
+    let fetching = false, retry = 0;
     const done = () => {
+      clearInterval(retry);
       removeEventListener('online', fetchClient);
       document.removeEventListener('visibilitychange', fetchClient);
       if (loadNote) { loadNote = ''; reading = true; show(false); }
@@ -221,7 +222,7 @@
       const s = document.createElement('script');
       s.src = '/live/_lib/live-client.js';
       s.onload = done;
-      s.onerror = () => { fetching = false; s.remove(); loadNote = '连接状态还没读到，请重新加载。'; reading = false; show(false); document.body.classList.add('is-ready'); };
+      s.onerror = () => { fetching = false; s.remove(); loadNote = '连接状态还没读到，请重新加载。'; reading = false; show(false); document.body.classList.add('is-ready'); retry ||= setInterval(fetchClient, 60000); };
       document.head.append(s);
     }
     addEventListener('online', fetchClient);
