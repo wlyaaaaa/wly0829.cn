@@ -406,7 +406,8 @@
       else if (!out.length) note = esc(gap || '这一轮说了什么没有存下来。');
       items.push(...out);
     }
-    if (note) items.push({ html: `<li class="ar-gap">${note}</li>` });
+    const headerLink = viewer === 'public' && hiddenFromVisitor && c.headerHref ? ` · ${link(c.headerHref, '看对话页头 ›')}` : '';
+    if (note) items.push({ html: `<li class="ar-gap">${note}${headerLink}</li>` });
     // 还在跑：最后一行写它这会儿在干什么；跑完了：派活程序说结论
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
