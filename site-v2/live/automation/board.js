@@ -372,12 +372,12 @@
     // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
     // 下面卡片的点分颜色：绿点跑完、红点没做成、灰点暂时不修。只看没做成的时写“没做成的”
     const doneWhat = `${filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
-    // 下面实际有几种结局，标题下面一行照几种写：各带“的”、最后一种用“和”接（“有跑完的和没做成的”），看得出是两类，不读成“跑完了但没做成”（r83 返修，主控 g4 第 2 条）。
-    // 标题仍和按钮同一个叫法，所以这句写在标题下面；只有一种、又正好是标题那种时不写
+    // 下面实际有几种结局，标题下面一行用点的颜色说清是哪几类（“已经结束的轮次：绿点跑完，红点没做成。”），看得出不止“跑完”一类（r83 返修，主控 g4 第 2 条）。
+    // 几类只说一遍，不在图例前再列一遍；标题仍和按钮同一个叫法，所以写在标题下面；只有一种、又正好是标题那种时不写
     const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
-    const kindNames = doneKinds.map(k => `${k}的`), dots = { 跑完: '绿点跑完', 没做成: '红点没做成', 暂时不修: '灰点暂时不修' };
-    const kindsNote = doneKinds.length && !(kindNames.length === 1 && kindNames[0] === doneWhat)
-      ? `<p class="tp-small au-kindsnote">这里是已经结束的轮次，有${kindNames.length > 1 ? `${kindNames.slice(0, -1).join('、')}和${kindNames.at(-1)}` : kindNames[0]}：${doneKinds.map(k => dots[k]).join('，')}。</p>` : '';
+    const dots = { 跑完: '绿点跑完', 没做成: '红点没做成', 暂时不修: '灰点暂时不修' };
+    const kindsNote = doneKinds.length && !(doneKinds.length === 1 && `${doneKinds[0]}的` === doneWhat)
+      ? `<p class="tp-small au-kindsnote">已经结束的轮次：${doneKinds.map(k => dots[k]).join('，')}。</p>` : '';
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     // 按钮和标题上的数是轮数（后台两张列表的 total），自动修理同一件的几轮收在一张卡里，卡片张数会少：都读完了、张数确实少时，标题下面说一句（复查挑过对不上）
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
@@ -641,7 +641,8 @@
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
       // 不然“每周二 00:00”后面跟一句“预计 11 月 30 日 23:55”（早 5 分钟跨过半夜成了周一）读着像矛盾（复查 11-26）
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
-      const off = est != null && nominal != null ? Math.round((est - nominal) / 60000) : 0;
+      // 差几分钟按显示出来的两个钟点（都截到分钟）相减，不拿带秒的差值四舍五入：预计 23:55:54、原定 00:00 写“早 5 分钟”，和后面写的 23:55 对得上
+      const off = est != null && nominal != null ? Math.floor(est / 60000) - Math.floor(nominal / 60000) : 0;
       const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
       return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
