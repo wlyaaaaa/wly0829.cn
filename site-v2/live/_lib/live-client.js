@@ -533,11 +533,14 @@
     // 只有它们有上次的数、页里各块全没存下来时，照全空说（r83 返修第二轮）
     const bodyUpTo = latestStamp(connectionEntries().filter(e => isMain(e) || e.resource !== 'home' && e.resource !== 'computer/hardware').map(dataAt));
     const rest = bodyUpTo ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
-    const mainAt = main && dataAt(main), atLine = mainAt ? ` · 下面是 ${shortStamp(mainAt)} 的数据` : rest;
+    const home = main?.path === 'home' || main?.resource === 'home' && main.query.includes('project=');
+    const showing = (whole, part) => ` · ${home ? '有记录的卡片显示' + part : '下面是' + whole}`;
+    const mainAt = main && dataAt(main), atLine = mainAt ? showing(` ${shortStamp(mainAt)} 的数据`, ` ${shortStamp(mainAt)} 读到的内容`) : rest;
     // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
     const since = main && failingStamp(main);
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
-      ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试` : '这次没读到新的，正在重试' } : { stage: 'online' };
+      ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
+          : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online' };
     const link = latestConnection();
     if (!hostOffline(link)) {
       // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”。
@@ -545,7 +548,7 @@
       // 随站那份只记了时刻、没存内容时（下面各块都写没存下来）：页顶照全空写“这页的数据没存下来”，第二句说那份只记了时刻，不说“先显示那份”（D6 复查：前后打架）
       const release = !!main && main.backupFrom === 'release' && onBackup(main);
       const releaseMeta = !!main && !mainAt && !onBackup(main) && main.backupMeta?.from === 'release';
-      const at = main && onBackup(main) ? ` · 下面是${releaseName()}` : atLine;
+      const at = main && onBackup(main) ? showing(releaseName(), releaseName() + '的内容') : atLine;
       // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
       const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
       // 怎么才算连不上（M928）：本页主数据连续 3 次读不到（头两次隔 2、4 秒重读；接口回得快时约 10 秒，超时的每次要等 15 秒）、别的读口也没读到新的才报；之后每 10 秒重读一次
@@ -561,9 +564,9 @@
     const say = Number.isFinite(Date.parse(link?.offSince)) ? `电脑 ${shortStamp(link.offSince)} 起离线` : '电脑关机了';
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
-      return { stage: 'off', say, from,
-        at: from === 'cloud' ? ` · 下面是${cloud}存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
-          : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
+      const copy = from === 'cloud' ? `${cloud}存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? releaseName()
+        : `这台浏览器存的最后一份（${shortStamp(main.at)}）`;
+      return { stage: 'off', say, from, at: showing(copy, copy + '的内容'),
         // “这台浏览器没存过上次的数据；”只给电脑页（照 OFFLINE1125 A 那张图）；两个首页本人答了电脑关机时不改，共用这句照原样
         wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
@@ -680,9 +683,9 @@
     const off = !reachable && (reason === 'host-off' || hostOffline(e.validatedLink));
     // 后台在、只是这一份暂时给不出（重启后首轮发布没齐、来源这次读失败，回 503 live_*_unavailable）：手上有数的照留着，
     // 但照实写“自几点起读不到新的、这是几点的数”，本页主数据这样时页顶写“正在刷新”，重读照常、读到就收（D6，本人 11-26 00:24）
-    const pending = status === 503 && /^live_(source|variant|detail)_unavailable$/.test(body?.error || '') && e.data !== null && Number.isFinite(Date.parse(e.at));
+    const pending = status === 503 && /^live_(source|variant|detail)_unavailable$/.test(body?.error || '');
     if (reachable) e.lagging = pending && isMain(e);
-    if (pending) e.fallbackNote = staleNote(e);
+    if (pending && e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = staleNote(e);
     if (!body?.link && !reachable && !off && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
       e.missReason = reason; e.missStatus = status;
       if (!e.missCount) e.missSince = Date.now();

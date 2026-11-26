@@ -1053,7 +1053,9 @@
       const reading = `${html}${cutoff ? ` <small>${cutoff}</small>` : ''}`;
       return `<div class="kv__row">${lamp(status)}<dt>${title}</dt><dd>${group ? `<a class="kv__link" href="${esc(href('phone'))}#grp-${group}" aria-label="${esc(label)}，查看详情">${reading}</a>` : reading}${warn ? U.actions({ id: `phone-${ids[0]}`, text: `${label} ${sp(html.replace(/<[^>]*>/g, ''))}` }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}</dd></div>`;
     }).join(''));
-    const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), received?.last_at ? `${lastState?.offline ? U.time(received.last_at) : U.ago(received.last_at, lastState?.now || at)}收到` : '还没收到数据', received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
+    const receivedAt = received?.last_at;
+    const arrival = receivedAt ? lastState?.offline ? `上次收到 ${recordStamp(receivedAt)}` : `${U.ago(receivedAt, lastState?.now || at)}收到` : '还没收到数据';
+    const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), arrival, received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
     p.note.hidden = !note;
     U.html(p.note, `${reason && !offline ? lamp(received?.gap) : ''}<span class="card__note-text">${reason && !offline && connection ? esc(connection) + ' · ' : ''}${U.fieldHtml(typeof note === 'string' ? note.replace(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, (_, m, d) => `${m.padStart(2, '0')}-${d.padStart(2, '0')}`) : note, { name: '手机情况', kind: viewer })}</span>${reason ? U.actions({ id: 'phone', text: reason }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}`);
   }
@@ -1318,7 +1320,10 @@
     // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
     const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
     p.head.querySelector(':scope > .lamp')?.remove();
-    if (state.lamp) p.head.insertAdjacentHTML('afterbegin', state.lamp);
+    if (state.lamp) {
+      p.head.insertAdjacentHTML('afterbegin', state.lamp);
+      if (id === 'phone' && lastState?.offline) p.head.firstElementChild.dataset.tone = 'gray';
+    }
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, cutoff].filter(Boolean).join(' · ');
@@ -1409,10 +1414,8 @@
   // —— 出事时才有的横条 ——
   function renderNotices(state) {
     const rows = [];
-    if (state.offline || (!home && state.text && state.phase === 'none')) {
-      // 实况在线、只是首页这一份读不到：说清是哪几块（计划任务单独读）
-      const text = state.offline || !/读不到/.test(state.text) ? state.text : '首页这一份暂时读不到：除计划任务外各块先空着，正在重读';
-      rows.push({ key: 'link', cls: home ? 'notice glass' : 'l1-unreadable-note', html: `${home ? '<span class="lamp" aria-hidden="true"></span>' : ''}<span>${U.fieldHtml(text, { name: '连接情况', kind: viewer })}</span>` });
+    if (!state.offline && state.conn?.stage !== 'retrying' && !home && state.text && state.phase === 'none') {
+      rows.push({ key: 'link', cls: 'l1-unreadable-note', html: U.fieldHtml(state.text, { name: '连接情况', kind: viewer }) });
     }
     if (project) {
       const f = home?.filter || { name: home?.projects.items.find(it => it.id === project)?.name || project, count: home?.needs.items.filter(it => it.project === project && ['choose', 'do'].includes(it.kind)).length };
