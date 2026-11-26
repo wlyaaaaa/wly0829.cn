@@ -24,7 +24,7 @@ FINGERPRINT = re.compile(r"[a-f0-9]{40}")
 REPORT = Path("E:/.agents/skills/report-page/scripts/New-ReportPage.ps1")
 STEPS = dict(renames="查改名", before="保留改前图", convert="改稿换进网页", scan="验成品", publish="发布回读")
 REQUIRED_REVIEWS = {
-    "/live/": "实况：逐项核 docs/update.md 第九节的 7 条",
+    "/live/": "实况：逐项核 docs/update.md 第九节（含项目页模块抽查）",
     "/rules/": "规则：对照活动版本、专题名单和适用范围",
 }
 
@@ -219,7 +219,7 @@ def renames(state, folder):
                 inputs.append((route, source))
     layer = ROOT / "site-v2/first-layer"
     sources = {"connect-auth/demo": ("/computer-access/",), "list-pages/demo": ("/projects/", "/skills/"),
-               "principles-page/source/文稿": ("/principles/",), "rules-page/demo": ("/rules/",),
+               "rules-page/demo": ("/rules/",),
                "header/demo": ("共用导航",), "trust-modal": ("设备验证弹窗",)}
     for relative, routes in sources.items():
         inputs.extend((route, file) for file in sorted((layer / relative).glob("*"))
