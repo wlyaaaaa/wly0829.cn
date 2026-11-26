@@ -1655,6 +1655,10 @@
     document.body.classList.add('live-unreadable');
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
+    if (lastState?.conn?.emptyHome) for (const id of IDS) {
+      U.html(parts[id].head, U.head(NAME[id], { lamp: false, href: href(id) }));
+      labelCard(cards[id]);
+    }
     balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
     Light.offline(!!lastState?.offline);
     showHome();
@@ -1731,6 +1735,7 @@
       // 第一次画的时候没有“正在看的那一行”，不锚视口；锚了会跟着页顶横条长出来往下滚，把横条和页眉标题挤走
       const changed = !!lastState?.offline !== !!state.offline, firstLink = !lastState, oldNow = lastState?.now;
       lastState = state;
+      document.body.classList.toggle('live-empty-home', !!state.conn?.emptyHome);
       bar?.set(state);
       Light.offline(state.offline);
       if (changed && home) {

@@ -132,6 +132,11 @@
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #phone .head__lead { font-size: 18px; }
+/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+.page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
+.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
+.live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
