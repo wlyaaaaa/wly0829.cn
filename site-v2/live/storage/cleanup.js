@@ -326,9 +326,9 @@
     for (const f of fresh) svg.push(`<text class="cl-newtxt" x="${f.x.toFixed(1)}" y="${(f.y - lift + 4).toFixed(1)}" text-anchor="end" fill="${f.s.color}">${esc(`${K.letter(f.s.v)} 盘刚开始记`)}</text>`);
     ends.sort((a, b) => a.y - b.y);
     for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
-    // 最下面那个盘的字母不压到底线、不贴着横轴日期：字的底边至少留在底线上方 4 像素，挤不下就整列往上收（M1009）
-    const overflow = ends.length ? Math.max(0, ends.at(-1).y - (H - B - 8)) : 0;
-    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.y - overflow + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
+    // 最下面那个盘的字母不压到底线、不贴着横轴日期：字的底边至少留在底线上方 4 像素；从下往上，只把挤到的那几个往上收，别的照旧贴着自己的线（M1009）
+    for (let i = ends.length - 1; i >= 0; i--) ends[i].y = Math.min(ends[i].y, i === ends.length - 1 ? H - B - 8 : ends[i + 1].y - 17);
+    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.y + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
     const big = [...data.marks].sort((a, b) => b.bytes - a.bytes);
     big.forEach((m, i) => {
       const mx = x(m.t), my = y(m.v);
