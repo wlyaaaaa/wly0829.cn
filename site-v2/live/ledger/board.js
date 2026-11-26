@@ -290,12 +290,13 @@
   function repeats(d) {
     const r = d.repeat_fixes || {}, now = Date.now(), from = now - 30 * DAY;
     const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
+    const reopened = it => Number.isInteger(it.reopen_count) && it.reopen_count > 0 ? it.reopen_count : null;
     // 后台给了“近 30 天坏了几次”就只列坏了 2 次以上的（或已转给本人的）；没给这个数的（比如约好再查的那几件只记了重开）不算坏，不进这一块
     const counted = list(r.items).some(it => Number.isInteger(it.broken_30d));
-    const rows = list(r.items).filter(it => !counted || (broke(it) ?? 0) >= 2 || it.handed_to_owner)
+    const rows = list(r.items).filter(it => it.handed_to_owner || (counted ? (broke(it) ?? 0) >= 2 : reopened(it) != null))
       .sort((a, b) => (broke(b) ?? -1) - (broke(a) ?? -1) || (stamp(b.last_at) || 0) - (stamp(a.last_at) || 0));
     if (!rows.length) return '';
-    const said = it => broke(it) != null ? `近 30 天坏了 ${int(broke(it))} 次` : known(it.reopen_count) ? `修好后又出现 ${int(it.reopen_count)} 次` : '';
+    const said = it => broke(it) != null ? `近 30 天坏了 ${int(broke(it))} 次` : reopened(it) != null ? `修好后又出现 ${int(reopened(it))} 次` : '';
     return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 30 天坏了不止一次的；30 天内第三次坏，自动修理停手、转给${you()}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
