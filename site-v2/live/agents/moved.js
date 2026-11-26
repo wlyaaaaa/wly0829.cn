@@ -5,7 +5,7 @@
 // 本人 11-24：“三个可点默认全部”“智能体页永远是打开默认全部”，点哪一处整页一起跟着变。
 // 技能先列用得最多的 5 个，“另 N 个技能”就地展开全部、再点收起（本人 11-24：“仍然不能展示全部（包括全部智能体和全部技能（带展开））”）。
 // 展开后最下面接着列这段时间没用过的技能（本人 16:35 照图点头）：名字灰字、条空着、右边琥珀色“没用过”；“另 N 个”的 N 算上它们。
-// 没用过 = 后台技能清单 skill_stats.catalog（键 label）里、这段时间所看的那几家一次都没用的；清单没给、或有一家只给了前 5 个、没采到，就不列。
+// 展开后用后台现役技能清单 skill_stats.catalog 对这段时间的完整技能行；只有记录下限时写“没记到使用”。
 // 数据读 /agents 的 message_stats、skill_stats（数据约定-前端升级 第 10 节）；取数只在“取数”那一段，约定改了只改那一段。
 (() => {
   'use strict';
@@ -55,25 +55,27 @@
   function skillModel(s) {
     const providers = providersOf(s), win = {}, labels = new Map();
     for (const [id] of PERIODS) {
-      const rows = new Map(), v = {}, own = {}, onlyTop = [];
+      const rows = new Map(), v = {}, own = {}, onlyTop = [], complete = new Set();
       for (const p of providers) {
         const w = p.windows?.[id];
         v[p.fam.id] = num(w?.count);
         // skills 是这一家这一段用到的全部技能，按标签对齐画三家合表；旧读口只有前 5（top）时退回前 5，并在下面写一句
         const full = Array.isArray(w?.skills), items = list(full ? w.skills : w?.top).filter(t => t?.label);
+        if (full && known(v[p.fam.id])) complete.add(p.fam.id);
         if (!full && items.length) onlyTop.push(p.fam.name);
         own[p.fam.id] = [...items].sort((a, b) => (num(b.count) || 0) - (num(a.count) || 0)).map(t => t.label);
         for (const t of items) { (rows.get(t.label) || rows.set(t.label, { name: t.label, v: {} }).get(t.label)).v[p.fam.id] = num(t.count); keepLabel(labels, t); }
         if (full) list(w?.top).forEach(t => keepLabel(labels, t));
       }
-      win[id] = { start: earliest(providers.map(p => dateKey(p.windows?.[id]?.start))), v, own, rows, onlyTop, starts: startsOf(providers, id) };
+      win[id] = { start: earliest(providers.map(p => dateKey(p.windows?.[id]?.start))), v, own, rows, onlyTop, complete, starts: startsOf(providers, id) };
     }
     // 全部技能清单：[{label}] 或 [名字]；没给是 null（这时不列没用过的）
     const cat = Array.isArray(s.catalog) ? s.catalog : Array.isArray(s.catalog?.skills) ? s.catalog.skills : null;
     const catalog = cat && [...new Set(cat.map(c => typeof c === 'string' ? c : c?.label).filter(c => typeof c === 'string' && c))];
     cat?.forEach(c => keepLabel(labels, c));
-    return { at: s.as_of || s.observed_at, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
-      missing: HOSTS.filter(h => !providers.some(p => p.fam === h)), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
+    return { latest: s.as_of, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
+      unverified: Object.fromEntries(providers.map(p => [p.fam.id, num(p.unverified_sources)])),
+      starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows',
       // 每家技能记到哪一刻（recorded_through）：比这一轮读到的时候早一天以上，说明后面用的还没入账，下面小字写明记到几点（M742），不让旧数冒充新的
       through: Object.fromEntries(providers.map(p => [p.fam.id, p.recorded_through || null])), readAt: s.observed_at || s.as_of || null };
@@ -90,7 +92,7 @@
     return `<div class="tp-seg" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) => `<button type="button" data-mperiod="${key}:${id}" aria-pressed="${period[key] === id}">${esc(id === 'all' && start ? `${label} · ${sinceWord(start)}` : label)}</button>`).join('')}</div>`;
   }
   // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
-  const head = (key, title, start, at) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${at && asof(at) ? `<span class="tp-asof">${esc(asof(at))}</span>` : ''}</div></div>`;
+  const head = (key, title, start, reading) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${reading ? `<span class="tp-asof">${esc(reading)}</span>` : ''}</div></div>`;
   const tone = id => only === id ? ' is-on' : only ? ' is-off' : '';
   // 三家各一行：点了这一家高亮
   function famRows(key, keys, v, unit, { lower = {}, last = {}, starts = {}, start = null } = {}) {
@@ -151,7 +153,7 @@
     const lastAt = f ? t.last[f] : Object.values(t.last).filter(Boolean).sort().at(-1);
     const to = f ? `跟 ${fam(f).name} ` : '';
     const todayText = !todayKnown ? '' : todayN > 0 ? `今天到 ${T.clock(t.at)} ${to}说了 ${int(todayN)} 句` : `今天到 ${T.clock(t.at)} 还没${to}说${lastAt ? ` · ${lastText(lastAt)}` : ''}`;
-    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at)}
+    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at && asof(t.at))}
       <div class="tp-grid ag-mgrid"><div class="ag-mleft">
         <p class="ag-mbig">${esc(lead(p, f ? w.starts[f] || w.start : w.start))}${you()}${esc(to)}<span class="ag-mbig__tail">说了 ${bigNum(key, value || 0, f, lower)} 句</span></p>
         ${famRows(key, HOSTS, w.v, '句', { lower: w.lower, last: t.last, starts: t.starts, start: p === 'all' ? w.start : null })}
@@ -166,24 +168,30 @@
     const every = f ? (w.own[f] || []) : [...w.rows.values()].sort((a, b) => sum(b.v, HOSTS) - sum(a.v, HOSTS)).map(r => r.name);
     const rows = (skillsOpen ? every : every.slice(0, TOP)).map(n => w.rows.get(n)).filter(Boolean);
     const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS;   // 只看一家时，下面的小字也只说这一家
-    // 这段时间所看的那几家一次都没用过的（清单里有、这几家次数都不大于 0）；有一家没采到或只给了前 5 个，判不了，不列
-    const judged = s.catalog && hs.every(h => !s.missing.includes(h) && !w.onlyTop.includes(h.name));
-    const unused = judged ? s.catalog.filter(n => !hs.some(h => (w.rows.get(n)?.v?.[h.id] || 0) > 0)) : [];
+    // 只在所选时段有全量行时对现役清单；如果来源照实标了下限，未见记录不能断定没用过。
+    const judged = s.catalog && hs.every(h => w.complete.has(h.id));
+    const unused = judged ? s.catalog.filter(n => !every.includes(n)) : [];
+    const lower = hs.filter(h => s.lower[h.id]).map(h => h.name);
+    const unusedLabel = lower.length ? '没记到使用' : '没用过';
+    const missing = hs.filter(h => !known(w.v[h.id]) && !w.own[h.id]?.length).map(h => h.name);
     const total = f ? w.v[f] : null;
     const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : `${fam(f).name} 这段时间的技能没采到`;
     const hidden = Math.max(0, every.length - TOP) + unused.length;
     const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
-    const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
-      `<div class="ag-hrow is-unused">${skillName(n, s.labels)}<span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
+    const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">${unusedLabel}的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
+      `<div class="ag-hrow is-unused">${skillName(n, s.labels)}<span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>${unusedLabel}</b></span></div>`).join('')}</div></div>` : '';
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const behind = hs.filter(h => Date.parse(s.readAt) - Date.parse(s.through[h.id]) > 864e5).map(h => `${h.name} 只记到 ${T.when(s.through[h.id])}`);
     const lag = behind.length ? `${behind.join('、')}，之后用的还没入账` : '';
-    const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
-      s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
+    const unverified = hs.filter(h => s.unverified[h.id] > 0).map(h => `${h.name} 有 ${int(s.unverified[h.id])} 个来源未能确认`);
+    const notes = [line, lag, ...later, ...unverified, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
+      missing.length ? `${missing.join('、')} 的技能这段时间还没采到` : '', lower.length ? `${lower.join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at)}
+    const reading = ['约每 2 分钟汇总已有记录', s.latest && `最近一条使用记于 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
+    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, reading)}
       ${chips()}
-      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels }) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
+      ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels })
+        : `<p class="tp-empty">${missing.length === hs.length ? '这段时间的技能没读到。' : '这段时间没有采到技能使用记录。'}</p>`}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {

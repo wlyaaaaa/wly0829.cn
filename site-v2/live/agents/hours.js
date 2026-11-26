@@ -21,12 +21,12 @@
   const hrs = m => !known(m) ? '' : m <= 0 ? '0' : m < 3 ? '不到 0.1' : Math.round(m / 6) >= 1000 ? T.int(m / 60)
     : (Math.round(m / 6) / 10).toLocaleString('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const fog = '<span class="tp-fog">没读到</span>';
-  // 某一家（或全部）这一段：合计、三类、没分出类的。家里合计读到了、某一类后台没给数，就是这一类没有，算 0
+  // 某一家（或全部）这一段：合计、三类、没分出类的。某一类有采集覆盖且没有活动时，后台会明确给 0。
   function scope(x) {
     const total = known(x?.actual_minutes) ? x.actual_minutes : null, split = x?.by_activity && typeof x.by_activity === 'object';
     const kinds = Object.fromEntries(KINDS.map(([k]) => {
       const v = x?.by_activity?.[k]?.actual_minutes;
-      return [k, total == null || !split ? null : known(v) ? v : 0];
+      return [k, known(v) ? v : null];
     }));
     const rest = total == null ? 0 : !split ? total : known(x.unclassified_minutes) ? x.unclassified_minutes : 0;
     return { total, kinds, rest, split, running: known(x?.in_progress) ? x.in_progress : 0, missing: known(x?.missing_timing) ? x.missing_timing : 0 };
@@ -65,8 +65,11 @@
   // 行名点了去哪（本人 11-25 23:15 选 A，照 L-agents-v3）：普通对话、子代理去 AI 对话页，自动任务去自动任务页；行名黑字后面一个灰“›”
   const ROW_HREF = { conversation: '/live/chats/', subagent: '/live/chats/', automatic: '/live/automation/' };
   function table(cols) {
-    const cell = (s, k) => s.total == null ? fog : k === 'total' ? esc(hrs(s.total)) : s.kinds[k] == null ? fog : esc(hrs(s.kinds[k]));
-    const head = cols.map(c => `<th scope="col" class="${c.h.id === 'all' ? 'is-all' : ''}" style="--host:${c.h.color}"><button type="button" class="ag-hpick" ${c.h.id === 'all' ? 'data-only="all"' : `data-pick="${c.h.id}"`}>${c.h.id === 'all' ? '' : '<i class="tp-swatch"></i>'}${esc(c.h.name)}</button></th>`).join('');
+    const cell = (s, k) => {
+      const minutes = k === 'total' ? s.total : s.kinds[k];
+      return known(minutes) ? esc(hrs(minutes)) : fog;
+    };
+    const head = cols.map(c => `<th scope="col" class="${c.h.id === 'all' ? 'is-all' : ''}" style="--host:${c.h.color}"><button type="button" class="ag-hpick" ${c.h.id === 'all' ? 'data-only="all"' : `data-pick="${c.h.id}"`} aria-pressed="${cols.length === 1 || c.h.id === 'all'}">${c.h.id === 'all' ? '' : '<i class="tp-swatch"></i>'}${esc(c.h.name)}</button></th>`).join('');
     const name = (k, label) => ROW_HREF[k] ? `<a class="ag-hrowlink" href="${ROW_HREF[k]}">${label}<span aria-hidden="true">›</span></a>` : label;
     const row = ([k, label]) => `<tr${k === 'total' ? ' class="is-sum"' : ''}><th scope="row">${name(k, label)}</th>${cols.map(c => `<td class="${c.h.id === 'all' ? 'is-all' : ''}">${cell(c.s, k)}</td>`).join('')}</tr>`;
     return `<table class="tp-table ag-htable"><thead><tr><th scope="col">类别</th>${head}</tr></thead><tbody>${[...KINDS, ['total', '合计']].map(row).join('')}</tbody></table>`;
@@ -107,7 +110,7 @@
       const one = v => v < 10 ? T.dec(Math.round(v * 10) / 10) : T.int(Math.round(v));
       const notes = [
         mine.total > 0 && span >= .25 && `这 ${one(span)} 小时里平均同时 ${one(mine.total / 60 / span)} 个在干`,
-        mine.kinds.automatic > 0 && '自动任务这一行比自动任务页的数多：这里还算了各家自带的定时和后台程序开的对话，自动任务页只算登记的每次调用',
+        mine.split && '自动任务工时包含各家自带的定时和后台程序开的对话。自动任务页按每次登记的运行回执统计',
         mine.total != null && !mine.split && '这一段后台还没分出普通对话、子代理、自动任务，只有合计',
         mine.split && mine.rest >= 3 && `另有 ${hrs(mine.rest)} 小时没分出是哪一类，算在合计里`,
         mine.running > 0 && `现在还在干的 ${T.int(mine.running)} 件算到此刻`,

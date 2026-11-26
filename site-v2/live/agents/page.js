@@ -114,6 +114,7 @@
   const chips = (hint = true) => `<p class="ag-mlegend"><button type="button" class="ag-chip ag-chip--all${only ? '' : ' is-on'}" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
     `<button type="button" class="ag-chip${only === h.id ? ' is-on' : only ? ' is-off' : ''}" data-pick="${h.id}" aria-pressed="${only === h.id}" style="--host:${h.color}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}
     ${hint ? `<span class="ag-mhint">${only ? `整页只看 ${HOSTS.find(h => h.id === only).name}，按它自己的数画 · 再点一次或点“全部”回到三家` : '点一家，整页只看它'}</span>` : ''}</p>`;
+  const familyHeading = h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><button type="button" class="ag-hpick" data-pick="${h.id}" aria-pressed="${only === h.id}"><i class="tp-swatch"></i>${h.name}</button></th>`;
   const hostData = (d, h) => d.hosts?.[h.name] || {};
   const keyOf = hook => String(hook.key || '').replace(/:external$/, '');
   const nameOf = hook => F(hook.title, '钩子名称') || esc(NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调');
@@ -162,9 +163,9 @@
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
       <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
-        <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
+        <p class="tp-small">${c.pass === c.total ? `${c.total} 项都照规矩` : `${c.total} 项里 ${c.pass} 项照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : c.unknown ? '' : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
   }
   // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
@@ -187,7 +188,7 @@
   };
   const est = (d, h) => inPeriod(d, estPeriod, h)?.estimate || {};
   // 有派单却一件开工都没记下，是采集没采上，不是没干活（本人 11-23 08:11：“我最近肯定是和 antigravity 有对话的”）。按全部记录判断，近 7 天没开工不算没采上
-  const missing = (d, h) => { const w = stats(d, h).work || {}; return !d.work_stats || w.starts === 0 || w.starts == null; };
+  const missing = (d, h) => { const w = stats(d, h).work || {}; return w.starts == null || w.starts === 0 && w.orders > 0; };
   // 最上面一行“全部”：三家合起来准不准，和三家同一种写法、字更大（本人 16:35 照图点头）。件数按各家的件数加起来，比例按件数重算，不是三个百分比取平均
   function accuracyAll(d) {
     const rows = HOSTS.filter(h => !missing(d, h)).map(h => est(d, h)).filter(e => e.samples && known(e.accuracy));
@@ -385,22 +386,22 @@
     const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
       : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
       : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
-    const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
-    const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
+    const waits = HOSTS.map(h => /EAGER/.test(String(x(h).approval || '')) ? false : x(h).waits_for_owner);
+    const version = entries.map(e => e.version ? [ruleVer(e.version), e.current === true ? '当前版' : e.current === false ? '版本未对上' : '当前状态没读到'].join(' · ') : '没读到');
     const rows = [
       row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
       row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
       row('对话装多满会压缩', HOSTS.map(compact)),
-      row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
-        { diff: waits.map(w => !w) }),
+      row('动手前停不停下等批准', waits.map(w => w === false ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>`
+        : w === true ? '会停下等批准' : '没读到'), { diff: waits.map(w => w === true) }),
       row('谁能自己解开资料锁', HOSTS.map(unlock), { note: link('/rules/topic-authorization.html', '规则 ›') }),
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
-      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
+      <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(familyHeading).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
   }
@@ -415,7 +416,8 @@
     const cell = hv.cells?.[station]?.[h.id] || {}, hooks = list(d.hooks).filter(r => r.host === h.name && stationOf(r) === station);
     const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => hv.cells?.[s]?.[hh.id]?.runs).filter(known)));
     if (!hooks.length) {
-      const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
+      const observed = station === 'compact' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer);
+      const why = observed || ABSENT[h.id]?.[station] || '这个当口没装钩子';
       return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
@@ -490,7 +492,7 @@
     return `<section class="tp-panel" id="hooks">${top}
       <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${short
         ? '<p class="tp-small">旧日志只记了次数和耗时，没记拦没拦、错没错；拦和错只按记了的那部分算，更早的那部分没采上，不算 0。</p>' : ''}
-      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
+      <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(familyHeading).join('')}</tr></thead><tbody>${body}</tbody></table>
       <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
   }
 
@@ -545,7 +547,10 @@
       if (next === only) return;
       const el = set || pick, sec = el.closest('section[id]');
       // 点了哪个按钮，重画后这个按钮停在原处；柱段这类不是按钮的，停住这一块的标题
-      const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]` : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend [data-${set ? 'only' : 'pick'}="${set ? set.dataset.only : pick.dataset.pick}"]` : `#${sec.id} .tp-panel__head`;
+      const stableButton = set ? `[data-only="${set.dataset.only}"]` : `[data-pick="${pick.dataset.pick}"]`;
+      const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]`
+        : el.closest('thead') ? `#${sec.id} thead ${stableButton}`
+        : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend ${stableButton}` : `#${sec.id} .tp-panel__head`;
       only = next;
       if (only && expanded && expanded.split('/')[1] !== only) expanded = null;   // 别家展开着的钩子格收起来
       T.keep(page.root, anchor, draw);
