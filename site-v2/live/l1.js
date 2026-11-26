@@ -898,6 +898,23 @@
     const legacy = typeof data?.text === 'string' && data.text.match(/(?:CPU\s*)?(-?\d+(?:\.\d+)?)\s*(?:℃|°C)/)?.[1];
     return legacy ? { value: Number(legacy) } : null;
   }
+  const computerSampleAt = row => row?.source_at ?? row?.at;
+  function oldComputerSample(row) {
+    const age = Date.parse(window.Live.clock()) - Date.parse(computerSampleAt(row));
+    return lastState?.offline || oldReading(row) || row?.state === 'unavailable' || age < 0 || row?.stale_after > 0 && age > row.stale_after * 1000;
+  }
+  const freshTemperature = row => Number.isFinite(row?.value) && timed(computerSampleAt(row)) && row.stale_after > 0 && row.q === 'ok' && !oldComputerSample(row);
+  let temperatureCurrent;
+  const fastHardwareIds = ['cpu', 'cpu-temp', 'memory', 'memory-total', 'memory-available'];
+  function preserveComputerSamples(current, previous) {
+    if (!current.metrics || !previous?.metrics) return;
+    current.metrics = current.metrics.map(row => {
+      if (!fastHardwareIds.includes(row.id)) return row;
+      const prior = previous.metrics.find(sample => sample.id === row.id), priorAt = computerSampleAt(prior);
+      if (!Number.isFinite(prior?.value) || !timed(priorAt) || Number.isFinite(row.value) && Date.parse(priorAt) <= Date.parse(computerSampleAt(row))) return row;
+      return { ...prior };
+    });
+  }
   function renderComputer(d, screen, phoneData) {
     const trafficBytes = bytes => U.trafficBytes(bytes);  // 按 1024 进位，和海外流量页同一个函数
     const p = parts.computer;
@@ -906,10 +923,10 @@
     const val = (x, f) => (x && x.value != null ? f(x) : null);
     const fmtTemp = n => `${Math.round(n)}℃`;
     const pair = (use, temperature) => join([val(use, x => quantity(x, 'value', n => `${Math.round(n)}%`)), temperature]) || null;
-    const sampleTime = (node, fallback) => {
-      const stamp = node?.source_at ?? node?.at ?? fallback;
+    const sampleTime = node => {
+      const stamp = computerSampleAt(node);
       if (!timed(stamp)) return null;
-      const old = !!(offline || oldReading(node) || node?.stale_after > 0 && Date.now() - Date.parse(stamp) > node.stale_after * 1000);
+      const old = !!oldComputerSample(node);
       return { key: JSON.stringify([stamp, node?.timestamp_basis, old]), text: `${old ? '上次' : '记录到'} ${recordStamp(stamp)}` };
     };
     const cpuSample = m.cpu?.value != null ? sampleTime(m.cpu) : null;
@@ -919,7 +936,7 @@
     const sharedNote = sharedMemory.length ? `CPU 占用、${sharedMemory.length === 2 ? '内存' : sharedMemory[0][1]} ${cpuSample.text}` : '';
     const withReadings = (text, ...sources) => {
       if (!text) return text;
-      const notes = sources.map(([label, node, fallback]) => [label, shared.has(node) ? null : sampleTime(node, fallback)]).filter(([, sample]) => sample);
+      const notes = sources.map(([label, node]) => [label, shared.has(node) ? null : sampleTime(node)]).filter(([, sample]) => sample);
       if (!notes.length) return text;
       const same = notes.length === sources.length && notes.every(([, sample]) => sample.key === notes[0][1].key);
       const detail = same ? notes[0][1].text : join(notes.map(([label, sample]) => `${label} ${sample.text}`));
@@ -954,7 +971,7 @@
     const memorySpec = U.memorySpec?.(d?.hardware?.memory ?? d?.memory?.spec, d?.hardware?.source_at);   // 频率、时序、同步：回包里有才写（M654）
     const rows = [
       // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页“CPU 和显卡”“内存”那一组（M708）
-      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/#grp-cpu'],
+      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu]), m.cpu, '/live/computer/#grp-cpu'],
       ['显卡', withReadings(join([val(m.gpu, x => (text => Number(x?.value) < 90 ? `<span class="kv-good">${text}</span>` : text)(quantity(x, 'value', n => `${Math.round(n)}%`))), val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))]) || null, ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
@@ -1310,9 +1327,11 @@
     const cutoff = endNote && !existing && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
-    // 电脑、手机卡上“读数暂缺”已经点过名的组（卡顿、程序身份筛查……），“读不准”里不再写一遍；它的原因并到“读数暂缺”那一项后面（一项只说一次，不把要紧数往下压）
-    const temperatureShown = id === 'computer' && computerTemperature(data)?.value != null;
-    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureShown && name === 'CPU 温度')))] : [];
+    const temperature = id === 'computer' && computerTemperature(data);
+    const temperatureFresh = freshTemperature(temperature);
+    if (id === 'computer') temperatureCurrent = temperatureFresh;
+    // 旧值可以显示，但只有温度本身有有效的新读数才收起它的缺读说明。
+    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureFresh && name === 'CPU 温度')))] : [];
     const plain = text => sp(String(text).replace(/<[^>]*>/g, '')).trim();
     const savedReading = text => plain(text).match(/^(最近一次记录于\s+(?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)(?:[，,](?:此后没有新读数))?[。.]?$/)?.[1] || '';
     const oldDetails = new Set();
@@ -1320,9 +1339,11 @@
     const lackWhy = new Map();
     for (const g of gray || []) {
       const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
+      if (name === 'CPU 温度' && temperatureFresh) continue;
       const recorded = savedReading(reason), lack = lacking.find(label => name === label || name.startsWith(label));
       if (recorded) oldDetails.add(recorded);
-      const why = id === 'computer' && recorded ? recorded.replace(/^最近一次记录于/, '上次读到') : reason;
+      const latest = name === 'CPU 温度' && recordStamp(computerSampleAt(temperature));
+      const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
       const detail = describedAt && U.sameCutoffNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
@@ -1696,6 +1717,7 @@
         const counts = Object.fromEntries(Object.keys(KIND).map(k => [k, needs.filter(it => it.kind === k).length]));
         d = { ...d, needs: { ...d.needs, items: needs, counts, waiting_oldest_days: null, closed7: scoped(closed.data?.items).length }, ledger: { ...d.ledger, items: ledger, open: ledger.length, text: `AI 手上 ${ledger.length} 件` } };
       }
+      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
       if (d.focus) restoreY = null, pinned = false;
       const render = () => {
       document.body.classList.remove('live-unreadable');
@@ -1781,26 +1803,29 @@
   subscribe();
   // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
   window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });
-  // 硬件小包：页面看得见时约每 5 秒取一次，只换电脑卡里的 CPU 占用、内存和 CPU 温度，不重取整包（M519）
-  // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
+  // 只并硬件小包自己的五项。过期的真值可续作历史，缺值不盖最后一次成功读数。
   window.Live.watch('computer/hardware', null, { link(state) {
     const computer = home?.computer;
     if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
-    if (!window.Live.mergeHardware(computer.metrics, state.data?.metrics)) return;
-    // “读不准：CPU 温度（最近一次记录于 …）”跟着页面上的温度走：读数是新的就不再说读不准，旧了只把时刻换成这次读到的（M602）
-    const temp = computer.metrics?.find(m => m.id === 'cpu-temp');
-    let grayChanged = false;
-    if (temp?.value != null && timed(temp.at) && Array.isArray(computer.gray_items)) {
-      const old = temp.stale_after > 0 && Date.now() - Date.parse(temp.at) > temp.stale_after * 1000;
-      const next = computer.gray_items.flatMap(g => {
-        const reason = typeof g?.reason === 'string' ? g.reason : '';
-        if (sp(U.fieldText(g?.name, viewer)) !== 'CPU 温度' || !/最近一次记录于 /.test(reason)) return [g];
-        grayChanged = true;
-        return old ? [{ ...g, reason: reason.replace(/最近一次记录于 [^，,]+/, `最近一次记录于 ${recordStamp(temp.at)}`) }] : [];
-      });
-      if (grayChanged) Object.assign(computer, { gray_items: next, gray_count: next.length });
+    const metrics = [200, 304].includes(state.meta.status) ? state.data?.metrics : null, now = Date.parse(window.Live.clock());
+    let changed = false;
+    for (const sample of metrics || []) {
+      if (!fastHardwareIds.includes(sample.id)) continue;
+      const row = computer.metrics?.find(m => m.id === sample.id);
+      if (!row) continue;
+      if (sample.state === 'unavailable' && row.value != null && !row.read_error) {
+        Object.assign(row, { q: 'stale', state: 'unavailable', read_error: true });
+        changed = true;
+      }
+      const stamp = Date.parse(computerSampleAt(sample));
+      if (sample.read_error || !Number.isFinite(sample.value) || !Number.isFinite(stamp) || stamp > now || !['ok', 'stale'].includes(sample.q)) continue;
+      if (!window.Live.mergeHardware([row], [{ ...sample, at: computerSampleAt(sample) }])) continue;
+      Object.assign(row, { source: sample.source, timestamp_basis: sample.timestamp_basis });
+      if (oldComputerSample(sample)) Object.assign(row, { q: 'stale', state: 'stale' });
+      changed = true;
     }
-    const render = () => { renderComputer(computer, home.screen, home.phone); if (grayChanged) paintStatus('computer', computer); };
+    if (!changed && temperatureCurrent === freshTemperature(computerTemperature(computer))) return;
+    const render = () => { renderComputer(computer, home.screen, home.phone); paintStatus('computer', computer); };
     if (settling()) render(); else U.anchor(render);
   } });
 
