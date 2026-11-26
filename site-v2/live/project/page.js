@@ -233,7 +233,7 @@
     const moment = m.moment && !m.moment_shared ? U.fieldHtml(m.moment, { name: '读数说明', kind: projectViewer }) : '';
     // 同处标一次：读数本身已挂了“对外换了说法／访客看不到”签，下面那句不再挂第二个
     const line = [!(v && /\blive-mark\b/.test(v.html)) && p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
-    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
+    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m, id), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
   }
   // 后台在读数名上标了 visitor_labels.label 的（访客看到的名字换过说法，或看不到），名字旁挂现有的小签；名字能点时挂在链接外面
   const labelTag = m => U.visitorLabel(m, 'label', '这一项的名称', projectViewer);
@@ -911,7 +911,7 @@
           const m = { ...metric, section: recordSection(metric.section) };
           if (m.section && id === 'wly0829.cn' && ['daily', 'top_pages'].includes(m.id)) {
             const b = graphBlock(m.id, m.label); b.group = m.id === 'top_pages' ? m.id : s.id; (m.id === 'top_pages' ? right : into).push(b);
-            U.html(b.head, `<b>${esc(m.label)}${window.ProjectAdditions?.metricCadence(m) || ''}</b>`);
+            U.html(b.head, `<b>${esc(m.label)}${window.ProjectAdditions?.metricCadence(m, id) || ''}</b>`);
             if (!b.chartLoaded || b.chartAt !== m.at) { b.chartLoaded = true; b.chartAt = m.at; loadGraph(b, m); }
           } else { const b = arrayBlock(m); b.group = s.id; into.push(b); }
         }
