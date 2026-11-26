@@ -509,7 +509,8 @@
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
       // 调度器预计的下一次和按周期推的原定不在同一分钟（如原定周二 00:00、预计周一 23:55）：不写“每周二 00:00”，免得和预计的日期对不上；照后台的周期原文写，再写下次预计几点
       if (est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000))
-        return `<li><b>${F(r.period)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(`下次预计 ${zhAt(r.next_estimated_at)}`)].filter(Boolean).join(' · ')}</small></li>`;
+        // 状态已经写着“等下次”时，后面写“预计 …”，不写成“等下次 · 下次预计”（r83 返修第三轮；整行等自动任务线 b2 换写法）
+        return `<li><b>${F(r.period)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(`${/下次\s*$/.test(U.fieldText(r.state_text, viewer)) ? '预计' : '下次预计'} ${zhAt(r.next_estimated_at)}`)].filter(Boolean).join(' · ')}</small></li>`;
       return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${F(r.state_text)}</small></li>`;
     };
     // Claude 只接本机执行的定时（本人 11-25 22:13 定），claude.ai 上建的不接：在 Claude 那行写明

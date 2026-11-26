@@ -28,7 +28,8 @@
   // 后台恢复说明换成人话；没对上的原样显示
   const PLAIN = [[/软件没有列出取回了哪些文件/, '没记取回了哪些文件'], [/恢复结果存在选定的还原目录旁，没有集中记录/, '从这里恢复的文件放在你选的目录旁，没有统一记录'],
     [/现有记录只覆盖文件恢复操作，离线整机还原没有可查的记录/, '离线整机还原不留记录，这里查不到']];
-  const plain = text => typeof text === 'string' ? PLAIN.find(([re]) => re.test(text))?.[1] : undefined;
+  // 访客版不对访客称“你”：“放在你选的目录旁”写成“放在本人选的目录旁”（r83 返修第三轮）
+  const plain = text => { const hit = typeof text === 'string' ? PLAIN.find(([re]) => re.test(text))?.[1] : undefined; return hit && viewer === 'public' ? hit.replaceAll('你', '本人') : hit; };
   let data = null, headline = '', lit = false, viewer = 'public';
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
