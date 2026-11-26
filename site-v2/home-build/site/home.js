@@ -273,6 +273,7 @@ function paintCell(cell, view, href, sample, quiet) {
 const down = { offline: false, hostOff: false, silent: false, paused: false };
 const lastReadings = new Map();
 let lastViewer;
+const beijingDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' });
 // 屏上的数是几点的：当天只写时刻，隔天带上月-日（北京时间）。
 function cutoffText(at, now, prefix) {
   try {
@@ -315,11 +316,19 @@ function renderScreen(data, meta, pending = false, now) {
   lastViewer = viewer;
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
+  const today = beijingDay.format(Date.parse(now) || Date.now());
+  const otherDay = (at) => {
+    const time = Date.parse(at);
+    return Number.isFinite(time) && beijingDay.format(time) !== today;
+  };
   cellTargets.forEach(([id, fallback], index) => {
     let source = data?.cells?.find((item) => item.id === id);
     let at = source?.source_at ?? source?.at ?? meta?.at;
     const waiting = source?.q === 'warming';
-    const facts = cellFacts(id, waiting || source?.q === 'unknown' ? null : source);
+    // “今天”的维护数不能沿用跨日的回包或页面内副本。其余读数继续沿用各自的上一次。
+    const maintenance = id === 'maintenance';
+    if (maintenance && otherDay(lastReadings.get(id)?.at)) lastReadings.delete(id);
+    const facts = cellFacts(id, waiting || source?.q === 'unknown' || (maintenance && otherDay(at)) ? null : source);
     const read = (entry, values, info) => id === 'ai' ? aiCellView(entry, info, owner, pending, now)
       : cellView(id, values, owner, pending || waiting, down);
     let view = read(source, facts, meta);
