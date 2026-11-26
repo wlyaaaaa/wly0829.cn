@@ -34,11 +34,11 @@
   const week = at => { const t = T.stamp(at); return t == null ? '' : `周${'日一二三四五六'[new Date(t + 8 * 3600000).getUTCDay()]}`; };
   const whenDay = at => T.dayKey(at) === T.dayKey(new Date().toISOString()) ? T.clock(at) : `${T.day(at)} ${week(at)} ${T.clock(at)}`;
   const clockRange = r => {
-    const a = r.startedAt || r.queuedAt, b = r.finishedAt;
+    const a = r.queuedAt || r.startedAt, b = r.finishedAt;
     if (!T.stamp(a)) return '';
     if (T.stamp(b)) return `${whenDay(a)}–${T.dayKey(a) === T.dayKey(b) ? T.clock(b) : whenDay(b)}`;
     // 不是正在跑、又没有结束时刻和用时（没有收尾回执）：照实写没记到结束，不写用时
-    return r.status !== 'running' && r.minutes == null ? `${whenDay(a)} 开始 · 没记到结束` : `${whenDay(a)} 起`;
+    return r.status !== 'running' && r.minutes == null ? `${whenDay(a)} 排上 · 没记到结束` : `${whenDay(a)} 排上`;
   };
   // 标题里的日期、时刻（11-23、2026-11-23、10:18）不从中间断行：只包字，不碰标签和属性
   const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])|(?<![\d:])\d{1,2}:\d{2}(?::\d{2})?(?![\d:])/g, '<span class="live-unit">$&</span>')).join('');
@@ -100,7 +100,10 @@
   }
   function tags(r) {
     const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
-    const time = [clockRange(r), minutes != null && (r.status === 'running' ? `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>` : `用了 ${span(minutes)}`)].filter(Boolean).join(' · ');
+    const whole = R.minutesBetween(r.queuedAt || r.startedAt, r.finishedAt);
+    const time = [clockRange(r), whole != null && `整轮 ${T.dec(whole)} 分钟`,
+      r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
+      r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `AI 实际 ${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
     const family = !r.who?.program && R.agentsPath(r.family);
     const who = !r.who?.text ? '' : family ? link(family, `${esc(r.who.text)} ›`) : esc(r.who.text);
@@ -372,7 +375,7 @@
     // 这一轮带入了哪些来源、各读到几点（回执的 scan）：从大标题挪到这里，单独一行（主控 11-26）
     const scan = scanOf(r), scanLine = scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '';
     if (d && !program && c.available) {
-      const m = CV.pageMeta(), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
+      const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
       const thinkGap = !locked && typeof d.field_gaps?.automation_thinking === 'string' ? d.field_gaps.automation_thinking : '';
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${m.meta.map(v => `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('')}${m.project ? `<span>所属项目 ${m.project}</span>` : ''}${tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer)}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;

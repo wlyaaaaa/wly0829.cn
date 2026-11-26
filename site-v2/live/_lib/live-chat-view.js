@@ -180,7 +180,7 @@
     }
 
     // 页头信息：型号档位、来源、第几步、各项时刻、报了几分钟、历时、实际工时、帮手几个、所属项目、App 标签
-    function pageMeta() {
+    function pageMeta({ automation = false, showElapsed = true } = {}) {
       const locked = contentLocked(chat, viewer), name = field(chat.title, chat), hiddenName = !locked && viewer === 'public' && (name.visibility === 'owner' || name.hidden), title = chatTitle(chat);
       const replyGap = Array.isArray(chat.field_gaps) ? chat.field_gaps.find(g => g.field === 'latest_reply') : chat.field_gaps?.latest_reply;
       const gapReason = typeof replyGap === 'string' ? replyGap : replyGap?.reason || replyGap?.gap;
@@ -190,15 +190,16 @@
         return [hours && `${hours} 小时`, mins && `${mins} 分`, (secs || !seconds) && `${secs} 秒`].filter(Boolean).join(' ');
       };
       const e = chat.estimate, actual = Object.hasOwn(chat, 'worked_seconds') ? chat.worked_seconds : Number.isFinite(e?.worked_min) ? Math.round(e.worked_min * 60) : null;
-      const timing = [Number.isFinite(chat.elapsed_seconds) && `历时 ${duration(chat.elapsed_seconds)}`,
-        Number.isFinite(actual) && `实际工时 ${duration(actual)}`].filter(Boolean).join(' · ');
+      const timing = [showElapsed && Number.isFinite(chat.elapsed_seconds) && `${automation ? 'AI 对话历时' : '历时'} ${duration(chat.elapsed_seconds)}`,
+        showElapsed && Number.isFinite(actual) && `实际工时 ${duration(actual)}`].filter(Boolean).join(' · ');
       const plan = planInfo(chat), log = locked ? [] : events(), end = recordEnd(log);
       const progress = locked ? plan.label || plan.count : plan.plan[plan.current] && plan.label;
       const rawReply = locked ? null : detailReply(chat);
       const hasReply = String(text(rawReply) ?? '').trim() !== '';
       const helpers = countHelpers(chat), dates = startTimes()
         .filter(([key, t]) => key !== 'session' || !title.endsWith(`${U.time(t)} 开始的对话`))
-        .map(([, t, label]) => `${label} ${when(t)}`);
+        .filter(([key, t]) => !automation || key !== 'session' || when(t) !== when(chat.turn_started_at))
+        .map(([key, t, label]) => `${automation && key === 'turn' ? 'AI 开始处理' : label} ${when(t)}`);
       if (locked && !dates.length) {
         const [start, label] = U.chatStart(chat);
         if (start) dates.push(`${label} ${when(start)}`);

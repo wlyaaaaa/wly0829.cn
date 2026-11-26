@@ -137,6 +137,7 @@
     const d = raw || {}, base = run(d, viewer), receipt = d.receipt || {};
     const site = h => typeof h === 'string' && h.startsWith('/live/') ? T.path(h) : '';
     return { ...base,
+      workedMinutes: num(d.duration_minutes),
       why: d.why_text,
       // 暂缓那一轮的“暂时不修”一步是灰点：后台对记成没做成的给 warn（这里落成灰），记成跑完的却给 ok（绿），这里一律落成灰（主控 11-25）
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
