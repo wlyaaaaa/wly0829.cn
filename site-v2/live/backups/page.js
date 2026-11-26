@@ -319,7 +319,7 @@
       const oldNote = item => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了 · ${esc(sp(item.gap).replace(/[。.]$/, ''))}</small>` : '';
       let folded = 0;
       const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
-        : `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
+        : `<span class="backup-can">能退回</span> <a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
       const own = lastRestore(g), from = g.points?.map(pt => pt.history_from).filter(Boolean).sort()[0];
       // 一条恢复记录都没有时，最上面“最近一次恢复：没有恢复过的记录”已经说了，各类下面不再各写一遍
       const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : latest ? '没有恢复过的记录' : '';
