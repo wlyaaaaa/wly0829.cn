@@ -53,7 +53,10 @@
   L.add($('hero')); U.fold($('recent-more'), $('recent-box'));
   document.querySelectorAll('#active > .part, #recent > .part').forEach(el => el.setAttribute('data-keep', ''));
   const heroRead = U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: 'AI 对话' });
-  const activeRead = U.reading($('active'), { ghost: U.ghost.rows(3), slow: false }), recentRead = U.reading($('recent'), { ghost: U.ghost.rows(4) });
+  const activeRead0 = U.reading($('active'), { ghost: U.ghost.rows(3), slow: false }), recentRead = U.reading($('recent'), { ghost: U.ghost.rows(4) });
+  // 在干的列表不在卡里：电脑连不上又没存下来时，页头卡已经写了“这块没存下来”，这一栏整栏先收起，不在卡外再写一遍、也不留没字的空卡（r83 返修）
+  const activeRead = { set(s) { const gone = !!s?.offline && s.data == null; $('active').hidden = gone; if (gone) activeRead0.done(false); else activeRead0.set(s); },
+    done(...a) { $('active').hidden = false; return activeRead0.done(...a); }, get phase() { return activeRead0.phase; } };
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
   const field = (value, item, parent) => U.chatFields.field(value, item, parent);
@@ -632,7 +635,7 @@
     fitRecent();
     U.land();
   }
-  function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), wait(text)); }
+  function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), U.offline?.() ? [] : wait(text)); }
   renderStats(null); missing('正在读'); U.list($('recent-list'), wait('正在读'));
   let first = true, activityMinute = null, homeOffline = false;
   // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页。

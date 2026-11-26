@@ -1468,7 +1468,8 @@
       html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
       const name = field(g.name, BLOCK_NAME[g.key] || '这一组', 'title');
       html(it.card.querySelector('.grp__name'), name);
-      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? gone : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
+      // 曲线没存下来、但这组上面已经有上次的读数时，只说曲线没存下来，不说整块没有（r83 返修）
+      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? (got ? '曲线没存下来，连上后补上。' : gone) : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
       it.card.classList.toggle('is-gone', missing || (!!gone && !payload) || !!g.empty);
       figures(it);
       const shown = g.cutoffIds && !g.empty && !pend(g)

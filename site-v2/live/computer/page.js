@@ -68,12 +68,13 @@
         return { set() {
         const href = computer?.stability?.href;
         if (stabilityWatch) return;
-        if (!href) { el.textContent = missing(); return; }
+        // 电脑连不上又没存下来：卡顶那行已经写了“这块没存下来”，下面不再写第二遍（r83 返修）
+        if (!href) { el.textContent = offline() && !computer?.stability ? '' : missing(); return; }
         const read = U.reading(el, { ghost: U.ghost.rows(3), name: '台式机稳不稳' });
         // 先占位再订阅：浏览器里存过这份数时 Live.watch 会当场回调 data，data 里又 renderStability → set()，不占位会重复订阅、无限递归
         stabilityWatch = true;
         stabilityWatch = window.Live.watch(href.replace(/^.*\/live\/v1\//, '').replace(/^\/__live\//, ''), null, {
-          data(d) { stabilityDetail = d; U.html(el, stabilityDetails(d)); read.done(); renderStability(); }, phase(st) { if (st.data == null) read.set(st); },
+          data(d) { stabilityDetail = d; U.html(el, stabilityDetails(d)); read.done(); renderStability(); }, phase(st) { if (st.data == null) { if (st.offline) { read.done(false); el.textContent = computer?.stability ? missing() : ''; } else read.set(st); } },
           link(st) { if (st.data == null && st.phase === 'none') { el.textContent = missing(); read.done(); } U.blockNote(el, st); },
         }); } };
       } }]);
@@ -822,7 +823,7 @@
       const chapter = card.querySelector('.grp__chapter');
       let note = chapter.querySelector('.computer-chart-end');
       if (!note) { note = document.createElement('p'); note.className = 'computer-chart-end'; note.dataset.keep = ''; chapter.prepend(note); }
-      const reason = ended ? offline() ? state?.say || missing() : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
+      const reason = ended ? offline() ? (known.length ? '曲线没存下来，连上后补上。' : state?.say || missing()) : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
       note.hidden = !known.length && (!ended || offline() && card.querySelector('.grp__said')?.textContent.includes('这块没存下来'));
       U.html(note, [...known, U.fieldHtml(reason, { name: g.name })].filter(Boolean).join('　'));
     }

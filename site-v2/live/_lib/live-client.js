@@ -480,13 +480,13 @@
     const upTo = disconnected ? resourceAt || shownUpTo() : null;
     const off = !publicPaused && hostOffline(link), silent = !publicPaused && !off && heartbeatStopped(link);
     const reason = disconnected ? linkReason(link) : '';
-    const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页没有可显示的上次数据。'}`;
+    const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页的数据没存下来。'}`;
     if (disconnected) text = line(upTo);
     if (publicPaused) text = publicPauseText;
     if (!text && e.data === null) text = e.warming ? '正在准备' : '没有记录';
     const stage = phase(e);
-    // 本块没有最后一份数据时明确说明，不承诺页面会自行补齐。
-    const say = publicPaused ? publicPauseText : stage === 'gone' ? '这一块没有可显示的上次数据。' : '';
+    // 本块没有最后一份数据时说明没存下来；全站同一句，和各页自己写的“这块没存下来，连上后补上。”一致（r83 返修：一页只用一种说法）
+    const say = publicPaused ? publicPauseText : stage === 'gone' ? '这块没存下来，连上后补上。' : '';
     const now = publicPaused ? null : disconnected ? resourceAt || upTo : e.now;
     const viewer = publicPaused ? { kind: 'public', device: 'none' } : e.viewer;
     const pairNotice = !publicPaused && e.previewOwner && viewer.kind === 'public' && viewer.device === 'invalid'
@@ -505,7 +505,8 @@
     if (publicPaused) return { stage: 'paused' };
     // 下面是几点的数，说本页主数据那一份；主数据没存下来、只有别的块有数时，不拿别的块的时刻说整页（不然横幅说“下面是几点的数据”，卡上却写没存下来）
     const main = connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
-    const rest = shownUpTo() ? ' · 只有部分块有上次的数据' : ' · 这页没有可显示的上次数据';
+    // 只在本页主数据没有时用：先说主要内容没存下来，再说哪些块还有，免得横幅说“有上次的数据”、下面主块却写没存下来（r83 返修）
+    const rest = shownUpTo() ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
     const mainAt = main && dataAt(main), atLine = mainAt ? ` · 下面是 ${shortStamp(mainAt)} 的数据` : rest;
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
       ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
@@ -763,8 +764,8 @@
     }
     if (e.data !== null || !Number.isFinite(Date.parse(at)) || e.backupMeta?.from === 'cloud') return;
     e.backupMeta = { from, at: new Date(at).toISOString() };
-    Object.assign(e, { at: e.backupMeta.at, rev: 'metadata-' + proof.audience, source: 'fallback',
-      fallbackNote: from === 'cloud' ? `云端只记了最后一份是北京时间 ${stamp(at)}，没存内容。` : `${releaseName()}只记了时刻，没存内容。` });
+    // 只记了时刻的那份：页顶那条已经说了“……只记了时刻，没存内容”，各块不再每块写一遍，只写“这块没存下来”（r83 返修）
+    Object.assign(e, { at: e.backupMeta.at, rev: 'metadata-' + proof.audience, source: 'fallback', fallbackNote: '' });
   }
   const useCloud = e => e.cloud && useBackup(e, 'cloud', e.cloud.at, e.cloud.proof, e.cloud.packet);
   async function usePackagedCopy(e) {

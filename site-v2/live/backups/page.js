@@ -325,7 +325,9 @@
     }
     if (groups.length) {
       const without = (d.sets || []).filter(s => s.name && !groups.some(g => g.set === s.id && g.points?.length)).length;
-      const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text))
+      // 只有“最近一次记录于 …”的说明不并进这句：恢复点上的这个时刻就是该恢复点自己的时间（后台按通用陈旧规则写进 gap），上面已按日期列出；
+      // 几处的时刻并成一句会写成“最近一次记录于 A；最近一次记录于 B”，看不出哪个时间是哪个
+      const seen = new Set(), notes = groups.flatMap(g => [g.gap, ...(g.points || []).map(pt => pt.gap)]).filter(text => text && !emptyWord(text) && !U.isCutoffNote(text))
         .map(text => plain(text) ? esc(plain(text)) : U.fieldHtml(text, { name: '恢复说明', kind: viewer })).filter(html => !seen.has(html) && seen.add(html));
       restored.push({ key: 'restore-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><div class="row__text">${without ? `<p class="row__sub">其余 ${without} 类没有登记恢复点。</p>` : ''}${notes.length ? `<p class="row__sub">${notes.join('；')}。</p>` : ''}</div>` });
     }

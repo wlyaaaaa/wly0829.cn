@@ -288,8 +288,10 @@
     function doneUnavailable(state) {
       if (['none', 'gone'].includes(state.phase) || state.meta?.status >= 400) {
         done.hidden = false;
+        // 没存下来时卡里只留雾里那行标题和一句话，可展开的小标题先收起，不把“近 30 天 · 做完的对话”写两遍（r83 返修）
+        disclosure.hidden = state.phase === 'gone';
         doneRead.set({ ...state, phase: state.phase === 'gone' ? 'gone' : 'none' });
-      } else if (Array.isArray(state.data?.items)) doneRead.done(false);
+      } else if (Array.isArray(state.data?.items)) { disclosure.hidden = false; doneRead.done(false); }
     }
     let baseStatus, recentStatus;
     const drawNotice = () => {
