@@ -729,10 +729,10 @@
     for (const item of rows) {
       const { until, created_at } = receipts[item.id] || {};
       const saved = { version: item.item_version, kind: item.kind, intent, until, created_at, at: Date.now() };
-      if (intent === 'ack') {
-        // 待办可能先撤下，退出记录稍后才到。只保留重摆这张已知卡所需的字段。
+      if (intent === 'ack' || intent === 'decline') {
+        // 待办可能先撤下，退出记录稍后才到。只保留重摆这张退出卡所需的字段。
         const { id, kind, text, title, project, visibility, public: audience, visitor_labels } = item;
-        saved.ack = { id, kind, text, title, project, visibility, public: audience, visitor_labels };
+        saved.exit = { id, kind, text, title, project, visibility, public: audience, visitor_labels };
       }
       all[item.id] = saved;
     }
@@ -743,7 +743,7 @@
     const hit = item && savedWrites()[item.id];
     return hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind ? hit : null;
   }
-  const savedAcknowledgements = () => Object.values(savedWrites()).filter(write => write.ack);
+  const savedItemClosures = () => Object.values(savedWrites()).filter(write => write.exit || write.ack);
   const justSaved = item => !!savedWrite(item);
   function savedReminder(item) {
     const hit = savedWrite(item);
@@ -1827,5 +1827,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, savedWrite, savedAcknowledgements, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

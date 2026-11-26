@@ -65,10 +65,12 @@
   const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
   const LANDED_KEEP_MS = 150000;
   let closedItems = [], next = null;
+  const closeThreshold = (receipt, fallback) => Date.parse(receipt?.created_at) || (fallback - 120000);
+  const hasClosed = (rows, id, kind, since) => rows.some(it => it.id === id && it.closed?.kind === kind && Date.parse(it.closed?.at) >= since);
   function landItem(item, intent, receipt) {
     // 本人 11-26 00:13：先摆上的那条只写后台回执里有的，不拿浏览器的钟算。下去的时刻用回执的 created_at（后台收下这一笔的时刻）；
     // 晚点提醒几点再提醒用回执的 until，回执没给就写“提醒时间还没确认”，等清单读回来换成后台那条
-    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? receipt?.at ?? Date.now()), saved: receipt?.at ?? Date.now(), version: item.item_version };
+    const at = receipt?.created_at || null, base = { since: closeThreshold(receipt, writeStarted.get(item.id) ?? receipt?.at ?? Date.now()), saved: receipt?.at ?? Date.now(), version: item.item_version };
     // 先摆上的“你放着”和后台那条一个样子：只留问情况、不办了和网站链接，不再挂“晚点提醒”
     if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: receipt?.until || null, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
     else if (intent === 'close_report') {
@@ -82,7 +84,7 @@
     const extra = [];
     for (const [id, w] of landed) {
       if (w.key !== key) continue;
-      const seen = key === 'closed' ? rows.some(it => it.id === id && Date.parse(it.closed?.at) >= w.since - 120000)
+      const seen = key === 'closed' ? hasClosed(rows, id, w.row.closed.kind, w.since)
         : [...collections].some(([k, c]) => k !== 'closed' && k !== 'reports' && c.items?.some(it => it.id === id && it.item_version !== w.version));
       if (seen) landed.delete(id); else extra.push(w.row);
     }
@@ -114,10 +116,10 @@
     if (reportsData) renderReports(reportsData);
     if (saved?.length) { drawClosed(); followLanded(); }
   });
-  // 还没确认的那几次（M945，主持 11-26 01:24）：读回来的退出记录里有这件、时刻不早于点的时候（留两分钟钟差），或晚点提醒的这件换了新版本到了“你放着”，就是办成了
-  const foundWrite = (item, intent, since) => intent === 'later'
+  // 已有成功回执时，核对读数是不是这一次。老回执没给后台时刻才和本机时间留钟差。
+  const foundWrite = (item, intent, receipt) => intent === 'later'
     ? collections.get('later')?.items?.find(it => it.id === item.id && !it._landed && it.item_version !== item.item_version)
-    : closedItems.find(it => it.id === (intent === 'close_report' ? item.owner_item || item.item_id || item.item || item.id : item.id) && Date.parse(it.closed?.at) >= since - 120000);
+    : hasClosed(closedItems, item.id, LANDED_KIND[intent], closeThreshold(receipt, receipt.at));
   function redrawItems() { for (const [key, c] of collections) list(key, c.items, c.empty, c.renderer, true, c.partial); balanceBoard(true); }
   $('due-sort').addEventListener('change', redrawItems);
   function dueOrder(items) {
@@ -435,7 +437,7 @@
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });
     const detail = shared && (note === shared || note.startsWith(`${shared} · `)) ? note.slice(shared.length + 3) : note;
-    return { key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${runSource(it)}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
+    return { key: it.historyKey || it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : lamp}<div class="row__text"><p class="row__main">${title}${shownMark ? `<span class="row__meta">${shownMark}</span>` : ''}<button type="button" class="more item-expand" data-text-toggle hidden aria-expanded="false">展开</button></p>${subtitle ? `<div class="row__sub">${brief(subtitle)}</div>` : ''}${detail ? `<p class="row__sub">${detail}</p>` : ''}${runSource(it)}${it.closed?.to ? `<a class="more" href="${esc(route('/live/item/?id=' + encodeURIComponent(it.closed.to)))}">看并入的事 ›</a>` : ''}</div><div class="row__acts">${actions(it)}${!closed ? checkbox(it) : ''}</div>` };
   }
   function list(key, items, empty, renderer = row, animate = true, partial = false) {
     collections.set(key, { items, empty, renderer, partial });
@@ -581,7 +583,7 @@
     if (viewer === 'owner') for (const item of rows || []) {
       const saved = U.savedWrite(item);
       if (!saved || landed.has(item.id) || Date.now() - saved.at > LANDED_KEEP_MS) continue;
-      if ((saved.intent === 'later' || LANDED_KIND[saved.intent]) && !foundWrite(item, saved.intent, Date.parse(saved.created_at) || saved.at)) {
+      if ((saved.intent === 'later' || LANDED_KIND[saved.intent]) && !foundWrite(item, saved.intent, saved)) {
         landItem(item, saved.intent, saved); restored = true;
       }
     }
@@ -654,24 +656,28 @@
   // 已关掉的事：后台标题带“当时记录：”，去掉直接说是什么事；本人版同一句关过几次的并成一条，写关过几次（本人 11-23 11:54）
   const unprefix = v => typeof v === 'string' ? v.replace(/^当时记录[：:]\s*/, '') : v && typeof v === 'object' ? { ...v, ...Object.fromEntries(['value', 'text'].filter(k => typeof v[k] === 'string').map(k => [k, v[k].replace(/^当时记录[：:]\s*/, '')])) } : v;
   function closedRows(items) {
-    const seen = new Map();
+    const seen = new Map(), ids = new Set();
     for (const raw of items) {
       // 访客版也并：看得到的同一句并成一条；仅本人可见的各算各的，件数照旧
       const it = { ...raw, text: unprefix(raw.text), title: unprefix(raw.title) }, shown = U.fieldText(it.text ?? it.title, viewer) || '';
       const hiddenRow = viewer !== 'owner' && (it.visibility === 'owner' || it.public === 'owner' || it.text?.visibility === 'owner' || /仅本人可见/.test(shown));
       const key = hiddenRow || !shown ? it.id : it.kind + '|' + shown.replace(/\s+/g, '').replace(/[。.]$/, '');
-      if (seen.has(key)) seen.get(key).repeats++; else seen.set(key, { ...it, repeats: 1 });
+      if (seen.has(key)) seen.get(key).repeats++;
+      else {
+        seen.set(key, { ...it, repeats: 1, historyKey: ids.has(it.id) ? `${it.id}:${it.closed?.at || seen.size}` : it.id });
+        ids.add(it.id);
+      }
     }
     return [...seen.values()];
   }
   function renderClosed(d, append = false) {
-    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
+    closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [`${it.id}:${it.closed?.at || ''}`, it])).values()] : d.items || [];
     let restored = false;
-    if (viewer === 'owner' && d.items != null) for (const saved of U.savedAcknowledgements()) {
-      const item = saved.ack;
+    if (viewer === 'owner' && d.items != null) for (const saved of U.savedItemClosures()) {
+      const item = saved.exit || saved.ack;
       if (Date.now() - saved.at > LANDED_KEEP_MS || project && item.project !== project || landed.has(item.id)) continue;
-      if (foundWrite(item, 'ack', Date.parse(saved.created_at) || saved.at)) continue;
-      landItem(item, 'ack', saved); restored = true;
+      if (foundWrite(item, saved.intent, saved)) continue;
+      landItem(item, saved.intent, saved); restored = true;
     }
     next = d.next;
     const partial = next != null;
