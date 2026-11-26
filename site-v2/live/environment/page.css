@@ -32,14 +32,11 @@
 .env-runtime p { margin: 0 0 12px; font-size: 16px; white-space: nowrap; }
 .env-runtime dl { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 8px 12px; margin: 0; font-size: 13px; line-height: 1.7; }
 .env-runtime dt { color: var(--muted); }.env-runtime dd { margin: 0; word-break: normal; overflow-wrap: anywhere; }
-.env-startup { list-style: none; margin: 0; padding: 0; }
-.env-startup > li { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(200px, 1.2fr) 70px 90px; align-items: baseline; gap: 20px; padding: 12px 0; border-top: 1px solid rgb(95 103 96 / .1); font-size: 14px; line-height: 1.7; }
-.env-startup > li > span { word-break: normal; overflow-wrap: normal; }.env-startup > li > span:nth-child(2) { color: var(--muted); font-size: 13px; }
-.env-path { display: contents; font-size: 12px; }.env-path > summary { white-space: nowrap; }
-.env-path code { grid-column: 1 / -1; font-size: 12px; white-space: pre-wrap; word-break: normal; overflow-wrap: anywhere; color: var(--muted); }
 .env-scope { margin-top: 16px; margin-bottom: 0; }
-
-.env-path-text { grid-column: 1 / -1; font: inherit; font-size: 14px; overflow-wrap: anywhere; color: var(--muted); }
+/* 开机启动挪到自启动页后，原处只留这一行 */
+.env-moved { margin: 18px 0 0; padding: 0; border-radius: 16px; font-size: 15px; line-height: 22px; }
+.env-moved a { display: block; padding: 16px 28px; border-radius: inherit; color: var(--ink-soft); text-decoration: none; transition: background .2s ease, color .2s ease; }
+.env-moved a:hover { background: rgb(255 255 255 / .5); color: var(--ink); }
 .env-table { font-size: 14px; line-height: 1.8; border-radius: 12px; background: rgb(255 255 255 / .35); }
 .env-table th, .env-table td { padding: 12px 14px; }
 .env-table th { font-size: 13px; color: var(--ink-soft); }
@@ -48,8 +45,6 @@
 .env-details > summary::-webkit-details-marker { display: none; }
 .env-details > summary::after { content: " ›"; display: inline-block; margin-left: 8px; }
 .env-details[open] > summary::after { transform: rotate(90deg); }
-
-.env-startup > li > .env-program { min-width: 0; overflow-wrap: anywhere; }
 
 .env-table td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .env-table td:last-child .lamp--sm {
@@ -67,6 +62,63 @@
 #hero.is-unread .card__glass { min-height: 0; padding: 0; }
 
 #board .grp.is-open .grp__head { min-height: 76px; padding-block: 12px; }
+/* 软件版本表按“要不要你管”分组（照图 ENV-1）：组名一行带竖条，要你点头的那组用正绿 */
+.env-table.env-table--versions th:first-child { width: 18%; }
+.env-table.env-table--versions th:nth-child(2), .env-table.env-table--versions th:nth-child(3) { width: 15%; }
+.env-table.env-table--versions th:nth-child(4) { width: 18%; }
+.env-table--versions td:nth-child(4) { white-space: normal; overflow: visible; }
+.env-table.env-table--versions th:last-child { width: auto; }
+.env-table--versions td:last-child { white-space: normal; overflow: visible; }
+.env-nw { white-space: nowrap; }
+.env-missing { color: var(--muted); }
+.env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 10px 18px; font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 5px 0 0 rgb(0 166 80 / .5); border-top: 6px solid transparent; background-clip: padding-box; }
+.env-table .env-group__head th span { letter-spacing: .02em; }
+.env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .13); box-shadow: inset 5px 0 0 #00A650; }
+.env-group[data-group="behind"] .env-group__head th { background-color: rgb(236 150 40 / .1); box-shadow: inset 4px 0 0 rgb(226 140 30 / .8); }
+.env-group[data-group="other"] .env-group__head th { background-color: rgb(95 103 96 / .07); box-shadow: inset 4px 0 0 rgb(95 103 96 / .35); }
+.env-table--versions tbody tr:nth-child(even) { background: transparent; }
+.env-more-row td { padding-top: 6px; padding-bottom: 6px; }
+.env-more-row .more { margin-left: 0; translate: none; }
+/* 日用软件（照图 ENV-2）：三列小卡，最近 7 天换过版本的那句用正绿 */
+.env-sub { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 30px 0 12px; font-size: 15px; color: var(--ink-soft); }
+.env-sub b { font-size: 18px; font-weight: 600; color: var(--ink); }
+.env-sub span { margin-left: 14px; font-size: 13px; color: var(--muted); }
+.env-apps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; }
+.env-app { display: grid; align-content: start; gap: 2px; min-width: 0; padding: 14px 20px; border: 1px solid rgb(95 103 96 / .1); border-radius: 14px; background: rgb(255 255 255 / .55); font-size: 14px; line-height: 1.6; }
+.env-app b { font-size: 16px; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.env-app span { color: var(--muted); overflow-wrap: anywhere; }
+.env-app .env-app__change.is-recent { color: #00A650; font-weight: 600; }
+.env-daily .more { margin: 10px 0 0; translate: none; }
+/* 命令环境：不影响的那句整句灰下去 */
+.env-differences li.is-quiet { color: var(--muted); }
+/* 近 N 天变化（照图 ENV-4）：日期、彩色小标签、人话名、版本；系统组件和驱动零件每天合成一行灰字 */
+.env-changes { margin-top: 18px; }
+.env-ch-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 22px; margin: 4px 0 14px; }
+.env-ch-title b { font-size: 27px; font-weight: 700; color: var(--ink); }
+.env-ch-title span { font-size: 15px; color: var(--muted); }
+.env-chs { list-style: none; margin: 0; padding: 0; }
+.env-ch { display: grid; grid-template-columns: 74px 66px max-content minmax(0, 1fr); align-items: center; column-gap: 20px; padding: 9px 0; font-size: 17px; line-height: 1.6; }
+.env-ch__date { color: var(--muted); font-variant-numeric: tabular-nums; }
+.env-ch__tag { justify-self: start; padding: 2px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; line-height: 22px; letter-spacing: .04em; background: rgb(95 103 96 / .12); color: var(--ink-soft); }
+.env-ch__tag[data-kind="up"] { background: rgb(0 166 80 / .14); color: #00843f; }
+.env-ch__tag[data-kind="new"] { background: rgb(65 153 182 / .16); color: #2b7690; }
+.env-ch__tag[data-kind="down"] { background: rgb(236 150 40 / .16); color: #a8620c; }
+.env-ch__name { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.env-ch__ver { color: var(--muted); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.env-ch--quiet { grid-template-columns: 74px minmax(0, 1fr); align-items: start; }
+.env-ch--quiet > .env-ch__date { padding-top: 8px; }
+.env-ch__fold > summary { position: relative; display: block; padding: 8px 48px 8px 18px; border-radius: 12px; background: rgb(95 103 96 / .07); color: var(--muted); cursor: pointer; list-style: none; transition: background .2s ease; }
+.env-ch__fold > summary::-webkit-details-marker { display: none; }
+.env-ch__fold > summary::after { content: "›"; position: absolute; right: 20px; top: 50%; font-size: 18px; line-height: 1; transform: translateY(-55%); transition: transform .2s ease; }
+.env-ch__fold[open] > summary::after { transform: translateY(-55%) rotate(90deg); }
+.env-ch__fold > summary:hover { background: rgb(95 103 96 / .11); }
+.env-ch__fold > ul { list-style: none; margin: 6px 0 2px; padding: 0; }
+.env-ch--sub { grid-template-columns: 0 66px max-content minmax(0, 1fr); padding: 4px 0 4px 18px; font-size: 15px; }
+.env-ch--sub .env-ch__tag { padding: 0 12px; font-size: 13px; }
+.env-ch--sub .env-ch__name { font-weight: 400; color: var(--ink-soft); }
+.env-ch-more { margin: 18px 0 6px; text-align: center; }
+.env-ch-more .more { height: 44px; margin: 0; padding: 0 34px; translate: none; background: rgb(0 166 80 / .12); color: #00843f; font-size: 16px; font-weight: 600; }
+.env-ch-more .more:hover { background: rgb(0 166 80 / .2); color: #006f35; }
 
 .env-differences li > .lamp { position: absolute; left: -26px; }
 .env-table th:first-child, .env-table td:first-child { padding-left: 0; width: 22%; }
