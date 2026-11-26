@@ -103,9 +103,9 @@
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
   // 同一时刻只说一次（M746）：顶栏固定在屏幕顶上，已写“HH:MM 读到”；卡里的“截至”跟它（或这张卡已写的）同一分钟就不写，不一样才写这张卡自己的时刻
-  let barAt = null;
+  let shownCutoffs = [];
   const minuteOf = at => { const t = T.stamp(at); return t == null ? null : Math.floor(t / 60000); };
-  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [barAt, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
+  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [...shownCutoffs, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
   const ruleVer = (v, label = esc(v), cls) => v ? link('/rules/', label, cls) : '';   // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”）
   // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
   const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
@@ -517,9 +517,10 @@
       page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
       return;
     }
-    // 顶栏已写同一分钟的“读到／最后一份”，大标题区和各卡就不再写同一分钟的“截至”；分钟不一样才写（M746）
-    barAt = state.offline ? state.cutoffAt : state.shownAt;
+    // 顶栏或连接提示已写这一页读到的时刻；别的块的离线时刻不能代替本页的统计截至（M746）。
+    shownCutoffs = [state.shownAt];
     const headAt = asof(d.at);
+    if (headAt) shownCutoffs.push(d.at);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
