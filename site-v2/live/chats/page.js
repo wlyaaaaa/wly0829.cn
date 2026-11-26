@@ -1,5 +1,5 @@
-// 第二层：上半截总的情况和统计；下半截第一排“在干｜等你”并排（别的状态有对话才出来，补到矮的那栏），下面整行列近 72 小时已结束。
-// 在干、等你每栏先 5 张；已结束的每组先露一整排；其余展开；点名字或“看完整对话”进入详情。
+// 第二层：上半截总的情况和统计；下半截第一排“在干｜等你”并排（别的状态有对话才出来，补到矮的那栏），旧回包在下面整行回看近 72 小时。
+// 在干、等你每栏先 5 张；回看每组先露一整排；其余展开；点名字或“看完整对话”进入详情。
 (() => {
   'use strict';
   const U = window.LiveUI, L = window.LiveLight, $ = id => document.getElementById(id), { esc, sp } = U;
@@ -24,7 +24,7 @@
   waitingCard.el.hidden = true;
   const doneCard = recentBoard.card('done', { icon: 'check', tint: 'lilac', art: 'done', ids: { el: 'recent', title: 'recent-title', sub: 'recent-sub', main: 'recent-list', rest: 'recent-rest', more: 'recent-more', box: 'recent-box', next: 'recent-next' } });
   doneCard.el.querySelector('.lb-card__head').setAttribute('data-keep', ''); doneCard.el.insertAdjacentHTML('beforeend', '<p class="pj-note lb-card__note" id="recent-note"></p>');
-  const recentTitle = '<b>近 72 小时已结束</b>';
+  const recentTitle = '<b>近 72 小时回看</b>';
   U.html($('recent-title'), recentTitle);
   // 卡里的帮手先露在做和出错的前 5 个，其余每点一次再放 5 个
   function helperButton(left, first) {
@@ -673,7 +673,7 @@
     const low = height[0] < height[1] ? 0 : 1, gap = Math.abs(height[0] - height[1]);
     if (last[0] && last[1] && gap >= 1) last[low].style.minHeight = `${last[low].getBoundingClientRect().height + gap}px`;
   }
-  // 近 72 小时已结束占整行、排成几列：每组先露一整排（这一排放得下几个就露几个），多的进“展开”；换了窗口宽重新算（M534）
+  // 回看包含已结束和没读到结局的对话。每组先露一整排，多的进“展开”；换了窗口宽重新算（M534）
   let recentRows = new Map(), recentCols = 3;
   function fitRecent() {
     if (boardOf()) return;
@@ -688,9 +688,11 @@
   $('recent-more').addEventListener('click', () => requestAnimationFrame(fitRecent));
   if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('recent-list'));
   function renderRecent() {
-    if (boardOf()) { $('recent').hidden = false; if (recentUsable || baseBoard) recentRead.done(); return; }
+    const recentBoardData = boardOf();
+    U.html($('recent-link'), recentBoardData ? '72 小时内已归档的 ›' : '近 72 小时回看 ›');
+    if (recentBoardData) { $('recent').hidden = false; if (recentUsable || baseBoard) recentRead.done(); return; }
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
-    if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('最近结束的对话暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
+    if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('近 72 小时的回看暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
     if (recentWarming) { U.list($('recent-list'), wait('正在准备')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
     const { rows, at, total, count, label } = recentEvidence();
     const sections = [['done', '做完的', ['done']], ['interrupted', '没做完就停了', ['stopped', 'failed']],
@@ -703,7 +705,7 @@
       ...rows.map((row, i) => ({ ...row, i, cls: i < recentCols ? row.cls : `${row.cls} chat-ended-extra` }))] : []);
     recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, i: row.i }]));
     U.html($('recent-title'), recentTitle + (label ? `<span class="lb-card__count">${esc(label)}</span>` : ''), false);
-    U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有结束的对话'
+    U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有可回看的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
     U.list($('recent-rest'), []);
     U.html($('recent-note'), esc(total != null && total > count ? `已列出 ${count} 个` : '') + (pages.get('')?.hidden ? ` ${U.hiddenMore?.(pages.get('').hidden, '场', pages.get('').hidden_what || '对话') || ''}` : ''));
