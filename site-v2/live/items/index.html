@@ -24,6 +24,9 @@
 .page--items .item-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .page--items .row__sub>.item-bit { display: inline; }
 .page--items .item-bit+.item-bit:before { content: ' · '; }
+/* 时刻、“约 N 分钟”这类不断开的短段（item-keep）原来是行内块，连同前面的“ · ”粘住前一个字一起折，剩“微／信”“到／了。”这种断法；改成行内不断开、“ · ”处可以折 */
+.page--items .row__sub > .item-keep { display: inline; }
+.page--items .row__sub > .item-bit + .item-keep::before { white-space: normal; }
 /* 收起时一行：截的是字，句尾“›”一直露在外面，看得出能展开（M679） */
 .page--items .brief > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 4px; min-width: 0; }
 .page--items .brief > summary > .brief__text { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -41,10 +44,20 @@
 @container (max-width: 859px) { .page--items #groups #closed[data-wide] .lb-item > .row__acts { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin: 6px 0 0; padding-left: 0; } }
 @container (max-width: 439px) { .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
 @container (max-width: 259px) { .page--items #groups .lb-item > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 6px 8px; max-width: 100%; } }
+/* 同上那种窄卡里带绿色“去办”按钮的一行：按钮间距、内边距和勾选框各收一点，勾选框跟在“晚点提醒”后面，不单独掉一行 */
+@container (max-width: 439px) {
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) { column-gap: 6px; }
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) > [data-slot="go"] { margin-right: 0; }
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) .btn { padding: 0 9px; }
+  .page--items #groups .lb-card:has([data-slot="later"]) .lb-item > .row__acts:has(> [data-slot="go"]):has(> [data-slot="pick"]) > [data-slot="pick"] { width: 22px; }
+}
 .page--items #hero .card__glass { min-height: 0; padding: 20px 26px; }
 .page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
 .page--items .lb-card__title { display: block; letter-spacing: 0; }
 .page--items .lb-card__title .lb-count { white-space: nowrap; }   /* 窄窗时卡头标题括号那段（几件）不拆开，不剩一个“件）”单独一行 */
+/* 卡窄到卡头说明一行放不下时（卡头内宽约 590 以下）：说明换行写全、不收成一行“…”，字停在右边插画淡入的地方，不压到画上；宽卡不变 */
+.page--items .lb-card__head { container-type: inline-size; }
+@container (max-width: 589px) { .page--items .lb-card__words { padding-right: 45%; } .page--items .lb-card__sub { -webkit-line-clamp: unset; } }
 .page--items .lb-card__more { display: block; text-align: center; }
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }

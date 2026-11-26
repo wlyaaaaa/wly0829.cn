@@ -55,6 +55,8 @@
 .page--notifications .notify-problems { color: var(--ink, #2b2a27); }
 .page--notifications .notify-problems .more { margin-left: 4px; }
 .page--notifications .notify-meaning { font-size: 13px; color: var(--muted); }
+/* 这段说明（含“怎么发”）比上面几句长、会一直排到右边画里：右边让出画窗的四成，字停在画淡入之前 */
+.page--notifications .notify-meaning { padding-right: calc(var(--win) * .4); }
 #attention .stut__w { display: grid; gap: 2px; }
 #attention .notify-what { font-weight: 600; }
 .page--notifications .notify-why { color: var(--ink-soft, #55524b); }

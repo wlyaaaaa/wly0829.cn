@@ -1458,17 +1458,20 @@
     function paint(it) {
       if (it.g.private_count) { it.card.classList.add('grp--private'); html(it.card.querySelector('.grp__said'), window.LiveUI.privateSummary(it.g.private_count)); return; }
       const g = it.g, warn = !opts.quiet && (g.level === 'red' || g.level === 'yellow');
-      const got = g.figures?.some((f) => !!figValue(f, g)) || g.chips?.some((c) => c.value != null || ids(c).some((id) => payload?.series?.find((s) => s.id === id)?.points?.some((p) => p[1] != null))) || g.blocks?.some((b) => !b.empty && !b.wait);
+      // hasOther：页面说这组卡里另有上次的读数（比如网络卡的海外流量、连得上吗），曲线没存下来时只说曲线（r83 返修第二轮）
+      const got = (typeof g.hasOther === 'function' ? g.hasOther() : !!g.hasOther) || g.figures?.some((f) => !!figValue(f, g)) || g.chips?.some((c) => c.value != null || ids(c).some((id) => payload?.series?.find((s) => s.id === id)?.points?.some((p) => p[1] != null))) || g.blocks?.some((b) => !b.empty && !b.wait);
       const missing = isOffline() && (g.empty || !got && (g.wait || !g.build));
       if (pend(g) && !it.reads.length) { it.lineRead = fog(it, it.card.querySelector('.grp__line'), PEND_NOTE); if (it.built) fog(it, it.card.querySelector('.grp__chapter'), CHAPTER_GHOST); }
       if (payload && g.wait) for (const r of it.reads) r.set({ phase: 'wait' });
       it.card.dataset.level = g.level || 'ok';
       it.card.style.setProperty('--grp-a', color((g.palette || [])[0] || 'teal'));
       it.card.style.setProperty('--grp-b', color((g.palette || [])[1] || (g.palette || [])[0] || 'violet'));
-      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
+      // 电脑连不上时组灯一律灰（和各卡小灯一样），不拿上次的判断亮绿（r83 返修第二轮）
+      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(isOffline() && g.level && g.level !== 'none' ? { level: 'gray' } : g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
       const name = field(g.name, BLOCK_NAME[g.key] || '这一组', 'title');
       html(it.card.querySelector('.grp__name'), name);
-      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? gone : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
+      // 曲线没存下来、但这组上面已经有上次的读数时，只说曲线没存下来，不说整块没有（r83 返修）
+      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? (got ? '曲线没存下来，连上后补上。' : gone) : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
       it.card.classList.toggle('is-gone', missing || (!!gone && !payload) || !!g.empty);
       figures(it);
       const shown = g.cutoffIds && !g.empty && !pend(g)

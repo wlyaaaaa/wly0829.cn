@@ -372,6 +372,12 @@
     // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
     // 下面卡片的点分颜色：绿点跑完、红点没做成、灰点暂时不修。只看没做成的时写“没做成的”
     const doneWhat = `${filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
+    // 下面实际有几种结局，标题下面一行照几种写：各带“的”、最后一种用“和”接（“有跑完的和没做成的”），看得出是两类，不读成“跑完了但没做成”（r83 返修，主控 g4 第 2 条）。
+    // 标题仍和按钮同一个叫法，所以这句写在标题下面；只有一种、又正好是标题那种时不写
+    const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
+    const kindNames = doneKinds.map(k => `${k}的`), dots = { 跑完: '绿点跑完', 没做成: '红点没做成', 暂时不修: '灰点暂时不修' };
+    const kindsNote = doneKinds.length && !(kindNames.length === 1 && kindNames[0] === doneWhat)
+      ? `<p class="tp-small au-kindsnote">这里是已经结束的轮次，有${kindNames.length > 1 ? `${kindNames.slice(0, -1).join('、')}和${kindNames.at(-1)}` : kindNames[0]}：${doneKinds.map(k => dots[k]).join('，')}。</p>` : '';
     const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     // 按钮和标题上的数是轮数（后台两张列表的 total），自动修理同一件的几轮收在一张卡里，卡片张数会少：都读完了、张数确实少时，标题下面说一句（复查挑过对不上）
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
@@ -379,7 +385,7 @@
     const excerpt = excerptToday?.data && known(excerptToday.data.total) ? `摘一句不在这里列，今天摘了 ${int(excerptToday.data.total)} 句。` : '';
     const left = v.done.length - doneShown;
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
-    return legacy + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished ?? v.done.length, v.done.length ? rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
+    return legacy + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished ?? v.done.length, v.done.length ? kindsNote + rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
       filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + capped + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
   }
   // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
@@ -619,6 +625,8 @@
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
     const hosts = ['Claude', 'Codex', 'Antigravity'];
     for (const r of rows) if (r.producer && !hosts.includes(r.producer)) hosts.push(r.producer);
+    // 定时的名字只有一个数字（如 Codex、Antigravity 里叫“1”的那个）时，写成“名为“1”的定时”，不单摆一个看不出是什么的数字
+    const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     // 上次跑：定时唤醒的那一场对话（后台 last_wake：时刻、对话标题、对话链接），点回原对话（M921“跑完能找回原对话”）；
     // 访客看不到的那场后台给标题“仅本人可见”、链接为空，照写
     const wake = r => {
@@ -629,13 +637,13 @@
     };
     const item = r => {
       const when1 = plan(r);
-      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small>${wake(r)}</li>`;
+      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, label(r))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small>${wake(r)}</li>`;
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
       // 不然“每周二 00:00”后面跟一句“预计 11 月 30 日 23:55”（早 5 分钟跨过半夜成了周一）读着像矛盾（复查 11-26）
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
       const off = est != null && nominal != null ? Math.round((est - nominal) / 60000) : 0;
       const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
-      return `<li><b>${esc(when1)}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
+      return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍
     const scope = {};
