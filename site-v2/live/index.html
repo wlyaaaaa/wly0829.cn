@@ -238,6 +238,7 @@
 .page--live #phone .card__note > .btn { flex: none; }
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
 .page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
 .page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
