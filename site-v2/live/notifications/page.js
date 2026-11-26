@@ -453,7 +453,9 @@
     U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几次 ›</a>`:'');
     U.html($('latest'),row?`最近一次：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
     const attentionNote=$('attention-note');
-    U.html(attentionNote,[header.note].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
+    // 后台在读数停了、停之前是红灯时写“最后读到 11-25 11:43 时通知发送失败”（时刻是那次告警的时刻），读着不知道在说什么：显示时改成说红灯从哪来
+    const redNote=typeof header.note==='string'?header.note.replace(/^最后读到 ((?:\d{2}-\d{2} )?\d{2}:\d{2}) 时/,'亮红灯是因为 $1 记到'):header.note;
+    U.html(attentionNote,[redNote].filter(Boolean).map(line=>`<span>${line}</span>`).join(''));
     attentionNote.hidden=!attentionNote.innerHTML;
     U.html($('coverage-note'),coverageNotes.map(v=>typeof v==='string'?esc(plainGap(v)):shown(v,'记录范围')).filter(Boolean).join(' · '));
     $('coverage-note').hidden=!$('coverage-note').innerHTML;
