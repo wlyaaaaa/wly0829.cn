@@ -227,20 +227,21 @@
   // —— 一段的几种行 ——
   // 卡里一个读数只露读数和一句解释（note）；口径、截止、取数日期放进 extra，由 fill 合进这一张卡的“说明”
   const plain = html => String(html).replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
-  function lineOf(m, v) {
+  function lineOf(m, v, arrow = '') {
     const p = subPieces(m), desktop = id === 'pcconfig' && m.id === 'remote' ? window.ProjectAdditions?.desktopNote(m, projectViewer, lower) : '';
     // “这件事最后一次发生”的那一句（LiveProjectMoments）：一张卡里几项同一句时写在卡底一次（moment_shared），否则跟在这一项下面
     const moment = m.moment && !m.moment_shared ? U.fieldHtml(m.moment, { name: '读数说明', kind: projectViewer }) : '';
     // 同处标一次：读数本身已挂了“对外换了说法／访客看不到”签，下面那句不再挂第二个
     const line = [!(v && /\blive-mark\b/.test(v.html)) && p.mark, desktop && esc(desktop), p.lead].filter(Boolean).join(' · ');
-    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m, id), extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
+    return { line, moment, desktop, cadence: window.ProjectAdditions?.metricCadence(m, id, arrow) || arrow, extra: p.all.filter(x => x !== p.lead), labelText: metricText(m.label || '') };
   }
   // 后台在读数名上标了 visitor_labels.label 的（访客看到的名字换过说法，或看不到），名字旁挂现有的小签；名字能点时挂在链接外面
   const labelTag = m => U.visitorLabel(m, 'label', '这一项的名称', projectViewer);
+  const metricArrow = '<span class="more__chev">›</span>';
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v);
-    const tag = labelTag(m), label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${href ? '' : tag}${cadence || ''}${href ? ' <span class="more__chev">›</span>' : ''}</span>`;
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
+    const tag = labelTag(m), label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${href ? '' : tag}${cadence}</span>`;
     return {
       key: m.id, extra, labelText,
       cls: `pj-fig${v.long ? ' pj-fig--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
@@ -249,12 +250,12 @@
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v);
-    const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + (cadence || ''), tag = labelTag(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
+    const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + cadence, tag = labelTag(m);
     return {
       key: m.id, extra, labelText,
       cls: `pj-kv__row${v.long || v.plain.length > 9 ? ' pj-kv__row--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label} <span class="more__chev">›</span></a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
+      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label}</a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
     };
   }
   // 状态文字沿用原说法，灯只照后端 level 画。
@@ -1077,7 +1078,7 @@
   function heroCells(d) {
     // 读数是一整句话（超过 12 个字）的那一格占两格宽、照正文字号写，不当大号粗体数字。
     const sentence = text => [...String(text || '')].length > 12;
-    const cell = (label, v, { sub = '', title = '', href = '', kind = '', wide = false } = {}) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell${wide ? ' pj-cell--wide' : ''}"${title ? ` title="${esc(title)}"` : ''}><span class="pj-cell__k">${label}${href ? '<span class="more__chev">›</span>' : ''}</span><span class="pj-cell__v${kind ? ` is-${kind}` : ''}">${v}</span>${sub ? `<small class="pj-cell__sub" title="${esc(plain(sub))}">${sub}</small>` : ''}</${href ? 'a' : 'div'}>`;
+    const cell = (label, v, { sub = '', title = '', href = '', kind = '', wide = false, arrow = href ? metricArrow : '' } = {}) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell${wide ? ' pj-cell--wide' : ''}"${title ? ` title="${esc(title)}"` : ''}><span class="pj-cell__k">${label}${arrow}</span><span class="pj-cell__v${kind ? ` is-${kind}` : ''}">${v}</span>${sub ? `<small class="pj-cell__sub" title="${esc(plain(sub))}">${sub}</small>` : ''}</${href ? 'a' : 'div'}>`;
     const head = [], tail = [], h = d.headline;
     const readingLabel = label => {
       const text = U.fieldHtml(label, { name: '读数', place: 'label' });
@@ -1097,11 +1098,11 @@
       head.push(cell(m?.label ? readingLabel(m.label) + (cadence || '') : '现在', esc(words), { kind: 'text', wide: sentence(words), sub: id === 'agents' && h.id === 'release' && h.at ? esc(`${stamp(h.at)} 生效`) : esc(desktop || ''),
         href: id === 'agents' && h.id === 'release' && ruleVersion(h.value ?? h.text) ? RULES : '' }));
     } else if (typeof h === 'string' && headline(d)) {
-      const v = value(m), { line: said, moment, cadence } = lineOf(m, v), line = [said, moment].filter(Boolean).join(' · ');
+      const href = metricHref(m), v = value(m), { line: said, moment, cadence } = lineOf(m, v, href ? metricArrow : ''), line = [said, moment].filter(Boolean).join(' · ');
       // 读数是一句字、超过 11 个字的（“10-04（52 天前）”，项目页卡 is-long 也从 11 个字起）：和整句读数一样占两格、一行写全，不截成“10-04（5…”
       const words = v.long || /class="pj-text"/.test(v.html) && [...v.plain].length > 11;
       const wrap = id === 'video-scaffold' && m.id === 'films' || id === 'pc-panel-hub' && m.id === 'updated';
-      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : wrap ? 'wrap' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
+      head.push(cell(readingLabel(m.label) + cadence, v.html, { kind: words ? 'text' : wrap ? 'wrap' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href, arrow: '', sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
       const cutoff = d.changes7_stale && d.changes7_at && esc(`上次记录截至 ${stamp(d.changes7_at)}`);
@@ -1209,7 +1210,7 @@
     // 后台说了为什么没数（changes7_gap）就只写原因，不再前面摆“没有记录”；数没核全（changes7_complete 为 false）写“至少”
     const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : `${d.changes7_complete === false ? '至少 ' : ''}${num(d.changes7)} 次`, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).join(' · ');
     const impactNote = !window.ProjectAdditions?.personalDetail(id) && Number.isFinite(d.changes7) && Number.isFinite(d.changes7_missing_note)
-      ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在下面。</small>' : '';
+      ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在<span class="pj-no-split">下面。</span></small>' : '';
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');

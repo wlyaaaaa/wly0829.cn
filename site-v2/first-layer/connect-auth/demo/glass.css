@@ -326,6 +326,7 @@ body {
   transition: color .9s ease;
 }
 .cell:not(.is-on):not(.is-private) .cell__name { color: #a9a79f; }
+#cell-ur .cell__name { white-space: nowrap; font-size: clamp(22px, 2.7vw, 28px); }
 
 .cell__state {
   margin: 6px 0 0;
@@ -339,6 +340,7 @@ body {
 }
 .cell:not(.is-on):not(.is-private) .cell__state { color: #b0aea6; }
 .cell__observation.is-old { color: var(--muted); }
+.cell__observation > span { white-space: nowrap; }
 
 .cell__acts {
   display: flex;

@@ -57,20 +57,25 @@
     'work-delivery-copilot', 'emerald-veil', 'typora-theme-pack', 'wlyaaaaa',
   ]);
   const personalDetail = id => personalDetailIds.has(id);
-  function metricCadence(m, id) {
+  function metricCadence(m, id, arrow = '') {
     const cadence = m?.cadence, seconds = m?.refresh_seconds;
     if (!personalDetail(id)) {
       const hasInterval = Number.isFinite(seconds) && seconds > 0;
       const minutes = hasInterval && Number((seconds / 60).toFixed(2));
-      const measured = seconds === 60 ? '每分钟量一次' : seconds < 60 ? `每 ${seconds} 秒量一次` : `每 ${minutes} 分钟量一次`;
-      const detail = cadence === 'completion' ? '每次做完才更新'
-        : hasInterval && cadence === 'sample' ? measured
-        : hasInterval && !cadence ? `网页每 ${minutes} 分钟刷新一次，内容不一定变` : '';
-      if (detail) return `<small class="pj-cadence pj-cadence--wrap">${e(detail)}</small>`;
+      if (cadence === 'completion') {
+        return `<span class="pj-no-split"><small class="pj-cadence pj-cadence--wrap">每次做完才更新</small>${arrow}</span>`;
+      }
+      if (hasInterval && cadence === 'sample') {
+        const measured = seconds === 60 ? '每分钟量一次' : seconds < 60 ? `每 ${seconds} 秒量一次` : `每 ${minutes} 分钟量一次`;
+        return `<small class="pj-cadence pj-cadence--wrap">${e(measured)}</small>${arrow}`;
+      }
+      if (hasInterval && !cadence) {
+        return `<small class="pj-cadence pj-cadence--wrap"><span class="pj-no-split">网页每 ${minutes} 分钟刷新一次，</span><wbr><span class="pj-no-split">内容不一定变</span></small>${arrow}`;
+      }
     }
     const names = { live: '实时更新', sample: '定时测量', hourly: '每小时更新', daily: '每天更新', nightly: '每晚更新', weekly: '每周更新', monthly: '每月更新', manual: '手动更新', on_change: '变更时更新' };
     const text = Object.hasOwn(names, cadence) ? names[cadence] : typeof cadence === 'string' && /\p{Script=Han}/u.test(cadence) ? cadence : '';
-    return text ? `<small class="pj-cadence">${e(text)}</small>` : '';
+    return (text ? `<small class="pj-cadence">${e(text)}</small>` : '') + arrow;
   }
   function weekly(data) {
     if (!data?.items?.length) return null;

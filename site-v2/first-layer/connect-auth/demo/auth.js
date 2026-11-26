@@ -64,8 +64,15 @@
     const freshRead = own && online && meta.source === 'net' && Math.abs(clock() - own / 1000) <= 120;
     const text = Number.isFinite(at) ? window.Live.stamp(at) : '';
     const note = document.createElement('span');
+    const reading = document.createElement('span');
     note.className = text && !freshRead ? 'cell__observation is-old' : 'cell__observation';
-    note.textContent = freshRead ? text.slice(-5) + ' 读到' : text ? '最后读到 ' + text : '没读到是几点的';
+    if (text && !freshRead) {
+      const prefix = document.createElement('span');
+      prefix.textContent = '最后读到';
+      note.append(prefix, ' ');
+    }
+    reading.textContent = freshRead ? text.slice(-5) + ' 读到' : text || '没读到是几点的';
+    note.append(reading);
     return note;
   }
   const fresh = key => {

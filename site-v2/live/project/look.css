@@ -90,6 +90,7 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-hero-fold .pj-facts { margin: 10px 0 2px; }
 .pj-hero-fold .pj-facts .kv__row { grid-template-columns: 0 108px minmax(0, 1fr); }
 .pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
+.pj-no-split { display: inline-block; white-space: nowrap; }
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
@@ -334,7 +335,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 #site-visitors .pj-note { overflow-wrap: anywhere; }
 .page--project .pj-card :is(.knowledge-prose small, .pj-viz > .pj-note) { color: #68665f; }
 .pj-cadence { margin-inline-start: 0.5em; color: #68665f; font-size: 12px; font-weight: 400; white-space: nowrap; }
-.pj-cadence--wrap { white-space: normal; }
+.pj-cadence--wrap { white-space: normal; word-break: keep-all; overflow-wrap: normal; }
 /* 卡里的排行长条（技能使用、被打开最多的页……）做成整行的胶囊：浅底槽＋按比例铺开的颜色，名字压在胶囊里（照样子图） */
 .page--project .pj-card .vz-rank--pill .vz-rank__row { padding: 7px 14px; margin: 5px 0; }
 .page--project .pj-card .vz-rank--pill .vz-rank__bar { inset: 0; height: auto; border-radius: 999px; overflow: hidden; background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 1px rgb(30 30 30 / .05); }
