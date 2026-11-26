@@ -205,10 +205,10 @@
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="ask"] { grid-column: ask; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="close"] { grid-column: close; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="later"] { grid-column: later; margin-right: 0; }
-/* 这件没有绿色“去办”时，“问情况”从最左边起，后面几颗跟着往左挪，不在左边空出一颗按钮的宽（r83 返修第二轮） */
-.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="ask"] { grid-column: go; }
-.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="close"] { grid-column: ask; }
-.page--live #needs [data-part="main"] > .row > .row__acts:not(:has(> [data-slot="go"])) > [data-slot="later"] { grid-column: close; }
+/* 别的件有绿色“去办”、这件没有时：这件的按钮不跟别的行对列，“问情况”从最左边起，后面几颗紧跟着排，间距照旧 8px（r83 返修第三轮）。
+   上一轮只把每颗挪进前一列，列宽还按别的行（去办那一列按“登录脉脉”定宽），空当挪到了“问情况”和“不办了”中间，“晚点提醒”还把那一列撑宽、带去办的几行跟着右移。
+   整张卡都没有去办时照旧对列（去办那一列不占地方）。 */
+.page--live #needs [data-part="main"]:has(> .row > .row__acts > [data-slot="go"]) > .row > .row__acts:not(:has(> [data-slot="go"])):has(> [data-slot]) { display: flex; flex-wrap: wrap; align-items: center; row-gap: 6px; }
 .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="pick"] { grid-column: end; }
 .page--live #needs [data-part="main"] > .row > .row__acts > :not([data-slot]) { grid-column: 1 / -1; grid-row: 2; }
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
