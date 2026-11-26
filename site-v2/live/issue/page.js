@@ -73,7 +73,10 @@
       rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
     }
     const hits = t => x => x && Math.abs(ms(x) - ms(t)) < 2000, near = t => rows.some(r => [r.at, r.checkAt].some(hits(t)));
+    const start = timed(d.accepted) && history.find(e => e && hits(d.accepted)(e.at)
+      && (e.event === 'Add' || /^(开始|登记)/.test(e.label || '')));
     for (const e of history) if (e && timed(e.at)) {
+      if (e === start) continue;
       const out = e.resolution === 'recovered' ? 'recovered' : e.outcome, kind = SETTLED[out] ? (out === 'to_owner' ? `转给${you()}` : SETTLED[out]) : STEP[out] || '';
       // 同一时刻那一轮已经有一行：不另起一行，这一步的结果（先放着、修好了……）挂在那一轮“修理”“验收”后面
       const own = rows.find(r => r.round && [r.at, r.checkAt].some(hits(e.at)));
@@ -84,6 +87,11 @@
       if (near(e.at)) continue;
       rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind, outcome: out,
         who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
+    }
+    if (timed(d.accepted)) {
+      const href = site(d.registered_by_href) || site(start?.source_href);
+      rows.push({ at: d.accepted, kind: '开始', href, linkLabel: repair && href?.startsWith('/live/automation/run/') ? '自动修理那一轮' : '',
+        why: d.registered_by_unavailable_reason ?? start?.source_unavailable_reason });
     }
     return rows.sort((a, b) => ms(a.at) - ms(b.at));
   }
@@ -143,7 +151,7 @@
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
-      const meta = [r.who && esc(r.who), r.href && go(r.href, goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
+      const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
       return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
