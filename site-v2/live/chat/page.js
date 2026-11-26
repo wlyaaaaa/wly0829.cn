@@ -235,7 +235,8 @@
     // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
     pageWords = new Set();
     for (const words of new Set([title, sp(title), ...sp(title).split(' · '), state])) once(esc(words));
-    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${since}</span>` : ''));
+    const heading = U.head(title, { lamp: false }).replaceAll('帮手', '<span class="live-unit">帮手</span>');
+    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + heading + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${since}</span>` : ''));
     part('head').querySelector('.head__lead')?.classList.toggle('rewrite-pending', !locked && pending(name));
     part('privacy').hidden = !locked; U.html(part('privacy'), locked ? `${lockedFields}仅本人可见` : '');
     // 这场对话是哪一轮自动任务开的：后台 automation_run=[类, 轮号]，照等你的事、账本写“来源：…那一轮 ›”，点了到那一轮（验收 11-24 07:28）
