@@ -680,7 +680,8 @@
   function chatShortName(c) {
     const projectItem = home?.projects?.items?.find(p => p.id === c.project);
     const extra = projectItem && !projectItem.hidden && !projectItem.hidden_block && !(viewer === 'public' && (projectItem.visibility === 'owner' || projectItem.public === 'owner')) ? [chatField(projectItem.name, projectItem)] : [];
-    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || 'AI 对话';
+    // 什么都取不出时不写“AI 对话”（跟卡名撞），交给下面写“无标题”，和 AI 对话页同一条对话叫法一样（r83 返修第二轮）
+    if (U.chatShortName) return U.chatShortName(c, viewer, extra) || '';
     const short = value => {
       if (value?.hidden || value?.hidden_block || value?.rewrite === 'pending' || value?.visibility === 'pending' || viewer === 'public' && (value?.visibility === 'owner' || value?.public === 'owner')) return '';
       const line = U.fieldText(value, viewer).trim().split(/[\n。！？]/, 1)[0];
@@ -867,7 +868,7 @@
     const stamp = recordStamp(status?.at || link?.at || blockAt(d) || d?.received?.last_at);
     const old = lastState?.offline || (status ? status.state !== 'online' || oldReading(status) : oldReading(d)) || oldReading(link);
     // 和手机卡同一套说法：电脑的调试连接和 Tailscale 都找不到手机才叫“手机离线”，只有调试连接断叫“电脑连不上手机”（主持 11-26 定）
-    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机上次离线${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';
+    if (d?.presence?.state === 'offline') return lastState?.offline || oldReading(status) ? `手机调试连接上次未连通${stamp ? `（${stamp} 记录）` : ''}` : '手机离线';   // 旧记录照原意说是那一次调试连接没连上，免得旁边手机卡有新读数时读成手机现在离线（r83 返修第二轮）
     if (status?.state === 'offline' || d?.state === 'offline' || d?.offline === true) return lastState?.offline || oldReading(status) ? `电脑上次连不上手机${stamp ? `（${stamp} 记录）` : ''}` : '电脑连不上手机';
     // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：写“手机连接状态暂时读不到”（主持 11-26 定）
     if (d?.presence?.state === 'unknown') return lastState?.offline ? `上次读不到手机连接状态${stamp ? `（${stamp} 记录）` : ''}` : '手机连接状态暂时读不到';
@@ -1126,7 +1127,7 @@
     const d = state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '电脑连不上，这份清单没存下来' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
+      : [state.offline ? '这块没存下来，连上后补上。' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
         // 这一样回“公开判定更新中”时写明为什么（M970）
         : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);

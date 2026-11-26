@@ -74,7 +74,7 @@
   // col 是放哪一栏，tone 是标签颜色（薄荷绿 AI 在动、黄要你做、橙停等外部、粉出错、灰紫被叫停或中断、蓝灰停着待定、淡紫做完、灰读不到），
   // verb 是行首时刻后面那两个字（设计第 4 节排序表），label 是后台没给 status_label 时的默认说法。
   const KINDS = {
-    running: { col: 'working', tone: 'mint', label: '正在做', verb: '起在做' },
+    running: { col: 'working', tone: 'mint', label: '在干', verb: '起在干' },   // 和卡头“在干”同一个说法（R20，r83 返修第二轮）
     reconnecting: { col: 'working', tone: 'cyan', label: '在重连', verb: '起在重连' },
     queued: { col: 'working', tone: 'slate', label: '排队', verb: '起排队' },
     quota_exhausted: { col: 'working', tone: 'orange', label: '额度用完', verb: '起额度用完' },

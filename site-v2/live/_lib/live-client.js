@@ -506,7 +506,10 @@
     // 下面是几点的数，说本页主数据那一份；主数据没存下来、只有别的块有数时，不拿别的块的时刻说整页（不然横幅说“下面是几点的数据”，卡上却写没存下来）
     const main = connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
     // 只在本页主数据没有时用：先说主要内容没存下来，再说哪些块还有，免得横幅说“有上次的数据”、下面主块却写没存下来（r83 返修）
-    const rest = shownUpTo() ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
+    // 不算页里的块：实况首页那几份（home，含每页顶上都读的页眉 home?view=header）、硬件小包（只并进别的块已有的读数行）；
+    // 只有它们有上次的数、页里各块全没存下来时，照全空说（r83 返修第二轮）
+    const bodyUpTo = latestStamp(connectionEntries().filter(e => isMain(e) || e.resource !== 'home' && e.resource !== 'computer/hardware').map(dataAt));
+    const rest = bodyUpTo ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
     const mainAt = main && dataAt(main), atLine = mainAt ? ` · 下面是 ${shortStamp(mainAt)} 的数据` : rest;
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
       ? { stage: 'retrying', say: '正在刷新', at: atLine, wait: '这次没读到新的，正在重试' } : { stage: 'online' };
