@@ -326,6 +326,8 @@
   }
 
   // —— 三、报了估时的活（原名“三家各干了多少活”，本人 11-26 04:27 选 A 改名；和工期放一起） ——
+  // 按需更新快核（派单型号的显示写法）核法：用 E:/PCConfig/tools/remote-computer-mcp/agent_work_stats.py 的 _summarize、_work_periods 所给 work_models ID，和 E:/.agents/config/model-roster.json 的 routing.model_families 对照正式名称。
+  // 现显示 Claude 系列名加点分版本、GPT 版本加型号、Gemini 系列加型号。标题「报了估时的活」为本人 11-26 04:27 选 A 的现行说法。
   const MODEL = id => {
     const m = /^(claude|gpt|gemini)-(.+)$/.exec(String(id || ''));
     if (!m) return String(id || '');

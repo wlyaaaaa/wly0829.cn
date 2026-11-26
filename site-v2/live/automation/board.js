@@ -9,6 +9,8 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
+  // 按需更新快核（总表分类次序）核法：对照 AUTOPAGES1126 选 A 的《页面说明·自动任务》总表和 /automation 的 categories，再核 E:/PCConfig/tools/remote-computer-mcp/automation/core.py 的 CATEGORIES。
+  // 现依次为自动修理、看新消息、翻译官、规矩复核、实况核对、摘一句、AI 约好的事。笔记本周检只留旧轮，核在用类别与改名时一起看旧入口。
   const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
   // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
   const PAST = ['weekly-laptop'];
