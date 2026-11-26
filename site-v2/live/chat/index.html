@@ -43,11 +43,14 @@
 .route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
 .route-cols:has(> .route-now[hidden]):has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
-/* 窄窗口把过程记录移到下一排，给时刻、事件名和说明足够的行宽。 */
+/* 窄电脑窗口让各卡顺次占满一行。手机仍用 1440 的页面视口。 */
+@media (max-width: 1100px) {
+  #rec .route-cols { grid-template-columns: minmax(0, 1fr); }
+  .route-now { min-height: 126px; padding-bottom: 26px; }
+  .route-now #words, .route-now__text { padding-right: 100px; }
+  .route-now__art { position: absolute; right: 14px; bottom: 8px; width: 112px; height: 94px; min-height: 0; margin: 0; background-position: center; }
+}
 @media (max-width: 1080px) {
-  .route-cols { grid-template-columns: minmax(0, .94fr) minmax(0, 1.1fr); }
-  .route-cols:has(> .route-now[hidden]), .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
-  .route-cols > .route-log { grid-column: 1 / -1; }
   .route-round__line:last-child .route-round__text { text-wrap: balance; }
 }
 #plan .route-stop__text { -webkit-line-clamp: unset; }
