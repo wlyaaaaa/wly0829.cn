@@ -320,12 +320,14 @@
       let folded = 0;
       const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
         : `<span class="backup-can">能退回</span> <a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
+      // 恢复点覆盖的范围和类名不一样时（如系统盘整盘镜像：Windows 系统和选定电脑配置）照旧写一句“范围：…”，同一类只写一次
+      const scopes = [...new Set((g.points || []).map(pt => pt.scope).filter(scope => scope && sp(U.fieldText(scope, viewer)) !== sp(U.fieldText(setName(g), viewer))).map(scope => U.fieldHtml(scope, { name: '备份范围', place: 'body', kind: viewer })))];
       const own = lastRestore(g), from = g.points?.map(pt => pt.history_from).filter(Boolean).sort()[0];
       // 一条恢复记录都没有时，最上面“最近一次恢复：没有恢复过的记录”已经说了，各类下面不再各写一遍
       const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : latest ? '没有恢复过的记录' : '';
       const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
       const toggle = folded ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
-      const subs = [line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
+      const subs = [scopes.length && `范围：${scopes.join('、')}`, line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
       restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${subs}</div>` });
     }
     if (groups.length) {
