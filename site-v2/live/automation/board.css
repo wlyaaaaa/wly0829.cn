@@ -79,6 +79,7 @@
 .au-now[data-tone="warn"] .au-now__dot { background: #f0b400; }
 .au-now p { margin: 0; }
 .au-now b { display: block; font-size: 14.5px; line-height: 21px; font-weight: 700; color: var(--ink); }
+.au-row[data-row="message-review"] .au-now b { text-wrap: balance; }
 .au-now[data-tone="warn"] b a.tp-link { color: var(--tp-amber); }
 .au-now small { display: block; margin-top: 2px; font-size: 12.5px; line-height: 18px; color: #6c6b64; }
 .au-now small a.tp-link { font-weight: 700; }
