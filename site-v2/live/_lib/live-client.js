@@ -534,7 +534,7 @@
     const bodyUpTo = latestStamp(connectionEntries().filter(e => isMain(e) || e.resource !== 'home' && e.resource !== 'computer/hardware').map(dataAt));
     const rest = bodyUpTo ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
     const home = main?.resource === 'home' && !new URLSearchParams(main.query).has('view');
-    const showing = (whole, part) => ` · ${home ? '有记录的卡片显示' + part : '下面是' + whole}`;
+    const showing = (whole, part = whole) => ` · ${home ? '有记录的卡片显示' + part : '下面是' + whole}`;
     const mainAt = main && dataAt(main), atLine = mainAt ? showing(` ${shortStamp(mainAt)} 的数据`, ` ${shortStamp(mainAt)} 读到的内容`) : rest;
     // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
     const since = main && failingStamp(main);
@@ -548,7 +548,7 @@
       // 随站那份只记了时刻、没存内容时（下面各块都写没存下来）：页顶照全空写“这页的数据没存下来”，第二句说那份只记了时刻，不说“先显示那份”（D6 复查：前后打架）
       const release = !!main && main.backupFrom === 'release' && onBackup(main);
       const releaseMeta = !!main && !mainAt && !onBackup(main) && main.backupMeta?.from === 'release';
-      const at = main && onBackup(main) ? showing(releaseName(), releaseName() + '的内容') : atLine;
+      const at = main && onBackup(main) ? showing(releaseName()) : atLine;
       // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
       const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
       // 怎么才算连不上（M928）：本页主数据连续 3 次读不到（头两次隔 2、4 秒重读；接口回得快时约 10 秒，超时的每次要等 15 秒）、别的读口也没读到新的才报；之后每 10 秒重读一次
@@ -566,7 +566,7 @@
       const from = onBackup(main) && main.backupFrom || 'browser';
       const copy = from === 'cloud' ? `${cloud}存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? releaseName()
         : `这台浏览器存的最后一份（${shortStamp(main.at)}）`;
-      return { stage: 'off', say, from, at: showing(copy, copy + '的内容'),
+      return { stage: 'off', say, from, at: showing(copy),
         // “这台浏览器没存过上次的数据；”只给电脑页（照 OFFLINE1125 A 那张图）；两个首页本人答了电脑关机时不改，共用这句照原样
         wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
@@ -690,7 +690,10 @@
       e.missReason = reason; e.missStatus = status;
       if (!e.missCount) e.missSince = Date.now();
       e.missCount = (e.missCount || 0) + 1;
-      if (globalThis.navigator?.onLine !== false) { awaitFresh(e); return; }
+      if (globalThis.navigator?.onLine !== false) {
+        if (isMain(e)) e.lagging = true;
+        awaitFresh(e); return;
+      }
       freshArrived(e); // 浏览器断网时立刻挂；10 秒的等待从重新联网后那一读算起
     } else { freshArrived(e); e.missCount = 0; }
     observedConnection(e, body?.link || (reachable
