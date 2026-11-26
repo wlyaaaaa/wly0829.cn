@@ -117,7 +117,8 @@
   }
   let changesPack = null;
   function fill(key, rows, none) {
-    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? '这块没存下来，连上后补上。' : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
+    // 冻结那组平常收在“冻结 N 个”按钮后面、没有自己的小标题：连不上又没存下来时不另写一句，免得紧接在“在用的”那句下面再写一遍“这块没存下来”（D6 复查）
+    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? 5 : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? (key === 'frozen' && !frozenOnly ? '' : '这块没存下来，连上后补上。') : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
     rows = withLook(key, rows);
     const total = rows.length;
     if (key !== 'frozen' || !frozenOnly && rows.length > 6) rows = groupedRows(rows, key);
