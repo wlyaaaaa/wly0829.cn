@@ -60,7 +60,7 @@
       `<span class="su-now su-now--${n.cls}"${n.title ? ` title="${esc(n.title)}"` : ''}>${n.tone ? `<span class="lamp lamp--sm" data-tone="${n.tone}" aria-hidden="true"></span>` : ''}<span>${esc(n.text)}</span></span></div>`;
   }
   // “这次开机”那一列几种说法是什么意思（本人要页面上讲清机制，M928）：后台按哪种证据认的照实写
-  const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“这次没确认”是设了启用、这次没找到它启动过的证据。</p>';
+  const LEGEND = '<p class="su-say su-legend">“这次开机”那一列：“起来了”是开机或登录时真把它拉起来了；“见到在跑”“服务在跑”“驱动已载入”只说明这次开机后它在跑；“这次没确认”是设了启用、这次没找到它启动过的证据；“启动失败”是这次开机或登录时系统去启动它、结果报了错。</p>';
   const cols = '<div class="su-cols" aria-hidden="true"><span>软件</span><span>从哪自启</span><span>设了自启</span><span>这次开机</span></div>';
   const say = text => `<p class="su-say">${esc(text)}</p>`;
 
