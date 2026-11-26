@@ -30,6 +30,17 @@
   border-radius: 8px;
   overflow: hidden;
 }
+/* 重取几次仍没取到图：衬底照旧占位、图注照旧，图位正中写一句（viz.js 标 data-viz-state="failed"） */
+.viz__plate[data-viz-state="failed"] {
+  display: grid;
+  place-items: center;
+}
+.viz__plate[data-viz-state="failed"]::after {
+  content: "这张图暂时没加载出来。";
+  font-size: 14px;
+  letter-spacing: .04em;
+  color: var(--v-muted);
+}
 
 .viz svg, .viz__plate > img {
   display: block;
