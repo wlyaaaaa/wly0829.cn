@@ -29,6 +29,9 @@
 .page--backup .backup-copy-state[data-state="mostly"] { color: #8a6800; }
 .page--backup .backup-copy-state[data-state="partial"] { color: #b14e0a; }
 .page--backup .backup-locator { overflow-wrap: break-word; }
+/* 本机包路径随本地文件夹列换行，保持其余副本原有列宽。 */
+.page--backup .backup-package-path { display: block; contain: inline-size; overflow-wrap: anywhere; }
+.page--backup .backup-package-path .backup-locator { overflow-wrap: inherit; }
 .page--backup .backup-locations { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
 .page--backup #copies td:has(.backup-time) small { white-space: nowrap; }
 .page--backup #copy-overview { margin-top: 12px; }
