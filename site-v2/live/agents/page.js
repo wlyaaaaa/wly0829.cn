@@ -168,11 +168,11 @@
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const stats = d.hook_stats?.totals?.[h.id] || {};
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · 定稿 ${stats.expected} 条`].filter(Boolean).join(' · ')}</small></header>
+      <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · <span class="ag-keep">定稿 ${stats.expected} 条</span>`].filter(Boolean).join(' · ')}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : '<p class="ag-ok">规矩、记忆、审批和钩子都和定稿一样。</p>'}</article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : `<p class="ag-ok">${h.id === 'antigravity' ? '规矩、审批和钩子都和定稿一样；它没有自带记忆，<span class="ag-keep">这项不查</span>' : '规矩、记忆、审批和钩子都和定稿一样。'}</p>`}</article>`;
   }
   // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
@@ -223,7 +223,7 @@
     const rowY = i => pad.t + (i + .5) * h / 3;
     let out = `<rect class="tp-band" x="${x(.7)}" y="${pad.t - 6}" width="${x(1.1) - x(.7)}" height="${h + 6}" rx="3"/>
       <line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>
-      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">允许范围</text>`;
+      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">估 1 小时以上</text>`;
     for (let v = .5; v <= hi + 1e-9; v += .5) out += `<text x="${x(v)}" y="${H - 8}" text-anchor="middle">${dec(v)}×</text><line class="tp-gridline" x1="${x(v)}" x2="${x(v)}" y1="${pad.t}" y2="${pad.t + h}"/>`;
     SIZES.forEach(([size, label], i) => {
       const y0 = rowY(i);
@@ -321,7 +321,7 @@
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍 <small>点在绿带里算准</small></p>${ratioPlot(d)}<p class="tp-small">绿带按估 1 小时以上的画：早 30% 到晚 10% 都算准；1 小时以内的单子是早 15 分钟到晚 5 分钟。</p></div>
+        <div><p class="tp-sub">实际是估的几倍</p>${ratioPlot(d)}<p class="tp-small">绿带只画估 1 小时及以上的单子：实际比估的早 30% 以内、晚 10% 以内都算准，正好在边上也算；不到 1 小时的单子按分钟算，早 15 分钟、晚 5 分钟以内算准。</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
@@ -385,14 +385,14 @@
   function configSection(d) {
     const x = h => hostData(d, h);
     const entries = HOSTS.map(h => x(h).entry || {});
-    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') : '没读到';
+    const tools = h => Array.isArray(x(h).tools) ? (x(h).tools.length ? x(h).tools.map(t => F(t.name)).join('、') : '没有') + (x(h).tools_scope ? `<small>${F(x(h).tools_scope).replace(/为准|未计入/g, '<span class="ag-keep">$&</span>')}</small>` : '') : '没读到';
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')) : '没读到'; };
-    const memory = h => h.id === 'antigravity' ? `无法设置${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
+    const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
     // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
     const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，设成用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
       : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
-      : '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
+      : '查不到准数（见过一次约 510K）';
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
     const rows = [
@@ -404,13 +404,13 @@
       row('动手前停不停下等批准', HOSTS.map((h, i) => waits[i] ? `不停，直接动手<a class="tp-link" href="#hooks-pre-tool">要拦的几样在钩子“动工具前” ›</a>` : '会停下等批准'),
         { diff: waits.map(w => !w) }),
       row('谁能自己解开资料锁', HOSTS.map(unlock), { note: link('/rules/topic-authorization.html', '规则 ›') }),
-      row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
+      row('多接的工具', HOSTS.map(tools), { note: ['电脑接口、Google 以外', asof(d.tools_at, d.at)].map(esc).filter(Boolean).join('<br>') }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
   }
 
   // —— 五、钩子 ——
