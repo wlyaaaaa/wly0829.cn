@@ -302,7 +302,13 @@
       const keep = status.textContent.split(' · ').map(s => s.trim()).filter(s => /项要处理$|^AI 在修|AI 已接手/.test(s));
       U.html(status, [reading, ...keep].map(U.esc).join(' · '));
       // 卡头另写着的读数时刻（“最近一次记录于 …”“上次读到 … · 每小时读一次”）和这一句重了，只留这一句
-      for (const part of card.querySelectorAll('.grp__said, .grp__cutoff')) if (/^(?:最近一次记录于|上次读到|数据截[止至]|截至)\s*\d/.test(part.textContent.trim())) U.html(part, '');
+      for (const part of card.querySelectorAll('.grp__said, .grp__cutoff')) {
+        const note = part.textContent.trim();
+        if (/^(?:最近一次记录于|上次读到|数据截[止至]|截至)\s*\d/.test(note)) U.html(part, '');
+        else if (/^这次没读到，最近一次记录于\s+[\d:-]+(?: \d{2}:\d{2})?$/.test(note)) {
+          U.html(part, reading.includes('没读到') ? '' : '这次没读到');
+        }
+      }
       queueMicrotask(() => V.cardLineTitle(status.parentElement));
       return;
     }

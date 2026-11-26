@@ -302,7 +302,7 @@
     for (const [a, b] of data.gaps) {
       const x0 = x(a), x1 = x(b);
       svg.push(`<rect x="${x0.toFixed(1)}" y="${T}" width="${(x1 - x0).toFixed(1)}" height="${H - T - B}" fill="url(#cl-hatch)"/>`);
-      if (x1 - x0 > 46) svg.push(`<text class="cl-gaptxt" x="${((x0 + x1) / 2).toFixed(1)}" y="${((T + H - B) / 2 + 4).toFixed(1)}" text-anchor="middle">没记录</text>`);
+      if (x1 - x0 > 46) svg.push(`<text class="cl-gaptxt" x="${((x0 + x1) / 2).toFixed(1)}" y="${T - 8}" text-anchor="middle">没记录</text>`);
     }
     const n = Math.max(2, Math.min(5, Math.floor((W - L - R) / 130)));
     for (let i = 0; i < n; i++) { const t = data.from + (data.to - data.from) * i / (n - 1); svg.push(`<text class="cl-xtxt" x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${esc(i === n - 1 ? '今天' : K.dayKey(t))}</text>`); }

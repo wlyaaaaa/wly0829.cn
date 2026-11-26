@@ -194,7 +194,7 @@
     const points = groups?.flatMap(group => (group.points || []).map(p => ({ ...p, kind: group.kind }))).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
     const latest = points?.find(p => p.at), restore = set.restore_summary;
     const hasRestorePoint = Number(restore?.count) > 0 && restore?.q !== 'unknown' || !!latest;
-    $('points-section').querySelector('.dossier-icon').dataset.icon = hasRestorePoint ? 'restore' : 'time';
+    $('points-section').querySelector('.dossier-icon').dataset.icon = hasRestorePoint ? 'restore' : 'clock';
     const dates = [...new Set([restore?.earliest_date, restore?.latest_date].filter(Boolean))].join(' 至 ');
     const restoreResult = Object.hasOwn(set, 'restore_summary')
       ? restore?.count == null || restore.q === 'unknown' ? said(restore?.reason || missing('恢复点清单'), '恢复点清单')
