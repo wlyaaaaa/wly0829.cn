@@ -102,8 +102,9 @@
     if (v == null) return '';
     if (typeof v !== 'string') return F(v, '这一次做了什么');
     const lines = v.split('\n').map(s => s.trim()).filter(Boolean);
-    if (lines.length < 2) return esc(v.trim());
-    return `${esc(lines.at(-1))}<details class="iss-more"><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${esc(s)}</p>`).join('')}</details>`;
+    const tail = esc(lines.at(-1)).replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="live-unit">$&</span>');
+    if (lines.length < 2) return tail;
+    return `${tail}<details class="iss-more"><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${esc(s)}</p>`).join('')}</details>`;
   }
 
   function render() {

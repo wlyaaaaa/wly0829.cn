@@ -435,7 +435,7 @@
         { name: '对话内容', kind: viewer })));
       if (m.project) facts.push(`所属项目 ${m.project}`);
       const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
-      if (mark) facts.push(`<span class="live-unit">${facts.pop() || ''}${mark}</span>`);
+      if (mark) facts[0] = `<span class="live-unit">${facts[0] || ''}${mark}</span>`;
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${facts.map(v => `<span>${v}</span>`).join('')}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
       plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
     } else {
@@ -473,7 +473,7 @@
     const look = li && [li.look ? `第 ${int(li.look)} 次看` : '', !li.look && li.lookMax ? `最多看 ${int(li.lookMax)} 次` : '', group].filter(Boolean).join('，');
     const doing = [li?.title && (li.href ? `<a href="${esc(li.href)}">属于账本：${F(li.title, '账本那件')} <i>›</i></a>` : `<p>属于账本：${F(li.title, '账本那件')}</p>`), look && `<p>${look}</p>`,
       r.subject?.href && `<a href="${esc(r.subject.href)}">这件修理的全部几轮 <i>›</i></a>`,
-      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：${esc(r.who.text).replace(/ · /g, '&nbsp;·&nbsp;')}` : ''}</p>`].filter(Boolean);
+      r.promisedBy?.title && `<p>谁约的：${r.promisedBy.href ? `<a class="ar-inline" href="${esc(r.promisedBy.href)}">${F(r.promisedBy.title, '约的那场对话')} ›</a>` : F(r.promisedBy.title, '约的那场对话')}${r.who?.text ? ` → 谁做的：<span class="live-unit">${esc(r.who.text)}</span>` : ''}</p>`].filter(Boolean);
     return `<aside class="ar-side">${doing.length ? `<section class="tp-panel ar-sidecard"><h2>这一轮在办</h2>${doing.join('')}</section>` : ''}
       <section class="tp-panel ar-sidecard"><a href="${esc(T.path('/live/automation/', { category }))}">${esc(name())} <i>›</i></a>${retired ? '' : `<a href="${esc(T.path('/live/automation/', { type: category }) + `#cat-${category}`)}">这一类怎么干 <i>›</i></a>`}</section>
       <section class="tp-panel ar-sidecard"><p class="ar-steps">${step(prevId, '上一轮', true)}${step(nextId, '下一轮', false)}</p></section></aside>`;

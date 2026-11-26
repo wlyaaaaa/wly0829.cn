@@ -555,6 +555,7 @@
       const next = st.next_at || c.next_at;
       main = next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`;
     }
+    if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
   }
   // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
