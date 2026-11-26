@@ -1307,7 +1307,9 @@
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
-    p.status.hidden = !note; U.html(p.status, note);
+    // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
+    const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
+    p.status.hidden = !note; U.html(p.status, statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
   const headline = (it, withLabel = true) => {

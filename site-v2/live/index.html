@@ -243,7 +243,7 @@
 .page--live #phone .card__note-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .page--live #phone .card__note > .btn { flex: none; }
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
-.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
 .page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
