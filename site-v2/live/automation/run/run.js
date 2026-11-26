@@ -146,10 +146,10 @@
     const pointsTo = x => [T.path(x?.href) && `href:${T.path(x.href)}`, typeof x?.local_path === 'string' && x.local_path && `file:${x.local_path}`].filter(Boolean);
     const mine = list(receipt.recorded).filter(x => !pointsTo(x).some(k => outs.has(k)));
     if (!r.outputs.length && !(r.outputCount > 0) && !mine.length && !receipt.told && !ownHref) return '';
-    // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；
+    // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；链接访客那边没有的（outputs[].visitor_labels.href = hidden），本人版链接后挂“访客看不到”（主控 11-26 11:02，等后台给）；
     // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
-      ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
+      ${o.href && !(o.github && viewer !== 'owner') ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : U.visitorLabel({ visitor_labels: o.labels }, 'href', '这件东西的链接', viewer)}</span>`
         : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x?.title ?? x?.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
