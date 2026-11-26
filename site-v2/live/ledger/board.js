@@ -211,7 +211,8 @@
     const text = b ? U.fieldText(b.text, viewer).trim() : '';
     if (!text) return '';
     const d = day(b.from), said = !d || /\d{1,2} *[-月.\/] *\d{1,2}/.test(text);
-    return F(b.text, '口径说明') + (said ? '' : ` ·&nbsp;${esc(d)}&nbsp;起`);
+    const end = /[。！？；…!?;.]$/u.test(text) ? ' ' : ' · ';
+    return F(b.text, '口径说明') + (said ? '' : `${end}<span class="live-unit">${esc(d)} 起</span>`);
   }
   function settled(d) {
     const rows = settledRows(d), shown = rows.filter(r => !filter || r.settled === filter);
