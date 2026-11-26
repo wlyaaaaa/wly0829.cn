@@ -1467,7 +1467,7 @@
       it.card.style.setProperty('--grp-a', color((g.palette || [])[0] || 'teal'));
       it.card.style.setProperty('--grp-b', color((g.palette || [])[1] || (g.palette || [])[0] || 'violet'));
       // 电脑连不上时组灯一律灰（和各卡小灯一样），不拿上次的判断亮绿（r83 返修第二轮）
-      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(isOffline() ? { level: 'gray' } : g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
+      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(isOffline() && g.level && g.level !== 'none' ? { level: 'gray' } : g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
       const name = field(g.name, BLOCK_NAME[g.key] || '这一组', 'title');
       html(it.card.querySelector('.grp__name'), name);
       // 曲线没存下来、但这组上面已经有上次的读数时，只说曲线没存下来，不说整块没有（r83 返修）
