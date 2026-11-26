@@ -26,6 +26,14 @@
     return v;
   }
   const replyBody = value => U.chatJoinedReply(value, viewer);
+  // 后台把改写标记标在这一块（chat.visitor_labels.summary）或正文对象自己身上（summary.visitor_labels.text）的，在显示这段字的地方挂签；整场藏着的只在页头挂
+  const fieldTag = (keys, what, own) => !chat || U.visitorWholeHidden(chat) ? '' : U.visitorLabel(chat, keys, what, viewer) || (own && typeof own === 'object' ? U.visitorLabel(own, ['$', 'text'], what, viewer) : '');
+  // 签和句末几个字放进同一个不折行的块（现有的 .live-unit），签不单独掉到下一行（不出现末行只剩“到。”加一个签）
+  const withTag = (html, tag) => {
+    if (!html || !tag || /\blive-mark--(?:reworded|rewritten)\b/.test(html)) return html;
+    const tail = /(?:&[a-z0-9#]+;|[^<>&\s]){1,4}$/i.exec(html);
+    return tail ? `${html.slice(0, tail.index)}<span class="live-unit">${tail[0]}${tag}</span>` : html + tag;
+  };
   const chatCell = (value, label, parent, limit = 0, card = false) => {
     return U.chatFields.cell(value, label, parent, viewer, limit, card);
   };
@@ -152,18 +160,31 @@
     note.hidden = !words; U.html(note, words);
   }
 
+  // —— 整页同一段字只摆一次（主控 11-26 10:02：翻译官那场第一屏同一段话出了 4 遍；相邻或上下级两处字一样只显示一次，口径同自动任务一轮页、一件活页）——
+  // render 从上往下登记已经摆出来的字：页头（标题、状态、最新进展）→ 现在（这一步、正式摘要、最新回复、任务原文）→ 思考摘要 → 过程记录里摘要、回复两行的原文。
+  // 后面一字不差的就不再摆，留上面那处；字不一样的照旧都摆。比的是去掉“仅本人可见”“换了说法”这类标记以后的字，只剩标记的（访客版本来藏着的）照旧摆
+  let pageWords = new Set();
+  const flatWords = html => { const el = document.createElement('div'); el.innerHTML = html || ''; el.querySelectorAll('.live-mark').forEach(m => m.remove()); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
+  const once = html => { const words = flatWords(html); if (pageWords.has(words)) return false; if (words) pageWords.add(words); return true; };
+
   // —— 正在执行：当前这一步写大，下面是正式摘要、最新回复，各露一句、点开看全文 ——
-  function drawNow(progress, facts) {
+  function nowText(progress) {
+    const { plan, current } = progress, p = plan[current];
+    const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
+    return stillWorking ? `后台帮手另在处理（${stillWorking} 个）` : p ? (privatePlan(p) ? U.fieldHtml({ text: null, visibility: 'owner', hidden_what: '这一步' }, { name: '这一步', kind: viewer }) : chatCell(field(p.text, p, chat), '这一步', chat, 0, true)) : esc(chatState(chat));
+  }
+  function drawNow(progress, facts, currentText) {
     const { plan, current, label, count } = progress, active = chat.state === 'running', p = plan[current];
     const stillWorking = chat.state === 'done' && U.chatFields.workingHelpers(chat);
     U.html($('now-label'), stillWorking ? '对话已结束' : U.offline?.() && active ? '断开前在做' : active ? '正在执行' : '现在');
     const word = p ? stepWord(stepState(p)) : '';
     const step = p ? `${label} · ${esc(word)}` : count;
     U.html($('now-step'), step); $('now-step').hidden = !step;
-    const currentText = stillWorking ? `后台帮手另在处理（${stillWorking} 个）` : p ? (privatePlan(p) ? U.fieldHtml({ text: null, visibility: 'owner', hidden_what: '这一步' }, { name: '这一步', kind: viewer }) : chatCell(field(p.text, p, chat), '这一步', chat, 0, true)) : esc(chatState(chat));
-    U.html($('now-text'), currentText);
+    U.html($('now-text'), currentText); $('now-text').hidden = !currentText;
     $('now-text').style.webkitLineClamp = 'unset';   // 两版同一套（本人禁令 11-24 14:16）：两版都不收行、不收条数
     U.html($('facts'), facts.map(([label, content, clip = false], i) => `<p class="route-fact"${clip ? ' data-clip="fact-' + i + '"' : ''}>${label ? `<span class="route-fact__k">${label}：</span>` : ''}${content}</p>${clip ? '<button type="button" class="route-clip__more" data-clip-for="fact-' + i + '" data-live-opened="card/chat/route-detail" hidden>展开</button>' : ''}`).join(''));
+    // 重复的都收掉以后一个字也不剩，“现在”这张卡整张不出，不留空壳
+    $('now-box').hidden = !step && !currentText && !facts.length;
   }
 
   // —— 帮手：顶上总数和各状态几个（只数数据里有的）；先列出错、在做的前 5 个，其余“看全部”后按批看 ——
@@ -212,8 +233,9 @@
     // 摘要、回复这两行接上已有的原文：本人版整段摆出，访客版先露两行、点“展开”看全；仅本人可见的照常写锁
     for (const [key, v, word, name, label] of [['summary', chat.summary, '摘要', '写好正式摘要', '正式摘要'], ['reply', reply, '回复', '发出最新回复', '最新回复']]) if (v && typeof v === 'object' && v.at) {
       const original = replyBody(key === 'summary' ? U.chatProgressText(v, chat, viewer) : v), body = chatCell(original, label, chat, 0, true) || chatCell(original, label, chat), clip = false;
-      const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${body}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
-      list.push({ key, at: v.at, word, name: esc(name), detail });
+      const tag = body ? fieldTag(key === 'summary' ? 'summary' : ['reply', 'latest_reply'], label, v) : '';
+      const detail = body ? `<p class="route-row__text"${clip ? ` data-clip="${clip}" style="--clip-lines:2"` : ''}>${withTag(body, tag)}</p>${clip ? `<button type="button" class="route-clip__more" data-clip-for="${clip}" hidden>展开</button>` : ''}` : '';
+      list.push({ key, at: v.at, word, name: esc(name), detail, words: flatWords(body) });
     }
     if (validTime(chat.at) && !list.some(e => Date.parse(e.at) === Date.parse(chat.at))) list.push({ key: 'update', at: chat.at, word: '主对话更新' });
     return list.filter(e => validTime(e.at)).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
@@ -227,6 +249,9 @@
   function drawLog(list = events()) {
     const b = R.batch('log', list.length, { first: 50, step: 50, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
     U.html($('log-part'), list.length > shown.length ? `最近 ${shown.length} 条 · 共 ${list.length} 条` : list.length ? `共 ${list.length} 条` : '');
+    // 摘要、回复两行的原文跟上面（页头、现在、思考摘要）或上一行一字不差的，这一行只留时刻和“写好正式摘要”“发出最新回复”；按“看更多”重画也照同一份登记
+    const above = new Set(pageWords);
+    for (const e of shown) if (e.words) { if (above.has(e.words)) e.detail = ''; else above.add(e.words); }
     U.list($('log'), shown.map(e => ({ key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${esc(stamp(e.at))}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b><span class="route-row__name">${e.name || ''}</span></p>${e.detail || ''}</div>${e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : ''}</div>` })), { animate: !first });
     const words = [!list.length && esc(U.collectionText('过程记录')), marks(new Set(shown.map(e => e.mark).filter(Boolean)), '帮手名')].filter(Boolean).join('<span class="route-note__sep">·</span>');
     note.hidden = !words; U.html(note, words);
@@ -243,22 +268,31 @@
     });
     const say = ['done', 'waiting'].includes(d.state) && d.summary?.text && d.summary.text === d.text ? d.summary : progress ?? reply ?? d.summary;
     const body = replyBody(say === d.summary ? U.chatProgressText(say, d, viewer) : say);
-    return { say: body, latest: chatCell(body, say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展', d) };
+    const what = say === d.summary ? '正式摘要' : say === reply ? '最新回复' : '最新进展';
+    const key = say === d.summary ? 'summary' : say === reply ? ['reply', 'latest_reply'] : say === d.doing ? 'doing' : say === d.progress ? 'progress' : 'text';
+    return { say: body, latest: chatCell(body, what, d), tag: say == null ? '' : fieldTag(key, what, say) };
+  }
+  // 思考摘要一行几段用“ · ”接的（后台把英文原句和中文译文接成“原句 · 译文”）：每段包成一块，短的不从中间拆、要折在“ · ”处折，
+  // 一段本身比一行还长的照常在块里折、不伸出去（主控 11-26 10:43，同首页时长不拆、账本那行的办法；样式在 index.html）。只拆字的部分，后面挂的签留在最后一块
+  function thoughtSegments(html) {
+    const cut = html.indexOf('<'), words = cut < 0 ? html : html.slice(0, cut), rest = cut < 0 ? '' : html.slice(cut), parts = words.split(' · ');
+    return parts.length < 2 ? html : parts.map((part, i) => `<span class="route-think__seg">${part}${i < parts.length - 1 ? ' ·' : rest}</span>`).join(' ');
   }
   function drawThought() {
     const node = $('thinking'), box = $('think-box');
     if (!node || !box) return;
     const raw = field(chat.thinking, chat), words = visibleText(raw);
     const heading = field(field(chat.thinking_heading?.title, chat.thinking_heading), chat), head = visibleText(heading);
-    const title = words && head && head !== words && head !== visibleText(field(chat.title, chat)) && chatCell(heading, '任务', chat, 0, true);
-    const thought = chat.thinking ? chatCell(raw, '思考摘要', chat, 0, true) || chatCell(raw, '思考摘要', chat) : '';
+    // 思考摘要跟上面（页头、现在）一字不差的，整块不出；它头上那行任务名跟上面哪处一样也不再写
+    const drawn = chat.thinking ? chatCell(raw, '思考摘要', chat, 0, true) || chatCell(raw, '思考摘要', chat) : '', thought = drawn && once(drawn) ? drawn : '';
+    const lead = thought && words && head && head !== words && head !== visibleText(field(chat.title, chat)) && chatCell(heading, '任务', chat, 0, true), title = lead && once(lead) ? lead : '';
     // 只有外文思考时，后台给缺因（field_gaps.thinking）：先说一句为什么是英文，再给原文
     const gap = thought && typeof chat.field_gaps?.thinking === 'string' ? chat.field_gaps.thinking : '';
     box.hidden = !thought; node.hidden = !thought;
     // M684：思考摘要访客那边不一样的，在这块标题后挂签（整场藏着的只在页头挂）
     const thinkHead = box.querySelector('.route-h__text');
     if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
-    U.html(node, thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thought : '');
+    U.html(node, thought ? (title ? `<b class="route-think__lead">${title}</b>` : '') + (gap ? `<small class="route-think__lead" style="font-weight:400;color:var(--route-muted, #848b87)">${esc(gap)}</small>` : '') + thoughtSegments(thought) : '');
   }
   // 本人版给全文：页头那句、思考摘要、过程记录和帮手的每一行都不收、不截；访客版照旧一句收起
   function fullText(on) {
@@ -296,15 +330,37 @@
     }
     if (validTime(chat.at)) dates.push(`主对话更新 ${when(chat.at)}`);
     if (validTime(end)) dates.push(`${hasNewTimes() ? '数据截止' : '最近一条记录'} ${when(end)}`);
-    const meta = [who(chat, true), U.chatFields.originLabel(chat, false), locked && stageLabel(chat), progress, ...dates, e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, timing, e?.over_min > 0 && `超了 ${U.minutes(e.over_min)}`, helpers === 0 ? '没有派帮手' : helpers && `帮手 ${helpers} 个`].filter(Boolean);
+    const model = who(chat, true);
+    const meta = [model, U.chatFields.originLabel(chat, false), locked && stageLabel(chat), progress, ...dates, e?.planned_min != null && `报 ${Math.round(e.planned_min)} 分钟`, timing, e?.over_min > 0 && `超了 ${U.minutes(e.over_min)}`, helpers === 0 ? '没有派帮手' : helpers && `帮手 ${helpers} 个`].filter(Boolean);
     const project = (chat.project || chat.project_name) && projectInfo(chat);
     const app = U.chatFields.appTag(chat);
+    // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀
+    const family = [chat.software, /^(claude|codex|antigravity):/i.exec(chat.id || '')?.[1]].map(v => String(v || '').toLowerCase()).find(v => /^(claude|codex|antigravity)$/.test(v));
+    const go = (href, words) => `<a class="route-head__go" href="${esc(route(href))}">${words} ›</a>`;
     part('meta').hidden = !meta.length && !project && !app;
-    U.html(part('meta'), app + meta.map(v => !locked && v === progress ? `<a class="more" href="#plan-box">${esc(v)} ›</a>` : `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('') + (project ? `<span class="route-head__project">所属项目 ${project}</span>` : ''));
+    U.html(part('meta'), app + meta.map(v => !locked && v === progress ? `<a class="more" href="#plan-box">${esc(v)} ›</a>` : v === model && family ? `<span>${go(`/live/agents/?family=${family}#work`, U.fieldHtml(v, { name: '对话内容', kind: viewer }))}</span>` : `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('') + (project ? `<span class="route-head__project">所属项目 ${project}</span>` : ''));
     U.draw10?.detail(part('meta'), chat, viewer);
-    const { say, latest } = locked ? { latest: '' } : workLine(chat, rawReply), note = locked ? '' : headerNote(chat, latest);
-    const state = !locked && U.chatFields.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
-    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>`);
+    // “开场读的规矩 ›”接在“压缩过 N 次 ›”那一行后面（图 L-chat-v3 圈②）；没压缩过就接在上面那排最后。后台没给这场对话开场读的是哪一版，版本号先不写
+    hero.querySelectorAll('[data-opening]').forEach(el => el.remove());
+    if (family) {
+      const compact = part('meta').parentElement.querySelector('[data-compaction]'), opening = go(`/live/agents/opening/?family=${family}`, '开场读的规矩');
+      if (compact && !compact.hidden) compact.insertAdjacentHTML('beforeend', `<span data-opening> · ${opening}</span>`);
+      else { part('meta').insertAdjacentHTML('beforeend', `<span data-opening>${opening}</span>`); part('meta').hidden = false; }
+    }
+    const { say, latest, tag: sayTag = '' } = locked ? { latest: '' } : workLine(chat, rawReply), note = locked ? '' : headerNote(chat, latest);
+    const F = U.chatFields, sk = F.statusKind(chat);
+    // 后台给了 status_kind 就只认那一套标签（同 AI 对话页）；旧回包才照“额度用完”的进展原文写
+    const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
+    // 设计第 9 节：标签后面接“从几点起”（排序时刻＋这一类的动词，同 AI 对话页行首）和原因；状态旧了 2 分钟以上加“状态是几点读的”。后台没给的那一项不写
+    const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
+    const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(at);
+    const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
+      reason && reason !== state && F.ownerWords(reason, viewer),
+      Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
+    // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
+    pageWords = new Set();
+    for (const words of new Set([title, sp(title), ...sp(title).split(' · '), state])) once(esc(words));
+    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${esc(since)}</span>` : ''));
     part('head').querySelector('.head__lead')?.classList.toggle('rewrite-pending', !locked && pending(name));
     part('privacy').hidden = !locked; U.html(part('privacy'), locked ? `${lockedFields}仅本人可见` : '');
     // 这场对话是哪一轮自动任务开的：后台 automation_run=[类, 轮号]，照等你的事、账本写“来源：…那一轮 ›”，点了到那一轮（验收 11-24 07:28）
@@ -313,7 +369,7 @@
     const runLabel = run && [LR?.categoryName(run[0], viewer) || '自动任务', runAt && LR ? `${LR.when(runAt)} 那一轮` : '那一轮'].join(' · ');
     part('source').hidden = !run;
     U.html(part('source'), run ? `来源：<a href="${esc(route(`/live/automation/run/?type=${encodeURIComponent(run[0])}&run=${encodeURIComponent(run[1])}`))}">${esc(runLabel)} ›</a>` : '');
-    part('say').hidden = !latest; U.html(part('say'), latest);
+    part('say').hidden = !latest || !once(chatCell(say, '最新进展', chat, 0, true)); U.html(part('say'), withTag(latest, sayTag));
     U.html(part('acts'), locked ? '' : actions(chat)); part('acts').hidden = !part('acts').textContent;
     rec.classList.toggle('route-body--locked', locked);
     $('now-box').hidden = $('log-box').hidden = locked;
@@ -325,25 +381,26 @@
       drawHelpers();
       return;
     }
-    drawThought();
     fullText(true);   // 两版同一套（本人禁令 11-24 14:16）：两版都直接给全文
+    // 接着登记“现在”这张卡：这一步（没有计划时是状态，跟页头那颗一样就不再写大字）、正式摘要、最新回复、任务原文
+    const current = nowText(plan), currentText = once(current) ? current : '';
     const facts = [];
-    const shown = value => { const el = document.createElement('div'); el.innerHTML = said(value); return el.textContent.replace(/\s+/g, ' ').trim().replace(/[。．.]$/, ''); };
     const summary = replyBody(U.chatProgressText(chat.summary, chat, viewer)), reply = replyBody(rawReply);
-    if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || shown(summary) !== shown(say))) facts.push(['', chatCell(summary, '正式摘要', chat)]);
+    if ((text(summary) != null || summary?.hidden || summary?.visibility === 'owner' || summary?.public === 'owner' || pending(summary) || summary?.q === 'warming') && (viewer === 'public' && field(summary, summary, chat).visibility === 'owner' || once(chatCell(summary, '正式摘要', chat, 0, true)))) facts.push(['', withTag(chatCell(summary, '正式摘要', chat), fieldTag('summary', '正式摘要', chat.summary))]);
     const replyContent = hasReply || !!(rawReply && (markOf(rawReply, rawReply) || pending(rawReply) || rawReply.q === 'warming'));
     // M684：最新回复访客那边不一样的（整块 reply / latest_reply，或正文对象里只换了词的 reply.visitor_labels.text），在这一行末挂签
     const blockTag = (key, what) => !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, key, what, viewer) : '';
     const replyTag = blockTag(['reply', 'latest_reply'], '最新回复');
     if (!replyContent) facts.push(['最新回复', privateSaid(missingReply, chat), false]);
-    else if (shown(reply) !== shown(say) && shown(reply) !== shown(summary)) {
+    else if (once(privateSaid(reply, chat))) {
       facts.push(['最新回复', privateSaid(reply, chat) + replyTag]);
     }
     const prompt = chatCell(chat.task_prompt, '任务原文', chat);
-    if (prompt && shown(chat.task_prompt) !== shown(say)) facts.push(['', prompt]);
+    if (prompt && once(chatCell(chat.task_prompt, '任务原文', chat, 0, true))) facts.push(['', prompt]);
     $('words').hidden = !facts.length; $('rec').hidden = false;
     U.html($('plan-box').querySelector('.route-h__text'), '执行计划' + (plan.plan.length ? blockTag('plan', '执行计划') : ''));
-    drawPlan(plan); drawNow(plan, facts); drawHelpers(); drawLog(log);
+    drawThought();   // 再登记思考摘要，最后过程记录（drawLog 只比不记）
+    drawPlan(plan); drawNow(plan, facts, currentText); drawHelpers(); drawLog(log);
     R.reclip();
     if (first && location.hash === '#plan-box' && !$('plan-box').hidden) requestAnimationFrame(() => $('plan-box').scrollIntoView());
   }
