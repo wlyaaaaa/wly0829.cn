@@ -31,7 +31,7 @@
   const spent = s => { const m = Math.round(s / 60); return m < 60 ? `${m} 分钟` : `${Math.floor(m / 60)} 小时${m % 60 ? ` ${m % 60} 分` : ''}`; };
 
   // 首页自动任务卡（照“首页自动任务卡-v2”，本人 11-25 定内容、大字是今天跑完几轮，11-26 01:04 批照图施工）：
-  // 大字今天跑完几轮、其中几轮没做成，0–24 点时间条每轮一个点，三行（在干或下一个、出毛病几处、近 7 天替你做成的），底行今天用时和开着几类。
+  // 大字今天跑完几轮、其中几轮没做成，0–24 点时间条每轮一个点；下面写在干或下一个、每处毛病、关着的类和近 7 天的结果。
   // 今天没做成几轮（results_today.failed_runs，和 finished_runs 同一个数法：每轮真实结束记录算一轮，跨夜那轮归结束那天）、
   // 今天每一轮的点（results_today.runs_today=[{finished_at, ok, href}]）：读到了但今天还没跑完一轮给 0 和空列表，照画（空时间条只有“现在”）；
   // 读不到轮次给 null，这一行和时间条都不画。
@@ -178,24 +178,29 @@
       const handled = p => p.handler === '本人' ? `等${own}处理`
         : p.handler ? `${p.repairing && !/^已交|在修/.test(p.handler) ? '已交' : ''}${p.handler}` : p.repairing ? 'AI 在修' : '还没人接手';
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
+      const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
+        : part.replace(/验收|太久/g, '<span class="live-unit">$&</span>')).join('');
+      const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
       // 大字：今天跑完几轮（点了到自动任务页今天跑完的）；下面“其中几轮没做成 ›”，0 轮照写 0、不带链接
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
       const fail = v.failed == null ? '' : `<p class="b6-fail">${v.failed > 0 ? go(v.failedHref, `其中 ${esc(v.failed)} 轮没做成`) : '其中 0 轮没做成'}</p>`;
       const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: R.runPage(r.href) || R.runHref(r),
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮') : '';
       // 第一行：在干哪一轮；没在跑写“这会儿空着 · 下一个 几点 哪一类 ›”
-      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join(' · ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `这会儿空着 · ${goWrap(next.href, `下一个 ${esc(clock(next.at) || next.wait || '')} ${field(next.title, '任务名称')}`)}`
-          : Array.isArray(d.running) && d.next === null ? '这会儿空着 · 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
-      // 第二行：出毛病几处，写第一处是什么、谁在管；点了到那一件的经过，“还有 N 处 ›”到自动任务页
-      const first = v.problems[0], what = p => p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)} · ${field(p.raw.text)}` : field(p.raw.text || p.raw.title);
-      const who = first ? [handled(first), first.round && !/轮/.test(first.handler) && `第 ${first.round} 轮`].filter(Boolean).join(' · ') : '';
-      const trouble = first ? `<p>${dot(first.repairing ? 'repair' : 'owner')}${goWrap(first.href, `出毛病 ${esc(v.problems.length)} 处：${what(first)}`)}${v.problems.length > 1 ? ` ${go(R.listHref(), `还有 ${esc(v.problems.length - 1)} 处`)}` : ''} <span class="b6-muted">· ${esc(who)}</span></p>`
-        : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
-      // 第三行：近 7 天替你做成的（图上写“这周”，后台给的是近 7 天的数，照数写）
-      const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条 · 修好 ${num(w.repaired)} 件 · 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
-      return { tone, head, body: toPublic(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${week}</div>
-        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'} · ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`) };
+      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
+        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${goWrap(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
+          : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
+      // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
+      const problemLine = p => {
+        const what = p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)}&nbsp;· ${field(p.raw.text)}` : field(p.raw.text || p.raw.title);
+        const who = [handled(p), p.round && !/轮/.test(p.handler) && `第 ${p.round} 轮`].filter(Boolean).map(esc).join('&nbsp;· ');
+        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}${goWrap(p.href, `出毛病的：${keepWords(what)}`)}&nbsp;· <span class="b6-muted">${who}</span></p>`;
+      };
+      const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
+      const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
+      const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 ${num(w.repaired)} 件&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
+      return { tone, head, body: toPublic(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
+        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`) };
     }
     if (id === 'agents') {
       const v = agentsView(d, { viewer, now });
