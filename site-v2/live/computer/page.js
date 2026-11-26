@@ -945,7 +945,9 @@
     const unreadNote = g => { if (g.key === 'stutter') return stutterNote(g); const stamp = at(g); return stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'; };
     const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
     const label = g => U.fieldHtml(g.name, { name: '检测分组' });
-    const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => [label(g), at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，'));
+    // 已确认的那组写出是什么（用回包里同一句说明，如“防护状态：有防火墙配置未启用”），读到时刻和谁在处理放括号里；和安全页页顶同一种写法（M1010）
+    const said = g => { const why = g.reason ?? g.why, text = why == null ? '' : U.fieldText(why).trim(); return text && text !== U.fieldText(g.name).trim() ? '：' + U.fieldHtml(why, { name: '异常说明' }) : ''; };
+    const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => `${label(g)}${said(g)}（${[at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，')}）`);
     const instantIds = { cpu: 'cpu-temp', disk: 'disk-free', network: 'net-loss' };
     const unread = groups.unread.flatMap(g => {
       const id = instantIds[g.key];
