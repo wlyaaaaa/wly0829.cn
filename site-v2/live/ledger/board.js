@@ -99,7 +99,9 @@
     // 本人能点开原来源、访客点进那场对话看不到内容的（registered_by_visitor_labels.conversation = hidden），本人版紧挨着链接挂全站同一个“访客看不到”；
     // “谁记的”访客照样看得到（访客版同一行也写“Codex 记的”），签只说那场对话的内容看不到，点开的说明照这个意思写，免得读成谁记的被藏了（主控 11-26 10:27）
     const mark = U.visitorFieldKind({ visitor_labels: it.registered_by_visitor_labels }, 'conversation');
+    // 签上的字写“对话访客看不到”（全站“访客看不到”那个样子），一眼看出藏的是对话、不是谁记的（主控 11-26 11:02）
     const tag = mark === 'hidden' ? U.visitorHiddenTag('记下这件事的那场对话', '', viewer).replace(/data-trust-explanation="[^"]*"/, `data-trust-explanation="${esc(RECORDER_HIDDEN)}"`)
+      .replace('title="访客看不到 ·', 'title="对话访客看不到 ·').replace('<span class="live-mark__label">访客看不到</span>', '<span class="live-mark__label">对话访客看不到</span>')
       : U.visitorLabel({ visitor_labels: it.registered_by_visitor_labels }, 'conversation', '记下这件事的那场对话', viewer);
     if (T.path(it.registered_by_href)) return link(it.registered_by_href, `${label} ›`) + tag;
     const why = U.fieldText(it.registered_by_unavailable_reason ?? '', viewer).trim();
@@ -117,9 +119,10 @@
     const count = full(it) ? '' : nx || late ? nth : known(it.check_count) ? `看过 ${int(it.check_count)} 次，最多 ${limit} 次` : '';
     // 这一行放不下时只在“ · ”处折，段内不拆（“最多 3 次”“下次 12:35 看”“12-02 10:00”整段走）：谁记的、几点看、第几次这几段短的不断行，
     // 后台原句（为什么放着、在等什么、到点还没了结）太长照常折。“·”打在每段前头、和这段字连着（&#8288; 不让它们分开），
-    // 折到下一行开头的那个“·”被裁掉（board.css 的 .lg-line），行尾不悬一个“·”、行首也不冒一个（主控 11-26 10:27）
+    // 折到下一行开头的那个“·”被裁掉（board.css 的 .lg-line），行尾不悬一个“·”、行首也不冒一个（主控 11-26 10:27）。
+    // 段与段之间用零宽空格（能在这里折、不占宽），“·”左右只靠点那一格居中留白，两边一样宽（主控 11-26 11:02：原来左边多一个空格）
     const segs = [[recorder(it), true], [why, false], [time, !late], [count, true]].map(([s, keep]) => [s.replace(/。$/, ''), keep]).filter(([s]) => s);
-    return `<span class="lg-line">${segs.map(([s, keep]) => `<span class="lg-seg${keep ? ' is-keep' : ''}"><i class="lg-dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join(' ')}</span>`;
+    return `<span class="lg-line">${segs.map(([s, keep]) => `<span class="lg-seg${keep ? ' is-keep' : ''}"><i class="lg-dot" aria-hidden="true">·</i>&#8288;${s}</span>`).join('&#8203;')}</span>`;
   }
   function track(d) {
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;

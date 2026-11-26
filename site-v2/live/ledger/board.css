@@ -58,10 +58,10 @@
 .lg-item__text p { margin: 3px 0 0; font-size: 13px; line-height: 20px; color: #6c6b64; }
 /* 第二行几段：只在段与段之间折行，短的几段整段走；每段前头的“·”折到行首时落在左边裁掉的那一截里，看不见 */
 .lg-item__text p { overflow-x: clip; }
-.lg-line { display: block; margin-left: -1.1em; }
-.lg-dot { display: inline-block; width: 1.1em; text-align: center; font-style: normal; }
+.lg-line { display: block; margin-left: -1.3em; }
+.lg-dot { display: inline-block; width: 1.3em; text-align: center; font-style: normal; }
 .lg-seg.is-keep { white-space: nowrap; }
-.lg-line #live-privacy-note { margin-left: 1.1em; }   /* 点开签的说明在这一行里另起一块，躲开左边裁掉的那一截 */
+.lg-line #live-privacy-note { margin-left: 1.3em; }   /* 点开签的说明在这一行里另起一块，躲开左边裁掉的那一截 */
 .lg-running { background: var(--tp-green) !important; color: #fff; text-decoration: none; }
 .lg-over { color: var(--tp-amber); }
 .lg-lane { position: relative; align-self: center; height: 26px; }
