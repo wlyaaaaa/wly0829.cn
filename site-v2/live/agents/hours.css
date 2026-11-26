@@ -57,7 +57,9 @@
 .ag-hseg[data-kind="rest"] { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--host) 22%, #fff) 0 5px, #fff 5px 8px); }
 .ag-hunit { margin: 0 62px 0 calc(var(--hname) + 12px); text-align: center; font-size: 12.5px; color: #6c6b64; }
 .ag-hlegend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 26px; margin: 12px 0 0; font-size: 14px; color: #3d3d3a; }
-.ag-hlegend span { display: inline-flex; align-items: center; gap: 8px; }
-.ag-hlegend .ag-hseg { width: 18px; height: 14px; border-radius: 3px; cursor: default; }   /* 图例只是说明颜色，不能点：不出手形（M624“看着像按钮的点不了”） */
+.ag-hlegend > span { display: inline-flex; align-items: center; gap: 8px; }
+.ag-hswatches { display: inline-flex; height: 14px; border-radius: 3px; overflow: hidden; }
+.ag-hswatches .ag-hseg { width: 7px; }
+.ag-hswatches .ag-hseg:only-child { width: 18px; }
 .ag-hnote { margin: 14px 0 0; }
 @keyframes ag-hgrow { from { scale: 0 1; } to { scale: 1 1; } }

@@ -98,9 +98,10 @@
       const cols = (host ? [host] : [...HOSTS, ALL]).map(h => ({ h, s: scope(h.id === 'all' ? p.total : p.hosts?.[h.id]) }));
       const rows = host ? cols : [cols.at(-1), ...cols.slice(0, -1)];   // 横条“全部”放最上面
       const mine = host ? cols[0].s : cols.at(-1).s;
-      const legendColor = host ? host.color : ALL.color;
       const anyRest = rows.some(r => r.s.rest > 0);
-      const legend = `<p class="ag-hlegend" style="--host:${legendColor}" aria-hidden="true">${KINDS.map(([k, label]) => `<span><i class="ag-hseg" data-kind="${k}"></i>${label}</span>`).join('')}${anyRest ? '<span><i class="ag-hseg" data-kind="rest"></i>没分出类</span>' : ''}</p>`;
+      const key = ([kind, label]) => `<span><span class="ag-hswatches">${rows.map(({ h }) =>
+        `<i class="ag-hseg" data-kind="${kind}" style="--host:${h.color}"></i>`).join('')}</span>${label}</span>`;
+      const legend = `<p class="ag-hlegend" aria-hidden="true">${KINDS.map(key).join('')}${anyRest ? key(['rest', '没分出类']) : ''}</p>`;
       // 叠加的小时数一天能过 24：顺手写“这段经过几小时、平均同时几个在干”，看得出数合不合理（主控 11-26 03:50 点名“今天 43 小时”）
       const span = (Date.parse(p.as_of) - Date.parse(period === 'all' ? first || p.window_start : p.window_start)) / 3600000;
       const one = v => v < 10 ? T.dec(Math.round(v * 10) / 10) : T.int(Math.round(v));
