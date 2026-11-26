@@ -396,6 +396,10 @@
   }
   // M947：每月循环的提醒（后台给整数 monthly_day），在写日期的那一格写“每月 6 日”；这一期从哪天起照旧按 act_from 排
   const monthlyDay = it => Number.isInteger(it.monthly_day) && it.monthly_day >= 1 && it.monthly_day <= 31 ? `每月 ${it.monthly_day} 日` : '';
+  function detailTitle(text) {
+    const title = text.replace(/\p{Script=Han}{2}(?=[。！？]?$)/u, '<span class="live-unit">$&</span>');
+    return `${title}&nbsp;<span class="more__chev">›</span>`;
+  }
   function row(it, closed = false, shared = '') {
     function brief(html) {
     return html;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，访客版不再先收成一句
@@ -413,7 +417,7 @@
     // 占位行的标题已写清“〈哪一样〉仅本人可见”时，旁边不再重复同一句。
     const markSaid = mark.replace(/<[^>]*>|🔒/g, '').trim(), shownMark = placeholder && markSaid === titleText.replace(/<[^>]*>/g, '').trim() ? '' : mark;
     const archivedTitle = titleText;   // 已关掉的不再加“当时记录：”，直接说是什么事（本人 11-23 11:54）
-    const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${titleText}&nbsp;<span class="more__chev">›</span></button>` : `<span class="row__title">${titleText}</span>`;   // 末字和“›”用不断行空格连住，折行时最后一行不单剩一个字（“会不会卡／死 ›”，r83 返修第三轮第 8 条）
+    const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${detailTitle(titleText)}</button>` : `<span class="row__title">${titleText}</span>`;
     const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${i < all.length - 1 ? U.fieldHtml(s, { kind: viewer }).replace(/。((?:<\/[a-z]+>)*)$/, '$1') : U.fieldHtml(s, { kind: viewer })}</span>`).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });

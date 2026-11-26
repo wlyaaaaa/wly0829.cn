@@ -214,6 +214,9 @@
     const oldest = v.oldest, limit = count(oldest?.check_limit) && oldest.check_limit > 0 ? oldest.check_limit : 3;
     // “第 N 次看”跟账本页同一个说法：下次看是第几次（看过 check_count 次）；看满了写看满
     const looked = !oldest || !count(oldest.check_count) ? '' : oldest.check_count >= limit ? ` · ${esc(limit)} 次看满了` : ` · 第 ${esc(oldest.check_count + 1)} 次看`;
+    const nextCheck = oldest?.next_at ? ` · ${go(oldest.href, `下次 ${esc(U.date(oldest.next_at))}`)}` : '';
+    const oldestLine = (oldest ? `${oldest.next_at ? field(oldest.title, '事项标题') : go(oldest.href, field(oldest.title, '事项标题'))}${looked}${nextCheck}` : v.oldestText)
+      .replace(/。((?:<\/[a-z]+>)*) · /g, '$1 · ');
     const dueLine = v.due.n == null ? `今天到日子 ${num(null)} 件`
       : v.due.n > 0 ? `${go(v.due.href, `今天到日子 ${esc(v.due.n)} 件`)}${v.overdue.n > 0 ? ` ${v.overdue.href ? `<a class="b6-big__aside" href="${esc(route(v.overdue.href))}">` : '<span class="b6-big__aside">'}过期的 ${esc(v.overdue.n)} 件排最前${v.overdue.href ? '</a>' : '</span>'}` : ''}`
       : `今天没有到日子的${v.next ? ` · ${go(v.next.href, `下一件 ${esc(v.next.day)}`)}` : ''}`;
@@ -228,7 +231,7 @@
       `<div class="b6-big"><strong>AI 在跟 <em>${v.open.n == null ? num(null) : `<a href="${esc(route(v.open.href))}">${esc(v.open.n)}</a>`}</em> 件</strong></div>
       <p>${dueLine}</p>
       ${v.due.n > 0 ? v.dueItems.slice(0, 3).map(dueItem).join('') : ''}
-      ${oldest || v.oldestText && v.open.n == null ? `<p class="b6-last">跟得最久：${oldest ? `${oldest.next_at ? field(oldest.title, '事项标题') : go(oldest.href, field(oldest.title, '事项标题'))}${looked}${oldest.next_at ? ` · ${go(oldest.href, `下次 ${esc(U.date(oldest.next_at))}`)}` : ''}` : v.oldestText}</p>` : ''}
+      ${oldest || v.oldestText && v.open.n == null ? `<p class="b6-last">跟得最久：${oldestLine}</p>` : ''}
       <p class="b6-foot">${flow}</p>` };
   }
   // AI 对话卡和 AI 对话页顶上那一行“后台另有 N 个在跑 ›”：数自动任务这会儿在跑的轮数（AI 对话不列后台的对话，本人定的）。
