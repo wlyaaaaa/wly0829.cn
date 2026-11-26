@@ -320,7 +320,7 @@
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍${band ? ' <small>点在绿带里算准</small>' : ''}</p>${ratioPlot(d, band)}<p class="tp-small">${bandNote}${shortNote}</p></div>
+        <div><p class="tp-sub">实际是估的几倍${band ? ` <small>估 ${esc(limit)}及以上的点在绿带里算准${shortNote ? '，更短的见图下' : ''}</small>` : ''}</p>${ratioPlot(d, band)}<p class="tp-small">${bandNote}${shortNote}</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;

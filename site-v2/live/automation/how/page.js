@@ -46,7 +46,8 @@
       if (![repair_limit, repeat_window_days, repeat_handoff_count, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
         return '最多修几轮、坏几次转给本人，这次没读到。';
       }
-      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断要不要告诉本人或请本人选。同一处修好后 ${repeat_window_days} 天内第 ${repeat_handoff_count} 次坏，自动修理停手，直接转给本人。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
+      // 按需更新快核：转给本人时写什么，核 PCConfig automation/scheduler.py 里 REPEATED_FAULT 那段（现写“之前修了 N 轮”和 root_guess，没有就写“原因还没查清”，选项是问情况和不办了）
+      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断要不要告诉本人或请本人选。同一处修好后 ${repeat_window_days} 天内第 ${repeat_handoff_count} 次坏，自动修理停手，直接转给本人，转的时候写明之前修了几轮和可能的原因（没查清就写没查清），由本人选接着查还是不办了。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
       ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';

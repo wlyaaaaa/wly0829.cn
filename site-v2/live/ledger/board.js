@@ -5,6 +5,8 @@
   'use strict';
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, dec, link, when, big, stamp, day } = T;
+  // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
+  const asOf = d => esc(when(d?.at || d?.as_of || state?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
   const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
   const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner' };
@@ -178,7 +180,7 @@
       return items.length ? `<div class="lg-board"><div class="lg-head"><span></span>${axis}</div><ul class="lg-list">${shown.map(it => row(it, group)).join('')}</ul><div class="lg-now" style="--x:${x(now)}" data-from="${from}" data-span="${span}"><span>现在</span></div></div>${more}${keyIn === group ? legend : ''}`
         : `<p class="tp-empty">${kind ? `“${KINDS.find(([k]) => k === kind)[1]}”里` : 'AI 手上'}${empty}</p>`;
     };
-    return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件${U.isStale(d) || U.offline() ? '' : '<span class="lg-live">实时</span>'}<small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2><span class="tp-asof">截至 ${esc(when(d.at))}</span></div>
+    return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修的 ${int(blocks.owed.length)} 件${U.isStale(d) || U.offline() ? '' : '<span class="lg-live">实时</span>'}<small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2>${asOf(d) ? `<span class="tp-asof">截至 ${asOf(d)}</span>` : ''}</div>
       ${board('owed', '没有在修的事。')}</section>
       <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '最多修几轮、最多看几次，这次没读到。'}</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
@@ -383,12 +385,12 @@
     if (!d) { T.paint(page.root, T.placeholder(state, 'AI 自动任务账本')); page.tick.set([], { off: true }); return; }
     if (view) {
       T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
-        <p class="tp-head__side"><span>截至 ${esc(when(d.at || d.as_of))}</span></p></div>${T.stateNote(state)}${viewList(d)}`));
+        <p class="tp-head__side">${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>${T.stateNote(state)}${viewList(d)}`));
       page.tick.set([], { off: state.offline });
       return;
     }
     T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
-        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}<span>截至 ${esc(when(d.at))}</span></p></div>
+        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
       ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });

@@ -612,8 +612,9 @@
     const days = list(c.daily_30d), s = c.recent_stats || {};
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
-    const nums = known(s.success) || known(s.failed) ? `成 ${known(s.success) ? int(s.success) : '没读到'} · 坏 ${known(s.failed) ? int(s.failed) : '没读到'}` : '成了几轮、坏了几轮没读到';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    // 颜色跟柱图一样：成是绿字，坏了才是红字（M1096：原来整行一坏就全红，成也成了红字）
+    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮没读到';
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
