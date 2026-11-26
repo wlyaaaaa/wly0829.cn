@@ -297,11 +297,11 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   const edge = await client.get('home');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);
-  assert.equal(edge.conn.stage, 'lost'); assert.match(edge.conn.at, /下面是 .+ 的数据/);
+  assert.equal(edge.conn.stage, 'lost'); assert.ok(edge.conn.at.includes(client.stamp(edge.shownAt).slice(-5)));
   // 确认关机后，手里那份比备用包新就留着，写明是这台浏览器存的
   delete sandbox.navigator; hostOff = true;
   const off = await client.get('home');
-  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.match(off.conn.at, /下面是这台浏览器存的最后一份/);
+  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.equal(off.conn.from, 'browser');
   assert.deepEqual(shown, ['safe']);
   paused = true;
   assert.equal((await client.get('home')).publicPaused, true);
