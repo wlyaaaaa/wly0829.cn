@@ -75,8 +75,7 @@
   function seg(key, start) {
     return `<div class="tp-seg" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) => `<button type="button" data-mperiod="${key}:${id}" aria-pressed="${period[key] === id}">${esc(id === 'all' && start ? `${label} · ${sinceWord(start)}` : label)}</button>`).join('')}</div>`;
   }
-  // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
-  const head = (key, title, start, at) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${at && asof(at) ? `<span class="tp-asof">${esc(asof(at))}</span>` : ''}</div></div>`;
+  const head = (key, title, start, stamp) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${stamp ? `<span class="tp-asof">${esc(stamp)}</span>` : ''}</div></div>`;
   const tone = id => only === id ? ' is-on' : only ? ' is-off' : '';
   function famRows(key, keys, v, unit, { lower = {}, last = {}, starts = {}, start = null } = {}) {
     return `<ul class="ag-fams">${keys.map(h => {
@@ -139,7 +138,7 @@
     const lastAt = f ? t.last[f] : Object.values(t.last).filter(Boolean).sort().at(-1);
     const to = f ? `跟 ${fam(f).name} ` : '';
     const todayText = !todayKnown ? '' : todayN > 0 ? `今天到 ${T.clock(t.at)} ${to}说了 ${int(todayN)} 句` : `今天到 ${T.clock(t.at)} 还没${to}说${lastAt ? ` · ${lastText(lastAt)}` : ''}`;
-    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at)}
+    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at && asof(t.at))}
       <div class="tp-grid ag-mgrid"><div class="ag-mleft">
         <p class="ag-mbig">${esc(lead(p, f ? w.starts[f] || w.start : w.start))}${you()}${esc(to)}<span class="ag-mbig__tail">说了 ${bigNum(key, value || 0, f, lower)} 句</span></p>
         ${famRows(key, HOSTS, w.v, '句', { lower: w.lower, last: t.last, starts: t.starts, start: p === 'all' ? w.start : null })}
@@ -166,7 +165,7 @@
     const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at)}
+    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at && `截至 ${T.when(s.at)}`)}
       ${chips()}
       ${rows.length ? bars(rows, hs, s, w) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
