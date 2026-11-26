@@ -222,6 +222,8 @@ p.au-basis { max-width: none; margin: -6px 0 14px; }
 .au-card__outs > span { color: #3d3d3a; }
 .tp .au-card__outs .tp-link { min-width: 0; white-space: normal; }
 .au-card__meta { margin: 4px 0 0; font-size: 14px; line-height: 21px; color: #57564f; }
+/* 总表“AI 约好的事”那行“今天做完 1 件，用了 12 分钟”：每一截整块换行，不把“钟”单独甩到下一行 */
+.au-nobr { white-space: nowrap; }
 .au-card__meta .tp-link { font-weight: 700; }
 .au-card__rounds { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 0; }
 /* 一轮的结果可能很长：一行写不下就省略号收在卡里，不伸出卡片、不压右边的“看经过 ›”（前端 QA 11-25） */
