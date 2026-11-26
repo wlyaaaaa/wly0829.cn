@@ -85,9 +85,10 @@
   const GITHUB_WHY = '本人的 GitHub 仓库有一部分是私有的，访客点开会打不开';
   function outputs(r) {
     // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签
+    // 成品自己没有地址、这一轮下面有“打开业务回执 ›”时，右边不写“没有能打开的地址”（和下面那行读着矛盾），空着
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
       ${o.href ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
-        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
+        : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : r.receipt?.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
     const receipt = r.receipt || {};
     // 回执里记下的和上面做成的东西名字一样的不再列一遍；全都一样，“回执里记下的”整块不出
     const recorded = list(receipt.recorded).filter(x => !r.outputs.some(o => sameText(o.title, x.title ?? x.text ?? x))).map(x => `<li>${F(x.title ?? x.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('');
