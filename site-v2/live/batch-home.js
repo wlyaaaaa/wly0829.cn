@@ -193,7 +193,10 @@
           : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
       // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
       const problemLine = p => {
-        const what = p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)}&nbsp;· ${field(p.raw.text)}` : field(p.raw.text || p.raw.title);
+        // 摘一句的故障回包有时把沿用的原回复当成原因给出，只写能从回包确认的状态。
+        const detail = p.title === '摘一句' && /(?:这轮|本轮)沿用原话/.test(p.text)
+          ? '这轮沿用了原回复，故障原因没记下' : p.raw.text;
+        const what = p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)}&nbsp;· ${field(detail)}` : field(detail || p.raw.title);
         const who = [handled(p), p.round && !/轮/.test(p.handler) && `第 ${p.round} 轮`].filter(Boolean).map(esc).join('&nbsp;· ');
         return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}${goWrap(p.href, `出毛病的：${keepWords(what)}`)}&nbsp;· <span class="b6-muted">${who}</span></p>`;
       };
