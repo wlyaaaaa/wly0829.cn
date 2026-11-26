@@ -28,7 +28,12 @@
   const replyBody = value => U.chatJoinedReply(value, viewer);
   // 后台把改写标记标在这一块（chat.visitor_labels.summary）或正文对象自己身上（summary.visitor_labels.text）的，在显示这段字的地方挂签；整场藏着的只在页头挂
   const fieldTag = (keys, what, own) => !chat || U.visitorWholeHidden(chat) ? '' : U.visitorLabel(chat, keys, what, viewer) || (own && typeof own === 'object' ? U.visitorLabel(own, ['$', 'text'], what, viewer) : '');
-  const withTag = (html, tag) => html && tag && !/\blive-mark--(?:reworded|rewritten)\b/.test(html) ? html + tag : html;
+  // 签和句末几个字放进同一个不折行的块（现有的 .live-unit），签不单独掉到下一行（不出现末行只剩“到。”加一个签）
+  const withTag = (html, tag) => {
+    if (!html || !tag || /\blive-mark--(?:reworded|rewritten)\b/.test(html)) return html;
+    const tail = /(?:&[a-z0-9#]+;|[^<>&\s]){1,4}$/i.exec(html);
+    return tail ? `${html.slice(0, tail.index)}<span class="live-unit">${tail[0]}${tag}</span>` : html + tag;
+  };
   const chatCell = (value, label, parent, limit = 0, card = false) => {
     return U.chatFields.cell(value, label, parent, viewer, limit, card);
   };
