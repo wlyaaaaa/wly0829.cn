@@ -425,18 +425,18 @@
     const boxes = [...root.querySelectorAll('.code input')], go = root.querySelector('.go__btn');
     const both = root.querySelector('.both input'), ownChip = own.closest('.chip--own'); let hours = '', touched = false;
     function pick(h) { hours = String(h); chips.forEach(c => c.setAttribute('aria-checked', String(c.dataset.h === hours))); own.value = chips.some(c => c.dataset.h === hours) ? '' : hours; ownChip.setAttribute('aria-checked', String(!!own.value)); }
-    // 还能加多少：总上限（72 小时）减去这次要办的那几项里剩得最多的；按 0.1 小时往下取整，不会超
+    // 还能加多少：总上限（72 小时）减去这次要办的那几项里剩得最多的（以分钟计）。
     function room() {
       const p = state?.policy;
       if (!p || !Number.isFinite(p.maximum_minutes)) return null;
       const keys = both.checked ? ['personal_data', 'unrestricted'] : [fields[key]];
       return Math.max(0, p.maximum_minutes - Math.max(...keys.map(k => remainingMinutes(state[k], clock()) || 0)));
     }
-    const roomHours = m => Math.floor(m / 6) / 10;
+    const roomHours = m => Number((m / 60).toFixed(2));
     // 填的超过还能加的，直接收回到上限（本人 11-24）
     function clamp() {
       const m = room(), asked = parseFloat(hours);
-      if (m === null || !(asked > 0) || asked * 60 <= m || m < (state.policy.minimum_minutes || 30)) return;
+      if (m === null || !(asked > roomHours(m)) || m < (state.policy.minimum_minutes || 30)) return;
       pick(roomHours(m));
     }
     chips.forEach(c => c.onclick = () => { touched = true; pick(c.dataset.h); sync(); });

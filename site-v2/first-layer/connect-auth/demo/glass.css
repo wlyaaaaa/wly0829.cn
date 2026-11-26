@@ -461,7 +461,7 @@ body {
 /* 自己填：一个空格子加“小时”，像填空 */
 .chip--own { cursor: text; padding-right: 11px; }
 .chip--own input {
-  width: 2.4em;
+  width: 2.7em;
   height: 18px;
   margin-right: 4px;
   padding: 0;
