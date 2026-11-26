@@ -339,26 +339,31 @@
   // 配对先于任何资源建档，避免第一读和副本沿用新设备的访客身份。
   async function pair() {
     const match = /^#pair=([A-Za-z0-9_-]{43})$/.exec(location.hash);
+    const invalid = '配对链接无效或已过期，请让 AI 重新发一个';
+    // 网络断了、等超时、电脑回的话看不懂：电脑那头办没办成不知道，照实说还没确认（M981）
+    const unsure = '配对结果还没确认，这条链接可能还能用，稍后再点一次';
+    try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+    if (!match) return invalid;
+    let response, body;
     try {
-      history.replaceState(null, '', location.pathname + location.search);
-      if (match) {
-        const response = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: match[1] }),
-          signal: AbortSignal.timeout(12000) });
-        const body = await response.json().catch(() => null);
-        if (response.ok && body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
-          localStorage.setItem('wly-cockpit-device', body.token);
-          if (device() === body.token) return '这台设备已设为本人设备，私人事项会直接显示';
-        }
-        // 兑换时个人资料没解锁、无限制授权也没开（403），或读不到授权状态（503）：电脑没用掉这条链接，照实说
-        const refused = {
-          cockpit_pair_authorization_required: '要先在电脑上解锁个人资料或开着无限制授权，才能把这台加成可信设备；这条链接还能用',
-          cockpit_pair_authorization_unavailable: '暂时读不到授权状态，这条链接还能用，稍后再点',
-        }[!response.ok && body?.error];
-        if (refused) return refused;
-      }
-    } catch { /* 格式、接口和本地存储失败，都用同一句提示。 */ }
-    return '配对链接无效或已过期，请让 AI 重新发一个';
+      response = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: match[1] }),
+        signal: AbortSignal.timeout(12000) });
+      body = await response.json().catch(() => null);
+    } catch { return unsure; }
+    if (response.ok && body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
+      try { localStorage.setItem('wly-cockpit-device', body.token); } catch {}
+      if (device() === body.token) return '这台设备已设为本人设备，私人事项会直接显示';
+      // 电脑已经同意、链接也用掉了，是这个浏览器存不下（无痕窗口、禁了网站存储这类）
+      return '电脑同意了，但这个浏览器存不下配对（可能是无痕窗口或禁了网站存储），换个正常窗口再让 AI 发一个链接';
+    }
+    // 兑换时个人资料没解锁、无限制授权也没开（403），或读不到授权状态（503）：电脑没用掉这条链接，照实说
+    const refused = {
+      cockpit_pair_authorization_required: '要先在电脑上解锁个人资料或开着无限制授权，才能把这台加成可信设备；这条链接还能用',
+      cockpit_pair_authorization_unavailable: '暂时读不到授权状态，这条链接还能用，稍后再点',
+      cockpit_pair_invalid: invalid,
+    }[!response.ok && body?.error];
+    return refused || unsure;
   }
   const paired = location.hash?.startsWith('#pair=') ? pair() : null;
   let pairing = paired;
