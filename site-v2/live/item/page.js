@@ -305,7 +305,8 @@
   const pastRound = (row, d) => {
     const from = Date.parse(row.episode_at || row.born || '');
     const history = (Array.isArray(d.history) ? d.history : []).filter(e => { const t = Date.parse(e.occurred_at || e.at || ''); return Number.isFinite(t) && t <= closedAt + 1000 && !(t < from - 1000); });
-    return { ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
+    // 访客的退出清单行不带来源（origin），来源是这件事的、各轮一样，照详情补上（本人版清单行带的照用清单行的）
+    return { origin: d.origin, ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
   };
   function showItem(d) {
     latestDetail = d;
@@ -313,12 +314,28 @@
     if (issue || !Number.isFinite(closedAt) || Date.parse(d.closed?.at) === closedAt) { show(d); return; }
     if (closedRound !== undefined) { show(closedRound ? pastRound(closedRound, d) : d); return; }
     const ask = ++closedAsk, kind = viewer;
-    window.Live.get('items/closed', null).catch(() => null).then(r => {
+    findClosedRound(d.id, () => ask !== closedAsk || kind !== viewer).then(found => {
       if (ask !== closedAsk || kind !== viewer) return;
-      const d = latestDetail, ok = Array.isArray(r?.data?.items) && (!r.meta?.viewer?.kind || r.meta.viewer.kind === viewer);
-      if (ok) closedRound = r.data.items.find(row => row.id === d.id && Date.parse(row.closed?.at) === closedAt) || null;
+      if (found !== undefined) closedRound = found;
+      const d = latestDetail;
       show(closedRound ? pastRound(closedRound, d) : d);
     });
+  }
+  // M567：那一轮的了结不一定在退出清单第一批里（清单按了结时刻从新到旧，一批 50 条），照“再往前读”的续页往后找，
+  // 找到为止；读到比那一轮还早的、或读完了还没有，才算清单里没有（null）。哪一批没读到就先照现在这一轮摆（undefined），下次读数到了再找
+  async function findClosedRound(itemId, stale) {
+    let cursor = null;
+    for (let page = 0; page < 20; page++) {
+      const r = await window.Live.get('items/closed', cursor == null ? null : { cursor }).catch(() => null);
+      if (stale()) return undefined;
+      if (!Array.isArray(r?.data?.items) || (r.meta?.viewer?.kind && r.meta.viewer.kind !== viewer)) return undefined;
+      const hit = r.data.items.find(row => row.id === itemId && Date.parse(row.closed?.at) === closedAt);
+      if (hit) return hit;
+      const oldest = Math.min(...r.data.items.map(row => Date.parse(row.closed?.at)).filter(Number.isFinite));
+      cursor = r.data.next;
+      if (cursor == null || oldest < closedAt - 1000) return null;
+    }
+    return null;
   }
   // 后台“登记事项”“核对事项”（Add / Review）这类纯流水对这件事没有信息，经过里不列；这件事从哪天开始照留，起点写“开始”（同问题账本的起点），不写“登记事项”；
   // 没有别的经过时也照列这一条。重新打开、关闭和真有内容的经过照列，换了一轮的“本轮开始”照补（M691）

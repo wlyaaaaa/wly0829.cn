@@ -82,6 +82,9 @@
     return [hours && `${hours} 小时`, mins && `${mins} 分`, (secs || !seconds) && `${secs} 秒`].filter(Boolean).join(' ');
   }
   const knownCount = v => Number.isInteger(v) && v >= 0;
+  // 加绿（GREENIMG1126）：历时、帮手数、第几步的数字套一层 chat-green，只在在干、等你两栏里变绿（样式在 index.html）
+  // 小药丸是 inline-flex，数字前后的普通空格会被吞掉（“帮手53个”），换成不断行空格
+  const greenNum = s => s.replace(/(\s?)(\d+)(\s?)/, (m, a, n, b) => `${a ? '&nbsp;' : ''}<span class="chat-green">${n}</span>${b ? '&nbsp;' : ''}`);
   const helperPeople = helpers => helpers.reduce((sum, h) => sum + (h.private_count || 1), 0);
   function helperLabel(c, helpers) {
     const exact = c.helper_counts?.total ?? c.helpers?.total;
@@ -158,7 +161,7 @@
     const helpers = helperList(c);
     const { label, count, plan, current } = planInfo(c);
     const progress = locked ? (label || count) && `<span class="chat-pill">${esc(label || count)}</span>`
-      : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${label} ›</a>` : '';
+      : c.detail && plan[current] && label ? `<a class="chat-pill chat-pill--link" href="${detailHref(c.id, '#plan-box')}" aria-label="${label}，查看执行计划">${greenNum(label)} ›</a>` : '';
     const steps = !locked && progress ? `<span class="chat-steps" aria-hidden="true">${plan.map(p => `<i data-status="${esc(stepState(p) || '')}"></i>`).join('')}</span>` : '';
     const thoughtFull = locked ? '' : chatCell(c.thinking, '思考摘要', c, 0, true);
     const thoughtShort = thoughtFull;   // 两版同一套（本人禁令 11-24 14:16）：两版思考摘要都给全文
@@ -174,7 +177,7 @@
     const source = origin ? `<span class="chat-tag">${esc(origin)}</span>` : '';
     const attribution = [U.chatFields.appTag(c), who(c, 'body', true), source].filter(Boolean).join(' ');
     const modelLine = attribution ? `<span class="chat-model">${attribution}</span>` : '';
-    const context = [modelLine, titleMark, timing && `<span data-steady>${esc(timing)}</span>`].filter(Boolean).join('');
+    const context = [modelLine, titleMark, timing && `<span data-steady>${esc(timing).replace(/^历时 (.+?)(?= · |$)/, '历时 <span class="chat-green">$1</span>')}</span>`].filter(Boolean).join('');
     const runningPreview = !Array.isArray(c.helpers) && !Array.isArray(c.helpers?.items);
     const groupedPreview = runningPreview && helpers.length === 1 && helpers[0].private_count;
     const busyCount = helperPeople(helpers), allCount = c.helper_counts?.total ?? c.helpers?.total;
@@ -188,7 +191,7 @@
     const lockedMeta = [stage, project && `所属项目 ${project}`].filter(Boolean).join(' · ');
     const meta = lockedMeta ? `<p class="row__sub">${esc(lockedMeta)}</p>` : '';
     const reason = column ? statusReason(c) : '';
-    return { key: c.id, cls: `row row--chat lb-item${column ? ' row--board' : ''}${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${column ? whenCell(c) : lamp(c)}<p class="row__main">${column ? statusPill(c) : ''}${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${helperCount}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${reason}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
+    return { key: c.id, cls: `row row--chat lb-item${column ? ' row--board' : ''}${attention(c) ? ' is-attention' : ''}${completed && params.get('source') === c.source ? ` source-${c.source}` : ''}`, html: `${column ? whenCell(c) : lamp(c)}<p class="row__main">${column ? statusPill(c) : ''}${title}${waitBadge}${progress}${helperCount ? `<span class="chat-pill">${greenNum(helperCount)}</span>` : ''}${U.draw10?.badge(c) || ''}${U.visitorHiddenMark(c, '这场对话', viewer)}</p>${detailAction}<div class="row__acts">${rowActions}</div><div class="row__text">${lockLine}${completed ? [modelLine, titleMark].filter(Boolean).map(value => `<p class="row__sub">${value}</p>`).join('') : context && `<p class="row__sub chat-context">${context}</p>`}${reason}${meta}${steps}${latest}${thought}${locked ? '' : U.draw10?.compactionDisclosure?.(c, viewer) || ''}${completed && timing ? `<p class="row__sub" data-steady>${esc(timing)}</p>` : ''}${helpers.length ? `<ul class="helpers">${helperPreview}${[...helperFirst, ...helperRest].map((h, i) => { const later = i >= helperFirst.length ? ' hidden' : ''; return h.private_count ? `<li class="helper helper--sum"${later}>${U.visibilityNote({ visibility: 'owner', hidden_what: `其中 ${h.private_count} 个${groupedPreview ? '在干的' : ''}帮手` }, viewer)}</li>` : h.q === 'warming' ? `<li class="helper"${later}>正在准备</li>` : `<li class="helper"${later}><div><span class="helper__who" style="display:inline-flex;align-items:center;gap:8px">${lamp(h)}<span class="chat-tag">帮手</span>${who(h)}${U.visitorWholeHidden(c) ? '' : U.visitorHiddenMark(h, '这个帮手', viewer)}</span>${helperTitle(h, c) ? ` · ${helperTitle(h, c)}` : ''}${helperAt(h, at) ? ` · <span class="helper__at">${esc(helperAt(h, at))}</span>` : ''}${U.draw10?.helperDetailHtml?.(h, viewer) || ''}</div><span class="helper__at">${esc(stateText(h))}</span></li>`; }).join('')}${helperRest.length ? `<li class="helper helper--more"><button class="more" type="button" data-helpers-more>${helperButton(helperRest.length, !helperFirst.length)}</button></li>` : ''}</ul>` : ''}</div>` };
   }
   const stamp = at => `${U.date(at)} ${U.time(at)}`.trim();
   function readAt(at) {
@@ -238,9 +241,11 @@
     document.querySelectorAll('#chat-counts [data-links]').forEach(host => {
       const key = host.dataset.links === 'today' ? 'today' : 'd7';
       const by = homeFull?.agents?.today?.activity?.periods?.[key]?.total?.by_activity;
-      const mins = ['conversation', 'subagent'].map(k => by?.[k]?.actual_minutes).filter(Number.isFinite);
+      const parts = ['conversation', 'subagent'].map(k => by?.[k]?.actual_minutes), mins = parts.filter(Number.isFinite);
+      // 对话、帮手两项只读到一项时不当成完整的“干了 X 小时”：写“至少”，并说哪一项没读到（缺数指出哪组）
+      const short = mins.length === 1 ? `<small>（${Number.isFinite(parts[0]) ? '帮手' : '对话'}的没读到）</small>` : '';
       const runs = homeFull?.automation?.results_today?.finished_runs;
-      const links = [mins.length && `<a class="chat-stat-link" href="${esc(route(`/live/agents/?hours=${key}#hours`))}">干了 <strong>${hoursText(mins.reduce((a, b) => a + b, 0))}</strong><small>小时</small> ›</a>`,
+      const links = [mins.length && `<a class="chat-stat-link" href="${esc(route(`/live/agents/?hours=${key}#hours`))}">干了 ${short ? '至少 ' : ''}<strong>${hoursText(mins.reduce((a, b) => a + b, 0))}</strong><small>小时</small>${short} ›</a>`,
         key === 'today' && Number.isInteger(runs) && runs >= 0 && `<a class="chat-stat-link" href="${esc(route('/live/automation/?date=today'))}">自动任务另跑了 <strong>${runs}</strong><small>轮</small> ›</a>`].filter(Boolean);
       U.html(host, links.map(link => ` <span class="chat-stat-piece">· ${link}</span>`).join(''), false);
     });
@@ -315,7 +320,9 @@
       const firstGap = models?.[0]?.gap;
       const modelGap = typeof firstGap === 'string' && models.every(m => m.gap === firstGap) ? firstGap : '';
       const modelRow = m => {
-        const model = U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' });
+        // 别家的型号在 Antigravity 里跑的那行（例：Claude Opus 5.5）后面写“（Antigravity 里用）”，和本家那行分得清（主持 11-26 06:4x 定，照交回第 2 题 A）
+        const viaAg = m.vendor === 'antigravity' && !/^Gemini/i.test(String(U.draw10?.modelName?.(m) ?? m.model ?? '')) ? '（Antigravity 里用）' : '';
+        const model = (U.draw10?.modelHtml(m, { name: '型号', place: 'body', kind: viewer }) ?? U.fieldHtml(m.model, { name: '型号', place: 'body' })) + (viaAg && (m.model || m.model_text) ? viaAg : '');
         const counts = `${n(m.opened, m, 'opened', '对话')} · ${n(m.helpers, m, 'helpers', '帮手')}`;
         return `<p class="chat-model-row"><small>${model || '型号没记下'} · ${counts}${m.gap && !modelGap ? ' · ' + gapHtml(m.gap) : ''}</small></p>`;
       };
@@ -347,7 +354,7 @@
   function readViewer(meta) {
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
-      homeChats = activeChats = null; recentUsable = false; pages.clear();
+      homeChats = activeChats = null; recentUsable = false; pages.clear(); archivedPages.clear();
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
     }
     viewer = next;
@@ -518,8 +525,15 @@
     stoppedCard.bound = true; U.fold(stoppedCard.more, stoppedCard.box);
     return stoppedCard;
   }
+  // 已经往下读过的归档几批，名单更新（as_of 变了）后照旧留着接在后面，不退回第一批；同一场以新读到的为准，
+  // 已经挪到别的栏、或已经出了近 72 小时的，从留着的几批里去掉
+  function laterArchived(b) {
+    const elsewhere = new Set(['working', 'waiting', 'stopped'].flatMap(k => Array.isArray(b.columns?.[k]?.items) ? b.columns[k].items.map(c => c.id ?? c.key) : []));
+    const from = Date.parse(b.as_of) - 72 * 3600000;
+    return [...archivedPages.values()].flatMap(p => p.items).filter(c => !elsewhere.has(c.id ?? c.key) && !(Date.parse(c.sort_at) < from));
+  }
   function fillColumn(card, key, col, b) {
-    const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? [...archivedPages.values()].flatMap(p => p.items) : [])]
+    const all = bySortAt([...(Array.isArray(col?.items) ? col.items : []), ...(key === 'archived' ? laterArchived(b) : [])]
       .filter((c, i, list) => list.findIndex(x => (x.id ?? x.key) === (c.id ?? c.key)) === i));
     const picked = quotaPick && (key === 'working' || key === 'waiting') ? all.filter(c => stuckBy(c, quotaPick)) : all;
     const total = totalOf(col), listed = peopleIn(all), completed = key === 'stopped' || key === 'archived';
@@ -571,10 +585,11 @@
     if (cursor == null) return;
     button.disabled = true; U.html(button, '正在读…', false);
     try {
-      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor });
-      if (boardOf()?.as_of !== b.as_of) return;
-      if (Array.isArray(r.data?.items) && (r.data.as_of == null || r.data.as_of === b.as_of)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
-      else U.html(button, Array.isArray(r.data?.items) ? '名单刚更新过，再点一次继续读 ›' : U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
+      const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor }), kind = viewer;
+      if (!boardOf() || r.meta?.viewer?.kind && r.meta.viewer.kind !== kind) return;
+      // 读的时候名单更新了也照样接上（按编号去重），不让人再点一次（M915：读到第二页不能被更新冲掉）
+      if (Array.isArray(r.data?.items)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
+      else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
     } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
   }
   // 第一排两栏底边拉齐：矮的那栏最后一张卡拉长到和另一栏一样高；卡变高变矮（展开、来了新对话、换窗口宽）时重新拉（M534）
@@ -650,6 +665,15 @@
     const words = [n > 0 && `后台另有 ${n} 个在跑`, paused > 0 && `${paused} 个额度用完停等`].filter(Boolean).join(' · ');
     $('chat-background').hidden = !words; U.html($('chat-background'), words ? `<a class="chat-background" href="${esc(route(typeof own?.href === 'string' && own.href.startsWith('/live/') ? own.href : '/live/automation/'))}">${esc(words)} ›</a>` : '');
   }
+  // M915 设计第 10 节：整页只有一个时刻。四栏在时，顶栏“HH:MM 读到”和页头“截至”都用四栏那一次读到的时刻（board.as_of）；
+  // 断线、暂停公开时照旧由顶栏自己说“最后一份”
+  let headerState = null;
+  const setBar = (s = headerState) => {
+    if (!s) return;
+    headerState = s;
+    const asOf = boardOf()?.as_of;
+    bar?.set(!s.offline && !s.publicPaused && s.shownAt && Number.isFinite(Date.parse(asOf)) ? { ...s, shownAt: asOf } : s);
+  };
   window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {
       homeChats = d?.chats || null; homeSources = { data: homeChats, viewer }; drawSources(); homeAt = meta.at;
@@ -660,7 +684,7 @@
   }, link(s) {
     const minute = Math.floor(Date.parse(s.now) / 60000), offlineChanged = homeOffline !== !!s.offline; homeOffline = !!s.offline;
     if (homeChats && (offlineChanged || !s.offline && minute !== activityMinute)) { activityMinute = minute; U.anchor(() => render(homeChats, s.now)); }
-    bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
+    setBar(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
     if (!s.data && !activeChats) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
@@ -669,8 +693,9 @@
     readViewer(meta);
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
     const nextBoard = d?.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
-    if (nextBoard?.as_of !== baseBoard?.as_of) archivedPages.clear();
+    if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
     baseBoard = nextBoard;
+    setBar();
     if (homeChats || activeChats) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
   }, link(s) { U.blockNote($('active'), s); } });

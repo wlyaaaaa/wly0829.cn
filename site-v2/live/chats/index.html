@@ -61,6 +61,18 @@
 .page--chats .chat-think--fits > .chat-think__toggle { display: none; }
 .page--chats .lb-item .helpers { margin-top: 8px; }
 .page--chats .lb-card__note { margin: 0 22px 14px; }
+/* 页头卡、三家额度那一排、统计卡、最下面“近 30 天”那张跟中间四栏一样宽（四栏有意跟自动任务页一样宽，不动；主控 11-26 06:15 记的老毛病）；只改宽度，卡里的排法不动 */
+.page--chats :is(#hero, #chat-quota, .chat-stats) { --wide: min(1856px, calc(100vw - 64px)); margin-inline: calc((var(--col) - var(--wide)) / 2); }
+/* 加绿（本人 11-26 00:14 点头 GREENIMG1126 选 A，照 G-AI对话-v6）：只加颜色，版式和字不动。
+   “今天”“近 7 天”“在干”“等你”前一根绿竖条；今天、近 7 天的对话数和帮手数绿；在干、等你两栏里“问情况”“打开对话”“看完整对话”绿字绿边白底（照本人给的那颗），
+   历时、帮手数、第几步的数字绿。“停下了，没归档”（状态不明在这一栏）和“做完了 · 已归档”不加绿；对话标题前只留空心圈；进度条照旧 */
+.page--chats .chat-counts h2 { display: flex; align-items: center; gap: 9px; }
+.page--chats .chat-counts h2::before, .page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .lb-card__title::before { content: ""; flex: none; align-self: center; width: 5px; height: 18px; border-radius: 3px; background: #00A650; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .lb-card__title::before { height: 22px; margin-right: -2px; }
+.page--chats .chat-counts > div > p:first-of-type > strong { color: #00A650; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) :is(.row__acts .btn, .chat-detail-link) { border-color: #00A650; background: #fff; color: #00A650; font-weight: 600; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) :is(.row__acts .btn, .chat-detail-link):is(:hover, :focus-visible) { border-color: #008a43; background: rgb(0 166 80 / .07); color: #008a43; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .chat-green { color: #00A650; font-weight: 600; }
 </style>
 <link rel="stylesheet" href="/live/chats/draw10.css">
 </head>
