@@ -67,7 +67,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-result[data-state="failed"] { color: #a83948; }
 .task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
 /* 部分完成的那一轮和那一天：沿用计划任务列表“要留意”的黄点和字色（M381、M676） */
-.task-mark[data-state="warn"] { background: #e9b714; border-color: transparent; }
+.task-mark:is([data-state="warn"], [data-state="observed-failed"]) { background: #e9b714; border-color: transparent; }
 .task-dot[data-state="warn"] { background: #e9b714; border-color: transparent; }
 .task-result[data-state="warn"] { color: #9a6514; }
 /* 统计格和下面卡片拉开一点，“最近几次”“这个任务”的标题不和统计格挤成一块 */
@@ -88,7 +88,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-stat[data-stat="failure"] { background: #fae8eb; }
 /* “出错”那格跟着后台分档（M779）：大部分成功黄、部分成功橙、全出错红，全成功不上色 */
 .task-stats[data-outcome="ok"] .task-stat[data-stat="failure"] { background: rgb(255 255 255 / .62); }
-.task-stats[data-outcome="mostly"] .task-stat[data-stat="failure"] { background: #fbedbb; }
+.task-stats:is([data-outcome="mostly"], [data-outcome="warn"]) .task-stat[data-stat="failure"] { background: #fbedbb; }
 .task-stats[data-outcome="partial"] .task-stat[data-stat="failure"] { background: #fcdcc4; }
 .task-stats[data-outcome="failed"] .task-stat[data-stat="failure"] { background: #f9d9d6; }
 /* 出错那格读到 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色；后台给了分档仍照分档 */

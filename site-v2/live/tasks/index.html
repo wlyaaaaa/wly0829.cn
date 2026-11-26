@@ -91,9 +91,10 @@
 .task-days { display: flex; gap: 6px; width: max-content; }
 .task-day { position: relative; width: 15px; height: 15px; padding: 0; border: 1px solid #d9ddd7; border-radius: 4px; background: #f0f1ed; cursor: pointer; }
 .task-day[data-state="ok"] { background: rgb(var(--glow-green)); border-color: transparent; }
+.task-day[data-state="observed-ok"] { background: transparent; border-color: rgb(var(--glow-green)); }
 .task-day[data-state="failed"] { background: #d9443a; border-color: #d9443a; }
 .task-day[data-state="partial"] { background: #ef7a22; border-color: #ef7a22; }
-.task-day:is([data-state="mostly"],[data-state="warn"]) { background: #e9b714; border-color: #e9b714; }
+.task-day:is([data-state="mostly"],[data-state="warn"],[data-state="observed-failed"]) { background: #e9b714; border-color: #e9b714; }
 .task-day[data-state="unknown"] { background: repeating-linear-gradient(135deg, #ddd 0 1px, transparent 1px 4px); border-style: dashed; }
 .live-offline .task-day { background: transparent; border-color: #aeb9b3; box-shadow: none; }
 .task-day-tip { display: none; position: absolute; z-index: 6; bottom: 23px; left: -8px; width: max-content; padding: 7px 10px; border-radius: 8px; background: #f6faf9; box-shadow: 0 5px 24px #153d3426; color: #263c37; font-size: 13px; white-space: nowrap; }

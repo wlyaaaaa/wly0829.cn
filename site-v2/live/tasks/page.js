@@ -94,16 +94,18 @@
   const groupsRead = U.reading($('groups'), { ghost: U.ghost.rows(4) }), changesRead = U.reading(changesBox, { ghost: U.ghost.rows(3), slow: false });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
-  // 后台没给分档、或给的是 unknown（次数读不全）的，照原来的 state 画（同一天先算出错，其次成功，再次部分完成，M676）
+  // 旧包的 failed 只表示当天有一轮出错，没有足够记录时用黄格提醒。
   const TIER = { success: 'ok', mostly_successful: 'mostly', partial_success: 'partial', failed: 'failed', warn: 'warn', none: 'none' };
-  const dayTier = day => TIER[day?.outcome?.state] || day?.state;
+  const dayTier = day => TIER[day?.outcome?.state] || (day?.state === 'failed' ? 'observed-failed'
+    : day?.state === 'ok' && day.partial ? 'observed-ok' : day?.state);
+  const dayTrouble = day => ['mostly', 'partial', 'failed', 'observed-failed'].includes(dayTier(day));
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0 && o.state !== 'none'
     ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   function week(d) {
     if (U.offline?.() && !Array.isArray(d.days7)) return '';
-    const labels = { ok: '跑成了', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '没跑成', warn: '部分完成', none: '没跑' }, days = d.days7;
-    if (!Array.isArray(days) || days.every(day => day.state == null || day.state === 'unknown')) return '';
-    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const state = day.state == null || day.state === 'unknown' ? day.state : dayTier(day), label = `${U.date(day.date)} ${labels[state] || U.collectionText()}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`; return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
+    const labels = { ok: '跑成了', 'observed-ok': '至少一轮成功', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '部分完成', none: '没跑' }, days = d.days7;
+    if (!Array.isArray(days) || days.every(day => dayTier(day) == null || dayTier(day) === 'unknown')) return '';
+    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const state = dayTier(day), label = `${U.date(day.date)} ${labels[state] || U.collectionText()}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`; return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
   }
   function taskName(t) {
     if (viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden || t.hidden_block || t.content_locked)) return { visibility: 'owner' };
@@ -147,7 +149,7 @@
     const reason = notRunningReason(t) || (t.state === 'disabled' ? '停用' : '');
     const plan = t.schedule ? U.fieldHtml(t.schedule, { name: '运行周期', place: 'body', kind: viewer }) : '';
     // 近 7 天每天的小方块只给出过事的任务画；正常的只写时间和结果
-    const trouble = Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed' || ['mostly', 'partial', 'failed'].includes(dayTier(day)));
+    const trouble = Array.isArray(t.days7) && t.days7.some(dayTrouble);
     const field = (value, name) => U.fieldHtml(value, { name, kind: viewer });
     const outcome = field(Object.hasOwn(t, 'status_text') ? t.status_text : result, '运行结果');
     const lastCell = [lastAt && `<span aria-label="上次${last.start ? '运行' : '结束'} ${esc(stamp(lastAt))}">${stamp(lastAt)}</span>`, (outcome || trouble) && `<span class="lb-run"><span data-task-state data-result="${esc(resultKey)}">${outcome}</span>${trouble ? week(t) : ''}</span>`];
@@ -496,7 +498,7 @@
     U.html($('head'), heading);
     if (project) U.html($('project-label'), [linkedProject(project) && typeof page?.project_name === 'string' ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(project)}`))}">${U.fieldHtml(page.project_name, { name: '项目筛选', kind: viewer })} ›</a>` : U.fieldHtml(page?.project_name || page?.project_name_gap || U.collectionText('项目名称', page), { name: '项目筛选', kind: viewer }), !maintenance && U.fieldHtml(total != null ? `${String(total).startsWith('至少') ? '' : '共 '}${total} 件` : U.collectionText('任务总数', page), { name: '项目筛选', kind: viewer })].filter(Boolean).join(' · '));
     // 小方块黄橙怎么分。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现出错次数不超过成功次数算大部分成功；变了改这句
-    const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(day => day?.state === 'failed')) && '近 7 天出过事的任务画了每天的小方块（灰格是那天没记录；黄“大部分成功”是出错次数不超过成功次数，橙“部分成功”是出错多于成功）', ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');
+    const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)) && '近 7 天出过事的任务画了每天的小方块（灰格是那天没记录；黄“大部分成功”是出错次数不超过成功次数，橙“部分成功”是出错多于成功）', ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');
     const rosterOld = Date.now() - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
     const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册停在 ${U.time(dataAt)}，之后没更新` : ''
       : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
