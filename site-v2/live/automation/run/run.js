@@ -72,7 +72,7 @@
   // 提交在 GitHub 上：本人版给链接并标“访客看不到”，访客版写已提交、为什么不放链接（后台没标仓库公开还是私有）
   const GITHUB_WHY = '本人的 GitHub 仓库有一部分是私有的，访客点开会打不开';
   function outputs(r) {
-    const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${o.version ? ` 第 ${esc(o.version)} 版` : ''}` : ''}</p>
+    const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
       ${o.href ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href)}">${esc(o.go)} ›</a>${o.github ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : ''}</span>`
         : `<span class="tp-small">${o.github ? `已提交 · 访客版不放提交链接（${GITHUB_WHY}）` : o.kind === 'commit' ? '还没发布，没有能打开的地址' : '没有能打开的地址'}</span>`}</li>`).join('');
     const receipt = r.receipt || {};

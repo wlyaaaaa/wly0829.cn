@@ -194,10 +194,17 @@
     return U.visitorLabel({ visitor_labels: r.labels }, ['summary', 'title', 'activity', '$'], '这一轮的说法', viewer);
   }
 
+  // 文档后面补的“第 N 版”：后台的标题里已经写了这一版（“《他要什么》第 15 版”）就不再补，免得“第 15 版 第 15 版”
+  function versionTail(o, viewer) {
+    if (!o?.version) return '';
+    const title = U.fieldText(o.title, viewer).replace(/\s+/g, ''), v = String(o.version).replace(/\s+/g, '');
+    return title.includes(`第${v}版`) ? '' : ` 第 ${U.esc(String(o.version))} 版`;
+  }
+
   // 访客版称呼：页面上指本人的“你”写“本人”（私事线 11-26：替本人看新消息、转给本人、等本人打开、需要本人操作）。
   // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, asOwner, roundTag };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, asOwner, roundTag, versionTail };
 })();

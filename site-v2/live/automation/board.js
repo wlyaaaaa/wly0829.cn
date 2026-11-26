@@ -245,7 +245,7 @@
   const Fm = (v, name) => { const h = F(v, name); return viewer !== 'owner' && /仅本人可见/.test(h) ? '' : h; };
   const outLink = o => {
     const label = o.kind === 'owner_item' ? `${Fm(o.title, '那张卡') || ''}那张卡` : o.kind === 'ledger_item' ? `账本${o.title && Fm(o.title, '账本那件') ? `：${Fm(o.title, '账本那件')}` : '那件'}`
-      : o.kind === 'commit' ? `提交${o.title && Fm(o.title, '提交') ? `：${Fm(o.title, '提交')}` : ''}` : `${Fm(o.title, '文档') || '文档'}${o.version ? ` 第 ${esc(o.version)} 版` : ''}`;
+      : o.kind === 'commit' ? `提交${o.title && Fm(o.title, '提交') ? `：${Fm(o.title, '提交')}` : ''}` : `${Fm(o.title, '文档') || '文档'}${R.versionTail(o, viewer)}`;
     return o.href ? `<a class="tp-link" href="${esc(o.href)}">${label} ›</a>` : `<span>${label}</span>`;
   };
   function outputs(r) {
