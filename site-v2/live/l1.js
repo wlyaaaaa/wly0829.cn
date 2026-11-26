@@ -1140,7 +1140,8 @@
       Light.tone(cards[id], tone);
       p.status.hidden = !summary;
       U.html(p.status, U.nowrap(summary), false);
-      U.blockNote(cards[id].querySelector('.card__body'), state); // 保留计划任务旧读数的说明。
+      // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
+      U.blockNote(cards[id].querySelector('.card__body'), state.offline && !counts.length && !rows.length ? null : state);
       paintList(p.main, rows, { animate: false });
       fitCard(id);
     };
