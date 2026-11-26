@@ -435,7 +435,8 @@
           showUnavailable();
           if (verification) renderVerification();
         } else { heroRead.set(state); copiesRead.set(state); if (state.phase === 'gone') $('rec').hidden = true; }
-        [hero.querySelector('.card__body'), $('copies-section')].forEach(el => U.blockNote(el, state));
+        // 这页只有这一块：从几点起读不到、手上是几点的，页顶那张卡已经说了，块里不再说第二遍（和自动任务、开场页只留页顶卡一样；D6 复查）
+        [hero.querySelector('.card__body'), $('copies-section')].forEach(el => U.blockNote(el, null));
       }
     });
     if (id === 'recovery-kit') {
