@@ -306,8 +306,12 @@
     // M684：本人版成品名称旁按后台 visitor_labels.title 挂签；后台还没标、但访客版另有名字（public_title 和本人版的名字不一样）的，就是成品改了名字，挂第二种签。
     const renamed = projectViewer === 'owner' && typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(it.recent_title || it.title, projectViewer).trim();
     // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：本人版名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
-    const wholeTag = projectViewer === 'owner' && U.visitorWholeHidden(it, ['$']) ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
-    const nameTag = !name ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
+    // 只在最外面挂一个（LOOKS1126 ②）：这个项目整个访客看不到时，页头已挂“访客看不到”，成品各行一个签都不再挂；
+    // 只是这份成品整条看不到时，签挂在名称旁，“在电脑上打开”旁不再重复挂
+    const quiet = projectViewer === 'owner' && U.visitorWholeHidden(proj, ['$', 'name']);
+    const whole = projectViewer === 'owner' && U.visitorWholeHidden(it, ['$']);
+    const wholeTag = whole && !quiet ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
+    const nameTag = !name || quiet ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
     const changes = canShorten && Array.isArray(it.changes) && it.changes.length ? it.changes : display !== title ? [typeof title === 'string' ? title.replace(/([。！？])\s*；/g, '$1') : title] : [];
     const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${text(change)}</p>`).join('')}</details>` : '';
     const publicLink = projectViewer === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
@@ -318,7 +322,7 @@
     const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
     const action = target ? projectViewer === 'public' && typeof target.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>${U.visitorLabel(it, 'open', '这份成品的正文', projectViewer)}`
-      : pcActions(item, [target]) + (U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
+      : pcActions(item, [target]) + (quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
     const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
     const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');

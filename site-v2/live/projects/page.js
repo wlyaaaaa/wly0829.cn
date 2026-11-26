@@ -519,37 +519,41 @@
         // 两版同一套：访客版正文那句照写，打开按钮也照摆，不再让那句把按钮压掉
         if (openNote && audience === 'public') item = { ...item, openNote };
         else if (audience === 'owner') {
-          const ownerNote = U.visitorLabel(it, 'open', '这份成品的正文', audience) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) : '');
+          // 整条访客看不到的成品只在名称旁挂一个“访客看不到”，“在电脑上打开”旁不再重复挂（LOOKS1126 ②，全站同一个口径）
+          const whole = U.visitorWholeHidden(it, ['$']);
+          const ownerNote = whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', audience) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, audience) : '');
           if (ownerNote) item = { ...item, ownerNote };
           const renamed = typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(raw, audience).trim();
           // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
-          const wholeTag = U.visitorWholeHidden(it, ['$']) ? U.visitorHiddenMark(it, '这份成品', audience, { keys: ['$'] }) : '';
+          const wholeTag = whole ? U.visitorHiddenMark(it, '这份成品', audience, { keys: ['$'] }) : '';
           const nameTag = wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', audience) : '');
-          if (nameTag) title += nameTag;
+          if (nameTag) item = { ...item, nameTag };
         }
         if (audience !== 'owner') {
           // M930：访客版只挂“对外换了说法”（后台在访客回包里标了 rewritten 才有）
           const openTag = U.visitorLabel(it, 'open', '这份成品的正文', audience), nameTag = U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', audience);
           if (openTag) item = { ...item, ownerNote: openTag };
-          if (nameTag) title += nameTag;
+          if (nameTag) item = { ...item, nameTag };
         }
       }
-      const sig = secret && audience === 'public' ? item.id : `${title}\u0000${sub}`;
+      const sig = secret && audience === 'public' ? item.id : `${title}\u0000${item.nameTag || ''}\u0000${sub}`;
       let row = group.rows.find(r => r.sig === sig);
-      if (!row) group.rows.push(row = { sig, title, sub, members: [] });
+      if (!row) group.rows.push(row = { sig, title, tag: item.nameTag || '', sub, members: [] });
       row.members.push({ item, open, at: it.at });
     });
     const openAction = (item, action) => audience === 'public' && typeof action.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(action.href)}"${/^https?:/i.test(action.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(action.label)}</a>`
       : U.actions(item, [action]);
-    const rowHtml = r => {
-      const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '';
-      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${r.title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${m.item.ownerNote || ''}</div>` : m.item.ownerNote ? `<div class="acts">${m.item.ownerNote}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
+    // quiet：整张卡（这个项目）访客看不到时，卡头项目名旁已挂一个“访客看不到”，卡里各行的名称旁、“在电脑上打开”旁一个签都不再挂
+    const rowHtml = (r, quiet = false) => {
+      const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '', note = x => quiet ? '' : x.item.ownerNote || '';
+      const title = r.title + (quiet ? '' : r.tag);
+      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${note(m)}</div>` : note(m) ? `<div class="acts">${note(m)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
       // 本人版的“访客看不到”签跟着自己的日期，成组不拆行；整组每份都挂同一个签时，只在组名旁挂一个
-      const groupNote = r.members.every(x => x.item.ownerNote && x.item.ownerNote === m.item.ownerNote) ? m.item.ownerNote : '';
-      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : x.item.ownerNote || '') + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`}</span>`).join('');
-      return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${r.title} <span class="pj-art__count">×${r.members.length}</span>${groupNote}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
+      const groupNote = r.members.every(x => note(x) && note(x) === note(m)) ? note(m) : '';
+      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : note(x)) + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`}</span>`).join('');
+      return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${title} <span class="pj-art__count">×${r.members.length}</span>${groupNote}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;
     const cards = [...groups.values()].map(g => {
@@ -557,12 +561,13 @@
       // 本人版：整项不给访客看的项目（名册里标 visitor_labels.name=hidden 或 visibility: 'owner'），卡头项目名后挂“访客看不到”；成品行里的项目只带 id 和名字，标记到名册里找
       const listed = audience === 'owner' && !g.secret && p?.id ? [...(Array.isArray(roster) ? roster : []), ...['active', 'frozen'].flatMap(key => states.get(key)?.data?.items || [])].find(r => r?.id === p.id) || p : null;
       const headTag = !listed ? '' : projectTag(listed, audience) || (listed.visibility === 'owner' || listed.public === 'owner' ? U.visitorHiddenTag('这个项目', '', audience) : '');
+      const quiet = !!listed && U.visitorWholeHidden(listed, ['$', 'name']);
       const head = (g.secret ? `<span class="row__title">${name}</span>` : p?.href ? `<a class="row__title" href="${esc(route(p.href))}">${name} <span class="more__chev">›</span></a>` : `<span class="row__title">${name}</span>`) + (headTag ? ` ${headTag}` : '');
       // 卡里先 3 行，“展开（还有 N 条）”一次再露 5 行，露到底变“收起”（R97、R147；长列表表第 112 项）
       const extra = Math.max(0, g.rows.length - SHOW), open = Math.min(extra, reveals.artifacts.get(g.key) || 0), left = extra - open;
       const step = extra ? `<button class="more pj-step" type="button" data-step-of="artifacts" data-step="${esc(g.key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       const header = g.secret && audience === 'public' ? '' : `<div class="pj-art__head">${g.secret ? miniPic('', null) : miniPic(p?.id, p?.name)}${head}</div>`;
-      return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW + open).map(rowHtml).join('')}</ul>${step}` };
+      return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW + open).map(r => rowHtml(r, quiet)).join('')}</ul>${step}` };
     });
     const range = recent?.range || '7d', count = range === '7d' ? recent?.count_7d : recent?.count;
     // 还能往下翻的不算“未读到”；翻完了还比登记的少才写
