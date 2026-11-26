@@ -292,7 +292,9 @@
   }
   let lastOverview = null;
   function drawRange(key) { if (key === 'changes') renderChanges(); else drawProjectExtras(lastOverview); }
-  $('changes').querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('changes'));
+  const changesHeading = $('changes').querySelector('.part');
+  const changesTitle = changesHeading.firstChild;
+  changesHeading.insertAdjacentHTML('beforeend', rangeSeg('changes'));
   // 切时间档还在加载时，“加载中 · 下面先留着…”写在时间按钮下面、列表上面（和成品那块同一个位置），点了马上看得到
   const changesWaiting = document.createElement('p'); changesWaiting.className = 'pj-extra__note'; changesWaiting.hidden = true; $('changes').querySelector('.part').after(changesWaiting);
   document.addEventListener('click', e => {
@@ -317,20 +319,25 @@
     });
     const projects = new Map(roster.map(it => [it.id, it]));
     const rows = own.rows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
-    const data = own.data, gap = data?.gap && (data.q === 'partial' || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const data = own.data;
+    const partial = data?.q === 'partial' || Array.isArray(data?.partial) && data.partial.includes('total');
+    const gap = data?.gap && (partial || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const lastFull = !partial && (isStale(data) || U.offline?.()) && Number.isInteger(data?.total)
+      && Number.isFinite(Date.parse(data?.source_at)) && stamp(data.source_at).slice(-11);
+    changesTitle.textContent = partial ? '已读到的变化' : '全部变化';
     const hidden = data?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
     const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
     if (['loading', 'missing'].includes(own.state)) fill('changes', [], rangeWord('changes', range, own.state));
-    else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : quiet);
+    else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || partial || gap ? '' : quiet);
     // 读到的项目组都露完了才出“更多变化 ›”接着读（和成品那块“更多成品 ›”一样）
     const groupsLeft = !$('changes-more').hidden && $('changes-more').getAttribute('aria-expanded') !== 'true';
     $('next').hidden = !!kept || !own.next || groupsLeft;
     // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
-    const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
+    const listed = own.rows?.length || 0, count = !partial && range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
       ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
     const waiting = kept ? waitingNote('changes', picked, kept) : '';
     changesWaiting.hidden = !waiting; U.html(changesWaiting, waiting);
-    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
+    const note = [lastFull ? `这是 ${esc(lastFull)} 读全的那一批` : gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
     changesNote.hidden = !note; U.html(changesNote, note);
   }
   function link(key, s) {
