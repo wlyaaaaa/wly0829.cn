@@ -667,19 +667,33 @@
   };
   const MANY_TITLE = { decline: '这 N 件都不办了？', done: '复制这 N 件的办理结果？', decline_copy: '复制这 N 件的后续给 AI？',
     later: '这 N 件都晚点再提醒？', ack: '这 N 件都确认已知？', close_report: '关掉这 N 份汇报？' };
-  // 没保存上时给本人看的原因：后台回的错误名换成人话（错误名留在回执的 data-error 上，查问题用）
+  // 后台原原因留在回执和日志里。页面只给能读懂的办理提示。
   const FAILED_TEXT = {
     cockpit_action_not_allowed: '后台现在不让这张卡这样办，没保存上。卡先留着，可以点“问情况”交给 AI 处理。',
-    cockpit_item_changed: '这张卡刚有变化，没保存上。点“再点一次”会按最新的再保存。',
-    cockpit_item_buttons_disabled: '电脑这会儿没开放卡上的按钮，没保存上。稍后再点一次。',
     cockpit_owner_required: '这台设备没配对，没保存上。',
-    cockpit_device_rate_limited: '点得太多了，没保存上。过几分钟再点一次。',
-    cockpit_action_missing: '这一下没送到后台，没办；卡还在，可以再点一次（再点沿用原来的编号，后台认得出是同一笔，不会办两次）。',
   };
+  const ITEM_FAILURE_MESSAGES = new Map([
+    ['这次提交编号不正确。', '这次提交的编号不对，刷新页面再点一次。'],
+    ['事项版本格式不正确，请刷新。', '页面上这条不是最新的，刷新页面再点一次。'],
+    ['这次提交编号已用过，请刷新后重试。', '这一下之前已经提交过，刷新看看是不是已经保存上了。'],
+    ['事项已经变化，无法写回，请刷新。', '这条事项刚被改过，刷新看到最新的再操作。'],
+    ['事项内容已经变化，操作没有保存，请刷新。', '这条事项刚被改过，刷新看到最新的再操作。'],
+    ['这台设备已在写回期间撤销，本次修改已撤回。', '保存时这台设备的配对被取消了，这次修改没生效；重新配对后再点。'],
+  ]);
+  const ITEM_FAILURE_CODES = new Map([
+    ['public_origin_not_allowed', '只能在 wly0829.cn 打开的页面里操作，到那里再点一次。'],
+    ['public_request_invalid', '这次提交的内容不对，刷新页面再点一次。'],
+    ['public_request_too_large', '这次提交的内容太多，少选几条再点。'],
+  ]);
   const ITEM_RECEIPT_ACCEPTED = '已收下，还在写', ITEM_RECEIPT_UNKNOWN = '还没查到结果，会接着查这一次';
-  function readableWriteReason(message) {
+  const ITEM_RECEIPT_MISSING = '没查到这一次的记录，可能没送到；刷新看看事项变了没有，没变就再点一次。';
+  function readableWriteReason(receipt) {
+    const { error, message } = receipt || {};
     const text = typeof message === 'string' ? message.trim() : '';
-    return /\p{Script=Han}/u.test(text) && !/\b\w+_\w+\b|\bHTTP\s+\d+|提交编号|事项版本格式|写回/u.test(text) ? text : '';
+    const translated = ITEM_FAILURE_MESSAGES.get(text) || ITEM_FAILURE_CODES.get(error);
+    if (translated) return translated;
+    if (/\p{Script=Han}/u.test(text) && !/\b\w+_\w+\b|\b[A-Z]{4,}\b|\b\w*(?:Error|Exception)\b|\bHTTP\s+\d+|提交编号|事项版本格式|写回|数据库|序列化|堆栈/u.test(text)) return text;
+    return Object.hasOwn(FAILED_TEXT, error) ? '' : '后台没给能看懂的原因，刷新看看保存上没有。';
   }
   const itemWrites = new Set();
   function itemIntent(item, action) {
@@ -849,14 +863,21 @@
       else {
         const accepted = unsure.length > 0 && allAccepted(unsure);
         const waitingText = accepted ? ITEM_RECEIPT_ACCEPTED : ITEM_RECEIPT_UNKNOWN;
-        const reasonFor = failure => readableWriteReason(receipts[failure.item.id]?.message);
-        const failure = failed[0], reason = failure && reasonFor(failure), batch = rows.length > 1;
-        const head = batch ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && (accepted ? `已收下、还在写 ${unsure.length} 件` : `还没确认 ${unsure.length} 件`)].filter(Boolean).join('，')
-          : failure?.error === 'cockpit_action_missing' ? '这一下没送到后台' : failure ? (reason ? `没保存上：${reason}` : '没保存上') : waitingText;
+        const missing = failure => failure.error === 'cockpit_action_missing';
+        const reasonFor = failure => readableWriteReason(receipts[failure.item.id]);
+        const failure = failed[0], batch = rows.length > 1;
+        const reason = failure && !missing(failure) && reasonFor(failure);
+        const missingCount = failed.filter(missing).length, failedCount = failed.length - missingCount;
+        const unknownCount = (accepted ? 0 : unsure.length) + missingCount;
+        const head = batch ? [
+          saved.length && `保存上 ${saved.length} 件`, failedCount && `没保存上 ${failedCount} 件`,
+          accepted && `已收下、还在写 ${unsure.length} 件`, unknownCount && `还没确认 ${unknownCount} 件`,
+        ].filter(Boolean).join('，') : failure
+          ? (missing(failure) ? ITEM_RECEIPT_MISSING : reason ? `没保存上：${reason}` : '没保存上') : waitingText;
         const details = batch ? [...failed.map(f => {
-          const detail = reasonFor(f) || FAILED_TEXT[f.error];
-          return `「${f.name}」` + (detail ? '：' + detail : '');
-        }), unsure.length && waitingText] : [nameOf(rows[0]), failure && !reason && FAILED_TEXT[failure.error]];
+          const detail = missing(f) ? ITEM_RECEIPT_MISSING : reasonFor(f) || FAILED_TEXT[f.error];
+          return `「${f.name}」：${detail}`;
+        }), unsure.length && waitingText] : [nameOf(rows[0]), failure && !reason && !missing(failure) && FAILED_TEXT[failure.error]];
         receipt.set('fail', head,
           { name: [...details, extra].filter(Boolean).join('\n'), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
         failedReceipts.set(receipt.note, { key: receiptKey(left), close: receipt.close });
