@@ -125,6 +125,8 @@
 .live-unreadable .board__wide { grid-column: auto; }
 .page--live.live-unreadable .board .card .card__glass { min-height: 0; padding: 14px 20px; }
 .live-unreadable .card__body { padding: 0 !important; }
+/* 电脑连不上、各卡收成一两行时，长的那行（计划任务）也在画淡进来之前换行，不伸到右边插画下面（r83 返修） */
+.page--live.live-unreadable .board .card[data-pic="right"] .card__body { padding-right: calc(var(--win) * .6) !important; }
 .live-unreadable .card__body > :not([data-part="head"]):not([data-part="status"]) { display: none !important; }
 .page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }

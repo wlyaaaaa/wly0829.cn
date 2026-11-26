@@ -327,14 +327,16 @@
     card.classList.add('card--empty'); card.classList.toggle('card--warming', warming);
     const named = id === 'chats', name = NAME[id];
     const caption = id === 'needs' && d ? addressed('等你的事 · 没有记录') : d?.text || `${name}暂时读不到`;
-    const text = warming ? '正在准备' : lastState?.offline ? `${name}：这块没存下来，连上后补上。` : caption;
-    U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>` : cardHead(text, name));
+    // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
+    const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
+    U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
+      : gone ? U.head(name) + `<br><span class="row__sub">${esc(text)}</span>` : cardHead(text, name));
     for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (!el.querySelector?.('[data-part]')) U.html(el, ''); el.hidden = true; }
     paintStatus(id, d);
   }
 
   // —— 加载中（雾里显影，_lib/live-ui.js 的 reading）：第一次读、手上还没有数时七张卡各自进雾，数到了由糊变清；
-  //    电脑不在线、又没存下来时每张卡收成一句话（名字 + “电脑不在线，这块没存下来，开机后自动补上”） ——
+  //    电脑不在线、又没存下来时每张卡收成卡名加一句灰色小字“这块没存下来，连上后补上。” ——
   const NAME = Object.fromEntries(PAGES.map(p => [p.id, p.name || p.id]));
   let projectLooks = null;
   const LINES = { needs: 3, chats: 3, computer: 3 };
