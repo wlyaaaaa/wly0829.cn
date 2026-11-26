@@ -206,8 +206,21 @@
         cells.set(`${s.id}:${key}`, { state: tier[0], label: tier[1] });
         return cell(tier[0], tier[1], [told !== tier[1] && told, !narrowFailure && said, counts, ...lines], note + link, failureNote);
       }
-      cells.set(`${s.id}:${key}`, { state: told ? 'gap' : state, label: told || label });
-      return cell(told ? 'gap' : state, told || label, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
+      const countReason = copy?.missing?.count;
+      const countCode = countReason?.reason_code || countReason;
+      const countMissing = copy?.count == null && countCode !== 'not_applicable';
+      const gEvidenceOnly = key === 'g' && state === 'complete' && (refresh === 'failed' || countMissing);
+      const gConfirmed = copy?.confirmed_state === 'complete' && confirmedAt;
+      const evidenceLabel = gConfirmed ? '上次确认有副本' : '只核实部分副本';
+      if (gEvidenceOnly) {
+        if (refresh === 'failed') lines.unshift('本次未刷新');
+        const countNote = !countCode || countCode === 'not_recorded' ? '没有记录' : reason(countReason);
+        if (countMissing) lines.unshift(`份数：${U.fieldText(countNote, viewer)}`);
+      }
+      const shownState = told ? 'gap' : gEvidenceOnly ? 'unknown' : state;
+      const shownLabel = told || (gEvidenceOnly && evidenceLabel) || label;
+      cells.set(`${s.id}:${key}`, { state: shownState, label: shownLabel });
+      return cell(shownState, shownLabel, lines, causes.length ? `<details class="backup-note"><summary>副本说明</summary><div>${causes.join('<br>')}</div></details>` : '');
     };
     cells.clear();
     const sets = U.mergePrivateRows(byImportance((d.sets || []).filter(s => s.name)), { value: s => s.name, kind: viewer });
