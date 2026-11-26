@@ -119,6 +119,8 @@
 .page--computer .hero__warns, .page--computer .hero__count, .page--computer .hero__note { margin-left: 0; }
 .computer-impact > small { display: block; }
 .page--computer .hero__warns a, .page--computer .hero__devs .dev-pill { display: flex; gap: 8px; min-width: 0; min-height: 24px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; font-size: 14px; line-height: 24px; }
+.dev-laptop-unavailable { min-width: 0; white-space: normal; }
+.dev-laptop-unavailable > span { white-space: nowrap; }
 .page--computer .computer-hw-item, .page--computer .remote-link > a { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
 .page--computer .hero__devs .row__sub { margin: 4px 0 0; font-size: 12px; line-height: 20px; }
 .desktop-config__summary { margin: 2px 0 4px; color: var(--muted); font-size: 12px; line-height: 19px; }
