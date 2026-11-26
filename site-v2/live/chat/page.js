@@ -171,11 +171,12 @@
     const { locked, name, hiddenName, title, missingReply, plan, log, progress, rawReply, hasReply, meta, project, app } = V.pageMeta();
     document.title = `${title} · 实况`;
     const model = who(chat, true);
-    // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀
+    // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀。
+    // 落点跟首页智能体卡点一家一样（MODELJUMP1126 本人 11-26 选 A）：“今天三家干了多少”（#hours），选好今天，这一家那条横条框绿（agents/land.js）
     const family = [chat.software, /^(claude|codex|antigravity):/i.exec(chat.id || '')?.[1]].map(v => String(v || '').toLowerCase()).find(v => /^(claude|codex|antigravity)$/.test(v));
     const go = (href, words) => `<a class="route-head__go" href="${esc(route(href))}">${words} ›</a>`;
     part('meta').hidden = !meta.length && !project && !app;
-    U.html(part('meta'), app + meta.map(v => !locked && v === progress ? `<a class="more" href="#plan-box">${esc(v)} ›</a>` : v === model && family ? `<span>${go(`/live/agents/?family=${family}#work`, U.fieldHtml(v, { name: '对话内容', kind: viewer }))}</span>` : `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('') + (project ? `<span class="route-head__project">所属项目 ${project}</span>` : ''));
+    U.html(part('meta'), app + meta.map(v => !locked && v === progress ? `<a class="more" href="#plan-box">${esc(v)} ›</a>` : v === model && family ? `<span>${go(`/live/agents/?hours=today&family=${family}#hours`, U.fieldHtml(v, { name: '对话内容', kind: viewer }))}</span>` : `<span>${U.fieldHtml(v, { name: '对话内容', kind: viewer })}</span>`).join('') + (project ? `<span class="route-head__project">所属项目 ${project}</span>` : ''));
     U.draw10?.detail(part('meta'), chat, viewer);
     // “开场读的规矩 ›”接在“压缩过 N 次 ›”那一行后面（图 L-chat-v3 圈②）；没压缩过就接在上面那排最后。后台没给这场对话开场读的是哪一版，版本号先不写
     hero.querySelectorAll('[data-opening]').forEach(el => el.remove());
