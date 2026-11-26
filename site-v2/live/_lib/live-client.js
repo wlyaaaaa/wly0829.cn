@@ -572,14 +572,13 @@
         wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
     const meta = main?.backupMeta;
+    const metaNote = meta && `${meta.from === 'cloud' ? `${cloud}只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示`;
     // 等主数据和备用包都读完再收成十张标题卡。有任意一份正文时保持原样（COLDOFF）。
     if (home && main.answered && main.data === null && /^\/live\/(?:index\.html)?$/.test(location.pathname)) {
-      const times = [offlineAt && `${shortStamp(offlineAt)} 起离线`,
-        meta && `${meta.from === 'cloud' ? cloud + '最后一份' : '随站缓存'} ${shortStamp(meta.at)}`].filter(Boolean);
+      const times = [offlineAt && `${shortStamp(offlineAt)} 起离线`, metaNote].filter(Boolean);
       return { stage: 'off', emptyHome: true, say: '电脑关机了，开机后自动出来', at: '', wait: times.join('，') };
     }
-    return { stage: 'off', say, from: null, at: rest, wait: meta
-      ? `${meta.from === 'cloud' ? `${cloud}只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
+    return { stage: 'off', say, from: null, at: rest, wait: metaNote || '开机连上后自动显示' };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
