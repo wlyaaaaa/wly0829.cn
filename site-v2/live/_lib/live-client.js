@@ -330,6 +330,8 @@
   const stamp = at => dateFormat.format(new Date(at)).slice(5) + ' ' + time(at);
   // 随站那份是最近一次更新网站时一起发上去的（本人 11-25 17:00：说的是最近一次更新网站，不是第一次上线），包里有生成时刻就写上
   const releaseName = () => `最近一次更新网站${Number.isFinite(Date.parse(releaseMade)) ? `（${stamp(releaseMade)}）` : ''}时带的那份`;
+  // 页顶卡里的“云端”两个字中间放一个看不见的连接符（U+2060），折行时不拆成“云／端”（D6 复查）
+  const cloud = '云\u2060端';
   const shortStamp = at => dateFormat.format(new Date(at)) === dateFormat.format(new Date(clock())) ? time(at) : stamp(at);
   // 这一份从几点起读不到（换成后台钟）；只有这个窗口里先读到过、之后才读不到的才算（M982，同 M918 首访不写“自几点起”）
   const failingStamp = e => e.failSince && e.freshAt && e.freshAt < e.failSince ? new Date(e.failSince + clockOffset).toISOString() : null;
@@ -547,7 +549,7 @@
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
           : release ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，先显示${releaseName()}`
           : releaseMeta ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，${releaseName()}只记了时刻、没存内容；连上后自动显示`
-          : `${rule}电脑没确认关机，先留着这份；确认关机后先显示云端存的那份，云端读不到再显示最近一次更新网站时带的那份` };
+          : `${rule}电脑没确认关机，先留着这份；确认关机后先显示${cloud}存的那份，${cloud}读不到再显示最近一次更新网站时带的那份` };
     }
     // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；说法照本人 11-25 23:19 选的图（OFFLINE1125 A）写“电脑 HH:MM 起离线”。
     // 没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
@@ -555,14 +557,14 @@
     if (main?.data != null && Number.isFinite(Date.parse(main.at))) {
       const from = onBackup(main) && main.backupFrom || 'browser';
       return { stage: 'off', say, from,
-        at: from === 'cloud' ? ` · 下面是云端存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
+        at: from === 'cloud' ? ` · 下面是${cloud}存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? ` · 下面是${releaseName()}`
           : ` · 下面是这台浏览器存的最后一份（${shortStamp(main.at)}）`,
         // “这台浏览器没存过上次的数据；”只给电脑页（照 OFFLINE1125 A 那张图）；两个首页本人答了电脑关机时不改，共用这句照原样
         wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
     const meta = main?.backupMeta;
     return { stage: 'off', say, from: null, at: rest, wait: meta
-      ? `${meta.from === 'cloud' ? `云端只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
+      ? `${meta.from === 'cloud' ? `${cloud}只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示` : '开机连上后自动显示' };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
