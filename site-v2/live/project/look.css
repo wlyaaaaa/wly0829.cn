@@ -208,7 +208,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-empty { border-bottom: 0; padding: 6px 0; }
 .pj-card .pj-kv { column-gap: 28px; }
 .pj-card .pj-kv__row { padding: 8px 0; }
-.pj-card .pj-kv__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 读数下面那句解释照全写，格子窄就折行，不截成“…”（M881） */
+.pj-card .pj-kv__sub { white-space: normal; overflow-wrap: break-word; }
 /* “这件事最后一次发生”那一句（M769）：单独一行，格子窄时折行写全，不截成“…” */
 .pj-card .pj-moment { white-space: normal; overflow: visible; text-overflow: clip; }
 .pj-card .list { border-bottom: 0; }
@@ -226,6 +227,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-foot .more { translate: -10px 0; }
 .pj-card .pj-sec--rows:not(.pj-sec--flat) .pj-foot { padding-left: 0; }
 .pj-card .pj-sec > [data-p="page"] { margin: 6px 0 0; translate: -10px 0; }
+/* 分组底下一批一批露的“展开（还有 N 条）／收起”（R147） */
+.pj-card .pj-list-group > .pj-step { margin: 4px 0 0; translate: -10px 0; }
+.pj-card .pj-step[data-open] .more__chev, .pj-card .pj-foot > .more[aria-expanded="true"] .more__chev, .pj-rh-step[data-open] .more__chev { rotate: 90deg; }
 
 /* 卡底：收起来的“说明”（口径、截止时刻、重复的小字合在这里）＋整张卡一样的截止时刻 */
 .pj-card > .pj-sec > .pj-tail { display: none; }
@@ -247,7 +251,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-sec--array > .pj-foot { grid-column: 2; grid-row: 1; margin: -4px -10px 0 0; flex-wrap: nowrap; }
 .pj-card .pj-sec--array > .pj-foot .more { translate: none; height: 28px; }
 .pj-card .pj-sec--array > .pj-foot .more--link .more__chev { color: var(--pj-accent); }
-.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; overflow-wrap: break-word; }
 .pj-card .pj-sec--array > .pj-note { margin-top: 2px; white-space: normal; overflow-wrap: anywhere; }
 .pj-card .pj-sec--array > .fold > div > .list { margin-top: 6px; }
 .pj-card > .pj-sec:first-of-type.pj-sec--array { padding-top: 0; }
@@ -302,6 +306,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .more.pj-led, .pj-card details.pj-led > summary { display: none; }
 .pj-card .pj-foot:not(:has(> :not([hidden]):not(.pj-led))) { display: none; }
 .pj-rh-events p { margin: 6px 0 0; font-size: 13px; line-height: 21px; color: #5d5c56; }
+.pj-rh-list > .pj-rh-step { margin: 6px 0 0; translate: -10px 0; }
 
 #artifacts { container-type: inline-size; }
 @container (width < 260px) {
@@ -322,6 +327,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
+.pj-viz > .pj-rank-step, [data-visit-rank] > .pj-rank-step { margin: 2px 0 0; translate: -10px 0; }
+.pj-rank-step[data-open] .more__chev { rotate: 90deg; }
 #site-visitors .pj-note { overflow-wrap: anywhere; }
 .page--project .pj-card :is(.knowledge-prose small, .pj-viz > .pj-note) { color: #68665f; }
 .pj-cadence { margin-inline-start: 0.5em; color: #68665f; font-size: 12px; font-weight: 400; white-space: nowrap; }

@@ -23,8 +23,6 @@
 #frozen .row__title, #changes .row__title { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
 .page--l2 .card--hero[data-pic] .card__glass { min-height: 192px; }
 :is(#active, #frozen) .pj-figs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-#active .pj-fig__sub { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-#active .pj-fig__scope { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; max-height: 36px; }
 #active .pj-grid-ghost .fog__text { display: block; white-space: nowrap; overflow: hidden; }
 #active .pj-grid-ghost .pj-fig__v { margin-top: 4px; }
 #activity > .part { margin-left: 0; }
@@ -37,6 +35,10 @@
 #activity .pj-heat-name { white-space: normal; flex-wrap: wrap; row-gap: 1px; }
 #activity .pj-heat-label { overflow: visible; overflow-wrap: anywhere; text-overflow: clip; }
 #activity .pj-heat-private { white-space: normal; }
+/* 本地还没推的改动多了才分批（R147）：“展开（还有 N 个项目）”在小卡下面，和成品那块“更多成品 ›”一样靠左 */
+#unpushed > .pj-unpushed-more { margin: 12px 0 0; translate: none; }
+#unpushed > .pj-unpushed-more .more__chev { rotate: 90deg; }
+#unpushed > .pj-unpushed-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 .pj-changes-footer { display: grid; gap: 10px; padding-top: 16px; }
 .pj-changes-footer:not(:has(.pj-changes-actions > :not([hidden]), > .row__sub:not([hidden]))) { display: none; }
 .pj-changes-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -65,7 +67,10 @@
 #active .pj-card :is(.pj-fig__link, .pj-fig__k) + .pj-fig__sub { font-size: 14.5px; line-height: 22px; color: #3d3d3a; }
 #active .pj-card .pj-fig__v { margin-top: 6px; font-size: 28px; line-height: 36px; font-weight: 700; letter-spacing: .01em; color: #141413; }
 #active .pj-card .pj-fig__v.is-long { font-size: 19px; line-height: 27px; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-#active .pj-card .pj-fig__scope { -webkit-line-clamp: 1; max-height: 20px; margin-top: 4px; }
+/* 画册卡上代表数下面那句说明、读数名、读取时刻这几行小字照常换行写全，不截成“…”（M880）；卡跟着长，同一排的卡一样高，底下“N 天前改动”照旧对齐 */
+#active .pj-card .pj-fig__scope { margin-top: 4px; }
+/* 说明折行时末尾不单掉一两个字（如“面。”），浏览器自己把上一行匀一个过来 */
+#active .pj-card .pj-fig__scope { text-wrap: pretty; }
 #active .pj-card .pj-recent { order: 9; display: flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 10px; font-size: 13.5px; line-height: 20px; color: #3d3d3a; }
 #active .pj-card .pj-recent::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #00A650; }
 #changes :is(#changes-list, #changes-rest) { gap: 24px; }
@@ -108,8 +113,6 @@
 /* 排法在 _lib/live-pack.js：每张卡放进最矮的一栏、卡贴着卡排；“再看几个项目”展开后接着上面几栏排，“收起”挪到展开的卡下面（M487） */
 #recent-artifacts .pj-extra__more[open] { position: relative; padding-bottom: 34px; }
 #recent-artifacts .pj-extra__more[open] > summary { position: absolute; left: 0; bottom: 0; }
-#recent-artifacts .pj-extra__all { flex: none; }
-#recent-artifacts .pj-extra__all[hidden] { display: none; }
 .pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
 .pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
 .pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
@@ -128,14 +131,30 @@
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
 #changes .pj-changes-actions .more { margin: 0; translate: none; }
-/* 冻结入口在偶用那组下面、同一行的右边（本人 11-24 20:34，图5 那处）：“冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；
-   和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
-#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-end; width: max-content; max-width: 100%; margin-left: auto; }
-#frozen-head > .more { height: auto; margin: 0; translate: 10px 0; }
+/* 冻结入口在偶用那组下面，紧挨左边“展开（还有 N 条）／在用项目名册截至 …”的右边（本人 11-24 20:34，图5 红框那处），左边对齐第二列卡片：
+   “冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。
+   点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
+#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: max-content; max-width: 100%; margin-left: calc((100% - 48px) / 3 + 24px); }
+#frozen-head > .more { height: auto; margin: 0; }
 #frozen-head > .row__sub { margin: 2px 0 0; }
 #frozen-rest { padding-top: 24px; }
-/* 全部变化、成品现在只列近 7 天：标题旁一行灰色小字写明（照首页入口“全部变化 · 近 7 天 ›”的说法，字号颜色同这一块的说明小字）；“近 7 天｜近 30 天｜全部”切换上线时由切换代替 */
-.pj-part-span { font-size: 13.5px; line-height: 20px; font-weight: 400; letter-spacing: .02em; color: #6b6a64; }
+/* 全部变化、成品标题右边的“近 7 天｜近 30 天｜全部”：和智能体页工期、工作量、钩子那三排同一个样子（_lib/live-tape.css 的 .tp-seg，选中绿底白字照 agents/page.css 的 .ag-tseg）。
+   项目页不加载 live-tape.css，只照抄这几条；那边改了样子，这里跟着改。 */
+.pj-tseg { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: auto; padding: 3px; border-radius: 10px; background: rgb(20 20 19 / .05); font-size: 13px; font-weight: 400; line-height: normal; letter-spacing: 0; }
+.pj-tseg button { padding: 4px 12px; border: 0; border-radius: 8px; background: none; font: inherit; font-size: 13px; color: #4a4944; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.pj-tseg button[aria-pressed="true"] { background: #00a650; color: #fff; font-weight: 700; }
+.pj-tseg button:hover { color: var(--ink); }
+.pj-tseg button[aria-pressed="true"]:hover { color: #fff; }
+.pj-tseg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+#recent-artifacts > .pj-extra__next { margin: 10px 0 0; translate: none; }
+#recent-artifacts > .pj-extra__next[hidden] { display: none; }
+/* 名册各组、冻结名册、全部变化每组底下的“展开（还有 N 条）／收起”：点一次多露一批（R97、R147）；字号颜色照原来那行“展开（还有 N 条）”，箭头朝下、露到底变“收起”箭头朝上 */
+#stage .pj-list-group > .pj-step { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
+#changes .pj-list-group > .pj-step { margin: 6px 0 0; }
+.pj-art > .pj-step { margin: 2px 0 8px; font-size: 14px; color: #3d3d3a; }
+#recent-artifacts > .pj-art-more { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
+.pj-step .more__chev { rotate: 90deg; }
+.pj-step[data-open] .more__chev { rotate: -90deg; }
 #changes-more .more__chev { rotate: 90deg; }
 #changes-more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 </style></head>
@@ -156,7 +175,7 @@
 <div class="pj-sec pj-sec--flat pj-roster-section" id="frozen"><div class="pj-frozen-head" id="frozen-head"><button class="more" id="frozen-more" type="button" hidden></button></div><ul class="pj-figs" id="frozen-list"></ul>
     <div class="fold" id="frozen-box"><div><ul class="pj-figs" id="frozen-rest"></ul></div></div></div>
 <section class="pj-sec card" id="activity"><div class="card__glass glass"><div class="card__body"><p class="part">近 30 天项目活跃</p><div id="activity-chart"></div></div></div></section>
-<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>全部变化<small class="pj-part-span">近 7 天</small></p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
+<section class="pj-sec pj-changes-wide" id="changes" data-mo-rise><p class="part" data-keep>全部变化</p><div class="pj-changes-columns"><ul class="rows list" id="changes-list"></ul>
   <div class="fold" id="changes-box"><div><ul class="rows list" id="changes-rest"></ul></div></div></div>
   <footer class="pj-changes-footer" id="changes-footer"><div class="pj-changes-actions"><button class="more" id="changes-more" type="button" hidden></button><button class="more" id="next" type="button" hidden>更多变化 ›</button></div></footer></section></main>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-header.js"></script><script src="/live/_lib/live-ui.js"></script>
