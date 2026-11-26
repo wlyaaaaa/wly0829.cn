@@ -643,9 +643,23 @@
     try {
       const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
       if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
-      if (result.data) { arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; renderBoard(true); }
+      // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
+      if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else { b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer })); }
     } finally { b.page.disabled = false; U.html(b.page, label, false); }
+  }
+  // 从规则页按版本跳进来（?artifact=E…）：这一版不在已读到的几页里，就接着往后读，读到这一版或读完为止（R55）
+  const versionHit = it => it.kind === 'rules' && typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion;
+  async function readVersion(b) {
+    if (b.versionRead) return;
+    b.versionRead = true;
+    try {
+      while (artifactVersion && arts?.next && !arts.items?.some(versionHit)) {
+        const cursor = arts.next;
+        await loadArtifacts(b);
+        if (arts?.next === cursor) { b.versionFailed = true; renderBoard(false); break; }
+      }
+    } finally { b.versionRead = false; }
   }
   function graphBlock(key, label) {
     const b = block(key, 'figs'); b.el.classList.add('pj-sec--chart');
@@ -875,15 +889,18 @@
       if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
+        // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
+        b.step = 5; b.hasNext = !artifactVersion && !!arts?.next;
         const missingArts = !Array.isArray(arts?.items) && !(arts?.hidden || proj.artifacts?.hidden);
-        const items = (arts?.items || []).filter(it => !artifactVersion || it.kind === 'rules' &&
-          typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion);
+        const items = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '正在读最近产物' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
-        b.page.hidden = !!artifactVersion || !arts?.next;
+        syncPage(b);
+        if (versionMore) readVersion(b);
         U.blockNote(b.el, artsState);
         right.unshift(b);
       }
