@@ -1,6 +1,6 @@
 // 第三层：一个 AI 对话的全过程，摆成共用模版“航线”（_lib/live-route.*，本人 11-17 20:15 点头的新模版）。
 // 页头照旧：对话名、型号档位、走到第几步、干了多久、最新进展、问情况和打开对话；下面一条航线是计划各步，
-// 再下面三栏：正在执行（当前这一步、正式摘要、最新回复）｜思考摘要 + 帮手（先列在做和出错的）｜过程记录（按时间，最近 10 条）。
+// 再下面三栏：正在执行（当前这一步、正式摘要、最新回复）｜思考摘要 + 帮手（先列在做和出错的）｜过程记录（按时间，先列最近 5 条）。
 // 字一律走 LiveUI.fieldHtml / fieldText；灯一律 LiveUI.status，没有灯字段不画；计划每步的状态只照数据（completed / in_progress，或旧的 state），没给不写。
 (() => {
   'use strict';
@@ -124,17 +124,37 @@
     U.html($('helpers-more'), b.html);
   }
 
-  // —— 过程记录：开始、各帮手最后动静、正式摘要和最新回复的时刻，按时间排（记录由共用模块出，events()） ——
-  function drawLog(list = events()) {
-    const b = R.batch('log', list.length, { first: 50, step: 50, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
-    U.html($('log-part'), list.length > shown.length ? `最近 ${shown.length} 条 · 共 ${list.length} 条` : list.length ? `共 ${list.length} 条` : '');
-    // 摘要、回复两行的原文跟上面（页头、现在、思考摘要）或上一行一字不差的，这一行只留时刻和“写好正式摘要”“发出最新回复”；按“看更多”重画也照同一份登记
+  // —— 过程记录：记录由共用模块出，列表和长文本各自展开 ——
+  const LOG_FIRST = 5;
+  const logMore = key => `<button type="button" class="route-clip__more" data-clip-for="${key}" aria-controls="${key}" hidden>展开</button>`;
+  function drawLog(list = events({ includeSteps: true })) {
+    const b = R.batch('log', list.length, { first: LOG_FIRST, step: 20, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
+    const tally = list.length > shown.length ? `${b.open ? '已显示' : '最近'} ${shown.length} 条 · ` : '';
+    U.html($('log-part'), list.length ? `${tally}共 ${list.length} 条` : '');
+    // 同一段字在页头、“现在”、思考摘要或较新的过程记录里已出现时，这行只留时刻和动作。
     const above = new Set(pageWords);
-    for (const e of shown) if (e.words) { if (above.has(e.words)) e.detail = ''; else above.add(e.words); }
-    U.list($('log'), shown.map(e => ({ key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${esc(stamp(e.at))}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b><span class="route-row__name">${e.name || ''}</span></p>${e.detail || ''}</div>${e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : ''}</div>` })), { animate: !first });
+    const unique = html => {
+      const words = flatWords(html);
+      if (!words || above.has(words)) return false;
+      above.add(words);
+      return true;
+    };
+    U.list($('log'), shown.map(e => {
+      const key = `log-${esc(e.key)}`, parts = e.parts?.filter(unique).join('<br>');
+      const name = `<span class="route-row__name"${e.clipName ? ` id="${key}" data-clip="${key}"` : ''}>${e.name || ''}</span>`;
+      const body = parts ? `<p class="route-row__text" id="${key}" data-clip="${key}">${parts}</p>${logMore(key)}` : '';
+      const sub = e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : '';
+      return { key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${e.at ? esc(stamp(e.at)) : ''}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b>${name}</p>${e.clipName ? logMore(key) : ''}${body}${e.detail || ''}</div>${sub}</div>` };
+    }), { animate: !first });
     const words = [!list.length && esc(U.collectionText('过程记录')), marks(new Set(shown.map(e => e.mark).filter(Boolean)), '帮手名')].filter(Boolean).join('<span class="route-note__sep">·</span>');
     note.hidden = !words; U.html(note, words);
-    U.html($('log-more'), b.html);
+    const footer = $('log-more'), focused = footer.contains(document.activeElement);
+    U.html(footer, list.length > LOG_FIRST ? b.html : '', false);
+    for (const button of footer.querySelectorAll('button')) {
+      button.setAttribute('aria-controls', 'log');
+      button.setAttribute('aria-expanded', String(b.open));
+    }
+    if (focused && !footer.contains(document.activeElement)) footer.querySelector('button')?.focus({ preventScroll: true });
   }
   R.on('helpers', () => { if (chat) drawHelpers(); });
   R.on('log', () => { if (chat) { drawLog(); R.reclip(); } });
@@ -156,7 +176,7 @@
     if (thinkHead) U.html(thinkHead, '思考摘要' + (thought && !U.visitorWholeHidden(chat) ? U.visitorLabel(chat, 'thinking', '思考摘要', viewer) : ''));
     U.html(node, html);
   }
-  // 本人版给全文：页头那句、思考摘要、过程记录和帮手的每一行都不收、不截；访客版照旧一句收起
+  // 两版共用全文样式；过程记录的长段另按实际行高折叠
   function fullText(on) {
     rec.classList.toggle('route-body--full', on); hero.classList.toggle('route-head--full', on);
     for (const [el, key] of [[part('say'), 'say'], [$('thinking'), 'thinking']]) {
@@ -168,7 +188,7 @@
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
-    const { locked, name, hiddenName, title, missingReply, plan, log, progress, rawReply, hasReply, meta, project, app } = V.pageMeta();
+    const { locked, name, hiddenName, title, missingReply, plan, log, progress, rawReply, hasReply, meta, project, app } = V.pageMeta({ includeLogSteps: true });
     document.title = `${title} · 实况`;
     const model = who(chat, true);
     // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀。
@@ -219,7 +239,7 @@
       drawHelpers();
       return;
     }
-    fullText(true);   // 两版同一套（本人禁令 11-24 14:16）：两版都直接给全文
+    fullText(true);   // 两版共用样式，只有过程记录的长段需要按行展开
     // 接着登记“现在”这张卡：这一步（没有计划时是状态，跟页头那颗一样就不再写大字）、正式摘要、最新回复、任务原文（后三行由共用模块出）
     const current = nowText(plan), currentText = once(current) ? current : '';
     const facts = V.facts(rawReply, hasReply, missingReply, once), blockTag = V.blockTag;
