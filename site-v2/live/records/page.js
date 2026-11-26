@@ -425,7 +425,8 @@
   function drawRecordNote(d, extra = []) {
     if (groupPrivate && recordViewer === 'public') {
       const name = U.fieldText(sectionName) || '这一组', n = knowledge ? knowledgeCount(d.items?.[0]) : null;
-      U.html($('record-note'), esc(knowledge ? `这里是${n == null ? '' : ` ${n.toLocaleString('zh-CN')} 条`}关于${name}的认识，本人版能看到全部，所以不予展示` : `${name}的原文仅本人可见。`));
+      // M1000：说明书一类访客看不到时，那一片铺一整块拼布被面，两行字写在中间那条绿针脚布标签上（样子在 page.css 的 .record-veil__tag）
+      U.html($('record-note'), knowledge ? `<span class="record-veil__tag"><b>${esc(`这里是${n == null ? '' : ` ${n.toLocaleString('zh-CN')} 条`}关于${name}的认识`)}</b><span>本人版能看到全部，所以不予展示</span></span>` : esc(`${name}的原文仅本人可见。`));
       return;
     }
     U.html($('record-note'), [d.note && text(d.note), ...extra].filter(Boolean).join(' · '));
