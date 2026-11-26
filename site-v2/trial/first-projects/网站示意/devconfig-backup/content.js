@@ -192,7 +192,7 @@ window.PAGE_DATA = {
     {
       "id": "project-02",
       "title": "它管哪些事",
-      "image": "assets/总览-02-v4.webp",
+      "image": "assets/总览-02-v5.webp",
       "width": 1774,
       "height": 887,
       "detail": [
@@ -265,7 +265,7 @@ window.PAGE_DATA = {
     {
       "id": "project-05",
       "title": "没备上的文件护住旧副本",
-      "image": "assets/总览-05-v3.webp",
+      "image": "assets/总览-05-v4.webp",
       "width": 1774,
       "height": 887,
       "detail": [
@@ -322,7 +322,7 @@ window.PAGE_DATA = {
     {
       "id": "project-08",
       "title": "备份结果有据可查",
-      "image": "assets/总览-08-v2.webp",
+      "image": "assets/总览-08-v3.webp",
       "width": 1774,
       "height": 887,
       "detail": [
