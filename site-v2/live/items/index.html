@@ -45,6 +45,9 @@
 .page--items .hero__note { display: block; letter-spacing: 0; word-spacing: normal; }
 .page--items .lb-card__title { display: block; letter-spacing: 0; }
 .page--items .lb-card__title .lb-count { white-space: nowrap; }   /* 窄窗时卡头标题括号那段（几件）不拆开，不剩一个“件）”单独一行 */
+/* 卡窄到卡头说明一行放不下时（卡头内宽约 590 以下）：说明换行写全、不收成一行“…”，字停在右边插画淡入的地方，不压到画上；宽卡不变 */
+.page--items .lb-card__head { container-type: inline-size; }
+@container (max-width: 589px) { .page--items .lb-card__words { padding-right: 45%; } .page--items .lb-card__sub { -webkit-line-clamp: unset; } }
 .page--items .lb-card__more { display: block; text-align: center; }
 .page--items .lbp-side__list { contain: none; min-height: 0; overflow: visible; }
 .page--items .lbp-side__list > .more { margin-left: 0; translate: 0 0; padding-left: 0; }
