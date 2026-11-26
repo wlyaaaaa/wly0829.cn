@@ -191,7 +191,8 @@
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
 /* 等你的事卡三行依次排标题、按钮和小字，按钮窄时照常折行。 */
 .page--live #needs [data-part="main"] > .row { grid-template-columns: minmax(0, 1fr); row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
-.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; left: 2px; top: 14px; margin: 0; }
+.page--live #needs [data-part="main"] > .row:has(> .lamp) { padding-left: max(24px, var(--gut)); }
+.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; grid-column: auto; left: 2px; top: 14px; margin: 0; }
 .page--live #needs [data-part="main"] > .row .row__main { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
 .page--live #needs [data-part="main"] > .row > .row__acts { grid-column: 1 / -1; grid-row: 2; padding-left: 0; justify-content: flex-start; }
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }

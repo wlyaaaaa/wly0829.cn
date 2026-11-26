@@ -152,6 +152,7 @@
     L.tone(hero, status.tone);
     const field = value => say(value);
     const closedSay = d.closed && (d.closed.kind === 'unknown' || d.closed.text === '本人关掉了这份汇报' ? d.closed.text || CLOSED.unknown : CLOSED[d.closed.kind] || CLOSED.unknown);
+    const closedNote = d.closed?.text == null ? '' : say(d.closed.text).trim();
     const monthly = !issue && Number.isInteger(d.monthly_day) && d.monthly_day >= 1 && d.monthly_day <= 31 ? `每月 ${d.monthly_day} 日` : '';
     const facts = issue ? [
       // 档案卡里结局就是状态卡的大字，了结说明在“结论”卡（能展开），这里不再重复。
@@ -169,7 +170,7 @@
       (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
       d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
-      d.closed && fact('了结说明', say(d.closed.text)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
+      closedNote && fact('了结说明', closedNote), d.closed?.at && fact('了结时刻', when(d.closed.at)),
     ];
     $('about').hidden = !facts.some(Boolean) || privateItem; U.html($('facts'), facts.filter(Boolean).join(''));
     const qs = Array.isArray(d.questions) ? d.questions : [];
@@ -304,6 +305,9 @@
   // 按钮不给（按了会落到现在这一轮上），另给一条“看现在这件”。清单里找不到就照现在这一轮摆。
   const closedAt = Date.parse(p.get('closed') || '');
   let closedRound, closedAsk = 0, latestDetail = null;
+  $('item-action-receipts')?.addEventListener('item-write', ({ detail }) => {
+    if (latestDetail && detail.saved?.includes(id)) showItem(latestDetail);
+  });
   const pastRound = (row, d) => {
     const from = Date.parse(row.episode_at || row.born || '');
     const history = (Array.isArray(d.history) ? d.history : []).filter(e => { const t = Date.parse(e.occurred_at || e.at || ''); return Number.isFinite(t) && t <= closedAt + 1000 && !(t < from - 1000); });
@@ -313,7 +317,11 @@
   function showItem(d) {
     latestDetail = d;
     const show = r => { record = r; historyRows = itemHistory(r); render(); };
-    if (issue || !Number.isFinite(closedAt) || Date.parse(d.closed?.at) === closedAt) { show(d); return; }
+    if (!Number.isFinite(closedAt) && viewer === 'owner') {
+      const saved = U.savedWrite(d), kind = { ack: 'acknowledged', decline: 'declined' }[saved?.intent];
+      if (kind) { show({ ...d, closed: { kind, at: saved.created_at } }); return; }
+    }
+    if (!Number.isFinite(closedAt) || Date.parse(d.closed?.at) === closedAt) { show(d); return; }
     if (closedRound !== undefined) { show(closedRound ? pastRound(closedRound, d) : d); return; }
     const ask = ++closedAsk, kind = viewer;
     findClosedRound(d.id, () => ask !== closedAsk || kind !== viewer).then(found => {
@@ -354,7 +362,7 @@
     if (closed && !rows.some(e => sameAt(e.at, closed.at) && (e.kind && e.kind === closed.kind || e.event === 'Close' || /关闭|办完|了结|不办/u.test(e.label) || e.text && e.text === closed.text))) {
       rows.push({ at: closed.at, text: closed.text, label: CLOSED[closed.kind] || '已了结' });
     }
-    return rows.sort((a, b) => Date.parse(b.at || 0) - Date.parse(a.at || 0));
+    return rows.sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
   }
   async function earlier() {
     if (searching || !next) return;

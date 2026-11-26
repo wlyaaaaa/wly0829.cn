@@ -916,7 +916,7 @@
       if (!notes.length) return text;
       const same = notes.length === sources.length && notes.every(([, sample]) => sample.key === notes[0][1].key);
       const detail = same ? notes[0][1].text : join(notes.map(([label, sample]) => `${label} ${sample.text}`));
-      return text + `<small>${esc(detail)}</small>`;
+      return text + `<small>${computerTimes(esc(detail))}</small>`;
     };
     const uptime = screen?.uptime ?? m.uptime?.value;
     const summary = typeof d.text === 'string' ? d.text : '';
@@ -937,7 +937,7 @@
     else if (Number.isFinite(growthTop?.bytes)) {
       const until = timed(growthTop.at) && `截至 ${U.date(growthTop.at)} ${U.time(growthTop.at)}`;
       growthReading = (growthTop.bytes > 0 ? `${fileGrowth(growthTop.name)} · 多占 ${U.nowrap(U.gb(growthTop.bytes))}` : '已测类别都没有增加')
-        + (until ? `<small>${esc(until)}</small>` : '');
+        + (until ? `<small>${computerTimes(esc(until))}</small>` : '');
     }
     // 读数不是今天的（离线旧页过了半夜）写日期，不叫“今天”（M062）
     const trafficAt = traffic?.from || traffic?.to, trafficDay = timed(trafficAt) && day(trafficAt) !== day(!lastState?.offline && lastState?.now || Date.now()) ? U.date(trafficAt) : '今天';
@@ -951,9 +951,9 @@
       ['显卡', withReadings(join([val(m.gpu, x => (text => Number(x?.value) < 90 ? `<span class="kv-good">${text}</span>` : text)(quantity(x, 'value', n => `${Math.round(n)}%`))), val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))]) || null, ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
-      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${esc(diskTime)}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
+      ['最紧的盘', val(m['disk-free'], x => { const label = x.note || (x.drive ? sp(x.drive).replace(/([A-Za-z]):?\s*(?:盘)?/g, '$1 盘') : x.label === '最紧的盘' ? '' : typeof x.label === 'string' ? x.label.replace(/剩余$/, '') : x.label) || ''; const growth = diskGrowth(x); return `<span class="disk-note">${U.fieldHtml(label, { name: '磁盘', kind: viewer })}</span> 还剩 ${U.nowrap(quantity(x, 'value', U.gb))}${diskTime ? `<small>${computerTimes(esc(diskTime))}</small>` : ''}${growth ? `<small>${U.nowrap(growth)}</small>` : ''}`; }), diskFree, '/live/storage/'],
       ['近 7 天占空间涨得最多', growthReading, false, '/live/storage/'],
-      ['海外流量', traffic ? `<span class="traffic-day">${U.nowrap(trafficText)}</span>` + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${esc(trafficTime)}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
+      ['海外流量', traffic ? `<span class="traffic-day">${U.nowrap(trafficText)}</span>` + (traffic.hour_bytes != null ? ` <span class="traffic-hour">${U.nowrap(`近一小时 ${quantity(traffic, 'hour_bytes', trafficBytes)}`)}</span>` : '') + (trafficTime ? `<small>${computerTimes(esc(trafficTime))}</small>` : '') + (traffic.q === 'partial' && traffic.gap ? `<small>${U.fieldHtml(traffic.gap, { name: '流量说明', kind: viewer })}</small>` : '') : null, false, '/live/traffic/'],
       ['设备', devices.filter(x => x.id !== 'main').map(x => {
         if (x.id === 'phone') return `<a class="kv__link" href="${esc(route('/live/phone/'))}">${esc(phone || '手机连接线路未记录')}</a>`;
         const name = { secondary: '笔记本', secondary_laptop: '笔记本', remote: '远程' }[x.id] || sp(x.label || x.name || x.title || x.text) || x.id;
@@ -977,6 +977,7 @@
     U.html(p.note, U.fieldHtml(note, { name: '运行情况', kind: viewer }));
   }
 
+  const computerTimes = html => html.replace(/\b\d\d-\d\d(?: \d\d:\d\d(?::\d\d)?)?(?![^<]*>)/g, '<span class="live-unit">$&</span>');
   function computerStability(host, note) {
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
     host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
@@ -1291,7 +1292,8 @@
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
-    const matchesCutoff = text => endNote && U.sameCutoffNote(endNote, text);
+    const timeNote = id === 'needs' && timed(end) && U.time(end, data?.at_precision);
+    const matchesCutoff = text => endNote && (U.sameCutoffNote(endNote, text) || timeNote && U.sameCutoffNote(`数据截至 ${timeNote}`, text));
     const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
     const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
     // 卡头分时写的（在干、等回答、做完数各自几点）：截止时刻卡头里有就不重复；读不全的说明不再说“先显示几点的统计”

@@ -7,7 +7,7 @@
   let at = null, viewer = 'public', pendingItems = new Set(), reportsData = null, reportCount = null, openTrend = null, recentClosed = null;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (params.has('fixture') && u.pathname.startsWith('/live/')) u.searchParams.set('fixture', params.get('fixture')); return u.pathname + u.search + u.hash; };
   // M567：同一件事了结后又重新打开时编号不变；关闭清单的链接带上那次了结的时刻，详情页才找得到当时的结局。
-  const closedHref = it => route('/live/item/?id=' + encodeURIComponent(it.id) + (it.closed?.at ? '&closed=' + encodeURIComponent(it.closed.at) : ''));
+  const closedHref = it => route('/live/item/?id=' + encodeURIComponent(it.id) + (!it._landed && it.closed?.at ? '&closed=' + encodeURIComponent(it.closed.at) : ''));
   const actions = it => {
     // M458：卡上不单独放“复制给 AI”，问情况就是复制给 AI（定稿卡-等你的事 开头，本人 11-22 16:04）
     const list = (it.actions || []).filter(a => a.intent !== 'done' && (!it.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => ({ ...a, label: a.intent === 'ask' ? '问情况' : !a.label || typeof a.label === 'object' && !a.label.text && !a.label.value ? ({ ack: '我知道了', close_report: '关掉', later: '晚点提醒', decline: '不办了' })[a.intent] || (a.target === 'report' ? '看汇报' : '打开对话') : a.label }));
@@ -63,10 +63,12 @@
   // 这期间照办理回查的节奏接着重读（前一分钟每 3 秒，之后每 15 秒），最多两分半，到点照后台读数。
   const landed = new Map(), writeStarted = new Map();
   const LANDED_KIND = { ack: 'acknowledged', decline: 'declined' };
+  const LANDED_KEEP_MS = 150000;
+  let closedItems = [], next = null;
   function landItem(item, intent, receipt) {
     // 本人 11-26 00:13：先摆上的那条只写后台回执里有的，不拿浏览器的钟算。下去的时刻用回执的 created_at（后台收下这一笔的时刻）；
     // 晚点提醒几点再提醒用回执的 until，回执没给就写“提醒时间还没确认”，等清单读回来换成后台那条
-    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? Date.now()), saved: Date.now(), version: item.item_version };
+    const at = receipt?.created_at || null, base = { since: Date.parse(at) || (writeStarted.get(item.id) ?? receipt?.at ?? Date.now()), saved: receipt?.at ?? Date.now(), version: item.item_version };
     // 先摆上的“你放着”和后台那条一个样子：只留问情况、不办了和网站链接，不再挂“晚点提醒”
     if (intent === 'later') landed.set(item.id, { ...base, key: 'later', row: { ...item, kind: 'later', act_from: receipt?.until || null, due: null, now: null, actions: (item.actions || []).filter(a => a.intent === 'ask' || a.intent === 'decline' || a.href), _landed: true } });
     else if (intent === 'close_report') {
@@ -76,7 +78,7 @@
   }
   // 后台读数已经有这一次的结果，就不再摆先放上去的那条
   function withLanded(key, rows) {
-    if (!Array.isArray(rows) || !landed.size) return rows;
+    if (viewer !== 'owner' || !Array.isArray(rows) || !landed.size) return rows;
     const extra = [];
     for (const [id, w] of landed) {
       if (w.key !== key) continue;
@@ -90,7 +92,7 @@
   function followLanded() {
     clearTimeout(landedTimer);
     const now = Date.now(), before = landed.size;
-    for (const [id, w] of landed) if (now - w.saved > 150000) landed.delete(id);
+    for (const [id, w] of landed) if (now - w.saved > LANDED_KEEP_MS) landed.delete(id);
     if (landed.size !== before) { redrawItems(); drawClosed(); if (lastHome) renderHome(...lastHome); }
     if (!landed.size) return;
     const first = Math.min(...[...landed.values()].map(w => w.saved));
@@ -426,9 +428,9 @@
     const title = placeholder ? `<span class="row__title">${titleText}</span>` : closed ? `<a class="row__title" href="${esc(closedHref(it))}">${archivedTitle}</a>` : it.detail ? `<button class="row__title detail-toggle" type="button" data-detail="${esc(it.id)}">${detailTitle(titleText)}</button>` : `<span class="row__title">${titleText}</span>`;
     const subtitle = sub.filter(s => s && !(/正在换说法|仅本人可见/.test(sp(s)) && sp(s) === itemText(it)) && !(hidden && /仅本人可见|可信设备可见/.test(sp(s))) && !(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(sp(s)))).map((s, i, all) => {
       let html = U.fieldHtml(s, { kind: viewer });
-      if (s === closing) html = html.replace(/自动任务页(?![^<]*>)/g, '<span class="live-unit">自动任务页</span>');
+      if (s === closing) html = html.replace(/(?:自动任务页|跟进(?=[。<]|$))(?![^<]*>)/g, '<span class="live-unit">$&</span>');
       if (i < all.length - 1) html = html.replace(/。((?:<\/[a-z]+>)*)$/, '$1');
-      return `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d)/.test(sp(s)) ? ' item-keep' : ''}">${html}</span>`;
+      return `<span class="item-bit${s === deadline || /^(?:已等|约 |挂了 |\d\d-\d\d|同一件事关过 )/.test(sp(s)) ? ' item-keep' : ''}">${html}</span>`;
     }).join('');   // 后面还接“ · ”的一段，句尾“。”去掉，不写成“到了。 · 约 2 分钟”（r83 返修第三轮）
     // M225：卡片只报自己的记录时刻；整组采集时刻（stale_text/gap）已在页头说过，不再逐卡重复。
     const { lamp, note } = U.status({ ...it, source_at: itemRecordedAt(it), stale_text: null, gap: null, level: it.light }, { small: true });
@@ -575,10 +577,14 @@
     const needs = d.needs; if (d.q === 'warming' || needs?.q === 'warming') { missingHome('正在准备'); return; } if (!needs) { missingHome(U.collectionText()); return; }
     const embedded = Object.hasOwn(needs, 'items'), page = !embedded && openRows?.kind === viewer ? openRows : null;
     const rows = embedded ? needs.items : page?.items;
-    // 刷新仍读到旧清单时，按成功回执接回刚移到‘你放着’的那条。
+    // 刷新仍读到旧清单时，按同一份成功回执接回刚移走的那条。
+    let restored = false;
     if (viewer === 'owner') for (const item of rows || []) {
-      const saved = U.savedReminder(item);
-      if (saved && !landed.has(item.id)) landItem(item, 'later', saved);
+      const saved = U.savedWrite(item);
+      if (!saved || landed.has(item.id) || Date.now() - saved.at > LANDED_KEEP_MS) continue;
+      if ((saved.intent === 'later' || LANDED_KIND[saved.intent]) && !foundWrite(item, saved.intent, Date.parse(saved.created_at) || saved.at)) {
+        landItem(item, saved.intent, saved); restored = true;
+      }
     }
     const partial = embedded ? needs.q === 'partial' : page?.cursor != null || page?.incomplete;
     openTrend = needs.open_trend7; renderSide();
@@ -639,9 +645,9 @@
       const empty = rows == null ? U.collectionText() : partial ? '事项名单尚未读全' : `没有${viewer === 'public' ? KIND[key].replaceAll('你', '本人') : KIND[key]}的事`;
       list(key, rows?.filter(it => it.kind === key).sort(itemOrder), empty, it => row(it, false, shared.get(it)), !meta.firstOpen, partial);
     }
+    if (restored) { drawClosed(); followLanded(); }
     showOpenMore(); renderSelection();
   }
-  let closedItems = [], next = null;
   function redrawClosed() {
     const shown = collections.get('closed');
     if (shown) list('closed', shown.items, shown.empty, shown.renderer, true, shown.partial);
@@ -661,6 +667,13 @@
   }
   function renderClosed(d, append = false) {
     closedItems = append ? [...new Map([...closedItems, ...d.items].map(it => [it.id, it])).values()] : d.items || [];
+    let restored = false;
+    if (viewer === 'owner' && d.items != null) for (const saved of U.savedAcknowledgements()) {
+      const item = saved.ack;
+      if (Date.now() - saved.at > LANDED_KEEP_MS || project && item.project !== project || landed.has(item.id)) continue;
+      if (foundWrite(item, 'ack', Date.parse(saved.created_at) || saved.at)) continue;
+      landItem(item, 'ack', saved); restored = true;
+    }
     next = d.next;
     const partial = next != null;
     const empty = d.items == null ? U.collectionText() : partial ? '已读范围还没有这类事项' : '近 7 天没有下去的事';
@@ -672,6 +685,7 @@
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
     requestAnimationFrame(() => balanceBoard(true));   // 条数变了，重新看放短栏还是两栏下面
+    if (restored) followLanded();
   }
   // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
   function drawClosed() { if (collections.get('closed')?.items != null) renderClosed({ items: closedItems, next }); }
