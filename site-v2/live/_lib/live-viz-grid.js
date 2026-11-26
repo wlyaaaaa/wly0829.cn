@@ -21,7 +21,14 @@
     cold_group_failed: '这轮冷备份没备齐',
     required_backup_previous_file_unavailable: '上一份备份文件读不到，这次没出新包',
     backup_process_interrupted: '备份做到一半被打断',
+    backup_run_result_missing: '只记了开始时间，没有记录结果',
     wechat_hot_resource_busy: '微信正占着文件',
+    backup_sqlite_capture_failed: '没能备好数据库文件',
+    backup_vss_cleanup_failed: '备份后没能清理卷影快照',
+    backup_vss_delete_target_not_unique: '清理时无法确定唯一的卷影快照',
+    wechat_drive_final_verification_failed: '云端文件没通过最后核对',
+    wechat_hot_receipt_stale: 'G 盘的微信副本超过可上传的时限',
+    complete_with_skipped_files: '备份完成，有文件跳过',
   };
   function backupFailureReason(value) {
     if (typeof value === 'string') return Object.hasOwn(BACKUP_FAILURES, value) ? BACKUP_FAILURES[value] : value;

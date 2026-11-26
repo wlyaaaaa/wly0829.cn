@@ -13,9 +13,9 @@
   const count = (item, key, format) => item?.[key] == null ? offline() ? '—' : U.collectionText(({ count: '份数', total: '总份数', bytes: '大小', failed: '失败份数' })[key] || '', item) : D.count(item, key, format);
   const gap = item => offline() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|未读/.test(item?.gap || '') ? '' : D.gap(item);
   let pointLimit = 5, assetLimit = 5, fileLimit = 5;
-  const pathHtml = (value, what = '备份位置') => {
+  const pathHtml = (value, what = '备份位置', showFull = false) => {
     const shown = said(value, what), plain = U.fieldText(value, viewer);
-    if (U.sp(value).length > 28) return `<details class="backup-path"><summary>${shown}</summary><div>${shown}</div></details>`;
+    if (!showFull && U.sp(value).length > 28) return `<details class="backup-path"><summary>${shown}</summary><div>${shown}</div></details>`;
     return shown === esc(plain) && /^[a-z]:[\\/]/i.test(plain)
       ? `<span class="backup-locator">${shown.replace(/([\\/])(?=[^\\/])/g, '$1<wbr>')}</span>` : shown;
   };
@@ -43,6 +43,8 @@
 
   const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本旧了', partial: '副本不齐' };
   const PLACES = [['local', '本机'], ['g', 'G 盘'], ['h', 'H 盘']], CLOUDS = { drive: 'Drive', photos: '照片云' };
+  const RUN_STATUS = { complete: '备好了', failed: '没备成', unfinished: '没做完' };
+  const DRIVE_RUN_STATUS = { complete: '云盘任务完成', failed: '云盘任务失败', unfinished: '云盘任务未完' };
   const notApplicable = copy => copy?.state === 'not_applicable' || (Object.hasOwn(copy || {}, 'applicable') ? copy.applicable === false : copy?.required === false);
   const absentReason = (data, key) => {
     const value = data?.missing?.[key], code = value?.reason_code || value;
@@ -167,6 +169,19 @@
     const reason = copy?.missing?.location?.reason_code;
     return said(({ generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '这次备份使用的用户目录还没记录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到', not_recorded: '还没记录位置', read_failed: '位置读取失败', not_applicable: '不适用' })[reason] || (offline() ? '—' : U.collectionText('备份位置')), '备份位置');
   }
+  function backupHistory(runs) {
+    if (!runs.length) return '';
+    const time = run => `<time datetime="${esc(run.at)}">${esc(stamp(run.at))}</time>`;
+    const result = run => (run.target === 'drive' ? DRIVE_RUN_STATUS : RUN_STATUS)[run.status];
+    const tags = runs.map(run => `<li data-state="${run.status}">${time(run)}${result(run)}</li>`);
+    const reasons = runs.map(run => {
+      const reason = D.backupFailureReason(run.reason_code);
+      const detail = reason && reason !== run.reason_code ? reason
+        : reason ? `记录的原因代码是 ${reason}` : run.status === 'failed' ? '没有记录失败原因' : '';
+      return detail && `<p class="fe-l3b-note">${time(run)} · ${result(run)}：${said(detail, '备份原因')}</p>`;
+    }).join('');
+    return `<div class="dossier-card__part backup-history"><p class="dossier-card__sub">最近几次备份</p><ul aria-label="最近几次备份">${tags.join('')}</ul>${reasons}</div>`;
+  }
   function verificationTime(row) {
     return row.at && row.at_precision && !['run_completed', 'not_recorded'].includes(row.at_precision) ? stamp(row.at) : '';
   }
@@ -184,13 +199,24 @@
     Light.tone(hero, set);
     $('media-section').hidden = id !== 'personal_media';
     if (id === 'personal_media') U.html($('media-counts'), table(['类别', '个数', '大小'], [['photos', '照片'], ['videos', '视频'], ['music', '音乐'], ['audio', '录音']].map(([key, name]) => { const m = set.media?.find(m => m.id === key); return [name, count(m, 'count') + gap(m), esc(count(m, 'bytes', U.gb.scaled))]; }), '照片、视频、音乐、录音'));
-    U.html($('copies'), table(['去处', '本地文件夹', '情况', '内容时间', '核对时间'], PLACES.map(([key, name], i) => {
+    const localPackage = set.local_package;
+    const targets = notApplicable(set.transfer_summary) ? [] : Object.keys(CLOUDS).filter(key => !notApplicable(set[key]));
+    const runs = (set.recent_runs || []).filter(run => (run.target !== 'drive' || targets.includes('drive')) &&
+      Object.hasOwn(RUN_STATUS, run.status) && Number.isFinite(Date.parse(run.at))).slice(0, 5);
+    const rows = PLACES.map(([key, name], i) => {
+      if (key === 'local' && (localPackage || runs.length)) name = '本机原件';
       const copy = set[key], c = copies[i], localNote = key === 'local' && set.local_location_note;
       if (c.skip) return [name, localNote ? said(localNote, '本机原件说明') : '—', '不适用', '—', '—'];
       const detail = [copy?.bytes != null && esc(count(copy, 'bytes', U.gb)), copy && c.why, key === 'local' && esc(D.sourceSubset(copy, stamp)), c.retired && copy.reason && said(copy.reason, '停用说明')].filter(Boolean).join(' · ');
       return [`${name}${copy?.scope ? `<small>${said(copy.scope === set.id ? set.name : copy.scope, '备份范围')}</small>` : ''}`, locationHtml(copy, key === 'local' ? set.local_paths : null, localNote), `${c.lead}${detail ? `<small>${detail}</small>` : ''}${gap(copy)}` || '—', evidenceTime(c.content), evidenceTime(c.checked)];
-    })));
-    const targets = notApplicable(set.transfer_summary) ? [] : Object.keys(CLOUDS).filter(key => !notApplicable(set[key])), clouds = targets.filter(key => set[key]);
+    });
+    if (localPackage) {
+      const completed = `<span class="backup-time">${esc(stamp(localPackage.completed_at))}</span>`;
+      const path = `<span class="backup-package-path">${pathHtml(localPackage.path, '备份位置', true)}</span>`;
+      rows.splice(1, 0, ['本机备份包', path, `最近一次备好了 · ${U.trafficBytes(localPackage.bytes)}`, completed, completed]);
+    }
+    U.html($('copies'), table(['去处', '本地文件夹', '情况', '内容时间', '核对时间'], rows) + backupHistory(runs));
+    const clouds = targets.filter(key => set[key]);
     $('cloud-section').hidden = !targets.length;
     U.html($('cloud'), table(['去处', '位置', '已传 / 共', '在等', '没传成'], clouds.map(key => {
       const cloud = set[key], pending = waiting(cloud);

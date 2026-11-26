@@ -29,10 +29,19 @@
 .page--backup .backup-copy-state[data-state="mostly"] { color: #8a6800; }
 .page--backup .backup-copy-state[data-state="partial"] { color: #b14e0a; }
 .page--backup .backup-locator { overflow-wrap: break-word; }
+/* 本机包路径随本地文件夹列换行，保持其余副本原有列宽。 */
+.page--backup .backup-package-path { display: block; contain: inline-size; overflow-wrap: anywhere; }
+.page--backup .backup-package-path .backup-locator { overflow-wrap: inherit; }
 .page--backup .backup-locations { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
 .page--backup #copies td:has(.backup-time) small { white-space: nowrap; }
 .page--backup #copy-overview { margin-top: 12px; }
 .page--backup #copy-overview p { margin: 6px 0 0; }
+.page--backup .backup-history ul { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 6px 0 0; }
+.page--backup .backup-history li { padding: 4px 9px; border: 1px solid var(--hair); border-radius: 12px; background: #f4f5f3; color: var(--muted); font-size: 13px; line-height: 1.35; text-align: center; white-space: nowrap; }
+.page--backup .backup-history li time { display: block; }
+.page--backup .backup-history li[data-state="complete"] { background: #eaf7ef; color: #17633d; }
+.page--backup .backup-history li[data-state="failed"] { background: #fdf0ee; color: #a8362c; }
+.page--backup .backup-history .fe-l3b-note { margin: 6px 0 0; }
 /* 选中的那一份（点了“这份 ›”或带着它进来）：绿框一直亮着，下面多一行这一份在哪、哪一天 */
 .page--backup .dossier .run.is-picked::after { background: #effaf3; box-shadow: inset 0 0 0 2px #00A650, 0 6px 18px rgb(0 166 80 / .14); }
 .page--backup .run.is-picked .fe-l3b-point > span { color: #00A650; font-weight: 600; }
