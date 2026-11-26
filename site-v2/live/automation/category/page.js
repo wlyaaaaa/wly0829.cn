@@ -148,14 +148,26 @@
   const catNext = () => { const c = catOf(state?.data); return c?.state?.next_at || c?.next_at || list(c?.upcoming)[0]?.at; };
 
   // —— 接下来几次 ——
+  function nextCheck() {
+    const now = Date.now(), bj = 8 * 3600000, day = new Date(now + bj);
+    const weekly = id === 'weekly-rules';
+    if (!weekly && id !== 'auto-repair') return '';
+    if (weekly) day.setUTCDate(day.getUTCDate() + (8 - day.getUTCDay()) % 7);
+    day.setUTCHours(weekly ? 15 : 6, weekly ? 30 : 10, 0, 0);
+    if (+day - bj <= now) day.setUTCDate(day.getUTCDate() + (weekly ? 7 : 1));
+    const at = esc(when(new Date(+day - bj).toISOString()));
+    return weekly ? `下次周检 ${at}，有改动才跑。` : `急件马上处理，非急件下次从 ${at} 起处理。`;
+  }
   function upcoming(d, c) {
     const rows = list(c.upcoming).filter(u => T.stamp(u.at));
+    const next = c.state?.next_at || c.next_at;
     const queue = id === 'auto-repair' && known(d.counts?.queue) ? `<p class="ak-queue">现在排着等修的：<b>${int(d.counts.queue)} 件</b></p>` : '';
-    const body = mode(c) === 'off' ? `<p class="ak-up__none">关着，不排下一次。</p>`
-      : rows.length ? `<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
-      : `<p class="ak-up__none">没有排好的钟点${c.waiting_for ? `：${F(c.waiting_for, '在等什么')}` : ''}。</p>`;
-    return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>
-      <p class="ak-up__how">${esc(g.when || '')}</p>${body}${queue}</section>`;
+    const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不排下一次。</p>'
+      : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
+      : rows.length ? `<p class="ak-up__how">${esc(g.when || '')}</p><ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
+      : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
+        : (mode(c) === 'on' && nextCheck()) || esc(g.when || '') || F(c.waiting_for, '在等什么') || '没有排好的钟点。'}</p>`;
+    return `<section class="tp-panel ak-panel"><div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">◷</span><h2>接下来几次</h2></div>${body}${queue}</section>`;
   }
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
