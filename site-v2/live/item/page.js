@@ -15,6 +15,7 @@
   const text = d => sp(d?.text && typeof d.text === 'object' ? { ...d, ...d.text } : d) || (U.offline?.() ? '' : U.collectionText());
   // 只照接口明确的本人标记隐藏；改写状态和操作权限不改变已提供的正文。
   const say = (value, what = '事项内容') => U.fieldHtml(value == null ? U.offline?.() ? '' : U.collectionText() : value, { name: what, kind: viewer });
+  const itemUnits = html => issue ? html : U.itemTextUnits(html);
   const fact = (name, value, extraClass = '') => `<div class="rec-fact${extraClass}"><dt>${name}</dt><dd class="rec-prose">${value}</dd></div>`;
   const optionActions = (d, q) => U.actions({ id: `${d.id}:question:${q.id}`, text: text(d) }, q.options.map(o => { const label = sp(o); return { kind: 'copy', label, text: U.choiceText(d, text(d), q, o) }; }));
   const OUT = { fixed: '修好', not_fixed: '没修好', wont_fix: '定了不修', deferred: '暂时不修' };
@@ -97,12 +98,12 @@
     const head = part('head');
     // M688：本人版标题旁挂签，按后台给在这件事上的 visitor_labels（标题键 text，'$' 是整件）；没有差异键的普通原文不挂
     const visitorMark = !issue ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
-    U.html(head, (dossier ? '' : status.lamp) + U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false }) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
+    U.html(head, (dossier ? '' : status.lamp) + itemUnits(U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false })) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
     issueReadings?.breakHeading(head.querySelector('.head__lead'));
     if (dossier) {
       part('head').classList.toggle('is-long', [...cut.title].length > 40);
       part('lamp').hidden = !status.lamp; U.html(part('lamp'), status.lamp);
-      part('lead').hidden = privateItem || !lead.head; U.html(part('lead'), lead.head ? `<p>${say(lead.head)}</p>` : '');
+      part('lead').hidden = privateItem || !lead.head; U.html(part('lead'), lead.head ? `<p>${itemUnits(say(lead.head))}</p>` : '');
       part('state').hidden = !kindLabel; U.html(part('state'), U.fieldHtml(kindLabel || ''));
       // 状态卡的小图：了结了画勾；只有“办完了”“修好”是绿勾，其余了结是灰勾，不另判别的。
       const card = part('state').closest('.dossier-card');
@@ -140,7 +141,7 @@
     const detailTag = !issue && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
     const issueSay = value => issueReadings ? issueReadings.conclusion(say(value)) : say(value);
     const sayHead = issue ? (summary ? (reason.rest ? `<details class="dossier-text"><summary>${issueSay(reason.head)}</summary><p>${issueSay(reason.rest)}</p></details>` : issueSay(summary)) : '')
-      : bodyFields.map(value => say(value).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
+      : bodyFields.map(value => itemUnits(say(value)).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
     if (body) {
       body.hidden = !sayHead && !(notes && !note);
       U.html(body, (issue && summary && !d.outcome_text ? `<small>${description ? '问题说明' : '当前进展'}</small>` : '') + sayHead + (note ? '' : notes));
@@ -155,7 +156,7 @@
     L.tone(hero, status.tone);
     const field = value => say(value);
     const closedSay = d.closed && (d.closed.kind === 'unknown' || d.closed.text === '本人关掉了这份汇报' ? d.closed.text || CLOSED.unknown : CLOSED[d.closed.kind] || CLOSED.unknown);
-    const closedNote = d.closed?.text == null ? '' : say(d.closed.text).trim();
+    const closedNote = d.closed?.text == null ? '' : say(U.itemClosingText(d.closed.text, viewer)).trim();
     const monthly = !issue && Number.isInteger(d.monthly_day) && d.monthly_day >= 1 && d.monthly_day <= 31 ? `每月 ${d.monthly_day} 日` : '';
     const facts = issue ? [
       // 档案卡里结局就是状态卡的大字，了结说明在“结论”卡（能展开），这里不再重复。
@@ -172,7 +173,7 @@
       // M947：每月循环的提醒（后台给整数 monthly_day）这一行写“每月 6 日”，不另加行
       (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
-      d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
+      d.closed && !(dossier && closedSay === label) && fact('结局', say(U.itemClosingText(closedSay, viewer))),
       closedNote && fact('了结说明', U.itemTextUnits(closedNote)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
     ];
     $('about').hidden = !facts.some(Boolean) || privateItem; U.html($('facts'), facts.filter(Boolean).join(''));
@@ -239,13 +240,14 @@
       if (e.private_count) return { key: e.key, cls: 'run', html: U.privateSummary(e.private_count) };
       const { actor = '', extra = '' } = eventReadings.get(e) || {};
       const body = eventBody(e);
+      const historyLabel = e.label || outcomeLabel(e.outcome) || EVENT[e.event] || '进展';
       // 这一步是哪个 AI、哪一轮：“自动修理第 2 轮（GPT-6.2 Sol xhigh）›”，点了到那一轮（后台在这一步或 automation_runs 里写明了才有）
       const own = e.automation_run && window.LiveRuns?.sources({ automation_runs: [e.automation_run] }, viewer)[0];
       const runAt = own ? `<small class="issue-event-actor">${runLink(own)}</small>` : '';
       // 这一步已经挂了“哪一轮 ›”或本身就是那一轮的，不再挂来源
       const src = own || e.run ? '' : source(e) || '', why = src ? '' : sourceWhy(e);
       const who = src && rawActor(e) ? '' : actor;
-      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"${why ? ` title="${esc(why)}"` : ''}><b>${e.run ? runLink(e.run) : say(e.label || outcomeLabel(e.outcome) || EVENT[e.event] || '进展')}</b>${who}${src}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
+      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"${why ? ` title="${esc(why)}"` : ''}><b>${e.run ? runLink(e.run) : say(issue ? historyLabel : U.itemClosingText(historyLabel, viewer))}</b>${who}${src}${runAt}</span></p>${body ? runOut(issue ? body : U.itemClosingText(body, viewer)) : ''}${extra}` };
     });
     U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText("经过")}</p>` }], { animate: !first });
     U.list($('events-rest'), events.slice(firstRun), { animate: !first });
