@@ -352,9 +352,12 @@
   const blockAt = d => Object.hasOwn(d || {}, 'source_at') ? d.source_at : d?.at;
   // 是不是今天按眼下的时刻比，不拿数据包自己的时刻比：首屏先画和数据到了以后再画，写法一样；不是今天的一定带日期。
   const recordStamp = (value, precision) => timed(value) ? join([day(value) !== day(!lastState?.offline && lastState?.now || Date.now()) && U.date(value), U.time(value, precision)]).replace(' · ', ' ') || U.date(value) : '';
+  const chatHistoryReady = d => Number.isInteger(d?.board?.columns?.archived?.total) ||
+    [d, d?.last_counts].some(sample => sample?.done72 != null && timed(sample.window?.to));
+  const cardWarming = (id, data) => data?.q === 'warming' && !(id === 'chats' && chatHistoryReady(data));
   function hasCardData(id, d) {
-    if (!d || d.q === 'warming') return false;
-    if (id === 'chats') return d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
+    if (!d || cardWarming(id, d)) return false;
+    if (id === 'chats') return chatHistoryReady(d) || d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
     if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length || set.failed_points?.length);
     if (id === 'needs') return d.counts != null || (d.items || []).length > 0;
     if (['agents', 'automation', 'ledger'].includes(id)) return true;
@@ -796,12 +799,11 @@
 
   const oldReading = d => d?.stale || ['stale', 'old'].includes(d?.q) || ['stale', 'old'].includes(d?.state) || d?.read_error || /最近一次记录于/.test(sp(d?.stale_text || d?.text));
   // 在干、等回答按新样本自己的时刻（source_at）写，和根首页一样；完整统计（近 72 小时那一窗）的时刻不拿来顶（M606）
-  const chatCountsAt = d => Object.hasOwn(d, 'source_at') ? d.source_at : d.window?.to || blockAt(d);
   function chatSnapshot(d) {
-    const observed = chatCountsAt(d);
+    const observed = blockAt(d);
     const old = lastState?.offline || oldReading(d) || timed(observed) && new Date(lastState?.now || Date.now()) - Date.parse(observed) >= 120000;
     const counts = d.last_counts && d.running == null && d.waiting == null && d.done72 == null ? d.last_counts : d;
-    return { counts, observed: counts === d ? observed : counts.at || counts.window?.to, old: old || counts !== d };
+    return { counts, observed: counts === d ? observed : counts.at, old: old || counts !== d };
   }
   function chatCardHead({ summary, recorded, marker, url, stamps }) {
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
@@ -816,29 +818,34 @@
     const p = parts.chats, { counts, observed, old } = chatSnapshot(d);
     // 在干数用后台的新样本 running_sample {n, at, q}（和根首页同一个读数、同一个时刻）；旧包没有才退回原字段（M606）
     const sample = d.running_sample && typeof d.running_sample === 'object' ? d.running_sample : null;
-    const running = sample ? { n: Number.isInteger(sample.n) ? sample.n : null, at: sample.at } : { n: counts.running, at: observed };
-    const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(sample.at) && new Date(lastState?.now || Date.now()) - Date.parse(sample.at) >= 120000 : old;
-    // 在干、等回答、近 72 小时做完各有各的时刻：一样就共用开头的“几点记录”，不一样各自贴上，不拿旧时刻顶新读数
-    const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(counts.window?.to ?? counts.at);
-    const has = { running: running.n != null, waiting: counts.waiting != null, done: counts.done72 != null };
-    const stamps = [...new Set([has.running && runningAt, has.waiting && waitingAt, has.done && doneAt].filter(Boolean))], split = stamps.length > 1;
-    const recorded = split ? (has.running ? runningAt : waitingAt) : stamps[0] || recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
-    const runningText = sample ? `${sample.q === 'partial' ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
-    const concurrent = has.running && `${runningText} 个${runningOld && !(split ? runningAt : recorded) ? '当时' : ''}在干`;
+    const running = sample ? { n: Number.isInteger(sample.n) && !['unknown', 'warming'].includes(sample.q) ? sample.n : null, at: sample.source_at ?? sample.at } : { n: counts.q === 'warming' ? null : counts.running, at: observed };
+    const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(running.at) && new Date(lastState?.now || Date.now()) - Date.parse(running.at) >= 120000 : old;
+    const history = counts.done72 != null && timed(counts.window?.to) ? counts :
+      d.last_counts?.done72 != null && timed(d.last_counts.window?.to) ? d.last_counts : counts;
+    // 只有每个实际显示的数字都同一时间，开头才共用“几点记录”。
+    const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(history.window?.to);
+    const has = { running: running.n != null, waiting: counts.q !== 'warming' && counts.waiting != null, done: history.done72 != null };
+    const times = [has.running && running.at, has.waiting && observed, has.done && history.window?.to].filter(at => at !== false);
+    const stamps = [...new Set(times.map(at => recordStamp(at)).filter(Boolean))];
+    const recorded = timed(times[0]) && times.every(at => Date.parse(at) === Date.parse(times[0])) ? recordStamp(times[0]) : '';
+    const runningPartial = sample?.q === 'partial' || sample?.q === 'stale' && sample.gap === '只显示有记录的部分';
+    const runningText = sample ? `${runningPartial ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
+    const concurrent = has.running && `${runningText} 个${runningOld && !runningAt ? '当时' : ''}在干`;
     const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const done = has.done && `近 72 小时做完 ${quantity(counts, 'done72')} 个`;
-    const own = (piece, at, label) => !piece || !split || !at || at === recorded ? piece : label(piece, at);
+    const done = has.done && `近 72 小时做完 ${quantity(history.q === 'warming' ? { ...history, q: 'stale' } : history, 'done72')} 个`;
+    const own = (piece, at, label) => !piece || !at || recorded ? piece : label(piece, at);
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
-    const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
+    const missing = [running.n == null && '在干数', !has.done && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
+    // M915 的四栏数照 AI 对话页。归档总数与旧 done72 不同，现役 board 也没有归档截止，不能借旧窗口给它标日期。
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     const colTotal = key => Number.isInteger(board?.columns[key]?.total) ? board.columns[key].total : null, colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
     const bySort = list => [...list].sort((a, b) => (Number.isFinite(Date.parse(b.sort_at)) - Number.isFinite(Date.parse(a.sort_at))) || Date.parse(b.sort_at) - Date.parse(a.sort_at) || 0);
-    const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
+    const boardSeen = board && colTotal('working') != null && recordStamp(blockAt(d));
+    const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}${boardSeen ? `（${boardSeen} 记录）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
       `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
     const summary = boardSummary || join(pieces);
-    const heading = chatCardHead({ summary, recorded: board ? recordStamp(board.as_of) : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
+    const heading = chatCardHead({ summary, recorded: board ? '' : recorded, marker, url: href('chats'), stamps: board ? boardSeen && [boardSeen] : stamps });
     U.html(p.head, heading + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
     // 这张卡不列后台的对话（本人定的）；后台自动任务这会儿在跑的另起一行，点了到自动任务页
     const background = !lastState?.offline && window.LiveBatchHome.backgroundRunning(home?.automation);
@@ -846,7 +853,7 @@
     U.html(p.background, background?.n > 0 ? `<a class="b6-go" href="${esc(route(background.href))}">后台另有 ${background.n} 个在跑 ›</a>` : '');
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
-    const runningNow = sample ? running.n : d.running;
+    const runningNow = sample ? running.n : d.q === 'warming' ? null : d.running;
     const rows = board && Array.isArray(board.columns.working?.items) ? board : null;   // 带行的 board（chats 读口那一份）才拿来列行
     // 停下没归档的（出错、叫停、回完了没归档、状态不明）照改前一样列在卡上，排在在干、等你后面；几行露在外面照旧由卡高定，其余进“还有 N 个”
     const active = rows ? [...bySort([...colItems('working'), ...colItems('waiting')]), ...bySort(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
@@ -1234,10 +1241,10 @@
   function renderCards(d) {
     for (const id of HOME_IDS) if (id !== 'needs' && cards[id].classList.contains('card--empty') && hasCardData(id, d[id])) for (const el of Object.values(parts[id])) el.hidden = false;
     renderHomeNeeds(d);
-    for (const [id, render] of [['chats', renderChats], ['computer', renderComputer], ['phone', renderPhone]]) if (d[id]?.q !== 'warming') render(d[id], d.screen, d.phone);
+    for (const [id, render] of [['chats', renderChats], ['computer', renderComputer], ['phone', renderPhone]]) if (!cardWarming(id, d[id])) render(d[id], d.screen, d.phone);
     renderRest(d);
     paintBatchCards(d);
-    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = d[id]?.q === 'warming'; cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) U.html(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); U.html(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
+    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = cardWarming(id, d[id]); cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) U.html(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); U.html(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
   }
   function renderHomeNeeds(d) {
     const needs = d.needs, focus = noticeFocus(d, viewer), card = cards.needs;
@@ -1253,8 +1260,7 @@
   }
   function cutoffAt(id, data) {
     if (id === 'chats') {
-      const { counts, observed } = chatSnapshot(data || {});
-      if (counts !== data || observed || oldReading(data)) return observed;
+      return chatSnapshot(data || {}).observed;
     }
     if (id === 'phone' && data?.state === 'offline' && !Object.hasOwn(data, 'source_at')) return data.received?.last_at || data.at;
     if (!data || Object.hasOwn(data, 'source_at') || Object.hasOwn(data, 'at') || oldReading(data)) return blockAt(data);
@@ -1271,7 +1277,7 @@
     const named = new Set((d.gray_items || []).map(g => U.fieldText(g?.name, viewer)));
     const ownGap = d.read_error || d.refresh_error || [...(d.gray_items || []).map(g => g?.reason), ...Object.entries(d.missing || {}).filter(([key]) => !named.has(key)).map(([, r]) => r?.reason_code ?? r?.reason ?? r)]
       .some(r => !/还在读|warming/.test(sp(U.fieldText(r, viewer))));
-    if (reading && !ownGap && d.done72 != null) return '';
+    if (reading && !ownGap && chatHistoryReady(d)) return '';
     const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
     return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
   }
@@ -1751,7 +1757,7 @@
       renderNotices(state);
       if (home && !changed && !state.offline && timed(state.now) && Math.floor(Date.parse(oldNow) / 60000) !== Math.floor(Date.parse(state.now) / 60000)) {
         const render = () => {
-          if (home.chats.q !== 'warming') { renderChats(home.chats); paintStatus('chats', home.chats); }
+          if (!cardWarming('chats', home.chats)) { renderChats(home.chats); paintStatus('chats', home.chats); }
         };
         if (firstLink || settling()) render(); else U.anchor(render);
       }

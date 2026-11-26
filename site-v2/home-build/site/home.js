@@ -282,8 +282,9 @@ function cutoffText(at, now, prefix) {
     return day(at) === day(now || Date.now()) ? `${prefix ?? '以上截至'} ${time}` : `${prefix ?? '截至'} ${day(at)} ${time}`;
   } catch { return ''; }
 }
+const aiCellAt = source => [source?.source_at, source?.at].find(value => Number.isFinite(Date.parse(value)));
 function aiCellView(source, meta, owner, pending, now) {
-  const at = source?.source_at ?? source?.at ?? meta?.at;
+  const at = aiCellAt(source);
   const stamp = Date.parse(at), age = (Date.parse(now) || Date.now()) - stamp;
   // /screen 的 n 只表示当前读数。过期时，同笔对话计数留在“上次 N 个在干”里。
   const last = source?.q === 'stale' && /^上次\s*(\d+)\s*个在干(?:\s*·|$)/.exec(source.text ?? '');
@@ -291,7 +292,7 @@ function aiCellView(source, meta, owner, pending, now) {
     : last && Number.isFinite(stamp) ? Number(last[1]) : cellFacts('ai', source).n;
   const view = cellView('ai', { n }, owner, pending || source?.q === 'warming', down);
   if (!view.num) return view;
-  if (source?.q === 'partial') {
+  if (source?.q === 'partial' || source?.q === 'stale' && source.gap === '只显示有记录的部分') {
     view.unit = '个以上';
     view.label = `AI 在干活，至少 ${view.num} 个`;
   }
@@ -323,7 +324,7 @@ function renderScreen(data, meta, pending = false, now) {
   };
   cellTargets.forEach(([id, fallback], index) => {
     let source = data?.cells?.find((item) => item.id === id);
-    let at = source?.source_at ?? source?.at ?? meta?.at;
+    let at = id === 'ai' ? aiCellAt(source) : source?.source_at ?? source?.at ?? meta?.at;
     const waiting = source?.q === 'warming';
     // “今天”的维护数不能沿用跨日的回包或页面内副本。其余读数继续沿用各自的上一次。
     const maintenance = id === 'maintenance';
@@ -334,7 +335,10 @@ function renderScreen(data, meta, pending = false, now) {
     let view = read(source, facts, meta);
     const previous = lastReadings.get(id);
     const hasUptime = Number.isFinite(facts.uptime), time = Date.parse(at);
-    const retain = !view.off && previous && ((!view.num && (previous.hasNumber || !hasUptime)) || time < Date.parse(previous.at));
+    const priorTime = Date.parse(previous?.at);
+    const samePartial = id === 'ai' && time === priorTime && source?.q === 'stale' && previous.source.q === 'partial' && facts.n === previous.facts.n;
+    const retain = !view.off && previous && ((!view.num && (previous.hasNumber || !hasUptime)) ||
+      (id === 'ai' && !Number.isFinite(time)) || time < priorTime || samePartial);
     if (retain) {
       ({ source, at } = previous);
       view = read(source, previous.facts, { ...meta, at, source: 'copy' });
