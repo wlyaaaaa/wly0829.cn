@@ -43,7 +43,6 @@
   const titleParts = [document.querySelector('.lbp-title h1'), document.querySelector('.lbp-title p > span')].filter(Boolean).map(el => [el, el.textContent]);
   const pageTitle = (kind = viewer) => titleParts.forEach(([el, text]) => { el.textContent = kind === 'public' ? text.replaceAll('你', '本人') : text; });
   const pairedHere = (() => { try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || '') && !window.LiveView?.isPublic?.(); } catch { return false; } })();
-  pageTitle(pairedHere ? 'owner' : 'public');
   L.add($('hero'));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   document.querySelectorAll('a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
@@ -137,6 +136,8 @@
     c.title.dataset.keep = ''; c.title.textContent = labels[kind]; c.sub.textContent = hintText(kind, pairedHere ? 'owner' : 'public'); cards.set(kind, c);
     $('kind-pick').insertAdjacentHTML('beforeend', `<option value="${kind}">${labels[kind]}</option>`);
   }
+  titleParts.push([$('kind-pick').querySelector('option[value="reports"]'), labels.reports]);
+  pageTitle(pairedHere ? 'owner' : 'public');
   const closedCard = cards.get('closed');
   closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
@@ -458,7 +459,7 @@
     // M973：“近 7 天下去的”数的是读回来多少件，同一句并成一行的（“同一件事关过 N 次”）按原来的件数算，不按摆了几行；两版读回来的一样多，件数就一样
     const pieces = key === 'closed' ? items.reduce((n, it) => n + (it.repeats || 1), 0) : items.length;
     const green = n => n > 0 ? '<b class="lb-count__n">' + n + '</b>' : n;   // 加绿（GREENIMG1126）：大于 0 的件数绿
-    const count = partial ? key === 'closed' ? '已读 ' + green(pieces) + ' 件' : '已读部分' + (items.length ? ' · ' + green(items.length) + ' 件' : '') : (known ? green(pieces) : '—') + ' 件';
+    const count = partial ? key === 'closed' ? '下去了 ' + green(pieces) + ' 件' : '已读部分' + (items.length ? ' · ' + green(items.length) + ' 件' : '') : (known ? green(pieces) : '—') + ' 件';
     U.html(cards.get(key).title, (viewer === 'owner' ? labels[key] : labels[key].replaceAll('你', '本人')) + '<span class="lb-count">（' + count + '）</span>');
     // M665：近 7 天下去的按事情本来的类别分组（要你做／要你选／你放着／要你知道），不再按“电脑办／手机办”分、不再有“其他”这一组（本人 11-24 02:21）。
     const order = Object.keys(KIND), rank = it => { const i = order.indexOf(it?.kind); return i < 0 ? order.length : i; };
