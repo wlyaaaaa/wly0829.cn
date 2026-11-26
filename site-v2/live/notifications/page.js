@@ -449,8 +449,9 @@
       stale_text:oldReading?staleLine:d.stale_text},{missingNames,showZeroFixing:false,cutoffShown:oldReading?cutoffOnly:undefined});
     const namedMissing=header.tone==='gray'?[]:Object.entries(d.missing||{}).map(([key,reason])=>combine([missingNames[key]||(/[\u3400-\u9fff]/.test(key)?key:''),/[\u3400-\u9fff]/.test(reason)||typeof reason==='object'?reason:'']));
     const coverageNotes=[...new Set([...(d.coverage?.missing||[]),...namedMissing,...sources.filter(incomplete).map(o=>o.gap),...gaps.map(g=>g.text||combine([gapNames[g.reason]&&'缺'+gapNames[g.reason],interval(g.from,g.to)]))])].filter(v=>v&&!(oldReading&&cutoffOnly(v)));
-    // “发了”中间不折行（原来会排成“给你发／了 662 次”）；只在显示时加不可见的连字，问 AI 那句照原文（r83 返修第三轮）
-    U.html($('head'),header.lamp+U.head(headline.replace('发了','发\u2060了'),{lamp:false}));
+    // 显示时保住“发了”“截至”“本人”整词；问 AI 那句照原文。
+    const displayHeadline=headline.replace(/发了|截至|本人/g,word=>word[0]+'\u2060'+word[1]);
+    U.html($('head'),header.lamp+U.head(displayHeadline,{lamp:false}));
     const problems=problemLine(issues);
     U.html($('note'),problems?`${esc(problems)} <a class="more" href="#attention">看是哪几次 ›</a>`:'');
     U.html($('latest'),row?`最近一次：${shown(stamp(at(row)),'时刻')}，发到${shown(channel(row),'渠道')}，${shown(stateWord(row),'到没到')}`:'');
