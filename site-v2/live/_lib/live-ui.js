@@ -1202,7 +1202,7 @@
   // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
   const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
   let connBack = 0, connNow = 'online';
-  const pillHooks = new Set();   // 页眉“几点读到”按钮跟着卡一起换成“正在重试”
+  const pillHooks = new Set();   // 页眉读数按钮和连接条用同一份主读口状态
   const connStage = () => document.querySelector?.('body.page--live main.stage');
   const connFit = card => {
     const was = card.hidden;
@@ -1319,12 +1319,11 @@
     const at = group.querySelector('.live-at');
     const askBtn = group.querySelector('.live-ask');
     const pageTitle = document.title || '实况';
-    let label = '', busy = false, paused = false, last = null;
-    // 刷新图标用画好的 SVG：一段顺时针 300° 的圆弧，右上偏上一个实心三角箭头（字体里的 ↻ 在不同字体里样子怪）。
-    // 不用“直角折线”箭头（转到缺口朝上像电源键）；箭头小了、线细了又像字母 C。线宽 2.25（显示约 1.5px，和 14px 字的笔画一样重），
-    // 箭头尖离圆弧起点约 2px，转到哪个角度都像一个圆在转。
-    const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
-    const show = (text) => html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${icon}</span><span class="live-refresh-text">${esc(text)}</span>`);
+    let label = '', busy = false, paused = false, disconnected = false, last = null;
+    const show = (text) => {
+      at.setAttribute('aria-label', text);
+      html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${CONN_ICON}</span><span class="live-refresh-text">${esc(text)}</span>`);
+    };
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
     // 点一下就等于浏览器刷新（本人 M513：页面上的刷新没用、浏览器刷新就好）：整页重新载入，拿到最新版网页和最新数据。
     // 动画照 r62：药丸先收成圆（--live-at-slide）再重新载入；新页面一出来就是收好、接着转的样子，这一轮数据读完、
@@ -1344,10 +1343,22 @@
         busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);
       });
     }
-    at.addEventListener('click', () => {
+    at.addEventListener('click', async () => {
       if (busy) return;
       busy = true;
       at.setAttribute('aria-busy', 'true');
+      if (!paused && disconnected) {
+        at.classList.add('is-reconnecting');
+        show('正在重连');
+        try { await window.Live.reconnectMain(); }
+        finally {
+          busy = false;
+          at.classList.remove('is-reconnecting');
+          at.removeAttribute('aria-busy');
+          show(label);
+        }
+        return;
+      }
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
@@ -1360,7 +1371,7 @@
       if (text) flash(askBtn, (await copy(text)) ? '已复制' : '没复制成');
     });
     const api = {
-      // 用假数据写“示意数”；真数写“04:12 读到”；读不到正在重试写“正在重试”（本人 11-24 20:34：不写连不上）
+      // 重连的结果只用主读口的状态，时刻取页面实际拿到的读数。
       set(state) {
         last = state;
         const nextViewer = state.viewer?.kind === 'public' ? 'public' : 'owner';
@@ -1380,15 +1391,18 @@
           clearTimeout(waiting); readDone();
           label = state.text;
           document.title = `${label} · 实况`;
-          at.setAttribute('aria-label', label);
+          at.title = '点一下重读';
           show(label);
           return;
         }
-        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
-        const retry = state.meta?.source !== 'fixture' && ['retrying', 'lost'].includes(state.conn?.stage);
-        if (stamp || state.offline || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
-        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : retry ? '正在重试'
-          : atText || (state.offline ? '电脑关机了' : state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
+        const stage = state.conn?.stage;
+        disconnected = stage ? stage === 'lost' || stage === 'off' : !!state.offline;
+        at.title = disconnected ? '点一下重连' : '点一下重读';
+        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
+        const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
+        if (stamp || disconnected || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
+        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
+          : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
       },

@@ -1032,6 +1032,10 @@
     };
   }
   const refreshPath = (path, fresh = false) => refresh(false, fresh, path);
+  function reconnectMain() {
+    const main = connectionEntries().find(e => isMain(e) && e.listeners.size);
+    return main ? refreshPath(main.path, true) : refresh(false, true);
+  }
   function watch(resource, query, callbacks) {
     if (pairing) {
       let subscription, stopped = false;
@@ -1248,7 +1252,7 @@
     return changed;
   }
   window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
-    get, refreshPath, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
+    get, refreshPath, reconnectMain, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {
         const name = String(item.name || item.title || '自动任务').replace(/\s+/g, ' ').slice(0, 90);

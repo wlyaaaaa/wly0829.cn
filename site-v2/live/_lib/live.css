@@ -442,7 +442,7 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
 .is-refreshing .live-refresh-icon { left: calc(50% - 8px); animation: live-refresh-turn calc(var(--live-at-turn) * var(--sp, 1)) cubic-bezier(.45, .1, .45, .9) var(--live-at-t) infinite; }
 .is-refreshing .live-refresh-text { opacity: 0; transition-duration: calc(var(--live-at-t) * .3); transition-delay: 0s; }
 /* 读不到、正在重试：字写“正在重试”，图标原地一直转（本人 11-24 20:34） */
-.topbar .live-at.is-retrying:not(.is-refreshing) .live-refresh-icon { animation: live-refresh-turn 1.4s linear infinite; }
+.topbar .live-at:is(.is-retrying, .is-reconnecting):not(.is-refreshing) .live-refresh-icon { animation: live-refresh-turn 1.4s linear infinite; }
 @keyframes live-refresh-turn { to { rotate: 1turn; } }
 .topbar .live-ask { margin-right: 10px; }
 .head__link { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; color: inherit; text-decoration: none; border-radius: 8px; }
