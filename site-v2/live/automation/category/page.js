@@ -90,7 +90,9 @@
     if (p) return ['warn', `停着：${pauseText(p)}`];
     if (pr && (pr.headline || pr.title || pr.text)) {
       const handler = pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理');
-      return ['warn', `出毛病 —— ${F(pr.headline || pr.title || pr.text, '哪里坏了')}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
+      const problem = F(pr.headline || pr.title || pr.text, '哪里坏了').replace(/<[^>]*>|运行证据/g,
+        part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
+      return ['warn', `出毛病 —— ${problem}${handler ? `<wbr><span class="au-nobr">（${handler}）</span>` : ''}`];
     }
     if (c.running || st.kind === 'running' || live) return ['run', `正在跑${live && T.stamp(live.startedAt) ? `，${esc(T.clock(live.startedAt))} 起` : ''}${live?.activity ? ` —— ${F(live.activity, '正在干什么')}` : ''}`];
     if (m === 'off') return ['off', `关着${id === 'weekly-live' ? '，网站上线收尾做完再开' : ''}`];
