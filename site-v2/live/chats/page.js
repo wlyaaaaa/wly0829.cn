@@ -518,7 +518,6 @@
     const pieces = [esc(`在干 ${num('working')}${quota}`), waitingN > 0 ? `<b class="chat-head-wait">${esc(waiting)}</b>` : esc(waiting),
       esc(`停下没归档 ${num('stopped')}`), esc(`近 72 小时做完 ${num('archived')}`), asOf && esc(asOf)].filter(Boolean).map(x => `<span class="chat-head-piece">${x}</span>`);
     U.html($('chat-note'), pieces.join(' · '), false);
-    const link = $('hero').querySelector('.hero__links a[href$="#recent"]'); if (link) link.textContent = '近 72 小时做完的 ›';
     heroRead.done();
   }
   // 三家额度条：每格写“没有额度用完的记录”或“额度用完 · 5 小时额度 · 预计 19:00 恢复 · 卡住 3 场对话、1 个自动任务 ›”，读不到写“没读到”和原因。
@@ -557,16 +556,17 @@
     if (!quotas) { if (host) host.hidden = true; return; }
     if (!host) { host = Object.assign(document.createElement('section'), { id: 'chat-quota', className: 'chat-quota' }); host.setAttribute('aria-label', '三家额度'); $('chat-pins').after(host); }
     host.hidden = false;
+    const quotaText = parts => `<span class="chat-quota__text">${parts.map(part => `<span class="live-unit">· ${part}</span>`).join(' ')}</span>`;
     const cells = SOFT.map(([id, name]) => {
       const q = quotas[id] || {}, state = ['denied', 'no_denial', 'unknown'].includes(q.state) ? q.state : 'unknown';
-      if (state === 'no_denial') return `<div class="chat-quota__cell" data-state="ok"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没有额度用完的记录</span></div>`;
+      if (state === 'no_denial') return `<div class="chat-quota__cell" data-state="ok"><span class="chat-quota__dot"></span><b>${name}</b>${quotaText(['没有额度用完的记录'])}</div>`;
       if (state === 'unknown') {
         const why = U.fieldText(q.reason, viewer).trim();
-        return `<div class="chat-quota__cell" data-state="unknown"><span class="chat-quota__dot"></span><b>${name}</b><span>· 没读到 · ${esc(why || '后台没给原因')}</span></div>`;
+        return `<div class="chat-quota__cell" data-state="unknown"><span class="chat-quota__dot"></span><b>${name}</b>${quotaText(['没读到', ...(why || '后台没给原因').split(' · ').map(esc)])}</div>`;
       }
       const stuck = [Number.isInteger(q.chat_count) && q.chat_count > 0 && `${q.chat_count} 场对话`, Number.isInteger(q.automation_count) && q.automation_count > 0 && `${q.automation_count} 个自动任务`].filter(Boolean);
       const words = ['额度用完', quotaWindow(q.window), quotaRecovery(q.reset_at), stuck.length && `卡住 ${stuck.join('、')}`].filter(Boolean);
-      const body = `<span class="chat-quota__dot"></span><b>${name}</b><span>· <em>${words[0]}</em>${words.slice(1).map(w => ` · ${esc(w)}`).join('')}</span>`;
+      const body = `<span class="chat-quota__dot"></span><b>${name}</b>${quotaText([`<em>${words[0]}</em>`, ...words.slice(1).map(esc)])}`;
       return stuck.length ? `<button type="button" class="chat-quota__cell" data-state="denied" data-soft="${id}" aria-pressed="${quotaPick === id}">${body} <span class="more__chev" aria-hidden="true">›</span></button>`
         : `<div class="chat-quota__cell" data-state="denied">${body}</div>`;
     });
@@ -689,7 +689,7 @@
   if (typeof ResizeObserver === 'function') new ResizeObserver(() => fitRecent()).observe($('recent-list'));
   function renderRecent() {
     const recentBoardData = boardOf();
-    U.html($('recent-link'), recentBoardData ? '72 小时内已归档的 ›' : '近 72 小时回看 ›');
+    U.html($('recent-link'), recentBoardData ? '近 72 小时做完的 ›' : '近 72 小时回看 ›');
     if (recentBoardData) { $('recent').hidden = false; if (recentUsable || baseBoard) recentRead.done(); return; }
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
     if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('近 72 小时的回看暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }

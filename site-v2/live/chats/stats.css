@@ -72,6 +72,16 @@ body.chats-board.page--chats #recent-list { grid-template-columns: minmax(0, 1fr
 .chat-quota__cell[data-state="denied"] b, .chat-quota__cell[data-state="denied"] em { font-style: normal; font-weight: 600; color: #c0531a; }
 button.chat-quota__cell { cursor: pointer; }
 button.chat-quota__cell:is(:hover, :focus-visible), button.chat-quota__cell[aria-pressed="true"] { border-color: rgb(227 151 115 / .9); background: #ffe9db; }
+@media (max-width: 1080px) {
+  /* 窄窗口内让额度徽标在标题这一格换行，留出右边的详情按钮。 */
+  .page--chats .lb-card[data-key="running"] .row--board .chat-status[data-tone="orange"] {
+    max-width: 100%; min-height: 22px; height: auto; padding-block: 2px;
+    line-height: 1.35; white-space: normal; overflow-wrap: anywhere;
+  }
+  .chat-quota__cell { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .chat-quota__text { grid-column: 2 / -1; grid-row: 2; }
+  .chat-quota__cell > .more__chev { grid-column: 3; grid-row: 1; }
+}
 /* LINK1125：今天、近 7 天第一行后面“干了 X 小时 ›”“自动任务另跑了 N 轮 ›”，字照这一行，只多一个“›” */
 .chat-counts .chat-stat-piece { white-space: nowrap; } .chat-counts .chat-stat-link { color: inherit; text-decoration: none; }
 .chat-counts .chat-stat-link:is(:hover, :focus-visible) { text-decoration: underline; text-underline-offset: 3px; }
