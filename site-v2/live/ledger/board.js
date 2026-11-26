@@ -95,9 +95,11 @@
     const name = it.registered_by_text ?? it.registered_by;
     if (!U.fieldText(name ?? '', viewer).trim() || !U.fieldText(it.registered_by ?? '', viewer).trim() && !T.path(it.registered_by_href)) return '';
     const label = `${typeof name === 'string' ? esc(name) : F(name, '谁记的')} 记的`;
-    if (T.path(it.registered_by_href)) return link(it.registered_by_href, `${label} ›`);
+    // 本人能点开原来源、访客看不到那段文字的（registered_by_visitor_labels.conversation = hidden），本人版在后面挂全站同一个“访客看不到”
+    const tag = U.visitorLabel({ visitor_labels: it.registered_by_visitor_labels }, 'conversation', '记下这件事的那场对话', viewer);
+    if (T.path(it.registered_by_href)) return link(it.registered_by_href, `${label} ›`) + tag;
     const why = U.fieldText(it.registered_by_unavailable_reason ?? '', viewer).trim();
-    return why ? `<span title="${esc(why)}">${label}</span>` : label;
+    return (why ? `<span title="${esc(why)}">${label}</span>` : label) + tag;
   }
   // 第二行：谁记的 · 为什么放着／在等什么（后台原句）· 下次几点看（到点没看的写后台那句“约好几点再看，到点还没了结”）· 第几次、最多几次
   function itemMeta(it, group, now) {

@@ -51,7 +51,7 @@
     const where = viewer === 'owner' ? meta.where : meta.where.replace('等你的事', '等本人的事');
     // 提交：后台给的是 GitHub 地址（站外）。本人版照给链接；访客版不给：本人的仓库有公开有私有，后台没标是哪种，访客点到私有的会 404（验收 11-24 07:15）
     const github = kind === 'commit' && typeof o?.href === 'string' && o.href.startsWith('https://github.com/');
-    return { kind, id: o?.id, title: o?.title, action, where: str(o?.card_text) || where, version: o?.version,
+    return { kind, id: o?.id, title: o?.title, labels: o?.visitor_labels, action, where: str(o?.card_text) || where, version: o?.version,
       href: T.path(o?.href) || (github && viewer === 'owner' ? o.href : ''), github, go: meta.go };
   }
 
@@ -59,7 +59,8 @@
   function run(raw, viewer) {
     const r = raw || {}, category = str(r.category), status = ['running', 'completed', 'incomplete'].includes(r.status) ? r.status : 'unknown';
     const who = whoOf(r.worker), started = r.started_at || r.queued_at;
-    const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at || r.last_activity_at) : null);
+    // 用了多久只认后台的用时或结束时刻；没有收尾回执的轮次后台如实留空，不拿最后一条记录凑出“用了 1 秒”（一轮页写“没记到结束”）
+    const minutes = num(r.duration_minutes) ?? (status !== 'running' ? minutesBetween(started, r.finished_at) : null);
     // 暂缓：后台把“暂时不修”（自动修理修了还没好、由做事的 AI 判断先等下一次检查点）记成 outcome deferred，status 有时是 incomplete、有时是 completed。
     // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
     // status 照后台原样；自动任务页“只看跑完的”“只看没做成的”两个筛选都不含暂缓的轮次（board.js）。
@@ -125,7 +126,9 @@
     return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
       href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
       // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
-      reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why) };
+      reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why),
+      // 卡头的事实：几条消息，和对话的软件、型号档位、状态、时刻、第几步、帮手数（metadata，有记录才给）；对话对访客藏着时两版也都给
+      count: num(conv?.message_count), meta: conv?.metadata && typeof conv.metadata === 'object' ? conv.metadata : null };
   }
   // 一轮的详情
   function detail(raw, viewer) {

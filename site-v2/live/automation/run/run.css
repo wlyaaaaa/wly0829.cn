@@ -70,6 +70,9 @@
 .ar-off i { color: inherit; }
 .ar-side a:focus-visible, .ar-fold > summary:focus-visible, .ar-go:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
 .ar-talkstate { margin: 0 auto 0 4px; font-size: 13.5px; color: #6c6b64; }
+/* 卡头第二行：软件、型号、几条消息、时刻、帮手（照 AI 对话详情页页头的写法），收起时也看得见 */
+.ar-talk .ar-fold > summary { flex-wrap: wrap; row-gap: 6px; }
+.ar-talkmeta { order: 3; flex-basis: 100%; font-size: 14px; line-height: 22px; color: #6c6b64; }
 .ar-plan { margin: 0; padding-left: 22px; font-size: 15px; line-height: 25px; }
 .ar-plan li[data-step="done"] { color: #6c6b64; }
 .ar-plan li[data-step="done"]::marker { color: var(--tp-green); }
