@@ -1100,7 +1100,7 @@
       const v = value(m), { line: said, moment, cadence } = lineOf(m, v), line = [said, moment].filter(Boolean).join(' · ');
       // 读数是一句字、超过 11 个字的（“10-04（52 天前）”，项目页卡 is-long 也从 11 个字起）：和整句读数一样占两格、一行写全，不截成“10-04（5…”
       const words = v.long || /class="pj-text"/.test(v.html) && [...v.plain].length > 11;
-      const wrap = id === 'video-scaffold' && m.id === 'films';
+      const wrap = id === 'video-scaffold' && m.id === 'films' || id === 'pc-panel-hub' && m.id === 'updated';
       head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : wrap ? 'wrap' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
