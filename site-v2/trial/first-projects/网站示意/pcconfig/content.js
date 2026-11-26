@@ -829,7 +829,7 @@ window.PAGE_DATA = {
     {
       "id": "incidents-01",
       "title": "封面",
-      "image": "assets/故障值班-01-v2.webp",
+      "image": "assets/故障值班-01-v3.webp",
       "width": 2172,
       "height": 724,
       "detail": [
@@ -860,7 +860,7 @@ window.PAGE_DATA = {
           "href": "/live/ledger/?project=pcconfig"
         }
       ],
-      "imageText": "故障值班\n\n电脑和我各个项目出了事，有人值班：每晚 3 点把各个项目自查一遍，每五分钟把新故障派给 AI 去修，每周再查一遍漏；修了两轮还没好，才叫我出面。"
+      "imageText": "故障值班\n\n电脑和我各个项目出了事，有人值班：每晚 3 点把各个项目自查一遍，每五分钟把新故障派给 AI 去修，半夜 0 点到 6:10 只修急的，每周再查一遍漏；修了两轮还没好，才叫我出面。"
     },
     {
       "id": "incidents-02",
