@@ -583,6 +583,8 @@
     if (it.rewrite === 'pending' && it.at) sub = [sub, `${U.date(it.at)} ${U.time(it.at)}`].filter(Boolean).join(' · ');
     // 标题和来源整句显示，放不下就换行，不按字数截成“…”（M760）
     if (U.originName(it.origin, it)) sub = join([sub, U.capText(U.originName(it.origin, it), Infinity, true)]);
+    // 后面还接“ · ”的一段，句尾“。”去掉，不写成“约好的办理时间到了。 · 社区与网站查询”（和等你的事页同一个规矩，r83 返修第三轮复看）
+    if (sub) sub = String(sub).replace(/。((?:<\/[a-z]+>)*) · /g, '$1 · ');
     if (viewer === 'public' && it.visibility === 'owner') sub = '';
     const fresh = seen.isNew(it.episode_at || it.born, at) ? tags([['新', 'tag--new']]) : '';
     // 本人版给完整版，不挂“仅你可见”；访客版整件藏掉的，本人版挂“访客看不到”（M648）。
@@ -952,12 +954,12 @@
         const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
           ? `\u00a0· ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
-        // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和后一台包在一起，一行放不下时连着后一台折下去，不单独占一行
+        // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和前一台包在一起，一行放不下时后一台整个折下去，“·”留在上一行末尾（r83 返修第三轮复看：原来跟后一台包在一起，第二行以“· 手机上次经蓝牙连接”开头）
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? `\u00a0· 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
         const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
         return `<span>${esc(name + status)}</span>`;
-      }).map((html, i) => i ? `<span>·\u00a0${html}</span>` : html).join(''), null, '', '/live/computer/'],
+      }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
     ];
     const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : value;
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
@@ -1321,7 +1323,10 @@
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, ...(state.note || staleText).split(' · ').filter(text => (!(existing || cutoff) || !matchesCutoff(text)) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
-    p.status.hidden = !note; U.html(p.status, note);
+    // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
+    // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
+    const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
+    p.status.hidden = !note; U.html(p.status, statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
   const headline = (it, withLabel = true) => {
