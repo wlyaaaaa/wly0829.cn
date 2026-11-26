@@ -73,7 +73,7 @@
     const cat = Array.isArray(s.catalog) ? s.catalog : Array.isArray(s.catalog?.skills) ? s.catalog.skills : null;
     const catalog = cat && [...new Set(cat.map(c => typeof c === 'string' ? c : c?.label).filter(c => typeof c === 'string' && c))];
     cat?.forEach(c => keepLabel(labels, c));
-    return { latest: s.as_of, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
+    return { latest: s.as_of, refresh: num(s.refresh_seconds), win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
       unverified: Object.fromEntries(providers.map(p => [p.fam.id, num(p.unverified_sources)])),
       starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows',
@@ -187,7 +187,8 @@
     const notes = [line, lag, ...later, ...unverified, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       missing.length ? `${missing.join('、')} 的技能这段时间还没采到` : '', lower.length ? `${lower.join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    const reading = ['约每 2 分钟汇总已有记录', s.latest && `最近一条使用记于 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
+    const interval = s.refresh > 0 && (s.refresh % 60 ? `${int(s.refresh)} 秒` : T.duration(s.refresh));
+    const reading = [interval && `约每 ${interval}汇总已有记录`, s.latest && `最近一条使用记于 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
     return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, reading)}
       ${chips()}
       ${rows.length ? bars(key, rows, HOSTS, '次', { lower: s.lower, labels: s.labels })

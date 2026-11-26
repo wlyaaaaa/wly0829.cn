@@ -39,7 +39,8 @@
       const only = files.flatMap(f => f.blocks.filter(b => b.kind === 'host_only').map(b => b.label)).filter(Boolean);
       return { ...h, present: Boolean(r), version, current: typeof r?.current === 'boolean' ? r.current : null, behind,
         characters: num(r?.characters), files, only, context: opening(list(d.startup_context), h),
-        compact: latest(d.compact_context, h), message: latest(d.message_context, h) };
+        compact: latest(d.compact_context, h), message: latest(d.message_context, h),
+        triggers: list(d.context_triggers).filter(r => hostOf(r.host) === h && r.enabled === true) };
     });
     const c = d.charter && typeof d.charter === 'object' ? d.charter : null, ref = d.charter_href || c?.href || '';
     return { active, hosts, hasHosts: Boolean(raw), charter: c && { version: plain(c.version) || null },
@@ -225,7 +226,7 @@
   // —— 开法：一排胶囊切换；下面“读哪几份”一份一行 ——
   const modeOf = m => m.modes.find(x => x.id === mode) || m.modes[0];
   const whenOpen = o => o.id === 'no_project' ? `${o.name}时` : `选${/^[A-Za-z0-9]/.test(o.name) ? ' ' : ''}${o.name}时`;
-  const approx = r => r?.method !== 'antigravity_settings';   // 只有 Antigravity 按它设置页自己的算法算，别家都是估的
+  const approx = r => r?.method === 'o200k_base_estimate';
   const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> token` : 'token 没算出';
   const EV = { observed: '看到的', inferred: '按加载规则推算', unavailable: '读不到' };
   const ev = kind => `<span class="op-ev" data-ev="${EV[kind] ? kind : 'unavailable'}">${EV[kind] || '没标'}</span>`;
@@ -261,7 +262,7 @@
       return `按 Antigravity 设置页自己的算法：每份按 UTF-8 字节数 ÷ 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
     }
     if (r.method === 'o200k_base_estimate') return `token 是用 GPT 的分词表估的，${h.name} 自己的计数没拿到，所以都写“约”。`;
-    return 'token 是估的，所以都写“约”。';
+    return 'token 的计数方法这一轮没读到。';
   }
   function filesCard(m, h) {
     const o = modeOf(m), r = o.hosts[h.id];
@@ -335,23 +336,16 @@
     };
     return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }
-  // 这几行什么时候补、平常每条消息补什么（M928 补机制）：Claude、Codex 的开场钩子在开对话、恢复和压缩以后都跑
-  // （两家钩子设置里开场那组的条件都是 startup|compact|resume），每收到一条消息另由“收到消息”那条钩子补状态；
-  // Antigravity 只在开新对话时补，之后每次叫模型前补状态（规则仓 hook-catalog.json 的 C01/C03、X01/X02、A01/A02）。
-  // 压缩以后规则文件重不重读，本机没实测，这里不写
-  const REFILL = {
-    claude: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
-    codex: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
-    antigravity: ['只在开新对话时补这几行', '之后每次叫模型前，另补几行状态（资料锁、没答的题、刚才的工具错误）'],
-  };
   const stampText = x => `${esc(T.day(x.at))} ${esc(T.clock(x.at))}`;
   function refillText(h) {
-    const [open, each] = REFILL[h.id] || [];
-    if (!open) return '';
-    const compact = h.compact && h.id !== 'antigravity' ? `，最近一次压缩后是 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字` : '';
-    const message = h.message ? `，最近一次 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字` : '';
-    // 每条消息补的原样在智能体页钩子“收到消息”那格里有（最近一次塞给 AI 的原样），这里不另摆，给个去处
-    return `${open}${compact}；${each}${message} ${link('/live/agents/#hooks-message', '原样在智能体页 ›')}`;
+    const when = station => [...new Set(h.triggers.filter(r => r.station === station)
+      .map(r => plain(r.when).trim().replace(/。$/, '')).filter(Boolean))].map(esc).join('，');
+    const configured = [when('start'), when('message')].filter(Boolean);
+    const sample = [
+      h.compact && `压缩后最近一次在 ${stampText(h.compact)} 补了 ${int(h.compact.chars)} 字`,
+      h.message && `收到消息相关的最近一次在 ${stampText(h.message)} 补了 ${int(h.message.chars)} 字`,
+    ].filter(Boolean);
+    return [...configured, ...sample, link('/live/agents/#hooks-message', '原样在智能体页 ›')].join(' · ');
   }
   function contextHtml(h) {
     const c = h.context, refill = refillText(h);
