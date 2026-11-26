@@ -205,7 +205,7 @@
   // 旧 Codex 回包有时把多条短思考用空格拼起来。只从另一条思考的开头断开，保留普通的中英文空格。
   function splitThought(text) {
     const lead = /^[A-Z][a-z]+(?=[ \t])/.exec(text)?.[0];
-    const start = new RegExp(`[ \\t]+(?=(?:我(?:正在|已|先|将|会|在|继续|等待|核对|核查|检查)|正在(?:核对|核查|检查)|(?:[A-Z][a-z]+ing${lead ? `|${lead}` : ''})\\b[ \\t]))`, 'g');
+    const start = new RegExp(`[ \\t]+(?=(?:(?:我|正在)\\p{Script=Han}|(?:[A-Z][a-z]+ing${lead ? `|${lead}` : ''})\\b[ \\t]))`, 'gu');
     return text.replace(start, (space, at) => /^[我正]/.test(text[at + space.length]) && !/[。！？.!?]$/.test(text.slice(0, at)) ? '。\n' : '\n');
   }
   function quotes(lines, key) {
