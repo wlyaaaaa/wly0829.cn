@@ -281,7 +281,9 @@
     // 这一节的名字照列表里实际有的几种写：绿点“跑完”、红点“没做成”、灰点“暂时不修”，和筛选按钮、卡上的说法一样；
     // 筛了“只看跑完的”“只看没做成的”就只剩那一种。列表空着时照筛选写（主控 11-25：原来不管筛什么都写“跑完的”，下面一列红点对不上）
     const doneKinds = ['跑完', '没做成', '暂时不修'].filter(k => v.done.some(c => (c.run.deferred ? '暂时不修' : c.status === 'incomplete' ? '没做成' : c.status === 'completed' ? '跑完' : '') === k));
-    const doneWhat = `${doneKinds.length ? doneKinds.join('、') : filter.status === 'incomplete' ? '没做成' : '跑完'}的`;
+    // 几种各带“的”、最后一种用“和”接（“跑完的和没做成的”），不写成“跑完、没做成的”（读着像“跑完了但没做成”）
+    const doneNames = (doneKinds.length ? doneKinds : [filter.status === 'incomplete' ? '没做成' : '跑完']).map(k => `${k}的`);
+    const doneWhat = doneNames.length > 1 ? `${doneNames.slice(0, -1).join('、')}和${doneNames.at(-1)}` : doneNames[0];
     const doneName = `${filter.date ? day : '近 72 小时'}${doneWhat}`;
     // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
     // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
