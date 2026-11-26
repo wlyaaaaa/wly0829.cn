@@ -499,12 +499,16 @@
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
     const hosts = ['Claude', 'Codex', 'Antigravity'];
     for (const r of rows) if (r.producer && !hosts.includes(r.producer)) hosts.push(r.producer);
+    // 定时的名字只有一个数字（如 Codex、Antigravity 里叫“1”的那个）时，写成“名为“1”的定时”，不单摆一个看不出是什么的数字
+    const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     const item = r => {
       const when1 = plan(r);
-      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
+      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, label(r))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small></li>`;
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
-      const late = est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000) ? `预计 ${zhAt(r.next_estimated_at)}` : '';
-      return `<li><b>${esc(when1)}</b>${link(r.href, F(r.label, '这个定时'))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small></li>`;
+      // 调度器预计的下一次和按周期推的原定不在同一分钟（如原定周二 00:00、预计周一 23:55）：不写“每周二 00:00”，免得和预计的日期对不上；照后台的周期原文写，再写下次预计几点
+      if (est != null && nominal != null && Math.floor(est / 60000) !== Math.floor(nominal / 60000))
+        return `<li><b>${F(r.period)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(`下次预计 ${zhAt(r.next_estimated_at)}`)].filter(Boolean).join(' · ')}</small></li>`;
+      return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${F(r.state_text)}</small></li>`;
     };
     // Claude 只接本机执行的定时（本人 11-25 22:13 定），claude.ai 上建的不接：在 Claude 那行写明
     const scope = { Claude: d.scheduled_sources?.claude?.scope === 'local_execution' ? '这里只列本机执行的定时，claude.ai 上建的看不到' : '' };
