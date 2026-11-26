@@ -89,7 +89,9 @@
     U.html($('checked'), ['每天零点后查一次', valid(s.checked_at) ? `上次 ${esc(stamp(s.checked_at))} 查完${age > 1.5 ? `<span class="su-old">（${Math.floor(age)} 天没查了）</span>` : ''}` : '还没查过', '当天开机会当场补查'].join(' · '));
     $('checked').hidden = false;
     const fig = (key, label, v) => `<div data-fig="${key}"><dt>${label}</dt><dd>${num(v) ? `<b>${v}</b><small>项</small>` : '<small>还没读到</small>'}</dd></div>`;
-    U.html($('figs'), fig('observed', '这次起来了', s.observed) + fig('disabled', '停用', s.disabled) + fig('unconfirmed', '这次没确认', num(s.unconfirmed) ? s.unconfirmed : s.enabled_unconfirmed));
+    // 启动失败单列一格、红字，只在后台给的 failed 大于 0 时出；这时“这次没确认”已不含失败的，四格加起来等于总数
+    U.html($('figs'), fig('observed', '这次起来了', s.observed) + fig('disabled', '停用', s.disabled) + fig('unconfirmed', '这次没确认', num(s.unconfirmed) ? s.unconfirmed : s.enabled_unconfirmed)
+      + (num(s.failed) && s.failed > 0 ? fig('failed', '启动失败', s.failed) : ''));
     $('figs').hidden = false;
   }
 

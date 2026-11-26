@@ -19,6 +19,7 @@
 .su-figs dd small { margin-left: 6px; font-size: 14px; color: var(--ink-soft); }
 .su-figs [data-fig="observed"] b { color: #00a650; }
 .su-figs [data-fig="unconfirmed"] b { color: #e07800; }
+.su-figs [data-fig="failed"] b { color: #c8261d; }
 
 /* 三张卡 */
 .su-card .card__glass { padding: 30px 32px 28px; }
