@@ -80,10 +80,10 @@
   for (const key of ['active', 'frozen']) { U.fold($(`${key}-more`), $(`${key}-box`)); $(`${key}-more`).addEventListener('click', () => foldLabel(key)); }
   // 分批展开（R97“逐步展开”、R147）：名册各组、冻结名册、全部变化的组和组里的行，先露一批，点“展开（还有 N …）”一次多露一批，露到底变“收起”。
   // 露到第几批按块记着（名册约每分钟重画、变化翻页后重画都照着露）；切时间档时全部变化从头露。
-  const STEP = { active: 6, frozen: 6, changes: 5 }, MORE = { active: 6, frozen: 6, changes: 5 }, GROUPS = { first: 5, more: 4 };
-  const reveals = { active: new Map(), frozen: new Map(), changes: new Map() };
+  const STEP = { active: 6, frozen: 6, changes: 5, artifacts: 3 }, MORE = { active: 6, frozen: 6, changes: 5, artifacts: 5, artcards: 6 }, GROUPS = { first: 5, more: 4 }, CARDS = 9;
+  const reveals = { active: new Map(), frozen: new Map(), changes: new Map(), artifacts: new Map(), artcards: new Map() };
   let groupsShown = 0;
-  const redraw = key => key === 'changes' ? renderChanges() : key === 'frozen' ? renderFrozen(states.get('frozen')?.data?.items) : renderActive(p.has('fixture') ? home?.items : states.get('active')?.data?.items);
+  const redraw = key => key === 'artifacts' || key === 'artcards' ? drawProjectExtras(lastOverview) : key === 'changes' ? renderChanges() : key === 'frozen' ? renderFrozen(states.get('frozen')?.data?.items) : renderActive(p.has('fixture') ? home?.items : states.get('active')?.data?.items);
   $('stage').addEventListener('click', e => {
     const b = e.target.closest('button.pj-step[data-step-of]');
     if (!b) return;
@@ -295,7 +295,8 @@
     for (const b of document.querySelectorAll(`[data-range-of="${key}"]`)) b.setAttribute('aria-pressed', String(b === button));
     if (pick[key] === range) return;
     pick[key] = range;
-    if (key === 'changes') { groupsShown = 0; reveals.changes.clear(); }   // 换了时间档，全部变化从头一批批露
+    if (key === 'changes') { groupsShown = 0; reveals.changes.clear(); }   // 换了时间档，从头一批批露
+    else { reveals.artifacts.clear(); reveals.artcards.clear(); }
     if (range === '7d' || ranged[key][range]?.state === 'ok') drawRange(key); else loadRange(key, range);
   });
   function renderChanges() {
@@ -407,28 +408,6 @@
     const ready = looksReady && look, bg = ready ? `linear-gradient(135deg,${look.glow[0]},${look.glow[1]})` : 'linear-gradient(135deg,#f1ece2,#ebe8f0)';
     return `<span class="pj-mini__pic" style="background:${bg}" aria-hidden="true">${ready ? lazyImg(look.thumb, 160) : ''}</span>`;
   }
-  function recentDisclosure(box) {
-    const button = box.querySelector('.part').appendChild(document.createElement('button'));
-    button.type = 'button'; button.className = 'btn btn--sm pj-extra__all'; button.setAttribute('data-mo-press', '');
-    const folds = () => [...box.querySelectorAll('.pj-extra__more:not([hidden]), .pj-art:not(.is-leaving) > details')];
-    const sync = () => {
-      const sections = folds(), allOpen = sections.length > 0 && sections.every(el => el.open);
-      button.hidden = !sections.length;
-      button.setAttribute('aria-expanded', String(allOpen));
-      button.textContent = allOpen ? '收起全部成品' : '展开全部已读到的成品';
-    };
-    button.addEventListener('click', () => {
-      const open = button.getAttribute('aria-expanded') !== 'true';
-      box.pack?.reset();
-      for (const el of folds()) el.open = open;
-      sync();
-    });
-    box.addEventListener('toggle', sync, true);
-    return () => {
-      if (button.getAttribute('aria-expanded') === 'true') for (const el of folds()) el.open = true;
-      sync();
-    };
-  }
   function drawProjectExtras(d) {
     const field = v => U.fieldHtml(v, { kind: viewer });
     const section = (id, title, rows, note = '', rest = []) => {
@@ -438,7 +417,6 @@
         box = document.createElement('section'); box.id = id; box.className = `pj-sec pj-extra pj-extra--${id}`;
         box.innerHTML = '<p class="part"><span></span></p><p class="pj-extra__note" data-extra-note></p><ul class="pj-extra__list"></ul><details class="pj-extra__more"><summary class="live-disclosure"><span class="disclosure-closed"></span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-extra__list" data-extra-rest></ul></details>';
         if (id === 'recent-artifacts') {
-          box.syncDisclosure = recentDisclosure(box);
           box.querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('artifacts'));
           for (const b of box.querySelectorAll('[data-range-of]')) b.setAttribute('aria-pressed', String(b.dataset.range === pick.artifacts));
           // 近 30 天、全部一页读不完时接着翻（和全部变化的“更多变化 ›”一样）
@@ -455,7 +433,6 @@
       U.list(box.querySelector('[data-extra-rest]'), rest);
       // 最近成品：卡按顺序放进最矮的一栏，“再看几个项目”展开后接着排（M487，共用 LivePack）
       if (id === 'recent-artifacts') (box.pack ||= window.LivePack.create([...box.querySelectorAll('.pj-extra__list')], { min: 330, gap: 24 })).fit();
-      box.syncDisclosure?.();
       watchBands(box);
     };
     const range = pick.artifacts, own = ranged.artifacts[range] || { state: 'loading' };
@@ -474,7 +451,7 @@
     try {
       const cursor = own.next, s = await window.Live.get('projects/artifacts', { range, cursor });
       if (cursor !== own.next || ranged.artifacts[range] !== own) return;
-      if (s.data?.items && s.data.range === range && s.data.next !== cursor) { own.rows = [...own.rows, ...s.data.items]; own.next = s.data.next || null; own.pageGap = ''; }
+      if (s.data?.items && s.data.range === range && s.data.next !== cursor) { own.rows = [...own.rows, ...s.data.items]; own.next = s.data.next || null; own.pageGap = ''; reveals.artcards.set('', (reveals.artcards.get('') || 0) + MORE.artcards); }   // 新读到的接着露一批
       else own.pageGap = '下一页暂时读不到，已读到的留在这里。';
       if (pick.artifacts === range) U.anchor(() => drawProjectExtras(lastOverview));
     } finally { button.disabled = false; button.textContent = label; }
@@ -590,9 +567,11 @@
       const listed = audience === 'owner' && !g.secret && p?.id ? [...(Array.isArray(roster) ? roster : []), ...['active', 'frozen'].flatMap(key => states.get(key)?.data?.items || [])].find(r => r?.id === p.id) || p : null;
       const headTag = !listed ? '' : projectTag(listed, audience) || (listed.visibility === 'owner' || listed.public === 'owner' ? U.visitorHiddenTag('这个项目', '', audience) : '');
       const head = (g.secret ? `<span class="row__title">${name}</span>` : p?.href ? `<a class="row__title" href="${esc(route(p.href))}">${name} <span class="more__chev">›</span></a>` : `<span class="row__title">${name}</span>`) + (headTag ? ` ${headTag}` : '');
-      const rest = g.rows.slice(SHOW);
+      // 卡里先 3 行，“展开（还有 N 条）”一次再露 5 行，露到底变“收起”（R97、R147；长列表表第 112 项）
+      const extra = Math.max(0, g.rows.length - SHOW), open = Math.min(extra, reveals.artifacts.get(g.key) || 0), left = extra - open;
+      const step = extra ? `<button class="more pj-step" type="button" data-step-of="artifacts" data-step="${esc(g.key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       const header = g.secret && audience === 'public' ? '' : `<div class="pj-art__head">${g.secret ? miniPic('', null) : miniPic(p?.id, p?.name)}${head}</div>`;
-      return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW).map(rowHtml).join('')}</ul>${rest.length ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary><ul class="pj-art__rows">${rest.map(rowHtml).join('')}</ul></details>` : ''}` };
+      return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW + open).map(rowHtml).join('')}</ul>${step}` };
     });
     const range = recent?.range || '7d', count = range === '7d' ? recent?.count_7d : recent?.count;
     // 还能往下翻的不算“未读到”；翻完了还比登记的少才写
@@ -607,8 +586,20 @@
       // 近 30 天、全部一页没列完：写清列了几件、这一档一共几件，下面“更多成品 ›”接着翻
       recent.next && Number.isInteger(count) && `已列出 ${items.length} 件，${rangeLabel(range)}共 ${count} 件`, recent.page_gap,
     ].filter(Boolean).join(' · ') : '';
-    section('recent-artifacts', '成品', cards.slice(0, 9), note, cards.slice(9));
-    if ($('artifacts-next')) $('artifacts-next').hidden = !recent?.next;
+    const cardsShown = Math.min(cards.length, CARDS + (reveals.artcards.get('') || 0)), cardsLeft = cards.length - cardsShown;
+    section('recent-artifacts', '成品', cards.slice(0, cardsShown), note, []);
+    const box = $('recent-artifacts');
+    if (box) {
+      // 项目卡先 9 张，“再看 N 个项目”一次再露 6 张（两排），露到底变“收起”；读到的都露完了才出“更多成品 ›”接着读
+      let more = box.querySelector(':scope > .pj-art-more');
+      if (cards.length <= CARDS) more?.remove();
+      else {
+        if (!more) { more = document.createElement('button'); more.type = 'button'; more.className = 'more pj-step pj-art-more'; more.dataset.stepOf = 'artcards'; more.dataset.step = ''; box.querySelector(':scope > .pj-extra__list').after(more); }
+        more.toggleAttribute('data-open', !cardsLeft);
+        U.html(more, `${cardsLeft ? `再看 ${cardsLeft} 个项目` : '收起'} <span class="more__chev">›</span>`);
+      }
+    }
+    if ($('artifacts-next')) $('artifacts-next').hidden = !recent?.next || cardsLeft > 0;
   }
   window.LiveHeader.watch(null, {
     phase: s => phase('home', s),

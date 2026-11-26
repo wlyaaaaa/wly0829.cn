@@ -116,8 +116,6 @@
 /* 排法在 _lib/live-pack.js：每张卡放进最矮的一栏、卡贴着卡排；“再看几个项目”展开后接着上面几栏排，“收起”挪到展开的卡下面（M487） */
 #recent-artifacts .pj-extra__more[open] { position: relative; padding-bottom: 34px; }
 #recent-artifacts .pj-extra__more[open] > summary { position: absolute; left: 0; bottom: 0; }
-#recent-artifacts .pj-extra__all { flex: none; }
-#recent-artifacts .pj-extra__all[hidden] { display: none; }
 .pj-art { min-width: 0; padding: 16px 20px 6px; border-radius: 18px; }
 .pj-art__head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
 .pj-art__head .pj-mini__pic { width: 40px; height: 40px; border-radius: 10px; }
@@ -156,6 +154,8 @@
 /* 名册各组、冻结名册、全部变化每组底下的“展开（还有 N 条）／收起”：点一次多露一批（R97、R147）；字号颜色照原来那行“展开（还有 N 条）”，箭头朝下、露到底变“收起”箭头朝上 */
 #stage .pj-list-group > .pj-step { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
 #changes .pj-list-group > .pj-step { margin: 6px 0 0; }
+.pj-art > .pj-step { margin: 2px 0 8px; font-size: 14px; color: #3d3d3a; }
+#recent-artifacts > .pj-art-more { margin: 14px 0 0; font-size: 14px; color: #3d3d3a; }
 .pj-step .more__chev { rotate: 90deg; }
 .pj-step[data-open] .more__chev { rotate: -90deg; }
 #changes-more .more__chev { rotate: 90deg; }
