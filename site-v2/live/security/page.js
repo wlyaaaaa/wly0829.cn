@@ -65,7 +65,7 @@
     const shown = parents.slice(0, 6);
     return [traits.join('、'), shown.length && `启动它的程序：${shown.join('、')}${parents.length > shown.length ? ` 等 ${parents.length} 个` : ''}`].filter(Boolean).join(' · ');
   }
-  // 明细先露一部分（签名线索 10 条，别的每个小类 5 条），底下“再看 20 条”每点一次多摆 20 条，一直能看到底，到底按钮就没了（L1；本人 11-26 02:12）。
+  // 明细先露一部分（签名线索 10 个，别的每个小类 5 个），底下“再看 20 个”每点一次多摆 20 个，一直能看到底，到底按钮就没了（L1；本人 11-26 02:12）。按钮数的是一行行的程序，用“个”，不和次数、登记条数混。
   // 签名线索、短命进程、后台外联三类后台可能只给了前一部分（truncated）：后台有分批读口（computer/security?audit=…，L1）时，先把这一类按批取好，
   // 点“再看”照整份往下摆，下一批在点之前先取好；后台没有这个读口（现役）时摆完手里的为止，照旧写“仅显示已返回的程序”。
   const AUDIT_STEP = 20, PAGED_AUDITS = ['impersonation', 'short_lived', 'silent'];
@@ -84,7 +84,7 @@
     const total = page?.rows ? page.total : list.lines.length, left = total - shown;
     const waiting = page?.rows && page.rows.length < Math.min(total, shown) && !page.failed;
     const button = page?.failed === 'page' ? '这一批没读到，点一下再取 <span class="more__chev">›</span>' : waiting ? '正在取…'
-      : left > AUDIT_STEP ? `再看 ${AUDIT_STEP} 条（还有 ${left} 条） <span class="more__chev">›</span>` : left > 0 ? `再看剩下 ${left} 条 <span class="more__chev">›</span>` : '';
+      : left > AUDIT_STEP ? `再看 ${AUDIT_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : left > 0 ? `再看剩下 ${left} 个 <span class="more__chev">›</span>` : '';
     return `<ul class="vz-audit__rows">${list.lines.slice(0, shown).join('')}</ul>${button ? `<button class="more" type="button" data-audit-more="${U.esc(id)}"${waiting ? ' disabled' : ''}>${button}</button>` : ''}`;
   }
   function auditGroup(id, note, lines, first, paged = null) {
