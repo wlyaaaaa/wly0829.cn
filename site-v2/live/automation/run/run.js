@@ -134,11 +134,12 @@
   }
 
   // —— 这一轮做成了什么：做出来的东西、回执里记下的、告诉本人的；有东西时才放（单子：原来那块的内容不能丢）——
-  // 提交在 GitHub 上：本人版给链接并标“访客看不到”。访客版同一颗“看提交 ›”，后面挂“访客打不开”（全站“访客看不到”那个签的样子，点开写为什么），
-  // 点了由全站共用的可信设备说明框（trust-modal.js，data-need-trusted）拦下、不跳走（本人 11-26 12:2x 改选 2；原来 04:24 选的是访客版不给链接）
-  const GITHUB_WHY = '本人的 GitHub 仓库有一部分是私有的，访客点开会打不开';
+  // 提交在 GitHub 上：两版同一颗“看提交 ›”，后面都挂“访客打不开”（全站“访客看不到”那个签的样子，点开写为什么）；访客点了由全站共用的可信设备说明框
+  // （trust-modal.js，data-need-trusted）拦下、不跳走（本人 11-26 12:2x 改选 2；原来 04:24 选的是访客版不给链接）。
+  // 两版说的理由一样：只有本人的可信设备能打开（有的提交在公开仓库里，GitHub 上本来打得开，所以不拿“仓库私有”当理由）
+  const CANT_OPEN = { owner: '访客看得到“看提交”，点了打不开：只有本人的可信设备能打开。', public: '访客打不开这次提交：只有本人的可信设备能打开。' };
   const cantOpenTag = () => U.visitorHiddenTag('这次提交的链接', '', 'owner').replace('title="访客看不到 ·', 'title="访客打不开 ·')
-    .replace(/data-trust-explanation="[^"]*"/, `data-trust-explanation="${esc('访客打不开这次提交：本人的 GitHub 仓库有一部分是私有的，提交只有本人能打开。')}"`)
+    .replace(/data-trust-explanation="[^"]*"/, `data-trust-explanation="${esc(CANT_OPEN[viewer === 'owner' ? 'owner' : 'public'])}"`)
     .replace('<span class="live-mark__label">访客看不到</span>', '<span class="live-mark__label">访客打不开</span>');
   function made(r) {
     const receipt = r.receipt || {};
@@ -158,7 +159,7 @@
     // 名字访客那边换了说法的（outputs[].visitor_labels.title），名字后挂全站同一个签；链接访客那边没有的（outputs[].visitor_labels.href = hidden），本人版链接后挂“访客看不到”（主控 11-26 11:02，等后台给）；
     // 成品自己没有地址、这一轮又有业务回执的链接（下面“打开业务回执 ›”或右栏“这件修理的全部几轮 ›”）时，右边不写“没有能打开的地址”，空着
     const rows = r.outputs.map((o, i) => `<li><span class="ar-num">${i + 1}</span><p><b>${F(o.title, '做成的东西') || esc(o.where)}</b>${o.title ? U.visitorLabel({ visitor_labels: o.labels }, 'title', '这件东西的名字', viewer) : ''}${o.action || o.where ? ` <span class="ar-arrow">→</span> ${esc(o.action)}${o.where && o.title ? esc(o.where) : ''}${R.versionTail(o, viewer)}` : ''}</p>
-      ${o.href || o.github ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href || o.githubHref)}"${o.github && viewer !== 'owner' ? ' data-need-trusted="看提交"' : ''}>${esc(o.go)} ›</a>${o.github ? viewer === 'owner' ? U.visitorHiddenTag('这次提交的链接', GITHUB_WHY, viewer) : cantOpenTag() : U.visitorLabel({ visitor_labels: o.labels }, 'href', '这件东西的链接', viewer)}</span>`
+      ${o.href || o.github ? `<span class="ar-out-go"><a class="tp-link" href="${esc(o.href || o.githubHref)}"${o.github && viewer !== 'owner' ? ' data-need-trusted="看提交"' : ''}>${esc(o.go)} ›</a>${o.github ? cantOpenTag() :U.visitorLabel({ visitor_labels: o.labels }, 'href', '这件东西的链接', viewer)}</span>`
         : `<span class="tp-small">${o.kind === 'commit' ? '还没发布，没有能打开的地址' : receipt.href ? '' : '没有能打开的地址'}</span>`}</li>`).join('');
     const extra = [mine.length && `<p class="ar-sub">回执里记下的：</p><ul class="ar-recorded">${mine.map(x => `<li>${noOriginal(x) ? '后台没给这件的原文' : F(x?.title ?? x?.text ?? x, '记下的事')}${U.visitorLabel(x, 'title', '这条记下的事', viewer)}</li>`).join('')}</ul>`,
       receipt.told && `<p class="ar-sub">告诉${you()}的：${F(receipt.told, '回执')}</p>`,
