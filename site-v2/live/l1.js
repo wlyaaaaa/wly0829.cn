@@ -988,7 +988,10 @@
         // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和前一台包在一起，一行放不下时后一台整个折下去，“·”留在上一行末尾（r83 返修第三轮复看：原来跟后一台包在一起，第二行以“· 手机上次经蓝牙连接”开头）
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? `\u00a0· 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
         const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
-        if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
+        if (x.id === 'secondary' || x.id === 'secondary_laptop') {
+          const line = esc(name + status).replace(/读不到|\d{2}-\d{2} \d{2}:\d{2}/g, '<span class="l1-unit">$&</span>');
+          return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${line} ›</a>`;
+        }
         return `<span>${esc(name + status)}</span>`;
       }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
     ];

@@ -125,7 +125,8 @@
     // 不能当“最后确认在线”，改用 last_online，不然会出现“自 22:10 起连不上 · 最后确认在线 22:40”打架
     const laptopOff = x?.state === 'offline' && !checked, offSince = laptopOff ? time(x.offline_since, now) : '';
     const confirmed = time(checked ? seen : x?.last_online, now);
-    const stamp = (offSince ? ` · 自 ${offSince} 起` : '') + (confirmed ? ` · ${checked ? '最近确认' : '最后确认在线'} ${confirmed}` : disconnected && !last ? ' · 没有留存读数' : '');
+    const confirmation = checked ? '最近确认' : '<span class="laptop-state-unit">最后确认在线</span>';
+    const stamp = (offSince ? ` · 自 ${U.esc(offSince)} 起` : '') + (confirmed ? ` · ${confirmation} ${U.esc(confirmed)}` : disconnected && !last ? ' · 没有留存读数' : '');
     const readings = readingsOld && last !== confirmed ? ` · 下面的读数是 ${last} 的` : '';
     // 怎么判在不在线（M928，数照后台回包里这台笔记本的 refresh_seconds、stale_after，不写死）：
     // 每 1 分钟确认一次；超过 3 分钟没确认上写“未重新确认”；远程连接（Tailscale 或笔记本的远程通道）报它离线才写“连不上”
@@ -133,7 +134,7 @@
     const span = s => s % 60 ? `${s} 秒` : `${s / 60} 分钟`;
     const rule = every && expire ? ` · 每 ${span(every)}确认一次在线，超过 ${span(expire)}没确认上就写“未重新确认”，远程连接报它离线才写“连不上”` : '';
     // 在线时“●”单独一格，后面整段折行后跟“在线”两个字对齐（不回到圆点底下）
-    const rest = `${U.esc(stamp + readings)}${note ? ` · ${field(note, '读取原因')}` : ''}${U.esc(rule)}`;
+    const rest = `${stamp}${U.esc(readings)}${note ? ` · ${field(note, '读取原因')}` : ''}${U.esc(rule)}`;
     $('laptop-state').classList.toggle('laptop-state--dot', checked);
     U.html($('laptop-state'), checked ? `<span class="laptop-good" aria-hidden="true">●</span><span>${status('在线', true)}${rest}</span>` : `${status(headline, false)}${rest}`);
     const missing = pending ? '正在读' : unavailable;
