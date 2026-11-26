@@ -16,7 +16,9 @@
     const kinds = { elevated_start_events: '按匹配启动行数算', nonzero_exit_events_joined_registry: detail ? '按已列程序的非零退出事件计数' : '按匹配的非零退出事件计数', nonzero_exit_events: '按统计面板记录的非零退出事件计数',
       svchost_registry_rows_with_service_name: '按已列服务的登记条数算', nonpositive_signature_or_core_name_outside_windows: '按已列组件的登记条数算',
       activity_samples_with_flagged_remote_ports: '按活动测量次数算', unsigned_activity_during_sensitive_focus_above_resource_threshold: '按活动测量次数算' };
-    return U.sp(count?.label) || kinds[basis.kind] || ({ distinct_process_keys: '按去重后的进程身份算', registry_rows: '按现存登记条数算（含历史）', events: basis.source === 'stat_panel' ? '按统计面板记录的事件计数' : '按事件条数算', matching_rows_per_program_in_returned_groups: '按已列程序的匹配行数算' })[count?.aggregation] || '';
+    // 后台给的说法是半句（“明细已列出的匹配行数”），说成整句：每行右边那个数是什么（L1）
+    const label = U.sp(count?.label).replace(/^明细已列出的匹配(.+)$/, '每行右边的数是这个程序匹配到的$1');
+    return label || kinds[basis.kind] || ({ distinct_process_keys: '按去重后的进程身份算', registry_rows: '按现存登记条数算（含历史）', events: basis.source === 'stat_panel' ? '按统计面板记录的事件计数' : '按事件条数算', matching_rows_per_program_in_returned_groups: '按已列程序的匹配行数算' })[count?.aggregation] || '';
   }
   const countUnit = (basis, unit) => ({ distinct_process_keys: '个进程身份', registry_rows: '条' })[basis?.aggregation] || unit;
   const figure = (key, label, unit = '次') => S.figure({ key, label, value: data?.summary?.[key], unit: countUnit(data?.summary?.count_basis?.[key], unit) }, data?.summary, key);
@@ -72,10 +74,12 @@
   const auditShown = new Map(), auditLists = new Map(), auditPages = {};
   let auditRefresh = [];
   const auditCategory = source => { const raw = U.sp(source.category).replace(/\s*[（(]\s*[)）]/g, ''); return raw.includes('；') ? categoryNote(raw) : raw; };
-  // 一行：时间、程序名（签名线索和分批读来的多类混排时，原因写在下一行小字），次数（排行前 3 已在上面的小标签里，行里不再重复）
+  // 一行：时间、程序名（签名线索和分批读来的多类混排时，原因写在下一行小字），次数（排行前 3 上面的小标签里有，行里也照写，不空着）
+  // 线索说明按“、”“，”“：”“ · ”分成几段，折行时整段换到下一行，不从“未知”“7 个”“git-remote-https.exe”这种词中间折开（L1）
+  const clueSegs = t => U.esc(t).replace(/(、|，|：| · )/g, '$1\u0001').split('\u0001').filter(Boolean).map(s => `<span class="security-seg">${s}</span>`).join('');
   function auditLine(c, source, count, why) {
     const when = source.window && windowText(source.window, c.unit === '条');
-    return `<li><span class="vz-audit__t">${U.esc(stamp(source.time))}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}${why ? `<small class="stat-gap security-clue-why">${U.esc(why)}</small>` : ''}</span><span class="vz-audit__c">${count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`;
+    return `<li><span class="vz-audit__t">${U.esc(stamp(source.time))}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}${why ? `<small class="stat-gap security-clue-why">${clueSegs(why)}</small>` : ''}</span><span class="vz-audit__c">${count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`;
   }
   function auditListHtml(id) {
     const list = auditLists.get(id);
@@ -118,9 +122,9 @@
   function pagedLines(key) {
     const page = auditPages[key], list = auditLists.get(`${key}|*`);
     if (!page?.rows || !list?.c) return;
-    const c = list.c, top = new Set((c.top || []).map(t => U.sp(t.name)));
+    const c = list.c;
     const cats = new Set(page.rows.map(auditCategory));
-    list.lines = page.rows.map(r => auditLine(c, r, key !== 'impersonation' && top.has(U.sp(r.name)) ? null : r.count, key === 'impersonation' || cats.size > 1 ? auditCategory(r) : ''));
+    list.lines = page.rows.map(r => auditLine(c, r, r.count, key === 'impersonation' || cats.size > 1 ? auditCategory(r) : ''));
     list.note = cats.size === 1 && key !== 'impersonation' ? [...cats][0] : '';
   }
   function auditRows(c) {
@@ -210,7 +214,7 @@
           const badges = top.slice(0, 3);
           ready.push({ ...status, key, paged, name, when: when === common ? '' : when, period: when, unit, scope, detail, count, gap, lower: stats?.at_least === true || rows.some(r => r.count == null || S.partial(r, 'count')), source: rows,
             top: badges.filter(r => r.count != null || !U.offline?.()).map(r => ({ ...r, text: S.text(r, 'count') })),
-            rows: rows.map(r => ({ name: U.sp(r.name), count: badges.includes(r) && key !== 'impersonation' ? null : r.count, time: stamp(r.time) })) });
+            rows: rows.map(r => ({ name: U.sp(r.name), count: r.count, time: stamp(r.time) })) });
         }
         heading.hidden = !common;
         heading.textContent = common ? `统计时段 ${common}` : '';
