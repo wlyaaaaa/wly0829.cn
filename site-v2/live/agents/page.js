@@ -102,10 +102,8 @@
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
-  // 同一时刻只说一次（M746）：顶栏固定在屏幕顶上，已写“HH:MM 读到”；卡里的“截至”跟它（或这张卡已写的）同一分钟就不写，不一样才写这张卡自己的时刻
-  let shownCutoffs = [];
-  const minuteOf = at => { const t = T.stamp(at); return t == null ? null : Math.floor(t / 60000); };
-  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [...shownCutoffs, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
+  // 公用读数由顶栏或页头报一次，只有同一批的时刻才拿来比；独立读数照写自己的截至。
+  const asof = (at, coveredAt) => T.stamp(at) == null || at === coveredAt ? '' : `截至 ${when(at)}`;
   // 采样时只有匹配到活动版原件，才能给开场文件标出版号。
   const sampledRule = entry => entry?.current === true && typeof entry.version === 'string' && /^E[1-9]\d*$/.test(entry.version) ? esc(entry.version) : '';
   const rulePageLabel = (version, cls) => `${version} · ${link('/rules/', '规则页 ›', cls)}`;
@@ -314,7 +312,9 @@
     if (!ws) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">工期账这一轮没读到。</p></section>`;
     if (ws.unavailable_reason) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">${esc(ws.unavailable_reason)}</p></section>`;
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${asof(ws.as_of) ? `<span class="tp-asof">${esc(asof(ws.as_of))}</span>` : ''}</div></div>`;
+    // 施工账统计与本页同次生成，后端只在这项的时间戳省掉小数秒。
+    const recordedAt = ws.as_of === d.at ? '' : asof(ws.as_of, typeof d.at === 'string' && d.at.replace(/\.\d+(?=Z|[+-]\d\d:\d\d$)/, ''));
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
@@ -409,7 +409,7 @@
       row('多接的工具', HOSTS.map(tools), { note: '电脑接口、Google 以外，能点名用的' }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
-    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
+    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2></div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
       <p class="tp-small ag-foot">${codexReview ? 'Codex 遇到要批准的，由它自带的审核模型代批，不找人。' : ''}${link('/rules/', '规则页 ›')}</p></section>`;
@@ -474,8 +474,9 @@
   }
   function hooksSection(d) {
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
+    const recordedAt = asof(hv?.at || hs.at, d.at);
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量</p>${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
@@ -527,10 +528,8 @@
       page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
       return;
     }
-    // 顶栏或连接提示已写这一页读到的时刻；别的块的离线时刻不能代替本页的统计截至（M746）。
-    shownCutoffs = [state.shownAt];
-    const headAt = asof(d.at);
-    if (headAt) shownCutoffs.push(d.at);
+    const headerAt = state.conn ? state.conn.shownAt : !state.offline && state.shownAt;
+    const headAt = asof(d.at, headerAt);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;

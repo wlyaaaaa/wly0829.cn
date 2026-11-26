@@ -1323,6 +1323,14 @@
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
+    // 两张卡的灰项由后台从同次名册读数派生，只有同一采样才合并灰项与卡底说明。
+    const cardReading = id === 'needs' || id === 'backups';
+    const sameSample = cardReading && timed(end) && end === data?.at && !(id === 'needs' &&
+      data.items?.some(row => row.light === 'gray' && blockAt(row) !== end));
+    const shortEnd = cardReading && timed(end) && `数据截至 ${U.time(end, data.at_precision)}`;
+    const cardCutoff = text => shortEnd && (U.sameCutoffNote(shortEnd, text) || U.sameCutoffNote(endNote, text));
+    const sameNote = (a, b) => (!cardReading || sameSample) && (U.sameCutoffNote(a, b) || cardCutoff(a) && cardCutoff(b));
+    const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
     const matchesCutoff = text => endNote && U.sameCutoffNote(endNote, text);
     const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
     const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
@@ -1331,7 +1339,7 @@
     const existing = endNote && (chatReading === stamp || chatStamps.includes(stamp) || [p.head, p.note].some(el => el && !el.hidden &&
       [...el.querySelectorAll('.head__cutoff'), el].some(node => node.textContent.split(' · ').some(matchesCutoff))));
     const difference = Date.parse(home?.at ?? at) - Date.parse(end);
-    const cutoff = endNote && !existing && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
+    const cutoff = endNote && !existing && !cardCutoff(`最后读到 ${describedAt}`) && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
     const temperature = id === 'computer' && computerTemperature(data);
@@ -1342,7 +1350,6 @@
     const plain = text => sp(String(text).replace(/<[^>]*>/g, '')).trim();
     const savedReading = text => plain(text).match(/^(最近一次记录于\s+(?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)(?:[，,](?:此后没有新读数))?[。.]?$/)?.[1] || '';
     const oldDetails = new Set();
-    const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
     const lackWhy = new Map();
     for (const g of gray || []) {
       const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
@@ -1352,7 +1359,7 @@
       const latest = name === 'CPU 温度' && recordStamp(computerSampleAt(temperature));
       const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
-      const detail = describedAt && U.sameCutoffNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
+      const detail = describedAt && sameNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
     }
     const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}${why ? `（${esc(why)}）` : ''}`).join('；');
@@ -1379,9 +1386,13 @@
       if (id === 'phone' && lastState?.offline) p.head.firstElementChild.dataset.tone = 'gray';
     }
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
-    const alreadyDated = text => [...oldDetails].some(reason => U.sameCutoffNote(reason, plain(text)));
+    const alreadyDated = text => [...oldDetails].some(reason => sameNote(reason, text));
+    const redundantCutoff = text => {
+      const value = plain(text);
+      return alreadyDated(value) || (existing || cutoff) && matchesCutoff(value) || cutoff && cardCutoff(value);
+    };
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => !alreadyDated(text) && (!(existing || cutoff) || !matchesCutoff(plain(text))) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
+      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）

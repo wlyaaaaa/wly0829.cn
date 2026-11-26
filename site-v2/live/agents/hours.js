@@ -82,7 +82,7 @@
     const title = `${lead}${who}干了多少`.replace(/\s+干/, ' 干');
     const seg = `<div class="tp-seg ag-hseg-pick" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) =>
       `<button type="button" data-hperiod="${id}" aria-pressed="${period === id}">${label}</button>`).join('')}</div>`;
-    // 跟顶栏“读到”同一分钟的“截至”不再写（page.js 递来的 asof，M746）
+    // 工时来自独立汇总，跟本页顶栏碰巧同一分钟也要保留自己的“截至”。
     // “几号起才有记录”只在选的这一段起点早于最早一条记录时写；“全部”标题里已写从哪天起，记录全了、判断不了都不写（本人 11-25 16:30，M911）
     const first = p?.earliest_record_at || m?.earliest, gap = period !== 'all' && Date.parse(p?.window_start) < Date.parse(first);
     // 对话、帮手的记录（chat_source_at）比“截至”早 10 分钟以上：这之后对话和帮手干的还没算进来，照实写读到几点，不让旧数冒充新的

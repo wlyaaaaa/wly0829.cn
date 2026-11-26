@@ -539,7 +539,7 @@
     // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
     const since = main && failingStamp(main);
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
-      ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
+      ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', shownAt: mainAt, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
           : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online', shownAt: mainAt };
     const link = latestConnection();
     if (!hostOffline(link)) {
@@ -548,12 +548,12 @@
       // 随站那份只记了时刻、没存内容时（下面各块都写没存下来）：页顶照全空写“这页的数据没存下来”，第二句说那份只记了时刻，不说“先显示那份”（D6 复查：前后打架）
       const release = !!main && main.backupFrom === 'release' && onBackup(main);
       const releaseMeta = !!main && !mainAt && !onBackup(main) && main.backupMeta?.from === 'release';
-      const at = main && onBackup(main) ? showing(releaseName()) : atLine;
+      const backup = main && onBackup(main), at = backup ? showing(releaseName()) : atLine;
       // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
       const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
       // 怎么才算连不上（M928）：本页主数据连续 3 次读不到（头两次隔 2、4 秒重读；接口回得快时约 10 秒，超时的每次要等 15 秒）、别的读口也没读到新的才报；之后每 10 秒重读一次
       const rule = '本页连续 3 次读不到才算连不上，之后每 10 秒重读一次；';
-      return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at,
+      return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at, shownAt: backup ? null : mainAt,
         wait: globalThis.navigator?.onLine === false ? '这台设备没联网，先留着这份；联网后马上重读'
           : release ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，先显示${releaseName()}`
           : releaseMeta ? `${rule}电脑没确认关机，这台浏览器没存过上次的数据，${releaseName()}只记了时刻、没存内容；连上后自动显示`
@@ -567,7 +567,7 @@
       const from = onBackup(main) && main.backupFrom || 'browser';
       const copy = from === 'cloud' ? `${cloud}存的最后一份（${shortStamp(main.at)}）` : from === 'release' ? releaseName()
         : `这台浏览器存的最后一份（${shortStamp(main.at)}）`;
-      return { stage: 'off', say, from, at: showing(copy),
+      return { stage: 'off', say, from, at: showing(copy), shownAt: from === 'release' ? null : main.at,
         // “这台浏览器没存过上次的数据；”只给电脑页（照 OFFLINE1125 A 那张图）；首页有正文时沿用原说明。
         wait: `${from === 'release' && globalThis.document?.body?.classList.contains('page--computer') ? '这台浏览器没存过上次的数据；' : ''}${from !== 'browser' && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的'}` };
     }
