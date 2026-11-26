@@ -1283,6 +1283,14 @@
     for (const g of gray || []) { const why = U.fieldText(g?.reason, viewer) || '原因没记下'; grayWhy.set(why, [...(grayWhy.get(why) || []), g?.name]); }
     const grayNote = gray && '读不准：' + [...grayWhy].map(([why, names]) => `${names.slice(0, 3).map(n => U.fieldHtml(n, { name: '读数名称', kind: viewer })).join('、')}${names.length > 3 ? ` 等 ${names.length} 项` : ''}（${esc(why)}）`).join('；');
     const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
+    // M1010：电脑卡的“N 项要处理”写出是哪一组、什么事（和电脑页页顶同一句说明）；卡小，只写组名和那句说明，几组时只列组名
+    const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
+    if (sure.length && sure.length === data.attention_count && state.note) {
+      const name = g => U.fieldHtml(g.name, { name: '检测分组', kind: viewer });
+      const said = g => { const why = g.reason ?? g.why, text = sp(U.fieldText(why, viewer) || '').trim(); return text && text !== sp(U.fieldText(g.name, viewer) || '').trim() ? '，' + U.fieldHtml(why, { name: '异常说明', kind: viewer }) : ''; };
+      const text = sure.length === 1 ? `1 项要处理：${name(sure[0])}${said(sure[0])}` : `${sure.length} 项要处理：${sure.slice(0, 3).map(name).join('、')}${sure.length > 3 ? ' 等' : ''}`;
+      state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : part).join(' · ');
+    }
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(Boolean))] : [];
     const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
