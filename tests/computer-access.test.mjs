@@ -379,7 +379,10 @@ test("built access page binds the current grant model, formal origins and recove
   const runtime = await readFile(new URL(runtimePath, dist), "utf8");
   assert.match(runtime, /createGrantRecovery\(\(\) => query\(\)/);
   assert.match(runtime, /const local = !isAccessOrigin\(location\.origin, window\.top === window\)/);
-  const modelUrl = new URL(runtime.match(/import\(['"]([^'"]*computer-access-model\.js)['"]\)/)?.[1], runtimeUrl).href;
+  const modelReference = runtime.match(/\bconst MODEL = ['"]([^'"]*computer-access-model\.js)['"]/)?.[1];
+  assert.ok(modelReference, "access runtime declares its model reference");
+  assert.match(runtime, /\bimport\([^;\n]*\bMODEL\b[^;\n]*\)/);
+  const modelUrl = new URL(modelReference, runtimeUrl).href;
   const modelPath = artifact(modelUrl);
   assert.ok(modelPath, "current access model belongs to the finalized manifest");
   assert.equal(await readFile(new URL(modelPath, dist), "utf8"), await readFile(new URL("../app/computer-access-model.js", import.meta.url), "utf8"));
