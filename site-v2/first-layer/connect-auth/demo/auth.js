@@ -275,7 +275,7 @@
         const lines = keys.map(k => ok.includes(k) ? `${name[k]}办成了${drawn.includes(k) ? ' · ' + untilText(value[fields[k]].expires_at_unix * 1000) : ''}`
           : open.includes(k) ? `${name[k]}结果还没确认` : `${name[k]}没办成`);
         if (open.length) message(`${lines.join('；')}，页面会自己再核对。`);
-        else { setOpen(null); toast(false, '办成一项，请看各自状态。', lines.join('；')); }
+        else { setOpen(null); toast(false, '办成一项，请看各自状态', lines.join('；')); }
       } else if (value.state === 'cancelled' && value.request_created === false) {
         // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
         const why = errorMessages[value.reason || value.error]; message(''); toast(false, '那次请求没发出去，不用再取消', why ? '没发出的原因：' + why : '');
