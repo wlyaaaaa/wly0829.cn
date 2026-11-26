@@ -347,15 +347,20 @@
   // 热图本身是共用的 live-project-viz.js，不动它：画好后把没轮到的行藏起来，时间轴、图例和点格子照旧。名册约每分钟重画一次，露到第几批跟着留住。
   const HEAT_STEP = 8;
   let heatShown = HEAT_STEP;
-  function renderActivity(data) {
-    const host = $('activity-chart'), rows = data?.items || [];
+  function renderActivity(data, roster) {
+    // 项目行和上面画册卡同一个顺序：最近一次改动在前（主持 11-26 10:3x 定，照同页已有顺序），第一批露出的就是最近在忙的
+    const changedAt = new Map((roster || []).map(it => [it.id, Date.parse(it.changed?.at) || 0]));
+    const host = $('activity-chart'), rows = (data?.items || []).map((r, i) => [r, i]).sort(([a, i], [b, j]) => (changedAt.get(b.id) ?? -1) - (changedAt.get(a.id) ?? -1) || i - j).map(([r]) => r);
     if (!data || rows.length < 2 || U.offline?.() && !rows.some(r => r.commits?.some(Number.isFinite))) {
       window.LiveProjectViz.heatmap(host, data, viewer, route); return;
     }
     const days = data.days || [], first = days.findIndex((_, i) => rows.some(r => Number.isFinite(r.commits?.[i]))), start = first < 0 ? days.length : first;
     host.innerHTML = '<div class="pj-heat-halves"><div></div><div></div></div><div class="pj-heat-footer"></div>';
-    const halves = [...host.firstElementChild.children], midpoint = Math.ceil(rows.length / 2);
-    halves.forEach((half, i) => window.LiveProjectViz.heatmap(half, { ...data, days: days.slice(start), items: (i ? rows.slice(midpoint) : rows.slice(0, midpoint)).map(r => ({ ...r, commits: r.commits?.slice(start) })) }, viewer, route, { aligned: true }));
+    // 按批填两半：每批 2×HEAT_STEP 个，前一半进左边、后一半进右边；第一批露出的左右两半合起来就是排在最前的 16 个，展开再接下一批
+    const sides = [[], []];
+    for (let b = 0; b < rows.length; b += 2 * HEAT_STEP) { const batch = rows.slice(b, b + 2 * HEAT_STEP), cut = Math.ceil(batch.length / 2); sides[0].push(...batch.slice(0, cut)); sides[1].push(...batch.slice(cut)); }
+    const halves = [...host.firstElementChild.children], midpoint = sides[0].length;
+    halves.forEach((half, i) => window.LiveProjectViz.heatmap(half, { ...data, days: days.slice(start), items: sides[i].map(r => ({ ...r, commits: r.commits?.slice(start) })) }, viewer, route, { aligned: true }));
     const footer = host.lastElementChild;
     footer.append(...[...halves[0].children].slice(1));
     [...halves[1].children].slice(1).forEach(el => el.remove());
@@ -397,7 +402,7 @@
     }
     // 文档字数、代码行数和代码字数用 code_size（数据约定第 10 节：同一份只算在用项目的合计）；它还没出数的那几项照旧用 summary
     const size = d?.code_size && Object.fromEntries(['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars', 'covered', 'active'].filter(k => Number.isFinite(d.code_size[k])).map(k => [k, d.code_size[k]]));
-    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer); renderActivity(d?.activity);
+    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer); renderActivity(d?.activity, d?.items);
     if (!U.offline?.() && !d?.summary) U.html($('pj-summary'), '<span class="pj-summary-none">近 7 天、文档、代码暂时读不到</span>');
     $('activity').querySelector('.part').hidden = !U.offline?.() && !d?.activity;
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');
