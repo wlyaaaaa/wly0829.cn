@@ -76,10 +76,10 @@
     const rows = metrics?.filter(it => it !== a && it !== b).map(it => row(it.label, it.value == null ? esc(text(it)) : count(it.value, it.unit))).join('');
     const items = showcase?.items?.map(it => {
       const href = /^https:\/\/wly0829\.cn\/live\/project\/\?id=[\w.-]+$/.test(it.open || '') ? related(new URL(it.open).pathname + new URL(it.open).search) : '';
-      return href ? `<a href="${esc(href)}"><span>${esc([it.title, it.kind].filter(Boolean).join(' · '))}</span><b>›</b></a>` : esc(it.title);
+      return href ? `<a href="${esc(href)}" title="${esc(it.title)}"><span>${esc([it.title?.split('：')[0], it.kind].filter(Boolean).join(' · '))}</span><b>›</b></a>` : esc(it.title);
     }).join('');
-    const html = `<div class="career-goal"><section><h4>进展</h4>${rows || MISSING}</section><section><h4>${esc(a?.label || '资料')}</h4><div class="career-hero-num">${count(value(a), a?.unit)}</div>${row('目录文件', count(value(b), b?.unit))}</section><section><h4>可以拿来讲的作品</h4><div class="career-works">${items || MISSING}</div></section></div>`;
-    const when = [cutoff(line.progress_at, '进展截止'), cutoff(a?.at, '资料截止', a), cutoff(showcase?.at, '作品截止')].filter(Boolean).join(' · ');
+    const html = `<div class="career-goal"><section><h4>进展</h4>${rows || MISSING}</section><section><h4>${esc(a?.label?.replace(/篇数$/, '') || '资料')}</h4><div class="career-hero-num">${count(value(a), a?.unit)}</div>${row('目录文件', count(value(b), b?.unit))}</section><section><h4>可以拿来讲的作品</h4><div class="career-works">${items || MISSING}</div></section></div>`;
+    const when = [cutoff(line.progress_at, '进展截止'), cutoff(a?.at, `${a?.label?.replace(/资料篇数$/, '') || '资料'}截止`, a), cutoff(showcase?.at, '作品截止')].filter(Boolean).join(' · ');
     const block = card(make, 'career-goal', `这条线的目标：${name}`, 'goal', html + foot(when, note(metrics)), U.visitorHiddenTag('这条线的目标', '', viewer));
     block.el.hidden = false;
     return block;
