@@ -180,9 +180,11 @@
 .page--live #backups .row__acts { padding-left: 10px; }
 @media (max-width: 960px) {
  .page--live #backups [data-part="main"] .row { margin-inline-end: -24px; }
- .page--live #tasks .task-preview .row { margin-inline-end: calc(var(--win) * -.65); }
+ /* 只收回玻璃留白中的 24px，任务文字和按钮留在插画左侧。 */
+ .page--live #tasks .task-preview .row { margin-inline-end: -24px; }
  .page--live #tasks .task-preview .row:has(> .row__acts) { grid-template-columns: var(--gut) minmax(0, 1fr); row-gap: 4px; }
  .page--live #tasks .task-preview .row > .row__acts { grid-area: 2 / 2; justify-content: flex-start; padding-left: 0; }
+ .page--live #tasks .task-preview .row__meta { display: block; margin-left: 0; white-space: normal; }
  /* 原行宽继续撑住插画的裁切，提示的可见文字借用插画渐隐处。 */
  .page--live:not(.live-unreadable) #tasks [data-withdrawn-text] { position: relative; }
  .page--live:not(.live-unreadable) #tasks [data-withdrawn-text]::before { content: attr(data-withdrawn-text); display: block; visibility: hidden; }
