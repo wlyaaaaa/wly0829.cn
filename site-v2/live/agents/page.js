@@ -173,7 +173,7 @@
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const stats = d.hook_stats?.totals?.[h.id] || {};
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${ruleStatus(x.entry)}${known(stats.installed) ? ` · <wbr>${rulePart(`钩子装着 ${stats.installed} 条 · `)}<wbr>${rulePart(`定稿 ${stats.expected} 条`)}` : ''}</small></header>
+      <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${known(stats.installed) ? ` · <wbr>${rulePart(`钩子装着 ${stats.installed} 条 · `)}<wbr>${rulePart(`定稿 ${stats.expected} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
