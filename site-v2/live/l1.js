@@ -5,6 +5,47 @@
   const U = window.LiveUI;
   const Light = window.LiveLight;
   const { esc, sp } = U;
+  // 只切展示文字，保留原来的标签、标点和时刻。词之间给换行点，词里面不断。
+  const wordSegmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const wordUnit = /[\p{L}\p{N}]/u;
+  const oneHan = /^\p{Script=Han}$/u;
+  const timedUnit = /((?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:分钟|小时|个月|项|件|天|年|秒|份|个|台|条|次))/g;
+  const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
+  function keepWords(html) {
+    if (!wordSegmenter || !html) return html;
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    for (const unit of template.content.querySelectorAll('.live-unit')) unit.classList.replace('live-unit', 'l1-unit');
+    const walk = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) nodes.push(walk.currentNode);
+    for (const node of nodes) {
+      if (node.parentElement?.closest('.l1-unit,svg')) continue;
+      const pieces = node.data.split(timedUnit).flatMap((part, i) => i % 2 ? [part] :
+        Array.from(wordSegmenter.segment(part), entry => entry.segment));
+      const words = [];
+      for (let i = 0; i < pieces.length;) {
+        let word = pieces[i++];
+        if (oneHan.test(word)) {
+          while (oneHan.test(pieces[i] || '')) word += pieces[i++];
+          if (oneHan.test(word) && wordUnit.test(pieces[i] || '')) word += pieces[i++];
+          else if (oneHan.test(word) && wordUnit.test(words.at(-1) || '')) {
+            words[words.length - 1] += word;
+            continue;
+          }
+        }
+        if (/^[，。！？、；：）】”’·]$/u.test(word) && words.length) {
+          if (words.length > 1 && /^\s+$/.test(words.at(-1))) word = words.pop() + word;
+          words[words.length - 1] += word;
+        } else words.push(word);
+      }
+      const markup = words.map((word, i) => wordUnit.test(word) ?
+        (i && wordUnit.test(words[i - 1]) ? '<wbr>' : '') + keepWord(word) : esc(word)).join('');
+      const text = document.createElement('template');
+      text.innerHTML = markup;
+      node.replaceWith(text.content);
+    }
+    return template.innerHTML;
+  }
   let viewer = 'public';
   const viewerKind = state => (state.viewer?.kind ?? state.meta?.viewer?.kind) === 'owner' ? 'owner' : 'public';
   const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
@@ -466,7 +507,8 @@
     const style = look && !look.known ? ` style="background:linear-gradient(135deg,${look.glow[0]},${look.glow[1]})"` : '';
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
     const rule = it.id === 'agents' && h?.id === 'release' && typeof value === 'string' && /^E\d+$/.test(String(h.value ?? h.text ?? ''));
-    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer })}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
+    const reading = rule ? '' : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer });
+    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : reading.includes('分钟') ? keepWords(reading) : reading}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
   }
   function renderProjectGroups(data) {
     projectExtraLinks(data);
@@ -594,7 +636,8 @@
     const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
     const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
     const heading = title(it, U.capText(it.text, Infinity, true), 'items');
-    const headingWords = viewer === 'owner' ? heading.replace(/(?:副号|\d{1,2} 月 \d{1,2} 日|Chrome 打开)(?![^<>]*>)/g, '<span class="l1-unit">$&</span>') : heading;
+    const headingWords = heading.replace(/(?:Chrome 打开|副号|\d{1,2} 月 \d{1,2} 日)(?![^<>]*>)/g,
+      word => viewer === 'owner' || word === 'Chrome 打开' ? keepWord(word) : word);
     return {
       key: it.id,
       cls: 'row',
@@ -971,7 +1014,7 @@
       node?.value != null && sampleTime(node)?.key === cpuSample.key) : [];
     const shared = new Set(sharedMemory.length ? [m.cpu, ...sharedMemory.map(([node]) => node)] : []);
     const sharedNote = sharedMemory.length ? `CPU 占用、${sharedMemory.length === 2 ? '内存' : sharedMemory[0][1]} ${cpuSample.text}` : '';
-    const timeNote = text => text ? `<small>${keepComputerWords(esc(text))}</small>` : '';
+    const timeNote = text => text ? `<small>${keepWords(esc(text))}</small>` : '';
     const withReadings = (text, ...sources) => {
       if (!text) return text;
       const notes = sources.map(([label, node]) => [label, shared.has(node) ? null : sampleTime(node)]).filter(([, sample]) => sample);
@@ -1194,7 +1237,7 @@
         { ...row, text: join([U.fieldText(row.display_name ?? row.name, kind), label, U.fieldText(row.problem?.reason, kind)]) },
         [row.actions?.find(action => action.kind === 'copy' && action.intent === 'ask') || { kind: 'copy', label: '问情况', intent: 'ask' }],
       );
-      rows.push({ key: row.id, cls: 'row row--flat', html: `<p class="row__text"><span class="row__title">${name}</span> <span class="row__meta">${esc(label)}</span></p>${ask ? `<div class="row__acts">${ask}</div>` : ''}` });
+      rows.push({ key: row.id, cls: 'row row--flat', html: `<p class="row__text"><span class="row__title">${keepWords(name)}</span> <span class="row__meta">${esc(label)}</span></p>${ask ? `<div class="row__acts">${ask}</div>` : ''}` });
     }
     return rows;
   }
@@ -1460,9 +1503,7 @@
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
     let statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
-    if (id === 'needs' && state.tone === 'blue') {
-      statusHtml = statusHtml.replace(/(?:不用|确认)(?![^<>]*>)/g, '<span class="l1-unit">$&</span>');
-    }
+    if (id === 'needs' && state.tone === 'blue') statusHtml = keepWords(statusHtml);
     p.status.hidden = !note; U.html(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
