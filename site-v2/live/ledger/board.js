@@ -8,7 +8,8 @@
   // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
   const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
-  const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你', handed_off: '交给别的线', not_worth: '不值得修' };
+  const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
+  const HISTORY_OUTCOMES = { ...SETTLED, handed_off: '交给别的线', not_worth: '不值得修' };
   const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner', handed_off: 'handoff', not_worth: 'not-worth' };
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
@@ -37,7 +38,7 @@
   const owed = d => list(d.items).filter(it => it.state);
   const decided = d => list(d.items).filter(it => !it.state && it.outcome === 'wont_fix');
   const outcomeOf = row => row.resolution === 'recovered' || row.outcome === 'recovered' ? 'recovered' : row.resolution || row.outcome;
-  const settledLabel = key => key === 'to_owner' ? `转给${you()}` : SETTLED[key];
+  const settledLabel = key => key === 'to_owner' ? `转给${you()}` : HISTORY_OUTCOMES[key];
   const waitText = v => { const t = U.fieldText(v, viewer).trim(); return t && !t.startsWith('等') ? `等：${F(v, '等的原因')}` : F(v, '等的原因'); };
   // check_count 是已经看过的次数；看满了 AI 停手
   const positive = n => Number.isInteger(n) && n > 0;
@@ -202,7 +203,7 @@
     const kept = decided(d).map(it => ({ ...it, at: it.at || it.outcome_at || it.accepted }));
     for (const row of [...list(d.history), ...older, ...kept]) {
       const key = row.issue || row.id, out = outcomeOf(row);
-      if (!SETTLED[out] || open.has(key) || seen.has(key)) continue;
+      if (!HISTORY_OUTCOMES[out] || open.has(key) || seen.has(key)) continue;
       seen.add(key); rows.push({ ...row, settled: out });
     }
     return rows.sort((a, b) => (stamp(b.at) || 0) - (stamp(a.at) || 0));
@@ -231,7 +232,7 @@
     if (r.settled === 'handed_off') {
       const who = U.fieldText(r.repair_summary || r.outcome_text, viewer).trim().replace(/^交给了/, '交给');
       const href = typeof r.evidence_ref === 'string' && r.evidence_ref.startsWith('/live/') ? T.path(r.evidence_ref) : '';
-      const value = href.startsWith('/live/') ? link(href, `${esc(who || SETTLED.handed_off)} ›`) : esc(who);
+      const value = href.startsWith('/live/') ? link(href, `${esc(who || HISTORY_OUTCOMES.handed_off)} ›`) : esc(who);
       return value ? `<span class="lg-settled__note">${value}</span>` : '';
     }
     if (r.settled === 'not_worth') {
@@ -243,10 +244,10 @@
   function settled(d) {
     const rows = settledRows(d), shown = rows.filter(r => !filter || r.settled === filter);
     const fixed7 = d.counts?.outcomes7?.fixed, why7 = basis(d.outcomes7_basis ?? d.counts?.outcomes7_basis);
-    const counts = Object.fromEntries(Object.keys(SETTLED).map(k => [k, rows.filter(r => r.settled === k).length]));
+    const counts = Object.fromEntries(Object.keys(HISTORY_OUTCOMES).map(k => [k, rows.filter(r => r.settled === k).length]));
     const next = older.length ? olderNext : d.next;
     return `<section class="tp-panel lg-done" id="history"><div class="tp-panel__head"><h2>最近了结的</h2></div>
-      <div class="tp-seg" role="group" aria-label="按结果看" aria-describedby="lg-settled-basis"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(SETTLED).map(k =>
+      <div class="tp-seg" role="group" aria-label="按结果看" aria-describedby="lg-settled-basis"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(HISTORY_OUTCOMES).map(k =>
         `<button type="button" data-filter="${k}" aria-pressed="${filter === k}">${settledLabel(k)} ${int(counts[k])}</button>`).join('')}</div>
       <p class="tp-small lg-basis" id="lg-settled-basis">按每件最后的结局算，一件只算一次。</p>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 次：${why7}</p>` : ''}
@@ -260,8 +261,7 @@
   function merge(events) {
     const groups = [];
     for (const e of events) {
-      const value = e.reason || e.outcome_text || e.repair_summary;
-      const text = outcomeOf(e) === 'not_worth' ? unworthyReason(value) : U.fieldText(value, viewer).trim();
+      const text = U.fieldText(e.reason || e.outcome_text || e.repair_summary || '', viewer).trim();
       const key = `${e.event || ''}|${e.outcome || ''}|${text}`, last = groups.at(-1);
       if (last && last.key === key) { last.rows.push(e); continue; }
       groups.push({ key, text, rows: [e] });

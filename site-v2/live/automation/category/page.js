@@ -6,10 +6,10 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/' + location.hash); return; }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
   const { list, known, int, link, when } = T;
   const heroArt = document.getElementById('ak-hero-art').innerHTML;
   const g = G[id] || {};
@@ -138,11 +138,9 @@
   }
 
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
-  function stats(c, neverRan) {
+  function stats(c) {
     const w = c.week, s = c.recent_stats || {};
     if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这一类近 7 天跑了几轮，这次没读到。</p></section>`;
-    if (neverRan && [w.runs, w.completed, w.incomplete, w.waiting].every(n => n === 0)
-        && !(w.checks > 0 || s.success > 0 || s.failed > 0 || s.basis?.text)) return '';
     const from = T.stamp(w.from), late = from && from > Date.now() - 6.5 * 86400000;
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p>${tail ? `<p class="ak-stat__tail">${tail}</p>` : ''}</div>`;
@@ -155,18 +153,18 @@
   }
 
   // —— 最近几轮 ——
-  function recent(rows, info, neverRan) {
+  function recent(rows, info) {
     // 右上角的总数：列表里除了叫 AI 跑的轮次，还有程序自己空查的、程序直接办没叫 AI 的；后台给了 counts 就分开写，免得和上面四个数里的“几轮”对不上
     const n = info.counts || {}, ai = known(n.runs) ? n.runs : null, checks = known(n.checks) ? n.checks : 0;
     const other = known(info.total) && ai != null ? info.total - ai - checks : 0;
-    const total = neverRan || !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
+    const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
     const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
     if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
     if (!rows.length) {
       const next = catNext();
       const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
-      const empty = neverRan && nextText ? `${nextText}。` : `还没跑过${nextText ? `，${nextText}` : ''}。`;
+      const empty = `还没跑过${nextText ? `，${nextText}` : ''}。`;
       return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
     }
     const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
@@ -197,6 +195,7 @@
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const rows = [['做什么', esc(g.purpose || g.short || '')], ['谁来做', model ? model + '（跟着模型清单走）' : '这一类用哪个型号没读到'],
       ['什么时候跑', (mode(c) === 'off' && g.offWhen ? esc(g.offWhen) : F(c.schedule_text, '排期说明')) || '这次没读到，下一轮会自动再读。']];
+    if (id === 'weekly-laptop' && g.off) rows.push(['关了会怎样', esc(g.off)]);
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
@@ -321,10 +320,9 @@
     }
     document.title = `${U.fieldText(cn(c.title), viewer)} · 自动任务 · 实况`;
     const info = allRuns();
-    const neverRan = id === 'weekly-live' && info.total === 0 && !info.rows.length && !c.last_result?.at && !c.last_result?.text;
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><strong aria-current="page">${F(cn(c.title), '类别')}</strong></nav>
-      ${T.stateNote(state)}${hero(d, c, info.rows)}${stats(c, neverRan)}
-      <div class="ak-grid">${recent(info.rows, info, neverRan)}<div class="ak-side">${upcoming(d, c)}${about(d, c)}</div></div>`);
+      ${T.stateNote(state)}${hero(d, c, info.rows)}${stats(c)}
+      <div class="ak-grid">${recent(info.rows, info)}<div class="ak-side">${upcoming(d, c)}${about(d, c)}</div></div>`);
     page.tick.set(R.ticker(d, info.rows, viewer), { off: state.offline });
   }
 
