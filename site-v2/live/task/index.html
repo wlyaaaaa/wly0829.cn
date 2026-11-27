@@ -34,6 +34,10 @@
   </article>
 
   <div id="task-body" hidden>
+    <section class="glass task-card task-prompt" id="scheduled-prompt" aria-labelledby="task-prompt-title" hidden>
+      <header><h2 id="task-prompt-title">到点做什么</h2></header>
+      <dl id="task-prompt-facts"></dl>
+    </section>
     <dl class="task-stats" id="task-stats"></dl>
     <section class="glass task-card task-failure" id="failure" hidden>
       <header><span class="lb-card__badge" data-icon-name="alert"></span><h2>上次为什么出错</h2></header>

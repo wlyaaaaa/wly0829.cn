@@ -8,8 +8,8 @@
   // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
   const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
-  const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
-  const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner' };
+  const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你', handed_off: '交给别的线', not_worth: '不值得修' };
+  const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner', handed_off: 'handoff', not_worth: 'not-worth' };
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
@@ -207,11 +207,12 @@
     }
     return rows.sort((a, b) => (stamp(b.at) || 0) - (stamp(a.at) || 0));
   }
-  // 标题一样、结果一样的几件并成一行（标题藏起来的不并）
+  // 标题一样、结果一样的几件并成一行；交接目标、不修理由各自展示。
   function groupRows(rows) {
     const groups = [], byKey = new Map();
     for (const r of rows) {
-      const t = titleOf(r), key = typeof t === 'string' ? `${r.settled}|${t.trim()}` : null, g = key && byKey.get(key);
+      const t = titleOf(r), key = typeof t === 'string' && !['handed_off', 'not_worth'].includes(r.settled) ? `${r.settled}|${t.trim()}` : null;
+      const g = key && byKey.get(key);
       if (g) g.rows.push(r); else { const n = { rows: [r] }; groups.push(n); if (key) byKey.set(key, n); }
     }
     return groups;
@@ -225,6 +226,20 @@
     const end = /[。！？；…!?;.]$/u.test(text) ? ' ' : ' · ';
     return F(b.text, '口径说明') + (said ? '' : `${end}<span class="live-unit">${esc(d)} 起</span>`);
   }
+  const unworthyReason = v => U.fieldText(v, viewer).trim().replace(/^AI 判不值得修(?:[：:]\s*|$)/, '');
+  function settledNote(r) {
+    if (r.settled === 'handed_off') {
+      const who = U.fieldText(r.repair_summary || r.outcome_text, viewer).trim().replace(/^交给了/, '交给');
+      const href = typeof r.evidence_ref === 'string' && r.evidence_ref.startsWith('/live/') ? T.path(r.evidence_ref) : '';
+      const value = href.startsWith('/live/') ? link(href, `${esc(who || SETTLED.handed_off)} ›`) : esc(who);
+      return value ? `<span class="lg-settled__note">${value}</span>` : '';
+    }
+    if (r.settled === 'not_worth') {
+      const reason = [r.repair_summary, r.outcome_text, r.reason].map(unworthyReason).find(Boolean);
+      return reason ? `<span class="lg-settled__note">AI 判不值得修：${esc(reason)}</span>` : '';
+    }
+    return '';
+  }
   function settled(d) {
     const rows = settledRows(d), shown = rows.filter(r => !filter || r.settled === filter);
     const fixed7 = d.counts?.outcomes7?.fixed, why7 = basis(d.outcomes7_basis ?? d.counts?.outcomes7_basis);
@@ -236,7 +251,7 @@
       <p class="tp-small lg-basis" id="lg-settled-basis">按每件最后的结局算，一件只算一次。</p>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 次：${why7}</p>` : ''}
       <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
-        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
+        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}${settledNote(r)}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
       <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-older${olderBusy ? ' disabled' : ''}>${olderBusy ? '正在读…' : '看更早的 ›'}</button>` : ''}<span class="tp-small">已读到 ${int(rows.length)} 件${next ? '，还有更早的' : ''}</span></div></section>`;
   }
@@ -245,7 +260,8 @@
   function merge(events) {
     const groups = [];
     for (const e of events) {
-      const text = U.fieldText(e.reason || e.outcome_text || e.repair_summary || '', viewer).trim();
+      const value = e.reason || e.outcome_text || e.repair_summary;
+      const text = outcomeOf(e) === 'not_worth' ? unworthyReason(value) : U.fieldText(value, viewer).trim();
       const key = `${e.event || ''}|${e.outcome || ''}|${text}`, last = groups.at(-1);
       if (last && last.key === key) { last.rows.push(e); continue; }
       groups.push({ key, text, rows: [e] });
