@@ -88,7 +88,10 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-line .pj-about { order: 4; flex-basis: 100%; margin-top: 6px; font-size: 15.5px; line-height: 26px; letter-spacing: .03em; color: #3d3c38; text-wrap: pretty; }
 .pj-hero-fold:not(.is-open) .trust-note { visibility: hidden; }
 .pj-hero-fold .pj-facts { margin: 10px 0 2px; }
-.pj-hero-fold .pj-facts .kv__row { grid-template-columns: 0 108px minmax(0, 1fr); }
+/* 名字一列按最长的那个名字（“近 7 天影响改动”）定宽，几行对齐，名字和内容之间固定留 16 像素 */
+.pj-hero-fold .pj-facts { grid-template-columns: 0 max-content minmax(0, 1fr); }
+.pj-hero-fold .pj-facts .kv__row { grid-column: 1 / -1; grid-template-columns: subgrid; }
+.pj-hero-fold .pj-facts dt { padding-right: 16px; white-space: nowrap; }
 .pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
 .pj-no-split { display: inline-block; white-space: nowrap; }
 

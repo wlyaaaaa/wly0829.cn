@@ -9,7 +9,7 @@
 .pj-interface-grid > figure:only-child { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 20px; align-items: start; }
 .pj-interface-grid > figure:only-child .pj-interface-thumb { aspect-ratio: auto; }
 .pj-interface-grid > figure:only-child .pj-interface-thumb img { height: auto; }
-.pj-interface-grid > figure:only-child figcaption { margin-top: 0; font-size: 15px; line-height: 24px; }
+.pj-interface-grid > figure:only-child figcaption { margin-top: 0; font-size: 15px; line-height: 24px; text-wrap: balance; }
 @media (max-width: 760px) {
   .pj-interface-grid > figure:only-child { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .pj-interface-grid > figure:only-child figcaption { margin-top: 7px; }
