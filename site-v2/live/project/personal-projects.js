@@ -227,7 +227,16 @@
     return shown;
   }
 
-  const compactDateTitle = value => typeof value === 'string' ? value.replace(/(\d+)\s*月\s*(\d+)\s*日/g, '$1月$2日') : value;
+  function compactArtifactDates(list) {
+    for (const title of list.querySelectorAll('.row__title')) {
+      for (const text of title.childNodes) {
+        if (text.nodeType !== Node.TEXT_NODE) continue;
+        const compact = text.data.replace(/(\d+)\s*月\s*(\d+)\s*日/g, '$1月$2日');
+        if (compact !== text.data) text.data = compact;
+      }
+    }
+  }
+
   function lists({ blocks, left, right, block, arts, changeLog, changeIssue, viewer, artifactRow, loadArtifacts, loadChanges, keepWords }) {
     for (const [key, packet, load] of [['artifacts', arts, loadArtifacts], ['changes', changeLog, loadChanges]]) {
       let b = blocks.get(key);
@@ -247,11 +256,11 @@
         let entries = rows.slice(offset, offset + limit);
         const wallpaperPage = page === 'emerald' && key === 'artifacts';
         if (key === 'artifacts' && entries.length) entries = packet.items.slice(offset, offset + limit).map((it, i) =>
-          artifactRow(page === 'steam' ? { ...it, recent_detail: '', recent_title: compactDateTitle(it.recent_title),
-            public_title: compactDateTitle(it.public_title) } : it, offset + i));
+          artifactRow(page === 'steam' ? { ...it, recent_detail: '' } : it, offset + i));
         if (wallpaperPage) entries = wallpaperRows(b, entries, packet?.items || [], offset);
         b.el.classList.toggle('pp-multiple', packet?.total > limit || !!packet?.next);
         U.list(b.main, entries.length ? entries : [{ key: 'pp-none', cls: 'pp-empty', html: packet && !packet.next && !changeIssue ? '暂无记录' : unavailable }], { animate: false });
+        if (key === 'artifacts' && page === 'steam') compactArtifactDates(b.main);
         if (key === 'changes' || wallpaperPage) keepWords?.(b.main);
         if (wallpaperPage) observeImages(b.main);
         const issue = (key === 'changes' && changeIssue) || state.issue;
