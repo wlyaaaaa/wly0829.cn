@@ -1222,8 +1222,11 @@
       Light.tone(cards[id], tone);
       cards[id].dataset.hasReadings = counts.length || revoked && !state.offline ? 'yes' : '';
       p.status.hidden = !summary;
-      p.status.classList.toggle('task-status--revoked', !!revoked && !state.offline);
-      U.html(p.status, U.nowrap(summary), false);
+      const withdrawn = revoked && !state.offline;
+      if (withdrawn) p.status.dataset.withdrawnText = summary;
+      else p.status.removeAttribute('data-withdrawn-text');
+      const text = U.nowrap(summary);
+      U.html(p.status, withdrawn ? `<span>${text}</span>` : text, false);
       // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
       U.blockNote(cards[id].querySelector('.card__body'), state.offline && !counts.length && !rows.length ? null : state);
       paintList(p.main, rows, { animate: false });
