@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=1440">
 <title>实况</title>
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/042ccc54f69b7676e0b0d1239821eeafb9ee81647b5fe21f2723008b74060ea3/header/topbar.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/beded42bc7c9fc4aa1a40ccad62c0a07518f71116bae7e571c42caa61020d887/connect-auth/glass.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/7b9ff7864a7abbe923f85e59538873b1f0228ea7a33fc6df21acde85595328ef/connect-auth/glass.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/9e44ca7a5176bb7637e1aa1f0771e7951fcefad3564f7700c0725cd58c18d0ed/trust-modal/trust-modal.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/de03218e569020c5ac832a7866e9e0f48480472c1491701c8271e2dc9f4d3a96/live/_lib/live.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
@@ -139,11 +139,13 @@
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable:not(.live-empty-home) #phone .head__lead { font-size: 18px; }
-/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
-.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+/* 首页没有正文时沿用两栏和插画，独立读到的计划任务摘要也用同一行高。 */
+.live-unreadable.live-empty-home .board { grid-auto-rows: 1fr; align-items: stretch; }
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { height: 100%; min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
 .page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
 .live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
 .live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
+.live-empty-home.live-home-summary .board #tasks[data-has-readings="yes"] [data-part="status"] { display: block !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
@@ -176,6 +178,9 @@
 .page--live :is(#computer .kv__row:last-child, #phone .kv__row) dt a:hover { text-decoration: underline; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, max-content) auto; justify-content: start; }
 .page--live #backups .row__acts { padding-left: 10px; }
+@media (max-width: 960px) {
+ .page--live #backups [data-part="main"] .row { margin-inline-end: -24px; }
+}
 .page--live #backups .row > .lamp { scale: .6; transform-origin: left center; }
 .page--live #backups [data-part="restore"] .row { border-top: 1px solid var(--hair); padding: 8px 0; }
 .page--live #backups [data-part="restore"] .row__sub { display: block; white-space: normal; }
@@ -183,6 +188,7 @@
 .page--live #computer [data-part="why"] { margin-left: 25px; }
 .page--live #computer .kv__row:last-child dd { gap: 4px 10px; }
 .page--live #computer .kv__row:last-child .kv__link::after { content: none; }
+.page--live #computer .kv-device-time { white-space: nowrap; }
 .page--live #computer .kv__link > small { margin-top: 4px; text-wrap: pretty; }
 .page--live #phone .card__head + [hidden] + .kv { margin-top: 12px; }
 .page--live #phone .card__note:has(> .lamp) { padding-left: 18px; }
@@ -215,6 +221,7 @@
 .page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
 .page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
 .page--live #projects .project-group--occasional { background: linear-gradient(120deg, rgb(233 222 247 / .8), rgb(239 235 246 / .65)); border-color: rgb(171 148 205 / .22); }
+.page--live #projects .project-group--personal { background: linear-gradient(120deg, rgb(251 229 207 / .8), rgb(251 240 227 / .65)); border-color: rgb(218 165 118 / .24); }
 .page--live #projects .project-group--unknown { background: rgb(237 237 231 / .8); }
 .page--live #projects .project-group > h3 { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; margin: 0; font-size: 22px; line-height: 1.4; text-align: center; }
 .page--live #projects .project-group > h3 > span { font-size: 28px; }
@@ -236,7 +243,11 @@
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
 .page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
 .page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
+.page--live #computer .card__note { white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
+@media (max-width: 1024px) {
+ .page--live #computer .stutter-frame-note { color: var(--ink); background: rgb(255 255 255 / .88); box-shadow: 0 0 7px 3px rgb(255 255 255 / .65); border-radius: 4px; }
+}
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
 .page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
@@ -388,6 +399,7 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
 .b6-host__name i { width: .66em; height: .66em; border-radius: 3px; background: var(--host); }
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
+.b6-rule-part { white-space: nowrap; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
 /* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }
@@ -442,8 +454,8 @@ a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166
 <meta property="og:description" content="电脑、计划任务、自动任务、备份、项目和 AI 当前进展的实时总览。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/a553c8089783901e20aae6a89a2b5d6398d1152e724936eaf63f42a49aa309d2/%E5%85%AC%E7%94%A8/fonts/ui-17f0446ca64f37aa.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/686c66a1835ffd7bc3de24bc74cb49207ef2429577a6111aa9ea11ea1751c2e6/%E5%85%AC%E7%94%A8/fonts/live-1dc9bd8b0d61740e.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c62c5125ec1717e4338c710f2faaea1a952a08958076d8b76533a02f4cf0a9bb/%E5%85%AC%E7%94%A8/fonts/ui-fe0813fb47910c21.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/52670c8d33714f13c215aa6b65b6324b8d4e89e802e1437806f8bf10aa0356fa/%E5%85%AC%E7%94%A8/fonts/live-91f9bc968677bd92.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body class="page page--live live-first-read">
@@ -557,16 +569,16 @@ a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166
 </main>
 
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8f5f8282413fc3591ebf750f68469bd8e2d2c126079d7743b053f4517745a486/live/_lib/live-client.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/77aa3e05c43a2338a08dbf259da58570c760eec2d9826aa1e28015c9466d40dc/live/_lib/live-ui.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/23a4f30b13fb0e59a3c9743c3ab7f285cd5806ae4deb1c617421da894bcd2798/live/_lib/live-client.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dbfbb34de9ebf52f4fb8b47f6fd49dd166d637d904212c0ec3c3ee69b5fe07a4/live/_lib/live-ui.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d62023e5657104ea47280862adced01a2ad870d8f9485a65d737b1e28800b66a/live/_lib/live-project-look.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/60181e912e5e7f07669cbeee783b5044911e1b065467e7574988f98babba2143/live/_lib/live-project-moments.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/184236dc74fc96d46a42830fd5a7df4bf8709baba5f7db994e175bb753088dd7/live/chats/draw10.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bdd77eb691575f0daf8930daeef7496966799bcdaa7d6688f402a4a67f4091b2/live/chats/draw10.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/382a7cff27c0eef31d7255b69736c8932418895ba244cffb74280af7e6de61eb/live/_lib/live-runs.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28f745fe71df3e51569b6c232932f57f01c5111abe1c87f745f055d72f358584/live/batch-home.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3668de263d15fbc505c65e85f15367a432a77be2920de885b4660c178e4122cb/live/l1.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cdea549865af34cb60cc08a4d3d90171a56606e458d8c3cbffc9c179a7f72435/live/batch-home.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/cc3b1eab94d399dca96ad9574920b075f65a2ad688f84bc05d4c762168f86bb8/live/l1.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body>
