@@ -11,6 +11,7 @@
   const types = { image: '照片', video: '视频', audio: '录音和音乐' };
   const kinds = Object.keys(types);
   const narrow = matchMedia('(max-width: 620px)');
+  const twoColumns = matchMedia('(min-width: 1101px)');
   const num = n => Number.isFinite(n) ? n.toLocaleString('zh-CN') : '—';
   const gb = (n, digits = 2) => Number.isFinite(n) ? `${n.toFixed(digits)} GB` : '—';
   const day = (at, year = false) => {
@@ -68,7 +69,7 @@
       const cellsHtml = cells.map((cell, i) => {
         const n = row === 3 ? all(cell) : cell[kind] || 0;
         const heat = n ? 7 + 69 * Math.sqrt(n / peak) : 0;
-        return `<td${i === width ? ' class="media-undated"' : ` style="--heat:${heat}%"`}>${y ? num(n) : '—'}</td>`;
+        return `<td${i === width ? ' class="media-undated"' : ` style="--heat:${heat}%"`}${n >= 1000 ? ' data-wide-count' : ''}>${y ? num(n) : '—'}</td>`;
       }).join('');
       return `<tr><th scope="row"><div class="media-type">${icon(kind)}<span>${label}</span> <strong>${num(counts[row])} <small>${['张', '个', '段', '件'][row]}</small></strong></div><div class="media-type-sub">${segments([sizes[row], ...subtitles[row]])}</div></th>${cellsHtml}</tr>`;
     }).join('');
@@ -116,12 +117,13 @@
   function recent(m, d) {
     const rows = m.recent_days?.value;
     const days = Array.isArray(rows) ? rows : [];
-    recentPage = Math.min(recentPage, Math.max(0, Math.ceil(days.length / 5) - 1));
-    const start = recentPage * 5, list = days.slice(start, start + 5);
+    const perPage = twoColumns.matches ? 7 : 5;
+    recentPage = Math.min(recentPage, Math.max(0, Math.ceil(days.length / perPage) - 1));
+    const start = recentPage * perPage, list = days.slice(start, start + perPage);
     if (selectedDay !== '' && !list.some(x => x.date === selectedDay)) selectedDay = list[0]?.date;
     const html = list.map(x => {
-      const groups = kinds.filter(type => x.types?.[type]?.count > 0);
-      const summary = x.show_summary ? groups.map(type => `<span class="media-compact">${types[type]} ${num(x.types[type].count)}</span>`).join(' · ') : '';
+      const groups = kinds.filter(type => Number.isFinite(x.types?.[type]?.count) && x.types[type].count > 0);
+      const summary = groups.map(type => `<span class="media-compact">${types[type]} ${num(x.types[type].count)}</span>`).join(' · ');
       return `<details name="media-day" data-day="${esc(x.date)}"${x.date === selectedDay ? ' open' : ''}><summary class="live-disclosure"><b>${day(x.date)}</b>${summary ? `<span>${summary}</span>` : ''}</summary><ul class="media-day-types">${groups.map(type => {
         const row = x.types[type], id = `media-${x.date}-${type}`;
         const action = row.open ? U.actions({ id }, [{ kind: 'open', label: row.open.label, href: row.open }]) : '';
@@ -129,7 +131,7 @@
       }).join('')}</ul></details>`;
     }).join('');
     const count = d.artifacts?.count;
-    return `<div class="media-recent-list">${html || missing}</div><div class="media-foot">${nav('recent', days.length > start + 5, recentPage > 0)}${count != null ? `<a class="more" href="#artifacts">全部 ${num(count)} 份 ›</a>` : ''}${cutoff(m.recent_days)}</div>`;
+    return `<div class="media-recent-list">${html || missing}</div><div class="media-foot">${nav('recent', days.length > start + perPage, recentPage > 0)}${count != null ? `<a class="more" href="#artifacts">全部 ${num(count)} 份 ›</a>` : ''}${cutoff(m.recent_days)}</div>`;
   }
 
   function board(d, viewer, graphBlock, element) {
@@ -158,6 +160,7 @@
     return blocks;
   }
   narrow.addEventListener('change', () => { yearPage = 0; refresh?.('year'); });
+  twoColumns.addEventListener('change', () => { recentPage = 0; selectedDay = undefined; refresh?.('recent'); });
   document.addEventListener('click', e => {
     const button = e.target.closest('[data-media-page]');
     const open = e.target.closest('.media-recent-list summary')?.parentElement;
