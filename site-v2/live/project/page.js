@@ -249,7 +249,7 @@
     return {
       key: m.id, extra, labelText,
       cls: `pj-fig${v.long ? ' pj-fig--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>${tag}` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
+      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>${tag}` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${keepWords(subText(line))}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
     };
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
@@ -259,7 +259,7 @@
     return {
       key: m.id, extra, labelText,
       cls: `pj-kv__row${v.long || v.plain.length > 9 ? ' pj-kv__row--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label}</a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
+      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label}</a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${keepWords(subText(line))}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
     };
   }
   // 状态文字沿用原说法，灯只照后端 level 画。
@@ -376,7 +376,7 @@
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
   // 窄屏折行不拆词、不留单字行（本人看图 11-28）：分词后只在两字以上的词前面插可断点（<wbr>），单字跟着前一个词走（分词常把“动效”“读数”切成两个单字），
-  // 书名号和短引号里不断，最后一个断点后不足三个字就不断；“ · ”后面、数字和后面的单位、月和日之间换成不断行空格，折行时圆点跟着下一段走、日期不拆。在拼好的 HTML 上做、不改 DOM，实况刷新时照原样比对，不闪。
+  // 书名号和短引号里、“这”“每”这类字后面不断；最后一个断点后不足三个字、并上前一段也不超过五个字就不断（并完太长，窄格里会被硬拆）；“ · ”后面、数字和后面的单位、月和日之间换成不断行空格，折行时圆点跟着下一段走、日期不拆。在拼好的 HTML 上做、不改 DOM，实况刷新时照原样比对，不闪。
   // look.css 让这几块只在这些点、空格和标点后折行，一段比一整行还长才从中间断（不横向溢出）
   const wordCut = typeof Intl === 'object' && Intl.Segmenter ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
   if (wordCut) document.documentElement.classList.add('pj-words');
@@ -389,8 +389,10 @@
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
       if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return t;
       const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
-      if (cuts.length && t.slice(cuts.at(-1)).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length < 3) cuts.pop();
+      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
+      const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
+      const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
+      if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
       let out = '', from = 0;
       for (const at of cuts) { out += t.slice(from, at) + '<wbr>'; from = at; }
       return out + t.slice(from);

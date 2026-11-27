@@ -171,9 +171,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 /* 整页的字窄了折行时不让最后一行只剩一两个字（产物说明、卡底小字、读数名都算；只调折法，不动不折行的那些，写了 balance 的照 balance） */
 .page--project .stage { text-wrap-style: pretty; }
 /* 最近改动、页首简介、详情、单图说明、卡里读数名和读数条：page.js 按词插了可断点，只在词与词之间折，词长过一整行才从中间断 */
-.pj-words :is(.pj-sec--timeline .row__title, .pj-line .pj-about, .pj-hero-fold .pj-facts dd, .pj-interface figcaption, #pj-board :is(.pj-kv__k, .pj-fig__k),
+.pj-words :is(.pj-sec--timeline .row__title, .pj-line .pj-about, .pj-hero-fold .pj-facts dd, .pj-interface figcaption, #pj-board :is(.pj-kv__k, .pj-fig__k, .pj-fig__sub),
   .pj-strip :is(.pj-cell__k, .pj-cell__sub, .pj-cell__v.is-text, .pj-cell__v.is-wrap, .pj-cell__v.is-scale)) { word-break: keep-all; overflow-wrap: anywhere; text-wrap-style: pretty; }
-.pj-words #pj-board .pj-kv__k small { word-break: normal; }
 
 /* ============ 两栏卡片 ============ */
 .page--project #pj-board.pj-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--pj-gap); margin-top: var(--pj-gap); align-items: start; }
