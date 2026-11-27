@@ -186,7 +186,7 @@
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
       return { ...day, state: state === 'unknown' && started ? 'started' : state, name, started };
     });
-    if (!cells.some(day => day.state !== 'unknown' || day.started)) return '<div class="task-week"><strong>近 7 天</strong><span>每日结果还没读到</span></div>';
+    if (!cells.some(day => day.state !== 'unknown' || day.started)) return '<div class="task-week"><strong>近 7 天</strong><span>这 7 天的每日结果没读到</span></div>';
     const marks = cells.map(({ date, state, name, counts = '' }) => `<li title="${esc(date)} ${name}${counts}">${dayMark(state)}<time datetime="${esc(date)}" aria-label="${esc(date)} ${name}${counts}">${esc(date.slice(5))}</time></li>`).join('');
     const legend = [...new Map(cells.map(day => [`${day.state}|${day.key || weekLabel[day.state]}`, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.key || weekLabel[day.state]}</span>`).join('');
     return `<div class="task-week"><strong>近 7 天</strong><ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}</div></div>`;

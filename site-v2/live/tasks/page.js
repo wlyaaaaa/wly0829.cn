@@ -32,7 +32,7 @@
   }
   const nextAt = at => `${U.date(at) === U.date(now || Date.now()) ? '今天' : U.date(at)} ${U.time(at)}`;
   const MODE = { event: '有事才跑', on_demand: '叫了才跑', resident: '一直开着', service_loop: '一直开着' };
-  const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
+  const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|维护明细这次没读全|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
   // 上次出错、这次没读到运行状态的任务，后台标 scheduled_issue 并算进“项要处理”，表里也按要处理排前面
   const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
   // 没有下次时间的任务：按 Windows 登记的触发方式写“登录时”“开机时”这类，不写“没读到”
@@ -348,7 +348,9 @@
       s.el.classList.toggle('task-full', !maintenance && full);
     }
     board.layout(); pickGroup(); pickProjects();
-    const noTasks = maintenance && (d.q !== 'ok' || maintenanceRounds(d) !== 0) ? '还没读到维护明细'
+    const rounds = maintenanceRounds(d);
+    const noTasks = maintenance && (d.q !== 'ok' || rounds !== 0)
+      ? (Number.isInteger(rounds) && rounds > 0 ? '维护明细这次没读全' : '还没读到维护明细')
       : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
     let none = $('task-empty'); if (!none) { none = document.createElement('ul'); none.className = 'rows list'; none.id = 'task-empty'; $('groups').append(none); } none.hidden = cards > 0; U.list(none, empty(noTasks));
     const ranges = Array.isArray(d.coverage) ? d.coverage : [];

@@ -264,7 +264,7 @@
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(ART[c.id] || hero)}" class="aw-art">
       <div class="aw-lead"><div class="aw-type-top"><h1>${field(c.title, '类别名称')}</h1><div class="aw-type-settings">${controls}${message(c.id)}</div></div>
       <div class="aw-type-top aw-type-top--lines">${now ? `<p class="aw-covers"><b>现在：</b>${now}</p>` : '<span></span>'}${last ? `<p class="aw-off"><b>上一次：</b>${last}</p>` : ''}</div></div></section>`;
-    const runs = !Array.isArray(c.recent_runs) ? empty('这里还看不到') : !c.recent_runs.length ? empty('还没有记录')
+    const runs = !Array.isArray(c.recent_runs) ? empty('最近几轮这次没读到') : !c.recent_runs.length ? empty('最近还没跑过')
       : `<ul class="aw-log">${c.recent_runs.map(run => `<li><time>${when(run.at)}</time><span>${link(route(run.ledger_href), field(run.summary, '这次做了什么'))}</span></li>`).join('')}</ul>`;
     const known = new Set(list(data.types).map(t => t.id));
     const subs = list(c.subcategories).map(t => `<li>${line(known.has(t.id) ? typeHref(t.id) : '', `<b>${field(t.title, '小类')}</b><small>${({ on: '已开', off: '已关', paused: '暂停中' })[t.setting?.mode] || ''}</small>`)}</li>`).join('');
