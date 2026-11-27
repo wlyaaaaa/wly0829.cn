@@ -14,6 +14,7 @@
   let current = null;
   let pinned = null;
   let ticking = false;
+  let entryHash = location.hash;
 
   function mark(item) {
     if (item === current) return;
@@ -69,6 +70,7 @@
 
   // 读的人自己动了（滚轮、触摸、键盘、拖滚动条），就回到按位置标
   const release = () => {
+    entryHash = '';
     if (!pinned) return;
     pinned = null;
     schedule();
@@ -113,6 +115,8 @@
     [title, list, body, count].forEach((node, i) => { node.innerHTML = parts[i]; });
     if (publicMark) publicMark.hidden = original;
     items = readItems();
+    if (original && entryHash && entryHash === location.hash) items.find(({ a }) => a.hash === entryHash)?.el.scrollIntoView({ block: 'start', behavior: 'instant' });
+    entryHash = '';
     pinned = null;
     current = null;
     update();
