@@ -399,7 +399,7 @@
     try {
       while(reading?.audience===viewerKey&&reading.next&&reading.sources.length<depth&&!complete?.(reading)){
         const batch=reading,cursor=batch.next;
-        const response=fixture?{data:batch.first.pages?.[cursor]}:await window.Live.get(resource,{cursor},undefined,{fallbackOnFailure:true}).catch(()=>null);
+        const response=fixture?{data:batch.first.pages?.[cursor]}:await window.Live.get(resource,{cursor}).catch(()=>null);
         if(batch!==reading)continue;
         const data=response?.data;
         const saved=response?.meta?.source==='fallback';
@@ -532,8 +532,7 @@
       if(Array.isArray(d?.rows))appendRows(reading,d.rows);
     },
     link(s){
-      const fallback=s.fallbackNote||s.meta?.fallbackNote;
-      bar?.set(s.offline?{...s,cutoffAt:null}:s);L.offline(s.offline);U.list($('notices'),s.offline?[{key:'offline',cls:'notice glass',html:`<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(fallback?s.text.split(' · ',1)[0]:s.text,{name:'连接状态',place:'body',kind:viewer})}</span>`}]:[]);
+      bar?.set(s.offline?{...s,cutoffAt:null}:s);L.offline(s.offline);
       const draw=redraw||now!==s.now||cutoff!==s.cutoffAt;
       now=s.now;cutoff=s.cutoffAt;
       if(redraw&&!reading){phase='none';clearDelivery();}

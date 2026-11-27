@@ -57,6 +57,14 @@ body {
 }
 
 .page--auth    { --pad: calc(var(--bar-bottom) + clamp(42px, 12vh, 132px)); }
+.page:is(.page--live,.page--auth):not(.has-live-reading) .topbar .brand__lamp {
+  background: radial-gradient(circle at 34% 30%, #f3f4f6 0%, #c9cdd3 26%, #9aa1aa 60%, #7b828b 100%) !important;
+  animation: live-header-gray 3.4s ease-in-out infinite !important;
+}
+@keyframes live-header-gray {
+  0%, 100% { box-shadow: 0 0 0 3px rgb(140 148 158 / .12), 0 0 8px 1px rgb(140 148 158 / .42); }
+  50% { box-shadow: 0 0 0 4px rgb(140 148 158 / .17), 0 0 13px 2px rgb(140 148 158 / .65); }
+}
 .page--connect { --pad: calc(var(--bar-bottom) + clamp(40px, (100vh - 67px - 600px) * .38, 170px)); }
 .stage { padding-top: var(--pad); }
 
@@ -305,6 +313,7 @@ body {
   min-height: clamp(188px, 24vh, 260px);
 }
 .page--auth .cell__acts { flex-wrap: wrap; margin-top: auto; padding-top: 18px; }
+.cell__stale-note { flex-basis: 100%; color: var(--muted); font-size: 13px; line-height: 18px; }
 .page--auth .links .link__glass { min-height: clamp(116px, 14vh, 156px); }
 
 /* 灯：放在右上角，像一件东西上的指示灯，和名字齐 */
@@ -687,7 +696,7 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
   75% { transform: translate(-28px, 8px) scale(var(--connect-glow-scale)); }
 }
 
-.page--connect.live-off .sheet, .page--auth.live-off .cell { filter: grayscale(1); }
+.page--connect.live-off .sheet { filter: grayscale(1); }
 
 .sheet__glass {
   z-index: 1;
@@ -943,7 +952,10 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .cell__receipt[hidden], .page--auth .auth-offline[hidden] { display: none; }
 .page--auth .cell__receipt strong { display: block; color: #356b53; font-size: 17px; font-weight: 600; line-height: 22px; }
 .page--auth .cell__receipt span { display: block; color: #8f8d86; font-size: 13px; line-height: 18px; }
-.page--auth .auth-offline { position: absolute; margin: 0; color: #b0aea6; font-size: 15px; line-height: 22px; }
+.page--auth .auth-offline { display: grid; gap: 4px; margin: 0 0 28px; padding: 20px 28px 20px 64px; color: var(--muted); font-size: 16px; }
+.auth-offline strong { color: var(--ink); font: 900 24px/32px var(--black); }
+.auth-offline::before { content: ''; position: absolute; top: calc(50% - 9px); left: 26px; width: 18px; height: 18px; border-radius: 50%; background: #f2a516; }
+.auth-offline[data-stage="off"]::before { background: #9aa1aa; }
 .page--auth .dealbar:has(.deal.is-lock.is-active) .dealbar__glass { width: min(520px, 100%); margin-left: clamp(0px, calc(var(--nx, 0px) - 24px), calc(100% - 520px)); }
 .page--auth .deal.is-lock { display: grid; grid-template-columns: max-content max-content; gap: 12px; justify-content: start; }
 .page--auth .deal.is-lock .go__msg { grid-column: 1 / -1; margin: 0; text-align: left; white-space: normal; }
