@@ -173,6 +173,22 @@
   .page--computer .grp[data-key="machine"] .rows > .row:nth-child(-n+2) { border-top: 0; padding-top: 2px; }
 }
 
+@media (max-width: 1100px) {
+  .page--computer .mach__tag {
+    width: max-content; max-width: calc(100% - 24px); height: auto; min-height: 36px; padding-block: 5px;
+    white-space: normal; overflow-wrap: anywhere;
+  }
+  .page--computer .vz-chip-cell[data-key="threads"] .vz-reading__value { font-size: clamp(14px, 1.55vw, 22px); white-space: nowrap !important; }
+  .page--computer .hero__devs .dev-pill { white-space: normal; overflow-wrap: anywhere; }
+  .page--computer .hero__devs .row__sub { overflow-wrap: anywhere; }
+  .page--computer :is(.mach__tag-note, .computer-login-term, .hero__devs .dev-spec summary.more, .hero__devs [data-remote$="-mcp"] a.more,
+    .computer-events__weeks > span, .grp:is([data-key="network"], [data-key="disk"]) .vz-chip-cell__v .vz-reading__value small) { white-space: nowrap; }
+  .page--computer .vz-chip-cell[data-key="ccd"] .vz-chip-cell__v { line-break: strict; overflow-wrap: normal; }
+  .page--computer .grp[data-key="cpu"] .vz-chip-cell[data-key="use"] .vz-chip-cell__k { word-break: normal; text-wrap: balance; }
+  .page--computer .grp[data-key="cpu"] .vz-chip-cell[data-key="power"] .vz-reading__value > b { font-size: clamp(14px, 1.8vw, 22px); }
+  .page--computer .stability-panel .grp__said { white-space: normal; word-break: normal; }
+}
+
 @media (max-width: 720px) {
   .page--computer .chart__head:has(.vz-reading__caption) { display: block; }
   .page--computer .chart__vals:has(.vz-reading) { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(135px,100%),1fr)); }

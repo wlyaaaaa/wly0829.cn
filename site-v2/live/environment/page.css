@@ -1,5 +1,8 @@
 ﻿/* 沿用电脑页的体检单，只收紧本页的数字、画窗和展开明细。 */
-#board { gap: 18px; }#board > .vz-board { margin-top: 0; }
+.page--environment { --env-card-gap: 18px; }
+#board { gap: var(--env-card-gap); }
+#board > .vz-board { margin-top: 0; }
+#board + .grp--quiet:not([hidden]) { margin-block-start: var(--env-card-gap); }
 .l2-nav--data { margin-left: 0; padding-left: 0; }.l2-nav--data .l2-nav__groups { margin-left: 0; }.l2-nav__groups > span { font-size: 14px; color: var(--muted); }
 #hero, #board .grp, #board .grp.is-open { --win: 220px; }
 #hero .card__body { padding-right: var(--win); }
@@ -87,4 +90,32 @@
   .env-runtime, .env-startup > li { grid-template-columns:minmax(0,1fr); gap:8px; }
   .env-runtime dl { grid-template-columns:80px minmax(0,1fr); }
   .env-table :is(th,td) { padding:8px 4px; }
+}
+
+/* 软件版本表按“要不要你管”分组（照图 ENV-1）：组名一行带竖条，要你点头的那组用正绿 */
+.env-table.env-table--versions th:first-child { width: 18%; }
+.env-table.env-table--versions th:nth-child(2), .env-table.env-table--versions th:nth-child(3) { width: 15%; }
+.env-table.env-table--versions th:nth-child(4) { width: 18%; }
+.env-table--versions td:nth-child(4) { white-space: normal; overflow: visible; }
+.env-table.env-table--versions th:last-child { width: auto; }
+.env-table--versions td:last-child { white-space: normal; overflow: visible; }
+.env-nw { white-space: nowrap; }
+.env-missing { color: var(--muted); }
+.env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 10px 18px; font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 5px 0 0 rgb(0 166 80 / .5); border-top: 6px solid transparent; background-clip: padding-box; }
+.env-table .env-group__head th span { letter-spacing: .02em; }
+.env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .13); box-shadow: inset 5px 0 0 #00A650; }
+.env-group[data-group="behind"] .env-group__head th { background-color: rgb(236 150 40 / .1); box-shadow: inset 4px 0 0 rgb(226 140 30 / .8); }
+.env-group[data-group="other"] .env-group__head th { background-color: rgb(95 103 96 / .07); box-shadow: inset 4px 0 0 rgb(95 103 96 / .35); }
+.env-table--versions tbody tr:nth-child(even) { background: transparent; }
+.env-more-row td { padding-top: 6px; padding-bottom: 6px; }
+.env-more-row .more { margin-left: 0; translate: none; }
+
+@media (601px <= width <= 1100px) {
+  #board .grp__figs:empty { display: none; }
+  #board .grp__figs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: min(21vw, 232px); }
+  #board .grp__fig { width: auto; }
+  .env-table--versions :is(th, td) { padding-inline: 5px; }
+  .env-table.env-table--versions th:first-child { width: 20%; }
+  .env-table.env-table--versions th:nth-child(4) { width: 20%; }
+  .env-table--versions td:nth-child(-n+3), .env-runtime p { white-space: normal; overflow-wrap: anywhere; }
 }

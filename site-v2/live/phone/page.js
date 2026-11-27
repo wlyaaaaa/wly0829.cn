@@ -111,8 +111,25 @@
     const spans = row?.spans || [], to = seconds(row?.to), last = spans.findLastIndex(([, v]) => v != null);
     return last < 0 ? NaN : Math.min(spans[last + 1]?.[0] ?? to, to);
   }
-  // 最后一次记到之后、不到 35 分钟的那一段只是等下一轮，不算缺口（本人 11-24：“数据缺口的前提是真拿不到，而不是等下一轮”）
-  const waitingGap = g => { const start = seconds(g?.from), at = seconds(phone?.at), now = Number.isFinite(at) ? at : Date.now() / 1000; return Number.isFinite(start) && now >= start && now - start <= PENDING_SECONDS; };
+  const roundOnTime = () => {
+    const round = phone?.collect?.collector, age = seconds(phone?.at) - seconds(round?.at);
+    return round?.state === 'online' && !round.read_error && age >= 0 && age <= PENDING_SECONDS;
+  };
+  function roundText(round) {
+    if (pcOffline() || round?.read_error) return round?.text;
+    if (roundOnTime()) return `手机约 30 分钟采一次，上次 ${U.time(round.at)} 采的，下一轮还没到`;
+    const age = seconds(phone?.at) - seconds(round?.at);
+    return round?.state === 'offline' && age > PENDING_SECONDS
+      ? `手机已经 ${Math.ceil(age / 60)} 分钟没采了，超过 35 分钟算晚` : round?.text;
+  }
+  // 只有这次收到的使用记录末尾仍可在等下一轮；历史空档和已经确认的缺口保留原判。
+  const waitingGap = g => g?.kind === 'data_gap' && !g.recovered && roundOnTime()
+    && seconds(g.from) === seconds(phone?.usage_at) && seconds(phone?.at) - seconds(g.from) <= PENDING_SECONDS;
+  function collectionMeta(row) {
+    if (!row || pcOffline() || !roundOnTime() || row.q !== 'stale' || row.state === 'stale' || row.read_error || row.error
+      || seconds(row.source_at ?? row.at) !== seconds(phone.collect.collector.at)) return row;
+    return { ...row, q: row.lamp_q ?? row.state, stale: false, stale_text: null, gap: U.isReadingCutoff(row.gap) ? null : row.gap };
+  }
   // round：采集图最近一轮执行的时刻。某条（如定位）自己最后一条记录早，但最近一轮已经跑过，那之后的末尾一样是等下一轮
   function markSpans(row, gap, pending, since, omitted, round = NaN) {
     const own = recordedTo(row), spans = row.spans || [], from = seconds(row.from), to = seconds(row.to), cutoff = Number.isFinite(round) && !(own >= round) ? round : own;
@@ -592,7 +609,8 @@
       if (step?.hidden || viewer !== 'owner' && (step?.visibility === 'owner' || step?.public === 'owner')) return detail(label, step);
       const state = step?.status ?? step?.state, text = ({ online: '在采集', ok: label === '电脑汇总' ? '汇总成功' : '导入成功', success: '导入成功', succeeded: '导入成功', failed: '失败', error: '失败', offline: '没在采集' })[state];
       const times = [['记录于', step?.at], ['最近尝试', step?.attempted_at], ['采用的收件', step?.received], ['最近成功', step?.last_ok_at], ['下次汇总', step?.next_at]].filter(([, value]) => value);
-      return `<div><dt>${fh(label, '采集步骤', 'label')}</dt><dd>${U.status(step, { small: true }).lamp}${fh(step?.text ?? text ?? unread(), label)}${step?.error ? `<small class="phone-reading-note">${fh(step.error, `${label}原因`)}</small>` : ''}${times.map(([name, value]) => `<small class="phone-reading-note">${fh(name, '时间说明')} ${stampHtml(value)}</small>`).join('')}</dd></div>`;
+      const shown = label === '手机采集器' ? roundText(step) : step?.text;
+      return `<div><dt>${fh(label, '采集步骤', 'label')}</dt><dd>${U.status(step, { small: true }).lamp}${fh(shown ?? text ?? unread(), label)}${step?.error ? `<small class="phone-reading-note">${fh(step.error, `${label}原因`)}</small>` : ''}${times.map(([name, value]) => `<small class="phone-reading-note">${fh(name, '时间说明')} ${stampHtml(value)}</small>`).join('')}</dd></div>`;
     }).join('');
   }
   function details(key) {
@@ -696,7 +714,7 @@
     const r = phone?.received;
     if (key === 'usage') return shownRanges.usage === '7d' ? '' : compareText(phone?.usage?.compare_text) || '';
     if (key === 'network') return val('net_kind') == null && pcOffline() ? '' : `${pcOffline() ? '上网走' : '现在走'} ${val('net_kind') === 'wifi' ? 'WiFi' : netText()}`;
-    if (key === 'collect') return (r?.gap?.text && !waitingGap(r.gap) || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered && !waitingGap(g))) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
+    if (key === 'collect') return (r?.gap?.text || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered && !waitingGap(g))) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
     if (key === 'battery') return val('charging') == null ? pcOffline() ? '' : U.collectionText("充电状态 · ") : val('charging') ? '在充电' : '没充电';
     if (key === 'storage') return [!pcOffline() || val('storage_free') != null ? `还剩 ${reading('storage_free')}` : '', !pcOffline() || val('storage_total') != null ? `共 ${reading('storage_total')}` : ''].filter(Boolean).join(' · ');
     return phone?.apps?.text || '';
@@ -795,7 +813,10 @@
         };
       }
       if (done && phone?.state === 'unknown' && !pcOffline()) return { key, name, pic: groupPics[key], palette: palettes[i], ...given, line: `${name}暂时读不到`, empty: true, figures: [] };
-      const g = phone?.groups?.find(g => g.key === key), raw = phone?.blocks?.[key], block = raw && { ...raw, reason: sp(raw.reason), summary: sp(g?.reason) }, b = V.blockState(block, pcOffline());
+      const raw = phone?.blocks?.[key], group = given;
+      const g = key === 'collect' ? collectionMeta(group) : group;
+      const sourceBlock = key === 'collect' ? collectionMeta(raw) : raw;
+      const block = sourceBlock && { ...sourceBlock, reason: sp(sourceBlock.reason), summary: sp(g?.reason) }, b = V.blockState(block, pcOffline());
       const missingNames = g?.partial?.length ? { ...missingReadingNames(phone?.metrics, g.missing_readings), ...g.missingNames } : g?.missingNames;
       const compact = key === 'battery' || key === 'storage', status = compact && g ? U.status(g, { missingNames }).note || '' : '';
       const inStatus = value => { const html = value && status && U.fieldHtml(value, { name: '状态说明' }); return html && status.includes(html); };
@@ -823,7 +844,7 @@
       const statusShowsReason = U.status(g).tone !== 'none';
       const lineText = phone?.state === 'unknown' ? unread() : [display, !statusShowsReason && g?.why && humanText(g.why)].filter(text => text && (key !== 'collect' || text !== names[key])).join(' · ');
       const unique = distinctNotes(lineText, statusShowsReason && sp(g?.why), statusShowsReason && sp(g?.stale_text));
-      const blockText = unique(b?.text);
+      const blockText = unique(sourceBlock !== raw && b?.reason ? b.reason : b?.text);
       const gaps = partial.map(o => o.gap).filter(text => text && !inStatus(text)).map(text => unique(humanText(text))).filter(Boolean);
       return { ...g, key, name, pic: groupPics[key], palette: palettes[i], missingNames, reason: compact && typeof reason === 'string' && reason && !marked(reason) ? [...new Set([lineText, humanText(reason)].filter(Boolean))].join(' · ') : reason,
         line: lineText, wait: !done || b?.wait || !chartDone.has(key),

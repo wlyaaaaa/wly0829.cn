@@ -50,7 +50,7 @@
     const gap = d.gap && !(d.q === 'partial' && cover.late && !cover.inner) ? d.gap : '';
     return `${title}${head.join('')}${more}<p class="env-note">${U.esc(dateText([cover.late ? cover.note : d.text, d.q === 'stale' && '旧读数', cover.inner, gap].filter(Boolean).join(' · ')))}</p>`;
   }
-  const host = document.createElement('section'); host.className = 'card grp grp--quiet'; host.hidden = true; document.getElementById('board').before(host);
+  const host = document.createElement('section'); host.className = 'card grp grp--quiet'; host.hidden = true; document.getElementById('board').after(host);
   const shell = html => `<div class="card__glass glass"><div class="card__body"><div class="grp__chapter">${html}</div></div></div>`;
   let read;
   function unavailable(state) {

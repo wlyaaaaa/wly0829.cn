@@ -45,7 +45,6 @@
   // 后台给的字一律过这里：访客版藏起来的写清“〈哪一样〉仅本人可见”
   const field = (value, viewer, name = '') => value == null || value === '' ? '' : U.fieldHtml(value, { name, kind: viewer });
   const plain = (value, viewer) => U.fieldText(value, viewer);
-  const you = viewer => viewer === 'owner' ? '你' : '本人';
   const hostOf = id => HOSTS.find(h => h.id === String(id || '').toLowerCase() || h.name === id);
 
   // —— 大数跳：进页从 0 跳到当前值，之后读数变了从旧值跳到新值 ——
@@ -237,6 +236,6 @@
     return true;
   };
 
-  window.LiveTape = { HOSTS, TONE, list, known, stamp, clock, day, dayKey, when, int, dec, pct, hours, duration, ms, path, link, fog, field, plain, you,
+  window.LiveTape = { HOSTS, TONE, list, known, stamp, clock, day, dayKey, when, int, dec, pct, hours, duration, ms, path, link, fog, field, plain, you: U.you,
     hostOf, count, big, ticker, ring, line, columns, posneg, niceMax, boot, viewerOf, stateNote, placeholder, paint, keep, reveal, esc };
 })();
