@@ -64,7 +64,12 @@
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5V12l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7.5V12l3 2'/%3E%3C/svg%3E") center / contain no-repeat; }
 .pj-board--phone .pj-card[data-card="changes"] .pj-tl-copy { text-wrap: pretty; }
-.pj-board--phone .pj-card[data-card="changes"] .pj-step { display: flex; margin-left: auto; color: var(--ph-green); font-weight: 600; }   /* “全部 N 条 ›”放右下（照图） */
+/* 两张卡拉成一样高时，“说明 ›”贴卡底（照图） */
+.pj-board--phone .pj-card[data-card="changes"] { display: flex; flex-direction: column; }
+.pj-board--phone .pj-card[data-card="changes"] > .pj-card__tail { margin-top: auto; padding-top: 10px; }
+/* “全部 N 条 ›”放右下，和左下“说明 ›”同一行（照图）；说明点开时回到列表底下，不压说明的字 */
+.pj-board--phone .pj-card[data-card="changes"] .pj-step { position: absolute; right: 26px; bottom: calc(var(--pj-card-pad-bottom, 18px) - 5px); z-index: 2; color: var(--ph-green); font-weight: 600; }
+.pj-board--phone .pj-card[data-card="changes"]:has(.pj-card__tail details[open]) .pj-step { position: static; display: flex; margin-left: auto; }
 .pj-board--phone .pj-card > .ph-go-sec > .pj-part { flex-direction: row; align-items: center; gap: 12px; }
 .ph-go { margin: 0; padding: 0; list-style: none; }
 .ph-go li + li { border-top: 1px solid var(--hair); }
@@ -75,17 +80,15 @@
 .ph-go__text small { display: block; font-size: 13px; line-height: 19px; color: var(--muted); }
 .ph-go .more__chev { color: var(--ph-green); font-size: 18px; }
 
-/* ============ 窗口窄（≤1100 像素）：排成一栏；四种记录两两一排，格子带行名，太挤就横着滑 ============ */
+/* ============ 窗口窄（≤1100 像素）：排成一栏；四种记录两两一排，14 天的格子拆成上下两排各 7 天，带行名 ============ */
 @media (max-width: 1100px) {
   .page--project #pj-board.pj-board--phone { grid-template-columns: minmax(0, 1fr); gap: var(--pj-gap); }
   .ph-body { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
   .ph-kinds { grid-template-rows: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; padding-top: 0; }
   .ph-kind + .ph-kind { border-top: 0; }
-  .ph-days { padding: 12px 0 4px; border-left: 0; border-top: 1px solid var(--hair); overflow-x: auto; }
-  .ph-grid { width: max-content; min-width: 100%; box-sizing: border-box; padding-right: 4px; grid-template-columns: auto repeat(var(--n), minmax(44px, 1fr)); grid-template-rows: var(--ph-head) repeat(var(--r), 46px) 30px; }
-  .ph-c { font-size: 13.5px; }
-  /* 行名贴在左边不跟着滑 */
-  .ph-rl { position: sticky; left: 0; z-index: 2; align-self: stretch; display: flex; align-items: center; width: auto; overflow: visible; visibility: visible; padding: 0 6px 0 0; background: rgb(250 248 253 / .94); }
+  .ph-days { display: grid; row-gap: 16px; padding: 12px 0 0; border-left: 0; border-top: 1px solid var(--hair); }
+  .ph-grid { grid-template-rows: var(--ph-head) repeat(var(--r), 46px) 30px; }
+  .ph-rl { width: auto; overflow: visible; visibility: visible; padding-right: 8px; }
   .pj-board--phone .pj-card[data-card="changes"] { order: 0; }
   .pj-board--phone .pj-card[data-card="phone-go"] { order: 1; }
   .ph-foot { grid-template-columns: auto minmax(0, 1fr) auto; row-gap: 8px; }

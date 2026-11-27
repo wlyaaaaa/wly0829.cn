@@ -965,7 +965,7 @@
         const preview = custom?.changes?.shown ?? changeLog?.shown;
         b.preview = Math.min(b.loaded, Number.isInteger(preview) && preview >= 0 ? preview : SHOW.rows);
         b.stepLabel = custom?.changes?.step ? (left, open) => custom.changes.step(left, open, changeLog?.total ?? b.loaded) : null;
-        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '' }, animate);
+        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '', explain: custom?.changes?.note ? [esc(custom.changes.note)] : [] }, animate);
         const changed = !mine.length && proj.changed?.at ? proj.changed : null;
         const hasText = changed?.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(changed.text, projectViewer));
         b.reading.hidden = !changed;

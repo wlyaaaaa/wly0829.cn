@@ -178,7 +178,9 @@
     const { v, viewer } = shown;
     const kinds = kindsHtml(v, viewer), kindKeys = [...kinds.matchAll(/data-kind="(\w+)"/g)].map(m => m[1]);
     const days = state.rows.slice(state.offset, state.offset + PAGE).reverse();   // 左旧右新，今天在最右
-    const grid = gridHtml(days, kindKeys.length ? kindKeys : ROWS.map(r => r[1]));
+    // 窗口窄（≤1100 像素）：14 天拆成上下两排各 7 天，不横着滑、不挤
+    const rowKeys = kindKeys.length ? kindKeys : ROWS.map(r => r[1]), half = Math.ceil(days.length / 2);
+    const grid = window.matchMedia?.(NARROW).matches && days.length > 7 ? gridHtml(days.slice(0, half), rowKeys) + gridHtml(days.slice(half), rowKeys) : gridHtml(days, rowKeys);
     const gapDay = v.gapDay?.value?.date, gap = v.gap?.value?.text || (typeof v.gap?.text === 'string' ? v.gap.text : '');
     const gapText = gap && !locked(v.gap, viewer) ? `${gapDay ? gapDay === todayDay() ? '今天' : md(gapDay) : '当天'}定位最长隔了 ${gap}` : '';
     const cut = mdTime(v.daily?.at || state.at);   // daily_exact.at 是日记四类数据自己的截止时刻
@@ -191,9 +193,6 @@
       <div class="ph-body">${kinds ? `<ul class="ph-kinds" style="--r:${kindKeys.length}">${kinds}</ul>` : ''}<div class="ph-days">${grid || empty}</div></div>
       <div class="ph-foot">${v.notes.length ? `<button type="button" class="ph-explain" aria-expanded="false">说明 <span class="more__chev">›</span></button>` : '<span></span>'}<span class="ph-gap">${esc(gapText)}</span>${nav}<span class="ph-cut">${cut ? esc(`截止 ${cut}`) : ''}</span></div>${note}`;
     if (open) { wide.querySelector('.ph-note').hidden = false; wide.querySelector('.ph-explain')?.setAttribute('aria-expanded', 'true'); }
-    // 窄窗口格子横着滑：先停在最右（最新那天）
-    const scroller = wide.querySelector('.ph-days');
-    if (scroller && scroller.scrollWidth > scroller.clientWidth) scroller.scrollLeft = scroller.scrollWidth;
     realign();
   }
   function diary(d, viewer, boardEl) {
@@ -242,6 +241,7 @@
   }
   const realign = () => requestAnimationFrame(() => requestAnimationFrame(align));
   window.addEventListener('resize', realign);
+  window.matchMedia?.(NARROW).addEventListener?.('change', draw);
   document.fonts?.ready?.then(realign);
   document.addEventListener('click', e => { if (e.target.closest?.('.pj-card[data-card="changes"] button, .pj-card[data-card="changes"] summary')) realign(); });
 
@@ -260,8 +260,9 @@
   }
   // 卡放哪一栏：照图固定（左最近改动、右去实况里看）；出现别的卡时交回 page.js 按高度摆；窗口窄排成一栏
   const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.(NARROW).matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
-  // 最近改动：先露 3 条，展开按钮写“全部 N 条”（照图）
-  const changes = { shown: 3, step: (left, open, total) => !open && finite(total) ? `全部 ${int(total)} 条` : '' };
+  // 最近改动：先露 3 条，展开按钮写“全部 N 条”，左下“说明 ›”（照图）；共用的改动接口没有现成口径，说明这句是这页写的
+  const changes = { shown: 3, step: (left, open, total) => !open && finite(total) ? `全部 ${int(total)} 条` : '',
+    note: '这里是手机日记本这个项目的改动，按提交记，一条写一句改了什么（几次提交合成一条的写明几次），最新的在上。' };
 
   window.ProjectPages = Object.assign(window.ProjectPages || {}, { 'phone-collector': { adapt, board, columns, changes } });
 })();
