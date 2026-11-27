@@ -116,7 +116,7 @@
 
 /* 标题“钩子”、时间那排、说明一行排开，截至靠右（照 16:35 点头的图） */
 .ag-hookhead { justify-content: flex-start; align-items: center; flex-wrap: wrap; row-gap: 8px; }
-.ag-hookhead .ag-hooklead { margin: 0; font-size: 15px; font-weight: 500; color: #6c6b64; }
+.ag-hookhead .ag-hooklead { flex: 1 1 65%; margin: 0; font-size: 15px; font-weight: 500; color: #6c6b64; text-wrap: pretty; }
 .ag-hookhead .tp-asof { margin-left: auto; }
 .ag-hooktotal small { font-size: 13px; color: var(--muted); }
 .ag-hooktotals { display: grid; gap: 4px; margin: 0 0 10px; }

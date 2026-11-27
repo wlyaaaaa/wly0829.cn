@@ -473,7 +473,8 @@
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
     const recordedAt = asof(hv?.at || hs.at, d.at);
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。</p>${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div>`;
+    const rolloutNote = ['改了钩子以后：', 'Claude 开着的对话', '也会自己换上新的；', 'Codex 要新开的线程', '才用新的，', '已经开着的线程', '一般还用旧的；', 'Antigravity 要完整退出', '再打开才用新的。'].map(keep).join('');
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。${rolloutNote}</p>${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
