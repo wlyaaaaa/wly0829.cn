@@ -18,7 +18,7 @@
 [data-personal-project] [data-card="changes"] { grid-area: changes; }
 [data-personal-project] [data-card="pp-more"] { grid-area: more; }
 #pj-board[data-personal-project="steam"] { grid-template-areas: "comparison comparison" "wardrobe artifacts" "wardrobe history" "changes more"; }
-#pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles background" "artifacts more" "changes changes"; }
+#pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles background" "artifacts more" "artifacts changes"; }
 #pj-board[data-personal-project="github"] { grid-template-areas: "snake profile" "artifacts changes"; }
 #pj-board[data-personal-project="typora"] { grid-template-areas: "samples samples" "theme artifacts" "changes artifacts" "more more"; }
 [data-personal-project] .pj-card { display: flex; flex-direction: column; }
@@ -73,7 +73,10 @@
 .pp-samples figure { min-width: 0; margin: 0; padding: 10px; border: 1px solid var(--hair); border-radius: 14px; background: rgb(255 255 255 / .6); }
 .pp-preview { display: block; width: 100%; height: auto; border-radius: 7px; }
 .pp-samples figcaption { display: grid; gap: 3px; margin-top: 8px; line-height: 1.4; }
-.pp-samples figcaption strong { font-size: 15px; }
+.pp-samples figcaption strong { display: flex; align-items: baseline; gap: 6px; font-size: 15px; }
+.pp-samples figcaption strong::before { content: ""; align-self: center; flex: 0 0 8px; height: 8px; border-radius: 50%; background: #57616c; }
+.pp-samples figure:nth-child(2) strong::before { background: #263b51; }
+.pp-samples figure:nth-child(3) strong::before { background: #087b40; }
 .pp-samples figcaption > span { font-size: 13px; color: var(--muted); }
 .pp-paged { display: flex; flex: 1; flex-direction: column; }
 .pp-paged > :is([data-p="page"], [data-p="foot"], [data-p="box"]) { display: none !important; }
@@ -85,7 +88,7 @@
 .pp-pagination > span:last-child { display: flex; align-items: baseline; gap: 10px; }
 .pp-pagination button { white-space: nowrap; color: #087b40; }
 .pp-pagination button:disabled { color: var(--muted); cursor: default; }
-.pp-wallpapers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.pp-wallpapers { display: grid; grid-template-columns: minmax(0, 3.5fr) minmax(0, 1fr); gap: 12px; align-items: start; }
 #artifacts .pp-wallpapers > .pp-wallpaper-card {
   display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; min-width: 0;
   padding: 8px; border: 1px solid var(--hair); border-radius: 12px; background: rgb(255 255 255 / .33);
@@ -99,12 +102,17 @@
 .pp-wallpaper-card .acts { grid-row: 5; justify-self: start; }
 .pp-bubbles { grid-column: 1 / -1; }
 .pp-wallpaper { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: rgb(255 255 255 / .52); border-radius: 9px; }
+.pp-mobile-wallpaper > .pp-wallpaper { aspect-ratio: 9 / 20; object-fit: cover; }
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #pj-board[data-personal-project="emerald"] { grid-template-rows: auto min-content auto; }
+  [data-personal-project="emerald"] [data-card="changes"] { align-self: stretch; }
   [data-personal-project="typora"] .pp-preview-tools { margin-top: -42px; margin-bottom: 20px; }
   [data-personal-project="typora"] [data-card="artifacts"] { align-self: stretch; }
-  [data-personal-project="typora"] #more-data .pj-viz { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-  [data-personal-project="typora"] #more-data .pp-row { border: 0; }
+  [data-personal-project="typora"] #more-data .pj-viz { display: flex; align-items: baseline; gap: 16px; }
+  [data-personal-project="typora"] #more-data .pp-row { margin: 0; padding: 0; border: 0; gap: 6px; }
+  [data-personal-project="typora"] #more-data .pp-row > span { flex: none; }
+  [data-personal-project="typora"] #more-data .pp-row + .pp-row { padding-inline-start: 16px; border-inline-start: 1px solid var(--hair); }
 }
 @media (max-width: 1100px) {
   .page--project #pj-board[data-personal-project] { grid-template-columns: minmax(0, 1fr); }
@@ -112,4 +120,5 @@
   #pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles" "background" "artifacts" "more" "changes"; }
   #pj-board[data-personal-project="github"] { grid-template-areas: "snake" "profile" "artifacts" "changes"; }
   #pj-board[data-personal-project="typora"] { grid-template-areas: "samples" "theme" "artifacts" "changes" "more"; }
+  .pp-samples figcaption strong { font-size: 13px; }
 }
