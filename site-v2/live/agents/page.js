@@ -78,11 +78,10 @@
     const failed = issues.length || c.fail.length;
     const word = owner ? `要${T.you(viewer)}看` : failed ? `差 ${failed} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
     const ringColor = tone === 'ok' ? T.TONE.ok : tone === 'off' ? T.TONE.off : T.TONE.repair;
-    const statusWord = word => '<span class="ag-status-word">' + word + '</span>';
     const statusText = html => (h.id === 'codex' && !html.includes('<') ? html.replace(/\bPlugin\w+:[\w-]+@[\w-]+|钩子说明|钩子，?|说明|它是干什么的/g,
-      word => word.startsWith('Plugin') ? word.replace(/\w+[:@-]?/g, statusWord) : statusWord(word)) : html).replace(/(^Codex |」)装着/, '$1' + keep('装着'));
-    const fixer = i => i.handler_text ? F(i.handler_text, '谁在修') : i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '';
-    const fixText = i => [fixer(i) || (owner ? '' : '还没人接手'), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ');
+      word => word.startsWith('Plugin') ? `<span class="ag-truncate" title="${word}">${word}</span>` : `<span class="ag-status-word">${word}</span>`) : html).replace(/(^Codex |」)装着/, '$1' + keep('装着'));
+    const fixer = i => F(i.handler_text, '谁在修') || (i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '');
+    const fixText = i => [fixer(i), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ') || (owner ? '' : '还没人接手');
     const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
     const issueText = i => {
       const text = F(i.text);
@@ -91,7 +90,7 @@
     const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${statusText(issueText(i))}${issues.length > 1 && fixText(i)
         ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
       : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${statusText(esc(r.text))}</a>` : esc(r.text)}</span></li>`).join('');
-    const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
+    const lead = issues.find(i => fixer(i)) || issues.find(i => known(i.round)) || issues.find(i => T.path(i.href)) || issues[0];
     const fix = owner || !(c.fail.length || issues.length) ? ''
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const hooks = hostHooks(d, h);
@@ -340,9 +339,6 @@
   }
 
   // —— 五、钩子 ——
-  // 钩子这一段的数：后台给了 hook_stats.periods.<all|30d|7d>（每段 from_at、cells、totals）就读那一段；旧后台只有近 7 天（就是 hook_stats 本身）
-  const hookNow = d => hookPeriod || (d.hook_stats?.periods ? 'all' : '7d');
-  const hookView = d => { const hs = d.hook_stats || {}, p = hookNow(d); return hs.periods ? hs.periods[p] || null : p === '7d' ? hs : null; };
   // 拦、错只有新格式的记录里有；旧日志只记了次数和耗时。后台给 blocked_samples（记了拦没拦的有几次），比次数少就照实写只算了其中几次，不当全部
   const outcomeShort = t => known(t?.blocked_samples) && known(t?.runs) && t.blocked_samples < t.runs;
   function hookCell(hooks, station, h, hv, p) {
@@ -354,11 +350,11 @@
     const key = `${station}/${h.id}`, flashKey = `${p}/${key}`, before = cellsBefore.get(flashKey);   // 切时间段不闪，同一段次数变了才闪
     const flash = before != null && before !== cell.runs ? ' tp-flash' : '';
     cellsBefore.set(flashKey, cell.runs);
-    const runs = known(cell.runs) ? keep(`${int(cell.runs)} 次`) : '次数还没采上';
+    const stats = known(cell.runs) ? `<span>${int(cell.runs)} 次</span> <span>${ms(cell.median_ms)}</span>` : '<span>次数还没采上</span>';
     const badges = [known(cell.blocked) && cell.blocked > 0 && `<span class="ag-badge" data-tone="repair">拦 ${int(cell.blocked)}</span>`,
       known(cell.errors) && cell.errors > 0 && `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>`].filter(Boolean).join('');
     return `<td class="ag-heat${flash}${dim(h.id)}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
-      <span>${keep(`${count} 条 ·`)} ${runs}${known(cell.median_ms) ? ` ${keep(`· ${ms(cell.median_ms)}`)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
+      <span class="ag-heat-stats"><span>${count} 条</span> ${stats}</span>${badges ? `<span class="ag-heat-badges">${badges}</span>` : ''}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
   }
   function hookCard(d, hook, withSample = false) {
     const id = HOSTS.find(h => h.name === hook.host)?.id;
@@ -368,7 +364,7 @@
     // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
     const summary = preCompact && typeof hook.summary === 'string'
       ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
-    return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span>${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
+    return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span class="ag-truncate" title="${esc(U.fieldText(hook.name, viewer))}">${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
       <p class="tp-small">${F(summary, '钩子说明') || '说明还没读到'}</p>
       ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)}` : '自动压缩线还没读到'}</p>` : ''}
       ${hook.reason ? `<p class="ag-hook__num">${F(hook.reason)}</p>` : ''}
@@ -383,7 +379,8 @@
     }).join('');
   }
   function hooksSection(d) {
-    const hooks = inventory(d), hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
+    const hooks = inventory(d), hs = d.hook_stats || {}, p = hookPeriod || (hs.periods ? 'all' : '7d');
+    const hv = hs.periods ? hs.periods[p] : p === '7d' ? hs : null, totals = hv?.totals || {};
     // 按需更新快核：据规则仓 docs/operations/context-hooks.md 和三家现行设置核改后生效时机。
     const rolloutNote = ['改了钩子以后：', 'Claude 开着的对话', '也会自己换上新的；', 'Codex 要新开的线程', '才用新的，', '已经开着的线程', '一般还用旧的；', 'Antigravity 要完整退出', '再打开才用新的。'].map(keep).join('');
     const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。${rolloutNote}</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
@@ -393,9 +390,9 @@
     const head = HOSTS.map(h => {
       const t = totals[h.id] || {};
       const parts = [`登记 ${int(hostHooks(d, h).length)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
-        known(t.blocked) ? `拦 ${int(t.blocked)} 次` : '', known(t.errors) ? `出错 ${int(t.errors)} 次` : '',
-        outcomeShort(t) && `<small>拦、错只算记了的 ${keep(`${int(t.blocked_samples)} 次`)}</small>`].filter(Boolean);
-      return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
+        known(t.blocked) && `拦 ${int(t.blocked)} 次`, known(t.errors) && `出错 ${int(t.errors)} 次`];
+      const note = outcomeShort(t) ? `拦、错只算记了的 ${keep(`${int(t.blocked_samples)} 次`)}` : '';
+      return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span> ${parts.map(part => `<span>${part || ''}</span>`).join(' ')} <small class="tp-small">${note}</small></p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
       const alerts = id === 'error' ? HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('') : '';
