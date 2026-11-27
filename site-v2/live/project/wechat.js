@@ -175,7 +175,9 @@
   function load(viewer, redraw) {
     if (lists.viewer === viewer) return;
     Object.assign(lists, { viewer, rows: null, total: null, at: null, section: null, arts: null });
-    const get = (resource, query) => window.Live.get(resource, query).then(r => r?.meta?.viewer?.kind && r.meta.viewer.kind !== viewer ? null : r).catch(() => null);
+    // 这一次没读到的，等实况客户端说主数据接通了（again）再取一次
+    const once = (resource, query) => window.Live.get(resource, query).then(r => r?.meta?.viewer?.kind && r.meta.viewer.kind !== viewer ? null : r).catch(() => null);
+    const get = (resource, query) => once(resource, query).then(r => r?.data || !r?.again ? r : r.again.then(() => once(resource, query)));
     get(`projects/${ID}/records`, { section: 'owner_archives' }).then(r => r?.data && Array.isArray(r.data.items) ? r : get(`projects/${ID}/records`, { section: 'archive_records' }).then(x => x && Object.assign(x, { section: 'archive_records' })))
       .then(r => { if (lists.viewer !== viewer || !r?.data) return; Object.assign(lists, { rows: r.data.items, total: r.data.total, at: r.data.at, section: r.section || 'owner_archives' }); redraw(); });
     get(`projects/${ID}/artifacts`).then(r => { if (lists.viewer !== viewer || !Array.isArray(r?.data?.items)) return; lists.arts = r.data.items; redraw(); });
