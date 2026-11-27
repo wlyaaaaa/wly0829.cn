@@ -39,30 +39,21 @@
 .mn-bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: var(--mn-green); }
 .mn-bar > em { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px var(--mn-green); font-style: normal; }
 .mn-bar > em > span { position: absolute; bottom: 14px; left: 50%; translate: -50% 0; padding: 1px 9px; border-radius: 999px; background: rgb(0 166 80 / .12); color: #0a6b3a; font-size: 12px; font-weight: 600; line-height: 18px; }
-/* 五行：类别 · 标题 · 整理时间 ›；本人版类别做小底色、隐藏类别后挂“访客看不到” */
+/* 五行：类别 · 标题 · 整理时间 ›；类别做小底色，隐藏类别后挂“访客看不到”（两版一样，访客那份标题是“••••”） */
 .mn-rows { margin: 0; padding: 4px 0 0; list-style: none; }
 .mn-row { display: grid; grid-template-columns: minmax(0, auto) auto minmax(0, 1fr) auto auto; align-items: center; column-gap: 10px; padding: 9px 0; }
 .mn-row + .mn-row { border-top: 1px solid var(--hair); }
 .mn-row > a { display: contents; color: inherit; text-decoration: none; }
-.mn-row__cls { order: 0; min-width: 0; font-size: 14px; line-height: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mn-row__cls { order: 0; min-width: 0; padding: 2px 10px; border-radius: 8px; background: rgb(255 255 255 / .55); font-size: 13px; line-height: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mn-row > .live-mark { order: 1; margin: 0; }
 .mn-row__title { order: 2; min-width: 0; font-size: 14px; line-height: 21px; font-weight: 600; color: #3d3c38; }
-.mn-row__at { order: 3; font-size: 13px; line-height: 20px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mn-row__at { order: 3; font-size: 13px; line-height: 20px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.mn-dots { font-family: "Segoe UI", Arial, Helvetica, sans-serif; letter-spacing: .08em; font-weight: 700; color: var(--ink); white-space: nowrap; }   /* 和账房页的“••••”同一个写法：中文字体里的 • 是全角，用西文字体的半角点 */
 .mn-row .more__chev { order: 4; color: var(--pj-accent); }
 .mn-row > a:hover .mn-row__title, .mn-row > a:hover .mn-row__cls { color: var(--pj-accent-ink); }
 .mn-row:not(:has(> .live-mark)) .mn-row__title { grid-column: 2 / 4; }
 .mn-row.is-untitled:has(> .live-mark) .mn-row__at { grid-column: 3 / 4; }
 .mn-row.is-untitled:not(:has(> .live-mark)) .mn-row__at { grid-column: 2 / 4; }
-/* 本人版：类别一颗浅底小块 */
-.mn-viewer-owner .mn-row__cls { padding: 2px 10px; border-radius: 8px; background: rgb(255 255 255 / .55); font-size: 13px; }
-.mn-viewer-owner .mn-row__at { text-align: right; }
-/* 访客版：一行写成“类别 · 标题 · 日期”，箭头靠右 */
-.mn-viewer-public .mn-row { grid-template-columns: minmax(0, 1fr) auto; }
-.mn-viewer-public .mn-row > a { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 0; grid-column: 1 / -1; }
-.mn-viewer-public .mn-row__cls, .mn-viewer-public .mn-row__title, .mn-viewer-public .mn-row__at { font-size: 14.5px; line-height: 24px; font-weight: 700; color: var(--ink); }
-.mn-viewer-public .mn-row__title::before, .mn-viewer-public .mn-row__at::before { content: "·"; margin: 0 .55em; color: #8f8d86; font-weight: 400; }
-.mn-viewer-public .mn-row__at { font-weight: 600; color: #3d3c38; }
-.mn-viewer-public .mn-row .more__chev { margin-left: auto; }
 
 /* ============ 右栏：材料和依据 ============ */
 .mn-mat { margin: 4px 0 18px; }

@@ -1,7 +1,8 @@
 // 我的说明书（/live/project/?id=daily-preferences）自己的几块；page.js 只在四处接进来：adapt 改这一页的数据、strip 加关键数字第一格、board 加卡、columns 定卡放哪一栏。
 // 本人 11-27 定的样子：第一格“AI 共用的主题卡”；左栏“整理成主题卡的认识”（六类、明细、协作约定三条对外说法）＋最近改动（page.js 画），
 // 右栏“最近改过的 5 张”（四个小读数、月度总更新进度条、五行）＋“材料和依据”。原来“新不新”“最近产物”“更多数据”“材料攒了多少”“根据什么”不画。
-// 访客版同一套页面、同一份接口：能点进去的条目外面不挂签；本人版在访客看不到原文的类名旁挂全站同一个紫色“访客看不到”。
+// 访客版同一套页面、同一份接口、同样的按钮和签（本人 11-27 22:23 统一规则，和账房页同一做法）：访客看不到的标题原位写“••••”，
+// 两版同一处都挂全站同一个紫色“访客看不到”；两版说法不一样的那句，两版都挂“对外换了说法”。
 // 每个数、每个“截止／更新”都照接口给的字段写，字段没给的那块不画（本人 11-27 14:41 禁令：不显示没人维护的标识）。
 // 数在哪：项目详情顶层 manual，见 read。
 (() => {
@@ -15,6 +16,9 @@
   const RULES = '/rules/', FINANCE = '/live/project/?id=personal-finance';
   // 后台两项口径只给了一个内部代号，换成人话（和 page.js 的 SCOPE_WORDS 同一句）
   const SCOPE_WORDS = { 现行主题卡: '只算现在在用的认识，退役的旧认识不算', 现有记录: '按库里现在留着的记录算' };
+  // 访客看不到：全站那个紫色小签。共用函数只在本人版画，这页两版都挂（本人 11-27 22:23），所以按本人版取；访客那份原位画“••••”
+  const hiddenTag = what => U.visitorHiddenTag(what, '', 'owner');
+  const DOTS = '<span class="mn-dots">••••</span>';
 
   // —— 数怎么写 ——
   const finite = n => typeof n === 'number' && Number.isFinite(n);
@@ -85,11 +89,10 @@
   }
 
   // —— 卡头：卡名（＋一句）和右上“说明 ›”；说明点开在卡名下面 ——
-  function head(b, title, sub, notes) {
+  function head(b, title, sub, notes, subTag = '') {
     const explain = notes.length ? `<button type="button" class="mn-explain" aria-expanded="false">说明 <span class="more__chev">›</span></button>` : '';
-    U.html(b.head, `<b>${esc(title)}</b>${sub ? `<span>${esc(sub)}</span>` : ''}${explain}`, false);
+    U.html(b.head, `<b>${esc(title)}</b>${sub ? `<span>${esc(sub)}${subTag}</span>` : ''}${explain}`, false);
     b.el.classList.add('mn-sec');
-    b.el.classList.toggle('mn-viewer-owner', viewing === 'owner'); b.el.classList.toggle('mn-viewer-public', viewing !== 'owner');
     return notes.length ? `<div class="mn-note" hidden>${notes.map(esc).join('<br>')}</div>` : '';
   }
   // 说明：点一下打开、再点收起（每张卡自己的）
@@ -107,7 +110,7 @@
     const c = v.conventions;
     const conv = c.items.length ? `<div class="mn-conv">${c.rewritten ? U.visitorRewrittenTag('这几条约定', '', 'public') : '<span></span>'}<ul>${c.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
     return `<ul class="mn-groups">${v.groups.map(g => {
-      const tag = viewer === 'owner' && HIDDEN.has(g.section) ? U.visitorHiddenTag(`这一类的认识原文，只看到${g.count > 2 ? '一句说明' : '每条的标题'}`, '', viewer) : '';
+      const tag = HIDDEN.has(g.section) ? hiddenTag(`这一类的认识原文，只看到${g.count > 2 ? '一句说明' : '每条的标题'}`) : '';
       const meta = [finite(g.count) && `${int(g.count)} 张`, md(g.updated) && `本组更新 ${md(g.updated)}`].filter(Boolean).join(' · ');
       const rules = g.section === 'group-5' ? `<a class="more mn-rules" href="${RULES}">看通用规则 <span class="more__chev">›</span></a>` : '';
       return `<li class="mn-group"><div class="mn-group__main"><p class="mn-group__name"><b>${esc(g.label || '')}</b>${tag}</p>${meta ? `<p class="mn-group__meta">${esc(meta)}</p>` : ''}</div>
@@ -133,13 +136,15 @@
       bar = `<div class="mn-month"><span>${esc(md(last))}</span><div class="mn-bar" role="img" aria-label="${esc(`从 ${md(last)} 到 ${md(next)}，今天 ${nowText}`)}"><i style="width:${pct}%"></i><em style="left:${pct}%"><span>${esc(nowText)}</span></em></div><span>${esc(md(next))}</span></div>`;
     }
     const rows = r.items.slice(0, 5).map(it => {
-      const title = typeof it.title === 'string' && it.title.trim() ? it.title.trim() : '';
-      const tag = viewer === 'owner' && !TITLED.has(it.section) ? U.visitorHiddenTag('这张主题卡的标题和内容', '', viewer) : '';
-      const when = viewer === 'owner' ? dash(it.at) : md(it.at);
+      // 访客看不到标题的几类：访客那份标题是 null，原位画“••••”；两版都挂“访客看不到”；整理时间两版一样写到分钟
+      const hidden = !TITLED.has(it.section), raw = typeof it.title === 'string' && it.title.trim() ? esc(it.title.trim()) : '';
+      const title = raw || (hidden && viewer !== 'owner' ? DOTS : '');
+      const tag = hidden ? hiddenTag('这张主题卡的标题和内容') : '';
+      const when = dash(it.at);
       // 点回那一张所在的明细；后台给了 record_id 的带上 card=，明细页按它落到那一张
       const base = typeof it.href === 'string' && it.href.startsWith('/') ? it.href : records(it.section);
       const href = it.record_id != null && it.record_id !== '' ? `${base}${base.includes('?') ? '&' : '?'}card=${encodeURIComponent(it.record_id)}` : base;
-      return `<li class="mn-row${title ? '' : ' is-untitled'}"><a href="${esc(href)}"><span class="mn-row__cls">${esc(it.label || '')}</span>${title ? `<span class="mn-row__title">${esc(title)}</span>` : ''}<span class="mn-row__at">${esc(when)}</span><span class="more__chev">›</span></a>${tag}</li>`;
+      return `<li class="mn-row${title ? '' : ' is-untitled'}"><a href="${esc(href)}"><span class="mn-row__cls">${esc(it.label || '')}</span>${title ? `<span class="mn-row__title">${title}</span>` : ''}<span class="mn-row__at">${esc(when)}</span><span class="more__chev">›</span></a>${tag}</li>`;
     }).join('');
     return `${reads}${bar}${rows ? `<ul class="mn-rows">${rows}</ul>` : ''}`;
   }
@@ -176,10 +181,8 @@
   document.fonts?.ready?.then(realign);
   document.addEventListener('click', e => { if (e.target.closest?.('.mn-explain')) realign(); });
 
-  let viewing = 'public';
   function board(d, viewer, graphBlock, boardEl) {
     const v = d.manualView, out = [];
-    viewing = viewer;
     boardEl?.classList.add('pj-board--manual');
     realign();
     if (!v) return out;
@@ -187,8 +190,9 @@
       const b = graphBlock('manual-groups', '');
       b.group = 'manual-groups';
       const title = `整理成主题卡的认识${v.cards && finite(v.cards.count) ? `（${int(v.cards.count)} 张，分${['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'][v.groups.length] || v.groups.length}类）` : ''}`;
+      // 卡名下这句两版不一样（访客点进明细看到的少），两版都挂“对外换了说法”
       const sub = viewer === 'owner' ? '点“明细”看这一类每张的认识和依据' : '点“明细”看这一类有几张、哪天整理';
-      const note = head(b, title, sub, v.groupNotes);
+      const note = head(b, title, sub, v.groupNotes, U.visitorRewrittenTag('卡名下这句提示', '', viewer));
       U.html(b.viz, note + groupsHtml(v, viewer), false);
       out.push(b);
     }
