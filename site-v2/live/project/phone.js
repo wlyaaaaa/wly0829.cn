@@ -188,13 +188,13 @@
     const cut = mdTime(v.daily?.at || state.at);   // daily_exact.at 是日记四类数据自己的截止时刻
     // ‹ 更早 往前翻 14 天，翻到有记录的第一天变灰；翻过以后右边出“更晚 ›”翻回来
     const nav = days.length ? `<div class="ph-nav"><button type="button" class="ph-earlier more"${canEarlier() ? '' : ' disabled'}><span class="ph-chev-l">‹</span>${state.loading ? '正在读…' : '更早'}</button>${state.offset > 0 ? `<button type="button" class="ph-later more">更晚 <span class="more__chev">›</span></button>` : ''}</div>` : '';
-    const note = v.notes.length ? `<div class="ph-note" hidden>${v.notes.map(wrapShort).join('<br>')}</div>` : '';
-    const open = wide.querySelector('.ph-note:not([hidden])');
+    const open = wide.querySelector('.ph-explain')?.open;
+    const explain = v.notes.length ? `<details class="pj-notes ph-explain"${open ? ' open' : ''}><summary class="live-disclosure" aria-controls="ph-diary-note"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary></details>` : '<span></span>';
+    const note = v.notes.length ? `<div class="ph-note" id="ph-diary-note"${open ? '' : ' hidden'}>${v.notes.map(wrapShort).join('<br>')}</div>` : '';
     const empty = !days.length ? `<p class="ph-empty">${esc(state.failed ? '每天的记录暂时读不到' : state.loading ? '正在读每天的记录…' : '')}</p>` : '';
     wide.innerHTML = `<div class="ph-head">${icon('book', 'ph-ico ph-ico--title')}<b class="ph-title">日记本：每天收到了什么</b></div>
       <div class="ph-body">${kinds ? `<ul class="ph-kinds" style="--r:${kindKeys.length}">${kinds}</ul>` : ''}<div class="ph-days">${grid || empty}${nav}</div></div>
-      <div class="ph-foot">${v.notes.length ? `<button type="button" class="ph-explain" aria-expanded="false">说明 <span class="more__chev">›</span></button>` : '<span></span>'}<span class="ph-gap">${wrapShort(gapText)}</span><span class="ph-cut">${cut ? esc(`截止 ${cut}`) : ''}</span></div>${note}`;
-    if (open) { wide.querySelector('.ph-note').hidden = false; wide.querySelector('.ph-explain')?.setAttribute('aria-expanded', 'true'); }
+      <div class="ph-foot">${explain}<span class="ph-gap">${wrapShort(gapText)}</span><span class="ph-cut">${cut ? esc(`截止 ${cut}`) : ''}</span></div>${note}`;
     realign();
   }
   function diary(d, viewer, boardEl) {
@@ -206,11 +206,10 @@
       wide.addEventListener('click', e => {
         if (e.target.closest?.('.ph-earlier')) earlier();
         else if (e.target.closest?.('.ph-later')) later();
-        else if (e.target.closest?.('.ph-explain')) {
-          const btn = e.target.closest('.ph-explain'), note = wide.querySelector('.ph-note');
-          if (note) { note.hidden = !note.hidden; btn.setAttribute('aria-expanded', String(!note.hidden)); realign(); }
-        }
       });
+      wide.addEventListener('toggle', ({ target }) => {
+        if (target.matches('.ph-explain')) wide.querySelector('.ph-note').hidden = !target.open;
+      }, true);
     }
     if (wide.nextElementSibling !== boardEl || wide.parentNode !== boardEl.parentNode) boardEl.before(wide);
     shown = { v, viewer };

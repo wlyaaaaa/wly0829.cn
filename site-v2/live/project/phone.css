@@ -53,9 +53,6 @@
 .ph-earlier .ph-chev-l { margin-right: 4px; }
 .ph-earlier:disabled { background: none; box-shadow: none; color: #a9a7a0; cursor: default; }
 .ph-earlier:disabled .ph-chev-l { color: inherit; }
-.ph-explain { display: inline-flex; align-items: center; gap: 2px; padding: 0; border: 0; background: none; font: inherit; font-size: 13.5px; letter-spacing: .04em; color: var(--ink-soft); cursor: pointer; }
-.ph-explain .more__chev { color: var(--pj-accent, var(--ph-green)); transition: rotate .2s ease; }
-.ph-explain[aria-expanded="true"] .more__chev { rotate: 90deg; }
 .ph-note { margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; background: rgb(255 255 255 / .45); font-size: 12.5px; line-height: 20px; color: #68665f; }
 .ph-note[hidden] { display: none; }
 
