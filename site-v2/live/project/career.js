@@ -91,7 +91,8 @@
     const rows = items.slice(artPage * PAGE, artPage * PAGE + PAGE).map((it, i) => {
       const title = U.fieldText(it.title || it.recent_title, viewer), target = U.artifactAction(it, viewer, x => x);
       const tag = U.visitorHiddenMark(it, '这份成品', viewer, { keys: ['$'] });
-      return `<li><span>${esc(title)} ${tag}</span><time>${esc(date(it.at_precision === 'date' ? it.at?.slice(0, 10) : it.at, true))}</time>${target ? U.actions({ id: `${ID}-${artPage}-${i}`, title }, [target]) : ''}</li>`;
+      const hasTime = it.at_precision !== 'date' && it.kind !== '我上过的课';
+      return `<li><span>${esc(title)} ${tag}</span><time>${esc(date(it.at, hasTime))}</time>${target ? U.actions({ id: `${ID}-${artPage}-${i}`, title }, [target]) : ''}</li>`;
     });
     if (artifactHost) U.html(artifactHost, `<ul class="career-artifacts">${rows.join('')}</ul>${rows.length ? '' : art && !items.length ? '还没有产物' : MISSING}
       <div class="career-foot"><span>${total != null ? `共 ${esc(total)} 份` : ''}${pages ? ` · ${artPage + 1}/${pages} 页 ${pager('art', artPage, pages, loading)}` : ''}</span><span>${esc([failed && MISSING, cutoff(current?.artifacts?.at || art?.source_at || art?.at, '截止', art)].filter(Boolean).join(' · '))}</span></div>`, false);
