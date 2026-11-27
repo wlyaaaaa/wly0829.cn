@@ -180,7 +180,7 @@
     return d?.titles ? d.titles.map((t, i) => { const title = visibleTitle(t); return S.row({ key: String(t.key ?? t.id ?? `title:${i}`), visibility: t.visibility, private_value: t.title_field ?? t.title, name: sp(title ?? t.app), name_tag: title != null ? titleTag(t) : appTag(t), visitor_tag: title != null ? appTag(t) : titleTag(t), sub: title != null ? sp(t.app) : Number.isSafeInteger(t.window_title_count) && t.window_title_count > 0 ? `${countWords(t.window_title_count)}窗口标题` : '', value: t.seconds, text: t.seconds == null ? (U.offline?.() ? '' : U.collectionText('使用时长', t)) : dur(t.seconds), hue: catHue(appCat.get(t.app)) }, t, 'seconds'); }) : null;
   }
   // 本人版：后台在窗口标题这一条（排行 titles、最近前台 recent）的 visitor_labels 里标了窗口标题（title、'$'）或程序名（app）的，
-  // 在原位挂签：标题的签挂在标题那一行，程序名的签挂在程序名旁，两样都标了就各挂各的；没标的不挂。专注时间（focus）只画色条、不写标题，没有挂签的地方。程序排行（apps）用键 name。
+  // 在原位挂签：标题的签挂在标题那一行，程序名的签挂在程序名旁，两样都标了就各挂各的；没标的不挂。程序排行（apps）用键 name。
   const titleTag = t => U.visitorLabel(t, ['$', 'title'], '这条窗口标题', viewer);
   const appTag = t => U.visitorLabel(t, 'app', '这个程序名', viewer);
   function visibleTitle(row) {
@@ -217,7 +217,7 @@
   // 图例上不写一排“0 分钟”（像测过是零），写“没有这类记录”和来源说明；有记录的照常写时长，0 就是测过的 0。
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
   // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
-  const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
+  const OFF_NOTE = '◆ 是开机或重启的时刻，前面那段空白算关机，从最后一次采到算起（卡死后重启也算）';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -254,11 +254,15 @@
     if (!d) return d;
     let namesHidden = false;
     const named = (value, fallback) => { if (value && typeof value === 'object' && (value.hidden || (value.visibility === 'owner' || value.public === 'owner' || value.rewrite === 'pending') && value.value == null && value.text == null)) { namesHidden = true; return fallback; } return value; };
-    const currentFocus = d.focus_min_seconds === FOCUS_MIN_SECONDS;
+    const currentFocus = d.focus_rule?.min_seconds > 0 || d.focus_min_seconds === FOCUS_MIN_SECONDS;
     const program = (value, fallback) => U.programName(named(value, fallback));
-    const focus = currentFocus ? d.focus?.map(f => ({ ...f, app: program(f.display_label ?? f.app, '专注片段') })) : null;
+    const focus = currentFocus ? d.focus?.map(f => {
+      const entries = f.programs ?? [{ name: f.display_label ?? f.app, visitor_labels: { name: f.visitor_labels?.app } }];
+      const programs = entries.slice(0, 3).map(p => ({ ...p, name: program(p.name || '专注片段', '专注片段') }));
+      return { ...f, programs: programs.length ? programs : [{ name: program('专注片段') }] };
+    }) : null;
     const summary = d.summary && { ...d.summary };
-    if (summary && !currentFocus) summary.focus_count = summary.focus = null;
+    if (summary && !currentFocus) summary.focus_count = summary.focus = summary.focus_longest = null;
     if (summary && focus?.length && lowerRows(focus, 'seconds') && !S.partial(summary, 'focus')) {
       summary.q = 'partial';
       summary.partial = [...new Set([...(Array.isArray(summary.partial) ? summary.partial : []), 'focus'])];
@@ -310,8 +314,7 @@
           }
           note.textContent = [sourceReading(d?.day?.recorded_to, d?.blocks?.day),
             missed.total >= 60 && `缺测是电脑没关机、却没采到使用状态的时段（开机后还没采到的那一小会儿也算），不算在用也不算离开（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
-            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，它前面那段空白算关机（卡死后重启也算），从最后一次采到算起' :
-              d?.day && d.day.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
+            d?.day?.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
           note.hidden = !note.textContent;
           if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少') && !unnoted.has(n.closest('[data-state]')?.dataset.state)) n.append(' · 至少'); });
         } };
@@ -426,15 +429,16 @@
         return { set: () => heat.set(usage?.hours ? { days: usage.hours.days, minutes: usage.hours.minutes } : null) };
       } },
     { key: 'focus', name: '专注时间', pic: '/live/img/s1900-usage-headphones-v1.webp', palette: ['pink', 'violet'],
-      line: (d) => d?.summary?.focus_count > 0 ? `${read(d.summary, 'focus_count', String)} 段 · 共 ${read(d.summary, 'focus')}` : '',
+      line: () => '',
       build(el) {
-        el.innerHTML = `<p class="use-note" data-x="focus-min">同一应用连续在前台至少 ${FOCUS_MIN_SECONDS / 60} 分钟，算作一段。</p>
-          <p class="use-note" data-x="focus-dates" hidden></p><div data-x="track-wrap"><div class="focus-track" data-x="track"></div></div><div class="use-focus-key" data-x="focus-key"></div>
+        el.innerHTML = `<p class="use-focus-total" data-x="focus-total" hidden></p><p class="use-note" data-x="focus-share" hidden></p>
+          <p class="use-note" data-x="focus-min"></p><p class="use-note" data-x="focus-dates" hidden></p>
+          <div data-x="track-wrap"><div class="focus-track" data-x="track"></div><div class="use-focus-key" data-x="focus-key"></div>
+          <section class="use-focus-list" aria-labelledby="focus-list-heading" hidden><h3 class="use-two__k" id="focus-list-heading">每一段（从新到旧）</h3><ol></ol><button type="button" class="use-focus-more"></button></section></div>
           <section class="use-recent" aria-labelledby="recent-foreground-heading"><h3 class="use-two__k" id="recent-foreground-heading">最近的前台记录</h3><p class="use-note">每次切换到前台各记一条，按开始时间从近到远排列。</p><div data-x="recent"></div><p class="use-note" data-x="rcount" role="status" hidden></p><p class="use-note" data-x="rnote"></p></section>`;
         const recentHost = el.querySelector('[data-x="recent"]');
-        const trackHost = el.querySelector('[data-x="track"]');
-        const track = block('focus', el.querySelector('[data-x="track-wrap"]'), { set: (d) => renderTrack(trackHost, d) });
-        new ResizeObserver(() => track.set(usage)).observe(trackHost);
+        const trackWrap = el.querySelector('[data-x="track-wrap"]');
+        const track = block('focus', trackWrap, focusView(trackWrap));
         let snapshot = null, pending = null, notice = '';
         const cursorOf = (page) => page?.has_more === true && page.next_cursor || null;
         const recent = block('recent', recentHost, V.rank(recentHost, {
@@ -541,13 +545,8 @@
         }
         return { set: () => {
           const d = usage;
+          renderFocusSummary(el, d);
           track.set(d);
-          const appName = (name) => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim();
-          const categories = new Set((d?.focus || []).map((f) => (d.apps || []).find((a) => appName(a.name) === appName(f.app))?.category || 'other'));
-          U.html(el.querySelector('[data-x="focus-key"]'), categories.size > 1 ? [...categories].map((c) => `<span><i style="--c:${V.hues[catHue(c)] || catHue(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join('') : '');
-          const note = el.querySelector('[data-x="focus-dates"]');
-          note.textContent = d?.focus_min_seconds === FOCUS_MIN_SECONDS ? [rangeText(d.focus_window), foregroundLag(d, d.focus_window?.to)].filter(Boolean).join(' · ') : '';
-          note.hidden = !note.textContent;
           showRecent(d);
         } };
       } },
@@ -654,21 +653,170 @@
       quality: { this: now.map((x) => S.partial(x, 'active') ? 'partial' : null), last: prev.map((x) => S.partial(x, 'active') ? 'partial' : null) }, notes: { this: now.map((x) => S.partial(x, 'active') || x.active == null ? x.gap : null), last: prev.map((x) => S.partial(x, 'active') || x.active == null ? x.gap : null) },
     });
   }
-  function renderTrack(el, d) {
-    if (!d?.focus || !d.focus_window) { el.innerHTML = `<p class="vz-wait">${U.offline?.() ? missing() : U.collectionText()}</p>`; return; }
-    if (!d.focus.length) { el.innerHTML = `<p class="vz-wait">这段时间没有连续满 ${FOCUS_MIN_SECONDS / 60} 分钟的记录</p>`; return; }
-    const to = sec(d.focus_window.to), from = sec(d.focus_window.from), x = (t) => ((t - from) / (to - from)) * 100;
-    const appName = (name) => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim();
-    const appCat = new Map((d.apps || []).map((a) => [appName(a.name), a.category]));
-    const ticks = [], width = el.clientWidth;
-    const step = to - from > 7 * 86400 ? 86400 : to - from > 36 * 3600 ? 21600 : 10800;
-    let right = -14;
-    for (let t = Math.ceil((from + BJ) / step) * step - BJ; t < to; t += step) {
-      const px = x(t) * width / 100;
-      if (px - 18 < right + 14 || px + 18 > width - 44) continue;
-      ticks.push(`<span class="focus-track__tick" style="left:${x(t).toFixed(2)}%">${new Date((t + BJ) * 1000).getUTCHours() ? hm(t) : new Date((t + BJ) * 1000).toISOString().slice(5, 10)}</span>`); right = px + 18;
+  const focusMinutes = d => (d?.focus_rule?.min_seconds ?? FOCUS_MIN_SECONDS) / 60;
+  const focusDuration = (seconds, compact = false) => {
+    const minutes = Math.round(seconds / 60), rest = minutes % 60;
+    const text = minutes >= 6000 && rest ? `${Math.floor(minutes / 60)} 小时 ${rest} 分钟` : dur(seconds);
+    return compact ? text?.replaceAll(' ', '').replace('分钟', '分') : text;
+  };
+  const focusColor = category => category === 'ai' ? '#F7C858' : V.hues[catHue(category)] || catHue(category);
+  const focusAppKey = name => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
+  const focusChartNames = new Map([['Google Chrome', 'Chrome'], ['Claude 桌面端', 'Claude']]);
+  function renderFocusSummary(el, d) {
+    const { summary: s, focus_rule: rule, focus_window: window } = d || {};
+    const set = (key, markup) => {
+      const node = el.querySelector(`[data-x="focus-${key}"]`);
+      node.hidden = !markup;
+      U.html(node, markup, false);
+    };
+    set('total', s?.focus_count == null || s.focus == null ? '' :
+      `${esc(read(s, 'focus_count', String))} 段 · 共 <strong>${esc(read(s, 'focus', focusDuration))}</strong>`);
+    const longest = s?.focus_longest == null ? '' : `最长一段 ${read(s, 'focus_longest', focusDuration)}`;
+    const share = s?.active > 0 && s.focus != null ? `在用的 ${read(s, 'active')} 里，${Math.round(s.focus / s.active * 100)}% 是成段的` : '';
+    set('share', esc([share, longest].filter(Boolean).join(' · ')));
+    set('min', esc(!rule ? `同一应用连续在前台至少 ${FOCUS_MIN_SECONDS / 60} 分钟，算作一段。` :
+      `${rule.switching_breaks ? '同一个程序一直在前台' : '一直在操作电脑'}、中间离开不超过 ${rule.break_idle_seconds / 60} 分钟算没断，连续满 ${focusMinutes(d)} 分钟记一段；${rule.switching_breaks ? '切到别的程序就断。' : '在 Claude 和 Chrome 之间来回切不算断。'}`));
+    const dates = rangeText(window), range = shownRange === '30d' ? '近 30 天' : '近 72 小时';
+    set('dates', dates ? esc(`${[dates, foregroundLag(d, window.to)].filter(Boolean).join(' · ')}（${range}）`) : '');
+  }
+
+  function focusView(host) {
+    const chart = host.querySelector('.focus-track'), key = host.querySelector('.use-focus-key');
+    const list = host.querySelector('.use-focus-list'), items = list.querySelector('ol'), more = list.querySelector('button');
+    let rows = [], count, visible = 5, audience, range;
+    let pinned = null, tip = null;
+    function showList() {
+      list.hidden = !rows.length;
+      U.html(items, rows.slice(0, visible).map(row => `<li><i style="--c:${row.color}" aria-hidden="true"></i>
+        <span class="focus-list__time">${row.date} ${row.time}</span><span>${row.programHtml}</span><b>${esc(row.duration)}</b></li>`).join(''), false);
+      more.hidden = visible >= rows.length;
+      more.textContent = `再显示 5 段（共 ${count} 段）`;
     }
-    el.innerHTML = `<i class="focus-track__line"></i>${d.focus.map((f) => `<i class="focus-track__pill" style="left:${x(Math.max(from, sec(f.from))).toFixed(2)}%;width:${Math.max(x(Math.min(to, sec(f.to))) - x(Math.max(from, sec(f.from))), .6).toFixed(2)}%;--c:${V.hues[catHue(appCat.get(appName(f.app)))] || catHue(appCat.get(appName(f.app)))}" title="${esc(`${rangeText(f)} · ${sp(f.app)} · ${read(f, 'seconds')}`)}"></i>`).join('')}${ticks.join('')}<span class="focus-track__tick is-now" style="left:100%">${step === 86400 ? dayKey(to).slice(5) : hm(to)}</span>`;
+    more.addEventListener('click', () => { visible += 5; showList(); });
+    const pillOf = event => event.target.closest('.focus-track__open')?.parentElement;
+    function showTip(pill) {
+      if (!tip) return;
+      tip.hidden = !pill;
+      if (!pill) return;
+      const row = rows[pill.dataset.segment], rect = pill.getBoundingClientRect(), base = chart.getBoundingClientRect();
+      tip.textContent = row.detail;
+      tip.style.left = `${Math.min(rect.left - base.left, Math.max(0, base.width - tip.offsetWidth))}px`;
+      tip.style.top = `${rect.bottom - base.top + 5}px`;
+    }
+    function select(pill) {
+      pinned?.querySelector('button').setAttribute('aria-pressed', 'false');
+      pinned = pill;
+      pinned?.querySelector('button').setAttribute('aria-pressed', 'true');
+      showTip(pill);
+    }
+    chart.addEventListener('pointerover', event => { if (!pinned) showTip(pillOf(event)); });
+    chart.addEventListener('pointerout', () => { if (!pinned) showTip(null); });
+    chart.addEventListener('click', event => {
+      const pill = pillOf(event);
+      if (pill) select(pinned === pill ? null : pill);
+    });
+    document.addEventListener('click', event => { if (!pillOf(event)) select(null); });
+    chart.addEventListener('keydown', event => { if (event.key === 'Escape') select(null); });
+    function fitLabels() {
+      const month = chart.classList.contains('is-month');
+      const fits = Array.from(chart.querySelectorAll('.focus-track__pill'), pill => {
+        const labels = [...pill.querySelectorAll('.focus-track__label')];
+        const width = pill.getBoundingClientRect().width;
+        // 月图略过 4px 以下没有标签的跨日尾片，主色块仍可看整段提示。
+        const omit = month && labels.length === 0 && width < 4;
+        const label = labels.find(label => label.getBoundingClientRect().width <= width);
+        const badge = pill.querySelector('.focus-track__longest');
+        const edge = pill.nextElementSibling?.offsetLeft ?? pill.parentElement.clientWidth;
+        const beside = badge && width >= badge.offsetWidth && edge - pill.offsetLeft - width >= badge.offsetWidth + 4;
+        return { pill, label, badge, beside, omit };
+      });
+      for (const { pill, label, badge, beside, omit } of fits) {
+        pill.classList.toggle('is-omitted', omit);
+        pill.querySelector('.focus-track__label.is-fit')?.classList.remove('is-fit');
+        label?.classList.add('is-fit');
+        badge?.classList.toggle('is-beside', beside);
+      }
+      if (pinned?.classList.contains('is-omitted')) select(null);
+      else if (pinned) showTip(pinned);
+    }
+    new ResizeObserver(fitLabels).observe(chart);
+    document.fonts.ready.then(fitLabels);
+    return { set(d) {
+      if (viewer !== audience || shownRange !== range) {
+        visible = 5;
+        audience = viewer;
+        range = shownRange;
+        select(null);
+      }
+      const apps = new Map((d?.apps || []).map(a => [focusAppKey(a.name), a]));
+      const label = item => U.visitorLabel(item, ['$', 'name'], '这个程序名', viewer);
+      rows = (d?.focus || []).map((f, id) => {
+        const category = apps.get(focusAppKey(f.programs[0].name))?.category || 'other';
+        const names = f.programs.map(p => sp(p.name));
+        const tags = f.programs.map(p => label(p) || (viewer === 'owner' ? label(apps.get(focusAppKey(p.name))) : ''));
+        const programHtml = (name, i) => `<span class="focus-program">${esc(name)}${tags[i]}</span>`;
+        const trackPrograms = names.slice(0, 2).map(name => focusChartNames.get(name) ?? name).map(programHtml);
+        const a = sec(f.from), b = sec(f.to), time = `${hm(a)}–${hm(b)}`, duration = read(f, 'seconds', n => focusDuration(n, true));
+        return { id, a, b, category, color: focusColor(category), date: md(a), time, duration,
+          programHtml: names.map(programHtml).join('、'), trackPrograms,
+          detail: `${names.join('、')} · ${time} · ${duration}` };
+      });
+      count = d?.summary?.focus_count ?? rows.length;
+      showList();
+      const categories = new Set(rows.map(row => row.category));
+      U.html(key, [...categories].map(c => `<span><i style="--c:${focusColor(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join(''), false);
+      const longest = d?.focus?.findIndex(row => row.seconds === d?.summary?.focus_longest) ?? -1;
+      chart.classList.toggle('is-month', range === '30d');
+      const markup = renderTrack(d, rows, longest);
+      if (chart._html !== markup) {
+        const picked = pinned?.dataset.part;
+        select(null);
+        U.html(chart, markup, false);
+        tip = chart.querySelector('.focus-track__tip');
+        if (picked) select(chart.querySelector(`[data-part="${picked}"]`));
+        fitLabels();
+      }
+    } };
+  }
+
+  function renderTrack(d, rows, longest) {
+    const from = sec(d?.focus_window?.from), to = sec(d?.focus_window?.to), day = 86400;
+    if (!d?.focus || !(to > from)) return `<p class="vz-wait">${esc(missing())}</p>`;
+    const position = (start, end, midnight) => `left:${(start - midnight) / day * 100}%;width:${(end - start) / day * 100}%`;
+    const days = new Map();
+    for (let midnight = dayStart(from); midnight < to; midnight += day) {
+      days.set(midnight, { line: position(Math.max(from, midnight), Math.min(to, midnight + day), midnight), pills: [] });
+    }
+    // 按北京时间午夜切开画图，列表仍用整段；同样长时把字放在第一截。
+    for (const row of [...rows].reverse()) {
+      const parts = [];
+      const start = Math.max(from, row.a), end = Math.min(to, row.b);
+      for (let a = start; a < end;) {
+        const midnight = dayStart(a), b = Math.min(end, midnight + day);
+        parts.push({ midnight, a, b });
+        a = b;
+      }
+      const main = parts.reduce((best, p) => !best || p.b - p.a > best.b - best.a ? p : best, null);
+      for (const p of parts) {
+        const duration = esc(row.duration), allPrograms = row.trackPrograms.join('、');
+        const programs = [...new Set([allPrograms, row.trackPrograms[0]])];
+        const labels = p === main ? [
+          ['full', `${allPrograms} · ${row.time} · ${duration}`],
+          ...programs.map(names => ['program-duration', `${names} · ${duration}`]),
+          ...programs.map(names => ['program', names]),
+          ['duration', duration],
+        ] : [];
+        days.get(p.midnight).pills.push(`<span class="focus-track__pill"${row.category === 'ai' ? ' data-ai' : ''} data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${row.color}">
+          <button type="button" class="focus-track__open" aria-pressed="false" aria-label="${esc(row.detail)}"></button>
+          ${labels.map(([form, label]) => `<span class="focus-track__label" data-label="${form}">${label}</span>`).join('')}
+          ${p === main && row.id === longest ? '<span class="focus-track__longest">最长</span>' : ''}</span>`);
+      }
+    }
+    return `${[...days].map(([midnight, { line, pills }]) => `<div class="focus-track__row"><time>${md(midnight)}</time>
+      <div class="focus-track__plot"><i class="focus-track__line" style="${line}"></i>${pills.join('')}</div></div>`).join('')}
+      <div class="focus-track__axis">${[0, 6, 12, 18, 24].map(h => `<span class="focus-track__tick" style="left:${h / 24 * 100}%">${h}:00</span>`).join('')}</div>
+      <div class="focus-track__tip" hidden></div>
+      ${rows.length ? '' : `<p class="use-note">这段时间没有连续满 ${focusMinutes(d)} 分钟的记录</p>`}`;
   }
 
   const board = V.board($('board'), { key: 'usage', quiet: true, sync });
@@ -781,6 +929,7 @@
     for (const job of state.jobs) {
       if (Object.hasOwn(job, 'value')) {
         data[job.block] = job.value;
+        if (job.block === 'focus' && job.focusRule) data.focus_rule ??= job.focusRule;
         if (waitingUsageBlock(data.blocks[job.block])) delete data.blocks[job.block];
       } else data.blocks[job.block] = { state: job.failed ? 'unavailable' : 'computing' };
     }
@@ -842,7 +991,10 @@
       const { response, packet } = await fetchUsagePart(job.query, state.controller.signal);
       const data = packet?.data;
       if (response.ok && response.headers.get('X-Live-Source') !== 'oss' && packet?.viewer?.kind === state.viewer
-          && data?.block === job.block && Object.hasOwn(data, 'value')) job.value = data.value;
+          && data?.block === job.block && Object.hasOwn(data, 'value')) {
+        job.value = data.value;
+        if (job.block === 'focus') job.focusRule = data.focus_rule;
+      }
       else {
         job.failed = true;
         invalidSnapshot = response.status === 400 && packet?.error === 'live_invalid_snapshot';
