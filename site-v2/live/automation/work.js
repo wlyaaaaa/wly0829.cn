@@ -199,7 +199,8 @@
   }
   function typePage(data) {
     const c = data.counts || {}, rows = list(data.works);
-    const [description, example, off, boundary] = descriptions[data.id] || [];
+    // 四句是本人审定的原句，本人版照写；访客版里指本人的“你”都称“本人”（M1141：“你自己的事项”“你和访客”整页换称呼接不住，“要你本人”会成“要本人本人”）
+    const [description, example, off, boundary] = (descriptions[data.id] || []).map(s => audience === 'owner' || !s ? s : s.replace(/你本人/g, '本人').replace(/你(?!们)/g, '本人'));
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
