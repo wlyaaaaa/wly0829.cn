@@ -148,7 +148,14 @@
     if(e.target.open)batchFolds.add(key);else batchFolds.delete(key);
   }
   function attentionChapter(el){
-    el.innerHTML='<div data-attention-groups></div><p class="delivery-note" data-attention-private hidden></p>';
+    const firstCount=4;
+    el.innerHTML='<div data-attention-groups></div>'
+      +'<details data-attention-more hidden><summary class="more live-disclosure delivery-more">'
+      +'<span class="delivery-more__closed"></span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span>'
+      +'</summary><div class="stut"></div></details>'
+      +'<p class="delivery-note" data-attention-private hidden></p>';
+    const more=el.querySelector('[data-attention-more]');
+    const moreLabel=more.querySelector('.delivery-more__closed'),rest=more.querySelector('.stut');
     // 明细开着的那几张，数据刷新重画后照样开着；点卡片空白处也能开合明细
     el.addEventListener('toggle',e=>{const key=e.target.dataset?.detailKey;if(!key)return;if(e.target.open)detailOpen.add(key);else detailOpen.delete(key);},true);
     el.addEventListener('click',e=>{
@@ -161,8 +168,13 @@
           +`<span class="stut__s">${shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r)} · 走${shown(channel(r),'渠道')}</b>`
           +`<span class="notify-why">${esc(stuck(r))}</span><span class="notify-other">${esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
           +`${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`);
-      U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.join('')}</div>`
+      U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.slice(0,firstCount).join('')}</div>`
         :`<p class="delivery-note">${Array.isArray(page?.attention_rows)?page.attention_window?.complete===false?`有记录的部分里，给${you()}的提醒都到了`:`近 24 小时给${you()}的提醒都到了`:page?.attention_rows===null?'没到的清单这次没读到':'已读到的记录里，提醒都到了'}</p>`);
+      const remaining=cards.slice(firstCount);
+      more.hidden=!remaining.length;
+      if(more.hidden)more.open=false;
+      moreLabel.textContent=remaining.length?`展开其余 ${remaining.length} 条`:'';
+      U.html(rest,remaining.join(''));
       const note=el.querySelector('[data-attention-private]'),count=issues.filter(r=>!r.private_count&&!hiddenBatch(r)).length;
       // 新私事规则（本人 11-24 02:56）：程序写的提醒原样给，不再写“各是哪件事，仅本人可见”。
       note.hidden=true;note.textContent='';void count;
