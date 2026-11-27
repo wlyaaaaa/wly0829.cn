@@ -220,13 +220,20 @@
     return `<div class="ta-tl"><p class="ta-tl__head"><b>从哪天起能翻回</b><small>（时间轴：${z0.y} 年 ${z0.m} 月 → 今天）</small></p><div class="ta-axis">${ticks.join('')}</div><ol class="ta-lanes">${lanes}</ol>${z ? groupCut(rows.map(r => ({ name: r.name, at: r.at })), '项') : ''}</div>`;
   }
 
-  // —— 近 24 小时整机测量：四个读数 ——
+  // —— 近 24 小时整机测量：四个读数；“展开”里是原“更多数据”里别处没放的几项（照图），接口没给的那项不画 ——
+  let foldOpen = false;
+  const MORE = [
+    ['clipboard_latest', '剪贴板最近一次复制', m => typeof m.value === 'string' && zoned(m.value) ? mdTime(m.value) : ''],
+    ['clipboard_temporary', '剪贴板目录里的旧临时文件', m => { const t = v(m); return finite(t.count) ? `${int(t.count)} 个${finite(t.bytes) ? `（${size(t.bytes)}）` : ''}` : typeof t.text === 'string' ? t.text : ''; }],
+    ['website_dashboards', '网站看板定义', m => finite(m.value) ? `${int(m.value)} 份（不算进看板总数）` : ''],
+  ];
   function samplesCard(p) {
     const tiles = [['samples24', '留下'], ['covered24', '有记录'], ['empty24', '没记录'], ['max_gap', '最长空段']].map(([id, k]) => ({ k, m: p.m(id) })).filter(t => t.m && (finite(t.m.value) || hidden(t.m)));
-    if (!tiles.length) return '';
-    const body = `<ul class="ta-tiles">${tiles.map(t => `<li><span>${esc(t.k)}</span><b>${hidden(t.m) ? DOTS + ownerTag(t.m, t.k) : esc(t.m.id === 'max_gap' ? one(t.m.value) : int(t.m.value))}</b><small>${esc(t.m.unit || '')}</small></li>`).join('')}</ul>`;
-    const first = tiles[0].m;
-    return card('samples', 'pulse', '近 24 小时整机测量', body, { note: notes(tiles.map(t => metricNotes(t.m, t.m.label || t.k))), at: first.at });
+    const more = MORE.map(([id, k, text]) => { const m = p.m(id); return m && { k, m, text: text(m) }; }).filter(x => x && x.text);
+    if (!tiles.length && !more.length) return '';
+    const fold = more.length ? `${foldOpen ? `<ul class="ta-more">${more.map(x => `<li><span>${esc(x.k)}</span><b>${esc(x.text)}</b></li>`).join('')}</ul>` : ''}<button type="button" class="more ta-go ta-fold" data-ta-fold aria-expanded="${foldOpen}">${foldOpen ? '收起' : `展开（还有 ${more.length} 项）`} <span class="more__chev">›</span></button>` : '';
+    const body = (tiles.length ? `<ul class="ta-tiles">${tiles.map(t => `<li><span>${esc(t.k)}</span><b>${hidden(t.m) ? DOTS + ownerTag(t.m, t.k) : esc(t.m.id === 'max_gap' ? one(t.m.value) : int(t.m.value))}</b><small>${esc(t.m.unit || '')}</small></li>`).join('')}</ul>` : '') + fold;
+    return card('samples', 'pulse', '近 24 小时整机测量', body, { note: notes(...tiles.map(t => metricNotes(t.m, t.m.label || t.k)), ...more.map(x => metricNotes(x.m, x.k))), at: (tiles[0] || more[0]).m.at });
   }
 
   // —— 占多大地方：记录库多大，大头在哪 ——
@@ -243,7 +250,7 @@
   let pageAt = 0;
   const title = it => String(it.title || it.text || '').replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '').trim();
   function dashboardsCard(p, list) {
-    const m = p.m('dashboards'), web = p.m('website_dashboards');
+    const m = p.m('dashboards');
     if (!m && !list.length) return '';
     const pages = Math.max(1, Math.ceil(list.length / PAGE));
     pageAt = Math.min(pageAt, pages - 1);
@@ -257,14 +264,13 @@
     const mv = v(m), count = finite(mv.count) ? mv.count : list.length || null, panels = finite(mv.panels) ? mv.panels : null;
     const total = count != null ? `全部 ${int(count)} 份${panels != null ? ` · ${int(panels)} 张图` : ''}` : m?.text || '';
     const pager = pages > 1 ? `<span class="ta-pager"><button type="button" class="ta-page" data-ta-page="-1" aria-label="上一页"${pageAt ? '' : ' disabled'}>‹</button><span>${pageAt + 1} / ${pages}</span><button type="button" class="ta-page" data-ta-page="1" aria-label="下一页"${pageAt < pages - 1 ? '' : ' disabled'}>›</button></span>` : '';
-    const webLine = finite(web?.value) ? `<p class="ta-small">另有网站看板定义 ${int(web.value)} 份，不算进总数</p>` : '';
-    const body = `${rows ? `<ul class="ta-dashes">${rows}</ul>` : ''}<div class="ta-dash-foot">${total ? `<a class="more ta-go" href="${esc(records(m?.section || 'dashboards'))}">${esc(total)} <span class="more__chev">›</span></a>` : '<span></span>'}${pager}</div>${webLine}`;
-    return card('dashboards', 'board', '留下的看板', body, { id: 'artifacts', note: notes(p.sec('results')?.note, metricNotes(m, '看板和图表'), metricNotes(web, '网站看板定义')), at: m?.at });
+    const body = `${rows ? `<ul class="ta-dashes">${rows}</ul>` : ''}<div class="ta-dash-foot">${total ? `<a class="more ta-go" href="${esc(records(m?.section || 'dashboards'))}">${esc(total)} <span class="more__chev">›</span></a>` : '<span></span>'}${pager}</div>`;
+    return card('dashboards', 'board', '留下的看板', body, { id: 'artifacts', note: notes(p.sec('results')?.note, metricNotes(m, '看板和图表')), at: m?.at });
   }
 
   // —— 剪贴板：能翻回多少条，事件和库多大 ——
   function clipboardCard(p) {
-    const c = p.m('clipboard'), ev = p.m('clipboard_events'), by = p.m('clipboard_bytes'), lt = p.m('clipboard_latest'), tmp = p.m('clipboard_temporary'), vw = p.m('viewer');
+    const c = p.m('clipboard'), ev = p.m('clipboard_events'), by = p.m('clipboard_bytes'), vw = p.m('viewer');
     if (!c && !ev) return '';
     const cv = v(c), count = n(c);
     const head = count != null ? big(esc(int(count)), '条', '能翻回') : '';
@@ -275,11 +281,9 @@
     const evv = v(ev), evParts = [finite(evv.skipped) && `跳过 ${int(evv.skipped)}`, finite(evv.gaps) && `缺口 ${int(evv.gaps)}`, finite(evv.boundaries) && `${MARKS} ${int(evv.boundaries)}`].filter(Boolean);
     const evText = n(ev) != null ? `全部事件 ${int(n(ev))} 条${evParts.length ? `（含${evParts.join('、')}）` : ''}` : evv.text ? `全部事件 ${String(evv.text).replace('边界', MARKS)}` : '';
     const boxParts = [evText, finite(by?.value) && `独立库 ${size(by.value)}`].filter(Boolean);
-    const tv = v(tmp), tmpText = finite(tv.count) ? `目录里旧临时文件 ${int(tv.count)} 个${finite(tv.bytes) ? `（${size(tv.bytes)}）` : ''}` : tv.text ? `目录里旧临时文件 ${tv.text}` : '';
-    const small = [typeof lt?.value === 'string' && zoned(lt.value) && `最近一次复制 ${mdTime(lt.value)}`, tmpText].filter(Boolean);
     const vv = v(vw), viewerLine = vw ? (vv.web_open === true && typeof vv.href === 'string' ? `<p class="ta-viewer">本机剪贴板查看器：<button class="ta-btn" type="button" data-ta-owner data-href="${esc(vv.href)}">在本机打开</button></p>` : vv.text || vw.text ? `<p class="ta-viewer">本机剪贴板查看器：${esc(vv.text || vw.text)}</p>` : '') : '';
-    const body = head + (line ? `<p class="ta-line">${esc(line)}</p>` : '') + (boxParts.length ? `<p class="ta-box">${esc(boxParts.join(' · '))}</p>` : '') + (small.length ? `<p class="ta-small">${small.map(esc).join(' · ')}</p>` : '') + viewerLine;
-    return card('clipboard', 'clip', '剪贴板', body, { note: notes(metricNotes(c, '能翻回'), metricNotes(ev, '全部事件'), (finite(evv.boundaries) || /边界/.test(evv.text || '')) && `“${MARKS}”后台原名叫“边界”：开机、锁屏、解锁、睡眠、恢复、暂停或会话结束时记下的分界，没有内容。`, metricNotes(by, '独立库'), metricNotes(lt, '最近一次复制'), metricNotes(tmp, '旧临时文件'), metricNotes(vw, '查看器')), at: c?.at || ev?.at });
+    const body = head + (line ? `<p class="ta-line">${esc(line)}</p>` : '') + (boxParts.length ? `<p class="ta-box">${esc(boxParts.join(' · '))}</p>` : '') + viewerLine;
+    return card('clipboard', 'clip', '剪贴板', body, { note: notes(metricNotes(c, '能翻回'), metricNotes(ev, '全部事件'), (finite(evv.boundaries) || /边界/.test(evv.text || '')) && `“${MARKS}”后台原名叫“边界”：开机、锁屏、解锁、睡眠、恢复、暂停或会话结束时记下的分界，没有内容。`, metricNotes(by, '独立库'), metricNotes(vw, '查看器')), at: c?.at || ev?.at });
   }
 
   // —— 去哪看细节（和“最近改动”同一排，page.js 摆） ——
@@ -301,6 +305,7 @@
       window.TrustModal?.show();
       return;
     }
+    if (e.target.closest?.('[data-ta-fold]')) { foldOpen = !foldOpen; draw(); return; }
     const step = e.target.closest?.('[data-ta-page]');
     if (step) { pageAt = Math.max(0, pageAt + Number(step.dataset.taPage)); draw(); }
   });
@@ -330,7 +335,7 @@
   function draw() {
     if (!last) return;
     const { raw, board } = last, p = pick(raw), clip = p.m('clipboard');
-    const sig = JSON.stringify([raw.sections, extra, viewing, pageAt]);
+    const sig = JSON.stringify([raw.sections, extra, viewing, pageAt, foldOpen]);
     if (!wide) { wide = document.createElement('div'); wide.className = 'ta-wide'; }
     if (board && (wide.nextElementSibling !== board || wide.parentNode !== board.parentNode)) board.before(wide);
     if (sig === drawn) return;

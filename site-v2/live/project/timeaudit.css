@@ -98,6 +98,13 @@
 .ta-tiles li > span { flex-basis: 100%; font-size: 12.5px; line-height: 18px; color: #6f6e68; }
 .ta-tiles li > b { font-size: 22px; line-height: 30px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
 .ta-tiles li > small { font-size: 13px; color: #6f6e68; }
+/* “展开”里的几项：一行一项，名字在左、读数在右 */
+.ta-more { margin: 10px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--hair); }
+.ta-more li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); }
+.ta-more li > span { font-size: 13px; line-height: 20px; color: #6f6e68; }
+.ta-more li > b { font-size: 13.5px; line-height: 20px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.ta-fold { margin-top: 10px; border: 0; background: none; font: inherit; cursor: pointer; }
+.ta-fold[aria-expanded="true"] .more__chev { rotate: -90deg; }
 
 /* ============ 占多大地方：一条堆叠条 ============ */
 .ta-disk { display: flex; height: 18px; margin: 16px 0 0; overflow: hidden; border-radius: 6px; background: rgb(20 20 19 / .06); }
@@ -131,8 +138,7 @@
 .ta-viewer { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 13px; line-height: 20px; color: #6f6e68; }
 
 /* ============ 最后一排：最近改动（page.js 画）＋去哪看细节 ============ */
-.page--project #pj-board.pj-board.pj-board--timeaudit:not(.is-single) { grid-template-columns: minmax(0, 1.33fr) minmax(0, 1fr); align-items: stretch; }
-.page--project #pj-board.pj-board--timeaudit > .l2-col { align-content: stretch; }
+.page--project #pj-board.pj-board.pj-board--timeaudit:not(.is-single) { grid-template-columns: minmax(0, 1.33fr) minmax(0, 1fr); }
 .pj-board--timeaudit .pj-card[data-card="ta-where"] > .pj-sec > .pj-part { flex-direction: row; align-items: center; gap: 10px; }
 .pj-board--timeaudit .pj-card[data-card="ta-where"] > .pj-sec > .pj-part > svg { width: 22px; height: 22px; color: var(--ta-green-ink); }
 .ta-wheres { margin: 0; padding: 0; list-style: none; }
