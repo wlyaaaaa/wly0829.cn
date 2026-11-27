@@ -68,7 +68,7 @@
   if ('ResizeObserver' in window) new ResizeObserver(() => alignFrozen()).observe($('active'));
   let disconnected;
   const repaints = new Map(), remember = (key, draw) => (d, meta) => { repaints.set(key, () => draw(d, meta)); draw(d, meta); };
-  let viewer = 'public', home = null, changes = null, changeRows = null, changeViewer = 'public', next = null;
+  let viewer = 'public', homeViewer = 'public', home = null, changes = null, changeRows = null, changeViewer = 'public', next = null;
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '项目' });
   const projectGhost = `<div class="pj-figs pj-grid-ghost">${Array.from({ length: 4 }, () => '<div class="pj-fig"><span class="pj-fig__k fog__text">正在读项目</span><span class="pj-fig__v fog__text">正在读这一项</span></div>').join('')}</div>`;
   const reads = Object.fromEntries(['active', 'frozen', 'changes'].map(key => [key, U.reading($(key), { ghost: key === 'changes' ? U.ghost.rows(4) : projectGhost, slow: key !== 'active' })]));
@@ -111,7 +111,7 @@
   function setRosterVisibility() {
     $(frozenOnly ? 'all-link' : 'frozen-link').removeAttribute('aria-current');
     $(frozenOnly ? 'frozen-link' : 'all-link').setAttribute('aria-current', 'page');
-    for (const id of ['board', 'activity', 'active', 'changes', 'pj-summary']) $(id).hidden = frozenOnly;
+    for (const id of ['board', 'activity', 'active', 'changes']) $(id).hidden = frozenOnly;
     $('active').parentElement.hidden = frozenOnly;
     $('board').classList.toggle('is-single', frozenOnly);
   }
@@ -121,9 +121,38 @@
     const button = $(`${key}-more`); if (count != null) button.dataset.count = count;
     U.html(button, `${button.getAttribute('aria-expanded') === 'true' ? '收起' : key === 'frozen' ? `冻结 ${button.dataset.count} 个` : key === 'changes' ? `展开（还有 ${button.dataset.count} 个项目组）` : `还有 ${button.dataset.count} 个`} <span class="more__chev">›</span>`);
   }
+  const sizeFields = [['docs_chars', '文档', '字'], ['code_chars', '代码', '字'], ['code_lines', '代码', '行']];
+  function sizeLine(label, size, active = false) {
+    const count = active ? size?.active : size?.total;
+    const fields = sizeFields.map(([key, name, unit]) => {
+      if (Number.isFinite(size?.[key])) return `${name} ${size[key].toLocaleString('zh-CN')} ${unit}`;
+      const observed = size?.[`observed_${key}`], covered = size?.coverage?.[key];
+      if (!Number.isFinite(observed)) return `${name}${unit === '字' ? '字数' : '行数'}暂时读不到`;
+      const coverage = Number.isInteger(covered) && Number.isInteger(count) ? `（已读 ${covered}/${count} 个）` : '';
+      return `${name}至少 ${observed.toLocaleString('zh-CN')} ${unit}${coverage}`;
+    });
+    const unavailable = fields.every(text => text.endsWith('暂时读不到'));
+    const at = active && stamp(size?.at || size?.collected_at || size?.date);
+    const cutoff = at && ` · ${unavailable || U.isStale(size) || U.offline?.() ? '上次截止' : '截止'} ${at}`;
+    return `<div class="pj-summary__size">${esc(label)}：${esc(unavailable ? '文档、代码暂时读不到' : fields.join(' · '))}${esc(cutoff || '')}</div>`;
+  }
+  function renderSummary(summary, activeSize, frozenSize) {
+    const changed = summary?.changed_7d;
+    const partial = summary?.q === 'partial' && summary.partial?.includes('changed_7d');
+    const hidden = viewer === 'public' && summary?.changed_7d_visibility === 'owner';
+    const activity = hidden ? U.visibilityNote({ visibility: 'owner', hidden_what: summary.hidden_what }, viewer, '近 7 天项目统计')
+      : Number.isFinite(changed) ? `<b>${partial ? '至少 ' : ''}${esc(changed)}</b><small>个项目动过</small>`
+      : esc(U.collectionText('近 7 天', summary));
+    const note = !hidden && Number.isFinite(changed)
+      ? '<small>按日历算，含今天共 7 天；这几天有提交的项目各算 1 个，合并、机器人和自动记录的不算。跟项目详情里的“影响改动”不是一种算法，两个数别拿来比。</small>' : '';
+    const activityRow = hidden || Number.isFinite(changed) ? `<span><small>近 7 天</small>${activity}</span>` : `<small>${activity}</small>`;
+    U.html($('pj-summary'), (frozenOnly ? '' : activityRow + note + sizeLine('在用', activeSize, true))
+      + sizeLine('冻结项目（单独计算）', frozenSize));
+  }
   function renderHead() {
     const roster = key => { const state = states.get(key); return state?.viewer?.kind === viewer ? state.data : null; };
     const activeRoster = roster('active'), frozenRoster = roster('frozen');
+    const matchingHome = homeViewer === viewer ? home : null;
     const source = frozenOnly ? frozenRoster : home || activeRoster || frozenRoster;
     L.tone(hero, source);
     const active = home?.active ?? activeRoster?.total, frozen = home?.frozen ?? frozenRoster?.total;
@@ -131,8 +160,10 @@
       ?? (Number.isFinite(active) && Number.isFinite(frozen) ? active + frozen : null);
     const privateSummary = home?.text && typeof home.text === 'object';
     const summary = privateSummary ? '' : sp(home?.text).split(' · ').filter(s => !/^数据截止\s/.test(s)).join(' · ');
-    // 约法“全部项目”不含冻结：项目数只算在用的（日用、偶用），冻结的另写一句；文档、代码的字数和行数在下面那排，也只算在用的（本人 11-24 02:45 定的那一批）
-    const size = activeRoster?.code_size, inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
+    const size = activeRoster?.code_size || matchingHome?.code_size;
+    const inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
+    renderSummary(activeRoster?.summary || matchingHome?.summary, size,
+      frozenRoster?.frozen_code_size || activeRoster?.frozen_code_size || matchingHome?.frozen_code_size);
     const counts = [Number.isFinite(inUse) && `共 ${inUse} 个在用项目`, Number.isFinite(cold) && cold > 0 && `另有 ${cold} 个冻结，不算在内`].filter(Boolean).join(' · ');
     const text = frozenOnly ? Number.isFinite(frozenRoster?.total) ? `共 ${frozenRoster.total} 个冻结项目` : '冻结的项目'
       : Number.isFinite(inUse) ? counts : [Number.isFinite(total) && `共 ${total} 个项目`, summary].filter(Boolean).map(sp).join(' · ');
@@ -409,11 +440,7 @@
       extraLanded = true;
       requestAnimationFrame(() => target.scrollIntoView());
     }
-    // 文档字数、代码行数和代码字数用 code_size（数据约定第 10 节：同一份只算在用项目的合计）；它还没出数的那几项照旧用 summary
-    const size = d?.code_size && Object.fromEntries(['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars', 'covered', 'active'].filter(k => Number.isFinite(d.code_size[k])).map(k => [k, d.code_size[k]]));
-    const sizeDate = ['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars'].some(k => Number.isFinite(size?.[k])) ? stamp(d.code_size.date) : '';
-    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer, sizeDate); renderActivity(d?.activity, d?.items);
-    if (!U.offline?.() && !d?.summary) U.html($('pj-summary'), '<span class="pj-summary-none">近 7 天、文档、代码暂时读不到</span>');
+    renderActivity(d?.activity, d?.items);
     $('activity').querySelector('.part').hidden = !U.offline?.() && !d?.activity;
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');
 
@@ -627,7 +654,7 @@
   window.LiveHeader.watch(null, {
     phase: s => phase('home', s),
     data: remember('home', (d, meta) => {
-      viewer = meta.viewer?.kind || 'public'; home = d?.projects; if (p.has('fixture')) renderOverview(home); renderHead();
+      viewer = homeViewer = meta.viewer?.kind || 'public'; home = d?.projects; if (p.has('fixture')) renderOverview(home); renderHead();
       if (changeRows?.length) renderChanges();  // 变化先到时名字还没有，项目名到了重画
       $('published').textContent = d?.published ? `网站上次发布 ${stamp(d.published)}` : '';
       if (d) homeRead.done();
