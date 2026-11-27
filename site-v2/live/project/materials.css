@@ -38,7 +38,7 @@
 .mat-levels li:last-child .mat-big { color: inherit; }
 .mat-levels strong { border-left: 1px solid rgb(0 0 0 / .12); padding-left: 16px; }
 .mat-levels li:last-child strong { border-left-color: rgb(255 255 255 / .45); }
-.mat-levels li > p { font-size: 13.5px; line-height: 1.55; }
+.mat-levels li > p:last-child { font-size: 13.5px; line-height: 1.55; }
 .mat-levels li[id] { scroll-margin-top: 90px; }
 .mat-dots { display: grid; grid-template-columns: repeat(auto-fill, 17px); max-width: 300px; gap: 7px 6px; margin: 15px 0 9px; }
 .mat-dots i, .mat-legend i { display: inline-block; border-radius: 50%; background: var(--pj-accent); }
@@ -86,9 +86,21 @@
   .pj-board--materials .pj-card[data-card="mat-where"] { order: 1; }
   .mat-levels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 30px; }
   .mat-levels li { width: 100%; grid-template-columns: minmax(94px, auto) minmax(0, 1fr); gap: 4px 12px; }
-  .mat-levels li > p { grid-column: 1 / -1; }
+  .mat-levels li > p:last-child { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) {
+  .page--project:has(.pj-board--materials) { --col: calc(100% - 28px); --pad: 126px; --pj-hero-win: 58%; --pj-card-pad: 16px; }
+  .page--project:has(.pj-board--materials) #pj-hero .card__glass { padding: 18px 16px; }
+  .page--project:has(.pj-board--materials) #pj-hero[data-pic] .card__body { padding-inline: 0; }
+  .page--project:has(.pj-board--materials) #pj-hero .card__pic { opacity: .45; }
+  .page--project:has(.pj-board--materials) #topbar {
+    zoom: 1; height: auto; padding-block: 6px; grid-template-columns: minmax(0, 1fr) 24px; gap: 4px;
+  }
+  .page--project:has(.pj-board--materials) #topbar .topbar__group--right {
+    grid-column: 1 / -1; grid-row: 2; justify-self: start; flex-wrap: wrap;
+  }
+  .page--project:has(.pj-board--materials) #topbar .pill { height: 26px; font-size: 12px; }
+  .mat-card .pj-notes > summary { white-space: nowrap; }
   .mat-levels { grid-template-columns: minmax(0, 1fr); gap: 27px; padding-inline: 8px; }
   .mat-levels li { padding-inline: 12px; }
   .mat-levels li::after { inset-inline: -8px; }
