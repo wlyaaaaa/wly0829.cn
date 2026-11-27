@@ -70,10 +70,9 @@
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
     const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
-    let note = detail;
-    for (const prefix of [`${t.text} · `, `${title} · `]) {
-      if (note.startsWith(prefix)) note = note.slice(prefix.length);
-    }
+    const labelPrefix = `${t.text} · `, titlePrefix = `${title} · `;
+    const originalNote = detail.startsWith(labelPrefix) ? detail.slice(labelPrefix.length) : detail;
+    let note = originalNote.startsWith(titlePrefix) ? originalNote.slice(titlePrefix.length) : originalNote;
     // 只去掉末尾单独一段的重复结局，保留中间的任务说明。
     const ending = /(?:^|(?<=[。！？；])\s*|\s+·\s+)([^。！？；·]+[。！？；]?)$/u.exec(note);
     if (ending && resultWords(ending[1]) && resultWords(ending[1]) === resultWords(title)) {
@@ -90,8 +89,15 @@
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
-    const segs = [[repeated ? '' : note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
-    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
+    const who = r.who?.text ? esc(r.who.text) : '';
+    const segs = [[repeated ? '' : note, false], [nth, true], [who, true], [ran, true]].filter(([s]) => s);
+    const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`);
+    // 说明删短后，执行方式和用时一起换行；整组比栏还宽时，内部仍可折开。
+    if (note && !repeated && note !== originalNote && who && ran) {
+      const footer = parts.splice(-2).join('&#8203;');
+      parts.push(`<span style="display:inline-block;max-width:100%">${footer}</span>`);
+    }
+    const meta = parts.length ? `<span class="ak-line">${parts.join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
       <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
