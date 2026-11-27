@@ -91,12 +91,7 @@
     return `这 ${list.length} 件事走${name}：${counts.size===1?`都${list[0].state}`:[...counts].map(([s,n])=>`${s} ${n} 件`).join('、')}`;
   }
   const keepWords=text=>`<span class="notify-nw">${esc(text)}</span>`;
-  const titleSegmenter=typeof Intl.Segmenter==='function'&&new Intl.Segmenter('zh-CN',{granularity:'word'});
-  const keepTitleWords=text=>esc(text).replace(/\p{Script=Han}+/gu,run=>run.split(/(汇报页|项目页|对话)/g).map((part,i)=>{
-    if(i%2)return keepWords(part);
-    if(!titleSegmenter)return part;
-    return Array.from(titleSegmenter.segment(part),({segment})=>segment.length>1?keepWords(segment):segment).join('<wbr>');
-  }).filter(Boolean).join('<wbr>'));
+  const keepDialogueWord=text=>esc(text).replace(/对话/g,keepWords);
   function attentionResult(r){
     if(r.channel!=='phone')return {};
     const reminders=Array.isArray(r.reminders)?r.reminders:[];
@@ -196,10 +191,8 @@
       const cards=issues.map(r=>{
         if(r.private_count||hiddenBatch(r))return `<div class="delivery-private">${privateLine(r)}</div>`;
         const result=attentionResult(r),duration=result.duration??took(r),why=result.recovered?'':stuck(r);
-        const deliveryChannel=channel(r);
-        const route=deliveryChannel==='手机'||deliveryChannel==='邮件'?keepWords(`走${deliveryChannel}`):`走${shown(deliveryChannel,'渠道')}`;
         return `<div class="stut__card" data-status="${result.recovered?'recovered':kindOf(r)}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
-          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepTitleWords)} · ${route}</b>`
+          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepDialogueWord)} · 走${shown(channel(r),'渠道')}</b>`
           +`${why?`<span class="notify-why">${esc(why)}</span>`:''}<span class="notify-other">${result.otherHtml??esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
           +`${duration?`<small class="notify-took">${shown(duration,'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`;
       });
