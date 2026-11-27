@@ -594,7 +594,7 @@
     const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
     const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
     const heading = title(it, U.capText(it.text, Infinity, true), 'items');
-    const headingWords = viewer === 'owner' ? heading.replace(/副号(?![^<>]*>)/g, '<span class="l1-unit">副号</span>') : heading;
+    const headingWords = viewer === 'owner' ? heading.replace(/(?:副号|\d{1,2} 月 \d{1,2} 日|Chrome 打开)(?![^<>]*>)/g, '<span class="l1-unit">$&</span>') : heading;
     return {
       key: it.id,
       cls: 'row',
