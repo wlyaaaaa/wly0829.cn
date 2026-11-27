@@ -45,7 +45,10 @@
     }
     return template.innerHTML;
   }
-  const paintHTML = (el, html, fade) => U.html(el, keepWords(html), fade);
+  const needsDate = /(<[^>]*>)|(?<!\d)\d{1,2}[ \t]*(?:月(?:[ \t]*\d{1,2}[ \t]*日)?|日)/g;
+  const unitsFor = (el, html) => keepWords(el.closest('#needs') && html
+    ? html.replace(needsDate, (part, tag) => tag || '<wbr>' + keepWord(part) + '<wbr>') : html);
+  const paintHTML = (el, html, fade) => U.html(el, unitsFor(el, html), fade);
   let viewer = 'public';
   const viewerKind = state => (state.viewer?.kind ?? state.meta?.viewer?.kind) === 'owner' ? 'owner' : 'public';
   const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
@@ -608,7 +611,7 @@
     restoreTimer = setTimeout(() => requestAnimationFrame(restoreHome), 650);
   });
   // 返回时先把列表放到完整高度，再恢复位置；逐行长高会把目标位置夹住。
-  const paintList = (ul, rows, options) => U.list(ul, rows, { format: keepWords, animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
+  const paintList = (ul, rows, options) => U.list(ul, rows, { format: html => unitsFor(ul, html), animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
   const elapsed = value => lastState?.offline ? U.time(value) : U.ago(value, at);
 
   // —— 等你的事 ——

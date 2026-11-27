@@ -1326,6 +1326,8 @@
       const say = link.querySelector('b');
       if (c.homePublication && say.textContent !== c.say) {
         say.innerHTML = esc(c.say).replace(/访客版|补上。/g, '<span class="live-unit">$&</span>');
+      } else if (['lost', 'off'].includes(c.stage) && say.textContent !== c.say) {
+        say.innerHTML = esc(c.say).replace(/这是 \d+日 \d{2}:\d{2} 的数据$/, '<span class="live-conn__data">$&</span>');
       } else put(say, c.say);
       put(link.querySelector('.live-conn__at'), '');
     } else if (link?.dataset.stage === 'loading') {
@@ -1470,7 +1472,7 @@
         const homeSummary = revoked && state.conn?.homePublication;
         if (stamp || disconnected || retry || revoked || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = homeSummary ? '' : revoked ? '这块正在更新访客版，稍后自动补上。'
-          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry || stage === 'loading' ? '加载中'
+          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : stage === 'off' ? '关机了' : disconnected ? '连不上' : retry || stage === 'loading' ? '加载中'
           : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);

@@ -1293,7 +1293,12 @@
   const bar = U.topbar({ ask });
 
   // ================= 取数：/computer（读数、好坏、卡过、设备）和 /computer/charts（曲线） =================
-  const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: '', slow: false });
+  const heroRead = U.reading(hero.querySelector('.card__body'), {
+    ghost: '<p class="hero__count">开机时长 · 加载中<br>各组状态 · 加载中</p>' +
+      '<div class="hero__devs">' + ['台式机', '笔记本', '手机', '远程连接'].map(name =>
+        `<div class="dev-spec"><b>${name}</b><p class="row__sub">加载中</p></div>`).join('') + '</div>',
+    slow: false,
+  });
   let litHero = false, first = true;
   function lightUp() {
     if (litHero) return;
