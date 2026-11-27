@@ -78,3 +78,5 @@
 /* 这一页的“最近改动”卡（全站共用的那张，只在说明书页收一点右边距，句子少折出一两个字的尾巴） */
 .pj-board--manual .pj-card[data-card="changes"] { padding-right: 16px; }
 .pj-board--manual .pj-card[data-card="changes"] .pj-tl-copy { text-wrap: pretty; }
+/* 标题、三条说法折行时句尾不单独剩一两个字 */
+.mn-row__title, .mn-conv li, .mn-mat__v { text-wrap: pretty; }
