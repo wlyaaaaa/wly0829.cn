@@ -328,7 +328,8 @@
       else if (!linkify) html += esc(match);
       else {
         const url = destination || bare.replace(/[，。！？；、,.!?;:]+$/u, '');
-        html += `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label ? replyInline(label, false) : esc(url)}</a>${bare ? esc(bare.slice(url.length)) : ''}`;
+        const keep = label && /^\p{Script=Han}{2,12}$/u.test(label) ? ' class="live-unit"' : '';
+        html += `<a${keep} href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label ? replyInline(label, false) : esc(url)}</a>${bare ? esc(bare.slice(url.length)) : ''}`;
       }
       end = token.index + match.length;
     }

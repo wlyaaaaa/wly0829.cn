@@ -194,10 +194,10 @@
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
-    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`;
+    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；<span class="live-unit">要${you()}定</span>、亲手做或补只有${you()}知道的，才转给${you()}。`;
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
-    const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`
+    const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，<span class="live-unit">最近一次</span> ${clock(lastAt)}` : ''}。`
       : Number.isInteger(f?.reopen_count) ? f.reopen_count > 0 ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '修好以后没再出现过。' : '这件坏了几次，这次没读到。';
     const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
     return card(said + handed);
@@ -233,7 +233,7 @@
     const whoHtml = who ? `${reg ? go(reg, F(who, '谁记的')) : F(who, '谁记的')}${hiddenTag(regRound) && ` ${hiddenTag(regRound)}`}${T(d.registered_by_unavailable_reason) ? `<small>${F(d.registered_by_unavailable_reason, '为什么打不开')}</small>` : ''}` : '';
     const fixer = d.running?.href ? go(d.running.href, '正在办') : s.group === 'owed' && !s.late && T(d.fixer?.text) ? F(d.fixer.text, '谁在修') : '';
     const kind = repair ? ['auto-repair', '自动修理'] : ['ai-commitments', 'AI 约好的事'];
-    const belong = `${go('/live/automation/', '自动任务')} ${go(R.listHref({ category: kind[0] }), R.categoryName(kind[0], viewer) || kind[1])}`;
+    const belong = `${go('/live/automation/', '自动任务')} <span class="live-unit">${go(R.listHref({ category: kind[0] }), R.categoryName(kind[0], viewer) || kind[1])}</span>`;
     const project = typeof d.project_name === 'string' && d.project_name && d.project ? go(`/live/project/?id=${encodeURIComponent(d.project)}`, esc(d.project_name)) : '';
     const rows = [
       fact('谁记的', whoHtml),
