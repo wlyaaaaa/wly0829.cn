@@ -145,11 +145,11 @@
 .ag-heat--none .ag-errorstatus { display: block; margin-top: 4px; font-size: inherit; }
 .ag-detailrow > td { padding: 14px 16px 18px !important; background: #f8f8f5; }
 .ag-hooks { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+section > .ag-hooks { align-items: start; }
 .ag-hook { padding: 12px 14px; border: 1px solid var(--tp-line); border-left: 4px solid var(--host); border-radius: 10px; background: #fff; }
 .ag-hook h4 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 15.5px; }
 .ag-truncate { display: inline-block; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
 .ag-hook__num { margin: 8px 0 0; font-size: 13px; color: #3d3d3a; font-variant-numeric: tabular-nums; }
-
 /* 钩子“最近一次塞给 AI 的原样”：summary 带 live-disclosure 躲开第二层通用的“展开后把 ::after 转 90 度”，“收起”两个字也不许被挤得折行（照 F1） */
 .ag-hook .tp-details > summary::after { flex: none; white-space: nowrap; }
 
