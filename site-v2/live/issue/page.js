@@ -187,7 +187,7 @@
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
-    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}花钱、登录或拍板的才转给${you()}。`;
+    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`;
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
     const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`

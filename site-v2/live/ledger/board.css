@@ -88,9 +88,11 @@
 .lg-key__next { width: 8px; height: 8px; border: 2px solid var(--ink); border-radius: 50%; }
 .lg-key__over { width: 10px; height: 10px; border-radius: 50%; background: var(--tp-amber); }
 
-/* 最近了结的 + 点开一件 */
-.lg-split { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; margin-top: 16px; }
-.lg-split > .tp-panel { margin: 0; }
+/* 左边两张列表卡共用右边跟随屏幕的详情。 */
+body.page--ledger-board { overflow-x: clip; } /* 横向仍裁切，纵向粘滞定位跟随页面滚动。 */
+.lg-split { --lg-detail-top: max(84px, calc(var(--bar-bottom, 68px) + 16px)); grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; margin-top: 16px; }
+.lg-lists { display: grid; gap: 16px; }
+.lg-split > .tp-panel, .lg-lists > .tp-panel { margin: 0; }
 .lg-done .tp-seg { margin-bottom: 10px; }
 .lg-basis { margin: -4px 0 10px; }
 .lg-settled { margin: 0; padding: 0; list-style: none; }
@@ -105,7 +107,7 @@
 .lg-view .lg-settled li > span > a { font-weight: 600; }
 .lg-done__foot { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
 .lg-done__foot .lg-more { margin-top: 6px; }
-.lg-detail { position: sticky; top: 84px; border-top: 3px solid var(--tp-green); }
+.lg-detail { position: sticky; top: var(--lg-detail-top); max-height: calc(100dvh - var(--lg-detail-top) - 16px); overflow-y: auto; border-top: 3px solid var(--tp-green); }
 .lg-detail__t { margin: 0 0 8px; font-size: 18px; line-height: 27px; font-weight: 800; }
 .lg-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
 .lg-chips .tp-pill { white-space: normal; }
@@ -120,7 +122,6 @@
 .lg-rel { margin: 8px 0 0; }
 
 /* 反复出现 */
-.lg-repeat { margin-top: 16px; }
 .lg-replist { margin: 0; padding: 0; list-style: none; }
 .lg-replist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; margin: 0 -10px; padding: 10px 10px 14px; border-bottom: 1px solid var(--tp-hair); border-radius: 8px; transition: background .2s ease; }
 .lg-replist .lg-title { font-size: 15px; line-height: 22px; }

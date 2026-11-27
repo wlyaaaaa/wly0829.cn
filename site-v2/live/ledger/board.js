@@ -309,7 +309,7 @@
   function repeats(d) {
     const r = d.repeat_fixes || {}, now = Date.now(), days = repeatDays(d), from = now - days * DAY;
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
-    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}花钱、登录或拍板的才转给${you()}`;
+    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}`;
     const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
     const reopened = it => Number.isInteger(it.reopen_count) && it.reopen_count > 0 ? it.reopen_count : null;
     // 后台给了“近 30 天坏了几次”就只列坏了 2 次以上的（或已转给本人的）；没给这个数的（比如约好再查的那几件只记了重开）不算坏，不进这一块
@@ -390,7 +390,7 @@
     }
     T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
-      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split">${settled(d)}${detail(d)}</div>${repeats(d)}`));
+      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split"><div class="lg-lists">${settled(d)}${repeats(d)}</div>${detail(d)}</div>`));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && (location.hash || asked)) landed = T.reveal(location.hash.slice(1) || 'detail');
@@ -403,7 +403,8 @@
     draw();
     if (!quiet) {
       params.set('id', id); history.replaceState(null, '', `${location.pathname}?${params}${location.hash}`);
-      document.getElementById('detail')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      const panel = document.getElementById('detail');
+      if (panel && panel.getBoundingClientRect().top >= innerHeight) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
     await pending;
     if (pickedRead !== read) return;

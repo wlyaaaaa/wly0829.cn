@@ -680,7 +680,9 @@
     };
     const item = r => {
       const when1 = plan(r);
-      const name = `<span class="au-schedule-name">${link(r.href, label(r))}</span>`;
+      const codexNumber = r.producer === 'Codex' && typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label);
+      const href = (codexNumber && T.path(r.last_wake?.chat_href)) || r.href;
+      const name = `<span class="au-schedule-name">${link(href, codexNumber && T.path(href) ? `${esc(r.label.trim())} ›` : label(r))}</span>`;
       const left = when(r.next_at || r.at);
       if (!when1) return `<li><b>${esc(left)}</b>${name}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}</small>${wake(r, left)}</li>`;
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
