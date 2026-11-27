@@ -986,6 +986,8 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .btn--slide .btn__more { display: inline-block; overflow: hidden; max-width: 2.2em; vertical-align: top; }
 /* 窄窗（900 宽左右）时“确认锁屏”比“锁屏”宽，这一格的两颗照样排一行，“解锁”不跳到下一行 */
 .page--auth .cell[data-key="win"] .cell__acts { flex-wrap: nowrap; }
+/* 窄窗时“Windows”几个大字贴到右上角的状态灯，照“无限制授权”那格一样跟着窗口收一点（宽窗照旧 28） */
+.page--auth .cell[data-key="win"] .cell__name { font-size: clamp(22px, 2.7vw, 28px); }
 @media (max-width: 1080px) { .page--auth .cell[data-key="win"] .cell__acts { gap: 6px; } .page--auth .cell[data-key="win"] .btn--slide.is-armed { padding-inline: 13px; } }
 .page--auth .btn--slide.is-armed { animation: auth-slide-ink .42s var(--ease) var(--slide-t, 0ms); }
 .page--auth .btn--slide.is-armed .btn__more { animation: auth-slide-more .42s var(--ease) var(--slide-t, 0ms); }
