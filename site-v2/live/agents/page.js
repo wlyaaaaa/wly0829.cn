@@ -144,16 +144,17 @@
       return `<div class="ag-acc__row${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
     }).join('')}</div>`;
   }
-  function ratioPlot(d) {
-    const W = 470, H = 214, pad = { l: 46, r: 16, t: 26, b: 28 }, w = W - pad.l - pad.r, h = H - pad.t - pad.b;
+  function ratioPlot(d, band, bandLabel = '允许范围') {
+    const W = 470, H = 214, pad = { l: 46, r: 62, t: 26, b: 28 }, w = W - pad.l - pad.r, h = H - pad.t - pad.b;
     const values = HOSTS.flatMap(hh => SIZES.map(([s]) => est(d, hh).size_ratios?.[s]).filter(r => r?.samples))
       .flatMap(r => [r.actual_over_estimate, r.p75]).filter(known);
-    const lo = .4, hi = Math.max(2, Math.ceil((Math.max(...values, 1) + .2) * 2) / 2);
+    const lo = Math.min(.4, band?.[0] ?? .4), hi = Math.max(2, Math.ceil((Math.max(...values, band?.[1] ?? 1) + .2) * 2) / 2);
     const x = v => pad.l + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * w;
     const rowY = i => pad.t + (i + .5) * h / 3;
-    let out = `<rect class="tp-band" x="${x(.7)}" y="${pad.t - 6}" width="${x(1.1) - x(.7)}" height="${h + 6}" rx="3"/>
-      <line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>
-      <text x="${(x(.7) + x(1.1)) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">估 1 小时以上</text>`;
+    let out = band ? `<rect class="tp-band" x="${x(band[0])}" y="${pad.t - 6}" width="${x(band[1]) - x(band[0])}" height="${h + 6}" rx="3"/>
+      <text x="${(x(band[0]) + x(band[1])) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">${esc(bandLabel)}</text>` : '';
+    out += `<line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>`;
+    out += `<text x="${W - 4}" y="${pad.t - 11}" text-anchor="end" style="fill:#6b6a63">这档准的</text>`;
     for (let v = .5; v <= hi + 1e-9; v += .5) out += `<text x="${x(v)}" y="${H - 8}" text-anchor="middle">${dec(v)}×</text><line class="tp-gridline" x1="${x(v)}" x2="${x(v)}" y1="${pad.t}" y2="${pad.t + h}"/>`;
     SIZES.forEach(([size, label], i) => {
       const y0 = rowY(i);
@@ -165,6 +166,7 @@
         const y = y0 + (hosts.length === 1 ? 0 : (j - 1) * 13), v = r.actual_over_estimate;
         if (known(r.p25) && known(r.p75)) out += `<line x1="${x(r.p25)}" x2="${x(r.p75)}" y1="${y}" y2="${y}" stroke="${hh.color}" stroke-width="3" stroke-linecap="round" opacity=".45"/>`;
         out += `<circle cx="${x(v)}" cy="${y}" r="5.5" fill="${hh.color}" stroke="#fff" stroke-width="1.5"/><text x="${x(v) + 9}" y="${y + 4}" style="font-weight:700;fill:#3d3d3a">${dec(v, 2)}×</text>`;
+        if (known(r.accuracy)) out += `<text x="${W - 4}" y="${y + 4}" text-anchor="end" style="font-weight:700;fill:${hh.color}">准 ${pct(r.accuracy)}</text>`;
       });
     });
     return `<svg class="tp-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="实际是估的几倍">${out}</svg>`;
@@ -246,11 +248,18 @@
     const recordedAt = ws.as_of === d.at ? '' : asof(ws.as_of, typeof d.at === 'string' && d.at.replace(/\.\d+(?=Z|[+-]\d\d:\d\d$)/, ''));
     const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
+    const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
+    const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;
+    const limit = band ? T.duration(splitAt * 60) : '';
+    const bandNote = band ? `绿带按估 ${limit}及以上的单子画：比估的早 ${pct(long.early_fraction)} 到晚 ${pct(long.late_fraction)} 都算准，正好在边上也算。`
+      : '估算程序定的允许范围这一轮没读到，绿带先不画，下一轮会自动再读。';
+    const shortNote = limit && [short?.early_minutes, short?.late_minutes].every(known)
+      ? `估不到 ${esc(limit)}的单子，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍</p>${ratioPlot(d)}<p class="tp-small">绿带只画估 1 小时及以上的单子：实际比估的早 30% 以内、晚 10% 以内都算准，正好在边上也算；不到 1 小时的单子按分钟算，早 15 分钟、晚 5 分钟以内算准。</p></div>
+        <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的<span class="ag-keep">倍数</span>，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${bandNote}${shortNote}点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;

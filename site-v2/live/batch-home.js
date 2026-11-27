@@ -258,13 +258,12 @@
     }
 
     // AI 自动任务账本卡（照“首页账本卡-v1”，本人 11-26 01:04 批照图施工）：欠着几件（大字）、放着几件 ›；今天要看的时间条；
-    // 今天要看的前 3 件和跟得最久的；底行写今天要看、近 7 天了结和新账起进的件数。
+    // 今天要看的前 3 件；底行写今天要看、近 7 天了结的件数。原卡的“新账起进”“跟得最久”图上没有，照图去掉（页面说明·账本 第一节 6）。
     const v = ledgerView(d, { viewer }), c = ledgerCard(d, { now });
     const tone = d.repair && !offline ? 'repair' : !v.pending && (count(c.owed) || count(c.parked)) && !offline ? 'ok' : 'off';
     const head = cardTitle('AI 自动任务账本', href, tone, '');
     if (v.pending) return { tone, head, body: `<div class="b6-big"><strong>正在重算</strong></div><p class="b6-muted">新账从正式生效那一刻起算，算好了这里写欠着几件、放着几件。</p>` };
-    const opened = c.opened == null ? '' : `&nbsp;· ${go(c.openedHref, `新账起进 <b>${esc(c.opened)}</b> 件`)}`;
-    const foot = `<p class="b6-foot b6-lg-foot">${c.due == null ? `今天要看 ${num(null)} 件` : `<a href="${esc(route(c.dueHref))}">今天要看 <b>${esc(c.due)}</b> 件</a>`}&nbsp;· ${go(c.closedHref, `近 7 天了结 <b>${num(c.closed)}</b> 件`)}${opened}</p>`;
+    const foot = `<p class="b6-foot b6-lg-foot">${c.due == null ? `今天要看 ${num(null)} 件` : `<a href="${esc(route(c.dueHref))}">今天要看 <b>${esc(c.due)}</b> 件</a>`}&nbsp;· ${go(c.closedHref, `近 7 天了结 <b>${num(c.closed)}</b> 件`)}</p>`;
     if (c.owed === 0 && c.parked === 0) return { tone, head, body: `<p class="b6-empty">AI 暂无待跟事项</p>${foot}` };
     const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
     const top = `<div class="b6-lg"><a class="b6-lg__owed" href="${esc(route(c.owedHref))}">欠着 <em>${num(c.owed)}</em> 件</a><i class="b6-lg__sep" aria-hidden="true"></i>`
@@ -274,17 +273,12 @@
     // 列出来的每一件：标题点了到那件；到点没看的橙点、写“到点没看，原定几点”，还没到的绿点、写“几点看”
     // 这件对外换了说法的，标题后面挂“对外换了说法”（两版都挂，M930；本人版访客看不到的另挂“访客看不到”）
     const titleTag = r => { const t = U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer); return t ? ` ${t}` : ''; };
-    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, field(r.title, '事项标题'))}${titleTag(r)}</p>`
+    const keepWords = html => html.replace(/(<[^>]+>)|处理|证据|事务/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, keepWords(field(r.title, '事项标题')))}${titleTag(r)}</p>`
       + `<small class="b6-muted">· ${c.late(r) ? `到点没看，原定 ${esc(clock(r.next_at))}` : `${esc(clock(r.next_at))} 看`}</small></div>`;
     const list = c.today.length ? c.today.slice(0, 3).map(dueItem).join('')
       : `<p class="b6-muted b6-lg-none">今天没有要看的${c.after ? ` · ${go(c.after.href, `下一件 ${esc(time(c.after.next_at))}`)}` : ''}</p>`;
-    const oldest = v.oldest, limit = count(oldest?.check_limit) && oldest.check_limit > 0 ? oldest.check_limit : 3;
-    const looked = !count(oldest?.check_count) ? '' : oldest.check_count >= limit ? `${esc(limit)} 次看满了` : `第 ${esc(oldest.check_count + 1)} 次看`;
-    const next = R.timed(oldest?.next_at) ? `下次 ${esc(U.date(oldest.next_at))}` : '';
-    const oldestTitle = oldest ? field(oldest.title, '事项标题') : '';
-    const last = oldest ? `<p class="b6-last">跟得最久：${goWrap(oldest.href, looked || next ? oldestTitle.replace(/。((?:<\/[a-z]+>)*)\s*$/, '$1') : oldestTitle)}${titleTag(oldest)}`
-      + `${looked ? `&nbsp;· <span class="live-unit">${looked}</span>` : ''}${next ? `&nbsp;· <span class="live-unit">${next}</span>` : ''}</p>` : '';
-    return { tone, head, body: publicHtml(`${top}${bar}<div class="b6-lg-list">${list}</div>${last}${foot}`, viewer) };
+    return { tone, head, body: publicHtml(`${top}${bar}<div class="b6-lg-list">${list}</div>${foot}`, viewer) };
   }
   // AI 对话卡和 AI 对话页顶上那一行“后台另有 N 个在跑 ›”：数自动任务这会儿在跑的轮数（AI 对话不列后台的对话，本人定的）。
   function backgroundRunning(automation) {

@@ -71,6 +71,7 @@
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
       key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
+      excerptFallback: category === 'excerpt' && status === 'incomplete' && r.outcome === 'fallback',
       queuedAt: r.queued_at, startedAt: started, finishedAt: r.finished_at, lastAt: r.last_activity_at || r.finished_at || started,
       minutes, summary: r.summary, reason: r.reason, activity: r.activity, subject,
       outputs: list(r.outputs).map(o => output(o, viewer)), outputCount: num(r.output_count),
@@ -121,6 +122,9 @@
     return head && tail ? `${head}${/[。！？；]$/.test(head) ? '' : ' · '}${tail}` : head || tail;
   }
 
+  // 翻译官早先几轮的结果把同一版说了两遍（“写好了《他要什么》第 18 版。《他要什么》第18版已写好，还有……”），后半那遍去掉；后来的轮次后台只写一遍，不受影响
+  const oneVersion = s => typeof s === 'string' ? s.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : s;
+
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
   function chatOf(conv) {
     const chatId = href => {
@@ -147,7 +151,8 @@
       // 暂缓那一轮的“暂时不修”一步是灰点：后台对记成没做成的给 warn（这里落成灰），记成跑完的却给 ok（绿），这里一律落成灰（主控 11-25）
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
-      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan },
+      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan,
+        originalText: typeof receipt.original_text === 'string' && (viewer === 'owner' || !receipt.source?.content_locked) ? receipt.original_text : '' },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
       // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、
       // AI 约好的事是谁约的（promised_by）。后台没给的是 null，页面照现在的样子退回
@@ -200,7 +205,7 @@
     }
     for (const p of list(d?.provider_pauses)) out.push({ at: p.started_at, actor: list(p.categories).map(title).join('、'), html: `<span><em>停了</em>：${p.reason === 'login' ? '登录过期' : '额度用完'}</span>`, tone: 'bad' });
     return out.filter(r => T.stamp(r.at) > cut).sort((a, b) => T.stamp(b.at) - T.stamp(a.at)).slice(0, 30)
-      .map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
+      .map(r => ({ ...r, html: oneVersion(r.html) })).map(r => viewer === 'owner' ? r : { ...r, actor: asOwner(r.actor, viewer), html: asOwner(r.html, viewer) });
   }
 
   // 本人版的签（私事线 11-26）：整轮对访客藏着的挂“访客看不到”，点开写后台给的是哪一种情况；只换了说法的挂“对外换了说法”，访客版也挂这一种（M930）
@@ -223,5 +228,5 @@
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, asOwner, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, roundTag, versionTail };
 })();

@@ -12,7 +12,7 @@
   const STEP = { not_fixed: '没修好', deferred: '先放着', superseded: '并进了别的一件', not_done: '没办成' };
   const KIND = { repair: '修理', verify: '验收' };
   const HOST = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
-  let viewer = 'public', item = null, history = [], misjudged = [], at = null, repeat, repeatAsked = false, first = true;
+  let viewer = 'public', item = null, history = [], misjudged = [], at = null, policy, repeat, repeatAsked = false, first = true;
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
@@ -36,6 +36,8 @@
   // 那一轮还是那场对话：看地址是自动任务的一轮还是对话页
   const goName = href => /^\/live\/chat\//.test(href) ? `${HOST[(new URL(href, location.origin).searchParams.get('id') || '').split(':')[0]] || ''} 那场对话`.trim() : '那一轮';
   const titleOf = d => T(d.plain_title) ? d.plain_title : T(d.title) ? d.title : d.text;
+  const positive = n => Number.isInteger(n) && n > 0;
+  const faultOf = d => T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
 
   // 左上照定稿图是面包屑“实况 › AI 自动任务账本 › 这件”（主控 04:5x 定）；点“AI 自动任务账本”回账本页原来的位置
   for (const a of document.querySelectorAll('.iss-crumb a')) a.href = route(a.getAttribute('href'));
@@ -117,15 +119,18 @@
     const d = item, s = stateOf(d), st = U.status({ level: s.level });
     hero.classList.remove('is-unavailable');
     const title = titleOf(d);
-    document.title = `${T(title) || '账本一件'} · 实况`;
     const head = part('head');
     // 这件事对外换了说法的标题后面挂“对外换了说法”（两版都挂，M930）；本人版访客看不到的挂“访客看不到”
     const shownTitle = publicHtml(F(title, '这件事'), viewer);
+    const titleText = document.createElement('template');
+    titleText.innerHTML = shownTitle;
+    document.title = `${titleText.content.textContent.trim() || '账本一件'} · 实况`;
     U.html(head, `<span class="head__lead">${shownTitle}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
-    const limit = d.check_limit || 3, looked = Number.isInteger(d.check_count) ? d.check_count : null, full = looked != null && looked >= limit;
+    const limit = positive(d.check_limit) ? d.check_limit : null, looked = Number.isInteger(d.check_count) ? d.check_count : null;
+    const full = looked != null && limit != null && looked >= limit;
     const waitOf = s.group === 'parked' ? d.park?.text != null ? d.park : d.wait : s.group === 'owed' && !s.late ? d.fixer?.text != null ? d.fixer : d.wait : null;
     const wait = waitOf?.text ?? null;
     // 在等什么这句对外换了说法的，原位挂“对外换了说法”（两版都挂，M930；“接下来”那格是同一句时也挂）
@@ -134,7 +139,8 @@
     const nextAt = !s.closed && !full && timed(d.next_at) ? d.next_at : null;
     const look = s.closed ? '' : full ? `${esc(limit)} 次看满了，AI 停手`
       : nextAt ? `<span>${s.late ? `到点没看，原定 ${clock(nextAt)}` : `下次 ${clock(nextAt)} 看`}</span>` : '';
-    const nth = s.closed || full || looked == null ? '' : nextAt ? `第 ${esc(looked + 1)} 次看，最多 ${esc(limit)} 次` : `看过 ${esc(looked)} 次，最多 ${esc(limit)} 次`;
+    const maxChecks = limit == null ? '最多看几次没读到' : `最多 ${esc(limit)} 次`;
+    const nth = s.closed || full || looked == null ? '' : `${nextAt ? `第 ${esc(looked + 1)} 次看` : `看过 ${esc(looked)} 次`}，${maxChecks}`;
     // “等约好的时间再看”和后面“下次几点看”是一回事，有钟点时不写这半句
     const dateOnly = (d.park?.kind || d.wait?.kind) === 'wait_date' && nextAt;
     const bits = [`${st.lamp}<b>${esc(s.label)}</b>`, !dateOnly && T(wait) && nodot(T(wait)) !== nodot(T(next)) && F(nodot(wait), '在等什么') + waitTag, look, nth,
@@ -182,24 +188,32 @@
     if (first) { first = false; requestAnimationFrame(() => L.lightUp([hero])); }
   }
 
-  // 反复出现：只对自动修理查出来的故障。近 30 天坏了几次从账本的“反复出现”里取（单件读口没给）；不在那里面就是这 30 天只坏了这一次
+  // 先取单件的当前故障次数。老读口缺这项时，可用账本里同一件的数补齐。
+  const hasWindowCount = d => Number.isInteger(d.faults_in_window) || Number.isInteger(d.broken_30d);
+  const faults = d => hasWindowCount(d) ? d : repeat ?? d;
   function repeatCard(d) {
-    // AI 约好的事也带 object（就是那句话），不能拿它判；自动修理查出来的件编号以 auto- 开头
-    const fault = T(d.registered_by) === '自动修理' || T(d.registered_by_text) === '自动修理' || /^auto-/.test(String(d.id || ''));
-    if (!fault || repeat === undefined) return '';
-    const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
-    const rule = `30 天内第 3 次坏，自动修理停手、转给${you()}。`;
-    if (!repeat) return card(`近 30 天只坏了这一次。${rule}`);
-    const n = Number.isInteger(repeat.broken_30d) ? repeat.broken_30d : null, dates = (repeat.broken_at || []).filter(timed);
-    const lastAt = dates.length ? dates.at(-1) : repeat.last_at;
-    const said = n != null ? `近 30 天坏了 ${esc(n)} 次${timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。` : Number.isInteger(repeat.reopen_count) ? `修好以后又出现过 ${esc(repeat.reopen_count)} 次。` : '';
-    const handed = repeat.handed_to_owner ? `已转给${you()}${site(repeat.owner_href) ? ` ${go(repeat.owner_href, '看那张卡')}` : ''}。` : n != null && n < 3 ? rule : '';
-    return said || handed ? card(said + handed) : '';
+    if (!faultOf(d)) return '';
+    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
+    const f = faults(d), windowDays = policy?.repeat_window_days;
+    const newCount = Number.isInteger(d.faults_in_window) ? d.faults_in_window : null;
+    const range = positive(windowDays) ? `近 ${esc(windowDays)} 天` : newCount != null ? '当前统计期内' : '近 30 天';
+    // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
+    const rule = esc(`反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`);
+    const reopen = Number.isInteger(d.reopen_count) ? d.reopen_count : f.reopen_count;
+    const once = repeat === null && positive(windowDays) && !Number.isInteger(reopen);
+    const n = newCount ?? (Number.isInteger(f.broken_30d) ? f.broken_30d : once ? 1 : null);
+    const dates = (f.broken_at || []).filter(timed);
+    const lastAt = dates.at(-1) || f?.last_at;
+    const said = n != null ? `${range}坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，<span class="live-unit">最近一次</span> ${clock(lastAt)}` : ''}。`
+      : Number.isInteger(reopen) ? reopen > 0 ? `修好以后又出现过 ${esc(reopen)} 次。` : '修好以后没再出现过。' : '这件坏了几次，这次没读到。';
+    const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
+    return card(said + handed);
   }
   // 坏了几次的依据（后台 broken_basis，一句话）和误判：近 30 天当时判了坏、现在不算的次数（misjudged_30d），
   // 单件回包给原记录（misjudged_records：时刻、当时记的、为什么不算、那一轮），收在“另有 N 次是误判”里，点开看。后台没给就什么都不写
   function basisOf(d) {
-    const pick = key => repeat && repeat[key] != null ? repeat[key] : d[key];
+    const f = faults(d);
+    const pick = key => f?.[key] ?? d[key];
     const basis = T(pick('broken_basis')), n = Number.isInteger(pick('misjudged_30d')) ? pick('misjudged_30d') : misjudged.length || 0;
     const rows = misjudged.filter(r => r && (timed(r.at) || T(r.summary)));
     const line = basis ? `<p class="iss-basis">怎么算坏：${F(nodot(pick('broken_basis')), '怎么算坏')}。</p>` : '';
@@ -226,7 +240,7 @@
     const whoHtml = who ? `${reg ? go(reg, F(who, '谁记的')) : F(who, '谁记的')}${hiddenTag(regRound) && ` ${hiddenTag(regRound)}`}${T(d.registered_by_unavailable_reason) ? `<small>${F(d.registered_by_unavailable_reason, '为什么打不开')}</small>` : ''}` : '';
     const fixer = d.running?.href ? go(d.running.href, '正在办') : s.group === 'owed' && !s.late && T(d.fixer?.text) ? F(d.fixer.text, '谁在修') : '';
     const kind = repair ? ['auto-repair', '自动修理'] : ['ai-commitments', 'AI 约好的事'];
-    const belong = `${go('/live/automation/', '自动任务')} ${go(R.listHref({ category: kind[0] }), R.categoryName(kind[0], viewer) || kind[1])}`;
+    const belong = `${go('/live/automation/', '自动任务')} <span class="live-unit">${go(R.listHref({ category: kind[0] }), R.categoryName(kind[0], viewer) || kind[1])}</span>`;
     const project = typeof d.project_name === 'string' && d.project_name && d.project ? go(`/live/project/?id=${encodeURIComponent(d.project)}`, esc(d.project_name)) : '';
     const rows = [
       fact('谁记的', whoHtml),
@@ -252,26 +266,43 @@
       <dl class="rec-facts">${rows}</dl></details>`;
   }
 
-  // 反复出现那张卡要的数在账本列表里：读一次，不跟着每轮刷新
+  // 单件的现行读口已带齐时，省掉对账本列表的补读。
   async function loadRepeat() {
-    if (repeatAsked || !item) return;
+    if (repeatAsked || !item || !faultOf(item) || hasWindowCount(item) && policy) return;
     repeatAsked = true;
-    if (Number.isInteger(item.broken_30d)) { repeat = item; render(); return; }
     const want = item, kind = viewer;
     const r = await window.Live.get('ledger', null).catch(() => null);
     if (item !== want && item?.id !== want.id || kind !== viewer) { repeatAsked = false; return; }
-    const rows = r?.data?.repeat_fixes?.items;
-    repeat = Array.isArray(rows) ? rows.find(x => x && (x.id === item.id || x.issue && x.issue === item.issue)) || null : undefined;
+    policy ??= r?.data?.policy;
+    const repeats = r?.data?.repeat_fixes, rows = repeats?.items;
+    repeat = Array.isArray(rows) && !repeats.missing
+      ? rows.find(x => x && (x.id === item.id || x.issue && x.issue === item.issue)) ?? null : undefined;
     if (item) render();
   }
 
   // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
   let ended = false;
   function empty(message) {
-    ended = true;
+    ended = true; delete hero.dataset.updating;
     U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
     part('state').hidden = part('src').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
+  }
+  // 访客版读口撤回（503 live_publication_revoked，访客版正在重新生成）：这一件旧的标题、状态、三格、经过、右栏全清，
+  // 页头大卡铺满第一屏当这一页的封面：只写这一句，配这件放大的画（账本 48，两版同一个样子；摆法在 issue.css）。
+  // 先前两版只剩一条字、上下大片空，像没加载完。读口恢复后 data() 照常画回
+  const UPDATING = '这一件正在更新访客版，稍后自动补上。';
+  function updating() {
+    if (ended === UPDATING) return;
+    ended = UPDATING; item = at = null; history = []; misjudged = []; policy = repeat = undefined; repeatAsked = false;
+    document.title = '账本一件 · 实况';
+    U.html(part('head'), `<span class="head__lead"><span>这一件正在更新<span class="iss-nowrap">访客版</span>，</span><span>稍后自动补上。</span></span>`);
+    part('head').classList.remove('is-long');
+    for (const name of ['state', 'src']) { U.html(part(name), ''); part(name).hidden = true; }
+    for (const key of ['three', 'steps', 'side']) U.html($(key), '');
+    $('steps-foot').textContent = ''; $('steps-foot').hidden = $('looks').hidden = $('rest').hidden = true;
+    hero.dataset.updating = '';
+    L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
 
   if (!id) empty('没有说是哪一件');
@@ -279,10 +310,10 @@
     phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
-      if (kind !== viewer) { viewer = kind; repeat = undefined; repeatAsked = false; }
+      if (kind !== viewer) { viewer = kind; policy = undefined; repeat = undefined; repeatAsked = false; }
       if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
-      $('rest').hidden = false; ended = false;
-      at = meta.at || d.at || null; item = d.item; history = Array.isArray(d.history) ? d.history : [];
+      $('rest').hidden = false; ended = false; delete hero.dataset.updating;
+      at = meta.at || d.at || null; item = d.item; policy = d.policy ?? policy; history = Array.isArray(d.history) ? d.history : [];
       misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
       render(); loadRepeat();
     },
@@ -290,6 +321,7 @@
       try {
         bar?.set(s); L.offline(s.offline);
         U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
+        if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
         if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }

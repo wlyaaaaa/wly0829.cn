@@ -104,7 +104,7 @@
     'website': ["实况打不开、读数出错或停更、访客版露出不该露的字、网站发布失败", "实况时不时把在跑的任务数清零 → 查出名单刚好过期被作废，放宽有效期 → 线上连读多次都齐才算好", "照样记着、看得到，只是没人修，你和访客看到的可能一直是旧数、错数"],
     'projects': ["各项目夜里自动跑的测试没过；冻结的、登记过的已知失败不算", "本地文字识别夜测报失败 → AI 拿样图实际识一遍字能用 → 之后夜测通过才关，原因没查到", "测试红着照样记着，没人查是程序坏了还是测试过时", "规则仓库的夜测归“规则和技能”"],
     'testing': ["规则仓库夜测里超时的分项，交 AI 分清是真坏、电脑忙还是测试过时；还有到期后夜测确认仍失败的已知失败", "夜测里回收临时目录那项超时了 → 递给 AI 分辨；真坏就转去修，测试过时就改测试", "夜测递来的超时分项过一天作废。到期后仍失败的测试留着，没人处理"],
-    'acceptance': ["登记里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的事项到期也在这里先办，访客看不到内容", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
+    'acceptance': ["登记里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的事项到期也在这里先办", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
     'ai-review': ["对话压缩后的复核、Claude 自动验收、Claude 出方案，最近一次跑得怎样", "有一回压缩后复核自己报错、结果文件坏了 → 这里亮黄灯，点开看最近几轮的记录", "", "复核挑出的错交回原对话，验收结论留在原事项，不在这里修"],
     'ai-stalled': ["别的类里放太久没人领的活，和 AI 干着干着没动静、跑太久被收回重排的活，集中到这里给你看", "一件活排了很久没人领，或 AI 干到一半没动静被收回 → 都汇总到这里亮黄灯，一眼看到没人在管", "", "派活程序自己停了不归这里，首页卡直接亮黄灯"],
     'rules': ["规则和技能仓库的夜测没过的项、每周体检和规则复核的结论，还有 AI 递来的规则、技能毛病", "自检把历史汇报的日期目录当断链、把技能简介长短当错 → AI 改了这几项检查 → 隔夜自检这几项过了", "夜测红着没人修，AI 照旧按有毛病的规则和工具干活", "夜测超时的分项归“待测”；AI 定时任务没跑成归“计划任务和后台程序”；每周结论里只是“待关注”的不建活"],
@@ -209,7 +209,7 @@
     const art = ART[data.id] || hero;
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(art)}" class="aw-art">
       <div class="aw-lead"><div class="aw-type-top"><h1>${lamp(data, false)}${field(data.title, '类型名称')}</h1><div class="aw-type-settings">${controls}${message(data.id)}</div></div>
-      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${esc(description)}</p>` : '<span></span>'}${!readOnly && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
+      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${esc(description)}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
       ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
       ? `<details class="aw-past"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
@@ -266,9 +266,9 @@
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
-  // 修理路线和这件的结果：照后台详情给的 repair_route、result_text 两段写；后台没给路线时写现行说法
+  // 修理路线和结果分别读这件的回执。
   function repairRoute(data) {
-    const route = field(data.repair_route, '修理路线') || `同一件修两轮还没好，由做事的 AI 判断值不值得让${own()}知道或请${own()}选，不用的只记在账本里。`;
+    const route = field(data.repair_route, '修理路线') || '这次没读到，下一轮会自动再读。';
     const result = field(data.result_text, '这件的结果');
     return `<p class="aw-path-note">修理路线：${route}</p>${result ? `<p class="aw-path-note">结果：${result}</p>` : ''}`;
   }
@@ -362,7 +362,9 @@
     if (reply.error === 'cockpit_owner_required') return;
     // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
     const fb = feedback;
-    Live.refresh().then(() => { if (feedback === fb && fb?.want) { fb.reread = true; paint(); } });
+    Live.get(category ? 'automation' : resource, {}).then(read => {
+      if (feedback === fb && fb?.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; paint(); }
+    });
   }
   async function save(operation, id, value) {
     if (busy) return;
@@ -395,6 +397,11 @@
     configuration = { op, id };
     $('automation-setting-title').textContent = '暂停到几点';
     settings.querySelector('[data-fields]').innerHTML = '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>';
+    const current = instant(targetOf(id)?.setting?.until_at);
+    if (Date.parse(current) > Date.now()) {
+      form.elements.value.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16);
+      configuration.until = current;
+    }
     form.querySelector('[data-dialog-result]').textContent = '';
     settings.showModal();
   }
@@ -407,7 +414,8 @@
     result.textContent = '正在保存…';
     feedback = { id, text: '正在保存…', pending: true };
     paint();
-    const until = `${value}:00+08:00`;
+    const selected = `${value}:00+08:00`;
+    const until = Math.floor(Date.parse(configuration.until) / 60000) === Date.parse(selected) / 60000 ? configuration.until : selected;
     const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
     feedbackFor(id, reply, { mode: 'paused', until });
     // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句

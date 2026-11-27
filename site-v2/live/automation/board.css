@@ -12,6 +12,11 @@
 .au-win .tp-big small { font-size: 19px; }
 .au-win__tail { margin: 6px 0 0; font-size: 14px; color: #57564f; }
 .au-win .tp-big.tp-fog { font-size: 20px; }
+@media (max-width: 1150px) {
+  .au-wins__grid > .au-win { padding-inline: 8px; }
+  .au-win .tp-big:not(.tp-fog) { font-size: clamp(24px, 3.5vw, 40px); }
+  .au-win .tp-big small { font-size: 14px; }
+}
 .au-use .tp-panel__head { margin-bottom: 4px; }
 .au-use__num { margin: 0 0 6px; }
 .au-use__num .tp-mid { font-size: 40px; }
@@ -94,7 +99,8 @@
 .au-ok { color: var(--tp-green-ink); font-weight: 700; }
 .au-trend { display: grid; gap: 2px; justify-items: start; }
 .au-trend > span { font-size: 12.5px; color: #57564f; white-space: nowrap; }
-.au-trend > span[data-bad] { color: var(--tp-red); }
+.au-trend .au-n[data-tone="ok"] { color: var(--tp-green-ink); }
+.au-trend .au-n[data-tone="bad"] { color: var(--tp-red); }
 .au-switchcell { white-space: nowrap; }
 /* 开关：点一下圆钮滑到另一头、底色跟着变；“开”写在左边空出来的地方，“关”写在右边 */
 .au-switch { position: relative; display: inline-block; width: 58px; height: 28px; padding: 0; border: 0; border-radius: 999px; background: #c9c7bf; color: #fff; font: inherit; font-size: 13px; font-weight: 700; line-height: 28px; cursor: pointer; vertical-align: middle; transition: background-color .3s ease; }
@@ -128,8 +134,10 @@
 .au-state[data-mode="paused"] { background: var(--tp-amber); }
 .au-foot { margin: 12px 0 0; }
 .au-sched { margin: 18px 0 0; }
-.au-sched .au-recent small { margin-left: 8px; font-size: 12.5px; color: #6c6b64; }
-.au-sched .au-recent small.au-wake { display: block; margin: 2px 0 0 90px; }
+.au-sched .au-recent small { font-size: 12.5px; color: #6c6b64; }
+.au-sched .au-wake { grid-column: 2 / -1; }
+.au-schedule-name { min-width: 0; overflow-wrap: anywhere; }
+.au-schedule-name .tp-link { white-space: normal; }
 
 /* 一类的机制 */
 .au-mechrow > td { padding: 0 !important; background: #fbfbf9; }
@@ -167,8 +175,9 @@
 .au-subs small { font-size: 12.5px; color: #57564f; }
 .au-mini { margin-left: 4px; padding: 0 6px; border: 1px solid var(--tp-line); border-radius: 5px; background: #fff; font: inherit; font-size: 12px; cursor: pointer; }
 .au-mini-table { max-width: 760px; }
-.au-recent { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13.5px; }
-.au-recent b { display: inline-block; min-width: 90px; font-family: var(--mono); font-weight: 600; color: #57564f; }
+.au-recent { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: minmax(90px, max-content) minmax(0, max-content) minmax(0, 1fr); gap: 4px 8px; font-size: 13.5px; }
+.au-recent > li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; }
+.au-recent b { font-family: var(--mono); font-weight: 600; color: #57564f; }
 .au-more { display: grid; gap: 8px; }
 .au-why { padding: 2px 14px 12px; font-size: 13.5px; line-height: 21px; }
 .au-why p { margin: 6px 0 0; }

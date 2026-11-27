@@ -63,8 +63,9 @@
     const cat = Array.isArray(s.catalog) ? s.catalog : Array.isArray(s.catalog?.skills) ? s.catalog.skills : null;
     const catalog = cat && [...new Set(cat.map(c => typeof c === 'string' ? c : c?.label).filter(c => typeof c === 'string' && c))];
     cat?.forEach(c => keepLabel(labels, c));
-    return { at: s.as_of || s.observed_at, win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
-      missing: HOSTS.filter(h => !providers.some(p => p.fam === h)), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
+    return { latest: s.as_of, refresh: num(s.refresh_seconds), win, catalog, labels, lower: Object.fromEntries(providers.map(p => [p.fam.id, p.lower_bound === true])),
+      unverified: Object.fromEntries(providers.map(p => [p.fam.id, num(p.unverified_sources)])),
+      starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       invalid: num(s.invalid_ledger_rows), href: '/live/records/?project=agents&section=skill_rows',
       through: Object.fromEntries(providers.map(p => [p.fam.id, p.recorded_through || null])), readAt: s.observed_at || s.as_of || null };
   }
@@ -159,12 +160,15 @@
   function skillSection(s, summaryAt) {
     const key = 'skills', p = period[key], w = s.win[p], f = only;
     const every = f ? (w.own[f] || []) : [...w.rows.values()].sort((a, b) => sum(b.v, HOSTS) - sum(a.v, HOSTS)).map(r => r.name);
-    const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS, names = [...new Set([...every, ...(s.catalog || [])])];
+    const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS;
+    const lower = hs.filter(h => s.lower[h.id]).map(h => h.name);
+    const missing = hs.filter(h => !known(w.v[h.id]) && !w.own[h.id]?.length).map(h => h.name);
+    const names = missing.length === hs.length ? every : [...new Set([...every, ...(s.catalog || [])])];
     const unused = names.filter(n => hs.every(h => skillCount(n, h, w) === 0));
     const visible = names.filter(n => !unused.includes(n));
     const rows = (skillsOpen ? visible : visible.slice(0, TOP)).map(n => w.rows.get(n) || { name: n, v: {} });
     const total = f ? w.v[f] : null;
-    const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : `${fam(f).name} 这段时间的技能没采到`;
+    const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : rows.length ? `${fam(f).name} 这段时间的技能没采到` : '';
     const hidden = Math.max(0, visible.length - TOP) + unused.length;
     const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
@@ -172,12 +176,17 @@
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const behind = hs.filter(h => Date.parse(s.readAt) - Date.parse(s.through[h.id]) > 864e5).map(h => `${h.name} 只记到 ${T.when(s.through[h.id])}`);
     const lag = behind.length ? `${behind.join('、')}，之后用的还没入账` : '';
-    const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
-      s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
+    const unverified = hs.filter(h => s.unverified[h.id] > 0).map(h => `${h.name} 有 ${int(s.unverified[h.id])} 份记录读不出来，里面用过的技能没算进来`);
+    // 全都没读到时上面空着那句已经说了，这里不再写一遍
+    const notes = [line, lag, ...later, ...unverified, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
+      missing.length && missing.length < hs.length ? `${missing.join('、')} 的技能这段时间还没采到` : '', lower.length ? `${lower.join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, asof(s.at, summaryAt))}
+    const interval = s.refresh > 0 && (s.refresh % 60 ? `${int(s.refresh)} 秒` : T.duration(s.refresh));
+    const reading = [asof(s.at, summaryAt), interval && `约每 ${interval}汇总一次`, s.latest && `最近一次用技能在 ${T.when(s.latest)}`].filter(Boolean).join(' · ');
+    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, reading)}
       ${chips()}
-      ${rows.length ? bars(rows, hs, s, w) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
+      ${rows.length ? bars(rows, hs, s, w)
+        : `<p class="tp-empty">${missing.length === hs.length ? '这段时间的技能记录这次没读到，下一轮会自动再读。' : '这段时间没记到用过技能。'}</p>`}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；')).replace(/\d{2}-\d{2} 起才有记录/g, '<span class="ag-keep">$&</span>')}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {

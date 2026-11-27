@@ -39,7 +39,8 @@
       const only = files.flatMap(f => f.blocks.filter(b => b.kind === 'host_only').map(b => b.label)).filter(Boolean);
       return { ...h, present: Boolean(r), version, current: typeof r?.current === 'boolean' ? r.current : null, behind,
         characters: num(r?.characters), files, only, context: opening(list(d.startup_context), h),
-        compact: latest(d.compact_context, h), message: latest(d.message_context, h) };
+        compact: latest(d.compact_context, h), message: latest(d.message_context, h),
+        triggers: list(d.context_triggers).filter(r => hostOf(r.host) === h && r.enabled === true) };
     });
     const c = d.charter && typeof d.charter === 'object' ? d.charter : null, ref = d.charter_href || c?.href || '';
     return { active, hosts, hasHosts: Boolean(raw), charter: c && { version: plain(c.version) || null },
@@ -59,9 +60,10 @@
   //   resolved_path,bytes,characters,tokens,scope,file_evidence,load_evidence,imported_by,counted_bytes,excluded_header_bytes}],
   //   file_count,bytes,characters,tokens,count_method, token_limit,tokens_remaining（只 Antigravity）}} }
   // 项目那几份（scope: project）另带 text、version、paragraphs、visitor_text_rewritten，和全局那几份一样登原文；
-  // 没读到时 text 为 null。旧接口项目那几份不带 text 这一项，那时照旧写一句“这里没登原文”。
+  // 没读到时 text 为 null；全局文件可按路径取 hosts 中另给的那份原文。
   const MODE_NAMES = { no_project: '无项目', website: '网站项目', agents: 'agents 项目' };
   const baseName = p => String(p || '').split(/[\\/]/).filter(Boolean).at(-1) || '';
+  const pathKey = p => (p || '').replaceAll('\\', '/').toLowerCase();
   function modesOf(d) {
     const raw = d.opening_modes && typeof d.opening_modes === 'object' ? d.opening_modes : null;
     if (!raw) return null;
@@ -85,11 +87,9 @@
         bytes: num(f.bytes), characters: num(f.characters), tokens: num(f.tokens), project: f.scope === 'project', read: f.file_evidence !== 'unavailable',
         load: String(f.load_evidence || ''), importedBy: plain(f.imported_by) || null,
         counted: num(f.counted_bytes), header: num(f.excluded_header_bytes) };
-      if (!row.project || !f || !Object.hasOwn(f, 'text')) return row;
-      const doc = file(f);
-      return { ...row, hasText: true, name: doc.name, readable: doc.readable, blocks: doc.blocks, rewritten: doc.rewritten };
+      return { ...row, doc: Object.hasOwn(f, 'text') ? file(f) : null };
     });
-    return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens),
+    return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens), characters: num(r.characters),
       method: String(r.count_method || ''), limit: num(r.token_limit), left: num(r.tokens_remaining), staleAt: staleAt(r) };
   }
   // 开场时补的几行：这一家最近一次开场（同一次开场的几条钩子前后差不到 2 分钟），按先后接起来原样给
@@ -98,7 +98,9 @@
     if (!mine.length) return null;
     const last = T.stamp(mine[0].at), group = mine.filter(r => last - T.stamp(r.at) <= 120000).reverse();
     const text = group.map(r => plain(r.text)).filter(s => s.trim()).join('\n');
-    return text ? { at: mine[0].at, text, hooks: group.map(r => r.hook || r.event).filter(Boolean),
+    // 补了多少字：后台给了 characters 就用它，没给就数这一组原文的字（本人版就是原样补进去的那几行；访客版数的是换过说法的那份）
+    const chars = group.reduce((s, r) => s + (num(r.characters) ?? plain(r.text).length), 0);
+    return text ? { at: mine[0].at, text, chars, hooks: group.map(r => r.hook || r.event).filter(Boolean),
       triggers: [...new Set(group.map(r => TRIGGERS[r.trigger]).filter(Boolean))] } : null;
   }
   const TRIGGERS = { startup: '开对话时', resume: '恢复时', compact: '压缩后' };
@@ -169,6 +171,8 @@
     return out.filter(b => b.rows.length);
   }
 
+  const pathParts = text => text.split(/(?<=[\\/])/u).map(part => `<span class="op-path-segment">${part}</span>`).join('<wbr>');
+
   // —— 原文排版：标题、段落、列表、加粗、代码；本机路径的链接网页上打不开，只留字 ——
   function inline(s) {
     const codes = [];
@@ -230,7 +234,7 @@
   // —— 开法：一排胶囊切换；下面“读哪几份”一份一行 ——
   const modeOf = m => m.modes.find(x => x.id === mode) || m.modes[0];
   const whenOpen = o => o.id === 'no_project' ? `${o.name}时` : `选${/^[A-Za-z0-9]/.test(o.name) ? ' ' : ''}${o.name}时`;
-  const approx = r => r?.method !== 'antigravity_settings';   // 只有 Antigravity 按它设置页自己的算法算，别家都是估的
+  const approx = r => r?.method === 'o200k_base_estimate';
   const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> token` : 'token 没算出';
   const staleNote = x => x?.staleAt ? `<small class="op-stale">上次估算于 ${esc(when(x.staleAt))}</small>` : '';
   const EV = { observed: '看到的', inferred: '按加载规则推算', unavailable: '读不到' };
@@ -267,7 +271,7 @@
       return `按 Antigravity 设置页自己的算法：每份按 UTF-8 字节数 ÷ 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
     }
     if (r.method === 'o200k_base_estimate') return `token 是用 GPT 的分词表估的，${h.name} 自己的计数没拿到，所以都写“约”。`;
-    return 'token 是估的，所以都写“约”。';
+    return 'token 是怎么算出来的这一轮没读到，下一轮会自动再读。';
   }
   function filesCard(m, h) {
     const o = modeOf(m), r = o.hosts[h.id];
@@ -302,7 +306,8 @@
   }
   function metaRow(m, h) {
     const read = state?.meta?.at && when(state.meta.at);
-    return `<div class="op-meta"><p>${[versionText(m, h), words(h.characters), read && `${esc(read)} 读到`].filter(Boolean).join('<span class="op-dot">·</span>')}</p>${link(m.rulesHref, '看规则页 ›')}</div>`;
+    const base = m.modes?.find(x => x.id === 'no_project')?.hosts[h.id];
+    return `<div class="op-meta"><p>${[versionText(m, h), words(base?.characters ?? h.characters), read && `${esc(read)} 读到`].filter(Boolean).join('<span class="op-dot">·</span>')}</p>${link(m.rulesHref, '看规则页 ›')}</div>`;
   }
   function sharedTag(shared, h) {
     const names = list(shared).map(n => hostOf(n)).filter(x => x && x !== h).map(x => x.name);
@@ -319,49 +324,47 @@
     return `<section class="op-plain">${tag}<div class="op-md">${body}</div></section>`;
   }
   function body(m, h) {
-    if (!h.present) return `<p class="tp-empty">${h.name} 的开场页这一轮没读到。</p>`;
-    if (!h.files.length) return `<p class="tp-empty">${h.name} 的入口目录不在，开对话时没有开场页可读。</p>`;
-    const many = h.files.length > 1, on = Boolean(m.modes), o = on && modeOf(m), r = on && o.hosts[h.id];
+    const on = Boolean(m.modes), r = on && modeOf(m).hosts[h.id];
+    if (on ? !r : !h.present) return `<p class="tp-empty">${h.name} 这种开法要读的规矩原文这一轮没读到，下一轮会自动再读。</p>`;
+    const globals = new Map(h.files.filter(f => f.path).map(f => [pathKey(f.path), f]));
+    const files = on ? r.files.map(f => {
+      const doc = f.doc || globals.get(pathKey(f.path)) || globals.get(pathKey(f.resolved));
+      return { ...doc, path: f.path, project: f.project, characters: f.characters ?? doc?.characters, tokens: f.tokens ?? doc?.tokens,
+        readable: f.read && doc?.readable };
+    }) : h.files;
+    if (!files.length) return `<p class="tp-empty">${h.name} 这种开法没有要读的规矩文件。</p>`;
+    const many = files.length > 1;
     const near = r ? approx(r) : h.id !== 'antigravity';
     const one = (f, i, key) => {
       // 有开法时每份都写路径和 token（和上面“读哪几份”的第几份对得上）；后台还没给开法时照改之前的样子。
       // 访客版这一份换了说法的，本人版在抬头挂全站同一个“对外换了说法”小签
-      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
+      const file = (on && f.path) || f.name || '没写文件名';
+      const path = pathParts(esc(file));
+      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${path}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
         on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
-      return top + (f.blocks.length ? f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('') : '<p class="tp-empty">这一份是空的。</p>');
+      if (!f.blocks.length) return `${top}<p class="tp-empty">这一份是空的。</p>`;
+      return top + f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('');
     };
-    const html = h.files.map((f, i) => one(f, i, `${h.id}-${i}`)).join('');
-    // 项目自己的那几份：后台给了原文就跟全局那几份一样登；旧接口只给路径和大小，说一声原文没登，别让人以为漏了
-    const own = r ? r.files.map((f, i) => [f, i]).filter(([f]) => f.project) : [];
-    const shown = own.filter(([f]) => f.hasText).map(([f, i]) => one(f, i, `${h.id}-${o.id}-${i}`)).join('');
-    const extra = own.filter(([f]) => !f.hasText).map(([, i]) => i + 1);
-    const span = extra.length > 1 ? `第 ${extra[0]}–${extra.at(-1)} 份` : `第 ${extra[0]} 份`;
-    return html + shown + (extra.length ? `<p class="op-more">${span}是${esc(whenOpen(o))}多读的项目规矩，这里没登原文，路径和大小在上面“读哪几份”里。</p>` : '');
+    return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }
-  // 这几行什么时候补、平常每条消息补什么（M928 补机制）：Claude、Codex 的开场钩子在开对话、恢复和压缩以后都跑
-  // （两家钩子设置里开场那组的条件都是 startup|compact|resume），每收到一条消息另由“收到消息”那条钩子补状态；
-  // Antigravity 只在开新对话时补，之后每次叫模型前补状态（规则仓 hook-catalog.json 的 C01/C03、X01/X02、A01/A02）。
-  // 压缩以后规则文件重不重读，本机没实测，这里不写
-  const REFILL = {
-    claude: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
-    codex: ['开对话、恢复和压缩以后都补这几行', '平常每收到一条消息，另补几行状态（北京时间、资料锁、没答的题）'],
-    antigravity: ['只在开新对话时补这几行', '之后每次叫模型前，另补几行状态（资料锁、没答的题、刚才的工具错误）'],
-  };
   const stampText = x => `${esc(T.day(x.at))} ${esc(T.clock(x.at))}`;
   function refillText(h) {
-    const [open, each] = REFILL[h.id] || [];
-    if (!open) return '';
-    const compact = h.compact && h.id !== 'antigravity' ? `，最近一次压缩后是 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字` : '';
-    const message = h.message ? `，最近一次 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字` : '';
-    // 每条消息补的原样在智能体页钩子“收到消息”那格里有（最近一次塞给 AI 的原样），这里不另摆，给个去处
-    return `${open}${compact}；${each}${message} ${link('/live/agents/#hooks-message', '原样在智能体页 ›')}`;
+    const when = station => [...new Set(h.triggers.filter(r => r.station === station)
+      .map(r => plain(r.when).trim().replace(/。$/, '')).filter(Boolean))].map(esc).join('，');
+    const start = when('start'), message = when('message');
+    const configured = [start && `${start}时补这几行`, message && `${message}时另补几行状态`].filter(Boolean);
+    const sample = [
+      h.compact && `压缩后最近一次在 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字`,
+      h.message && `另补状态最近一次在 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字`,
+    ].filter(Boolean);
+    return [...configured, ...sample, link('/live/agents/#hooks-message', '原样在智能体页 ›')].join(' · ');
   }
   function contextHtml(h) {
     const c = h.context, refill = refillText(h);
-    const what = c?.triggers?.length ? `（${c.triggers.join('、')}补的）` : '';
+    const what = c?.triggers?.length ? `（${c.triggers.join('、')}）` : '';
     return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
+      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
       : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变
@@ -386,7 +389,7 @@
   function feed(m) {
     const rows = [];
     for (const h of m.hosts) if (h.context) rows.push({ at: h.context.at, actor: h.name,
-      text: `开场时补了 ${int(h.context.text.length)} 字${h.context.hooks.length ? `（${[...new Set(h.context.hooks.map(k => HOOK_NAMES[k] || k))].join('、')}）` : ''}`,
+      text: `开场时补了 ${int(h.context.chars)} 字${h.context.hooks.length ? `（${[...new Set(h.context.hooks.map(k => HOOK_NAMES[k] || k))].join('、')}）` : ''}`,
       href: T.path('/live/agents/opening/', { family: h.id }) + '#startup', tone: 'info' });
     for (const h of m.hosts) if (h.present) rows.push({ actor: h.name, html: h.current === false ? `<em>不是当前版</em> · ${esc(h.version || '')}` : `<em>${esc(h.version || '')}</em> · ${words(h.characters)} · 只它有的 ${h.only.length} 段`,
       href: T.path('/live/agents/opening/', { family: h.id }), tone: h.current === false ? 'repair' : 'ok' });

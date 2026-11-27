@@ -9,6 +9,8 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
+  // 按需更新快核（总表分类次序）核法：对照 AUTOPAGES1126 选 A 的《页面说明·自动任务》总表和 /automation 的 categories，再核 E:/PCConfig/tools/remote-computer-mcp/automation/core.py 的 CATEGORIES。
+  // 现依次为自动修理、看新消息、翻译官、规矩复核、实况核对、摘一句、AI 约好的事。笔记本周检只留旧轮，核在用类别与改名时一起看旧入口。
   const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
   // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
   const PAST = ['weekly-laptop'];
@@ -25,8 +27,12 @@
   // 一类：以前在这页原地展开（?type=）或只看这一类（?category=），现在各有一页；链到“怎么干”“提示词”的锚点转到怎么干页
   const catParam = IDS.includes(typeParam) ? typeParam : IDS.includes(params.get('category')) ? params.get('category') : null;
   if (catParam) {
-    const how = typeParam === catParam && /^#(prompt|cat|why|fail)-/.test(location.hash);
-    location.replace(how ? `/live/automation/how/?type=${catParam}${location.hash.startsWith('#prompt-') ? '#prompt' : ''}` : `/live/automation/category/?type=${catParam}`);
+    const how = /^#(prompt|cat|why|fail)-/.test(location.hash);
+    const path = new URL(how ? '/live/automation/how/' : '/live/automation/category/', location.origin);
+    path.searchParams.set('type', catParam);
+    if (params.has('fixture')) path.searchParams.set('fixture', params.get('fixture'));
+    if (how && location.hash.startsWith('#prompt-')) path.hash = 'prompt';
+    location.replace(path.pathname + path.search + path.hash);
     return;
   }
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
@@ -101,11 +107,12 @@
       const mine = board;
       for (const status of BOARD) subs.push(Live.watch('automation/runs', { scope: 'board', status }, { phase(st) {
         if (board !== mine) return;
-        if (!st.data && st.meta?.status >= 400 && st.meta.status < 500) { boardOff = true; queueMicrotask(() => { watchRuns(); schedule(); }); return; }
+        if (!st.data && [400, 404].includes(st.meta?.status)) { boardOff = true; queueMicrotask(() => { if (board === mine) { watchRuns(); schedule(); } }); return; }
         board[status] = st; readBack(status, st, { scope: 'board', status }); schedule();
       } }));
     } else for (const id of RUN_IDS) {
-      subs.push(Live.watch('automation/runs', { category: id, date }, { phase(st) { pages.set(id, st); readBack(id, st, { category: id }); schedule(); } }));
+      const query = { category: id, date, exclude_check_only: 1 };
+      subs.push(Live.watch('automation/runs', query, { phase(st) { pages.set(id, st); readBack(id, st, query); schedule(); } }));
     }
     subs.push(Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } }));
   }
@@ -119,8 +126,9 @@
   const lastAtOf = x => T.stamp(x?.last_activity_at || x?.finished_at || x?.started_at || x?.queued_at);
   function readBack(id, st, query) {
     const d = st?.data;
-    if (filter.date || !Array.isArray(d?.items)) { backPages.delete(id); return; }
-    const edge = query.scope ? -Infinity : Date.now() - 72 * 3600000, past = items => items.length > 0 && (lastAtOf(items.at(-1)) ?? Infinity) < edge;
+    if (!Array.isArray(d?.items)) { backPages.delete(id); return; }
+    const edge = query.scope || query.date ? -Infinity : Date.now() - 72 * 3600000;
+    const past = items => items.length > 0 && (lastAtOf(items.at(-1)) ?? Infinity) < edge;
     const sign = `${st.viewer?.kind || ''}|${d.items[0]?.run_id}|${d.items.length}|${d.next ?? ''}`;
     // 第一页没变：读完了或正在读就不动；上次读到一半断了（某一批没读到），从断的那一批接着读，已读到的留着
     const old = backPages.get(id);
@@ -145,43 +153,42 @@
     })();
   }
 
-  // 七类的读数拼成一份：rows 是有的行；legacy=true 表示读口没装上、用的是老读数拼的。
-  // 两张总列表时每行记下它在哪张（from），各自的 total 放 totals；有一张还没回就是 waiting
+  const loaded = st => st && (st.data || st.meta?.status >= 400 || ['none', 'gone', 'paused'].includes(st.phase));
+  // 按类读口同时带程序检查和未开工的记录。总览的历史只列实际结束的 AI 轮次。
+  const genuine = raw => {
+    if (!raw || raw.check_only || raw.worker?.kind !== 'ai' || raw.outcome === 'missed') return false;
+    if (raw.status === 'running') return true;
+    const kind = raw.run_state?.kind;
+    return T.stamp(raw.finished_at) != null && !['login', 'quota', 'paused', 'off'].includes(kind)
+      && (raw.status === 'completed' || raw.status === 'incomplete' && (kind == null || kind === 'problem'));
+  };
+  // 拼合原轮次。各列表独立保留读数状态，避免把读不到的一份当成零轮。
   function collect(d) {
-    if (board) {
-      const got = BOARD.map(status => ({ status, st: board[status], p: R.page(board[status]?.data, viewer) }));
-      const answered = got.filter(({ st }) => st && (st.data || st.meta?.status >= 400 || st.phase === 'none' || st.phase === 'gone'));
-      if (got.some(x => x.p)) {
-        const rows = [], keys = new Set(), totals = {};
-        for (const { status, p } of got) {
-          if (!p) continue;
-          totals[status] = p.total;
-          for (const r of [...p.rows, ...list(backPages.get(status)?.rows).map(x => R.run(x, viewer))]) {
-            if (r.category && r.id && !keys.has(r.key)) { keys.add(r.key); rows.push({ ...r, from: status }); }
-          }
-        }
-        return { rows, legacy: false, board: true, totals, waiting: answered.length < BOARD.length, capped: false };
-      }
-      if (answered.length < BOARD.length) return { rows: [], legacy: false, board: true, totals: {}, waiting: true };
-      return { rows: R.fallback(d, viewer), legacy: true, waiting: false };
-    }
-    const ids = RUN_IDS, states = ids.map(id => pages.get(id));
-    const answered = states.filter(s => s && (s.data || s.meta?.status >= 400 || s.phase === 'none' || s.phase === 'gone'));
-    const got = ids.map((id, i) => ({ id, p: R.page(states[i]?.data, viewer) })).filter(x => x.p);
-    if (got.length) {
-      // 第一页的行，接上往后翻到的行（同一轮只留一份）
-      const rows = [], keys = new Set();
-      for (const { id, p } of got) for (const r of [...p.rows, ...(filter.date ? [] : list(backPages.get(id)?.rows).map(x => R.run(x, viewer)))]) {
+    const ids = board ? BOARD : RUN_IDS;
+    const rows = [], keys = new Set(), totals = {}, waiting = new Set(), missing = new Set();
+    let supplied = 0, paging = false, pageFailed = false;
+    for (const id of ids) {
+      const st = board ? board[id] : pages.get(id), data = st?.data;
+      if (!Array.isArray(data?.items)) { (loaded(st) ? missing : waiting).add(id); continue; }
+      supplied++;
+      totals[id] = data.total;
+      const extra = backPages.get(id);
+      paging ||= !!data.next && !!extra?.busy;
+      pageFailed ||= !!data.next && !extra?.done && !extra?.busy;
+      for (const raw of [...data.items, ...list(extra?.rows)]) {
+        if (!board && !genuine(raw)) continue;
+        const r = R.run(raw, viewer);
+        if (board) r.from = id;
         if (r.category && r.id && !keys.has(r.key)) { keys.add(r.key); rows.push(r); }
       }
-      return { rows, legacy: false, waiting: answered.length < states.length, capped: got.some(({ id, p }) => p.more && (filter.date || !backPages.get(id)?.done)) };
     }
-    if (answered.length < states.length) return { rows: [], legacy: false, waiting: true };
-    return { rows: R.fallback(d, viewer), legacy: true, waiting: false };
+    const legacy = !supplied && !waiting.size;
+    return { rows: legacy ? R.fallback(d, viewer) : rows, legacy, board: !!board && !legacy, totals, waiting, missing, paging, pageFailed };
   }
   const inWindow = r => {
-    if (filter.date) { const key = dayOf(filter.date); return [r.queuedAt, r.startedAt, r.lastAt].some(at => T.dayKey(at) === key); }
-    return r.status === 'running' || Date.now() - (T.stamp(r.lastAt) || 0) < 72 * 3600000;
+    const end = r.finishedAt;
+    if (filter.date) return T.dayKey(end) === dayOf(filter.date);
+    return r.status === 'running' || Date.now() - (T.stamp(end) || 0) < 72 * 3600000;
   };
   // 自动修理一件一张卡，几轮收在卡里；别的一轮一张卡
   function cards(rows) {
@@ -208,18 +215,22 @@
       // 暂缓的轮次照暂缓显示，不算“跑完的”也不算“没做成的”（没有单独的“暂时不修”筛选，主控 11-25）
       && (!filter.family || r.family === filter.family) && (!filter.status || r.status === filter.status && !r.deferred));
     let live, done, counts, doneRounds = null;
+    const counted = (status, actual) => {
+      if (got.board && !filter.family && !filter.status && known(got.totals[status])) return got.totals[status];
+      const missing = got.board ? got.missing.has(status) || got.waiting.has(status) : got.missing.size || got.waiting.size;
+      return missing || got.paging || got.pageFailed || got.legacy ? null : actual;
+    };
     if (got.board) {
       // 两张列表各排各的：自动修理一件在修、之前几轮已跑完的，在修那轮在“进行中”，跑完的几轮在“近 72 小时跑完的”，件数和后台一致（按轮数）
       const lr = rows.filter(r => r.from === 'running'), dr = rows.filter(r => r.from === 'finished');
       [live, done] = [cards(lr), cards(dr)];
       doneRounds = dr.length;
-      const plain = !filter.family && !filter.status;
-      counts = { running: plain && known(got.totals.running) ? got.totals.running : got.waiting && !lr.length ? null : lr.length,
-        finished: plain && known(got.totals.finished) ? got.totals.finished : got.waiting && !dr.length ? null : dr.length };
+      counts = { running: counted('running', lr.length), finished: counted('finished', dr.length) };
     } else {
-      const all = cards(rows);
-      live = all.filter(c => c.status === 'running'); done = all.filter(c => c.status !== 'running');
-      counts = { running: got.waiting && !live.length ? null : live.length, finished: got.waiting && !done.length ? null : done.length };
+      const lr = rows.filter(r => r.status === 'running'), dr = rows.filter(r => r.status !== 'running');
+      [live, done] = [cards(lr), cards(dr)];
+      doneRounds = dr.length;
+      counts = { running: counted('running', lr.length), finished: counted('finished', dr.length) };
     }
     const problems = problemsOf(d);
     return { ...got, live, done, counts, doneRounds, problems, total: live.length + done.length + problems.length, byId: new Map(got.rows.map(r => [r.key, r])) };
@@ -286,7 +297,7 @@
       const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
       if (earlier.length) rounds = `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
-    else title = F(r.summary, '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
+    else title = R.oneVersion(F(r.summary, '这一轮做了什么')) || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = Fm(r.activity, '正在干什么');
       meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
@@ -303,16 +314,22 @@
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
       <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p>${rounds}</div>${go(r.href)}</article>`;
   }
+  // 派活程序超过两轮半没转：各类的下次时间算不出来（和页头那句警告同一个判断）
+  const stalled = d => {
+    const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+  };
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
     const x = d.dispatch;
-    if (!x) return '';
-    const every = known(x.interval_seconds) && x.interval_seconds > 0 ? Math.round(x.interval_seconds / 60) : null;
+    if (!x) return '<span class="au-warn">派活程序的状态这次没读到</span>';
+    const interval = x.interval_seconds;
+    const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
     if (!T.stamp(tick)) return '<span class="au-warn">派活程序几点转的没读到</span>';
     const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
-    return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转${every ? `（该每 ${every} 分钟一次）` : ''}</span>`
-      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every} 分钟一次` : ''}`;
+    return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
+      : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，多久转一圈没读到'}`;
   }
 
   // —— 上半部 ——
@@ -325,14 +342,13 @@
   }
   // 四个按钮（照第一屏图）：全部＝七类表，进行中、出毛病的、近 72 小时跑完的换成下面的列表。
   // 件数：两张总列表读到了，进行中、跑完的就是各自回包的 total（按轮数）；还没读到先用 automation 里的 board_counts；
-  // 只看一家、一种结局、某一天时照下面实际列出的数。全部＝几类（board_counts.all，没给时数七类表的行）。列表还在读时不写数
+  // 只看一家、一种结局、某一天时照下面实际列出的数。全部＝表里实际显示的类数。
   function buttons(d, v) {
     const bc = d.board_counts || {}, plain = !filter.family && !filter.status && !filter.date;
     const count = key => v.counts[key] ?? (plain && known(bc[key]) ? bc[key] : null);
-    const btn = (key, label, n) => `<button type="button" class="au-view" data-view="${key}" aria-pressed="${(filter.view || 'all') === key}">${label}${n != null ? ` <b>${int(n)}</b>` : ''}</button>`;
-    // 全部＝下面七类表有几类（后台 board_counts.all 同一个数）；后台没给时数表里实际几行，不再把三张列表加起来
-    const all = known(bc.all) ? bc.all : shownCats(d).length || null;
-    return `<nav class="au-views" aria-label="看哪些">${btn('all', '全部', all)}${btn('running', '进行中', count('running'))}${btn('problems', '出毛病的', v.problems.length)}${btn('done', '近 72 小时跑完的', count('finished'))}${chips(d)}</nav>`;
+    const btn = (key, label, n, unit = '') => `<button type="button" class="au-view" data-view="${key}" aria-pressed="${(filter.view || 'all') === key}">${label}${n != null ? ` <b>${int(n)}</b>${unit}` : ''}</button>`;
+    const all = shownCats(d).length || null;
+    return `<nav class="au-views" aria-label="看哪些">${btn('all', '全部', all, ' 类')}${btn('running', '进行中', count('running'))}${btn('problems', '出毛病的', v.problems?.length)}${btn('done', '近 72 小时跑完的', count('finished'))}${chips(d)}</nav>`;
   }
   const sec = (id, name, n, html, extra = '') => `<section class="au-sec" id="${id}"><h2 class="au-sec__head">${name}${n != null ? `<b> · ${int(n)}</b>` : ''}${extra}</h2>${html}</section>`;
   // 北京日期写成“11 月 24 日 周二”，今天的前面加“今天 · ”
@@ -361,12 +377,18 @@
     const waiting = '<p class="au-empty">正在读…</p>';
     // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
     // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
-    const legacy = v.legacy && filter.view !== 'problems' ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
     if (filter.view === 'problems') return sec('trouble', '出毛病的', v.problems.length, problemList(d, v));
+    const running = filter.view === 'running', status = running ? 'running' : 'finished';
+    const affected = set => v.board ? set.has(status) : set.size > 0;
+    const cards = running ? v.live : v.done, reading = affected(v.waiting) || (!running && v.paging);
+    const missing = affected(v.missing) || (!running && v.pageFailed);
+    const legacy = v.legacy && cards.length
+      ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
+    const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
     if (filter.view === 'running') {
       const next = shownCats(d).filter(c => c.next_at).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
       const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
-      return legacy + sec('running', '进行中', v.counts.running ?? v.live.length, v.live.length ? v.live.map(c => card(d, v, c)).join('') : v.waiting ? waiting : idle);
+      return (legacy || incomplete) + sec('running', '进行中', v.counts.running, v.live.length ? v.live.map(c => card(d, v, c)).join('') : reading ? waiting : missing ? '' : idle);
     }
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
     // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
@@ -378,15 +400,16 @@
     const dots = { 跑完: '绿点跑完', 没做成: '红点没做成', 暂时不修: '灰点暂时不修' };
     const kindsNote = doneKinds.length && !(doneKinds.length === 1 && `${doneKinds[0]}的` === doneWhat)
       ? `<p class="tp-small au-kindsnote">已经结束的轮次：${doneKinds.map(k => dots[k]).join('，')}。</p>` : '';
-    const capped = v.capped && !filter.date ? '<p class="tp-small au-capped">有的类这 72 小时跑得多，每类只列最近 50 轮；更早的按天看。</p>' : '';
     // 按钮和标题上的数是轮数（后台两张列表的 total），自动修理同一件的几轮收在一张卡里，卡片张数会少：都读完了、张数确实少时，标题下面说一句（复查挑过对不上）
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
       ? `<p class="tp-small au-roundsnote">${int(v.doneRounds)} 是轮数：自动修理同一件修了几轮的，收在同一张卡里，所以下面是 ${int(v.done.length)} 张卡。</p>` : '';
     const excerpt = excerptToday?.data && known(excerptToday.data.total) ? `摘一句不在这里列，今天摘了 ${int(excerptToday.data.total)} 句。` : '';
     const left = v.done.length - doneShown;
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
-    return legacy + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished ?? v.done.length, v.done.length ? kindsNote + rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : `<p class="au-empty">${v.waiting ? '正在读…' : `${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}`}</p>`,
-      filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + capped + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
+    const content = v.done.length ? kindsNote + rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : '';
+    const empty = !missing && !content ? `<p class="au-empty">${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}</p>` : '';
+    return (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading ? waiting : empty),
+      filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
   }
   // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
   function older(d) {
@@ -520,20 +543,23 @@
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
       <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
   }
-  // AI 约好的事在等几件、下一件几点：从账本数。后台把自动修理的活记成“自动修理”记的，其余还没了结的就是约好的；在办的不算在等
+  // 件数与账本“约好再查的”一致；已经在办的仍是未了结，但不参与下一件的排期。
   function promised() {
     const items = ledger?.data?.items;
     if (!Array.isArray(items)) return null;
-    const mine = items.filter(it => it.state && it.state !== 'working' && it.registered_by !== '自动修理');
-    const full = it => known(it.check_count) && it.check_count >= (it.check_limit || 3);
-    const next = mine.filter(it => !full(it) && T.stamp(it.next_at) > Date.now()).map(it => it.next_at).sort((a, b) => T.stamp(a) - T.stamp(b))[0];
+    const mine = items.filter(it => it.state && [it.registered_by, it.registered_by_text]
+      .every(v => U.fieldText(v ?? '', viewer).trim() !== '自动修理'));
+    const full = it => known(it.check_count) && Number.isInteger(it.check_limit) && it.check_limit > 0 && it.check_count >= it.check_limit;
+    const next = mine.filter(it => it.state !== 'working' && !full(it)).map(it => it.next_at || it.wait?.at)
+      .filter(at => T.stamp(at) > Date.now()).sort((a, b) => T.stamp(a) - T.stamp(b))[0];
     return { count: mine.length, next };
   }
   // “现在”那格（照第一屏图）：灯＋一句话，下面一行小字。先后：停等（登录过期、额度用完）＞出毛病＞正在跑＞关着＞暂停到＞空着等下次
   function nowCell(d, c, v) {
-    const g = G[c.id] || {}, p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
+    const p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
     const live = v.live.find(x => x.category === c.id)?.run, since = T.stamp(live?.startedAt);
-    let tone = 'idle', main, sub = esc(g.when || '');
+    const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
+    let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
     else if (pr && (pr.headline || pr.title || pr.text)) {
       tone = 'warn'; main = `出毛病：${F(pr.headline || pr.title || pr.text, '哪里坏了')}`;
@@ -543,7 +569,7 @@
       const ran = since ? `<span data-since="${since}">已 ${minutes((Date.now() - since) / 1000)}</span>` : known(st.elapsed_seconds) ? `已 ${minutes(st.elapsed_seconds)}` : '';
       const doing = live && (F(live.activity, '正在干什么') || (live.subject ? F(live.subject.title, '这件活') : ''));
       main = `正在跑${ran ? ` · ${ran}` : ''}`; sub = doing ? `${doing.replace(/^正在/, '')}` : sub;
-    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = c.id === 'weekly-live' ? '网站上线收尾做完再开' : sub; }
+    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = waiting || sub; }
     else if (m === 'paused') { tone = 'off'; main = esc(pausedText(c.setting?.until_at) || '暂停中'); }
     else if (c.id === 'excerpt') main = excerptToday?.data && known(excerptToday.data.total) ? `今天摘了 ${int(excerptToday.data.total)} 句` : '空着';
     else if (c.id === 'ai-commitments') {
@@ -553,7 +579,9 @@
       if (owed) sub = link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
     } else {
       const next = st.next_at || c.next_at;
-      main = next ? `空着 · 下次 ${esc(when(next))}` : `空着${c.waiting_for ? ` · ${F(c.waiting_for, '在等什么')}` : ''}`;
+      main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : stalled(d) ? '空着 · 派活程序没按时跑，下次几点暂时算不出' : waiting ? `空着 · ${waiting}` : '空着';
+      if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
+      if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
     if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
@@ -573,8 +601,7 @@
     const headline = problem?.headline || problem?.title || problem?.text;
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
-    const result = c.id === 'translator' && typeof r.text === 'string'
-      ? r.text.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : r.text;
+    const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
     const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
@@ -585,8 +612,9 @@
     const days = list(c.daily_30d), s = c.recent_stats || {};
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
-    const nums = known(s.success) ? `成 ${int(s.success)} · 坏 ${int(s.failed)}` : '还没采上';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${s.failed ? ' data-bad' : ''}>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    // 颜色跟柱图一样：成是绿字，坏了才是红字（M1096：原来整行一坏就全红，成也成了红字）
+    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮<span class="au-nobr">没读到</span>';
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
@@ -617,6 +645,8 @@
   // 后台没给 next_beijing_* 这几个字段、或周期认不出（cron 原文、“每小时”这类）时照原来的写法。
   const zhDate = at => { const t = T.stamp(at); if (t == null) return ''; const d = new Date(t + 8 * 3600000); return `${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`; };
   const zhAt = at => `${zhDate(at)} ${clock(at)}（北京）`;
+  // 末尾的“（北京）”和前面的钟点粘在一起，不单独折到下一行（M1031）
+  const keepBj = html => html.replace(/(\d{1,2}:\d{2}(?: 左右)?（北京）)$/, '<span class="au-nobr">$1</span>');
   function plan(r) {
     const p = typeof r.period === 'string' ? r.period.trim() : '', due = r.next_nominal_at || r.next_at;
     if (p === '一次性' || p === '单次运行') return due && T.stamp(due) != null ? zhAt(due) : '';
@@ -639,29 +669,39 @@
     const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     // 上次跑：定时唤醒的那一场对话（后台 last_wake：时刻、对话标题、对话链接），点回原对话（M921“跑完能找回原对话”）；
     // 访客看不到的那场后台给标题“仅本人可见”、链接为空，照写
-    const wake = r => {
-      const w = r.last_wake;
-      if (!w || !T.stamp(w.at)) return '';
-      const title = F(w.chat_title, '那一场对话');
-      return `<small class="au-wake">上次跑：${esc(when(w.at))}${title ? ` · ${T.path(w.chat_href) ? link(w.chat_href, `${title} ›`) : title}` : ''}</small>`;
+    // 同一时刻已有一遍且能点回原对话时，只留对话链接；没有链接时仍标明这是上次跑。
+    const wake = (r, shown = '') => {
+      const w = r.last_wake, started = w?.at || r.at;
+      if (!T.stamp(started)) return '';
+      const title = F(w?.chat_title, '那一场对话'), at = when(started), href = T.path(w?.chat_href);
+      const chat = title ? (href ? link(href, `${title} ›`) : title) : '';
+      if (at === shown && href && chat) return `<small class="au-wake">上次跑的对话：${chat}</small>`;
+      return `<small class="au-wake">上次跑：${esc(at)}${chat ? ` · ${chat}` : ''}</small>`;
     };
     const item = r => {
       const when1 = plan(r);
-      if (!when1) return `<li><b>${esc(when(r.next_at || r.at))}</b>${link(r.href, label(r))}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}${r.next_at ? ` · 下次 ${esc(when(r.next_at))}` : ''}</small>${wake(r)}</li>`;
+      const codexNumber = r.producer === 'Codex' && typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label);
+      const href = (codexNumber && T.path(r.last_wake?.chat_href)) || r.href;
+      const name = `<span class="au-schedule-name">${link(href, codexNumber && T.path(href) ? `${esc(r.label.trim())} ›` : label(r))}</span>`;
+      const left = when(r.next_at || r.at);
+      if (!when1) return `<li><b>${esc(left)}</b>${name}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}</small>${wake(r, left)}</li>`;
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，
       // 不然“每周二 00:00”后面跟一句“预计 11 月 30 日 23:55”（早 5 分钟跨过半夜成了周一）读着像矛盾（复查 11-26）
       const est = T.stamp(r.next_estimated_at), nominal = T.stamp(r.next_nominal_at);
       // 差几分钟按显示出来的两个钟点（都截到分钟）相减，不拿带秒的差值四舍五入：预计 23:55:54、原定 00:00 写“早 5 分钟”，和后面写的 23:55 对得上
       const off = est != null && nominal != null ? Math.floor(est / 60000) - Math.floor(nominal / 60000) : 0;
-      const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${zhAt(r.next_estimated_at)}` : `这次预计 ${zhAt(r.next_estimated_at)}`;
-      return `<li><b>${esc(when1)}</b>${link(r.href, label(r))}<small>${[F(r.state_text), esc(late)].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
+      // 预计的日期和钟点整块不折行：名字一长，这一栏变窄，“11 月”会和“30 日”拆成两行（看图 24）
+      const estAt = `<span class="au-nobr">${esc(zhAt(r.next_estimated_at))}</span>`;
+      const late = !off ? '' : Math.abs(off) < 180 ? `这次预计${off < 0 ? '早' : '晚'} ${Math.abs(off)} 分钟，${estAt}` : `这次预计 ${estAt}`;
+      return `<li><b>${keepBj(esc(when1))}</b>${name}<small>${[F(r.state_text), late].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍
-    const scope = {};
     const body = hosts.map(h => {
       const mine = rows.filter(r => r.producer === h).sort((a, b) => T.stamp(b.next_at || b.at) - T.stamp(a.next_at || a.at));
-      const notes = [scope[h], ...gaps.filter(g => g.includes(h))].filter(Boolean).map(g => `<small>${esc(g)}</small>`).join('');
-      return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : '没有'}${notes}</td></tr>`;
+      const missing = gaps.filter(g => g.includes(h));
+      const notes = missing.map(g => `<small>${esc(g)}</small>`).join('');
+      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '这次没读到' : '没有';
+      return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${content}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
     return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>只列在这台电脑上执行的，云端的（比如 claude.ai 上建的）不在这里；反复跑的活都在上面${kinds(d)}里</small></p>
@@ -672,13 +712,22 @@
   const feed = d => { const got = collect(d); return R.ticker(d, got.legacy ? null : got.rows, viewer); };
 
   let drawn = false;
+  function heading(d) {
+    const side = d ? [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
+    return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
+      <p class="au-crosslinks">也看：${link('/live/chats/', 'AI 对话 ›')} · ${link('/live/agents/', '智能体 ›')}</p></div>
+      ${side ? `<p class="tp-head__side"><span>${side}</span></p>` : ''}</div>`;
+  }
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
-    if (!d) { T.paint(page.root, T.placeholder(state, '自动任务')); page.tick.set([], { off: true }); return; }
-    const side = [`截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ');
+    if (!d) {
+      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(state, '自动任务'));
+      page.tick.set([], { off: true });
+      return;
+    }
     const v = view(d), all = !filter.view;
-    T.paint(page.root, R.asOwner(`<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p></div><p class="tp-head__side"><span>${side}</span></p></div>
+    T.paint(page.root, R.asOwner(`${heading(d)}
       ${T.stateNote(state)}${pauses(d)}${buttons(d, v)}
       ${all ? `${table(d, v)}<div class="tp-grid au-top">${results(d)}${usage(d)}</div>` : `<div class="au-list">${lists(d, v)}</div>`}`, viewer));
     drawn = true;
@@ -723,7 +772,9 @@
     draw();
     // 还没确认的：等这次重读回来，开关旁那行改照新读数说（noteFor）
     const fb = feedback;
-    Live.refresh().then(() => { if (feedback === fb && fb.want) { fb.reread = true; draw(); } });
+    Live.get('automation', {}).then(read => {
+      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+    });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
   dialog.querySelector('[data-cancel]').addEventListener('click', () => dialog.close());
@@ -735,16 +786,22 @@
     if (!(until > Date.now())) from.setUTCMinutes(0, 0, 0);
     const days = Array.from({ length: 14 }, (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + i)));
     const key = x => `${x.getUTCFullYear()}-${pad(x.getUTCMonth() + 1)}-${pad(x.getUTCDate())}`;
+    if (key(from) > key(days.at(-1))) days.push(from);
     form.elements.day.innerHTML = days.map((x, i) => `<option value="${key(x)}">${x.getUTCMonth() + 1}月${x.getUTCDate()}日 周${WEEK[x.getUTCDay()]}${['（今天）', '（明天）', '（后天）'][i] || ''}</option>`).join('');
     form.elements.hour.innerHTML = Array.from({ length: 24 }, (_, h) => `<option value="${pad(h)}">${pad(h)} 点</option>`).join('');
-    form.elements.minute.innerHTML = Array.from({ length: 12 }, (_, m) => `<option value="${pad(m * 5)}">${pad(m * 5)} 分</option>`).join('');
-    form.elements.day.value = key(from); form.elements.hour.value = pad(from.getUTCHours()); form.elements.minute.value = pad(Math.floor(from.getUTCMinutes() / 5) * 5);
+    const minute = from.getUTCMinutes();
+    const choices = [...new Set([...Array.from({ length: 12 }, (_, m) => m * 5), minute])].sort((a, b) => a - b);
+    form.elements.minute.innerHTML = choices.map(m => `<option value="${pad(m)}">${pad(m)} 分</option>`).join('');
+    form.elements.day.value = key(from); form.elements.hour.value = pad(from.getUTCHours()); form.elements.minute.value = pad(minute);
+    form.dataset.originalUntil = until > Date.now() ? untilIso(untilAt) : '';
   }
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!pausing || busy) return;
     const id = pausing, result = form.querySelector('[data-result]');
-    const until = `${form.elements.day.value}T${form.elements.hour.value}:${form.elements.minute.value}:00+08:00`;
+    const selected = `${form.elements.day.value}T${form.elements.hour.value}:${form.elements.minute.value}:00+08:00`;
+    const original = form.dataset.originalUntil;
+    const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
     // 等后台回话：框里和开关旁边都写“正在保存…”，开关和原来的暂停时间留着
     result.textContent = '正在保存…';

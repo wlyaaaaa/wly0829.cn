@@ -114,10 +114,19 @@
 .ak-subs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .ak-sub { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 8px; padding: 6px 8px 6px 14px; border-radius: 999px; background: var(--tp-green-soft); }
 .ak-sub[data-mode="off"] { background: #efeee9; color: #6c6b64; }
-.ak-sub b { font-size: 14px; font-weight: 700; white-space: nowrap; }
+.ak-sub b { min-width: 0; font-size: 14px; font-weight: 700; }
 .ak-sub .au-mini { padding: 2px 12px; border-radius: 999px; font-size: 13px; }
 .ak-sub small { flex-basis: 100%; font-size: 12.5px; color: #57564f; }
 .ak-sub small:empty { display: none; }
 .ak-sub small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
 .ak-sub small[data-tone="bad"] { color: var(--tp-red); }
 .ak-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; }
+
+@media (max-width: 1150px) {
+  .ak-hero { grid-template-columns: minmax(0, 1fr) 38%; }
+  .ak-hero__art { width: 38%; }
+  /* 窄窗（900 左右）放不下左右两栏：“最近几轮”占满一行，每条照 1440 的列宽排开；“接下来几次”“这一类”接在下面（M902） */
+  .ak-grid { grid-template-columns: minmax(0, 1fr); }
+  .ak-run__body { overflow-wrap: anywhere; }
+  .ak-run__tag i { flex: 0 0 10px; }
+}

@@ -75,6 +75,7 @@
     return F(r.headline, '这一轮的结局');
   }
   function title(r) {
+    if (r.excerptFallback) return '没写成摘要';
     const own = ownHeadline(r);
     if (own) return own;
     // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
@@ -91,6 +92,7 @@
   // 后台的 headline 自成一句、拿来当了大标题时，看 headline 那个键
   // summary 的签说的是整段换了说法；标题只留了第一句时，换掉的可能在后半句，签挂到写全这段的“收到结论”上（主控 11-26 11:02，331 轮）
   function titleTag(r) {
+    if (r.excerptFallback) return '';
     const key = ownHeadline(r) ? 'headline' : r.deferred ? '' : r.status === 'incomplete' ? 'reason' : r.status === 'running' && r.subject ? '' : 'summary';
     if (key === 'summary') {
       const whole = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : ''), r);
@@ -284,13 +286,18 @@
   function closing(r, lastWords) {
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
-    let body, tone;
+    let body, tone, original = '';
     if (r.deferred) {
       // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
       // 这一轮做了什么（summary）另起一行，和原因是同一句的不再写（公网复核 11-26：暂缓原因没显示）
       const why = F(r.reason, '为什么先放着'), whyPlain = plainOf(r.reason), note = R.deferredNote(r, F);
       const hasWhy = whyPlain && whyPlain !== '暂时不修', dupNote = hasWhy && note && loose(whyPlain).includes(loose(note.replace(/<[^>]+>/g, '')));
       body = `收到结论：暂时不修，等下一次检查再看。${hasWhy ? `<br>为什么先放着：${why}` : ''}${note && !dupNote ? `<br>${hasWhy ? '这一轮做了：' : ''}${note}` : ''}`; tone = 'off';
+    } else if (r.excerptFallback) {
+      const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
+        .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
+      if (r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
+      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original ? '<br>用的是：' : ''}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
@@ -307,7 +314,54 @@
       const tag = U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer);
       body = result ? `收到结论：${withTag(result, tag)}` : `收到结论${lastWords ? '。' : '：跑完了'}${tag}`; tone = 'ok';
     }
-    return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: later, tone, cls: 'ar-end' }) };
+    return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: original + later, tone, cls: 'ar-end' }) };
+  }
+
+  function replyInline(text, linkify = true) {
+    const tokens = /\x60([^\x60\n]+)\x60|\*\*([^*\n]+)\*\*|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>()]+)/gu;
+    let html = '', end = 0;
+    for (const token of text.matchAll(tokens)) {
+      const [match, code, bold, label, destination, bare] = token;
+      html += esc(text.slice(end, token.index));
+      if (code) html += `<code>${esc(code)}</code>`;
+      else if (bold) html += `<strong>${replyInline(bold, linkify)}</strong>`;
+      else if (!linkify) html += esc(match);
+      else {
+        const url = destination || bare.replace(/[，。！？；、,.!?;:]+$/u, '');
+        const keep = label && /^\p{Script=Han}{2,12}$/u.test(label) ? ' class="live-unit"' : '';
+        html += `<a${keep} href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label ? replyInline(label, false) : esc(url)}</a>${bare ? esc(bare.slice(url.length)) : ''}`;
+      }
+      end = token.index + match.length;
+    }
+    return html + esc(text.slice(end));
+  }
+
+  // 原回复的字和指代照回执显示，只把 Markdown 记号排成页面元素。
+  function originalReply(text) {
+    const cells = row => row.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/u).map(cell => cell.trim().replace(/\\\|/g, '|'));
+    const tableLine = /^\s*\|.*\|\s*$/u;
+    const bullet = /^\s*(?:[-*+]|\d+[.)])\s+(.+)$/u;
+    return text.trim().replace(/\r\n/g, '\n').split(/\n[ \t]*\n+/).map(block => {
+      const lines = block.split('\n');
+      if (lines.length >= 2 && lines.every(line => tableLine.test(line)) &&
+          cells(lines[1]).every(cell => /^:?-{3,}:?$/u.test(cell))) {
+        const unit = word => `<span class="ar-table-unit">${word}</span>`;
+        const cellWords = html => html.replace(/<[^>]+>|暂缓|\b(?:Host Python|PowerShell \d+|\d+(?:\.[a-z\d]+){2,})\b/gi, word => {
+          if (word.startsWith('<')) return word;
+          if (!/^\d/.test(word)) return unit(word);
+          return (word.match(/[^.]+\.?/g) || []).map(unit).join('<wbr>');
+        });
+        const row = (line, tag) => `<tr>${cells(line).map(cell => `<${tag}>${cellWords(replyInline(cell))}</${tag}>`).join('')}</tr>`;
+        return `<table><thead>${row(lines[0], 'th')}</thead><tbody>${lines.slice(2).map(line => row(line, 'td')).join('')}</tbody></table>`;
+      }
+      if (lines.every(line => bullet.test(line))) {
+        const start = /^\s*(\d+)/u.exec(lines[0])?.[1], tag = start ? 'ol' : 'ul';
+        const items = lines.map(line => `<li>${replyInline(bullet.exec(line)[1])}</li>`).join('');
+        return `<${tag}${start ? ` start="${start}"` : ''}>${items}</${tag}>`;
+      }
+      if (/^(?:-{3,}|\*{3,}|_{3,})$/u.test(block)) return '<hr>';
+      return `<p>${replyInline(block)}</p>`;
+    }).join('');
   }
 
   // 中间：AI 一条条说、帮手一行行，按时刻排
@@ -504,6 +558,8 @@
     paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
+    const original = page.root.querySelector('[data-excerpt-original]');
+    if (original) original.innerHTML = originalReply(r.receipt.originalText);
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

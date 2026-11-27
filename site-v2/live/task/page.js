@@ -46,6 +46,7 @@
   const marked = (html, row, keys, what) => html ? html + mark(row, keys, what) : html;
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
+  const failureResult = value => value === 'failed' || value === 'stopped';
   // 平台名：三家都认（Antigravity 的定时详情 11-25 起也走这一页，M921）
   const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
   // 各家自带的定时：后台给了下一次的北京星期和时刻，重复周期就照它写成“每周二 00:00（北京）”，不写外国时区名（M921；自动任务页“各家自带的定时”同一个写法）
@@ -68,14 +69,15 @@
   const label = (state, variant) => ({
     ok: variant === 'pickup' ? '处理完' : variant === 'schedule' ? '完成' : '成功',
     done: variant === 'pickup' ? '处理完' : '已完成', failed: variant === 'pickup' ? '没处理成' : variant === 'schedule' ? '没跑成' : '出错',
-    running: offline ? '断开前在跑' : '正在跑', disabled: '停用', paused: '已暂停', never: '未运行', accepted: '已接手',
+    running: offline ? '断开前在跑' : '正在跑', stopped: '中途停了', disabled: '停用', paused: '已暂停', never: '未运行', accepted: '已接手',
     warn: '部分完成',   // 只做完一部分的那一轮（后台 result=warn，如原话补漏“这次只补完一部分消息”），用列表“要留意”的黄色（M381）
   })[state] || '结果未读到';
   // 计划任务某一轮结果没读到时写清缘故：没记到结束、结束了但结果未确认（和列表同一个说法），或结果码的含义没登记
   const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '结果未确认' : '';
   const result = (state, variant, run) => {
-    const result = ['ok', 'done', 'failed', 'warn', 'running', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
-    return `<span class="task-result" data-state="${result}"><i class="task-dot" data-state="${result}" aria-hidden="true"></i>${result === 'unknown' && variant === 'plan' && esc(unknownRun(run)) || label(result, variant)}</span>`;
+    const result = ['ok', 'done', 'failed', 'warn', 'running', 'stopped', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
+    const tone = result === 'stopped' ? 'failed' : result;
+    return `<span class="task-result" data-state="${tone}"><i class="task-dot" data-state="${tone}" aria-hidden="true"></i>${result === 'unknown' && variant === 'plan' && esc(unknownRun(run)) || label(result, variant)}</span>`;
   };
   const runTime = r => r.start ?? r.end;
   const keepRuns = rows => { for (const r of rows || []) { const t = time(r?.started ?? r?.start ?? r?.finished ?? r?.end); if (Number.isFinite(t)) olderRuns.set(Math.floor(t / 1000), r); } };
@@ -87,7 +89,7 @@
   }
   function runsOf(d) {
     const list = Array.isArray(d.runs) && d.runs.length ? d.runs : d.recent || [], runs = new Map(), plan = variantOf(d) === 'plan';
-    const strength = { ok: 3, failed: 3, warn: 3, done: 2, running: 1 };
+    const strength = { ok: 3, failed: 3, stopped: 3, warn: 3, done: 2, running: 1 };
     for (const source of [...list, ...(d.last ? [d.last] : [])]) {
       if (!source || protectedField(source)) continue;
       const run = asRun(source), at = runTime(run);
@@ -229,11 +231,11 @@
       && coveredTo <= now && Array.isArray(d.runs) && !d.runs.some(protectedField);
     const counted = span ? runs.filter(r => r.start != null && r.start >= from && r.start <= coveredTo) : recent;
     const exact = covered || span;
-    const good = counted.filter(r => completeResults.includes(r.result)), bad = counted.filter(r => r.result === 'failed');
+    const good = counted.filter(r => completeResults.includes(r.result)), bad = counted.filter(r => failureResult(r.result));
     const running = counted.filter(r => r.result === 'running').length;
     const warn = counted.filter(r => r.result === 'warn').length;
-    const unread = counted.filter(r => !completeResults.includes(r.result) && !['failed', 'running', 'warn'].includes(r.result)).length;
-    const knownOutcomes = counted.every(r => completeResults.includes(r.result) || r.result === 'failed');
+    const unread = counted.filter(r => !completeResults.includes(r.result) && !failureResult(r.result) && !['running', 'warn'].includes(r.result)).length;
+    const knownOutcomes = counted.every(r => completeResults.includes(r.result) || failureResult(r.result));
     const durations = counted.map(r => r.length).filter(valid);
     const lastSample = time(d.runs_at ?? d.at ?? packetAt);
     const readsToday = lastSample <= now && dayStart(lastSample) === today && ['ok', 'partial'].includes(d.today_runs_q);
@@ -293,7 +295,7 @@
     const due = upcoming[0], original = valid(time(d.next_plan?.original_at)) ? time(d.next_plan.original_at) : kind === 'plan' ? pastNext(d) : NaN;
     const pending = kind === 'plan' && text(d.next_plan?.pending_text);
     const stopped = ['disabled', 'paused'].includes(d.state);
-    const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'warn'];
+    const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'stopped', 'warn'];
     const originalFinished = valid(original) && last?.start >= original && completed.includes(last.result);
     const resident = kind === 'plan' && ['resident', 'service_loop', 'on_demand', 'event'].includes(d.mode);
     const planStatus = stopped ? kind === 'plan' && d.state === 'disabled' ? disabledStatus(d) : showLast && label(d.state, kind)

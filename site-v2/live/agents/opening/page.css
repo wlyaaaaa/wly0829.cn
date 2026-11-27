@@ -104,7 +104,7 @@
 /* 原文排版 */
 .op-md { font-size: 15.5px; line-height: 1.85; color: #2f2f2b; overflow-wrap: anywhere; }
 .op-md p { margin: 8px 0; }
-.op-md h3 { margin: 18px 0 6px; font-family: var(--black); line-height: 1.3; color: var(--ink); }
+.op-md h3 { margin: 18px 0 6px; font-family: var(--black); line-height: 1.3; color: var(--ink); text-wrap: balance; }  /* 长标题两行摊匀，不把“段）”单独折到下一行 */
 .op-md h3.op-h1 { font-size: 26px; }
 .op-md h3.op-h2 { font-size: 24px; }
 .op-md h3.op-h3 { font-size: 18px; }
@@ -116,6 +116,7 @@
 .op-md li::marker { color: #8f8d85; }
 .op-md strong { font-weight: 800; color: var(--ink); }
 .op-md code { padding: 1px 5px; border-radius: 5px; background: rgb(20 20 19 / .06); font-family: var(--mono); font-size: .88em; }
+.op-path-segment { white-space: nowrap; }
 .op-md pre { margin: 8px 0; padding: 10px 14px; border-radius: 9px; background: #f4f4f1; font-family: var(--mono); font-size: 13px; line-height: 20px; white-space: pre-wrap; }
 .op-md .op-ref { border-bottom: 1px dotted rgb(20 20 19 / .35); }
 .op-md a.op-ext { color: var(--tp-green-ink); font-weight: 600; text-decoration: none; }
@@ -124,13 +125,12 @@
 .op-md hr { margin: 14px 0; border: 0; border-top: 1px solid var(--tp-hair); }
 
 /* 几份文件拼起来装的（Antigravity）：每份前面一行文件名 */
-.op-file { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 22px 0 12px; padding: 0 0 8px; border-bottom: 1px dashed var(--tp-line); font-size: 14px; color: #57564f; }
+.op-file { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 22px 0 12px; padding: 0 0 8px; border-bottom: 1px dashed var(--tp-line); font-size: 14px; color: #57564f; }
 .op-file:first-child { margin-top: 0; }
-.op-file b { font-family: var(--mono); font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
-.op-file span { flex: none; font-variant-numeric: tabular-nums; }
+.op-file b { min-width: 0; font-family: var(--mono); font-weight: 600; color: var(--ink); }
+.op-file > span { flex: none; font-variant-numeric: tabular-nums; }
 .page--opening .op-file span .live-mark { margin: 0 10px 0 0; }   /* 全站那条 .page--live .live-mark 把 margin 清成 0，这里要加一层才压得住 */
 /* 项目自己的那几份没登原文：说一声 */
-.op-more { margin: 18px 0 0; padding: 10px 16px; border-radius: 10px; background: rgb(20 20 19 / .04); font-size: 14px; line-height: 22px; color: #57564f; }
 
 /* 开场时程序另外补的几行 */
 .op-ctx { margin: 28px 0 0; padding: 24px 0 0; border-top: 1px solid var(--tp-line); scroll-margin-top: calc(var(--bar-bottom) + 16px); }
