@@ -5,6 +5,9 @@
   const U = window.LiveUI;
   const Light = window.LiveLight;
   const { esc, sp } = U;
+  let viewer = 'public';
+  const viewerKind = state => (state.viewer?.kind ?? state.meta?.viewer?.kind) === 'owner' ? 'owner' : 'public';
+  const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   let project = params.get('project'), focusId = params.get('item'), focused = false;
@@ -325,8 +328,8 @@
   function emptyCard(id, d) {
     const card = cards[id], p = parts[id], warming = d?.q === 'warming';
     card.classList.add('card--empty'); card.classList.toggle('card--warming', warming);
-    const named = id === 'chats', name = id === 'needs' ? addressed(NAME[id]) : NAME[id];
-    const caption = id === 'needs' && d ? addressed('等你的事 · 没有记录') : d?.text || `${name}暂时读不到`;
+    const named = id === 'chats', name = addressed(NAME[id]);
+    const caption = id === 'needs' && d ? `${name} · 没有记录` : d?.text || `${name}暂时读不到`;
     // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
     const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
     U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
@@ -504,20 +507,13 @@
   const tags = (list) => list.filter(Boolean).map(([t, cls]) => `<span class="tag${cls ? ' ' + cls : ''}">${t}</span>`).join('');
   const join = (list) => list.filter(Boolean).map(sp).join(' · ');
   const title = (it, text, resource) => { const own = resource === 'chats' ? 'AI 对话' : '事项', field = { visibility: it.visibility, public: it.public, rewrite: it.rewrite, hidden_what: it.hidden_what, ...(text && typeof text === 'object' ? text : { text }) }, hidden = viewer === 'public' && (field.visibility === 'owner' || field.public === 'owner' || field.hidden), words = U.fieldHtml(field, { name: own, place: 'title', kind: viewer }) || (lastState?.offline ? '' : U.collectionText()), note = hidden || (field.rewrite === 'pending' || field.hidden) && !field.text && !field.value ? U.fieldHtml(field, { name: field.hidden_what || (resource === 'chats' ? '这场对话的内容' : '这件事'), kind: viewer }) : ''; return (hidden ? `<span class="row__title">${words}</span>` : `<a class="row__title home-detail-link" href="${esc(route(`/live/${resource === 'chats' ? 'chat' : 'item'}/?id=${encodeURIComponent(it.id)}`))}">${words}</a>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
-  let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner', laptopState;
+  let home = null, at = null, source = null, seen = null, lastState = null, laptopState;
   let aiMessages = null;   // 首页的 AI 留言（ai-messages 读口），画在页顶那张卡里
   const newMarks = new Map();
   const fresh = (scope, born, readAt = at, readSource = source) => {
     if (!newMarks.has(scope)) newMarks.set(scope, U.seen(scope, readSource));
     return newMarks.get(scope).isNew(born, readAt) ? tags([['新', 'tag--new']]) : '';
   };
-  const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
-  function homeAddressed(value) {
-    if (viewer !== 'public') return value;
-    if (typeof value === 'string') return value.replace(/(等|要|请|让|由)你|你(?=同意|点头|重启|删)/g, '$1本人');
-    if (!value || typeof value !== 'object') return value;
-    return { ...value, text: homeAddressed(value.text), value: homeAddressed(value.value) };
-  }
   const returning = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
   // 后退、前进回来时以离开时存下的位置为准：地址里的“#卡片”是当初点进来时的，不再把页面拉回那张卡（M598）。
   const leftAt = returning ? history.state?.liveUI : null;
@@ -578,7 +574,7 @@
     let sub = '';
     if (loud) {
       const age = waitDays(it, end);
-      sub = [age != null && (age ? `等了 ${waitText(age)}` : '等了不到 1 天'), it.minutes != null && `约 ${it.minutes} 分钟`, it.due && `${U.date(it.due)} 前`, value(U.capText(it.now, 60, true), '为什么', homeAddressed), value(it.mobile, '在哪办', v => MOBILE[v])].filter(Boolean).join(' · ');
+      sub = [age != null && (age ? `等了 ${waitText(age)}` : '等了不到 1 天'), it.minutes != null && `约 ${it.minutes} 分钟`, it.due && `${U.date(it.due)} 前`, value(U.capText(it.now, 60, true), '为什么'), value(it.mobile, '在哪办', v => MOBILE[v])].filter(Boolean).join(' · ');
       if (!sub && !lastState?.offline) sub = U.collectionText('等待时间、用时和办理说明');
     }
     if (it.kind === 'later') {
@@ -597,7 +593,7 @@
     // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
     const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
     const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
-    const heading = title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items');
+    const heading = title(it, U.capText(it.text, Infinity, true), 'items');
     const headingWords = viewer === 'owner' ? heading.replace(/副号(?![^<>]*>)/g, '<span class="l1-unit">副号</span>') : heading;
     return {
       key: it.id,
@@ -628,9 +624,10 @@
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
     // 刚在本页点过、已经办成的，后台读数跟上前先不显示
     const all = [...by('choose').sort(newest), ...by('do').sort(newest)];
-    const rows = needsPreview(all).map(it => needRow(it, focus && it.id === focus.id ? noticeDetail(focus.item) : '', end));
+    const detail = focus ? noticeDetail(focus.detail, focus.id, focus.detailRevoked) : '';
+    const rows = needsPreview(all).map(it => needRow(it, it.id === focus?.id ? detail : '', end));
     const closed = focus && closedNoticeRow(focus), targetIndex = rows.findIndex(row => row.key === focus?.id);
-    const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, noticeDetail(focus.item), end));
+    const focusedRow = closed || (targetIndex < 0 && focus?.item?.kind && !focus.closed && needRow(focus.item, detail, end));
     if (focusedRow) rows.splice(Math.max(0, targetIndex), targetIndex < 0 ? 0 : 1, focusedRow);
     // 新私事规则（本人 11-24 02:56）：访客版不再按件藏，也不再写“另有 N 件……只有本人看得到”。
     const hidden = 0;
@@ -671,12 +668,12 @@
     return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main" style="margin-inline-end: clamp(0px, calc(1280px - 100vw), 14px)">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }
   // 展开后的事项详情整段照原文显示，不按字数截（M690）；卡面收起时那一行摘要的字数限制不动
-  function noticeDetail(item) {
-    if (!item?.detail_text || viewer === 'public' && (item.visibility === 'owner' || item.public === 'owner')) return '';
-    const detail = U.fieldHtml(U.capText(item.detail_text, Infinity), { name: '事项详情', kind: viewer });
-    const opened = parts.needs.main.querySelector(`[data-key="${CSS.escape(item.id)}"] .notice-detail`)?.open;
+  function noticeDetail(item, id, revoked) {
+    if (!revoked && (!item?.detail_text || viewer === 'public' && (item.visibility === 'owner' || item.public === 'owner'))) return '';
+    const detail = revoked ? '这件事正在更新访客版，稍后自动补上。' : U.fieldHtml(U.capText(item.detail_text, Infinity), { name: '事项详情', kind: viewer });
+    const opened = parts.needs.main.querySelector(`[data-key="${CSS.escape(id)}"] .notice-detail`)?.open;
     // 展开里最后一行“看这件的详情 ›”，进这件事自己的详情页（和等你的事页卡展开后那行同一处；本人 SHIP10 选 A）
-    const open = `<a class="more item-open" href="${esc(route('/live/item/?id=' + encodeURIComponent(item.id)))}">看这件的详情 ›</a>`;
+    const open = revoked ? '' : `<a class="more item-open" href="${esc(route('/live/item/?id=' + encodeURIComponent(id)))}">看这件的详情 ›</a>`;
     return detail ? `<details class="row__sub notice-detail"${opened ? ' open' : ''}><summary>事项详情</summary><p style="white-space: pre-line">${detail}</p>${open}</details>` : '';
   }
 
@@ -759,7 +756,7 @@
     const rawReply = quota || modern ? progressText ?? c.latest_reply : Object.hasOwn(c, 'latest_reply') ? c.latest_reply : progressText;
     const replyField = U.chatPreviewSummary(rawReply, c, viewer);
     const fieldLock = replyField && typeof replyField === 'object' && viewer === 'public' && c.visibility !== 'owner' && c.public !== 'owner' && (replyField.visibility === 'owner' || replyField.public === 'owner' || replyField.hidden || replyField.hidden_block);
-    const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(homeAddressed(replyField), c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
+    const reply = c.content_locked ? '' : fieldLock ? U.fieldHtml(replyField, { name: '最新进展', kind: viewer }) : U.chatFields.repeatsState(replyField, c, viewer) ? '' : chatWords(replyField, c, replyField !== rawReply) || (!modern && chatWords(gap('latest_reply', '最新回复'), c));
     // 两版同一套（本人禁令 11-24 14:16）：回复预览两版都给全文，访客版不再先收成 4 行加“展开全文”
     // M684：本人版回复预览访客那边不一样的，句末挂签；整场对访客藏着的只在 meta 那里挂一个。
     const previewTag = reply && !U.visitorWholeHidden(c) ? U.visitorLabel(c, ['latest_reply', 'text', 'reply'], '这句最新回复', viewer) : '';
@@ -940,6 +937,9 @@
   const freshTemperature = row => Number.isFinite(row?.value) && timed(computerSampleAt(row)) && row.stale_after > 0 && row.q === 'ok' && !oldComputerSample(row);
   let temperatureCurrent;
   const fastHardwareIds = ['cpu', 'cpu-temp', 'memory', 'memory-total', 'memory-available'];
+  // 小包只改画出来的行。保留最近主包的原始读数供撤回时复原。
+  const copyFastHardware = metrics => metrics?.map(row => fastHardwareIds.includes(row.id) ? { ...row } : row);
+  let mainHardware, hardwareOverlay = false;
   function preserveComputerSamples(current, previous) {
     if (!current.metrics || !previous?.metrics) return;
     current.metrics = current.metrics.map(row => {
@@ -1206,19 +1206,19 @@
     }
   }
   function paintTaskCard(id, state) {
-    const d = state.data, counts = scheduledSummary(d, state);
+    const revoked = state.meta?.publicationRevoked;
+    const d = revoked ? null : state.data, counts = scheduledSummary(d, state);
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
-      : [state.offline ? '这块没存下来，连上后补上。' : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读'
-        // 这一样回“公开判定更新中”时写明为什么（M970）
-        : state.meta?.withdrawn && state.meta.status === 503 ? '清单的公开判定正在更新，稍后自动补上' : '清单暂时读不到'];
+      : [state.offline ? '这块没存下来，连上后补上。' : revoked ? '计划任务正在更新访客版，稍后自动补上。'
+        : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);
     const update = () => {
       const { lamp, tone } = U.status(!state.offline && d?.level ? d : { level: 'gray' });
       p.head.querySelector(':scope > .lamp')?.remove();
       if (lamp) p.head.insertAdjacentHTML('afterbegin', lamp);
       Light.tone(cards[id], tone);
-      cards[id].dataset.hasReadings = counts.length ? 'yes' : '';
+      cards[id].dataset.hasReadings = counts.length || revoked && !state.offline ? 'yes' : '';
       p.status.hidden = !summary;
       U.html(p.status, U.nowrap(summary), false);
       // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
@@ -1536,7 +1536,8 @@
   // —— 出事时才有的横条 ——
   function renderNotices(state) {
     const rows = [];
-    if (!state.offline && state.conn?.stage !== 'retrying' && !home && state.text && state.phase === 'none') {
+    const revoked = state.meta?.publicationRevoked;
+    if (!revoked && !state.offline && state.conn?.stage !== 'retrying' && !home && state.text && state.phase === 'none') {
       rows.push({ key: 'link', cls: 'l1-unreadable-note', html: U.fieldHtml(state.text, { name: '连接情况', kind: viewer }) });
     }
     if (project) {
@@ -1550,7 +1551,7 @@
       rows.push({ key: 'net', cls: 'notice glass', html: `${lamp('red')}<a class="head__tail--link" href="${esc(route('/live/computer/#exits'))}">${esc(text)} <span class="more__chev">›</span></a>${U.actions(item, item.actions)}` });
     }
     if (home?.needs?.phone) {
-      const item = { id: 'phone', text: viewer === 'public' && typeof home.needs.phone.text === 'string' ? addressed(home.needs.phone.text).replace('这里的事请自己看', '相关事项等本人查看') : home.needs.phone.text, actions: [{ kind: 'copy', label: '问情况', intent: 'ask' }] };
+      const item = { id: 'phone', text: home.needs.phone.text, actions: [{ kind: 'copy', label: '问情况', intent: 'ask' }] };
       rows.push({ key: 'phone', cls: 'notice glass', html: `${lamp('red')}<a class="head__tail--link" href="${esc(route('/live/notifications/'))}">${U.fieldHtml(item.text, { name: '提醒', kind: viewer })} <span class="more__chev">›</span></a>${U.actions(item, item.actions)}` });
     }
     // AI 留言（选了“实况”的那几条，后台 ai-messages 读口）：一条一行，标题、时刻，正文点“全文”展开；到期后台自己撤
@@ -1562,7 +1563,7 @@
       const body = bodyText && bodyText !== titleText ? `<details class="notice-message__body"${opened ? ' open' : ''}><summary>全文</summary><p>${U.fieldHtml(m.body, { name: 'AI 留言', kind: viewer })}</p></details>` : '';
       rows.push({ key: `msg-${m.id}`, cls: 'notice glass notice--message', html: `${lamp('blue')}<span><b>AI 留言</b>：${titleText ? esc(titleText) : U.fieldHtml(m.title ?? m.body, { name: 'AI 留言', kind: viewer })}${timed(m.created_at) ? ` <span class="notice-message__at">· ${esc(recordStamp(m.created_at))}</span>` : ''}</span>${body}` });
     }
-    paintList(notices, rows);
+    paintList(notices, rows, revoked ? { animate: false } : undefined);
   }
 
   // —— 页眉右边的〔问情况〕：把页上几块的第一行拼成一句 ——
@@ -1718,10 +1719,10 @@
     const focus = data.focus, id = focus?.id || focusId;
     if (!id || (focus?.section && focus.section !== 'needs') || focus?.closed) return focus;
     const item = focus?.item || data.needs.items.find(it => it.id === id);
-    const detail = notice?.id === id && notice.kind === kind ? notice.detail : null;
+    const read = notice?.id === id && notice.kind === kind ? notice : null;
+    const detail = read?.detail;
     if (!item && !detail?.closed && !detail?.kind) return focus;
-    const merged = detail ? { ...detail, ...item, detail_text: detail.detail_text ?? item?.detail_text } : item;
-    return { id, section: 'needs', item: merged, closed: detail?.closed };
+    return { id, section: 'needs', item: detail ? { ...detail, ...item } : item, detail, detailRevoked: read?.revoked, closed: detail?.closed };
   }
   function labelCard(card) {
     const link = card.querySelector('.head__link');
@@ -1741,21 +1742,27 @@
     const focus = data.focus, id = focus?.id || focusId;
     if (!id) return;
     const otherSection = focus?.section && focus.section !== 'needs';
-    const loaded = notice?.id === id && notice.kind === viewer && (notice.detail?.kind || notice.detail?.closed);
-    if (!focused && (otherSection || data.needs.q !== 'warming' && (loaded || focus?.closed || focus?.item?.detail_text))) {
+    const loaded = notice?.id === id && notice.kind === viewer && (notice.detail?.kind || notice.detail?.closed || notice.detail?.detail_text);
+    if (!focused && (otherSection || data.needs.q !== 'warming' && (loaded || focus?.closed))) {
       requestAnimationFrame(focusItem);
     }
     if (otherSection || notice?.id === id) return;
     notice?.watch?.stop();
     const current = notice = { id };
+    const update = (detail, kind, revoked) => {
+      Object.assign(current, { detail: revoked ? null : detail, kind, revoked });
+      if (!home || current !== notice || kind !== viewer) return;
+      redrawNeeds();
+      if ((detail?.kind || detail?.closed || detail?.detail_text) && !focused && home.needs.q !== 'warming') requestAnimationFrame(focusItem);
+    };
     // 独立订阅：沿用 Live 的在途合并、重读和关机副本。
     current.watch = window.Live.watch(`items/${encodeURIComponent(id)}`, {}, {
-      data(detail, meta) {
-        current.detail = detail;
-        current.kind = meta.viewer?.kind;
-        if (!home || current !== notice || current.kind !== viewer) return;
-        redrawNeeds();
-        if ((detail?.kind || detail?.closed) && !focused && home.needs.q !== 'warming') requestAnimationFrame(focusItem);
+      data(detail, meta) { update(detail, viewerKind(meta), !!meta.publicationRevoked); },
+      link(state) {
+        const kind = viewerKind(state), revoked = !!state.meta?.publicationRevoked;
+        if (revoked !== !!current.revoked) update(current.detail, kind, revoked);
+        if (current !== notice || kind !== viewer || !home || home.needs.q === 'warming' || focused) return;
+        if (['none', 'gone'].includes(state.phase) && noticeFocus(home, viewer)?.item) requestAnimationFrame(focusItem);
       }
     });
   }
@@ -1764,7 +1771,7 @@
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
     if (lastState?.conn?.emptyHome) for (const id of IDS) {
-      U.html(parts[id].head, U.head(NAME[id], { lamp: false, href: href(id) }));
+      U.html(parts[id].head, U.head(addressed(NAME[id]), { lamp: false, href: href(id) }));
       labelCard(cards[id]);
     }
     balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
@@ -1778,17 +1785,28 @@
     notice = null;
     const callbacks = {
     async data(d, meta) {
+      const kind = viewerKind(meta);
       if (!d) {
+        viewer = kind;
         home = changesPage = null;
+        mainHardware = undefined;
+        hardwareOverlay = false;
         delete parts.projects['changes-box']._loaded;
-        for (const id of HOME_IDS) { emptyCard(id, null); cards[id].querySelectorAll('.rows,.row__sub,.card__note,.kv').forEach(el => { el.replaceChildren(); delete el._html; }); }
+        for (const id of HOME_IDS) {
+          emptyCard(id, null);
+          cards[id].querySelectorAll('.rows,.row__sub,.card__note,.kv').forEach(el => { el.replaceChildren(); delete el._html; });
+          if (meta.publicationRevoked) {
+            cards[id].removeAttribute('aria-label');
+            cards[id].querySelectorAll('.card__head[title],.card__note[title]').forEach(el => el.removeAttribute('title'));
+          }
+        }
         return;
       }
       // 真垫底里的计数仍在，没存下来的行列表不一定随包；保留已有行，只补空数组。
       d = { ...d };
       for (const id of HOME_IDS) d[id] = { ...U.withoutSnapshotCutoff(d[id], meta.at), items: Array.isArray(d[id]?.items) ? d[id].items : [] };
       // 快首页若只返回卡顿缺读占位，保留同一受众上一次的有效帧和覆盖截止。
-      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
+      if (kind === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
         const next = stutterGroup(d.computer), unread = stutterUnread(d.computer), previous = stutterGroup(home?.computer);
         if (timed(previous?.recorded_at) && stutterThrough(previous) && !stutterThrough(next, unread) &&
             !timed(next?.recorded_at) && !timed(unread?.recorded_at) && !noStutterFrames(next, unread)) {
@@ -1805,15 +1823,19 @@
         const counts = Object.fromEntries(Object.keys(KIND).map(k => [k, needs.filter(it => it.kind === k).length]));
         d = { ...d, needs: { ...d.needs, items: needs, counts, waiting_oldest_days: null, closed7: scoped(closed.data?.items).length }, ledger: { ...d.ledger, items: ledger, open: ledger.length, text: `AI 手上 ${ledger.length} 件` } };
       }
-      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
+      const metrics = d.computer.metrics;
+      d.computer.metrics = copyFastHardware(metrics);
+      if (kind === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
+      else hardwareOverlay = false;
       if (d.focus) restoreY = null, pinned = false;
       const render = () => {
       document.body.classList.remove('live-unreadable');
       balanceHome();
       home = d;
+      mainHardware = metrics;
       at = meta.at;
       source = meta.source;
-      viewer = meta.viewer?.kind || 'owner';
+      viewer = kind;
       seen ||= U.seen('needs', source);
       renderCards(d);
       const published = timed(d.published) ? `网站上次发布 ${changeTime(d.published)}` : '';
@@ -1842,6 +1864,7 @@
     },
     // 第一层还没收到包时也只占一行，避免请求未回时留下几张大空卡。
     phase(state) {
+      if (!home) viewer = viewerKind(state);
       if (!home && ['none', 'gone'].includes(state.phase)) { unreadable(); return; }
       if (!home) {
         for (const id of HOME_IDS) reads[id].set(state);
@@ -1853,6 +1876,7 @@
       const changed = !!lastState?.offline !== !!state.offline, firstLink = !lastState, oldNow = lastState?.now;
       const compact = !!state.conn?.emptyHome, wasCompact = !!lastState?.conn?.emptyHome;
       lastState = state;
+      if (!home) viewer = viewerKind(state);
       document.body.classList.toggle('live-empty-home', compact);
       document.body.classList.toggle('live-home-summary', !!state.conn?.homeSummary);
       bar?.set(state);
@@ -1897,9 +1921,15 @@
   // 只并硬件小包自己的五项。过期的真值可续作历史，缺值不盖最后一次成功读数。
   window.Live.watch('computer/hardware', null, { link(state) {
     const computer = home?.computer;
-    if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
-    const metrics = [200, 304].includes(state.meta.status) ? state.data?.metrics : null, now = Date.parse(window.Live.clock());
+    const revoked = state.meta?.publicationRevoked;
+    if (!computer || computer.q === 'warming' || viewerKind(state) !== viewer || !revoked && lastState?.offline) return;
     let changed = false;
+    if (revoked && hardwareOverlay) {
+      computer.metrics = copyFastHardware(mainHardware);
+      hardwareOverlay = false;
+      changed = true;
+    }
+    const metrics = !revoked && [200, 304].includes(state.meta?.status) ? state.data?.metrics : null, now = Date.parse(window.Live.clock());
     for (const sample of metrics || []) {
       if (!fastHardwareIds.includes(sample.id)) continue;
       const row = computer.metrics?.find(m => m.id === sample.id);
@@ -1915,6 +1945,7 @@
       if (oldComputerSample(sample)) Object.assign(row, { q: 'stale', state: 'stale' });
       changed = true;
     }
+    if (!revoked) hardwareOverlay ||= changed;
     if (!changed && temperatureCurrent === freshTemperature(computerTemperature(computer))) return;
     const render = () => { renderComputer(computer, home.screen, home.phone); paintStatus('computer', computer); };
     if (settling()) render(); else U.anchor(render);

@@ -351,7 +351,10 @@
     const tone = { green: 'green', yellow: 'amber', red: 'red', gray: 'gray', blue: 'blue', ok: 'green', amber: 'amber', off: 'gray' }[data?.level];
     if (!tone) return { tone: 'none', lamp: '', note: '' };
     const notes = [];
-    if (tone === 'blue') notes.push('有问题，AI 已接手在修，不用你动手');
+    if (tone === 'blue') {
+      const who = (window.Live?.viewerKind?.() ?? viewer) === 'owner' ? '你' : '本人';
+      notes.push(`有问题，AI 已接手在修，不用${who}动手`);
+    }
     const why = data.why, at = readingAt(data), shared = sameReadingReason(data, cover);
     const measured = Date.parse(at), coveredCutoff = Number.isFinite(measured) && measured === Date.parse(readingAt(cover))
       && [cover?.why, cover?.text, cover?.stale_text].some(isReadingCutoff);
@@ -1309,7 +1312,7 @@
     let link = rows.querySelector('.live-conn__row[data-key="link"]');
     const c = state.conn || { stage: 'online' };
     if (c.stage !== connNow) { connNow = c.stage; for (const hook of pillHooks) hook(c); }
-    if (['retrying', 'lost', 'off'].includes(c.stage)) {
+    if (c.homePublication || ['retrying', 'lost', 'off'].includes(c.stage)) {
       clearTimeout(connBack); connBack = 0;
       if (!link) {
         link = row('link');
@@ -1318,12 +1321,12 @@
       }
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
       link.classList.remove('is-back');
-      link.dataset.stage = c.stage;
+      link.dataset.stage = c.homePublication ? 'publication' : c.stage;
       put(link.querySelector('b'), c.say);
       put(link.querySelector('.live-conn__at'), c.at);
       put(link.querySelector('.live-conn__why'), c.wait);
     } else if (link && !link.classList.contains('is-back')) {
-      const refreshed = link.dataset.stage === 'retrying';
+      const refreshed = ['retrying', 'publication'].includes(link.dataset.stage);
       link.classList.add('is-back');
       link.dataset.stage = 'back';
       const upTo = c.shownAt;
@@ -1459,11 +1462,17 @@
         at.title = disconnected ? '点一下重连' : '点一下重读';
         const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
         const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
-        if (stamp || disconnected || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
-        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
+        const revoked = !disconnected && state.meta?.publicationRevoked;
+        const homeSummary = revoked && state.conn?.homePublication;
+        if (stamp || disconnected || retry || revoked || state.phase === 'none') { clearTimeout(waiting); readDone(); }
+        label = homeSummary ? '' : revoked ? '这块正在更新访客版，稍后自动补上。'
+          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
           : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
-        if (!busy) show(label);
+        if (!busy) {
+          show(label);
+          if (homeSummary) at.setAttribute('aria-label', at.title);
+        }
       },
     };
     pillHooks.add(c => { if (last && !paused) api.set({ ...last, conn: c }); });
