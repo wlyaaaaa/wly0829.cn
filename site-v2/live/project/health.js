@@ -232,11 +232,12 @@
     const total = finite(inv.total) ? inv.total : null;
     out.push(`<p class="hl-kbig"><b>${esc(int(kinds))}</b><small>种</small>${total != null ? `<i>·</i>${total >= 1e4 ? `<small>约</small><b>${esc(total >= 1e6 ? int(total / 1e4) : String(+(total / 1e4).toFixed(1)))}</b><small>万条</small>` : `<b>${esc(int(total))}</b><small>条</small>`}` : ''}${tag(im, '数据种类和条数')}</p>`);
     const through = md(inv.through);
-    out.push(`<p class="hl-sub">${prose(`手环原件${through ? ` · 截止 ${through}` : ''} · 程序自动数，增删种类跟着变。`)}${keep('横条按对数刻度')}</p>`);
-    const scaleMax = Math.log1p(Math.max(1, items[0]?.count ?? 0));
+    out.push(`<p class="hl-sub">${prose(`手环原件${through ? ` · 截止 ${through}` : ''} · 程序自动数，增删种类跟着变`)}</p>`);
+    const scaleMax = Math.max(1, items[0]?.count ?? 0);
     const row = x => {
-      const width = (Math.log1p(Math.max(0, x.count)) / scaleMax * 100).toFixed(2);
-      return `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar" aria-hidden="true"><i style="width:${width}%"></i></span><b${x.count >= 1e5 ? tip(`${int(x.count)} 条`) : ''}>${esc(wan(x.count))}</b></li>`;
+      const share = x.count / scaleMax * 100;
+      const fill = share > 0 ? `<i style="--hl-share:${share}%"></i>` : '';
+      return `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar" aria-hidden="true">${fill}</span><b${x.count >= 1e5 ? tip(`${int(x.count)} 条`) : ''}>${esc(wan(x.count))}</b></li>`;
     };
     const shown = Math.max(TOP, shownKinds), rest = items.length - shown;
     out.push(`<ul class="hl-kinds">${items.slice(0, open || rest <= 0 ? items.length : shown).map(row).join('')}</ul>`);
