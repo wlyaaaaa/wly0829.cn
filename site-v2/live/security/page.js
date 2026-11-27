@@ -76,7 +76,7 @@
   const auditCategory = source => { const raw = U.sp(source.category).replace(/\s*[（(]\s*[)）]/g, ''); return raw.includes('；') ? categoryNote(raw) : raw; };
   // 一行：时间、程序名（签名线索和分批读来的多类混排时，原因写在下一行小字），次数（排行前 3 上面的小标签里有，行里也照写，不空着）
   // 线索说明按“、”“，”“：”“ · ”分成几段，折行时整段换到下一行，不从“未知”“7 个”“git-remote-https.exe”这种词中间折开（L1）
-  const clueSegs = t => U.esc(t).replace(/(、|，|：| · )/g, '$1\u0001').split('\u0001').filter(Boolean).map(s => `<span class="security-seg">${s}</span>`).join('');
+  const clueSegs = (t, breaks = /(、|，|：| · )/g) => U.esc(t).replace(breaks, '$1\u0001').split('\u0001').filter(Boolean).map(s => `<span class="security-seg">${s}</span>`).join('');
   function auditLine(c, source, count, why) {
     const when = source.window && windowText(source.window, c.unit === '条');
     return `<li><span class="vz-audit__t">${U.esc(stamp(source.time))}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}${why ? `<small class="stat-gap security-clue-why">${clueSegs(why)}</small>` : ''}</span><span class="vz-audit__c">${count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`;
@@ -339,8 +339,8 @@
     window.LiveLight.tone(hero, data);
     queueMicrotask(() => {
       // 取数先画明细，再更新受众。用这一次更新后的身份写称呼。
-      const report = (title, items, detail, always = false) => items.length || always
-        ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join('；') : ''}` : '';
+      const report = (title, items, detail, always = false, separator = '；') => items.length || always
+        ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join(separator) : ''}` : '';
       const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
       // 页顶这几行的时刻和电脑页页顶同一种写法：今天的只写钟点，别的天带日期（M1010）
       const day = t => Number.isFinite(Date.parse(t)) ? [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ') : '';
@@ -350,15 +350,17 @@
         const lines = [
           report('已确认异常', groups.confirmed, g => `${name(g)}（${[g.at && U.esc(day(g.at)) + ' 读到', who(g)].filter(Boolean).join('，')}）`, true),
           report('读数暂缺', groups.unread, g => `${name(g)}（${g.at ? '最后读到 ' + U.esc(day(g.at)) : '没读到上次记录'}）`),
-          report('需核实', groups.review, g => {
+          report('需核实', groups.review, (g, i, items) => {
             const screening = /impersonation/.test(g.key || '');
             const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
               g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${day(g.at)} 读到`,
               g.ai_fixing === true ? 'AI 在逐个核对'
                 : screening && g.strong === 0 ? `这些线索待核对，眼下不用${you}处理。`
                 : `下一步：交给 AI 逐个核对签名和安装位置，${you}不用自己查；现在还没有 AI 接手`].filter(Boolean);
-            return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${U.esc(fields.join('；'))}）`;
-          })
+            const end = i + 1 < items.length ? '）；' : '）';
+            const details = clueSegs(`（${fields.join('；')}${end}`, /([，；])/g);
+            return `<a class="security-seg" href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>${details}`;
+          }, false, '')
         ].filter(Boolean);
         count.hidden = false;
         U.html(count, lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join(''));
