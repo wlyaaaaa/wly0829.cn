@@ -10,7 +10,7 @@
   const wordUnit = /[\p{L}\p{N}]/u;
   const oneHan = /^\p{Script=Han}$/u;
   // 卡名和读数短标签按一个单元走，标签之外仍可按词换行。
-  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|磁盘余量|网络丢包|防护状态|手机流量|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
+  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|停下(?:\s*·\s*)?没归档|上次(?:运行失败|读到在跑)|运行状态未读到|读数暂缺|读不准|磁盘余量|网络丢包|防护状态|手机流量|文件夹|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
   const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
   function keepWords(html) {
     if (!wordSegmenter || !html) return html;
@@ -1243,7 +1243,9 @@
         { ...row, text: join([U.fieldText(row.display_name ?? row.name, kind), label, U.fieldText(row.problem?.reason, kind)]) },
         [row.actions?.find(action => action.kind === 'copy' && action.intent === 'ask') || { kind: 'copy', label: '问情况', intent: 'ask' }],
       );
-      rows.push({ key: row.id, cls: 'row row--flat', html: `<p class="row__text"><span class="row__title">${keepWords(name)}</span> <span class="row__meta">${esc(label)}</span></p>${ask ? `<div class="row__acts">${ask}</div>` : ''}` });
+      const [stateLabel, ...nextRead] = label.split(' · ');
+      const statusHtml = [keepWord(stateLabel), ...nextRead.map(esc)].join(' · ');
+      rows.push({ key: row.id, cls: 'row row--flat', html: `<p class="row__text"><span class="row__title">${name}</span> <span class="row__meta">${statusHtml}</span></p>${ask ? `<div class="row__acts">${ask}</div>` : ''}` });
     }
     return rows;
   }
@@ -1444,7 +1446,9 @@
     const temperatureFresh = freshTemperature(temperature);
     if (id === 'computer') temperatureCurrent = temperatureFresh;
     // 旧值可以显示，但只有温度本身有有效的新读数才收起它的缺读说明。
-    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureFresh && name === 'CPU 温度')))] : [];
+    const hasReadingGroups = id === 'computer' || id === 'phone';
+    const readingLabel = html => hasReadingGroups ? `<span class="l1-unit">${html}</span>` : html;
+    const lacking = hasReadingGroups && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureFresh && name === 'CPU 温度')))] : [];
     const stutterMissing = id === 'computer' && lacking.includes('卡顿');
     const stutterNote = stutterMissing ? stutterGapNote(data) : '';
     if (stutterMissing) lacking.splice(lacking.indexOf('卡顿'), 1);
@@ -1466,7 +1470,7 @@
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
     }
     const grayNames = names => {
-      const format = name => U.fieldHtml(name, { name: '读数名称', kind: viewer });
+      const format = name => readingLabel(U.fieldHtml(name, { name: '读数名称', kind: viewer }));
       if (id !== 'needs') return names.slice(0, 3).map(format).join('、') + (names.length > 3 ? ` 等 ${names.length} 项` : '');
       const counts = new Map();
       for (const name of names.map(format)) counts.set(name, (counts.get(name) || 0) + 1);
@@ -1479,7 +1483,7 @@
     // M1010：电脑卡的“N 项要处理”写出是什么事；卡小，一件时写“要处理：”加那句说明（和电脑页页顶同一句，如“有防火墙配置未启用”），没说明写组名，几件时只列组名
     const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
     if (sure.length && sure.length === data.attention_count && state.note) {
-      const name = g => U.fieldHtml(g.name, { name: '检测分组', kind: viewer });
+      const name = g => readingLabel(U.fieldHtml(g.name, { name: '检测分组', kind: viewer }));
       const said = g => { const why = g.reason ?? g.why; return sp(U.fieldText(why, viewer) || '').trim() ? U.fieldHtml(why, { name: '异常说明', kind: viewer }) : name(g); };
       // 这一句用电脑页页顶“已确认异常”那行同一个颜色和字重，一眼看得出；旁边的说明照旧浅灰
       const text = `<b>${sure.length === 1 ? `要处理：${said(sure[0])}` : `${sure.length} 项要处理：${sure.slice(0, 3).map(name).join('、')}${sure.length > 3 ? ' 等' : ''}`}</b>`;
@@ -1488,7 +1492,7 @@
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     // 相邻几组原因一样时并成一句，写在最后一组后面（“CPU 温度、磁盘余量、网络丢包（最近一次记录于 10:26，此后没有新读数）”），不每组各写一遍（r83 返修第三轮）
     const lackReasons = lacking.map(name => lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
-    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map((name, i) => esc(name) + (lackReasons[i] && lackReasons[i] !== lackReasons[i + 1] ? `（${lackReasons[i]}）` : '')).join('、')}` : '';
+    const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map((name, i) => keepWord(name) + (lackReasons[i] && lackReasons[i] !== lackReasons[i + 1] ? `（${lackReasons[i]}）` : '')).join('、')}` : '';
     // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
     const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
     p.head.querySelector(':scope > .lamp')?.remove();
@@ -1505,10 +1509,9 @@
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, stutterNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !((lackNote || stutterMissing) && /^缺：/.test(text)) && !saidInLack(text)), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
     p.status.dataset.missingGroups = lackNote || stutterNote ? 'yes' : '';
-    // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
-    const statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
+    const statusHtml = hasReadingGroups ? groupedNote.replace(/ · /g, '\u00a0· ') : groupedNote;
     p.status.hidden = !note; paintHTML(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
