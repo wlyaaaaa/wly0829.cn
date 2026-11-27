@@ -29,7 +29,7 @@
   const put = (el, html) => U.html(el, publicHtml(html, viewer));
   const segmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
   const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || text
-    .split(/(修不住|转给|知道|亲手|新开|认领|接下来|读不到|要不要|要(?:你|本人)[选定]|AI 约好的事)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
+    .split(/(修不住|转给|知道|亲手|新开|认领|超时时?|接下来|读不到|要不要|要(?:你|本人)[选定]|AI 约好的事)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
     .map(word => /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join(''));
   const timed = R.timed, ms = x => Date.parse(x);
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
