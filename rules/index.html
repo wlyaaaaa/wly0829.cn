@@ -21,7 +21,7 @@
 <meta property="og:description" content="这些事撤不回，动手前要我明确点头： 替我给别人发消息、对外发布、花钱、删只有一份的数据、撤不回的迁移；还没发过 Release 的项目第一次公开发布也算。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f07fb9a38698797182c0c07826a96d7a1059eecf19fd2ce0eb1e3059bd616db4/%E5%85%AC%E7%94%A8/fonts/ui-8f9439f6196d23f2.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/31379ee74d6704ff2e18ffd01b0fd0d2876e8af5a1ee4a67376dafe27ba4dc05/%E5%85%AC%E7%94%A8/fonts/ui-e0081f970330c0aa.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/402674852489c4a886028bd2747be12c75ed20aa73f4b64284e83423b0cddd33/%E5%85%AC%E7%94%A8/fonts/article-027d11379c7eb77d.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E517" data-rule-page="index">
+<main class="rules-page" data-rule-release="E520" data-rule-page="index">
   <div class="rules-title"><h1 data-source-title="" id="我的-ai-约法">我的 AI 约法</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span><span class="rules-public-mark__note">个别内容仅本人可见</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#最要紧的到哪个项目都算数"><span class="toc-number">01</span><span class="toc-label">最要紧的几条</span></a></li>
@@ -99,7 +99,7 @@
 <li>处理图片、做画面一律先走生图，不走程序：画图、改图、换字、抠图、去字、换背景、精准替换都直接交生图，这些它都直接能做；拼动图、合成多页 PDF 这类拼装照常用程序。网页也先用生图拿到样子（已有的图直接让它改），再一块一块定哪几处直接用生成的图、哪几处写代码：“画面直接用图，只在会变的数字、动效、点击这些地方叠代码”要优先考虑，但不是非这样不可；用代码有生图给不了的实在好处（会变的数字、动效、手机上要重排、要被搜到）的那几处写代码，按钮也可以画在图里、上面盖一块能点的区域。打算怎么分，动手前一两句告诉我。给别人的证据、动效和实时数据、汇报网页的版式图表，以及改过提示重出仍做不到、等不起生图的，照生图技能办。现在的生图模型画中文和数字很准（一张图三百字以内、字不小的按不会错算，三百到五百字以上才约 2% 的错字，不值得抠着修），而且不花我的额度，写程序花。它听得懂笼统的提示、自己知道什么好看，提示不用写死。拿不准它做不做得到，先小批量试几张；试是为了找到怎么喂，不是证明它不行。出方案、估时、查风险、写单子、审稿时，不以“生图不行”“会有偏差”为前提去设计验证、量错误率、备退路，也不给生图出来的图加程序兜底（贴回原图、逐像素比对、用程序抠图挖图），更不自己编我没要过的前提把活推回程序（像“一个像素都不能变”“网页上的字都得能点”）。出来的图先看，能用就直接当成品，不默认当参考让程序把整张照着重做；图不对、风格不一样，先怀疑自己的提示写得不对、喂进去的图不对，改了重出，不转去写程序。Claude 自己没有生图模型、没被训练过这方面，觉得生图不行是想当然，不是事实。</li>
 <li>要配颜色的画面（网页、汇报网页、生图、图表、视频都算），强调色只有一个：正绿 <code>#00A650</code>，要强调的地方照常用它（满屏都是它不好看就少用），参考我的网站 wly0829.cn 的用法。强调色唯一不等于绿色唯一：别的绿（比如网站标题、数字用的深绿）照常能用，和强调色不冲突，保持原样，不必改成 <code>#00A650</code>。画面不只这一个颜色，可以彩色一点。我指出的例外除外。</li>
 <li>同一办法两次没成，先查实际发生了什么，再换一类办法。验收没过接着修了一轮、问题没明显变少，先想这条路走不走得通，再想验收标准和办法对不对：验收只证明结果，证明不了路走得通。要管理员就直接提权。</li>
-<li>同一个方案、设计或稿子被我纠正了好几次，说明你在这件事上已经想不全了（我纠正你的做法、说你答偏了不算，那种当场改做法）：别再出新的一整版，也别撂下不做，改成我一步一步给方向。我给一步，你把它说清楚、说对不对、补我漏的，不往设计上赶；我说给完了，你再整体评估、补漏（补的单独标出），出设计，没有要我拍板的直接做。聊了很久还在绕，就提议带一页材料换个新对话，或找更强的型号出设计。</li>
+<li>同一个方案、设计或稿子被我纠正了好几次，说明你在这件事上已经想不全了（我纠正你的做法、说你答偏了、只指出局部毛病的，当场改正，不算；我只是质疑某一处、没有纠正方案、设计或稿子本身的，先答清，也不算；你有把握这次能想全、说得清前几次暴露的问题这次怎么解决的，这一次也不算）：别再出新的一整版，也别撂下不做，改成我一步一步给方向。我给一步，你把它说清楚、说对不对、补我漏的，不往设计上赶；我说给完了，你再整体评估、补漏（补的单独标出），出设计，没有要我拍板的直接做。聊了很久还在绕，就提议带一页材料换个新对话，或找更强的型号出设计。</li>
 <li>我说“完善”，是要它对我更好用：挑最值的几件做，严重的先做，不影响使用的不修，做完就收。技术上没毛病不等于产品没问题：做的不是我要的、实际用起来会碰到的情况没想到、顾了这处丢了那处，比 bug 更要紧，在做错的产品上修技术是白花。<span class="rule-ref">（L11）</span></li>
 <li>开视频、新工具这类和学习无关、要占几天的新事，先一句话说用处、几天、哪天收，收尾日写进这件事的文件；我说做就做，过了日期提一句。</li>
 <li>验证过后提交并推到我的 GitHub，不用问，我说只留本地除外；每次提交说明里单独写一行“变化：……”说我看到的、用到的或你替我办事的方式变了什么，只改内部的写“变化：无”；此行按公开边界写（实况原样显示）；英文说明这一行也用中文。交付了我能直接用的成品，照实况技能登记做成了什么。这次产生的下载和临时文件清掉。<span class="rule-ref">（L13）</span></li>
@@ -112,7 +112,7 @@
 <li>写我的事之前先用 <code>E:\.agents\tools\Find-ExistingRecord.ps1</code> 查记过没有，查到就改原处。</li>
 <li>我生活里的事（钱到没到、事办没办）没人说没发生、记录也没反证，就按最可能的情况算，写“按到了算”，不写“未核”“查不到”，不追查也不问我；我一贯会做的事直接当结论，数字对不上先怀疑数字。AI 自己的活做没做完、交给机关的正式材料不在此列。</li>
 <li>长回答（凭直觉判断，大概参考 1000 个汉字以上）、要展开才说得清的汇报和裁定，用本地汇报网页（浅色底，不要黑底），见 report-page 技能。<span class="rule-ref">（L26）</span></li>
-<li>大工程（我点名的，或你看整件我一条条跟不过来的：几个对话一起做、要跑几天、要我陆续定很多事这类，按整件看，不按其中一项；中途变成这样的，从那时起照办）我只看一页稳定的汇报页，各个对话的回复我都不看：要我定、要我做、要我知道的都放到这一页，只放要紧的、写短；我定了的，要紧的（首页、实况什么样、风格、重要内容这类）精简后一直留在页上，其余收走；不要我拍板的技术修复不上页，哪怕很大（该先说核心思路的照说）；开工前的思路、收尾结果也放这一页，对话里只留一两句，我到对话里问的在对话里答。AI 替我选的只放会改变我看到什么的，放上去不算我定了。大工程只有一个主持：对整件成品负最后责任的那个对话；规则别处说的“主持”多指跟我对话、派子代理的根会话，大工程里管一块的对话不是这里说的主持。主持管产品和整体：做成什么样、整体的技术架构和方向、产品机制、整体好不好用好不好看、什么时候算做完；架构、方向和机制由做的线给它讲清楚，没人讲清的派人去弄清；它自己看成品、读各线交回的和指给它的那几行，这件成品的代码和日志不自己翻、原因不自己追，根会话那些“小事自己做、自己查”的例外在这件成品上对它不算；具体毛病（坏了、数不对、读不到这类）交牵头施工的那条线判和修，主持按类看各线交回的根因和整体结果，不一条条定修法；要我定的主动做成题挂到这一页请我拍板。别的一两句能问清的当场问，其余汇报页怎么分、怎么叫我见 report-page 技能。</li>
+<li>大工程（我点名的，或你看整件我一条条跟不过来的：几个对话一起做、要跑几天、要我陆续定很多事这类，按整件看，不按其中一项；中途变成这样的，从那时起照办）我只看一页稳定的汇报页，各个对话的回复我都不看：要我定、要我做、要我知道的都放到这一页，只放要紧的、写短；我定了的，要紧的（首页、实况什么样、风格、重要内容这类）精简后一直留在页上，其余收走；不要我拍板的技术修复不上页，哪怕很大（该先说核心思路的照说）；开工前的思路、收尾结果也放这一页，对话里只留一两句，我到对话里问的在对话里答。AI 替我选的只放会改变我看到什么的，放上去不算我定了。大工程只有一个主持：对整件成品负最后责任的那个对话；规则别处说的“主持”多指跟我对话、派子代理的根会话，大工程里管一块的对话不是这里说的主持。主持管产品和整体：做成什么样、整体的技术架构和方向、产品机制、整体好不好用好不好看、什么时候算做完；架构、方向和机制以各项目自己的说明为准：做的线改了就写进去，缺的派人查清后写回说明，主持读说明；它自己看成品、读各线交回的和指给它的那几行，这件成品的代码和日志不自己翻、原因不自己追，根会话那些“小事自己做、自己查”的例外在这件成品上对它不算；具体毛病（坏了、数不对、读不到这类）交牵头施工的那条线判和修，主持按类看各线交回的根因和整体结果，不一条条定修法；要我定的主动做成题挂到这一页请我拍板。别的一两句能问清的当场问，其余汇报页怎么分、怎么叫我见 report-page 技能。</li>
 <li>要我做、要我选、我可能漏看的事进实况，AI 核实做完再关；自动运行的东西要在实况看得见；几分钟内要我动手的发手机：<code>pwsh -NoProfile -File E:\PCConfig\tools\Send-OwnerNotice.ps1 -Text "一句话"</code>。我睡着、出门也照常进实况、发通知和邮件，不因为我在睡就压着不发。<span class="rule-ref">（L28）</span></li>
 <li>浏览器用我的 Chrome。“打开”文件就是系统默认程序打开。新装软件、缓存、临时文件放 E 盘。<span class="rule-ref">（L29）</span></li>
 <li>项目分日用、偶用、存档（冻结）三档，名单和各档怎么维护在<a href="topic-context-sources.html">《事实来源与任务上下文》</a>；冻结的不主动碰，我说“全部项目”也不含。<span class="rule-ref">（L24、L25）</span></li>
@@ -127,8 +127,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E517 <small>每天 07:20 跟一次新版本</small></dd></div><!-- 按需更新快核（M928）核法：E:/PCConfig/registries/tasks.json 里“Wly Website Rules Daily”的 schedule_zh，现“每天 07:20；错过会补”；变了改这句 -->
-        <div><dt>发布</dt><dd>2026-11-27 01:14 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E520</dd></div>
+        <div><dt>发布</dt><dd>2026-11-27 14:54 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html" aria-current="page">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -142,8 +142,8 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 8,249 字<br>专题共 70,777 字</dd></div>
-        <div class="meta-extra"><dt>钩子</dt><dd><a href="/agents/规矩落地.html#规矩落地-02">AI 百工谱 · 规矩落地</a></dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 8,332 字<br>专题共 70,920 字</dd></div>
+        <div class="meta-extra"><dt>钩子</dt><dd><a href="/live/agents/#hooks">实况 · 智能体页的钩子</a></dd></div>
       </dl>
     </aside>
   </div>
