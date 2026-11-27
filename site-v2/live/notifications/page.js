@@ -179,7 +179,7 @@
       const table=rows=>'<table class="delivery-table"><thead><tr><th>时间</th><th>什么提醒</th><th>走哪路</th><th>到没到</th></tr></thead><tbody>'+rows.map(r=>{
         if(r.private_count||hiddenBatch(r))return `<tr><td colspan="4">${privateLine(r)}</td></tr>`;
         const k=kindOf(r),links=notificationLinks(r);
-        return `<tr data-status="${esc(k)}"><td>${shown(stamp(at(r)),'时刻')}</td><td>${what(r)}${links?`<div>${links}</div>`:''}</td><td>${shown(way(r),'路线')}</td>`
+        return `<tr data-status="${esc(k)}"><td>${shown(stamp(at(r)),'时刻')}</td><td>${what(r)}${links?`<div>${links}</div>`:''}</td><td><span class="notify-route">${shown(way(r),'路线')}</span></td>`
           +`<td><span class="notify-state">${shown(stateWord(r),'到没到')}</span>${k!=='sent'?`<div class="notify-why">${esc(stuck(r))}</div><div class="notify-other">${esc(otherLine(r))}</div>`:''}${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</td></tr>`;
       }).join('')+'</tbody></table>';
       const groups=new Map();
