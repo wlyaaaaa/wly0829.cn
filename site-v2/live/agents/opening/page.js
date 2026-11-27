@@ -189,13 +189,27 @@
   // 不留一两个字加标点单独占一行（看图 06：工程卡首段末尾“的”。”单独折下去）
   const TAIL = /(?:<(a|span|strong|code)\b[^>]*>[^<]{1,8}<\/\1>)?(?:&[#\w]+;|[^<>&\s]){1,4}$/;
   const QUOTED_TAIL = /[“「][^<“”「」]{1,8}[”」][。！？]$/u;
-  const tail = (html, intro = false) => html.replace(intro && QUOTED_TAIL.test(html) ? QUOTED_TAIL : TAIL, m => `<span class="op-tail">${m}</span>`);
+  function tail(html, intro = false) {
+    const suffix = html.match(intro && QUOTED_TAIL.test(html) ? QUOTED_TAIL : TAIL);
+    if (!suffix) return html;
+    let cut = suffix.index;
+    if (!suffix[0].includes('<')) {
+      let start = html.lastIndexOf('>', cut - 1) + 1;
+      for (const part of U.wordParts(html.slice(start))) {
+        const end = start + part.length;
+        if (end > cut) { cut = start; break; }
+        start = end;
+      }
+    }
+    return `${html.slice(0, cut)}<span class="op-tail">${html.slice(cut)}</span>`;
+  }
   function md(lines, intro = false) {
     let html = '', para = [], fence = null;
     const stack = [];
     const flush = () => {
       if (!para.length) return;
-      html += `<p${intro ? ' class="op-project-intro"' : ''}>${para.map((line, i) => tail(inline(line), intro && i === para.length - 1)).join('<br>')}</p>`;
+      const lines = para.map((line, i) => tail(inline(line), intro && i === para.length - 1)).join('<br>');
+      html += `<p${intro ? ' class="op-project-intro"' : ''}>${intro ? U.keepWords(lines) : lines}</p>`;
       intro = false; para = [];
     };
     const close = (indent = -1) => { while (stack.length && stack.at(-1).indent > indent) html += `</li></${stack.pop().type}>`; };
@@ -377,7 +391,7 @@
     const c = h.context, refill = refillText(h);
     const what = c?.triggers?.length ? `（${c.triggers.join('、')}）` : '';
     return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
+      ? `<p class="op-ctx__when">${U.keepWords(`最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}`)}</p><pre>${esc(c.text)}</pre>`
       : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变

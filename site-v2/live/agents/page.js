@@ -337,7 +337,7 @@
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的倍数，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${bandNote}${shortNote}点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。</p></div>
+        <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的<span class="ag-keep">倍数</span>，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${U.keepWords(bandNote)}${U.keepWords(shortNote)}${U.keepWords('点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。')}</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;

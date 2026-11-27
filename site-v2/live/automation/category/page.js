@@ -56,6 +56,7 @@
     return `${part(when(a))}–<wbr>${part(T.dayKey(a) === T.dayKey(b) ? T.clock(b) : when(b))}`;
   };
   // 一行写两句：上面这一轮干的是哪件事（自动修理写那件活的名字，别的写结果），下面一句交代、谁做的、用了多久
+  const words = text => id === 'auto-repair' ? U.keepWords(text) : text;
   function runRow(r) {
     const t = tag(r), thing = r.subject ? F(r.subject.title, '这件活') : '';
     const summary = R.oneVersion(F(r.summary, '这一轮做了什么')), reason = F(r.statusReason || r.reason, '原因');
@@ -72,11 +73,11 @@
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
-    const segs = [[note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
+    const segs = [[words(note), false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
     const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
-      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
+      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${words(title)}</a>` : words(title)}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
       ${r.href ? `<a class="ak-run__go" href="${esc(r.href)}">看这一轮 <span aria-hidden="true">›</span></a>` : ''}</li>`;
   }
   const allRuns = () => {
@@ -120,8 +121,8 @@
     const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
-        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
-        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${F(c.last_result.text, '上次结果')}</p>` : ''}
+        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${words(now)}</b></p>
+        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${words(F(c.last_result.text, '上次结果'))}</p>` : ''}
         <p class="ak-hero__what">${description}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div><img class="ak-hero__art" alt="" src="/live/automation/category/art-desk.webp"></section>`;

@@ -78,27 +78,28 @@
     // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
     const wrapSteps = repair || weekly;
+    const words = text => wrapSteps ? U.keepWords(text) : text;
     const flow = `<ol class="ah-flow${wrapSteps ? ' ah-flow--words' : ''}${weekly ? ' ah-flow--weekly' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${wrapSteps ? keepWords(keepRange(esc(title))) : keepRange(esc(title))}</span></p><p class="ah-flow__text">${wrapSteps ? keepWords(esc(text)) : esc(text)}</p></li>`).join('')}</ol>`;
     const promptIntro = id === 'weekly-live' && off ? '这一类关着。下面是关掉以前每一轮交给 AI 的原话，照原样留着。'
       : `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
-    const prompt = c.prompt_template ? `<p>${promptIntro}</p>
+    const prompt = c.prompt_template ? `<p>${words(promptIntro)}</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
-    const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
+    const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${words(esc(a))}</p>`).join('');
     const failure = esc([failurePolicy(c.execution_policy || {}), g.failure].filter(Boolean).join(' '));
     const failureText = id === 'weekly-live' ? keepRange(failure).replace(/\d+ 分钟|这一轮算没做成，|派活程序登一件故障交自动修理。/g, m => `<span class="ah-keep">${m}</span>`) : failure;
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><a href="${esc(T.path('/live/automation/category/', { type: id }))}">${name}</a><strong aria-current="page">怎么干</strong></nav>
       <div class="ah-head"><div><h1>${name}怎么干</h1><p>${esc(g.short || '')}${g.short ? '。' : ''}${schedule}</p></div>
         <p class="ah-pills">${model ? `<span class="ah-pill">${model}</span>` : ''}<span class="ah-pill" data-mode="${pill[0]}">${esc(pill[1])}</span></p></div>
       <div class="ah-grid"><div class="ah-main">
-        ${card('什么时候开始', `<p>${esc(start)}</p>`)}
+        ${card('什么时候开始', `<p>${words(esc(start))}</p>`)}
         ${steps.length ? card(off ? '打开后一轮这样走' : '一轮怎么走', flow) : ''}
         ${card('交给 AI 的话', prompt, ' id="words"')}
         ${why ? card('为什么这样设计', `<div class="ah-why">${why}</div>`) : ''}
-        ${g.failure ? card('坏了会怎样', `<p>${failureText}</p>`) : ''}
-        ${g.off ? card('关了会怎样', `<p>${esc(g.off)}${/[。！？]$/.test(g.off) ? '' : '。'}</p>`) : ''}
-        ${g.cost ? card('花多少时间', `<p>${esc(g.costFull ? g.cost : `${timing(c.execution_policy)} ${g.cost}`)}</p>`) : ''}
-        ${g.result ? card('结果去哪', `<p>${esc(g.result)}</p>`) : ''}
+        ${g.failure ? card('坏了会怎样', `<p>${words(failureText)}</p>`) : ''}
+        ${g.off ? card('关了会怎样', `<p>${words(esc(g.off))}${/[。！？]$/.test(g.off) ? '' : '。'}</p>`) : ''}
+        ${g.cost ? card('花多少时间', `<p>${words(esc(g.costFull ? g.cost : `${timing(c.execution_policy)} ${g.cost}`))}</p>`) : ''}
+        ${g.result ? card('结果去哪', `<p>${words(esc(g.result))}</p>`) : ''}
       </div><aside class="tp-panel ah-side"><a href="${esc(T.path('/live/automation/category/', { type: id }))}">这一类的页 <i>›</i></a><a href="/live/automation/">自动任务 <i>›</i></a><a href="/live/ledger/">AI 自动任务账本 <i>›</i></a></aside></div>
       <p class="ah-foot">用谁：${esc(g.who || '')}${model ? `${off ? '打开后用' : '现在是'} ${model}，换代跟着模型清单走。` : ''}</p>`);
     if (!landed) { landed = true; if (location.hash) T.reveal(location.hash.slice(1)); }

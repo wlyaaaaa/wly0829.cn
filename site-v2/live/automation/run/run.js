@@ -551,9 +551,9 @@
     // 访客版画之前把指本人的“你”换成“本人”（paint）
     paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
-      <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
+      <div class="ar-grid"><div class="ar-main">${r.excerptFallback ? U.keepWords(conversation(r)) : conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.innerHTML = originalReply(r.receipt.originalText);
+    if (original) original.innerHTML = U.keepWords(originalReply(r.receipt.originalText));
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);
