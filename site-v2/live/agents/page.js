@@ -153,7 +153,7 @@
     const tone = c.fail.length || issues.length ? (owner ? 'owner' : 'repair') : c.unknown ? 'off' : 'ok';
     const word = owner ? `要${T.you(viewer)}看` : c.fail.length ? `差 ${c.fail.length} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
     const ringColor = tone === 'ok' ? T.TONE.ok : tone === 'off' ? T.TONE.off : T.TONE.repair;
-    // 每处毛病写谁在修、第几轮，能点的点到那一轮或那件事；只有一处时写在“差 1 处”下面，不在清单里再写一遍
+    const statusText = html => html.replace(/(^Codex |」)装着/, '$1' + keep('装着'));
     const fixer = i => i.handler_text ? F(i.handler_text, '谁在修') : i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '';
     const fixText = i => [fixer(i) || (owner ? '' : '还没人接手'), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ');
     const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
@@ -161,9 +161,9 @@
       const text = F(i.text);
       return text === `${h.name} 开场读到的规矩不是当前版` ? ruleMismatch : text;
     };
-    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${issueText(i)}${issues.length > 1 && fixText(i)
+    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${statusText(issueText(i))}${issues.length > 1 && fixText(i)
         ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
-      : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${esc(r.text)}</a>` : esc(r.text)}</span></li>`).join('');
+      : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${statusText(esc(r.text))}</a>` : esc(r.text)}</span></li>`).join('');
     const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
     const fix = owner || !(c.fail.length || issues.length) ? ''
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
