@@ -283,10 +283,12 @@
 
   // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
   let ended = false;
-  function empty(message) {
+  function empty(message, link = '') {
     ended = true; delete hero.dataset.updating;
-    U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
-    part('state').hidden = part('src').hidden = true;
+    const head = part('head'), src = part('src');
+    U.html(head, `<span class="head__lead">${esc(message).replace(/\b\d{1,2}-\d{2} \d{2}:\d{2}\b/g, '<span class="iss-nowrap">$&</span>')}</span>`);
+    head.classList.toggle('is-long', Boolean(link) && [...message].length > 40);
+    U.html(src, link); src.hidden = !link; part('state').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
   // 访客版读口撤回（503 live_publication_revoked，访客版正在重新生成）：这一件旧的标题、状态、三格、经过、右栏全清，
@@ -325,7 +327,11 @@
         if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
-        if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
+        if (s.meta?.status === 404) {
+          const { text, prefix, target } = s.link?.ledger_missing ?? {};
+          return empty(text || prefix || '这一件暂时读不到', target
+            ? (text ? `${esc(prefix)}<br>` : '') + go(`/live/issue/?id=${encodeURIComponent(target.id)}`, esc(target.title)) : '');
+        }
         if (ended) return;
         heroRead.set(s); restRead.set(s);
         if (s.phase === 'gone') empty('这块没存下来，连上后补上。');
