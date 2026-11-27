@@ -93,6 +93,7 @@
   .page--project:has(.pj-board--materials) #pj-hero .card__glass { padding: 18px 16px; }
   .page--project:has(.pj-board--materials) #pj-hero[data-pic] .card__body { padding-inline: 0; }
   .page--project:has(.pj-board--materials) #pj-hero .card__pic { opacity: .45; }
+  .page--project:has(.pj-board--materials) .pj-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .page--project:has(.pj-board--materials) #topbar {
     zoom: 1; height: auto; padding-block: 6px; grid-template-columns: minmax(0, 1fr) 24px; gap: 4px;
   }
