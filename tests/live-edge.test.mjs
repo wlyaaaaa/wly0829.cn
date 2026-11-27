@@ -81,8 +81,12 @@ test('reject broken or old fallback packages', async () => {
 
 test('shutdown marker, OSS receipt and resource time stay independent', async t => {
   const value = {v: 1, seq: 1, metadata_only: true, at, publication: {policy, audience}, resources: {home: {at: '2026-11-17T11:50:00.000Z'}}};
-  let status = 502;
-  t.mock.method(globalThis, 'fetch', async url => url === oss ? Response.json(value, {headers: {'Last-Modified': 'Tue, 17 Nov 2026 12:00:05 GMT'}}) : new Response('{}', {status}));
+  let status = 502, cloudReads = 0;
+  t.mock.method(globalThis, 'fetch', async url => {
+    if (url !== oss) return new Response('{}', {status});
+    cloudReads++;
+    return Response.json(value, {headers: {'Last-Modified': 'Tue, 17 Nov 2026 12:00:05 GMT'}});
+  });
   for (const [marker, basis, originStatus, connection] of [
     [undefined, undefined, 502, 'unreachable'], [true, 'windows_poweroff', 502, 'unreachable'],
     [at, undefined, 502, 'unreachable'], [at, 'network_timeout', 502, 'unreachable'],
@@ -95,6 +99,15 @@ test('shutdown marker, OSS receipt and resource time stay independent', async t 
     assert.deepEqual([response.headers.get('X-Live-Connection'), response.headers.get('X-Live-Offline-Since'), response.headers.get('X-Live-Last-Seen'), body.at], [connection, confirmed ? at : null, '2026-11-17T12:00:05.000Z', value.resources.home.at]);
     assert.deepEqual([body.host_off_basis, body.host_off_at], confirmed ? ['windows_poweroff', at] : [undefined, undefined]);
   }
+  status = 502;
+  const beforeScreen = cloudReads;
+  const screen = await call('screen?refresh=1');
+  assert.equal(screen.status, 503);
+  assert.equal(cloudReads, beforeScreen);
+  assert.deepEqual(['X-Live-Connection', 'X-Live-Source', 'X-Live-Offline-Since', 'X-Live-Last-Seen'].map(name => screen.headers.get(name)),
+    ['unreachable', null, null, null]);
+  const screenBody = await screen.json();
+  assert.deepEqual(screenBody, {error: 'snapshot_unavailable', text: '暂时连不上电脑', now: screenBody.now});
 });
 
 test('origin withdrawals, missing details, temporary unavailability and empty statuses pass through', async () => {
