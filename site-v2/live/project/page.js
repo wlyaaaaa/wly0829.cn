@@ -504,7 +504,7 @@
   const isMore = (s) => s.id === 'more-data' || s.label === '更多数据';
   let proj = null, at = null, arts = null, artsState = null, projectViewer = 'public';
   let changeLog, changeHead, changeView, changeRead = 0, changeEpoch = 0, changeRefill = 0;
-  let activity, sideReads = 0, audience = 0, changeIssue = '', correctionsWatch;
+  let activity, activityWatch, activityScope, audience = 0, changeIssue = '', correctionsWatch;
   const additions = {};
   const additionWatches = [];
   function readSoftware(save, watch) {
@@ -611,21 +611,28 @@
     publishChanges(missing ? hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
-    const read = ++sideReads;
     if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
       if (sameViewer(meta) && d?.stats?.owner_corrections) { additions.corrections = d.stats.owner_corrections; if (!first) renderBoard(false); }
     } });
+    reads.push(readChanges());
     const scope = d.phase === 'archived' || d.state === 'frozen' ? 'frozen' : 'active';
-    const readActivity = () => window.Live.get('projects', { state: scope }).then(r => {
-      // 没读到：本页主数据确认接通后自己再读一次（M982）
-      r?.again?.then(() => { if (read === sideReads) readActivity(); });
-      const a = sameViewer(r?.meta) ? r?.data?.activity : null, row = a?.items?.find(x => x.id === id);
-      return Array.isArray(a?.days) && Array.isArray(row?.commits) ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
-    }).catch(() => null).then(next => {
-      if (read !== sideReads || !next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
+    if (activityWatch && activityScope === scope) return;
+    activityWatch?.stop();
+    activityScope = scope;
+    const query = { state: scope };
+    const show = (data, meta) => {
+      if (!sameViewer(meta)) return;
+      const a = data?.activity, row = a?.items?.find(x => x.id === id);
+      const next = Array.isArray(a?.days) && Array.isArray(row?.commits)
+        ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
+      if (!next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
       activity = next; if (!first) renderStrip(proj);
-    });
-    reads.push(readChanges(), readActivity());
+    };
+    // 订阅接收重读结果，get 仍复用首个请求并处理这次读不到的状态。
+    const subscription = activityWatch = window.Live.watch('projects', query, { data: show });
+    reads.push(window.Live.get('projects', query).then(({ data, meta }) => {
+      if (activityWatch === subscription) show(data, meta);
+    }));
   }
   function changeRow(it, index) {
     const protectedRow = restricted(it), locked = protectedRow || restricted(it.text), field = protectedRow ? it : it.text ?? it;
@@ -1330,9 +1337,10 @@
     data(raw, meta) {
       const viewer = meta.viewer?.kind || 'public';
       if (viewer !== projectViewer || !raw) {
-        audience++; sideReads++; changeRead++; changeEpoch++; changeRefill = 0;
+        audience++; changeRead++; changeEpoch++; changeRefill = 0;
         changeLog = changeHead = changeView = activity = undefined; changeIssue = '';
         for (const subscription of additionWatches.splice(0)) subscription.stop();
+        activityWatch?.stop(); activityWatch = null;
         correctionsWatch?.stop(); correctionsWatch = null; Object.keys(additions).forEach(key => delete additions[key]);
         artsWatch?.stop(); artsWatch = arts = artsState = null;
         opening = [];
