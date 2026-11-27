@@ -185,15 +185,18 @@
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
       const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
         : part.replace(/验收|太久|回复/g, '<span class="live-unit">$&</span>')).join('');
-      const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
+      const last = d.last_run;
+      const lastDone = last?.title && R.timed(last.finished_at) && typeof last.ok === 'boolean' && R.timed(next.at)
+        ? `上次 <span class="live-unit">${esc(U.time(last.finished_at))}</span> ${field(last.title, '任务名称')}${last.ok ? '跑完' : '没做成'}&nbsp;· ` : '';
+      const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(lastDone ? U.time(next.at) : clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
       // 大字：今天跑完几轮（点了到自动任务页今天跑完的）；下面“其中几轮没做成 ›”，0 轮照写 0、不带链接
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
       const fail = v.failed == null ? '' : `<p class="b6-fail">${v.failed > 0 ? go(v.failedHref, `其中 ${esc(v.failed)} 轮没做成`) : '其中 0 轮没做成'}</p>`;
       const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: R.runPage(r.href) || R.runHref(r),
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮') : '';
-      // 第一行：在干哪一轮；没在跑写“这会儿空着 · 下一个 几点 哪一类 ›”
+      // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${goWrap(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
+        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${goWrap(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
       // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
       const problemLine = p => {
