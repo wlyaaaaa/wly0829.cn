@@ -6,6 +6,7 @@
     ["/live/project/interfaces/passwordcenter/04-thumb.webp", "/live/project/interfaces/passwordcenter/04.png", "已连接的手机：能批准绑定、解除绑定、删除记录（演示数据）"],
     ["/live/project/interfaces/passwordcenter/05-thumb.webp", "/live/project/interfaces/passwordcenter/05.webp", "解锁个人资料前先选怎么验证：通行密钥、动态验证码、恢复码、账号验证四选一（9 月 24 日）"],
     ["/live/project/interfaces/passwordcenter/06-thumb.webp", "/live/project/interfaces/passwordcenter/06.webp", "用手机验证器上的 6 位动态码验证（9 月 24 日）"],
+    ["/live/project/interfaces/passwordcenter/08-thumb.webp", "/live/project/interfaces/passwordcenter/08.webp", "用电脑上存的通行密钥验证，系统弹窗里也能改用手机确认（9 月 24 日）"],
     ["/live/project/interfaces/passwordcenter/07-thumb.webp", "/live/project/interfaces/passwordcenter/07.webp", "这次解锁多久：0.5～72 小时，无限制授权要不要一起开单独选（9 月 24 日）"]
   ],
   "proxyclean": [
