@@ -252,7 +252,7 @@ window.PAGE_DATA = {
     {
       "id": "project-04",
       "title": "讲义写完，先过两道互不通气的审查",
-      "image": "assets/总览-04-v2.webp",
+      "image": "assets/总览-04-v3.webp",
       "width": 1774,
       "height": 887,
       "detail": [
