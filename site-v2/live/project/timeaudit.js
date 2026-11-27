@@ -20,7 +20,8 @@
   // —— 数怎么写 ——
   const finite = n => typeof n === 'number' && Number.isFinite(n);
   const int = n => Math.round(n).toLocaleString('zh-CN');
-  const one = n => (Math.round(n * 10) / 10).toLocaleString('zh-CN', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  // 一位小数：和后台那几句（Python 的 .1f）同一种取法，按实际存的数取舍，204.45 写 204.4，不和悬停那句对不上
+  const one = n => { const [i, f] = Math.abs(n).toFixed(1).split('.'); return `${n < 0 && +`${i}.${f}` ? '−' : ''}${Number(i).toLocaleString('zh-CN')}.${f}`; };
   const gb = b => { const g = b / 2 ** 30; return g >= 10 ? one(g) : (Math.round(g * 100) / 100).toFixed(2); };   // 全站写 GB（按 Windows 的算法，1 GB = 2³⁰ 字节）
   const size = b => b >= 2 ** 30 ? `${gb(b)} GB` : b >= 2 ** 20 ? `${one(b / 2 ** 20)} MB` : b >= 1024 ? `${one(b / 1024)} KB` : `${int(b)} 字节`;
   const zoned = at => {
@@ -269,14 +270,16 @@
     const head = count != null ? big(esc(int(count)), '条', '能翻回') : '';
     const kinds = [finite(cv.text_count) && `文字 ${int(cv.text_count)}`, finite(cv.url_count) && `链接 ${int(cv.url_count)}`, finite(cv.file_list_count) && `文件列表 ${int(cv.file_list_count)}`, md(cv.earliest_date) && `最早 ${md(cv.earliest_date)}`].filter(Boolean);
     const line = kinds.length ? kinds.join(' · ') : typeof cv.text === 'string' ? cv.text : '';
-    const evv = v(ev), evParts = [finite(evv.skipped) && `跳过 ${int(evv.skipped)}`, finite(evv.gaps) && `缺口 ${int(evv.gaps)}`, finite(evv.boundaries) && `边界 ${int(evv.boundaries)}`].filter(Boolean);
-    const evText = n(ev) != null ? `全部事件 ${int(n(ev))} 条${evParts.length ? `（含${evParts.join('、')}）` : ''}` : evv.text ? `全部事件 ${evv.text}` : '';
+    // 后台叫“边界”的那类：开机、锁屏、解锁、睡眠、恢复、暂停或会话结束时记下的分界，没有内容（TimeAudit clipboard_history/PERSONALOS_ADAPTER_CONTRACT.md）
+    const MARKS = '开机锁屏等标记';
+    const evv = v(ev), evParts = [finite(evv.skipped) && `跳过 ${int(evv.skipped)}`, finite(evv.gaps) && `缺口 ${int(evv.gaps)}`, finite(evv.boundaries) && `${MARKS} ${int(evv.boundaries)}`].filter(Boolean);
+    const evText = n(ev) != null ? `全部事件 ${int(n(ev))} 条${evParts.length ? `（含${evParts.join('、')}）` : ''}` : evv.text ? `全部事件 ${String(evv.text).replace('边界', MARKS)}` : '';
     const boxParts = [evText, finite(by?.value) && `独立库 ${size(by.value)}`].filter(Boolean);
     const tv = v(tmp), tmpText = finite(tv.count) ? `目录里旧临时文件 ${int(tv.count)} 个${finite(tv.bytes) ? `（${size(tv.bytes)}）` : ''}` : tv.text ? `目录里旧临时文件 ${tv.text}` : '';
     const small = [typeof lt?.value === 'string' && zoned(lt.value) && `最近一次复制 ${mdTime(lt.value)}`, tmpText].filter(Boolean);
     const vv = v(vw), viewerLine = vw ? (vv.web_open === true && typeof vv.href === 'string' ? `<p class="ta-viewer">本机剪贴板查看器：<button class="ta-btn" type="button" data-ta-owner data-href="${esc(vv.href)}">在本机打开</button></p>` : vv.text || vw.text ? `<p class="ta-viewer">本机剪贴板查看器：${esc(vv.text || vw.text)}</p>` : '') : '';
     const body = head + (line ? `<p class="ta-line">${esc(line)}</p>` : '') + (boxParts.length ? `<p class="ta-box">${esc(boxParts.join(' · '))}</p>` : '') + (small.length ? `<p class="ta-small">${small.map(esc).join(' · ')}</p>` : '') + viewerLine;
-    return card('clipboard', 'clip', '剪贴板', body, { note: notes(metricNotes(c, '能翻回'), metricNotes(ev, '全部事件'), metricNotes(by, '独立库'), metricNotes(lt, '最近一次复制'), metricNotes(tmp, '旧临时文件'), metricNotes(vw, '查看器')), at: c?.at || ev?.at });
+    return card('clipboard', 'clip', '剪贴板', body, { note: notes(metricNotes(c, '能翻回'), metricNotes(ev, '全部事件'), (finite(evv.boundaries) || /边界/.test(evv.text || '')) && `“${MARKS}”后台原名叫“边界”：开机、锁屏、解锁、睡眠、恢复、暂停或会话结束时记下的分界，没有内容。`, metricNotes(by, '独立库'), metricNotes(lt, '最近一次复制'), metricNotes(tmp, '旧临时文件'), metricNotes(vw, '查看器')), at: c?.at || ev?.at });
   }
 
   // —— 去哪看细节（和“最近改动”同一排，page.js 摆） ——
