@@ -162,10 +162,25 @@
     return out.join('');
   }
 
+  // 下排两张卡顶边对齐（照图）：上排左右两张卡取一样高；说明展开、窗口变了、字体到了都重新量
+  function align() {
+    const a = document.querySelector('.pj-card[data-card="manual-groups"]'), b = document.querySelector('.pj-card[data-card="manual-recent"]');
+    for (const c of [a, b]) if (c) c.style.minHeight = '';
+    if (!a || !b || a.parentNode === b.parentNode) return;
+    const h = Math.max(a.offsetHeight, b.offsetHeight);
+    a.style.minHeight = b.style.minHeight = `${h}px`;
+  }
+  const realign = () => requestAnimationFrame(() => requestAnimationFrame(align));
+  window.addEventListener('resize', realign);
+  document.fonts?.ready?.then(realign);
+  document.addEventListener('click', e => { if (e.target.closest?.('.mn-explain')) realign(); });
+
   let viewing = 'public';
-  function board(d, viewer, graphBlock) {
+  function board(d, viewer, graphBlock, boardEl) {
     const v = d.manualView, out = [];
     viewing = viewer;
+    boardEl?.classList.add('pj-board--manual');
+    realign();
     if (!v) return out;
     if (v.groups.length) {
       const b = graphBlock('manual-groups', '');

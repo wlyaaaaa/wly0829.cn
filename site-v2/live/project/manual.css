@@ -74,3 +74,7 @@
 .mn-mat__go { display: inline-flex; align-items: center; gap: 4px; margin: 0 0 2px; font-size: 15px; line-height: 24px; font-weight: 700; color: var(--mn-green); text-decoration: none; }
 .mn-mat__go .more__chev { color: var(--mn-green); }
 .mn-mat__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 这一页的“最近改动”卡（全站共用的那张，只在说明书页收一点右边距，句子少折出一两个字的尾巴） */
+.pj-board--manual .pj-card[data-card="changes"] { padding-right: 16px; }
+.pj-board--manual .pj-card[data-card="changes"] .pj-tl-copy { text-wrap: pretty; }
