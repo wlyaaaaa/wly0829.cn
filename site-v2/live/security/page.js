@@ -373,6 +373,7 @@
       if (verdict && !figures) { figures = document.createElement('p'); figures.className = 'hero__count'; figures.dataset.part = 'figures'; head.after(figures); }
       if (figures) { figures.hidden = !verdict; U.html(figures, verdict ? `<span>${counted(U.nowrap(title))}</span>` : ''); }
       const words = verdict ? U.head(verdict, { lamp: false }).replaceAll('，', '，<br>')
+        .replace('程序待筛查）', '<span class="security-count">$&</span>')
         : counted(U.head(title, { lamp: false })).replace(/(，)(?=提权)/, '$1<br>');
       U.html(head, U.status(data).lamp + words);
     });
