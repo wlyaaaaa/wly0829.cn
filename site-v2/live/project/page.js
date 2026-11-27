@@ -942,7 +942,8 @@
         }
       }
       const artifactsTarget = location.hash === '#artifacts';
-      if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
+      // 电脑心电图把“最近产物”并进了自己的看板清单（timeaudit.js，那张卡的 id 就叫 artifacts），这里不再画通用的那张
+      if (!custom?.noArtifacts && (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden)))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
         // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
@@ -1366,7 +1367,7 @@
       };
       if (!first) draw(true);
       if (raw) { readSide(raw, reads, watch); readAdditions(reads, watch); }
-      if (raw?.artifacts && !artsWatch) {
+      if (raw?.artifacts && !artsWatch && !custom?.noArtifacts) {
         artsWatch = watch(`projects/${enc(id)}/artifacts`, null, {
           data(d, meta) {
             if (!sameViewer(meta)) return;

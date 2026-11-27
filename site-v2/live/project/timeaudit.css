@@ -1,0 +1,159 @@
+/* 电脑心电图（/live/project/?id=timeaudit）自己的几块，timeaudit.js 画；别的项目页用不到这些类名。
+   卡片材质、圆角、留白照项目页共用的 .pj-card / .glass；强调色只有网站的正绿，别的颜色只用来分类。 */
+.page--project { --ta-green: #00a650; --ta-green-ink: #00813f; --ta-teal: #3cc3ad; --ta-blue: #5b9be6; --ta-purple: #a487e6; --ta-amber: #f2b84b; }
+
+/* ============ 通栏：上面四排（三张一排、通栏一张、两张一排 ×2） ============ */
+.page--project .ta-wide { display: grid; gap: var(--pj-gap); margin-top: var(--pj-gap); }
+.ta-row { display: grid; gap: var(--pj-gap); align-items: stretch; min-width: 0; }
+.ta-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ta-row--2 { grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr); }
+.ta-row.is-one { grid-template-columns: minmax(0, 1fr); }
+.ta-card { display: flex; flex-direction: column; min-width: 0; }
+.ta-body { flex: 1; min-width: 0; }
+.ta-title { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 19px; line-height: 27px; letter-spacing: .04em; font-weight: 700; color: var(--ink); }
+.ta-title b { font-weight: 700; }
+.ta-ico { flex: none; width: 22px; height: 22px; color: var(--ta-green-ink); }
+
+/* 大数＋一句 */
+.ta-big { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 8px; margin: 0; line-height: 46px; }
+.ta-big b { font-size: 40px; font-weight: 800; letter-spacing: .01em; color: var(--ta-green); font-variant-numeric: tabular-nums; }
+.ta-big small { font-size: 22px; font-weight: 700; color: var(--ta-green); }
+.ta-big em { font-style: normal; font-size: 22px; font-weight: 700; color: var(--ta-green); }
+.ta-line { margin: 6px 0 0; font-size: 14px; line-height: 22px; color: #3d3c38; font-variant-numeric: tabular-nums; }
+.ta-small { margin: 10px 0 0; font-size: 12.5px; line-height: 20px; color: #6f6e68; font-variant-numeric: tabular-nums; }
+.ta-cut { margin: 10px 0 0; font-size: 12px; line-height: 18px; color: #8f8d86; font-variant-numeric: tabular-nums; }
+.ta-go { margin: 12px 0 0 -10px; color: var(--ta-green-ink); font-weight: 600; }
+.ta-go .more__chev { color: var(--ta-green); }
+.ta-dots { font-family: "Segoe UI", Arial, Helvetica, sans-serif; letter-spacing: .08em; font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+/* 卡底：左“说明 ›”（点开是口径），右边截止 */
+.ta-foot { display: flex; align-items: flex-start; justify-content: space-between; gap: 4px 14px; margin-top: 14px; }
+.ta-notes[open] { flex-basis: 100%; }
+.ta-foot .pj-cut { margin-left: auto; }
+
+/* ============ 记全了吗：最近 7 天每天没记上几分钟 ============ */
+.ta-bars { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.ta-bar { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.ta-bar__v { font-size: 11.5px; line-height: 16px; font-weight: 700; color: #3d3c38; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ta-bar__plot { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 76px; margin-top: 3px; border-bottom: 1px solid rgb(20 20 19 / .14); }
+.ta-bar__plot i { display: block; width: min(100%, 28px); border-radius: 5px 5px 2px 2px; background: linear-gradient(180deg, #a9e3d6, #cdeee6); }
+.ta-bar.is-over .ta-bar__plot i { background: linear-gradient(180deg, #f6c862, #f8dc98); position: relative; }
+/* 封顶那根画一道折痕：真数在顶上写着 */
+.ta-bar.is-over .ta-bar__plot i::after { content: ""; position: absolute; left: -3px; right: -3px; top: 18%; height: 7px; background: linear-gradient(170deg, transparent 38%, rgb(255 255 255 / .95) 40% 60%, transparent 62%); }
+.ta-bar.is-over .ta-bar__v { color: #c98a10; }
+.ta-bar.is-today .ta-bar__plot i { background: rgb(0 166 80 / .14); box-shadow: inset 0 0 0 2px var(--ta-green); }
+.ta-bar__x { margin-top: 5px; font-size: 11.5px; line-height: 16px; color: #6f6e68; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ta-bar.is-today .ta-bar__x { color: var(--ta-green-ink); font-weight: 700; }
+
+/* ============ 新到哪儿：采集 → 入库 → 网页更新 ============ */
+.ta-flow { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin: 18px 0 0; padding: 0; list-style: none; text-align: center; }
+.ta-flow::before { content: ""; position: absolute; top: 5px; left: calc(50% / var(--n)); right: calc(50% / var(--n)); height: 2px; background: linear-gradient(90deg, var(--ta-green), #7fd3a9); }
+.ta-flow li { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.ta-flow i { width: 12px; height: 12px; border-radius: 50%; background: var(--ta-green); box-shadow: 0 0 0 3px rgb(255 255 255 / .85); }
+.ta-flow li.is-bad i { background: var(--ta-amber); }
+.ta-flow b { margin-top: 8px; font-size: 12.5px; line-height: 18px; font-weight: 600; color: #3d3c38; white-space: nowrap; }
+.ta-flow li.is-bad b { color: #b27400; }
+.ta-flow span { font-size: 12.5px; line-height: 18px; color: #6f6e68; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ============ 卡顿留现场 ============ */
+.ta-bb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 16px 0 0; font-size: 13px; line-height: 20px; color: #3d3c38; font-variant-numeric: tabular-nums; }
+.ta-bb__k { font-weight: 600; }
+.ta-flag { padding: 1px 8px; border-radius: 6px; background: #fdf0c8; color: #a16b00; font-size: 12px; line-height: 18px; white-space: nowrap; }
+
+/* ============ 攒了多少、能翻回多早：左表右时间轴 ============ */
+.ta-retained { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 34px; }
+.ta-counts { min-width: 0; padding-right: 30px; border-right: 1px solid var(--hair); }
+.ta-counts ul { margin: 0; padding: 0; list-style: none; }
+.ta-counts li { display: grid; grid-template-columns: minmax(0, 1fr) auto 2.2em; align-items: baseline; gap: 0 8px; padding: 6px 0; }
+.ta-counts li > span { font-size: 14px; line-height: 22px; color: #3d3c38; }
+.ta-counts li > b { font-size: 17px; line-height: 22px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.ta-counts li > small { font-size: 12.5px; color: #6f6e68; }
+.ta-tl { min-width: 0; }
+.ta-tl__head { margin: 0 0 6px; font-size: 14px; line-height: 22px; color: var(--ink); }
+.ta-tl__head small { margin-left: 4px; font-size: 12.5px; color: #6f6e68; }
+.ta-axis { position: relative; height: 36px; margin: 0 6% 0 92px; font-size: 12px; line-height: 16px; color: #6f6e68; }
+.ta-axis span { position: absolute; bottom: 0; translate: -50% 0; white-space: nowrap; text-align: center; }
+.ta-axis span small { display: block; font-size: 11.5px; }
+.ta-axis span.is-now { color: var(--ta-green-ink); font-weight: 600; }
+.ta-lanes { margin: 6px 0 0; padding: 0; list-style: none; }
+.ta-lane { display: grid; grid-template-columns: 80px minmax(0, 1fr); align-items: center; column-gap: 12px; height: 34px; margin-right: 6%; --c: var(--ta-teal); }
+.ta-lane--activity { --c: var(--ta-green); }
+.ta-lane--window { --c: var(--ta-blue); }
+.ta-lane--clipboard { --c: var(--ta-purple); }
+.ta-lane--detail { --c: var(--ta-teal); }
+.ta-chip { justify-self: start; padding: 2px 10px; border-radius: 8px; background: color-mix(in srgb, var(--c) 16%, #fff); color: color-mix(in srgb, var(--c) 70%, #1c1c1a); font-size: 12.5px; line-height: 20px; font-weight: 600; white-space: nowrap; }
+.ta-track { position: relative; height: 100%; }
+.ta-track > i { position: absolute; top: 60%; height: 3px; border-radius: 3px; }
+.ta-run { right: 0; background: var(--c); }
+.ta-run::before { content: ""; position: absolute; left: -5px; top: -4px; width: 11px; height: 11px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 3px var(--c); }
+.ta-before { left: 0; border-top: 2px dashed color-mix(in srgb, var(--c) 55%, #9a9890); background: none !important; height: 0 !important; }
+.ta-before em { position: absolute; left: 10%; bottom: 4px; font-style: normal; font-size: 11.5px; line-height: 15px; color: #8f8d86; white-space: nowrap; }
+.ta-track > b { position: absolute; top: 4px; translate: -2px 0; font-size: 12px; line-height: 15px; font-weight: 600; color: #3d3c38; white-space: nowrap; }
+
+/* ============ 近 24 小时整机测量：四格 ============ */
+.ta-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 0; padding: 0; list-style: none; }
+.ta-tiles li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; padding: 8px 0 8px 18px; }
+.ta-tiles li:nth-child(odd) { padding-left: 0; border-right: 1px solid var(--hair); }
+.ta-tiles li:nth-child(n+3) { border-top: 1px solid var(--hair); }
+.ta-tiles li > span { flex-basis: 100%; font-size: 12.5px; line-height: 18px; color: #6f6e68; }
+.ta-tiles li > b { font-size: 22px; line-height: 30px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ta-tiles li > small { font-size: 13px; color: #6f6e68; }
+/* “展开”里的几项：一行一项，名字在左、读数在右 */
+.ta-more { margin: 10px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--hair); }
+.ta-more li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); }
+.ta-more li > span { font-size: 13px; line-height: 20px; color: #6f6e68; }
+.ta-more li > b { font-size: 13.5px; line-height: 20px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.ta-fold { margin-top: 10px; border: 0; background: none; font: inherit; cursor: pointer; }
+.ta-fold[aria-expanded="true"] .more__chev { rotate: -90deg; }
+
+/* ============ 占多大地方：一条堆叠条 ============ */
+.ta-disk { display: flex; height: 18px; margin: 16px 0 0; overflow: hidden; border-radius: 6px; background: rgb(20 20 19 / .06); }
+.ta-disk > i { display: block; height: 100%; }
+.ta-disk--detail { background: linear-gradient(90deg, #3cc3ad, #5fd6bf); }
+.ta-disk--summary { background: #8fd0f0; }
+.ta-disk--rest { background: #d9dde2; }
+.ta-legend { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 20px; color: #3d3c38; font-variant-numeric: tabular-nums; }
+.ta-legend li { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.ta-legend i { width: 12px; height: 12px; border-radius: 3px; }
+
+/* ============ 留下的看板：一张清单，固定 5 行，多了往后翻 ============ */
+.ta-dashes { margin: 0; padding: 0; list-style: none; }
+.ta-dash { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto auto auto; align-items: center; column-gap: 12px; min-height: 36px; padding: 3px 0; }
+.ta-dash + .ta-dash { border-top: 1px solid var(--hair); }
+.ta-ico--doc { width: 18px; height: 18px; color: #6f6e68; }
+.ta-dash__t { min-width: 0; font-size: 14px; line-height: 20px; color: var(--ink); overflow-wrap: anywhere; }
+.ta-dash__d { font-size: 12.5px; color: #6f6e68; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ta-btn { display: inline-flex; align-items: center; justify-content: center; height: 26px; padding: 0 12px; border: 0; border-radius: 999px; background: rgb(255 255 255 / .75); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1); font: inherit; font-size: 12.5px; color: var(--ink); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, color .2s ease; }
+.ta-btn:hover { background: #fff; box-shadow: inset 0 0 0 1px var(--ta-green); color: var(--ta-green-ink); }
+.ta-btn:focus-visible { outline: 2px solid var(--ta-green); outline-offset: 1px; }
+.ta-dash-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ta-dash-foot .ta-go { margin-top: 8px; }
+.ta-pager { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12.5px; color: #6f6e68; font-variant-numeric: tabular-nums; }
+.ta-page { width: 26px; height: 26px; border: 0; border-radius: 50%; background: rgb(255 255 255 / .7); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1); font: inherit; font-size: 15px; line-height: 1; color: var(--ink); cursor: pointer; }
+.ta-page:hover:not(:disabled) { color: var(--ta-green-ink); box-shadow: inset 0 0 0 1px var(--ta-green); }
+.ta-page:disabled { opacity: .35; cursor: default; }
+
+/* ============ 剪贴板 ============ */
+.ta-box { margin: 14px 0 0; padding: 8px 12px; border-radius: 10px; background: rgb(255 255 255 / .5); font-size: 13px; line-height: 20px; color: #3d3c38; font-variant-numeric: tabular-nums; }
+.ta-viewer { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 13px; line-height: 20px; color: #6f6e68; }
+
+/* ============ 最后一排：最近改动（page.js 画）＋去哪看细节 ============ */
+.page--project #pj-board.pj-board.pj-board--timeaudit:not(.is-single) { grid-template-columns: minmax(0, 1.33fr) minmax(0, 1fr); }
+.pj-board--timeaudit .pj-card[data-card="ta-where"] > .pj-sec > .pj-part { flex-direction: row; align-items: center; gap: 10px; }
+.pj-board--timeaudit .pj-card[data-card="ta-where"] > .pj-sec > .pj-part > svg { width: 22px; height: 22px; color: var(--ta-green-ink); }
+.ta-wheres { margin: 0; padding: 0; list-style: none; }
+.ta-wheres li + li { border-top: 1px solid var(--hair); }
+.ta-where { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; column-gap: 14px; width: 100%; min-height: 40px; padding: 4px 6px; border: 0; border-radius: 10px; background: none; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--ink); text-align: left; text-decoration: none; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.ta-where:hover { background: rgb(255 255 255 / .55); color: var(--ta-green-ink); }
+.ta-where .ta-ico { width: 20px; height: 20px; }
+.ta-where .more__chev { color: var(--ta-green); }
+
+/* 窗口窄（≤1100 像素）：排成一栏，顺序照宽屏从左到右、从上到下 */
+@media (max-width: 1100px) {
+  .ta-row--3, .ta-row--2 { grid-template-columns: minmax(0, 1fr); }
+  .ta-retained { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .ta-counts { padding-right: 0; border-right: 0; }
+  .page--project #pj-board.pj-board.pj-board--timeaudit:not(.is-single) { grid-template-columns: minmax(0, 1fr); }
+  .pj-board--timeaudit .pj-card[data-card="changes"] { order: 0; }
+  .pj-board--timeaudit .pj-card[data-card="ta-where"] { order: 1; }
+}
