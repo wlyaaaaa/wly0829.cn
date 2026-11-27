@@ -142,7 +142,7 @@
       const name = h.name || U.fieldHtml({ visibility: 'owner' }, { name: '帮手名', kind: viewer });
       return `<div class="route-round__helper${h.failed ? ' is-failed' : ''}">${[esc(h.model), name, esc(h.result)].filter(Boolean).join(' · ')}</div>`;
     });
-    const disclosure = `<details class="route-round__helpers"${open ? ' open' : ''}><summary class="route-clip__more"><span>展开帮手</span><span>收起</span></summary>${rows.join('')}</details>`;
+    const disclosure = `<details class="route-round__helpers" data-fold-anchor${open ? ' open' : ''}><summary class="route-clip__more"><span>展开帮手</span><span>收起</span></summary>${rows.join('')}</details>`;
     return [`派了 ${helpers.length} 个帮手，${lead}${reasons}${summary}`, disclosure];
   }
   function drawLog() {

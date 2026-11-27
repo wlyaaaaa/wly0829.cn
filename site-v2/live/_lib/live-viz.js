@@ -869,7 +869,8 @@
   // 一行一个：名字前一颗圆形首字小章（opts.mark 或这一行给 mark），比例条是整行背后一条很淡的胶囊（bar: false 不画）；
   // 第一名那行高一点、字大一号（top: false 不放大）；值按 unit 写（行自己的 unit 优先），给了 text 就写 text。
   function rank(host, opts = {}) {
-    const show = opts.bar === false || opts.batch ? opts.show ?? 5 : Infinity;
+    const preview = opts.bar === false || opts.batch ? opts.show ?? 5 : Infinity;
+    let show = preview;
     const merge = source => window.LiveUI?.mergePrivateRows?.(source, {
       value: r => opts.keepNameOnlyRows && Number.isFinite(r.value) ? null : r.name,
     }) ?? source;
@@ -878,7 +879,7 @@
     // 文字列表和分批排行可以展开，其他排行直接显示。
     host.innerHTML = `<ul class="vz-rank__list"></ul>${show === Infinity ? '' : '<div class="fold"><div><ul class="vz-rank__list"></ul></div></div><button class="more vz-rank__more" type="button" hidden></button>'}`;
     const [top, rest] = host.querySelectorAll('.vz-rank__list'), btn = host.querySelector('.more'), box = host.querySelector('.fold');
-    if (btn) window.LiveUI?.fold(btn, box);
+    if (btn) window.LiveUI?.fold(btn, box, null, !!opts.batch);
     const hasMore = () => opts.hasMore?.() ?? null;
     const next = btn && opts.batch ? document.createElement('button') : null;
     if (next) {
@@ -956,6 +957,7 @@
         if (!rows?.length) { put(top, empty(rows ? opts.empty || '没有记录' : opts.missing?.() || window.LiveUI.collectionText())); clearRest(); first = false; return; }
         max = opts.bar === false ? 0 : Math.max(...rows.map((r) => r.value || 0));
         rowsLen = rows.length;
+        show = opts.batch && hasMore() === null && rows.length === preview + 1 ? rows.length : preview;
         host.classList.toggle('has-mark', rows.some(markOf));
         put(top, rows.slice(0, show).map((r, i) => row(r, max, i)));
         if (!btn) { first = false; return; }
@@ -1122,7 +1124,8 @@
     const show = opts.show ?? 5;
     host.innerHTML = '<ol class="vz-moments__list"></ol><button class="more" type="button" hidden></button><div class="fold"><div><ol class="vz-moments__list"></ol></div></div>';
     const [top, rest] = host.querySelectorAll('.vz-moments__list'), btn = host.querySelector('.more'), box = host.querySelector('.fold');
-    window.LiveUI?.fold(btn, box);
+    const U = window.LiveUI;
+    U?.fold(btn, box, null, true);
     let picked = null;
     host.addEventListener('click', (e) => {
       const b = e.target.closest('[data-moment]');
@@ -1138,10 +1141,13 @@
     return {
       set(list) {
         if (!list?.length) { html(top, `<li class="vz-moment vz-moment--empty">${esc(emptyText(list ? opts.empty || '没有记录' : window.LiveUI.collectionText()))}</li>`); html(rest, ''); btn.hidden = true; return; }
-        html(top, list.slice(0, show).map(item).join(''));
-        html(rest, list.slice(show).map(item).join(''));
-        btn.hidden = list.length <= show;
+        const tail = list.slice(show);
+        html(rest, tail.map(item).join(''));
         html(btn, `${esc(opts.more ? opts.more(list.length - show) : `更早的 ${list.length - show} 个`)} <span class="more__chev">›</span>`);
+        const fold = U.shouldFoldList(btn, rest, tail.length);
+        html(top, (fold ? list.slice(0, show) : list).map(item).join(''));
+        if (!fold) html(rest, '');
+        btn.hidden = !fold;
       },
       wait(text) { html(top, `<li class="vz-moment vz-moment--empty">${esc(emptyText(text))}</li>`); btn.hidden = true; },
     };

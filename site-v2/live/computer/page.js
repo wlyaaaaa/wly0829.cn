@@ -51,7 +51,7 @@
     const note = U.olderNote?.(d?.at, d);
     const shown = recent ? merged(recent) : [], rest = shown.slice(5).reduce((n, r) => n + (r.times || 1), 0);
     return `${window.LiveEvents.render(d)}${note ? `<p class="row__sub">${U.fieldHtml(note, { name: '读数时间' })}</p>` : ''}<dl class="stability-counts">${rows}</dl>${window.DisplayRecovery?.html() || ''}
-      ${Stat.gap(d.counts, 'clean_restart') ? `<p class="row__sub">${U.fieldHtml(Stat.gap(d.counts, 'clean_restart'), { name: '正常重启或关机' })}</p>` : ''}<p class="l2-part">异常事件${recent ? ` · ${U.fieldHtml(Stat.text(recent.length, '条', d, 'events_count'), { name: '事件数量' })}` : ''}</p>${recent == null ? `<p class="row__sub">${missing()}</p>` : recent.length ? list(shown.slice(0, 5)) + (shown.length > 5 ? `<details class="vz-more"><summary class="more"><span class="stability-more">展开（还有 ${rest} 条）</span><span class="stability-less">收起</span> <span class="more__chev">›</span></summary>${list(shown.slice(5))}</details>` : '') : '<p class="row__sub">近 30 天没有异常记录</p>'}`;
+      ${Stat.gap(d.counts, 'clean_restart') ? `<p class="row__sub">${U.fieldHtml(Stat.gap(d.counts, 'clean_restart'), { name: '正常重启或关机' })}</p>` : ''}<p class="l2-part">异常事件${recent ? ` · ${U.fieldHtml(Stat.text(recent.length, '条', d, 'events_count'), { name: '事件数量' })}` : ''}</p>${recent == null ? `<p class="row__sub">${missing()}</p>` : recent.length ? list(shown.slice(0, 5)) + (shown.length > 5 ? `<details class="vz-more" data-fold-count="${rest}"><summary class="more"><span class="stability-more">展开（还有 ${rest} 条）</span><span class="stability-less">收起</span> <span class="more__chev">›</span></summary>${list(shown.slice(5))}</details>` : '') : '<p class="row__sub">近 30 天没有异常记录</p>'}`;
   }
   let stabilityWatch = null, stabilityDetail = null, stabilityEl = null;
   const stabilityHost = $('stability-title').closest('section');
@@ -450,7 +450,7 @@
     const types = s => s.micro === true ? '微卡顿' : s.micro === false ? '卡顿' : '未分类';
     return [...new Set(list.map(types))].map(kind => {
       const rows = list.filter(s => types(s) === kind).sort((a,b) => Date.parse(b.at) - Date.parse(a.at));
-      return `<section class="stut-group"><h3 class="use-two__k">${kind}</h3><div class="stut">${cards(rows.slice(0,5))}</div>${rows.length > 5 ? `<details class="vz-more"><summary class="more">展开（还有 ${rows.length-5} 条）</summary><div class="stut">${cards(rows.slice(5))}</div></details>` : ''}</section>`;
+      return `<section class="stut-group"><h3 class="use-two__k">${kind}</h3><div class="stut">${cards(rows.slice(0,5))}</div>${rows.length > 5 ? `<details class="vz-more" data-fold-count="${rows.length - 5}"><summary class="more">展开（还有 ${rows.length-5} 条）</summary><div class="stut">${cards(rows.slice(5))}</div></details>` : ''}</section>`;
     }).join('');
   }
   function stutterChapter(el) {
@@ -1104,14 +1104,18 @@
   const hardwarePane = $('desktop-config');
   const hardwareToggle = () => hero.querySelector('[data-desktop-config-toggle]');
   hero.addEventListener('click', (event) => {
-    if (!event.target.closest('[data-desktop-config-toggle], [data-desktop-config-close]')) return;
+    const button = event.target.closest('[data-desktop-config-toggle], [data-desktop-config-close]');
+    if (!button) return;
     const toggle = hardwareToggle();
     const open = hardwarePane.hidden;
-    hardwarePane.hidden = !open;
-    toggle.setAttribute('aria-expanded', String(open));
+    const set = () => {
+      hardwarePane.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    if (open) set(); else U.anchorFold(button, set, hardwareToggle, hero);
     const target = open ? $('desktop-config-title') : toggle;
     target.focus({ preventScroll: true });
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (open) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   function hardwareDetails(rows, title) {

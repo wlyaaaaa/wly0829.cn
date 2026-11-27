@@ -287,8 +287,8 @@
     const cell = (label, value, unit, key, fmt) => `<div class="ag-work__row"><span>${label}</span>${!w ? '<b class="tp-fog">后台还没送来</b>' : lost && key !== 'orders' ? `<b class="tp-fog">还没采上</b>`
       : known(value) ? `<b class="tp-mid">${big(value, `work-${h.id}-${key}-${period}`, fmt)}<small>${unit}</small></b>` : `<b class="tp-fog">没读到</b>`}</div>`;
     // 型号是普通清单，不做成像按钮的圆角小签；超过 4 种的“另 N 种”是真按钮，就地展开全部、再点收起（本人 11-23 23:53：“这种怎么都按不了？”）
-    const open = modelsOpen.has(h.id), shown = open ? models : models.slice(0, 4);
-    const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
+    const fold = U.shouldFold(models.length - 4), open = modelsOpen.has(h.id), shown = open || !fold ? models : models.slice(0, 4);
+    const more = fold ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
       <div class="ag-modelbox">${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>

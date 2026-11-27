@@ -40,7 +40,11 @@
   document.fonts?.ready.then(fitThoughts);
   document.addEventListener('click', e => {
     const toggle = e.target.closest('.chat-think__toggle');
-    if (toggle) toggle.setAttribute('aria-expanded', String(toggle.getAttribute('aria-expanded') !== 'true'));
+    if (toggle) {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      const set = () => toggle.setAttribute('aria-expanded', String(!open));
+      if (open) U.anchorFold(toggle, set); else set();
+    }
     const btn = e.target.closest('[data-helpers-more]');
     if (!btn) return;
     const later = [...btn.closest('.helpers').querySelectorAll(':scope > .helper[hidden]')];
@@ -50,7 +54,7 @@
     else btn.closest('li').remove();
   });
   const bar = U.topbar({ ask: () => `请看实况 AI 对话：${$('head').textContent}。请说明各段对话现在的情况。` });
-  L.add($('hero')); U.fold($('recent-more'), $('recent-box'));
+  L.add($('hero')); U.fold($('recent-more'), $('recent-box'), null, true);
   document.querySelectorAll('#active > .part, #recent > .part').forEach(el => el.setAttribute('data-keep', ''));
   const heroRead = U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: 'AI 对话' });
   const activeRead0 = U.reading($('active'), { ghost: U.ghost.rows(3), slow: false }), recentRead = U.reading($('recent'), { ghost: U.ghost.rows(4) });
@@ -240,7 +244,7 @@
     const tail = more.getBoundingClientRect().bottom - rows.at(-1).getBoundingClientRect().bottom;
     let keep = rows.length;
     while (keep > 1 && rows[keep - 1].getBoundingClientRect().bottom + (keep < rows.length ? tail : 0) > target + slack) keep -= 1;
-    if (rows.length - keep < 2) { more.hidden = true; return; }
+    if (!U.shouldFold(rows.length - keep, rows.at(-1).getBoundingClientRect().bottom - rows[keep - 1].getBoundingClientRect().bottom, more.offsetHeight)) { more.hidden = true; return; }
     rows.slice(keep).forEach(row => row.classList.add('is-extra'));
     more.querySelector('.chat-models-left').textContent = rows.length - keep;
   }
@@ -350,7 +354,7 @@
       };
       const open = $('chat-counts').querySelector(`details[data-models="${key}"]`)?.open;
       const modelList = models ? models.map(modelRow).join('')
-        + `<details class="chat-models-more" data-models="${key}"${open ? ' open' : ''} hidden><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 <span class="chat-models-left">0</span> 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary></details>`
+        + `<details class="chat-models-more" data-fold-anchor data-models="${key}"${open ? ' open' : ''} hidden><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 <span class="chat-models-left">0</span> 个型号）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary></details>`
         : `<p class="row__sub">${esc(U.collectionText('各型号', stats))}</p>`;
       const notes = [...new Set([d?.gap, modelGap].filter(Boolean))].map(gap => `<p><small>${gapHtml(gap)}</small></p>`).join('');
       return `<div><h2>${label}</h2><p>${n(d?.opened, sure(d), 'opened', '对话')} · ${n(d?.helpers, d, 'helpers', '帮手')} <small>${n(d?.manual_opened, d, 'manual_opened', '本人对话')}</small><span class="chat-stat-links" data-links="${key}"></span></p>${notes}${modelList}</div>`;
@@ -468,9 +472,10 @@
       const list = byState.get(key) || [], fixed = key === 'running' || key === 'waiting';
       if (!fixed && !list.length) { const old = board.get(key); if (old) old.el.hidden = true; continue; }
       const card = key === 'waiting' ? waitingCard : board.card(key, COLUMN[key]); card.el.hidden = false;
-      if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
+      if (!card.bound) { card.bound = true; U.fold(card.more, card.box, null, true); }
       const rows = list.map(c => chat(c, at)), count = peopleIn(list);
-      const main = rows.slice(0, 5), rest = rows.slice(5), restCount = rest.reduce((n, r, i) => n + (list[i + 5]?.private_count || 1), 0);
+      const cut = U.shouldFold(rows.length - 5) ? 5 : rows.length;
+      const main = rows.slice(0, cut), rest = rows.slice(cut), restCount = rest.reduce((n, r, i) => n + (list[i + cut]?.private_count || 1), 0);
       const countText = fixed && Number.isFinite(d[key]) && d[key] < count ? `已列出 ${count} 场` : fixed ? chatCount(d, key, count) : `${count} 个`;
       const emptyWaiting = key === 'waiting' && countText === '0 个', publicWaiting = key === 'waiting' && viewer === 'public';
       const label = publicWaiting ? '等本人' : COLUMN[key].name;
@@ -609,7 +614,7 @@
     if (stoppedCard) return stoppedCard;
     stoppedCard = recentBoard.card('stopped', { icon: 'moon', tint: 'blue', art: 'queued', ids: { el: 'stopped' } });
     recentBoard.el.prepend(stoppedCard.el);
-    stoppedCard.bound = true; U.fold(stoppedCard.more, stoppedCard.box);
+    stoppedCard.bound = true; U.fold(stoppedCard.more, stoppedCard.box, null, true);
     return stoppedCard;
   }
   // 已经往下读过的归档几批，名单更新（as_of 变了）后照旧留着接在后面，不退回第一批；同一场以新读到的为准，
@@ -642,7 +647,8 @@
     const none = matched.length > picked.length && !picked.length ? '这些对话已列在置顶区' : noRows ? '暂时只读到数量' : total === 0 ? (key === 'working' ? '现在没有在干的对话' : key === 'stopped' ? '没有停下没归档的对话' : key === 'archived' ? '近 72 小时没有归档的对话' : '')
       : total == null ? `这一栏没读到${b.source_gaps?.length ? '：' + [...new Set(b.source_gaps.map(g => [g.source, g.reason].filter(Boolean).join(' · ')))].join('；') : ''}` : quotaPick ? '这一栏没有被它卡住的对话' : '暂时只读到数量';
     const idle = emptyWaiting && [{ key: 'idle', cls: 'chat-idle', html: `<span class="chat-idle__mark">${window.LiveBoard.icon('check')}</span><b>${U.offline?.() ? '断开前' : '现在'}没有对话在等${viewer === 'public' ? '本人' : '你'}回复</b>` }];
-    const main = rows.slice(0, 5), rest = rows.slice(5), restCount = picked.slice(5).reduce((n, c) => n + (c.private_count || 1), 0);
+    const cut = U.shouldFold(rows.length - 5) ? 5 : rows.length;
+    const main = rows.slice(0, cut), rest = rows.slice(cut), restCount = picked.slice(cut).reduce((n, c) => n + (c.private_count || 1), 0);
     U.list(card.main, idle || [...pickNote, ...(main.length ? main : none ? wait(none) : [])]);
     U.list(card.rest, rest);
     const next = key === 'archived' ? nextArchived(col) : null;
@@ -660,7 +666,7 @@
     const cols = b.columns || {};
     for (const key of Object.keys(COLUMN)) if (key !== 'running' && key !== 'waiting') { const old = board.get(key); if (old) old.el.hidden = true; }   // 按状态临时冒出来的小卡取消（设计第 4 节第 3 条）
     runningCard.el.hidden = waitingCard.el.hidden = false;
-    for (const card of [runningCard, waitingCard]) if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
+    for (const card of [runningCard, waitingCard]) if (!card.bound) { card.bound = true; U.fold(card.more, card.box, null, true); }
     fillColumn(runningCard, 'working', cols.working, b);
     fillColumn(waitingCard, 'waiting', cols.waiting, b);
     const stopped = stoppedColumn(); stopped.el.hidden = false;
@@ -708,7 +714,8 @@
     const list = $('recent-list'), more = $('recent-more'), open = $('recent-box').classList.contains('is-open');
     const rows = [...list.children].filter(li => recentRows.has(li.dataset.key));
     if (list.offsetWidth) recentCols = Math.max(1, getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length);
-    rows.forEach(li => li.classList.toggle('chat-ended-extra', recentRows.get(li.dataset.key).i >= recentCols));
+    const hasFold = U.shouldFold(rows.length - recentCols);
+    rows.forEach(li => li.classList.toggle('chat-ended-extra', hasFold && recentRows.get(li.dataset.key).i >= recentCols));
     const left = rows.filter(li => li.classList.contains('chat-ended-extra')).reduce((sum, li) => sum + recentRows.get(li.dataset.key).count, 0);
     more.hidden = !left && !open;
     U.html(more, `<span class="lb-more__open">展开（还有 ${left} 个）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);

@@ -232,7 +232,7 @@
     const title = pname(d?.hangs?.rows?.find(r => String(r.key) === key)?.label || '');
     const period = hangPeriod(d, row), range = period ? `<p class="use-note">记录时段 ${U.esc(period)}</p>` : '';
     const list = rows => rows.map(s => { const at = new Date(s.start * 1000).toISOString(); return `<p class="use-note">${U.esc(U.date(at))} ${U.esc(U.time(at))} · 无响应 ${U.esc(fmt(s.end-s.start,'s'))}</p>`; }).join('');
-    return `<h3 class="use-two__k">${U.fieldHtml(title, { name: '程序' })}的无响应记录</h3>${range}${!row?.spans ? U.collectionText('事件') : !spans.length ? '<p class="use-note">这段时间没有无响应记录</p>' : list(spans.slice(0,5)) + (spans.length > 5 ? `<details><summary class="more">展开（还有 ${spans.length-5} 条）</summary>${list(spans.slice(5))}</details>` : '')}`;
+    return `<h3 class="use-two__k">${U.fieldHtml(title, { name: '程序' })}的无响应记录</h3>${range}${!row?.spans ? U.collectionText('事件') : !spans.length ? '<p class="use-note">这段时间没有无响应记录</p>' : list(spans.slice(0,5)) + (spans.length > 5 ? `<details data-fold-count="${spans.length - 5}"><summary class="more">展开（还有 ${spans.length-5} 条）</summary>${list(spans.slice(5))}</details>` : '')}`;
   }
   const figure = (key, label, value, unit) => ({ key, label, value, unit });
   const leader = (key, fields) => fields.map(([k, label, unit], i) => S.figure(figure(k, !i && ['top', 'io'].includes(key) && data?.[key]?.[0]?.name ? phrase(pname(data[key][0].name), value => `${value} · ${label}`) : label, data?.[key]?.[0]?.[k], unit), data?.[key]?.[0], k));
