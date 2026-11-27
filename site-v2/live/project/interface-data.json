@@ -49,5 +49,8 @@
     ["/live/project/interfaces/agents/09-thumb.webp", "/live/project/interfaces/agents/09.webp", "OpenCode：105.0M tokens、1,170 次请求，截至 2026年9月24日"],
     ["/live/project/interfaces/agents/10-thumb.webp", "/live/project/interfaces/agents/10.webp", "Google Antigravity：Google AI Pro 订阅和额度页，没有累计 token 数，截至 2026年9月24日"],
     ["/live/project/interfaces/agents/11-thumb.webp", "/live/project/interfaces/agents/11.webp", "Grok：SuperGrok Lite 订阅页，没有累计 token 数，截至 2026年9月24日"]
+  ],
+  "chineseasr": [
+    ["/live/project/interfaces/chineseasr/01-thumb.webp", "/live/project/interfaces/chineseasr/01.webp", "按 Win+H 弹出听写小胶囊（下方），说的话识别成字，直接打进正在用的输入框，这里是汇报页的答题框（11 月 26 日）"]
   ]
 }
