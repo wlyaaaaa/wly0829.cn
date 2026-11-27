@@ -350,7 +350,9 @@
     }
     const stamp = iso(source?.at ?? (long ? s?.last_measured_at : null)) || iso(last?.lastAt);
     const basis = s?.latest_instant_at && iso(source?.at) === s.latest_instant_at ? '即时实测' : source && source === temperature ? '分钟均值' : bucket(s);
-    const label = long && pointerTime == null ? (surface === 'hero' ? '最后实测' : '') : [surface !== 'weave' && !same && OLD_HISTORY[id] && historyName(s), surface !== 'weave' || basis !== weaveBucket() || id === 'net-loss' ? basis : ''].filter(Boolean).join(' · ');
+    const repeatMemorySample = surface === 'weave' && id === 'memory-capacity' && s?.aggregation === 'five_minute_sample' && basis === bucket(s);
+    const showBasis = !repeatMemorySample && (surface !== 'weave' || basis !== weaveBucket() || id === 'net-loss');
+    const label = long && pointerTime == null ? (surface === 'hero' ? '最后实测' : '') : [surface !== 'weave' && !same && OLD_HISTORY[id] && historyName(s), showBasis && basis].filter(Boolean).join(' · ');
     const day = long && chartGroups.get('长期')?.day_coverage?.find(d => d.day_start === beijingDay(Date.parse(stamp) / 1000));
     const device = id.startsWith('cpu-') ? 'cpu' : 'gpu';
     const duration = V.dur(day?.[device + '_seconds']);
