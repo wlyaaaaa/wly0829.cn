@@ -17,6 +17,7 @@
   const icon = name => `<svg class="mat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
   const n = value => Number.isFinite(value) ? value.toLocaleString('zh-CN') : '—';
   const count = (value, unit = '') => `<span class="mat-count">${n(value)}${unit ? ` ${unit}` : ''}</span>`;
+  const phrases = parts => parts.map((part, i) => `<span>${i ? '· ' : ''}${part}</span>`).join(' ');
   const valueOf = (data, id) => data.readings[id]?.value;
   const noteOf = (data, ...ids) => ids.map(id => U.fieldHtml(data.notes[id], { kind: viewer })).filter(Boolean).join('<br>');
   const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -60,13 +61,27 @@
     const v = id => valueOf(data, id), refresh = v('refresh_partial'), coverage = v('text_coverage'), complete = v('text_complete');
     const bytes = id => esc(v(id)?.text ?? (Number.isFinite(v(id)?.bytes) ? U.trafficBytes(v(id).bytes) : '—'));
     const levels = [
-      ['more-data', v('sources'), '处', '收录的来源', `${count(refresh?.total, '处')}建了文件名清单（${count(v('nonempty_directories'), '处')}有条目） · ${count(v('source_partial'), '处')}只声明部分覆盖`],
-      ['', v('filenames'), '个', '能按文件名找到', `清单原始 ${count(v('filename_rows'), '条')}（含重叠路径） · 清单记载体积 <span class="mat-count">${bytes('filename_bytes')}</span>`],
-      ['', v('registered'), '份', '精确记住位置', `收录时体积 <span class="mat-count">${bytes('registered_bytes')}</span>`],
-      ['text', coverage?.with_text, '份', '能搜到里面的字', `整份录了 ${count(complete?.complete)} · 只录部分 ${count(complete?.partial)} · 还没录 ${count(coverage?.without_text)} · 文字记录 ${count(v('text_rows'), '条')} · 原生关系 ${count(v('relations'), '条')}`],
+      ['more-data', v('sources'), '处', '收录的来源', [
+        `${count(refresh?.total, '处')}建了文件名清单（${count(v('nonempty_directories'), '处')}有条目）`,
+        `${count(v('source_partial'), '处')}只声明部分覆盖`,
+      ]],
+      ['', v('filenames'), '个', '能按文件名找到', [
+        `清单原始 ${count(v('filename_rows'), '条')}（含重叠路径）`,
+        `清单记载体积 <span class="mat-count">${bytes('filename_bytes')}</span>`,
+      ]],
+      ['', v('registered'), '份', '精确记住位置', [
+        `收录时体积 <span class="mat-count">${bytes('registered_bytes')}</span>`,
+      ]],
+      ['text', coverage?.with_text, '份', '能搜到里面的字', [
+        `整份录了 ${count(complete?.complete)}`,
+        `只录部分 ${count(complete?.partial)}`,
+        `还没录 ${count(coverage?.without_text)}`,
+        `文字记录 ${count(v('text_rows'), '条')}`,
+        `原生关系 ${count(v('relations'), '条')}`,
+      ]],
     ];
-    const rows = levels.map(([id, amount, unit, label, detail]) => `<li ${id ? `id="${id}"` : ''}>${large('', n(amount), unit)}
-      <strong>${label} ${count(amount, unit)}</strong><p>${detail}</p></li>`).join('');
+    const rows = levels.map(([id, amount, unit, label, details]) => `<li ${id ? `id="${id}"` : ''}>${large('', n(amount), unit)}
+      <strong>${label} ${count(amount, unit)}</strong><p class="mat-phrases mat-level-details">${phrases(details)}</p></li>`).join('');
     return card('shelf', '书架能帮你找到多少', 'shelf', levels.some(row => Number.isFinite(row[1])) ? `<ol class="mat-levels">${rows}</ol>` : missing,
       [coverage?.text && esc(coverage.text), noteOf(data, 'shelf', 'more-data', 'text')].filter(Boolean).join('<br>'), daily(data.readings.sources, ` · ${cadence}`), { subtitle: '从宽到窄四层，越往下越准' });
   }
@@ -82,7 +97,10 @@
     const content = ready ? `${large(today ? '今天' : '', `${n(done)}/${n(vs.total)}`, '处走完')}${dots}
       <p class="mat-legend">${dot(true)}走完 ${dot(false)}<span>没走完（先用上次完整清单）</span></p>
       ${vs.partial ? `<p class="mat-names">没走完的 ${count(vs.partial, '处')}：${names || '暂时读不到'}</p>` : ''}
-      <p class="mat-small">完整清单 最旧 ${stamp(info?.oldest) || '暂时读不到'} · 最新 ${stamp(info?.newest) || '暂时读不到'}<br>清单里最新的文件改于 ${stamp(fileAt) || '暂时读不到'}</p>` : missing;
+      <p class="mat-small"><span class="mat-phrases">${phrases([
+        `完整清单 最旧 ${stamp(info?.oldest) || '暂时读不到'}`,
+        `最新 ${stamp(info?.newest) || '暂时读不到'}`,
+      ])}</span>清单里最新的文件改于 ${stamp(fileAt) || '暂时读不到'}</p>` : missing;
     const link = go(`/live/records/?project=${ID}&section=refresh_partial`, vs?.partial > 5 ? `全部 ${n(vs.partial)} 处` : '明细');
     return card('refresh', '新放进去的找得到吗', 'search', content, noteOf(data, 'refresh'), daily(data.readings.refresh_partial), { link });
   }
@@ -161,11 +179,11 @@
     const b = graphBlock('mat-where', '去实况里看');
     const links = [
       ['disk', '备份', '原件所在几类资料的副本', BACKUPS],
-      ['calendar', '计划任务', '每日备份 17:10 顺带刷新名字清单', TASK],
+      ['calendar', '计划任务', '<span>每日备份 17:10</span> <span>顺带刷新名字清单</span>', TASK],
       ['bolt', '名下技能', '怎么让 AI 找原件', d.skills_href || '/skills/'],
     ];
     U.html(b.head, `${icon('grid')}<b>去实况里看</b>`, false);
-    U.html(b.viz, `<ul class="mat-links">${links.map(([kind, title, text, href]) => `<li><a href="${esc(href)}">${icon(kind)}<b>${title}</b><span>${text}</span>${arrow}</a></li>`).join('')}</ul>`, false);
+    U.html(b.viz, `<ul class="mat-links">${links.map(([kind, title, text, href]) => `<li><a href="${esc(href)}">${icon(kind)}<b>${title}</b><span class="mat-link-note">${text}</span>${arrow}</a></li>`).join('')}</ul>`, false);
     b.explain.hidden = false;
     U.html(b.explain, cadence, false);
     return [b];
