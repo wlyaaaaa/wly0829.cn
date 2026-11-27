@@ -988,6 +988,7 @@
         left.push(b);
       }
     }
+    if (proj) custom?.lists?.({ blocks, left, right, block, arts, changeLog, changeIssue, viewer: projectViewer, artifactRow, loadArtifacts, loadChanges, keepWords: typeof keepWords === 'function' ? keepWords : null });
     arrange(left, right);
     // 首次跳到分段后，晚到的项目数据可能把卡片移到另一栏。
     if (deepLink && deepLink.y === scrollY) {
