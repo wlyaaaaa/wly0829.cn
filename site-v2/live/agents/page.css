@@ -108,7 +108,6 @@
 
 /* 四、设置表 */
 .ag-config th[data-host], .ag-hooktable th[data-host] { color: var(--host); }
-:is(.ag-config, .ag-hooktable) .ag-hpick { color: inherit; }
 .ag-config { table-layout: fixed; }
 .ag-config thead th:first-child, .ag-config tbody th { width: 190px; }
 .ag-config td.ag-same { text-align: left; color: #3d3d3a; }
@@ -229,4 +228,3 @@
 .ag-moved .tp-panel__head { flex-wrap: wrap; row-gap: 8px; }
 #tp-root :is(.tp-head h1, .tp-panel__head h2, .tp-small) { text-wrap: pretty; }
 #tp-root :is(.ag-headside > span, .tp-asof) { white-space: nowrap; }
-/* 句尾最后一小截整块不折行（压缩前钩子“这条不管。”、工期图注“估不到 X 的单子”） */
