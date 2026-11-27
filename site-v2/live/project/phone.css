@@ -23,11 +23,12 @@
 .ph-kind__n b { font-size: 19px; font-weight: 700; letter-spacing: .01em; }
 .ph-kind__n small { margin-left: 4px; font-size: 13px; color: #5d5c56; }
 .ph-kind__sub { margin: 1px 0 0; font-size: 13px; line-height: 17px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ph-keep { white-space: nowrap; }
 .ph-stale { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 6px; background: #fbe3a1; font-size: 12px; line-height: 18px; color: #6f4b00; vertical-align: 1px; white-space: nowrap; }
 
 /* 右边格子：每天一列（左旧右新），四行数＋最下一行“收到至”；今天那列描绿边 */
-.ph-days { min-width: 0; padding-left: 14px; border-left: 1px solid var(--hair); }
-.ph-grid { position: relative; display: grid; grid-template-columns: auto repeat(var(--n), minmax(0, 1fr)); grid-template-rows: var(--ph-head) repeat(var(--r), var(--ph-row)) 30px; gap: 4px; }
+.ph-days { --ph-row-label: 58px; --ph-grid-gap: 4px; min-width: 0; padding-left: 14px; border-left: 1px solid var(--hair); }
+.ph-grid { position: relative; display: grid; grid-template-columns: var(--ph-row-label) repeat(var(--n), minmax(0, 1fr)); grid-template-rows: var(--ph-head) repeat(var(--r), var(--ph-row)) 30px; gap: var(--ph-grid-gap); }
 .ph-d { align-self: end; padding-bottom: 4px; font-size: 12.5px; line-height: 18px; color: #5d5c56; text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ph-d.is-today { color: var(--ph-green); font-weight: 700; }
 .ph-c { display: flex; align-items: center; justify-content: center; min-width: 0; border-radius: 7px; background: rgb(0 166 80 / var(--a, .07)); font-size: 14px; line-height: 20px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -41,11 +42,11 @@
 .ph-rl--t { width: auto; visibility: visible; padding-right: 6px; text-align: right; }
 .ph-empty { margin: 12px 0; font-size: 13.5px; color: var(--muted); }
 
-/* 卡底：说明 ›、今天定位最长隔了多久、‹ 更早、截止 */
-.ph-foot { display: grid; grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; column-gap: 24px; margin-top: 14px; font-size: 13.5px; line-height: 20px; color: var(--ink-soft); }
+/* 卡底：说明 ›、今天定位最长隔了多久、截止 */
+.ph-foot { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 24px; margin-top: 14px; font-size: 13.5px; line-height: 20px; color: var(--ink-soft); }
 .ph-gap { min-width: 0; color: #5d5c56; }
 .ph-cut { justify-self: end; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ph-nav { display: inline-flex; align-items: center; gap: 18px; }
+.ph-nav { display: flex; align-items: center; gap: 18px; margin-inline-start: calc(var(--ph-row-label) + var(--ph-grid-gap)); }
 .ph-nav .more { margin: 0; }
 .ph-earlier, .ph-later { color: var(--ph-green); font-weight: 600; }
 .ph-earlier .ph-chev-l, .ph-later .more__chev { color: var(--ph-green); }
@@ -91,6 +92,6 @@
   .ph-rl { width: auto; overflow: visible; visibility: visible; padding-right: 8px; }
   .pj-board--phone .pj-card[data-card="changes"] { order: 0; }
   .pj-board--phone .pj-card[data-card="phone-go"] { order: 1; }
-  .ph-foot { grid-template-columns: auto minmax(0, 1fr) auto; row-gap: 8px; }
+  .ph-foot { grid-template-columns: auto minmax(0, 1fr); row-gap: 8px; }
   .ph-cut { grid-column: 1 / -1; justify-self: start; }
 }

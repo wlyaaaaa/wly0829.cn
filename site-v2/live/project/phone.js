@@ -30,6 +30,8 @@
   const dash = day => { const z = zoned(day); return z ? `${String(z.m).padStart(2, '0')}-${String(z.d).padStart(2, '0')}` : ''; };
   const todayDay = () => zoned(new Date().toISOString()).day;
   const isoText = t => typeof t === 'string' ? t.replace(/\b\d{4}-\d\d-\d\d(?:T\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?)?/g, x => x.length > 10 ? mdTime(x) : md(x)) : '';
+  const shortParts = /(\d{1,2}月\d{1,2}日(?:起| \d\d:\d\d)?|\d\d:\d\d|\d[\d,.]*(?:[ \u00a0]*(?:分钟|小时|天|个))?|增删|空档|新装|卸载|亮屏|解锁)/g;
+  const wrapShort = text => text.split(shortParts).map((part, i) => i % 2 ? `<span class="ph-keep">${esc(part)}</span>` : esc(part)).join('');
 
   // —— 访客看不到的值（这页现在没有；以后接口真给了就照全站写法原位占位挂签，两版都挂）——
   const locked = (m, viewer) => !!m && (m.hidden || m.hidden_block || m.value?.hidden || viewer !== 'owner' && (m.visibility === 'owner' || m.public === 'owner') && m.value == null);
@@ -86,7 +88,7 @@
     if (!m) return '';
     const n = locked(m, viewer) ? hiddenHtml(`${name}的条数`) : finite(m.value) ? `<b>${esc(int(m.value))}</b><small>${esc(unit)}</small>` : '';
     if (!n) return '';
-    const sub = subParts.filter(Boolean).map(esc).join(' · ');
+    const sub = subParts.filter(Boolean).map(wrapShort).join(' · ');
     return `<li class="ph-kind" data-kind="${key}">${icon(key)}<div class="ph-kind__main"><p class="ph-kind__top"><b class="ph-kind__name">${esc(name)}</b><span class="ph-kind__n">${n}</span></p>${sub || extra ? `<p class="ph-kind__sub">${sub}${extra}</p>` : ''}</div></li>`;
   }
   function kindsHtml(v, viewer) {
@@ -185,13 +187,13 @@
     const gapText = gap && !locked(v.gap, viewer) ? `${gapDay ? gapDay === todayDay() ? '今天' : md(gapDay) : '当天'}定位最长隔了 ${gap}` : '';
     const cut = mdTime(v.daily?.at || state.at);   // daily_exact.at 是日记四类数据自己的截止时刻
     // ‹ 更早 往前翻 14 天，翻到有记录的第一天变灰；翻过以后右边出“更晚 ›”翻回来
-    const nav = days.length ? `<span class="ph-nav"><button type="button" class="ph-earlier more"${canEarlier() ? '' : ' disabled'}><span class="ph-chev-l">‹</span>${state.loading ? '正在读…' : '更早'}</button>${state.offset > 0 ? `<button type="button" class="ph-later more">更晚 <span class="more__chev">›</span></button>` : ''}</span>` : '';
-    const note = v.notes.length ? `<div class="ph-note" hidden>${v.notes.map(esc).join('<br>')}</div>` : '';
+    const nav = days.length ? `<div class="ph-nav"><button type="button" class="ph-earlier more"${canEarlier() ? '' : ' disabled'}><span class="ph-chev-l">‹</span>${state.loading ? '正在读…' : '更早'}</button>${state.offset > 0 ? `<button type="button" class="ph-later more">更晚 <span class="more__chev">›</span></button>` : ''}</div>` : '';
+    const note = v.notes.length ? `<div class="ph-note" hidden>${v.notes.map(wrapShort).join('<br>')}</div>` : '';
     const open = wide.querySelector('.ph-note:not([hidden])');
     const empty = !days.length ? `<p class="ph-empty">${esc(state.failed ? '每天的记录暂时读不到' : state.loading ? '正在读每天的记录…' : '')}</p>` : '';
     wide.innerHTML = `<div class="ph-head">${icon('book', 'ph-ico ph-ico--title')}<b class="ph-title">日记本：每天收到了什么</b></div>
-      <div class="ph-body">${kinds ? `<ul class="ph-kinds" style="--r:${kindKeys.length}">${kinds}</ul>` : ''}<div class="ph-days">${grid || empty}</div></div>
-      <div class="ph-foot">${v.notes.length ? `<button type="button" class="ph-explain" aria-expanded="false">说明 <span class="more__chev">›</span></button>` : '<span></span>'}<span class="ph-gap">${esc(gapText)}</span>${nav}<span class="ph-cut">${cut ? esc(`截止 ${cut}`) : ''}</span></div>${note}`;
+      <div class="ph-body">${kinds ? `<ul class="ph-kinds" style="--r:${kindKeys.length}">${kinds}</ul>` : ''}<div class="ph-days">${grid || empty}${nav}</div></div>
+      <div class="ph-foot">${v.notes.length ? `<button type="button" class="ph-explain" aria-expanded="false">说明 <span class="more__chev">›</span></button>` : '<span></span>'}<span class="ph-gap">${wrapShort(gapText)}</span><span class="ph-cut">${cut ? esc(`截止 ${cut}`) : ''}</span></div>${note}`;
     if (open) { wide.querySelector('.ph-note').hidden = false; wide.querySelector('.ph-explain')?.setAttribute('aria-expanded', 'true'); }
     realign();
   }
@@ -228,7 +230,7 @@
       ['apps', '装了哪些应用', '应用清单、近 7 天更新、近 90 天新装和卸载', '/live/phone/#grp-apps'],
       ['clock', '今天怎么用的', '亮屏、解锁、用在哪类应用、几点在用', '/live/phone/#grp-usage'],
     ];
-    return `<ul class="ph-go">${rows.map(([ic, name, sub, href]) => `<li><a href="${esc(href)}">${icon(ic)}<span class="ph-go__text"><b>${esc(name)}</b><small>${esc(sub)}</small></span><span class="more__chev">›</span></a></li>`).join('')}</ul>`;
+    return `<ul class="ph-go">${rows.map(([ic, name, sub, href]) => `<li><a href="${esc(href)}">${icon(ic)}<span class="ph-go__text"><b>${esc(name)}</b><small>${wrapShort(sub)}</small></span><span class="more__chev">›</span></a></li>`).join('')}</ul>`;
   }
 
   // 下排两张卡顶边、底边对齐（照图）：取一样高；说明展开、窗口变了、字体到了都重新量
