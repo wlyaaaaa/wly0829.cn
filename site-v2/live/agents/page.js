@@ -446,7 +446,7 @@
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2></div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(familyHeading).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}${rulesLink}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? `Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要${T.you(viewer)}点头或验证的大事照规矩还是找${T.you(viewer)}。` : ''}${rulesLink}</p></section>`;
   }
 
   // —— 五、钩子 ——

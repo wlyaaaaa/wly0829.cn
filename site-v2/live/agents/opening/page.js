@@ -343,7 +343,10 @@
       const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
         on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
-      return top + (f.blocks.length ? f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('') : '<p class="tp-empty">这一份是空的。</p>');
+      if (!f.blocks.length) return `${top}<p class="tp-empty">这一份是空的。</p>`;
+      const content = f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('');
+      const projectCard = f.project && mode === 'website' && baseName(f.path).toLowerCase() === 'claude.local.md';
+      return top + (projectCard ? content.replace('<p>', '<p class="op-project-intro">') : content);
     };
     return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }
