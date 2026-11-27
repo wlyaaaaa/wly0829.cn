@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/1a3ce84d9892a752d06c8a5b24c7552295a05f7cef8b933ab00a41b5fbb6ecbf/live/_lib/live-dossier.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/28dcc91b4fa342bfa18644bc0902de270c20821e6fe6483f4b23bc713eab1100/live/_lib/live-board.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ab3727f799c9230353a52ed4cba0808edb318f5571cf54cac1208be0d59d52fa/motion/motion.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/ef8925c171e09c365e29c271061714e0cf7bacef787b5677b762a250adf1684b/live/task/page.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6fcd6c8fbad624da14bc50070aec35024e25243cb569bf4ada07e91822475059/live/task/page.css">
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/20facf264fe89430cdda64f1631c9f4a3272e61a4482d18a4a817d551d61d682/motion/motion.js"></script>
 <meta name="color-scheme" content="only light">
 <style>:root{color-scheme:only light}</style>
@@ -27,8 +27,8 @@
 <meta property="og:description" content="查看一项自动任务的运行结果、执行记录和相关问题。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/aa42222e9944ea88182e75bcfa4077ee2aab17df823e415e0b27bc0c5e3be10c/%E5%85%AC%E7%94%A8/fonts/ui-13666a276a2d8d2e.css">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/139c929f3a3986af5bfb367e8e8dc481b5a02ca9db994497aef1bcbad30486da/%E5%85%AC%E7%94%A8/fonts/live-02187f916d548083.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/af42b01f62b3a1342d41a3c72ba7a29843bfe0506d2e406056d00b34cc4766c3/%E5%85%AC%E7%94%A8/fonts/ui-bce8c3832ffe51cf.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/dd8e5237fbd13ba185e574080074b44a42d13ac4ef3aa2328b9c70221cafeb78/%E5%85%AC%E7%94%A8/fonts/live-5121ae70724ac9dc.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
 <body class="page page--live page--l3 page--task" data-record="task">
@@ -49,6 +49,10 @@
   </article>
 
   <div id="task-body" hidden>
+    <section class="glass task-card task-prompt" id="scheduled-prompt" aria-labelledby="task-prompt-title" hidden>
+      <header><h2 id="task-prompt-title">到点做什么</h2></header>
+      <dl id="task-prompt-facts"></dl>
+    </section>
     <dl class="task-stats" id="task-stats"></dl>
     <section class="glass task-card task-failure" id="failure" hidden>
       <header><span class="lb-card__badge" data-icon-name="alert"></span><h2>上次为什么出错</h2></header>
@@ -77,7 +81,7 @@
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd3235b6f79bca3bbf98175d2425743ce54d936ef9f2ad8882bf6d500f8949f2/trust-modal/trust-modal.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e1b38d7163f94cd78381306d75719c8f40543a5715f6dcf57c4491ced256ffd8/live/_lib/live-view-switch.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/46e80aa4978a9a671eba2cb59b99e607adf169d4cea43482fe94cb8be0cfa1d3/live/_lib/live-client.js"></script>
 <script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/c84561881dae06b0bc231a8f8fe30acbe7d90f939d7ab71db27536cd12762552/live/_lib/live-ui.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/f7264e0395b434c9f734006d5781e5d6dbd0ee4ad4630edc2f81158b63873549/header/topbar.js"></script>
-<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3919eaf7cdae0631464919c0913a41e613826d70593fbf9622271ffe6d1fd782/live/_lib/live-board.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/b5f475d6d14db66e89ad4408db8aaea6cd0b2d0c14582e9c1a430d96833dcf9f/live/task/page.js"></script>
+<script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/0b0ac15a1196e21faaba47127a219a29719d1a6457fc4ecf809608acb5bf42ae/live/_lib/live-light.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/3919eaf7cdae0631464919c0913a41e613826d70593fbf9622271ffe6d1fd782/live/_lib/live-board.js"></script><script src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/6ebdb5c41a724ee6d078a5055410e3bbd6307a24eda0c613ac45ac090e5817b9/live/task/page.js"></script>
 <script data-site-visitors src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/691a18256ada23451dec379364c53d2bc51aafbfbbe085002808ea041944be4e/_site/visitor-beacon.js"></script>
 <script data-footer-email-copy src="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/d2aaa6e5ca65eac89aaf6cfc8e4ea7170b020e509ce3590da1e93fc1b985305f/_site/footer-email-copy.js"></script>
 </body>
