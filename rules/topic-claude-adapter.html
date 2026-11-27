@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E520" data-rule-page="topic-claude-adapter">
+<main class="rules-page" data-rule-release="E523" data-rule-page="topic-claude-adapter">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="claude-适配">Claude 适配</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#身份"><span class="toc-number">01</span><span class="toc-label">身份</span></a></li>
@@ -146,7 +146,7 @@
 <p>根会话开对话、恢复和压缩以后，<code>SessionStart</code> 照<a href="topic-context-sources.html#%E5%8E%8B%E7%BC%A9%E5%89%8D%E5%90%8E">压缩前后</a>递工程和《他要什么》的位置，不再接旧摘要和原话；根对话开场另提醒标“能／不能给外人看”（见 cockpit 技能“AI 对话”）。压缩前 <code>PreCompact</code> 补存原话、给压缩留下任务位置。每轮仍递本人消息清单。</p>
 <p><code>UserPromptSubmit</code> 每条真实新消息带来会话坐标、可核实的型号和档位、共享资料状态及已核验的无限制授权。资料需求和本人验证由根负责，按<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料锁与解锁</a>和<a href="topic-execution-coordination.html#%E6%B4%BE%E5%AD%90%E4%BB%A3%E7%90%86%E7%9A%84%E5%8E%9F%E5%88%99">派子代理的原则</a>“根核验规则和判断资料需求”一条执行；纯技术工作继续。同一条实况提醒、健康提醒每会话只提示一次或状态变化时再提示。</p>
 <p>收工（Stop）只查 3 样：资料锁拦住了还没处理、GPT 子任务在跑却没挂 Watch、给本人的回复主要是英文。命中的合成一次拦下，根照原因解锁重试或补做、补挂 Watch、改用中文重写；同轮第二次只提示。正常收工照原入口记实况、推手机。</p>
-<p>出错停下（宿主确认这一轮以错误结束：限流、服务忙、账号或计费出错等）时，<code>StopFailure</code> 把原因交给实况，确认后 2 分钟推手机；限流、服务忙的，原轮 10 分钟没动静才请原对话重试一次（桌面上实际续不续得上待实测）。</p>
+<p>出错停下（宿主确认这一轮以错误结束：限流、服务忙、账号或计费出错等）时，<code>StopFailure</code> 把原因交给实况，确认后 2 分钟推手机；限流、服务忙的，原轮 10 分钟没动静才请原对话重试一次（桌面上实际续不续得上待实测）；额度用完、报错里读得出重置时间的，到那个点原轮仍没动静就请原对话接着做，读不出时间的照 10 分钟那次。</p>
 <p>根会话收工后还有原生后台 Agent、Bash/PowerShell 后台任务或 GPT 子任务在跑时，受管 Stop 用一个会话级 <code>asyncRewake</code>（异步唤醒）等着，按主代理最近活动加 55 分钟计时。本人真实消息、主代理工具调用和收工刷新计时。子代理自己的进度和 SendMessage 发出时刻不算主代理活动。正在运行的任务根据宿主 <code>background_tasks</code> 与 GPT 执行器状态判断，有没有 Watch 在等都算。空闲满 55 分钟时以退出码 2 叫醒，列出仍在运行的任务，没事直接收工并重新计时，叫醒那一轮不推手机。后台都结束或无法确认仍有任务在跑时以退出码 0 静默结束。预计还要等 5 小时以上（包括等到很久以后的定时任务），由 Claude 运行提示中填好会话号的 <code>keepalive off &lt;会话号&gt; "实际理由"</code> 关闭本对话保活。对话只有几万词元时可以更早关。2026-11-10 统计的 61 次叫醒平均每次成本是缓存过期后重写整段对话的约 1/5.4，按每 55 分钟一次折算约 5 小时。本人下一条真实消息会恢复，也可用 <code>keepalive on &lt;会话号&gt;</code> 手动恢复。Watch/Resume 的内部续等和子任务执行照常。宿主能力依据见官方 <a href="https://code.claude.com/docs/en/hooks#limitations">asyncRewake 与后台 Hook</a>及 <a href="https://code.claude.com/docs/en/hooks#stop-input">Stop 输入</a>。</p>
 <p>程序细节、部署和维护只见上下文 Hook 运维，验证等待见<a href="topic-privacy-data.html#%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%9A%84%E9%94%81%E5%92%8C%E8%A7%A3%E9%94%81">个人资料的锁和解锁</a>。回执不放在回复开头，先回答本人当前的问题。</p>
 <p>Stop 不生成 personal_data_need 状态，不启动任务。Hook 不授予资料或操作权限，不按关键词自动弹验证窗口。</p>
@@ -169,8 +169,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E520</dd></div>
-        <div><dt>发布</dt><dd>2026-11-27 14:54 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E523</dd></div>
+        <div><dt>发布</dt><dd>2026-11-28 01:29 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -184,7 +184,7 @@
 <li><a href="topic-claude-adapter.html" aria-current="page">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 8,332 字<br>Claude 适配 7,035 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 8,634 字<br>Claude 适配 7,080 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/live/agents/#hooks">实况 · 智能体页的钩子</a></dd></div>
       </dl>
     </aside>

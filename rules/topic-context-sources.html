@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E520" data-rule-page="topic-context-sources">
+<main class="rules-page" data-rule-release="E523" data-rule-page="topic-context-sources">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="事实来源与任务上下文">事实来源与任务上下文</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#事实找谁"><span class="toc-number">01</span><span class="toc-label">事实找谁</span></a></li>
@@ -185,7 +185,7 @@
 <h3 id="碰到项目和压缩后先读哪份">碰到项目和压缩后先读哪份</h3>
 <p>约法和导航在各家入口里，压缩后原样还在，不另行重灌、不要求重读（Antigravity 压缩后是否原样还在见<a href="topic-antigravity-adapter.html#%E5%85%A5%E5%8F%A3%E5%92%8C%E8%A7%84%E5%88%99%E5%8A%A0%E8%BD%BD">Antigravity 适配</a>）。对话中途读过的专题、项目规则和攻略，以及 Codex 的技能正文，压缩后不保证还在；漏读项目做法的根子多在没认出这次在做哪个项目，不在压缩本身。所以程序按 AI 实际碰到的东西认项目：读写了登记项目目录里的文件、用了登记给该项目的技能，以及本人消息里提到项目名。这几样对所有项目一样适用；不为单个项目写专门的认法（比如按某项目的联系人名单认），这些痕迹之外的由 AI 自己判断在做哪个项目。同一对话第一次碰到某项目时给 AI 一行：项目规则位置和该项目规则开头“做什么之前先读哪份”的短表；每次压缩后再给一行：这次对话碰过的项目（同样带短表）、用过的技能、读过的专题，有任务状态文件时再给它的位置；这一行由 Claude、Codex 根会话的钩子给，Antigravity 没有压缩事件，做不到（见<a href="topic-antigravity-adapter.html#%E7%BC%BA%E5%8F%A3">Antigravity 适配</a>）。只给位置不给全文，只提醒不拦，同一项目同一对话不逐条重复。AI 在下一步用到哪份时重读哪份。短表由各项目在自己规则开头维护，只写位置，做法仍以所指文件为准；没出过漏读问题的项目不必补。</p>
 <h3 id="压缩前后">压缩前后</h3>
-<p>三家根会话开对话、恢复和压缩以后，上下文里没有时，钩子只递位置（普通消息不带）：这个对话在哪个登记过的工程、它的《他要什么》第几版在哪（工程的《他要什么》由翻译官照本人的话写，见模型清单“读懂人的话”一行）、工程卡和任务进度在哪；不再带本人话摘要和以前的原话，也不把原话当依据。压缩后、动手做这个工程的事之前先读《他要什么》，再照定稿、交接和任务进度接着做，工程卡里列了账的（毛病账、排查账这类）也照账接着做；之后本人新说的话优先。每轮的本人消息清单和连发防漏答照常。根会话压缩前更新已有的短任务状态，没有入口时用本任务的 work/task-state.md（这份给接手的人读；要钩子带回它的位置，用已绑定的入口或 task-state.json）。压缩后留下的内容里还有这几句就不再补：Claude 压缩前把它交给摘要；Antigravity 没有压缩事件，按对话里新出现的压缩摘要判断。</p>
+<p>三家根会话开对话、恢复和压缩以后，上下文里没有时，钩子只递位置（普通消息不带）：这个对话在哪个登记过的工程、它的《他要什么》第几版在哪（翻译官只随大工程汇报页自动登记，收工时一并关闭；《他要什么》由翻译官照本人的话写，见模型清单“读懂人的话”一行）、工程卡和任务进度在哪；不再带本人话摘要和以前的原话，也不把原话当依据。压缩后、动手做这个工程的事之前先读《他要什么》，再照定稿、交接和任务进度接着做，工程卡里列了账的（毛病账、排查账这类）也照账接着做；之后本人新说的话优先。每轮的本人消息清单和连发防漏答照常。根会话压缩前更新已有的短任务状态，没有入口时用本任务的 work/task-state.md（这份给接手的人读；要钩子带回它的位置，用已绑定的入口或 task-state.json）。压缩后留下的内容里还有这几句就不再补：Claude 压缩前把它交给摘要；Antigravity 没有压缩事件，按对话里新出现的压缩摘要判断。</p>
 <p>纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。</p>
 <p>重大动作仍按原把关规则。</p>
 <p>程序入口、暂停开关和各家实际支持的事件见上下文 Hook 运维，Antigravity 的见<a href="topic-antigravity-adapter.html#%E9%92%A9%E5%AD%90">Antigravity 适配</a>。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。</p>
@@ -267,8 +267,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E520</dd></div>
-        <div><dt>发布</dt><dd>2026-11-27 14:54 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E523</dd></div>
+        <div><dt>发布</dt><dd>2026-11-28 01:29 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -282,7 +282,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 8,332 字<br>事实来源与任务上下文 7,662 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 8,634 字<br>事实来源与任务上下文 7,681 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/live/agents/#hooks">实况 · 智能体页的钩子</a></dd></div>
       </dl>
     </aside>
