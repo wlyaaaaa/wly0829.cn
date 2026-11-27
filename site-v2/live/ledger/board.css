@@ -18,6 +18,10 @@
 .lg-cell .tp-big { margin: 4px 0 6px; }
 .lg-cell .tp-big small { margin-left: 4px; font-family: var(--sans); font-size: 18px; font-weight: 600; }
 .lg-hand { font-size: 88px; }
+@media (max-width: 1150px) {
+  #tp-root p.lg-hand { font-size: clamp(28px, 3.8vw, 50px); text-wrap: nowrap; }
+  .lg-cell .lg-hand small { font-size: 15px; }
+}
 .lg-cell .tp-chart { width: 100%; height: auto; margin-top: auto; }
 .lg-cell .tp-legend { margin-top: 6px; }
 .lg-pairs { display: grid; gap: 8px; margin: 8px 0; }
@@ -42,13 +46,15 @@
 /* 还欠着的每一件：左边是事，右边是时间轨道 */
 .lg-live { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; padding: 1px 9px; border-radius: 999px; background: var(--tp-green-soft); color: var(--tp-green-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0; vertical-align: 4px; }
 .lg-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tp-green); animation: tp-breathe 1.6s ease-out infinite; }
-.lg-board { position: relative; --text: 560px; --gap: 28px; }
+.lg-board { --text: 560px; --gap: 28px; }
 .lg-head, .lg-item { display: grid; grid-template-columns: var(--text) minmax(0, 1fr); gap: var(--gap); }
 .lg-head { padding-bottom: 6px; border-bottom: 1px solid var(--tp-line); }
 .lg-axis { position: relative; height: 18px; container-type: inline-size; }
 .lg-axis span { position: absolute; top: 0; translate: -50% 0; font-family: var(--mono); font-size: 11.5px; color: #6c6b64; white-space: nowrap; }
 /* 窄窗口（时间轴不到 360px 宽，比如 1024 宽）日期隔一个藏一个，免得挤成一串 */
 @container (max-width: 360px) { .lg-axis span:nth-child(even) { display: none; } }
+@container (max-width: 240px) { .lg-axis span:not(:nth-child(6n + 1)) { display: none; } }
+.lg-tracks { position: relative; }
 .lg-list { margin: 0; padding: 0; list-style: none; }
 .lg-item { margin: 0 -10px; padding: 10px 10px; border-bottom: 1px solid var(--tp-hair); border-radius: 8px; transition: background .2s ease; }
 .lg-item:hover { background: #fafaf7; }
