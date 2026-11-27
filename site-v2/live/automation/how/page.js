@@ -48,7 +48,7 @@
         return '同一件最多修几轮、排队多久算没人接手，这次没读到。';
       }
       // 按需更新快核：修满轮数和反复坏怎么办，核 PCConfig automation/scheduler.py（14:00 起反复坏照常交 AI，不再按次数转本人；转本人只限花钱、删唯一数据、亲手做或登录、补只有他知道的、做取舍）
-      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断接着查、先放下，还是转给本人；只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
+      return `同一件最多派 AI 修 ${repair_limit} 轮。只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
       ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';
