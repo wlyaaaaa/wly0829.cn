@@ -74,3 +74,26 @@
 .iss-facts .rec-fact > dd a.iss-go { color: #00A650; }
 #raw[open] .dossier-fold__chev { rotate: -90deg; }
 #raw .rec-fact > dd { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* 访客版读口撤回时（账本 48，page.js 的 updating()）：这一件旧内容全清，页头大卡铺满第一屏当这一页的封面——
+   只写那一句（分两行），这件的画放大成正方形整张露出，四边化进玻璃；宽的时候字在左、画在右，窄的时候字在上、画在右下。两版同一个样子。
+   先前只剩一条字：放顶上下面全空、放正中上下各空一大截，都像没加载完（48 被打回两次） */
+#stage:has(> #hero[data-updating]) { display: flex; flex-direction: column; min-block-size: 100svh; padding-bottom: 48px; }
+.iss-hero[data-updating] { flex: 1 0 auto; --win: min(100cqh, 62cqw); }
+.iss-hero[data-updating] .card__glass { container-type: size; display: flex; align-items: center; min-height: 440px; padding: 0; }
+.iss-hero[data-updating][data-pic="right"] .card__body { flex: 1 1 auto; padding: 56px calc(var(--win) * .48) 56px 72px; }
+.iss-hero[data-updating].card--record[data-pic="right"] .card__pic {
+  top: 50%; bottom: auto; width: var(--win); height: var(--win); translate: 0 -50%;
+  -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 34%, rgb(0 0 0 / .9) 44%, rgb(0 0 0 / .66) 56%, rgb(0 0 0 / .36) 68%, rgb(0 0 0 / .12) 80%, transparent 92%), linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(270deg, #000 0%, #000 34%, rgb(0 0 0 / .9) 44%, rgb(0 0 0 / .66) 56%, rgb(0 0 0 / .36) 68%, rgb(0 0 0 / .12) 80%, transparent 92%), linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-composite: intersect;
+}
+.iss-hero[data-updating] .card__head .head__lead { font-size: clamp(32px, 3.5cqw, 46px); line-height: 1.42; letter-spacing: .04em; text-wrap: wrap; }
+.iss-hero[data-updating] .head__lead > span { display: block; }
+@container (width < 1000px) {
+  .iss-hero[data-updating][data-pic="right"] .card__body { align-self: flex-start; padding: 64px 56px 0; }
+  .iss-hero[data-updating].card--record[data-pic="right"] .card__pic { top: auto; bottom: 0; translate: none; width: min(100cqh - 160px, 100cqw); height: min(100cqh - 160px, 100cqw); }
+  .iss-hero[data-updating] .card__head .head__lead { font-size: 36px; }
+}
+.iss-nowrap { white-space: nowrap; }

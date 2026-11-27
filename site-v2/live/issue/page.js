@@ -279,10 +279,26 @@
   // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
   let ended = false;
   function empty(message) {
-    ended = true;
+    ended = true; delete hero.dataset.updating;
     U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
     part('state').hidden = part('src').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
+  }
+  // 访客版读口撤回（503 live_publication_revoked，访客版正在重新生成）：这一件旧的标题、状态、三格、经过、右栏全清，
+  // 页头大卡铺满第一屏当这一页的封面：只写这一句，配这件放大的画（账本 48，两版同一个样子；摆法在 issue.css）。
+  // 先前两版只剩一条字、上下大片空，像没加载完。读口恢复后 data() 照常画回
+  const UPDATING = '这一件正在更新访客版，稍后自动补上。';
+  function updating() {
+    if (ended === UPDATING) return;
+    ended = UPDATING; item = at = null; history = []; misjudged = []; policy = repeat = undefined; repeatAsked = false;
+    document.title = '账本一件 · 实况';
+    U.html(part('head'), `<span class="head__lead"><span>这一件正在更新<span class="iss-nowrap">访客版</span>，</span><span>稍后自动补上。</span></span>`);
+    part('head').classList.remove('is-long');
+    for (const name of ['state', 'src']) { U.html(part(name), ''); part(name).hidden = true; }
+    for (const key of ['three', 'steps', 'side']) U.html($(key), '');
+    $('steps-foot').textContent = ''; $('steps-foot').hidden = $('looks').hidden = $('rest').hidden = true;
+    hero.dataset.updating = '';
+    L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
 
   if (!id) empty('没有说是哪一件');
@@ -292,7 +308,7 @@
       const kind = meta.viewer?.kind || 'public';
       if (kind !== viewer) { viewer = kind; policy = undefined; repeat = undefined; repeatAsked = false; }
       if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
-      $('rest').hidden = false; ended = false;
+      $('rest').hidden = false; ended = false; delete hero.dataset.updating;
       at = meta.at || d.at || null; item = d.item; policy = d.policy ?? policy; history = Array.isArray(d.history) ? d.history : [];
       misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
       render(); loadRepeat();
@@ -301,6 +317,7 @@
       try {
         bar?.set(s); L.offline(s.offline);
         U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
+        if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
         if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
