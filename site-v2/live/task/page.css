@@ -123,10 +123,12 @@ h1 .task-provider { margin-left: .6em; }
 /* 计划任务：结果一栏放得下“没记到结束”“结果码没登记” */
 .page--task[data-variant="plan"] .task-row { grid-template-columns: 128px 112px 150px minmax(0, 1fr) auto; }
 @media (max-width: 1199px) {
-  .page--task[data-variant="plan"] .task-row { grid-template-columns: 84px 62px 66px minmax(4em, 1fr) auto; gap: 6px; }
+  .page--task[data-variant="plan"] .task-hero__art { left: auto; width: 38%; background-size: contain; }
+  .page--task[data-variant="plan"] .task-row { grid-template-columns: 84px 104px minmax(76px, .8fr) minmax(4em, 1fr); gap: 6px; }
   .page--task[data-variant="plan"] .task-row > :is(time, .task-row__duration) { white-space: normal; }
-  .page--task[data-variant="plan"] .task-row > .task-row__duration { word-break: keep-all; }
   .page--task[data-variant="plan"] .task-row > span:nth-child(4) { overflow-wrap: break-word; }
+  .page--task[data-variant="plan"] .task-row > .task-link { grid-column: 4; }
+  .task-fact-word { white-space: nowrap; }
 }
 /* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
 #more-runs { position: relative; }
@@ -170,11 +172,13 @@ h1 .task-provider { margin-left: .6em; }
 .page--task[data-variant="plan"] #facts { flex: 1; display: grid; }
 .page--task[data-variant="plan"] #facts > div { align-items: center; }
 
-/* Closed run details share the row. An opened record uses the width of the timeline. */
-.page--task[data-variant="plan"] .task-timeline > li:has(> details:not([open])) {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  column-gap: 12px;
+/* 宽屏收起时详情入口同行。窄屏将整行宽度留给数据。 */
+@media (min-width: 1200px) {
+  .page--task[data-variant="plan"] .task-timeline > li:has(> details:not([open])) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 12px;
+  }
+  .page--task[data-variant="plan"] .task-timeline > li > details:not([open]) { padding: 0; }
 }
-.page--task[data-variant="plan"] .task-timeline > li > details:not([open]) { padding: 0; }
