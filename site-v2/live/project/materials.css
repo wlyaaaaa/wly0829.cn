@@ -84,9 +84,6 @@
 .mat-links a span { font-size: 13px; }
 .mat-links a:hover, .mat-links .more__chev { color: var(--pj-accent-ink); }
 @media (min-width: 1101px) {
-  .mat-levels li:nth-child(3) { grid-template-columns: minmax(185px, max-content) minmax(max-content, 1fr) auto; }
-  .mat-levels li:nth-child(3) strong { text-align: center; }
-  .mat-levels li:nth-child(3) .mat-level-details { justify-content: flex-end; }
   .mat-levels li:nth-child(3) .mat-level-details .mat-count { margin-left: .35em; font-weight: 700; }
 }
 @media (max-width: 1100px) {
