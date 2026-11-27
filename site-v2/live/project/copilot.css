@@ -23,12 +23,14 @@
 .pj-board--copilot [data-card="copilot-delivery"] .cp-grid--2 { grid-template-columns: 1fr 1.55fr; }
 .pj-board--copilot .cp-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pj-board--copilot .cp-grid > div { min-width: 0; padding-inline: 12px; }
+.pj-board--copilot .cp-grid > div:has(.cp-date) { padding-inline-end: 0; }
 .pj-board--copilot .cp-grid > div + div { border-left: 1px solid var(--cp-line); }
 .pj-board--copilot .cp-label { display: block; font-weight: 550; overflow-wrap: anywhere; text-wrap: pretty; }
 .pj-board--copilot .cp-value { margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pj-board--copilot .cp-value b { color: var(--cp-green); font-size: 26px; line-height: 1.25; }
-.pj-board--copilot .cp-value .cp-date { font-size: clamp(16px, 1.4vw, 21px); }
+.pj-board--copilot .cp-value .cp-date { white-space: normal; word-break: keep-all; }
 .pj-board--copilot .cp-sub { display: block; color: var(--muted); text-wrap: pretty; overflow-wrap: anywhere; }
+.pj-board--copilot .cp-value:has(.cp-date) + .cp-sub { word-break: keep-all; }
 .pj-board--copilot .cp-list { flex: 1; min-height: 160px; }
 .pj-board--copilot .cp-run { margin: 0 0 9px; padding: 9px 12px 12px; }
 .pj-board--copilot .cp-run header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 2px 8px; }
@@ -48,7 +50,7 @@
 .pj-board--copilot .cp-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 9px; color: var(--muted); font-size: 14px; }
 .pj-board--copilot .cp-foot nav { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
 .pj-board--copilot .cp-foot button { padding: 0; border: 0; background: none; font: inherit; color: var(--cp-green); cursor: pointer; }
-.pj-board--copilot .cp-foot button:disabled { opacity: .58; cursor: default; }
+.pj-board--copilot .cp-foot button:disabled { color: var(--muted); cursor: default; }
 .pj-board--copilot .pj-card__tail { margin-top: 18px; }
 .pj-board--copilot .pj-card__tail .pj-cut { text-wrap: pretty; }
 .pj-board--copilot [data-card="copilot-delivery"] .cp-inset { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
@@ -58,4 +60,5 @@
 }
 @media (max-width: 1100px) {
   .pj-copilot #pj-board.pj-board--copilot { grid-template-columns: minmax(0, 1fr); }
+  .pj-copilot .pj-strip:has(.copilot-capability) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
