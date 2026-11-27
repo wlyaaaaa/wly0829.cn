@@ -1,7 +1,13 @@
 (() => {
   'use strict';
-  const U = window.LiveUI, { esc } = U;
   const ID = 'personal-media';
+  if (new URLSearchParams(location.search).get('id') !== ID) return;
+  const look = window.LiveProjectLook, loadLook = look.load, lookKey = look.key(ID);
+  // Only this page uses the watercolor; the shared artwork registry still supplies the other views.
+  look.load = () => loadLook().then(looks => ({
+    ...looks, [lookKey]: { ...look.of(ID, looks), img: '/live/project/media-hero.webp' },
+  }));
+  const U = window.LiveUI, { esc } = U;
   const types = { image: '照片', video: '视频', audio: '录音和音乐' };
   const kinds = Object.keys(types);
   const narrow = matchMedia('(max-width: 620px)');
@@ -54,8 +60,9 @@
     const peak = Math.max(1, ...Object.values(y?.years || {}).map(all));
     const counts = [typesRead?.image, typesRead?.video, m.audio_total?.value, m.total?.value];
     const sizes = [gb(m.image_gb?.value, 1), gb(capacity?.video_gb, 1), gb(m.audio_gb?.value, 1), gb(capacity?.gb)];
-    const audio = typesRead && `录音 ${num(typesRead.recordings)} · 音乐铃声 ${num(typesRead.music)}`;
-    const subtitles = ['', '', audio, m.days?.value == null ? '' : `有东西的日子 ${num(m.days.value)} 天`];
+    const audio = typesRead ? [`录音 ${num(typesRead.recordings)}`, `音乐铃声 ${num(typesRead.music)}`] : [];
+    const subtitles = [[], [], audio, m.days?.value == null ? [] : [`有东西的日子 ${num(m.days.value)} 天`]];
+    const segments = parts => parts.filter(Boolean).map((text, i) => `<span class="media-compact">${i ? '· ' : ''}${text}</span>`).join(' ');
     const rows = [...kinds, 'layers'].map((kind, row) => {
       const label = types[kind] || '合计';
       const cellsHtml = cells.map((cell, i) => {
@@ -63,10 +70,10 @@
         const heat = n ? 7 + 69 * Math.sqrt(n / peak) : 0;
         return `<td${i === width ? ' class="media-undated"' : ` style="--heat:${heat}%"`}>${y ? num(n) : '—'}</td>`;
       }).join('');
-      return `<tr><th scope="row"><div class="media-type">${icon(kind)}<span>${label}</span> <strong>${num(counts[row])} <small>${['张', '个', '段', '件'][row]}</small></strong></div><div class="media-type-sub">${sizes[row]}${subtitles[row] ? ` <span>· ${subtitles[row]}</span>` : ''}</div></th>${cellsHtml}</tr>`;
+      return `<tr><th scope="row"><div class="media-type">${icon(kind)}<span>${label}</span> <strong>${num(counts[row])} <small>${['张', '个', '段', '件'][row]}</small></strong></div><div class="media-type-sub">${segments([sizes[row], ...subtitles[row]])}</div></th>${cellsHtml}</tr>`;
     }).join('');
     const gaps = [m.undated?.value != null && `没日期 ${num(m.undated.value)} 件`, m.undescribed?.value != null && `没写说明 ${num(m.undescribed.value)} 件`].filter(Boolean);
-    const range = [day(m.earliest?.value, true) && `最早一件 ${day(m.earliest.value, true)}`, day(m.latest?.value, true) && `最新一件 ${day(m.latest.value, true)}`].filter(Boolean).join(' · ');
+    const range = segments([day(m.earliest?.value, true) && `最早一件 ${day(m.earliest.value, true)}`, day(m.latest?.value, true) && `最新一件 ${day(m.latest.value, true)}`]);
     const extra = ['audio_locatable', 'phone_actual', 'cloud_actual'].map(key => m[key]).filter(Boolean).map(item => `${esc(item.label)} · ${esc(item.value == null ? item.unknown_text || item.scope || '暂时读不到' : num(item.value))}`).join('<br>');
     return `<table class="media-years"><colgroup><col class="media-type-col"><col span="${width + 1}"></colgroup><thead><tr><td></td>${years.map(year => `<th scope="col">${year}</th>`).join('')}<th scope="col" class="media-undated">没日期</th></tr></thead><tbody>${rows}</tbody></table>
       ${!y || !typesRead || !capacity ? missing : ''}${gaps.length ? `<p class="media-gaps">还缺：${gaps.join(' · ')}</p>` : ''}
