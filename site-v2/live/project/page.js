@@ -382,12 +382,14 @@
   if (wordCut) document.documentElement.classList.add('pj-words');
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
+  // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
+  const glueDates = t => t.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-])/g, '<span class="pj-no-split">$&</span>');
   function keepWords(html) {
     if (!html) return html;
     return String(html).split(/(<[^>]*>)/).map((t, i) => {
       if (i % 2 || !t) return t;
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
-      if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return t;
+      if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
       const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
       segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
@@ -395,7 +397,7 @@
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
       let out = '', from = 0;
       for (const at of cuts) { out += t.slice(from, at) + '<wbr>'; from = at; }
-      return out + t.slice(from);
+      return glueDates(out + t.slice(from));
     }).join('');
   }
   function syncPage(b) {
