@@ -633,7 +633,8 @@
     if (listed > (total ?? 0)) extra.push(`清单列出 ${listed} 场，汇总${total == null ? '没读到' : `只读到 ${total} 场`}`);
     const about = key === 'waiting' && viewer === 'public' ? '要本人回答或选一下才能接着做' : BOARD[key].about;
     U.html(card.title, `<b>${esc(name)}</b><span class="lb-card__count chat-col-count${total == null ? ' is-none' : ''}">${esc(total == null ? '没读到' : String(total))}</span>`, false);
-    U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')).replace(/\d+ 场|没归档/g, '<span class="live-unit">$&</span>'));
+    const keepTogether = key === 'stopped' ? /\d+ 场|没归档|记录/g : /\d+ 场|没归档/g;
+    U.html(card.sub, esc([about, ...extra].filter(Boolean).join(' · ')).replace(keepTogether, '<span class="live-unit">$&</span>'));
     const emptyWaiting = key === 'waiting' && total === 0 && !listed && !quotaPick;
     card.el.classList.toggle('lb-card--quiet', emptyWaiting);
     const pickNote = quotaPick && (key === 'working' || key === 'waiting') ? [{ key: 'quota-pick', cls: 'row row--flat row--empty chat-pick', html: `<span></span><p class="row__sub">只看被 ${esc(SOFT.find(([id]) => id === quotaPick)?.[1] || '')} 额度卡住的 · <button type="button" class="more" data-quota-all>看全部 ›</button></p>` }] : [];
