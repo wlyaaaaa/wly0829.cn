@@ -41,10 +41,11 @@ async function cloudSnapshot(resource) {
   // OSS 上这份按 gzip 存，不管请求头一律回压缩字节（Content-Encoding: gzip）；运行时没替我们解压时开头是 1f 8b，自己解（M817）。
   // 限时用 AbortController：EdgeOne 运行时文档只列了它和 AbortSignal.abort()，没列 AbortSignal.timeout()。
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 5000);
-  let bytes;
+  let bytes, modified;
   try {
     const response = await fetch(OSS_FALLBACK_URL, {cache: 'no-store', signal: controller.signal});
     if (!response.ok) throw Error('snapshot');
+    modified = response.headers.get('Last-Modified');
     bytes = new Uint8Array(await response.arrayBuffer());
   } finally { clearTimeout(timer); }
   const value = JSON.parse(new TextDecoder().decode(bytes[0] === 0x1f && bytes[1] === 0x8b ? await gunzip(bytes) : bytes)), proof = value?.publication;
@@ -53,9 +54,10 @@ async function cloudSnapshot(resource) {
       typeof value.at !== 'string' || !Number.isFinite(Date.parse(value.at))) throw Error('snapshot');
   const observed = value.resources?.[resource]?.at;
   const at = typeof observed === 'string' && Number.isFinite(Date.parse(observed)) ? new Date(observed).toISOString() : null;
-  const instant = Date.now(), received = Date.parse(response.headers.get('Last-Modified'));
-  const hostOff = value.v === 1 && Number.isInteger(value.seq) && value.host_off_at === value.at && Date.parse(value.at) <= instant;
-  return {at, audience: proof.audience, hostOffAt: hostOff ? new Date(value.at).toISOString() : null,
+  const instant = Date.now(), received = Date.parse(modified);
+  const shutdown = value.v === 1 && Number.isInteger(value.seq) && value.host_off_basis === 'windows_poweroff' &&
+    value.host_off_at === value.at && Date.parse(value.at) <= instant;
+  return {at, audience: proof.audience, hostOffAt: shutdown ? new Date(value.at).toISOString() : null,
     lastSeen: Number.isFinite(received) && received <= instant ? new Date(received).toISOString() : null};
 }
 export default async function onRequest({request, env = {}}) {
@@ -133,8 +135,9 @@ export default async function onRequest({request, env = {}}) {
     const variant = String(query);
     const resource = url.pathname.slice(prefix.length) + (variant ? '?' + variant : '');
     const {at, audience, hostOffAt, lastSeen} = await cloudSnapshot(resource);
+    const confirmed = connection === 'unreachable' && hostOffAt;
     if (lastSeen) headers.set('X-Live-Last-Seen', lastSeen);
-    if (hostOffAt && connection === 'unreachable') {
+    if (confirmed) {
       headers.set('X-Live-Connection', 'host-off');
       headers.set('X-Live-Offline-Since', hostOffAt);
     }
@@ -142,6 +145,7 @@ export default async function onRequest({request, env = {}}) {
     headers.set('X-Live-Fallback-Policy', FALLBACK_POLICY);
     headers.set('X-Live-Fallback-Audience', audience);
     headers.set('ETag', `"live-fallback-${audience}"`);
-    return reply({error: 'snapshot_metadata_only', at, now}, 503);
+    return reply({error: 'snapshot_metadata_only', at, now,
+      ...(confirmed ? {host_off_basis: 'windows_poweroff', host_off_at: hostOffAt} : {})}, 503);
   } catch { return fail('snapshot_unavailable', '云端还没有最后一份'); }
 }
