@@ -158,7 +158,7 @@
 
     // 三格
     const what = d.story?.what ?? d.progress_summary ?? d.outcome_text ?? d.text;
-    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', s.closed ? `已经了结：${s.label}，不再看了。` : next]]
+    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
     put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
@@ -167,8 +167,9 @@
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
+      const repeated = r === rows.at(-1) && cells.some(([, v]) => nodot(T(r.text)) === nodot(T(v)));
       const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
-      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
+      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${repeated ? '' : stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
