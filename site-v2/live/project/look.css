@@ -272,7 +272,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-tail[hidden] { display: none; }
 .pj-notes { flex: 1; min-width: 0; font-size: 12.5px; color: #8f8d86; }
 .pj-notes[hidden] { display: none; }
-.pj-notes > summary { display: inline-flex; align-items: center; height: 26px; margin-left: -8px; padding: 0 8px; border-radius: 999px; font-size: 12.5px; color: #68665f; }
+/* 卡底“说明 ›”和右边“全部 N 条 ›”、各页自己画的“说明 ›”同一个样子：深字、绿箭头，看得出能点（QA 第 10 轮） */
+.pj-notes > summary { display: inline-flex; align-items: center; height: 28px; margin-left: -8px; padding: 0 8px; border-radius: 999px; font-size: 13.5px; letter-spacing: .04em; color: var(--ink-soft); }
+.pj-notes > summary .disclosure-chev { color: var(--pj-accent); }
 .pj-notes > summary:hover { background: rgb(255 255 255 / .55); color: var(--ink); }
 .pj-notes > .pj-note { margin: 4px 0 0; }
 .pj-notes > .pj-note b { font-weight: 600; color: #6f6e68; }
