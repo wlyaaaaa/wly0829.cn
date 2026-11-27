@@ -482,7 +482,7 @@
     if (b.main) b.main.hidden = headOnly;
     b.headOnly = headOnly;
     b.head.hidden = !label && !about;
-    U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${U.fieldHtml(about)}</span>` : ''}`);
+    U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${keepWords(U.fieldHtml(about))}</span>` : ''}`);
     const rowCount = rows.length;
     if (b.kind === 'rows') {
       b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
@@ -867,12 +867,17 @@
     // 摆齐的算法在 layout.js；那个文件没取到时卡片留在原来那一栏，不让整页出错
     const PL = window.ProjectLayout;
     if (!PL) return;
-    const gap = parseFloat(getComputedStyle(main).rowGap) || 20, heights = seq.map(g => g.card.el.offsetHeight), prev = seq.map(g => g.card.col);
+    // 按卡里有几段、几行、几格、几张图估分量来摆，不按像素高度：两版的字长短不一样（访客版换了说法、挂的签不同），按高度摆会一版一个样，
+    // 同一张卡两版要放在同一栏同一处（本人定的两版前后端一套）。收着没露的行不算
+    const shown = (el, sel) => [...el.querySelectorAll(sel)].filter(n => !n.closest('[hidden], .fold:not(.is-open)')).length;
+    const weight = el => 3 + shown(el, '.pj-part') + 1.4 * shown(el, '.row:not(.row--empty)') + 1.6 * shown(el, '.pj-fig') + shown(el, '.pj-kv__row')
+      + 2 * shown(el, '.knowledge-prose') + 6 * shown(el, '.pj-viz:not(:empty), .fin-chart') + shown(el, '.pj-note, .pj-hidden');
+    const weights = seq.map(g => weight(g.card.el));
     // 项目自己定了哪张卡放哪一栏的（说明书照本人定的图：左栏大卡＋最近改动，右栏最近改过的 5 张＋材料和依据），照它摆
     const fixed = custom?.columns?.(seq.map(g => g.key));
     // 最近改动钉在左栏、最近产物钉在右栏：两版卡片高度不一样，不钉会一版改动在左、一版产物在左（本人定的两版前后端一套）
     const pins = seq.map(g => g.blocks.some(b => b.changes) ? 0 : g.blocks.some(b => b.artifacts) ? 1 : undefined);
-    const cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : prev.every(c => c === 0 || c === 1) && PL.keep(prev, heights, gap, pins) ? prev : PL.split(heights, gap, pins);
+    const cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : PL.split(weights, 0, pins);
     inOrder(main, seq.filter((_, i) => cols[i] === 0).map(g => g.card.el));
     inOrder(side, seq.filter((_, i) => cols[i] === 1).map(g => g.card.el));
     seq.forEach((g, i) => g.card.col = cols[i]);
