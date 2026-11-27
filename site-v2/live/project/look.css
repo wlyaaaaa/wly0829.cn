@@ -163,6 +163,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 
 /* 卡里的短字（读数名、小字说明、小标题）窄了折行时不让最后一行只剩一两个字（只调折法，不动不折行的那些） */
 .page--project #pj-board :is(.pj-kv__k, small, b, .row__title) { text-wrap-style: pretty; }
+/* 最近改动的每条和页首那句简介：page.js 按词插了可断点，只在词与词之间折，词长过一整行才从中间断 */
+.pj-words :is(.pj-sec--timeline .row__title, .pj-line .pj-about) { word-break: keep-all; overflow-wrap: anywhere; text-wrap-style: pretty; }
 
 /* ============ 两栏卡片 ============ */
 .page--project #pj-board.pj-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--pj-gap); margin-top: var(--pj-gap); align-items: start; }

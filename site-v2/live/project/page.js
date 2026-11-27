@@ -375,7 +375,21 @@
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
+  // 窄屏折行不拆词、不留单字行（本人看图 11-28）：按词插可断点（<wbr>），look.css 让这几处只在词与词之间折，长句照常折行
+  const wordCut = typeof Intl === 'object' && Intl.Segmenter ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
+  if (wordCut) document.documentElement.classList.add('pj-words');
+  function keepWords(root) {
+    if (!wordCut || !root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), texts = [];
+    for (let n; (n = walker.nextNode());) if (/[㐀-鿿]{2}/.test(n.data) && n.previousSibling?.nodeName !== 'WBR' && n.nextSibling?.nodeName !== 'WBR') texts.push(n);
+    for (const n of texts) {
+      const parts = document.createDocumentFragment(); let prev = '';
+      for (const s of wordCut.segment(n.data)) { if (prev && s.isWordLike && !/[（“「《(\[]$/.test(prev)) parts.append(document.createElement('wbr')); parts.append(s.segment); prev = s.segment; }
+      n.replaceWith(parts);
+    }
+  }
   function syncPage(b) {
+    if (b.changes) keepWords(b.main);
     if (!b.changes && !b.artifacts) return;
     const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - (b.reveal?.get('') || 0));
     b.page.hidden = !b.hasNext || left > 0;
@@ -1238,7 +1252,7 @@
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
     const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(stamp(ch.at))}</span>`, say && `<span class="pj-about">${U.fieldHtml(say, { name: '项目说明', kind: projectViewer })}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
-    part('about').hidden = !line; U.html(part('about'), line);
+    part('about').hidden = !line; U.html(part('about'), line); keepWords(part('about').querySelector('.pj-about'));
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
     // 提交时刻页头那行已写，这里只写这次改了什么
     const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : '';
