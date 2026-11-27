@@ -123,10 +123,12 @@
     const d = item, s = stateOf(d), st = U.status({ level: s.level });
     hero.classList.remove('is-unavailable');
     const title = titleOf(d);
-    document.title = `${T(title) || '账本一件'} · 实况`;
     const head = part('head');
     // 这件事对外换了说法的标题后面挂“对外换了说法”（两版都挂，M930）；本人版访客看不到的挂“访客看不到”
     const shownTitle = publicHtml(F(title, '这件事'), viewer);
+    const titleText = document.createElement('template');
+    titleText.innerHTML = shownTitle;
+    document.title = `${titleText.content.textContent.trim() || '账本一件'} · 实况`;
     U.html(head, `<span class="head__lead">${keepWords(shownTitle)}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 

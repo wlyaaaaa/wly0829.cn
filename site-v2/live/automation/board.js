@@ -671,13 +671,13 @@
     const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     // 上次跑：定时唤醒的那一场对话（后台 last_wake：时刻、对话标题、对话链接），点回原对话（M921“跑完能找回原对话”）；
     // 访客看不到的那场后台给标题“仅本人可见”、链接为空，照写
-    // 同一行左边已经写了这个时刻（没认出周期时左边写的就是上次跑的时刻），这里只留对话链接，不把同一时刻再写一遍（看图 24）
+    // 同一时刻已有一遍且能点回原对话时，只留对话链接；没有链接时仍标明这是上次跑。
     const wake = (r, shown = '') => {
-      const w = r.last_wake;
-      if (!w || !T.stamp(w.at)) return '';
-      const title = F(w.chat_title, '那一场对话'), at = when(w.at);
-      const chat = title ? (T.path(w.chat_href) ? link(w.chat_href, `${title} ›`) : title) : '';
-      if (at === shown) return chat ? `<small class="au-wake">上次跑的对话：${chat}</small>` : '';
+      const w = r.last_wake, started = w?.at || r.at;
+      if (!T.stamp(started)) return '';
+      const title = F(w?.chat_title, '那一场对话'), at = when(started), href = T.path(w?.chat_href);
+      const chat = title ? (href ? link(href, `${title} ›`) : title) : '';
+      if (at === shown && href && chat) return `<small class="au-wake">上次跑的对话：${chat}</small>`;
       return `<small class="au-wake">上次跑：${esc(at)}${chat ? ` · ${chat}` : ''}</small>`;
     };
     const item = r => {
@@ -698,11 +698,12 @@
       return `<li><b>${keepBj(esc(when1))}</b>${name}<small>${[F(r.state_text), late].filter(Boolean).join(' · ')}</small>${wake(r)}</li>`;
     };
     // 只接本机执行的定时（本人 11-25 22:13 定 Claude 那家，R129），claude.ai 上建的这类云端定时不接：整组标题旁写一句，不在 Claude 那行再写一遍
-    const scope = {};
     const body = hosts.map(h => {
       const mine = rows.filter(r => r.producer === h).sort((a, b) => T.stamp(b.next_at || b.at) - T.stamp(a.next_at || a.at));
-      const notes = [scope[h], ...gaps.filter(g => g.includes(h))].filter(Boolean).map(g => `<small>${esc(g)}</small>`).join('');
-      return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : '没有'}${notes}</td></tr>`;
+      const missing = gaps.filter(g => g.includes(h));
+      const notes = missing.map(g => `<small>${esc(g)}</small>`).join('');
+      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '这次没读到' : '没有';
+      return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${content}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
     return `<div class="au-extra au-sched" id="scheduled"><p class="tp-sub">各家自带的定时<small>只列在这台电脑上执行的，云端的（比如 claude.ai 上建的）不在这里；反复跑的活都在上面${kinds(d)}里</small></p>
