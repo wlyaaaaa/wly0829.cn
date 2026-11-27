@@ -935,7 +935,8 @@
         }
       }
       const artifactsTarget = location.hash === '#artifacts';
-      if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
+      // 项目自己画了产物（微信收发室的档案表，custom.artifactsHref）就不再画通用的“最近产物”卡
+      if (!custom?.artifactsHref && (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden)))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
         // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
@@ -1072,7 +1073,7 @@
     go(c.skills, '名下技能', '个', d.skills_href || ((d.sections || []).some((s) => s.id === 'skills') ? '#skills' : ''), 'skills');
     go(c.ai, 'AI 手上', '件', d.ai_href || `/live/ledger/?project=${enc(d.id)}`, 'ai');
     go(c.need, `等${projectViewer === 'public' ? '本人的' : '你的'}`, '件', d.need_href || `/live/?project=${enc(d.id)}#needs`, 'need');
-    if (d.artifacts?.count || (d.artifacts?.count === 0 && lower(d.artifacts, 'count'))) out.push(cell('最近产物', d.artifacts.count, '份', '#artifacts', `最近产物 ${lower(d.artifacts, 'count') ? '至少 ' : ''}${d.artifacts.count} 份`, lower(d.artifacts, 'count')));
+    if (d.artifacts?.count || (d.artifacts?.count === 0 && lower(d.artifacts, 'count'))) out.push(cell('最近产物', d.artifacts.count, '份', custom?.artifactsHref || '#artifacts', `最近产物 ${lower(d.artifacts, 'count') ? '至少 ' : ''}${d.artifacts.count} 份`, lower(d.artifacts, 'count')));
     if (c.q === 'partial' && c.gap) out.push(`<small class="pj-strip-note pj-count-gap">${esc(c.gap)}</small>`);
     // 冻结的项目不再采名下任务、技能，不写“还在采集”
     const missing = ['tasks', 'skills'].filter(k => k in c && c[k] == null);
