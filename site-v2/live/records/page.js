@@ -463,12 +463,12 @@
       const row = bookRow(r, data, i), n = A.recorded;
       if (row.wide) return row;
       const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
-        [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没有记录')];
+        [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没读到')];
       // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
       return { ...row, cells, detail: row.skillMore || row.detail || '', pick: { count: cells[2], last: r.last ? text(stamp(r.last)) : cells[6] }, sort: { ...row.sort, at: Date.parse(r.last_at) } };
     });
     const note = data.unrecorded30?.length ? `近 30 天账本里没有记录：${data.unrecorded30.join('、')}` : '';
-    return { columns, rows, note: text([note, 'Antigravity 列为可确认的技能原文件读取次数。'].filter(Boolean).join(' · ')), empty: data.items == null ? '没有记录' : '0 项' };
+    return { columns, rows, note: text([note, 'Antigravity 列为可确认的技能原文件读取次数。'].filter(Boolean).join(' · ')), empty: data.items == null ? '这次没读到' : '0 项' };
   }
   const siteTodoKey = r => r.id || JSON.stringify([r.kind, recordKey(r)]);
   function siteTodoTable(d, ordered) {
@@ -558,7 +558,9 @@
     if (skills) cells[0] += skillMore;
     // 技能一次也没用过（M747，本人 11-24 16:13 选 A，例 personal-profile）：没有最近一次、近 30 天 0 次、各家累计也是 0；只是没读到的不算。
     // “很久没用”卡把它排最前、写“没用过”，表里“最近使用日期”也写“没用过”
-    const never = skills && r.last == null && num(r.count) === 0 && ['claude_total', 'codex_total'].every(k => !(k in r) || num(r[k]) === 0) && !(num(r.antigravity_d30) > 0);
+    const never = (skills || skillUsageSection) && r.last == null && num(r.count) === 0 && (skillUsageSection
+      ? r.last_at == null && [r.claude_total, r.codex_total, r.antigravity_total].every(value => value === 0)
+      : ['claude_total', 'codex_total'].every(k => !(k in r) || num(r[k]) === 0) && !(num(r.antigravity_d30) > 0));
     if (never && 'last' in r) cells[2] = `<span class="book-never">${text('没用过')}</span>`;
     return {
       key, cells, nameCell, skillMore, never, title: esc(labelText), text: labelText, attention: attention(r), detail, lamp: lamp ? status.lamp : '',

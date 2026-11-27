@@ -217,7 +217,7 @@
       const start = new Date(at + 8 * 3600000).toISOString().slice(0, 10), year = new Date(Date.now() + 8 * 3600000).getUTCFullYear();
       return `从 ${start.startsWith(String(year)) ? start.slice(5) : start} 开始记`;
     }
-    return label ? `${label}还没读到` : '没有记录';
+    return label ? `${label}还没读到` : '还没读到';
   }
   const isStale = data => data?.stale === true || data?.q === 'stale' || data?.state === 'stale';
   function cutoffStamp(at, precision, now = Date.now()) {

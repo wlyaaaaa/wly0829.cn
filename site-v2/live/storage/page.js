@@ -74,7 +74,8 @@
       return { key: `${name}:${i}`, cls: 'vz-rank__row', html: `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${color};--v:${Math.max(amounts[i] / max, 0)}"></i></span><span class="vz-rank__name"><span class="vz-rank__label">${esc(name)}</span></span><span class="vz-rank__v">${esc(shown)}</span>` };
     });
     rankRows = rows.length ? ranked : [];
-    rankEmpty = rows.length || tableLocked || hidden ? [] : [{ key: 'empty', cls: 'vz-rank__row vz-rank__row--empty', html: `<span class="vz-rank__none">${esc(U.offline?.() ? missed : 'SSD 写入没有记录')}</span>` }];
+    const emptySsd = Array.isArray(table?.rows) && Number.isFinite(Date.parse(table.at)) && table.state === 'ok';
+    rankEmpty = rows.length || tableLocked || hidden ? [] : [{ key: 'empty', cls: 'vz-rank__row vz-rank__row--empty', html: `<span class="vz-rank__none">${esc(U.offline?.() ? missed : emptySsd ? '还没有 SSD 写入统计' : 'SSD 写入这次没读到')}</span>` }];
     drawRank();
     U.html($('ssd-period'), tableLocked ? '' : esc(field(table?.window?.label, '统计期间').split(/[，,]/)[0]));
     U.html($('ssd-count'), tableLocked ? '' : sampleCount(table, rows.length + hidden, ranked.length));

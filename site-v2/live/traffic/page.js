@@ -109,16 +109,17 @@
     const period = week ? '近 7 个自然日' : dayLabel(d?.to || cutoff);
     const basis = table?.basis?.replace(/^今日|^今天/, period) || `${period}已记录的海外代理流量`;
     $('program-title').textContent = [basis, '按代理计数归到程序'].join(' · ');
-    $('program-window').textContent = cutoff ? `数据截至 ${U.date(cutoff).slice(-5)} ${U.time(cutoff)}` : d ? '没有记录采集时间' : '';
+    $('program-window').textContent = cutoff ? `数据截至 ${U.date(cutoff).slice(-5)} ${U.time(cutoff)}` : d ? '采集时间没读到' : '';
     if (!source.length && !separate) { programs.wait(d ? '按程序暂时读不到' : '正在读'); return; }
+    const measuredBytes = (value, lower) => Number.isFinite(value) ? bytes(value, lower) : '没采到';
     const rows = source.map(p => {
       const total = Number.isFinite(p.upload) && Number.isFinite(p.download) ? p.upload + p.download : null;
       const original = U.fieldText(p.detail?.process_name ?? p.name, viewer).trim();
       const display = typeof p.display_label === 'string' ? p.display_label.trim() : '';
       const name = p.id === 'unknown' || original === '未归到程序' ? '未归到程序' : display || original;
-      const upload = bytes(p.upload, partial(p, 'upload')) || '没有记录';
-      const download = bytes(p.download, partial(p, 'download')) || '没有记录';
-      const text = bytes(total, partial(p, 'upload') || partial(p, 'download')) || '没有记录';
+      const upload = measuredBytes(p.upload, partial(p, 'upload'));
+      const download = measuredBytes(p.download, partial(p, 'download'));
+      const text = measuredBytes(total, partial(p, 'upload') || partial(p, 'download'));
       const proxyClaude = separate && [name, original].some(label => /^Claude(?:\.exe)?$/i.test(label));
       const note = [proxyClaude && '按代理计数', sp(p.gap)].filter(Boolean).join(' · ');
       const sub = tightText([`上传 ${upload}`, `下载 ${download}`, note].filter(Boolean).join(' · '));

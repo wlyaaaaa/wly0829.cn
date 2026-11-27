@@ -475,7 +475,7 @@
     const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页的数据没存下来。'}`;
     if (disconnected) text = line(upTo);
     if (publicPaused) text = publicPauseText;
-    if (!text && e.data === null) text = e.warming ? '正在准备' : '没有记录';
+    if (!text && e.data === null) text = e.warming ? '正在准备' : '这次没读到';
     const stage = phase(e);
     // 本块没有最后一份数据时说明没存下来；全站同一句，和各页自己写的“这块没存下来，连上后补上。”一致（r83 返修：一页只用一种说法）
     const say = publicPaused ? publicPauseText : stage === 'gone' ? '这块没存下来，连上后补上。' : '';

@@ -14,7 +14,7 @@
   // 手机亮屏用强调绿、电脑在用用青，两台一眼分得开；锁屏浅灰蓝、关机深灰蓝；锁屏是两台共用的一类。
   const USAGE_ORDER = ['on', 'active', 'away', 'off', 'sleep', 'shutdown', 'unrecorded', 'pending'];
   const USAGE_HUES = { on: '#00A650', active: 'teal', away: 'apricot', off: '#8f9bb3', sleep: 'violet', shutdown: '#3a4459', unrecorded: 'stone', pending: 'teal' };
-  const USAGE_LABELS = { unrecorded: '没记录', pending: '等下一轮记录' };
+  const USAGE_LABELS = { unrecorded: '没记录', pending: '等下一轮传上来' };
   const usageRank = id => { const k = USAGE_ORDER.indexOf(id); return k < 0 ? USAGE_ORDER.length : k; };
   let phone = null, viewer = 'public', done = false, linkOff = false, trafficProject = null, trafficDays = null, trafficDaysWatch = null;
   const ranges = {}, shownRanges = {}, watches = {}, generations = {}, chartStates = {};
@@ -190,7 +190,8 @@
       const since = s.id === 'network-timeline' ? seconds(phone?.collect?.since) : NaN, day = data.rows?.day;
       const sinceStart = Number.isFinite(since) && day?.spans?.[0]?.[1] == null && seconds(day.from) < since && since < seconds(day.to)
         && Math.abs((day.spans[1]?.[0] ?? NaN) - since) <= 60 ? since : null;
-      return { ...data, sinceStart, states: [...states, { id: 'unrecorded', label: '没记录', hue: 'stone' }, { id: 'pending', label: '等下一轮记录', hue: 'teal', pattern: 'hatch' }],
+      const pendingLabel = usage ? USAGE_LABELS.pending : s.id === 'collect-timeline' ? '等下一轮采' : '等下一轮记录';
+      return { ...data, sinceStart, states: [...states, { id: 'unrecorded', label: '没记录', hue: 'stone' }, { id: 'pending', label: pendingLabel, hue: 'teal', pattern: 'hatch' }],
         rows: Object.fromEntries(Object.entries(data.rows).map(([key, row]) => [key, { ...row, recorded_to: Number.isFinite(recordedTo(row)) ? iso(recordedTo(row)) : null, spans: markSpans(row, states.length, states.length + 1, since, omitted, s.id === 'collect-timeline' ? recordedTo(data.rows?.runs) : NaN) }])) };
     }
     if (!s?.points?.length) return null;
@@ -221,7 +222,9 @@
         const none = always && label && !value && (li.dataset.state === 'shutdown' || rows[i] === 'computer');
         cell.style.display = value > 0 || none ? '' : 'none';
         if (none) {
-          const text = li.dataset.state === 'sleep' ? '未记录到睡眠' : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机' : '关机记录读不到';
+          const text = li.dataset.state === 'sleep' ? '未记录到睡眠'
+            : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机'
+            : rows[i] === 'phone' ? '关机记录这次没读到' : '关机记录读不到';
           cell.innerHTML = `<small>${esc(label)}</small> ${text}`;
         } else if (value > 0) {
           cell.innerHTML = cell.classList.contains('row__sub') ? `${rows.length > 1 && label ? `<small>${esc(label)}</small> ` : ''}${V.dur(value)}` : rows.length === 1 ? value >= 360000 ? `<b>${Math.round(value / 3600)}</b><small>小时</small>` : V.durHtml(value)
@@ -346,7 +349,7 @@
     const dayStart = day => Date.parse(`${day.date}T00:00:00+08:00`) / 1000;
     const clock = day => U.time(iso(dayStart(day) + day.elapsed_s));
     function zeroText(st, lane) {
-      if (st.id === 'shutdown') return lane === 'phone' && !Array.isArray(data.phoneOff) ? '关机记录读不到' : '未记录到关机';
+      if (st.id === 'shutdown') return lane === 'phone' && !Array.isArray(data.phoneOff) ? '关机记录这次没读到' : '未记录到关机';
       if (st.id === 'sleep' && hasLane(st, lane)) return '未记录到睡眠';
       return '';
     }

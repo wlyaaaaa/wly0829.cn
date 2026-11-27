@@ -46,7 +46,7 @@
     const programs = review.filter(x => /impersonation/.test(x.key || '') && Number.isInteger(x.programs)).reduce((n, x) => n + x.programs, 0);
     return [confirmed ? `已确认异常 ${confirmed} 组` : '没发现确认的异常',
       review.length && `${review.length} 组要核实${programs ? `（${programs} 个程序待筛查）` : ''}`,
-      unread.length && `${unread.length} 组读数暂缺`].filter(Boolean).join('，');
+      unread.length && `${unread.length} 组这次没读到，不算没发现`].filter(Boolean).join('，');
   }
   function serviceRows(rows) {
     const merged = new Map();
@@ -341,7 +341,7 @@
     queueMicrotask(() => V.cardLineTitle(status.parentElement));
   }
   const board = V.board(document.getElementById('board'), { key: 'security', sync, reading(id, point, t) {
-    if (id === 'start' || id === 'exit') return point?.value != null ? { ...point, caption: t == null ? '最近实测' : '' } : t != null ? { text: '没记录' } : null;
+    if (id === 'start' || id === 'exit') return point?.value != null ? { ...point, caption: t == null ? '最近实测' : '' } : t != null ? { text: '没测到' } : null;
   }, onCount(c) {
     const seen = new Set();
     c = { ...c, warn: c.warn.flatMap(g => { const reason = U.sp(g.reason).split('；').filter(s => s && !seen.has(s) && seen.add(s)).join('；'); return reason || !g.reason ? [{ ...g, reason }] : []; }) };
@@ -429,7 +429,7 @@
       for (const v of values) {
         const cell = el.querySelector(`.chart__val[data-line="${v.id}"] b`);
         if (t == null && v.at != null) cell.innerHTML = `${U.esc(v.text)}<small class="stat-gap">最近实测 ${U.esc(stamp(new Date(v.at * 1000).toISOString()))}</small>`;
-        if (t != null && v.value == null) cell.textContent = '没记录';
+        if (t != null && v.value == null) cell.textContent = '没测到';
       }
     } });
     return { set() { chart.set(lifecycleData(data)); } };

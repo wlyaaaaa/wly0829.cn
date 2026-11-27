@@ -220,7 +220,7 @@
       const cell = chartHost.querySelector('.chart__val b');
       if (!cell || !reading) return;
       cell.parentElement.style.display = pointedAt == null && readingMerged ? 'none' : '';
-      if (reading.value == null) cell.textContent = '没记录';
+      if (reading.value == null) cell.textContent = '这一刻没读到';
       else if (Number.isFinite(reading.at)) cell.textContent = `${pointedAt == null ? (boardOf() ? `最近一次读数 ${dayClock(new Date(reading.at * 1000).toISOString())}` : readAt(reading.at * 1000)) : `所指记录 ${stamp(reading.at * 1000)}`} · ${reading.value} 个`;
     }
   });
