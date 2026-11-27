@@ -661,6 +661,7 @@
   };
   const focusColor = category => V.hues[catHue(category)] || catHue(category);
   const focusAppKey = name => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
+  const focusChartNames = new Map([['Google Chrome', 'Chrome'], ['Claude 桌面端', 'Claude']]);
   function renderFocusSummary(el, d) {
     const { summary: s, focus_rule: rule, focus_window: window } = d || {};
     const set = (key, markup) => {
@@ -719,8 +720,8 @@
     function fitLabels() {
       const fits = Array.from(chart.querySelectorAll('.focus-track__pill'), pill => {
         const labels = [...pill.querySelectorAll('.focus-track__label')];
-        const width = pill.clientWidth;
-        const fit = labels.findIndex(label => label.getBoundingClientRect().width + 8 <= width);
+        const width = pill.getBoundingClientRect().width;
+        const fit = labels.find(label => label.getBoundingClientRect().width <= width)?.dataset.label ?? '-1';
         const badge = pill.querySelector('.focus-track__longest');
         const edge = pill.nextElementSibling?.offsetLeft ?? pill.parentElement.clientWidth;
         const beside = badge && width >= badge.offsetWidth && edge - pill.offsetLeft - width >= badge.offsetWidth + 4;
@@ -746,13 +747,12 @@
       rows = (d?.focus || []).map((f, id) => {
         const category = apps.get(focusAppKey(f.programs[0].name))?.category || 'other';
         const names = f.programs.map(p => sp(p.name));
-        const programLabels = f.programs.map((p, i) => {
-          const tag = label(p) || (viewer === 'owner' ? label(apps.get(focusAppKey(p.name))) : '');
-          return `<span class="focus-program">${esc(names[i])}${tag}</span>`;
-        });
+        const tags = f.programs.map(p => label(p) || (viewer === 'owner' ? label(apps.get(focusAppKey(p.name))) : ''));
+        const programHtml = (name, i) => `<span class="focus-program">${esc(name)}${tags[i]}</span>`;
+        const trackNames = names.slice(0, 2).map(name => range === '72h' ? focusChartNames.get(name) ?? name : name);
         const a = sec(f.from), b = sec(f.to), time = `${hm(a)}–${hm(b)}`, duration = read(f, 'seconds', n => focusDuration(n, true));
         return { id, a, b, category, color: focusColor(category), date: md(a), time, duration,
-          programHtml: programLabels.join('、'), trackPrograms: programLabels.slice(0, 2).join('、'),
+          programHtml: names.map(programHtml).join('、'), trackPrograms: trackNames.map(programHtml).join('、'),
           detail: `${names.join('、')} · ${time} · ${duration}` };
       });
       count = d?.summary?.focus_count ?? rows.length;
@@ -776,6 +776,7 @@
   function renderTrack(d, rows, longest) {
     const from = sec(d?.focus_window?.from), to = sec(d?.focus_window?.to), day = 86400;
     if (!d?.focus || !(to > from)) return `<p class="vz-wait">${esc(missing())}</p>`;
+    const stackLabels = shownRange === '72h';
     const position = (start, end, midnight) => `left:${(start - midnight) / day * 100}%;width:${(end - start) / day * 100}%`;
     const days = new Map();
     for (let midnight = dayStart(from); midnight < to; midnight += day) {
@@ -793,10 +794,17 @@
       const main = parts.reduce((best, p) => !best || p.b - p.a > best.b - best.a ? p : best, null);
       for (const p of parts) {
         const duration = esc(row.duration), timed = `${row.time} · ${duration}`;
-        const labels = p === main ? [`${row.trackPrograms} · ${timed}`, timed, duration] : [];
+        // 短时间窗的色带有竖向空间，单行放不下时先分行，再按程序、起止的顺序省略。
+        const labels = p === main ? [
+          ['0', `${row.trackPrograms} · ${timed}`],
+          ...(stackLabels ? [['stack', `${row.trackPrograms}<br>${row.time}<br>${duration}`]] : []),
+          ['1', timed],
+          ...(stackLabels ? [['stack-time', `${row.time}<br>${duration}`]] : []),
+          ['2', duration],
+        ] : [];
         days.get(p.midnight).pills.push(`<span class="focus-track__pill" data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${row.color}">
           <button type="button" class="focus-track__open" aria-pressed="false" aria-label="${esc(row.detail)}"></button>
-          ${labels.map((label, i) => `<span class="focus-track__label" data-label="${i}">${label}</span>`).join('')}
+          ${labels.map(([form, label]) => `<span class="focus-track__label" data-label="${form}">${label}</span>`).join('')}
           ${p === main && row.id === longest ? '<span class="focus-track__longest">最长</span>' : ''}</span>`);
       }
     }
