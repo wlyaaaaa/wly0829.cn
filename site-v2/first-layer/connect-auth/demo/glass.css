@@ -313,6 +313,7 @@ body {
   min-height: clamp(188px, 24vh, 260px);
 }
 .page--auth .cell__acts { flex-wrap: wrap; margin-top: auto; padding-top: 18px; }
+.cell__stale-note { flex-basis: 100%; color: var(--muted); font-size: 13px; line-height: 18px; }
 .page--auth .links .link__glass { min-height: clamp(116px, 14vh, 156px); }
 
 /* 灯：放在右上角，像一件东西上的指示灯，和名字齐 */

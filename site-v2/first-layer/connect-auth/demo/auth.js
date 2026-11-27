@@ -523,6 +523,7 @@
   const offlineNote = document.querySelector('.auth-offline');
   function render() {
     const missingStatus = '授权状态暂时读不到，刷新后再试。';
+    const staleStatus = '状态不是最新的，刷新后再试';
     const now = disconnected ? Date.parse(meta.at) / 1000 : clock();
     if (unlocking() && !busy && !canOfferWindowsUnlock()) setOpen(null);
     offlineNote.hidden = !disconnected;
@@ -560,8 +561,14 @@
         // Windows 解锁也随时能点：读数旧了、读不准照样开码格，由电脑那头按真状态办
         const anytime = (kind === 'close' || kind === 'unlock') && !local;
         const why = disconnected ? offlineNote.lastElementChild.textContent : !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
-          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || kind !== 'unlock' && !state.state_version) ? '状态不是最新的，刷新后再试' : '';
+          : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || kind !== 'unlock' && !state.state_version) ? staleStatus : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
+        const sampled = grant?.observed_at_unix;
+        if (why === staleStatus && Number.isFinite(sampled) && sampled > 0 && Math.abs(now - sampled) > 120) {
+          const note = document.createElement('span'); note.className = 'cell__stale-note';
+          note.textContent = `状态停在 ${window.Live.stamp(sampled * 1000).slice(-5)}，读到新的才能办`;
+          acts.append(note);
+        }
         // 配对设备点锁定个人资料也开码格（要输码），只有结束授权、锁屏还是“再点一下确认”
         const inline = local || kind === 'close' && meta.viewer?.kind === 'owner' && !privateState && key !== 'pd';
         if (inline) b.setAttribute('aria-expanded', String(inlineAction?.key === key && inlineAction?.kind === kind));
