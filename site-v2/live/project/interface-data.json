@@ -23,11 +23,6 @@
     ["/live/project/interfaces/pc-panel-hub/01-thumb.webp", "/live/project/interfaces/pc-panel-hub/01.png", "机箱竖屏这一刻的画面：时间天气、CPU、显卡、内存、硬盘读写和最忙的几个程序（11 月 26 日 10:54，程序自己写出的那一帧）"],
     ["/live/project/interfaces/pc-panel-hub/02-thumb.webp", "/live/project/interfaces/pc-panel-hub/02.webp", "曲面屏平时的样子：没事时只在壁纸上显示手机电量和时间（11 月 26 日晚上，AI 在后台截）"]
   ],
-  "video-scaffold": [
-    ["/live/project/interfaces/video-scaffold/01-thumb.webp", "/live/project/interfaces/video-scaffold/01.webp", "有声预览页：左边选场，点一个字跳到那一秒，能调动画跟哪句词（测试样片）"],
-    ["/live/project/interfaces/video-scaffold/02-thumb.webp", "/live/project/interfaces/video-scaffold/02.webp", "自动做出来的封面（测试样片，标题是测试名）"],
-    ["/live/project/interfaces/video-scaffold/03-thumb.webp", "/live/project/interfaces/video-scaffold/03.webp", "成片里的一帧：字叠在循环的玻璃背景上（测试样片）"]
-  ],
   "localocr": [
     ["/live/project/interfaces/localocr/01-thumb.webp", "/live/project/interfaces/localocr/01.webp", "原图：一张合成的采购单，有标题、六列表格和合计"],
     ["/live/project/interfaces/localocr/02-thumb.webp", "/live/project/interfaces/localocr/02.webp", "本机认出来的结果：六列、五行和合计都对（9 月 3 日实际输出）"]
