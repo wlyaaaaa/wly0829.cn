@@ -19,6 +19,7 @@
 #attention .stut__card { min-height: 0; grid-template-columns: 80px 136px minmax(0,1fr); align-items: center; }
 #attention .stut__t { grid-row: auto; }
 #attention .stut__s { white-space: normal; overflow-wrap: anywhere; }
+#attention .notify-nw { white-space: nowrap; }
 #attention .grp__chapter { min-height: 0; }
 #attention .grp:not(.is-open) .grp__chapter { min-height: 0; }
 #attention .card__glow { opacity: .08; }
