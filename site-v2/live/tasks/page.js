@@ -403,7 +403,9 @@
     box.hidden = false;
     box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
     const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
-    U.list(box.querySelector('ul'), list.length ? list.slice(0, 6).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间'), { animate: false });
+    const firstRows = list.length ? list.slice(0, 6).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间');
+    if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace('下次运行时间', '<span class="task-phrase">$&</span>');
+    U.list(box.querySelector('ul'), firstRows, { animate: false });
     U.list(box.querySelector('details ul'), list.slice(6).map(entry), { animate: false });
     box.querySelector('details').hidden = list.length <= 6;
     const moreLabel = `<span class="disclosure-closed">再看 ${list.length - 6} 个</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
