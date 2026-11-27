@@ -1608,7 +1608,7 @@
       rows.push({ key: 'net', cls: 'notice glass', html: `${lamp('red')}<a class="head__tail--link" href="${esc(route('/live/computer/#exits'))}">${esc(text)} <span class="more__chev">›</span></a>${U.actions(item, item.actions)}` });
     }
     if (home?.needs?.phone) {
-      const item = { id: 'phone', text: home.needs.phone.text, actions: [{ kind: 'copy', label: '问情况', intent: 'ask' }] };
+      const item = { id: 'phone', text: viewer === 'public' && typeof home.needs.phone.text === 'string' ? addressed(home.needs.phone.text).replace('这里的事请自己看', '相关事项等本人查看') : home.needs.phone.text, actions: [{ kind: 'copy', label: '问情况', intent: 'ask' }] };
       rows.push({ key: 'phone', cls: 'notice glass', html: `${lamp('red')}<a class="head__tail--link" href="${esc(route('/live/notifications/'))}">${U.fieldHtml(item.text, { name: '提醒', kind: viewer })} <span class="more__chev">›</span></a>${U.actions(item, item.actions)}` });
     }
     // AI 留言（选了“实况”的那几条，后台 ai-messages 读口）：一条一行，标题、时刻，正文点“全文”展开；到期后台自己撤
