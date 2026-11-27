@@ -6,6 +6,18 @@
 .hl-title::before,
 .pj-board--health .pj-card > .pj-sec:first-of-type > .pj-part > b::before { content: ""; display: inline-block; width: 4px; height: 17px; margin: 0 10px 0 0; border-radius: 2px; background: var(--hl-green); vertical-align: -2px; }
 
+/* 读数那一排（全站共用的格子）只在这一页调第一格：它的说明比别页长，窄格里会把“采集成功”拆成两行、“到”单独掉行。
+   宽屏第一格多留一点宽度；窄屏（≤1100 像素）第一格占两格、整排五格一行排匀；第一格的字只在空格和标点处折行 */
+.page--project:has(.pj-board--health) .pj-strip > .pj-cell:first-child :is(.pj-cell__k, .pj-cell__sub) { word-break: keep-all; overflow-wrap: normal; }
+@media (min-width: 1101px) {
+  .page--project:has(.pj-board--health) .pj-strip { grid-template-columns: minmax(186px, 1.3fr) repeat(calc(var(--pj-cells, 6) - 1), minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+  .page--project:has(.pj-board--health) .pj-strip { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .page--project:has(.pj-board--health) .pj-strip > .pj-cell:first-child { grid-column: span 2; }
+  .page--project:has(.pj-board--health) .pj-strip > .pj-cell:nth-child(5)::before { content: none; }
+}
+
 /* ============ 通栏：手环记录齐不齐 ============ */
 .page--project .hl-wear { margin-top: var(--pj-gap); }
 .hl-wear__head { display: flex; align-items: center; gap: 16px; margin: 0 0 12px; }
@@ -30,7 +42,7 @@
 .hl-cal > i.is-wait, .hl-legend i.is-wait { background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 1px transparent; outline: 1px dashed #9d9b93; outline-offset: -1px; }
 .hl-month.is-quiet .hl-cal > i:not(.is-pad) { background: rgb(20 20 19 / .05); }
 .hl-month__sum { margin: 7px 0 0; font-size: 12.5px; line-height: 18px; color: #3d3c38; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.hl-month.is-quiet .hl-month__sum { color: #8f8d86; }
+.hl-month.is-quiet .hl-month__sum { color: #6b6a64; }
 
 /* 图例 */
 .hl-legend { display: flex; flex-wrap: wrap; gap: 6px 26px; margin: 16px 0 0; padding: 0 0 0 8px; list-style: none; font-size: 12.5px; line-height: 18px; color: #5d5c56; }
@@ -47,7 +59,7 @@
 .hl-stat > b small { margin-left: 4px; font-size: 13px; font-weight: 400; color: #68665f; }
 .hl-recent { flex: 1 1 320px; min-width: 0; margin: 0; padding: 0 22px; border-left: 1px solid rgb(20 20 19 / .08); font-size: 14px; line-height: 24px; font-weight: 600; color: var(--ink); text-wrap: pretty; }
 .hl-recent b { margin: 0 2px; font-size: 22px; font-weight: 700; color: var(--hl-green); font-variant-numeric: tabular-nums; vertical-align: -1px; }
-.hl-cut { margin-left: auto; padding: 0 4px 0 12px; font-size: 12.5px; line-height: 18px; color: #8f8d86; white-space: nowrap; }
+.hl-cut { margin-left: auto; padding: 0 4px 0 12px; font-size: 12.5px; line-height: 18px; color: #5f5e58; white-space: nowrap; }
 
 /* ============ 下面三块：左（AI 答到哪天／更多数据）、中（AI 能分析哪些数据）、右（简报／最近改动），底边对齐 ============ */
 .page--project #pj-board.pj-board--health:not(.is-single) { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: stretch; }
@@ -91,7 +103,7 @@
 /* 有待审时多一行：琥珀色底，写原来页面那句和它的时刻 */
 .hl-pending { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 10px 0 0; padding: 7px 12px; border-radius: 10px; background: rgb(242 165 110 / .16); box-shadow: inset 0 0 0 1px rgb(214 128 60 / .22); font-size: 13px; line-height: 20px; color: #3d3c38; }
 .hl-pending b { font-weight: 700; color: #a4561c; }
-.hl-pending small { margin-left: auto; font-size: 12px; color: #8f8d86; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-pending small { margin-left: auto; font-size: 12px; color: #5f5e58; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* 访客看不到时原位那一句（共用写法）：大号读数的位置也照正文字号写 */
 .hl-big.hl-locked { font-size: 15px; line-height: 24px; font-weight: 400; color: var(--ink); }
@@ -121,23 +133,17 @@
 .pj-card[data-card="health-kinds"] .pj-viz > :nth-last-child(2) { margin-bottom: 14px; }
 
 /* —— 更多数据：两组“名称……数字” —— */
-/* 卡窄（宽屏时在左栏）两组上下排；卡宽（窄屏排成一栏时）左右排 */
-.pj-card[data-card="health-more"] { container-type: inline-size; }
-.pj-card[data-card="health-more"] .pj-viz { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
-.hl-grp { min-width: 0; }
-.hl-grp + .hl-grp { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--hair); }
-@container (min-width: 520px) {
-  .pj-card[data-card="health-more"] .pj-viz { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hl-grp { padding: 0 16px 0 0; }
-  .hl-grp + .hl-grp { margin-top: 0; padding: 0 0 0 16px; border-top: 0; border-left: 1px solid rgb(20 20 19 / .08); }
-}
-.hl-grp__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 6px; font-size: 12px; line-height: 18px; color: #68665f; }
+/* 宽屏两组并排（照图），窄屏（≤1100 像素）上下排 */
+.pj-card[data-card="health-more"] .pj-viz { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.hl-grp { min-width: 0; padding: 0 14px 0 0; }
+.hl-grp + .hl-grp { padding: 0 0 0 14px; border-left: 1px solid rgb(20 20 19 / .08); }
+.hl-grp__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 6px; font-size: 12px; line-height: 18px; color: #5f5e58; }
 .hl-grp__head b { padding: 2px 9px; border-radius: 7px; background: rgb(0 166 80 / .1); font-size: 12.5px; font-weight: 700; color: #0a6b3a; }
 .hl-grp__head span { white-space: nowrap; }
 .hl-grp ul { margin: 0; padding: 0; list-style: none; }
-.hl-grp li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 13px; line-height: 19px; }
+.hl-grp li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 12.5px; line-height: 18px; }
 .hl-grp li > span { min-width: 0; color: var(--ink); text-wrap: pretty; }
-.hl-grp li > span small { display: block; font-size: 11.5px; color: #8f8d86; }
+.hl-grp li > span small { display: block; font-size: 11.5px; color: #5f5e58; }
 .hl-grp li > b { flex: none; white-space: nowrap; font-weight: 700; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
 
 /* —— 最近的简报：五行，日期时间、取回方式小签、资料到哪天、（本人版）在电脑上打开 —— */
@@ -153,6 +159,9 @@
 
 /* 窗口窄（≤1100 像素）：排成一栏，先后照宽屏从左到右、从上到下；12 个小月历排成 6×2 */
 @media (max-width: 1100px) {
+  .pj-card[data-card="health-more"] .pj-viz { grid-template-columns: minmax(0, 1fr); }
+  .hl-grp { padding: 0; }
+  .hl-grp + .hl-grp { margin-top: 10px; padding: 12px 0 0; border-left: 0; border-top: 1px solid var(--hair); }
   .hl-months { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 16px; }
   .hl-month:nth-child(6n + 1) { border-left: 0; }
   .hl-cal { max-width: 112px; }

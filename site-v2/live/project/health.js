@@ -12,7 +12,8 @@
   const OWN = new Set(['wear_calendar', 'collection_summary', 'record_inventory', 'brief_list']);   // 新字段：放在哪一节都从通用卡里拿掉
   const COLUMNS = { 'health-answer': 0, 'health-kinds': 0, 'health-more': 0, artifacts: 1, changes: 1 };
   const NARROW = '(max-width: 1100px)';   // 窗口窄时排成一栏（和 health.css 的 @media 同一个宽度）
-  const TOP = 8, BRIEFS = 5;   // 种类露几种、简报露几份
+  const TOP = 8, BRIEFS = 5;   // 种类至少露几种（卡比内容高时按空当多露几种，见 fitKinds）、简报露几份
+  let shownKinds = TOP;
   const KIND = { weekly: ['每周取回', 'is-weekly'], on_demand: ['按需取回', 'is-demand'] };
   const RECORDS = section => `/live/records/?project=personal-health&section=${encodeURIComponent(section)}`;
 
@@ -231,8 +232,8 @@
     out.push(`<p class="hl-sub">手环原件${md(inv.through) ? ` · 截止 ${esc(md(inv.through))}` : ''} · 程序自动数，增删种类跟着变</p>`);
     const max = items[0]?.count || 1;
     const row = x => `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar"><i style="width:${Math.max(1.5, x.count / max * 100).toFixed(2)}%"></i></span><b>${esc(wan(x.count))}</b></li>`;
-    const rest = items.length - TOP;
-    out.push(`<ul class="hl-kinds">${items.slice(0, open || rest <= 0 ? items.length : TOP).map(row).join('')}</ul>`);
+    const shown = Math.max(TOP, shownKinds), rest = items.length - shown;
+    out.push(`<ul class="hl-kinds">${items.slice(0, open || rest <= 0 ? items.length : shown).map(row).join('')}</ul>`);
     if (rest > 0) out.push(`<button type="button" class="hl-pill hl-more-kinds" aria-expanded="${open}">${open ? '收起' : `其余 ${esc(int(rest))} 种`} <span class="more__chev">›</span></button>`);
     out.push(enteredHtml(v));
     return out.join('');
@@ -317,7 +318,7 @@
     if (k) opened.kinds = !opened.kinds; else opened.briefs = !opened.briefs;
     const v = lastD.healthView, card = k ? 'health-kinds' : 'artifacts', b = blockOf(card);
     if (!b) return;
-    if (k) U.html(b.viz, kindsHtml(v, opened.kinds), false);
+    if (k) { U.html(b.viz, kindsHtml(v, opened.kinds), false); if (!opened.kinds) refit(); }
     else { head(b, '最近的简报', briefsRight(v, opened.briefs)); U.html(b.viz, briefsHtml(v, viewing, opened.briefs), false); }
   });
   const made = new Map();
@@ -342,8 +343,36 @@
     card('health-more', '更多数据', moreHtml(v));
     // 卡名取“artifacts”：读数那一排“最近产物 ›”（#artifacts）点过来落在这张卡
     card('artifacts', '最近的简报', briefsHtml(v, viewer, opened.briefs), briefsRight(v, opened.briefs));
+    refit();
     return out;
   }
+  // “AI 能分析哪些数据”比内容高时（右栏最近改动更高、卡被拉齐），按空当多露几种，不在中间留一大块白；
+  // 卡的大小仍由两边定，以后种类再多也一样大，露不下的收在“其余 N 种”
+  function fitKinds(again = 2) {
+    const b = blockOf('health-kinds'), v = lastD?.healthView;
+    if (!b || !v || opened.kinds) return;
+    const list = b.viz.querySelector('.hl-kinds'), foot = b.viz.querySelector('.hl-entered'), last = b.viz.querySelector('.hl-more-kinds') || list;
+    if (!list || !foot || !last) return;
+    const row = list.lastElementChild?.offsetHeight || 34;
+    const spare = foot.offsetTop - (last.offsetTop + last.offsetHeight) - row;   // 底下留一行的空，不贴死
+    const total = (Array.isArray(v.inventory?.items) ? v.inventory.items : []).filter(x => x?.label && finite(x.count)).length;
+    const want = Math.min(total, Math.max(TOP, shownKinds + Math.floor(spare / row)));
+    if (want === shownKinds) return;
+    shownKinds = want;
+    U.html(b.viz, kindsHtml(v, false), false);
+    if (again) requestAnimationFrame(() => fitKinds(again - 1));
+  }
+  const refit = () => requestAnimationFrame(() => requestAnimationFrame(() => fitKinds()));
+  let fitTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(fitTimer);
+    fitTimer = setTimeout(() => {
+      const b = blockOf('health-kinds');
+      if (b && lastD && shownKinds !== TOP && !opened.kinds) { shownKinds = TOP; U.html(b.viz, kindsHtml(lastD.healthView, false), false); }
+      refit();
+    }, 260);   // page.js 摆完卡（200 毫秒）以后再量
+  });
+  document.fonts?.ready?.then(refit);
   // 卡放哪一栏：照图固定；出现别的卡时交回 page.js 按高度摆；窗口窄时排成一栏，先后见 health.css
   const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.(NARROW).matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
 
