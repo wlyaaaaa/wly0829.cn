@@ -626,9 +626,33 @@
       return { id, name: names[id] || [x.label, x.name, x.title, x.text].find(v => sp(v) && !/^(?:没有记录|这一项)$/.test(sp(v))) || id, lamp: U.status(stale ? { level: 'gray' } : x, { small: true }).lamp, status, note };
     });
   }
+  function exitGuard(guard) {
+    let label = '读不到', tone = 'gray', note = '';
+    switch (guard?.mode) {
+      case 'observe':
+        label = '只观察'; tone = 'amber';
+        note = ' · 两个代理软件撞了只记下，不替你关；住宅出口的程序没在跑会自动拉起';
+        break;
+      case 'enforce': label = '会自己动手'; tone = 'green'; break;
+      case 'off': case 'disabled': case 'stopped': label = '没开'; break;
+    }
+    const at = guard?.last_action_at, action = typeof at === 'string' ? Date.parse(at) : NaN;
+    let last = '';
+    if (Number.isFinite(action)) {
+      const date = beijingDay(action / 1000) === beijingDay(Date.now() / 1000) ? '' : `${U.date(at)} `;
+      last = `上次动手 ${date}${U.time(at)}`;
+    } else if (at === null && Number.isFinite(Date.parse(guard.observed_at))) {
+      last = '还没动过手';
+    }
+    return `代理守护　<span class="exit-guard__mode" data-tone="${tone}">${label}</span>${note}${last ? ` · <span class="exit-guard__action">${last}</span>` : ''}`;
+  }
   function exitsChapter(el) {
-    el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><p class="grp-split__k">连得上吗</p><div data-exits></div><div data-draw10-network></div></section>';
-    drawExits = () => { U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || !['还没读到', '没有记录'].includes(r.status)); /* 块已经说没存下来，下面不再列一串“没有记录”（r83 返修第二轮） */ el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`); };
+    el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><p class="grp-split__k">连得上吗</p><p class="exit-guard"></p><div data-exits></div><div data-draw10-network></div></section>';
+    const guard = el.querySelector('.exit-guard');
+    drawExits = () => {
+      U.html(guard, exitGuard(exits?.guard));
+      U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || !['还没读到', '没有记录'].includes(r.status)); /* 块已经说没存下来，下面不再列一串“没有记录”（r83 返修第二轮） */ el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`);
+    };
     finishExitAnchor(el.querySelector("#exits"));
     return { set: drawExits };
   }
