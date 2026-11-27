@@ -29,6 +29,7 @@
   };
   function card(make, key, title, icon, html, extra = '') {
     const b = make(key, title);
+    b.el.hidden = !title;
     U.html(b.head, `<svg class="career-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[icon]}"/></svg><b>${esc(title)}</b>${extra}`, false);
     U.html(b.viz, html, false);
     return b;
@@ -40,6 +41,7 @@
     const total = completed?.total ?? completed?.prepared, done = completed?.done ?? completed?.count;
     const exercises = value(m('exercises')), groups = exercises?.groups?.map(it => `${it.label} ${it.count} ${it.unit}`).join(' · ');
     const next = viewer === 'owner' && line?.next_first_step;
+    const preview = next?.text?.match(/^.{30,48}(?=[，。；？！])/)?.[0] || next?.text?.slice(0, 48);
     const read = (key, label, tail) => tile(label, count(value(m(key)), m(key)?.unit), tail);
     const missing = line?.missing_minutes_dates?.map(at => date(at)).filter(Boolean).join('、');
     const meter = Number.isInteger(total) && total > 0 && Number.isFinite(done) ? `<div class="career-hero-num">${count(done)} / ${count(total, '课')} <small>课程上完</small></div>
@@ -48,7 +50,7 @@
     const body = `${meter}<p class="career-started"><b>开了头没上完</b> · ${esc(lesson || text(m('started')))}</p>
       <div class="career-tiles">${read('class_days', '有上课记录', detail(m('class_days')))}${read('days30', '近 30 天')}${read('days7', '近 7 天')}${read('known_minutes', '已记时长', missing ? `<small>${esc(missing)}那次没记</small>` : '')}</div>
       <div class="career-tiles career-tiles--practice">${read('quiz', '复习抽问答过')}${tile('自己动手练习', esc(groups || text(m('exercises'))))}</div>
-      ${next?.text ? `<aside class="career-next"><b>⊙ 下一步${next.minutes ? ` · 约 ${esc(next.minutes)} 分钟` : ''}</b>${U.visitorHiddenTag('下一步', '', viewer)}<p>${esc(next.text)}</p></aside>` : ''}`;
+      ${preview ? `<aside class="career-next"><b>⊙ 下一步${next.minutes ? ` · 约 ${esc(next.minutes)} 分钟` : ''}</b>${U.visitorHiddenTag('下一步', '', viewer)}<details><summary aria-label="下一步全文"><span>${esc(preview)}${preview.length < next.text.length ? '……' : ''}</span></summary><p>${esc(next.text)}</p></details></aside>` : ''}`;
     const stale = line?.stale_after && Date.now() - Date.parse(iso(line.checked_at)) > line.stale_after * 1000;
     const through = [cutoff(line?.progress_at, '学习记录整理于'), cutoff(line?.checked_at, '最近核对', { stale: !!stale })].filter(Boolean).join(' · ');
     return card(make, 'career-progress', '学到哪了', 'book', (metrics?.some(m => m.value != null || m.text) ? body : MISSING) + foot(through, note(metrics)));
@@ -67,22 +69,16 @@
   }
 
   function goal(make, line, viewer) {
-    if (!line?.goal?.name) {
-      const empty = card(make, 'career-goal', '', 'goal', '');
-      empty.el.hidden = true;
-      return empty;
-    }
+    if (!line?.goal?.name) return card(make, 'career-goal', '', 'goal', '');
     const { name, metrics, showcase } = line.goal, m = get(metrics), a = m('interviews'), b = m('interview_files');
-    const rows = metrics?.filter(it => it !== a && it !== b).map(it => row(it.label, it.value == null ? esc(text(it)) : count(it.value, it.unit))).join('');
+    const rows = metrics?.filter(it => it !== a && it !== b).map(it => row(it.label, it.value == null ? esc(text(it).replace(/^这一轮.+?还没开始记.+。$/, '还没开始记')) : count(it.value, it.unit))).join('');
     const items = showcase?.items?.map(it => {
       const href = /^https:\/\/wly0829\.cn\/live\/project\/\?id=[\w.-]+$/.test(it.open || '') ? related(new URL(it.open).pathname + new URL(it.open).search) : '';
       return href ? `<a href="${esc(href)}" title="${esc(it.title)}"><span>${esc([it.title?.split('：')[0], it.kind].filter(Boolean).join(' · '))}</span><b>›</b></a>` : esc(it.title);
     }).join('');
     const html = `<div class="career-goal"><section><h4>进展</h4>${rows || MISSING}</section><section><h4>${esc(a?.label?.replace(/篇数$/, '') || '资料')}</h4><div class="career-hero-num">${count(value(a), a?.unit)}</div>${row('目录文件', count(value(b), b?.unit))}</section><section><h4>可以拿来讲的作品</h4><div class="career-works">${items || MISSING}</div></section></div>`;
     const when = [cutoff(line.progress_at, '进展截止'), cutoff(a?.at, `${a?.label?.replace(/资料篇数$/, '') || '资料'}截止`, a), cutoff(showcase?.at, '作品截止')].filter(Boolean).join(' · ');
-    const block = card(make, 'career-goal', `这条线的目标：${name}`, 'goal', html + foot(when, note(metrics)), U.visitorHiddenTag('这条线的目标', '', viewer));
-    block.el.hidden = false;
-    return block;
+    return card(make, 'career-goal', `这条线的目标：${name}`, 'goal', html + foot(when, note(metrics)), U.visitorHiddenTag('这条线的目标', '', viewer));
   }
 
   let selected, current, draw = () => {}, artifactHost, art, first, artPage = 0, loading = false, failed = false, viewer, subscription;
