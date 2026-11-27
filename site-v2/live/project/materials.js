@@ -99,9 +99,10 @@
   let historyAt = 0, historyPage = 0;
   function inventory(data) {
     const metric = data.readings.inventory_history, previous = data.readings.inventory_files;
-    const history = metric?.value?.items ?? (previous?.value ? [{ at: previous.at, scope: previous.scope,
+    const entries = metric?.value?.items ?? (previous?.value ? [{ at: previous.at, scope: previous.scope,
       metrics: { source_scope_nonmedia_file_entries: previous.value, discoverable_not_exact_file_entries: valueOf(data, 'discoverable_files') },
       ...valueOf(data, 'inventory_progress') }] : null);
+    const history = entries?.filter((item, i) => !i || dayOf(item.at).slice(0, 7) !== dayOf(entries[i - 1].at).slice(0, 7)) ?? null;
     const page = history?.slice(historyPage * HISTORY_PAGE, (historyPage + 1) * HISTORY_PAGE) || [], entry = page[historyAt] || page[0];
     const totals = entry?.metrics?.source_scope_nonmedia_file_entries, other = entry?.metrics?.discoverable_not_exact_file_entries;
     const newest = dayOf(history?.[0]?.at);
