@@ -1628,13 +1628,16 @@
         const el = document.createElement(tag);
         el.className = 'vz-weave__pill';
         el.style.cssText = 'top:2px;left:0;border:0;cursor:pointer;max-width:100%;overflow:hidden;white-space:normal;line-height:12px';
+        if (tag === 'select') { el.style.appearance = 'none'; el.style.whiteSpace = 'nowrap'; }
         return el;
       };
-      const ruler = pill('button'), clusters = [];
-      events.append(ruler);
+      const ruler = pill('button'), selectRuler = pill('select'), clusters = [];
+      selectRuler.add(new Option(''));
+      events.append(ruler, selectRuler);
       const place = (first, last) => {
-        ruler.textContent = label(first, last);
-        const size = ruler.offsetWidth;
+        const text = label(first, last), single = first === last;
+        if (single) ruler.textContent = text; else selectRuler.options[0].text = text;
+        const size = Math.ceil((single ? ruler : selectRuler).getBoundingClientRect().width);
         const center = (x(hits[first].t) + x(hits[last].t)) * width / 200;
         return { first, last, size, left: Math.max(0, Math.min(center - size / 2, width - size)) };
       };
@@ -1644,6 +1647,7 @@
         clusters.push(group);
       }
       ruler.remove();
+      selectRuler.remove();
       const pick = m => opts.sync?.mark(m.t, detail(m));
       for (const { first, last, size, left } of clusters) {
         const single = first === last, el = pill(single ? 'button' : 'select');
@@ -1654,7 +1658,6 @@
           el.title = `${fullTime(hits[first].t)} · ${detail(hits[first])}`;
           el.addEventListener('click', () => pick(hits[first]));
         } else {
-          el.style.appearance = 'none';
           el.setAttribute('aria-label', `${label(first, last)} · ${fullTime(hits[first].t)} 至 ${fullTime(hits[last].t)}`);
           el.add(new Option(label(first, last), ''));
           for (let i = first; i <= last; i++) el.add(new Option(`${fullTime(hits[i].t)} · ${detail(hits[i])}`, i));

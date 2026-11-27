@@ -174,7 +174,7 @@
     const fails = g.last?.result === 'error' && window.StorageCleanup.failures?.(g.last, viewer), restFails = fails ? fails.slice(2).reduce((n, f) => n + f.n, 0) : 0;
     const why = fails ? fails.slice(0, 2).map(f => f.text).join('；') + (restFails ? `；还有 ${restFails} 项` : '') : K.field(g.last?.error, '清理出错原因', viewer) || '这一轮没写原因';
     const reason = g.deleted > 0 ? '看被删的是哪几件' : g.last?.result === 'error' ? `出错原因：${why}` : `每 ${g.hours} 小时该跑一轮，上次是 ${when(g.last.finished_at)}`;
-    return `<a href="#cleanup-card">${esc(reason)}，看下面“自动清理” ›</a>`;
+    return `<a href="#cleanup-card">${esc(reason)}，看下面<span class="cleanup-link-name">“自动清理”</span> ›</a>`;
   }
   function attention(d) {
     const volumes = d?.volumes || [];
