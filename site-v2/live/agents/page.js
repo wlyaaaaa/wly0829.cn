@@ -16,7 +16,7 @@
     PreInvocation: '叫模型前补状态', PostInvocation: '模型回完后', UserPromptSubmit: '收到消息时补状态', PreToolUse: '动工具前检查',
     PermissionRequest: '要批准时推手机', AutoReview: '宿主自带审批', PostToolUse: '工具用完补提醒', PreCompact: '压缩前留接续线索',
     SubagentStart: '帮手开场', SubagentStop: '帮手收尾', Stop: '收工检查', Notify: '收工推手机', Keepalive: '空等时叫醒',
-    StopFailure: '出错停下', Interrupt: '按停后清审批提醒', PluginStop: '插件的收工回调', PluginInterrupt: '插件的中断回调',
+    StopFailure: '出错停下', FailureRetry: '繁忙自动重试', Interrupt: '按停后清审批提醒', PluginStop: '插件的收工回调', PluginInterrupt: '插件的中断回调',
     PluginSubagentStop: '插件的帮手回调', SessionCostStart: '花费面板 · 开场', SessionCostAttach: '花费面板 · 挂到对话',
     SessionCostTurn: '花费面板 · 每轮开始', SessionCostChange: '花费面板 · 更新', SessionCostRender: '花费面板 · 画出来' };
   // 某家宿主没有这个当口时写原因和用什么兜（定稿卡-钩子清单 三家差异表）
@@ -42,7 +42,6 @@
   ]);
   // 每条钩子“为什么要它”：用人话说这条防的是什么。照钩子说明表（E:\.agents\config\hook-catalog.json）和三家适配专题写，后台给了 hook.why 就用后台的。
   const SAME = {
-    prompt: 'AI 自己不知道现在几点、个人资料锁没锁、你上回还有几道题没答；这条在你每发一条消息时补上，免得它把时间算错、在资料锁着时去用私人资料，或把还没结的题忘了。',
     helper: '派出去的帮手是从零开始的，不知道现在几点、自己是什么型号和档位、个人资料能不能用；这条在它开场时告诉它，免得它把时间写错或越过资料锁。',
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
@@ -60,9 +59,7 @@
   const WHY = {
     C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
     C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
-    C03: SAME.prompt,
     C04: '有些动作照规矩不该这样做（用错浏览器、派活走错路、反复读同一张图这类）；这条在动手前拦下，当场改对，不用事后返工。',
-    C05: 'AI 埋头干活时容易忘了登记工程、报估时、该查网时查网、长等时盯着；这条在工具用完时顺手提一句，不拦它。',
     C06: SAME.compact,
     C09: SAME.stop,
     C10: 'AI 收工后后台还有活在跑、却没人等结果，结果就没人收；这条等主对话空着够久还没人管，就叫醒原对话一次去收，每件只叫一次。',
@@ -75,22 +72,12 @@
     C17: '真正把花费画到面板上；没有它面板是空的。',
     C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机。',
     X01: 'Codex 开对话时不知道规矩是不是当前版、这是哪个项目；这条开场时核一下规矩入口，再递上工程和《他要什么》的位置，免得照旧规矩办事或在别的项目里动手。',
-    X02: SAME.prompt,
     X03: SAME.helper,
-    X04: '有些调用照规矩不该这样做（走错浏览器入口、派帮手走错路、查订阅、用过时的型号）；这条在动手前拦下，当场改对。',
-    X05: '工具用完时顺手提醒该查网、该报估时、该压缩了，并认出你已经答过的弹题和处理过的审批，免得同一件事反复问你。',
     X06: SAME.compact,
     X08: 'Codex 停下来等批准时，你不在电脑前它就一直卡着；这条把要你批准的事推到手机。',
     X09: SAME.stop,
-    X11: 'Codex 碰到要批准的动作，由它自带的审核模型代批，不用每次停下来等你；它看着不妥的照样拦下。',
-    X12: '给 Codex 的浏览器和电脑操作插件报一声“这一轮结束了”，让它把手上的操作收尾。',
-    X13: '你按停时通知浏览器和电脑操作插件也停手，免得对话停了它还在点。',
-    X14: '帮手干完时，让浏览器和电脑操作插件把那个帮手的操作收尾。',
     X15: '你按停以后，还在等的审批提醒就过时了；这条把它撤掉，免得停了还收到要你批准的推送。',
     A01: 'Antigravity 开对话时核一下规矩入口是不是当前版；桌面上的主对话再提醒它标一下这次能不能给外人看，免得照旧规矩办事，或把私事写在外人看得到的地方。',
-    A02: 'Antigravity 没有“收到消息”和“压缩前”这两个当口；这条在每次叫模型前补上时间、资料状态、没答的题和刚才的工具错误，顶上那两个当口的活。',
-    A04: '有些工具照规矩不该这样用（比如用它自带的生图、查订阅）；这条在动手前拦下。派帮手时还顺手告诉帮手时间、资料状态和型号。',
-    A05: '工具报错了模型自己未必注意到；这条把错误递给下一次叫模型，并登记你已经答过的弹题。',
     A06: SAME.stop,
   };
   const whyOf = hook => F(hook.why, '为什么要它') || esc(WHY[hook.id] || '');
@@ -463,14 +450,7 @@
     const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
     const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
     const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    // 按需更新快核（M928）钩子卡“什么时候跑／干什么”两格是规则仓 E:/.agents/config/hook-catalog.json 的 when/what 原样转出（JSON 写不了注释，记在这里），
-    // 页面不另算。下面几个数写死在目录句子里，核法照后台第 11 轮；变了改 hook-catalog.json 那句，再改这里的“现”：
-    // · C06/X06 压缩前最多等 45 秒：Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现 45；
-    // · C05/X05 对话用到 470K 词元提醒一次快压缩：E:/.agents/tools/claude_root_runtime.py 的提醒判断 used >= limit * .94（0.94 × 已登记压缩线，Codex 调同一入口），现 470K；
-    // · C10 空等 55 分钟叫醒：同文件 cache_keepalive_minutes() 默认值，和在用环境 EAGENT_CLAUDE_CACHE_KEEPALIVE_MINUTES（只能在 55 内缩短），现 55；
-    // · C18 限流等 10 分钟重试：同文件 retry_transient_stop_failure 的 delay_seconds，现 600 秒；
-    // · C06 约 490K、X06 500K：后台装上第 11 轮后分别从 Claude 设置 env.CLAUDE_AUTOCOMPACT_PCT_OVERRIDE（现 50，按约 980K 算）和 Codex config.toml 的
-    //   model_auto_compact_token_limit（现 500000）读，读不到才用目录里的回退句（约 490K、500K）；装上前是目录写死的句子，就照这两处核。
+    // 钩子六问照后台转出的现役 hook-catalog.json。变了改目录，网页不另抄参数。
     const what = F(hook.what, '干什么').split(/\r?\n/).filter(line => line.trim());
     const whatList = what.length ? `<ul class="ag-hook__what">${what.map(line => `<li>${line}</li>`).join('')}</ul>` : '';
     const facts = [['什么时候跑', F(hook.when)], ['干什么', whatList], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
