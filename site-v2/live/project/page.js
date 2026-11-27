@@ -26,6 +26,8 @@
   const id = params.get('id');
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents']);
   let interfaceLoad;
+  // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡
+  const custom = window.ProjectPages?.[id] || null;
   const artifactVersion = id === 'agents' && /^E\d+$/.test(params.get('artifact') || '') && params.get('artifact');
   function projectLookKey(id) {
     let hash = 0x811c9dc5;
@@ -844,6 +846,7 @@
     const allMetrics = (proj?.sections || []).flatMap(s => s.metrics || []), skillUsage = id === 'agents' ? V.skillData(allMetrics) : null;
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
+      if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board));
       for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, U.html, window.LiveViz.bars); left.push(b); }
       if (id === 'pcconfig' && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
@@ -1146,7 +1149,7 @@
     return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title }).replace(/<\/div>$/, `${svg}</div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
   }
   function renderStrip(d) {
-    const strip = part('links'), { head, tail } = heroCells(d), html = head.join('') + links(d) + tail.join('');
+    const strip = part('links'), { head, tail } = heroCells(d), html = (custom?.strip?.(d, projectViewer) || '') + head.join('') + links(d) + tail.join('');
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
     U.html(strip, html);
@@ -1333,6 +1336,7 @@
         opening = [];
       }
       projectViewer = viewer;
+      if (raw && custom?.adapt) raw = custom.adapt(raw);
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
       if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m

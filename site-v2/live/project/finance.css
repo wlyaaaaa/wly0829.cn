@@ -1,0 +1,97 @@
+/* 账房先生（/live/project/?id=personal-finance）自己的几块，finance.js 画；别的项目页用不到这些类名。
+   卡片材质、圆角、留白照项目页共用的 .pj-card / .glass；强调色只有网站的正绿。 */
+.page--project { --fin-plot: 270px; --fin-green: #00a650; }
+
+/* 关键数字第一格：格名后面挂“访客看不到” */
+.fin-cell .pj-cell__k { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; }
+.fin-dots { font-family: "Segoe UI", Arial, Helvetica, sans-serif; letter-spacing: .08em; font-weight: 700; color: var(--ink); white-space: nowrap; }   /* 中文字体里的 • 是全角，点会散开；用西文字体的半角点 */
+.pj-cell__v .fin-dots { font-size: clamp(17px, 1.8cqi, 21px); }
+.fin-miss { font-size: 13px; font-weight: 400; color: #8f8d86; }
+
+/* ============ 每月花多少、花在哪：通栏卡 ============ */
+.page--project .fin-spend { margin-top: var(--pj-gap); }
+.fin-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; margin: 0 0 14px; }
+.fin-title { font-size: 19px; line-height: 27px; letter-spacing: .04em; font-weight: 700; color: var(--ink); }
+.fin-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; color: #5d5c56; }
+.fin-legend li { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.fin-chip { flex: none; display: inline-block; width: 16px; height: 10px; border-radius: 3px; background: var(--c); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .45); }
+.fin-body { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+
+/* 柱子：左边纵坐标（只本人版有数），右边 12 个整月＋本月一根虚线柱 */
+.fin-chart { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: start; padding-top: 6px; }
+.fin-chart.is-bare { grid-template-columns: 10px minmax(0, 1fr); }
+.fin-y { position: relative; height: var(--fin-plot); }
+.fin-y span { position: absolute; right: 10px; bottom: var(--y); translate: 0 50%; font-size: 12px; line-height: 14px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-bars { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); column-gap: 10px; }
+.fin-grid { position: absolute; left: -6px; right: 0; top: 0; height: var(--fin-plot); border-left: 1px solid rgb(20 20 19 / .2); border-bottom: 1px solid rgb(20 20 19 / .2); pointer-events: none; }
+.fin-grid i { position: absolute; left: 0; right: 0; bottom: var(--y); border-top: 1px dashed rgb(20 20 19 / .08); }
+.fin-grid i::before { content: ""; position: absolute; left: -5px; top: -1px; width: 5px; border-top: 1px solid rgb(20 20 19 / .2); }
+.fin-bar { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: stretch; min-width: 0; margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.fin-bar__plot { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: var(--fin-plot); }
+.fin-bar__top { margin-bottom: 5px; font-size: 13px; line-height: 16px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-bar__stack { display: flex; flex-direction: column-reverse; width: min(100%, 64px); height: var(--h); min-height: 3px; border-radius: 7px 7px 2px 2px; overflow: hidden; background: rgb(255 255 255 / .4); transition: filter .2s ease, outline-color .2s ease; outline: 2.5px solid transparent; outline-offset: 3px; }
+.fin-bar__stack > i { display: block; flex: none; height: var(--s); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 88%, #fff), var(--c)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .5); }
+.fin-bar__x { margin-top: 8px; font-size: 12.5px; line-height: 17px; color: #5d5c56; text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-bar:hover .fin-bar__stack { filter: saturate(1.15) brightness(1.03); }
+.fin-bar:hover .fin-bar__x { color: var(--ink); }
+.fin-bar:focus-visible { outline: none; }
+.fin-bar:focus-visible .fin-bar__stack { outline-color: rgb(0 166 80 / .45); }
+.fin-bar[aria-pressed="true"] .fin-bar__stack { outline-color: var(--fin-green); }
+.fin-bar[aria-pressed="true"] .fin-bar__x { color: var(--ink); font-weight: 600; }
+/* 本月没过完：浅色虚线柱，单独放在最右，和整月隔开一点 */
+/* 没法按类拆的月：一整根浅灰带细斜纹，和“没分清”的灰分得开 */
+.fin-bar.is-gap .fin-bar__stack > i { background: repeating-linear-gradient(135deg, #e4e3e9 0 5px, #d6d5dc 5px 10px); }
+.fin-bar.is-current { margin-left: 6px; }
+.fin-bar.is-current .fin-bar__stack { border: 1.5px dashed rgb(20 20 19 / .3); background: rgb(255 255 255 / .5); }
+.fin-bar.is-current .fin-bar__stack > i { opacity: .5; }
+.fin-bar.is-current .fin-bar__x { display: flex; flex-direction: column; color: #8f8d86; }
+
+/* 右边面板：选中这个月的总额、各类金额和占比、比前 3 个月 */
+.fin-panel { min-width: 0; padding: 16px 20px 14px; border-radius: 16px; background: rgb(255 255 255 / .46); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .75), 0 10px 26px -20px rgb(40 30 90 / .4); }
+.fin-src { margin: 0 0 10px; padding: 0 0 9px; list-style: none; border-bottom: 1px solid rgb(20 20 19 / .08); font-size: 12.5px; line-height: 19px; color: #68665f; }
+.fin-panel__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 0 0 10px; }
+.fin-panel__month { font-size: 18px; line-height: 28px; font-weight: 700; color: var(--ink); }
+.fin-panel__total { font-size: 24px; line-height: 30px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fin-panel__head .live-mark { margin-left: 0; }
+.fin-rows { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; }
+.fin-rows li { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto 48px; align-items: center; column-gap: 10px; font-size: 13.5px; line-height: 22px; color: #3d3c38; }
+.fin-row__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fin-row__amt, .fin-row__pct { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-row__pct { color: #68665f; }
+.fin-empty { margin: 4px 0; font-size: 13.5px; color: #8f8d86; }
+.fin-cmp { margin: 12px 0 0; font-size: 14px; line-height: 22px; color: var(--ink); }
+.fin-em { font-weight: 700; color: var(--fin-green); }
+.fin-cmp .fin-dots { color: var(--fin-green); }
+.fin-unsure { margin: 4px 0 0; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
+.fin-unsure .fin-dots { font-weight: 600; color: #6f6e68; }
+.fin-foot { margin: 14px 0 0; font-size: 12.5px; line-height: 19px; color: #68665f; }
+
+/* ============ 钱现在大概多少 ============ */
+#finance-balance > .pj-part { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 0; padding-right: 0; }
+#finance-balance > .pj-part .live-mark__label { font-size: inherit; letter-spacing: normal; color: inherit; }   /* 段头里的 span 灰字规则别套到小签上 */
+.fin-big { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 18px; }
+.fin-big > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding-left: 16px; border-left: 1px solid rgb(20 20 19 / .08); }
+.fin-big > div:first-child { padding-left: 0; border-left: 0; }
+.fin-big span { font-size: 13.5px; line-height: 20px; color: #5d5c56; }
+.fin-big b { font-size: 24px; line-height: 32px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-big b small { margin-right: 6px; font-size: 15px; font-weight: 600; color: #5d5c56; }
+.fin-sub { margin: 6px 0 6px; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
+.fin-accts { margin: 0; padding: 0; list-style: none; }
+.fin-accts li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 6px 0; border-top: 1px solid rgb(20 20 19 / .07); font-size: 14.5px; line-height: 22px; }
+.fin-accts li:first-child { border-top: 0; }
+.fin-acct__name { font-weight: 600; color: var(--ink); }
+.fin-acct__amt { margin-left: auto; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-asof { position: relative; margin: 0; padding: 0 4px; border: 0; border-radius: 6px; background: none; font: inherit; font-size: 12.5px; line-height: 20px; color: #8f8d86; white-space: nowrap; }
+button.fin-asof { cursor: help; text-decoration: underline dotted rgb(20 20 19 / .28); text-underline-offset: 3px; -webkit-tap-highlight-color: transparent; }
+button.fin-asof:hover, button.fin-asof.is-open { color: var(--ink-soft); background: rgb(255 255 255 / .55); }
+button.fin-asof:focus-visible { outline: 2px solid var(--fin-green); outline-offset: 1px; }
+.fin-tip { position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 6; width: max-content; max-width: 300px; padding: 6px 11px; border-radius: 10px; background: rgb(255 255 255 / .97); box-shadow: 0 0 0 1px rgb(20 20 19 / .06), 0 8px 20px -8px rgb(20 28 36 / .35); font-size: 12.5px; line-height: 18px; color: var(--ink-soft); text-align: left; white-space: normal; text-decoration: none; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s ease, visibility .15s; }
+button.fin-asof:hover .fin-tip, button.fin-asof:focus-visible .fin-tip, button.fin-asof.is-open .fin-tip { opacity: 1; visibility: visible; }
+.fin-flag { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #fbedd2; color: #8a5a00; font-size: 12.5px; white-space: nowrap; }
+.fin-long { display: grid; gap: 1px; margin: 10px 0 0; padding: 9px 14px; border-radius: 12px; background: rgb(255 255 255 / .42); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .65); font-size: 13.5px; line-height: 23px; color: #3d3c38; }
+.fin-long__k { color: #5d5c56; }
+.fin-long__k small { margin-left: 2px; font-size: 12px; color: #8f8d86; }
+.fin-long__item { display: block; padding-left: 1em; }   /* 一项一行，真数下四笔也不会挤成一团 */
+.fin-long__item b { font-weight: 600; color: var(--ink); }
+.fin-long__item small { margin-left: 6px; font-size: 12px; color: #8f8d86; white-space: nowrap; }
+.fin-check { margin: 10px 0 0; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
