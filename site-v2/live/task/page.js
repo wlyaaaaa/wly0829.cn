@@ -114,7 +114,7 @@
     const groupLink = $('crumb-group');
     groupLink.hidden = !group;
     if (group) { groupLink.textContent = group; groupLink.href = route(list, { group: groupId }); }
-    write($('crumb-name'), marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
+    write($('crumb-name'), kind === 'schedule' ? '' : marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
   $('runs-rest').addEventListener('click', e => {
@@ -310,7 +310,7 @@
     const info = kind === 'plan' ? [mode, d.scheduler === 'windows' && 'Windows 计划任务', group && `分组为${group}`]
       : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', bjSchedule(d) ?? d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
-    write($('task-purpose'), marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途'));
+    write($('task-purpose'), kind === 'schedule' && text(d.purpose ?? d.text) === '按设定周期运行 AI 任务' ? '' : marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途'));
     write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
     // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
     const off = d.state === 'disabled' || d.enabled === false;
@@ -374,7 +374,7 @@
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
   function history(d, rows, kind, open, heads = true) {
-    if (!rows.length) return neverRan(d, kind) ? '<p>还没跑过，跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
+    if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
@@ -454,7 +454,7 @@
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
     const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
-    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? `还没跑过${upcoming[0] ? `，第一次在 ${stamp(upcoming[0], true)}` : ''}` : '');
+    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? '还没跑过' : '');
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     // 统计格用同一批次的结果；旧包按格里使用的次数分档。
     $('task-stats').dataset.outcome = kind === 'plan' ? outcome : '';

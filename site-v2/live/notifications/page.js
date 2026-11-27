@@ -38,10 +38,11 @@
     if(k==='sent')return '';
     if(k==='not_started')return e==='start'?'没开始发：发信程序没启动起来':'还没开始发：还在排队';
     const step=mail?'卡在交给 Gmail 那一步':'卡在推到手机那一步';
+    const noMailConfirmation='Gmail 没回确认';
     const why={interrupted:'正发的时候通知程序重启了，没等到回话',timeout:mail?'发信程序超时，没等到 Gmail 回话':'等手机回话超时',auth:mail?'Gmail 登录验证没通过':'手机那边验证没通过',
       start:'发送程序没启动起来',invalid:mail?'Gmail 的回话看不懂，不知道发出去没有':'手机的回话看不懂',exception:'发送程序出错了'}[e]
-      ||(mail?(k==='failed'?'Gmail 没收下':'Gmail 没回确认，不知道发出去没有'):(k==='failed'?'手机没回“已弹出”':'没等到手机回话'));
-    return `${step}：${why}`;
+      ||(mail?(k==='failed'?'Gmail 没收下':noMailConfirmation):(k==='failed'?'手机没回“已弹出”':'没等到手机回话'));
+    return why===noMailConfirmation?why:`${step}：${why}`;
   }
   const shortWhy=r=>{const s=stuck(r);return s.slice(s.indexOf('：')+1).split('，')[0];};
   const sec=v=>{if(v&&typeof v==='object')return v;if(v==null)return '';const [n,unit]=v>=3600?[v/3600,'小时']:v>=60?[v/60,'分钟']:v>0&&v<1?[v*1000,'毫秒']:[v,'秒'];return `${Number(n.toFixed(n<10?1:0))} ${unit}`;};

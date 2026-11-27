@@ -570,7 +570,7 @@
     // 新私事规则（本人 11-24 02:56）：访客版不再按项藏，总数旁边不再写“另有 N 项仅本人可见”。
     const ownerOnly = 0;
     headline = revoked ? updating : maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
-      : total != null ? `登记 ${total} 项计划任务${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
+      : total != null ? `登记 ${total} 项${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
     const cutoff = /^数据截止 /;
     const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
     const title = U.head(headline, { lamp: false });

@@ -36,7 +36,10 @@
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
   // 公用读数由顶栏或页头报一次，只有同一批的时刻才拿来比；独立读数照写自己的截至。
-  const asof = (at, coveredAt) => T.stamp(at) == null || at === coveredAt ? '' : `截至 ${when(at)}`;
+  const asof = (at, ...covered) => {
+    const stamp = T.stamp(at);
+    return stamp == null || covered.some(value => T.stamp(value) === stamp) ? '' : `截至 ${when(at)}`;
+  };
   const RULE_CHECK = '开场先读的规矩';
   const ruleHint = '每次采样时，拿三家开场要读的规矩文件跟本机现用的那版比一次，看是不是同一版。';
   const ruleMismatch = `${RULE_CHECK} · 没比对上`;
@@ -259,7 +262,7 @@
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
         <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的<span class="ag-keep">倍数</span>，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${bandNote}${shortNote}点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。</p></div>
-        <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
+        <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
   }
@@ -288,7 +291,7 @@
     const more = models.length > 4 ? `<button type="button" class="ag-more" data-models="${h.id}" aria-expanded="${open}">${open ? '收起' : `另 ${models.length - 4} 种`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
     return `<article class="ag-work${dim(h.id)}" data-host="${h.id}"><header>${h.name}</header>
       ${cell('开工', w?.starts, '件', 'starts')}${cell('登记工时', known(minutes) ? minutes / 60 : null, '小时', 'hours', 'dec')}${cell('派出去', orders, '单', 'orders')}
-      <div class="ag-modelbox"><p class="ag-models__head">派出去的单按型号 · 档位分</p>${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
+      <div class="ag-modelbox">${!w ? '<p class="tp-muted ag-models__none">后台还没送来</p>' : shown.length ? `<ul class="ag-models">${shown.map(m => `<li><span>${esc(MODEL(m.model))} · ${esc(m.effort)}</span><b>${int(m.count)}</b></li>`).join('')}</ul>` : '<p class="tp-muted ag-models__none">没有派单</p>'}${more}</div>
       ${lost ? '<p class="tp-small">开工和登记工时这一家还没采上，派单数是派活工具记的。</p>' : ''}</article>`;
   }
   function workSection(d) {
@@ -440,11 +443,11 @@
       page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
       return;
     }
-    const headerAt = state.conn ? state.conn.shownAt : !state.offline && state.shownAt;
+    const headerAt = state.offline || state.conn?.stage === 'retrying' ? state.conn?.shownAt : state.shownAt;
     const headAt = asof(d.at, headerAt);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
-      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
+      ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof: at => asof(at, headerAt, d.at) }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
     T.paint(page.root, html);
     const rows = feed(d), reason = d.work_stats?.unavailable_reason;
     if (reason && !rows.some(row => row.text)) rows.push({ text: WORK_UNAVAILABLE.get(reason) ?? reason });

@@ -158,7 +158,7 @@
 
     // 三格
     const what = d.story?.what ?? d.progress_summary ?? d.outcome_text ?? d.text;
-    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', s.closed ? `已经了结：${s.label}，不再看了。` : next]]
+    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
     put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));

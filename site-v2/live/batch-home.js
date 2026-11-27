@@ -43,10 +43,11 @@
     const runs = Array.isArray(today.runs_today)
       ? today.runs_today.filter(r => r && typeof r === 'object' && R.timed(r.finished_at)).map(r => ({ ...r, at: r.finished_at })) : null;
     const week = d.results_7d && typeof d.results_7d === 'object' ? d.results_7d : null;
-    const running = items(d.running).map(r => ({
-      what: [R.categoryName(r.category, viewer), r.title || r.summary].filter(Boolean),
-      round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href,
-    }));
+    const running = items(d.running).map(r => {
+      const category = R.categoryName(r.category, viewer), summary = r.title || r.summary;
+      return { what: [category, summary !== `${category}正在进行` && summary !== category && summary].filter(Boolean),
+        round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href };
+    });
     const problems = items(d.problems).map(p => {
       const title = U.fieldText(p.title, viewer), text = U.fieldText(p.text, viewer);
       const repairing = typeof p.repairing === 'boolean' ? p.repairing : p.handler !== '本人';   // 旧包没有 repairing：照原来，写明等本人的才不算在修

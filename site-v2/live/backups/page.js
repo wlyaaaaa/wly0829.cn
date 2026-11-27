@@ -182,7 +182,7 @@
         // 份数是哪一份清单上的：带上清单时刻，和表头“本次读于”分开（M580）。
         !cloud && copy?.count != null && `${D.count(copy, 'count')} 份${copy.checked_at ? ` · 按 ${stamp(copy.checked_at).trim()} 清单` : ''}`,
         copy?.failed > 0 && `失败 ${D.transferCount(copy, 'failed', key)}`,
-        showConfirmation && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
+        showConfirmation && confirmedAt && (cloud || copy?.count == null || Date.parse(confirmedAt) !== Date.parse(copy.checked_at)) && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
         // G、H 盘没核实又没有副本日期的，写明副本日期没登记（后台补上日期才判得了齐没齐）
@@ -350,9 +350,9 @@
       // 和详情页一样新的在前（M419）
       const newest = U.mergePrivateRows([...(g.points || [])].sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0)), { value: pt => pt.scope || pt, kind: viewer });
       // 说明只剩“最近一次记录于 …”的（后台标了这条记录旧了），写在它自己那一行下面：“旧了 · 最近一次记录于 …”，不并到栏底；这样的一条不收进“展开”，一眼看得到是哪条旧了
-      const oldNote = item => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了 · ${esc(sp(item.gap).replace(/[。.]$/, ''))}</small>` : '';
+      const oldNote = (item, shown) => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了${shown && U.sameCutoffNote(item.gap, `数据截至 ${shown}`) ? '' : ` · ${esc(sp(item.gap).replace(/[。.]$/, ''))}`}</small>` : '';
       let folded = 0;
-      const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
+      const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt, pt.at && (U.date(pt.at) === U.date(Date.now()) ? U.time(pt.at) : stamp(pt.at).trim())), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
         : `<span class="backup-can">能退回</span> <a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
       // 恢复点覆盖的范围和类名不一样时（如系统盘整盘镜像：Windows 系统和选定电脑配置）照旧写一句“范围：…”，同一类只写一次
       const scopes = [...new Set((g.points || []).map(pt => pt.scope).filter(scope => scope && sp(U.fieldText(scope, viewer)) !== sp(U.fieldText(setName(g), viewer))).map(scope => U.fieldHtml(scope, { name: '备份范围', place: 'body', kind: viewer })))];

@@ -152,9 +152,9 @@
     U.html($('log-part'), hasRoundList && list.length ? `${tally}共 ${list.length} 轮` : '');
     const opened = new Set([...$('log').querySelectorAll('.route-round__helpers[open]')].map(el => el.closest('li').dataset.key));
     U.list($('log'), list.slice(0, batch.shown).map(r => {
-      const reply = r.reply ? r.reply + (r.replyAt ? U.nowrap(`（${r.replyAt}）`) : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
+      const reply = r.reply ? [!pageWords.has(flatWords(r.reply)) && r.reply, r.replyAt && U.nowrap(`（${r.replyAt}）`)].filter(Boolean).join('') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
       const work = roundWork(r, opened.has(r.key));
-      const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], ['交回', reply]];
+      const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], reply && ['交回', reply]].filter(Boolean);
       const body = fields.map(([label, value, extra = ''], i) => {
         const key = `${r.key}-${i}`;
         return `<div class="route-round__line"><b>${label}</b><div><div class="route-round__text" id="${key}" data-clip="${key}">${value}</div>${logMore(key)}${extra}</div></div>`;
