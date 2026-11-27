@@ -54,12 +54,12 @@
   const marked=o=>o?.visibility==='owner'||o?.public==='owner',provided=field=>field&&typeof field==='object'&&!Array.isArray(field)?field.text??field.value:field;
   // 本人版原样给全；访客版藏起来的地方写“〈哪一样〉仅本人可见”。
   const lock=what=>`<span class="notify-private">${esc(what)}仅本人可见</span>`;
-  function shown(v,what){
+  function shown(v,what,format=esc){
     if(v&&typeof v==='object'){
       if((v.hidden||v.hidden_block||marked(v))&&viewer!=='owner')return lock(what);
-      const t=provided(v);return t==null?'':esc(String(t));
+      const t=provided(v);return t==null?'':format(String(t));
     }
-    return v==null?'':esc(String(v));
+    return v==null?'':format(String(v));
   }
   const hiddenBatch=r=>viewer!=='owner'&&(r.hidden||marked(r));
   // 标题在本人版的 reminders[].title 里（一次可能含几件事）；开头和类别重名的那段去掉，免得写两遍（M306）
@@ -74,7 +74,7 @@
     }
     return Array.from(seen,([title,reminder])=>[title,reminderTag(reminder)]);
   };
-  const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题');return s&&s+tag;}).filter(Boolean).join('；');};
+  const titleOf=(r,format)=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题',format);const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题',format);return s&&s+tag;}).filter(Boolean).join('；');};
   // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
   const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
   function others(r){
@@ -91,6 +91,12 @@
     return `这 ${list.length} 件事走${name}：${counts.size===1?`都${list[0].state}`:[...counts].map(([s,n])=>`${s} ${n} 件`).join('、')}`;
   }
   const keepWords=text=>`<span class="notify-nw">${esc(text)}</span>`;
+  const titleSegmenter=typeof Intl.Segmenter==='function'&&new Intl.Segmenter('zh-CN',{granularity:'word'});
+  const keepTitleWords=text=>esc(text).replace(/\p{Script=Han}+/gu,run=>run.split(/(汇报页|项目页|对话)/g).map((part,i)=>{
+    if(i%2)return keepWords(part);
+    if(!titleSegmenter)return part;
+    return Array.from(titleSegmenter.segment(part),({segment})=>segment.length>1?keepWords(segment):segment).join('<wbr>');
+  }).filter(Boolean).join('<wbr>'));
   function attentionResult(r){
     if(r.channel!=='phone')return {};
     const reminders=Array.isArray(r.reminders)?r.reminders:[];
@@ -146,7 +152,7 @@
       return `<a class="more" href="${esc(url.pathname+url.search+url.hash)}">回到原事${ids.length>1?` ${index+1}`:''}，看现在的状态 ›</a>`;
     }).join(' · ');
   }
-  const what=r=>{const t=titleOf(r),c=className(r);return [c?`「${esc(c)}」那条`:'一条提醒',t].filter(Boolean).join('：');};
+  const what=(r,format)=>{const t=titleOf(r,format),c=className(r);return [c?`「${esc(c)}」那条`:'一条提醒',t].filter(Boolean).join('：');};
   const hero=$('hero'),heroRead=U.reading(hero.querySelector('.card__body'),{ghost:U.ghost.card(2),name:'通知发送回执'});
   const boards=Object.fromEntries(['attention','overview','history'].map(k=>[k,V.board($(k),{key:`notifications-v3-${k}`,sync,
     ...(k==='overview'?{reading:hourReading}:{})})]));
@@ -190,8 +196,10 @@
       const cards=issues.map(r=>{
         if(r.private_count||hiddenBatch(r))return `<div class="delivery-private">${privateLine(r)}</div>`;
         const result=attentionResult(r),duration=result.duration??took(r),why=result.recovered?'':stuck(r);
+        const deliveryChannel=channel(r);
+        const route=deliveryChannel==='手机'||deliveryChannel==='邮件'?keepWords(`走${deliveryChannel}`):`走${shown(deliveryChannel,'渠道')}`;
         return `<div class="stut__card" data-status="${result.recovered?'recovered':kindOf(r)}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
-          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r)} · 走${shown(channel(r),'渠道')}</b>`
+          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepTitleWords)} · ${route}</b>`
           +`${why?`<span class="notify-why">${esc(why)}</span>`:''}<span class="notify-other">${result.otherHtml??esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
           +`${duration?`<small class="notify-took">${shown(duration,'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`;
       });

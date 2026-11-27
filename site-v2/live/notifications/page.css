@@ -100,4 +100,9 @@
 #attention .stut__card:has(.notify-detail[open]) { background: #fff; box-shadow: inset 0 0 0 1.5px rgb(163 106 33 / .3), 0 10px 24px -14px rgb(163 106 33 / .45); }
 .delivery-table .notify-other, .page--notifications #email-gaps .notify-other { color: var(--muted); font-size: 13px; }
 /* 窗口窄时一行一张，免得字挤成一长条 */
-@media (max-width: 1199px) { #attention .stut { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1199px) {
+  #attention { --notify-status-width: 124px; --notify-column-gap: 6px; }
+  #attention .stut { grid-template-columns: minmax(0, 1fr); }
+  #attention .stut__card { grid-template-columns: 80px minmax(min-content, var(--notify-status-width)) minmax(0,1fr); column-gap: var(--notify-column-gap); }
+  #attention .notify-detail > summary { margin-left: calc(80px + var(--notify-status-width) + 2 * var(--notify-column-gap)); }
+}
