@@ -668,7 +668,7 @@
     const label = U.fieldHtml(typeof outcome === 'string' ? addressed(outcome) : outcome, { name: '了结情况', kind: viewer })
       .replace(/(<[^>]*>)|(?:你|本人)?办完了/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
     const link = title({ ...item, id: item?.id || id }, item?.text || '查看原事项', 'items');
-    return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
+    return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main" style="margin-inline-end: clamp(0px, calc(1280px - 100vw), 14px)">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }
   // 展开后的事项详情整段照原文显示，不按字数截（M690）；卡面收起时那一行摘要的字数限制不动
   function noticeDetail(item) {

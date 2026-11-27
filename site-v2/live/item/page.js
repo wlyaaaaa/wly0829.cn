@@ -318,7 +318,20 @@
   const closedAt = Date.parse(p.get('closed') || '');
   const ARCHIVE_MISSING = '那次了结时的经过暂时没读到，读到后自动补上。';
   let archiveWatch, closedAsk = 0, latestDetail = null;
-  const show = r => { record = r; historyRows = r.archiveWithoutHistory ? [] : itemHistory(r); render(); };
+  const eventAt = e => e.occurred_at || e.at;
+  const afterClose = stamp => Date.parse(stamp) > closedAt;
+  function show(r) {
+    historyRows = r.archiveWithoutHistory ? [] : itemHistory(r);
+    const newer = Number.isFinite(closedAt) && (
+      [r.changed, r.recorded_at, r.episode_at, r.born].some(afterClose) ||
+      (Array.isArray(r.history) && r.history.some(e => afterClose(eventAt(e))))
+    );
+    // 最新详情的各段正文没有历史版本。选中的了结早于这份内容时，只展示有时刻依据的记录。
+    const born = r.episode_at || r.born;
+    record = newer ? { id: r.id, text: '这件事', closed: r.closed, reopened: r.reopened,
+      born: Date.parse(born) <= closedAt ? born : null, archiveWithoutHistory: r.archiveWithoutHistory } : r;
+    render();
+  }
   const stopArchive = () => { archiveWatch?.stop(); archiveWatch = null; closedAsk++; };
   const archiveMissing = () => { clearRecord(); empty(ARCHIVE_MISSING, false, '这件事'); };
   $('item-action-receipts')?.addEventListener('item-write', ({ detail }) => {
@@ -374,7 +387,7 @@
     const born = d.episode_at || d.born, closed = d.closed;
     const inRound = at => !Number.isFinite(closedAt) || Date.parse(at) <= closedAt;
     const sameAt = (a, b) => a === b || Date.parse(a) === Date.parse(b);
-    const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: e.occurred_at || e.at,
+    const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: eventAt(e),
       label: e.label || EVENT[e.event] || (/^(登记事项|重新打开事项|核对事项|关闭事项)$/u.test(e.text) ? e.text : '') }))
       .filter(e => !ledgerOnly(e) && inRound(e.at));
     const start = e => [e.label, e.text].some(t => /^(开始|本轮开始|登记|生成待办|重新打开|事项已加入等你的清单)/u.test(t));
