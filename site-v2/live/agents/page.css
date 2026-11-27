@@ -16,7 +16,7 @@
 @media (max-width: 1024px) {
   .ag-ok { text-wrap: balance; }
   .ag-score[data-host="codex"] .ag-diff li > span:last-child { min-width: 0; overflow-wrap: anywhere; text-wrap: pretty; }
-  .ag-status-word { display: inline-block; white-space: nowrap; }
+  .ag-status-word { display: inline-block; }
   .ag-heat button:has(.ag-badge + .ag-badge) { column-gap: 3px; padding-inline: 8px; }
   #estimate .ag-est { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ag-est > :nth-child(2) { grid-area: 2 / 1 / auto / -1; border: 0; padding-left: 0; }
@@ -111,7 +111,7 @@
 .ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
 .ag-tool-name { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
-.ag-keep { white-space: nowrap; }
+:is(.ag-keep, .ag-status-word) { white-space: nowrap; }
 .ag-foot { margin: 12px 0 0; }
 
 /* 标题“钩子”、时间那排、说明一行排开，截至靠右（照 16:35 点头的图） */
