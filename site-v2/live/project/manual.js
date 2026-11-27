@@ -3,7 +3,7 @@
 // 右栏“最近改过的 5 张”（四个小读数、月度总更新进度条、五行）＋“材料和依据”。原来“新不新”“最近产物”“更多数据”“材料攒了多少”“根据什么”不画。
 // 访客版同一套页面、同一份接口：能点进去的条目外面不挂签；本人版在访客看不到原文的类名旁挂全站同一个紫色“访客看不到”。
 // 每个数、每个“截止／更新”都照接口给的字段写，字段没给的那块不画（本人 11-27 14:41 禁令：不显示没人维护的标识）。
-// 数在哪：详情顶层 manual（后台这一页的字段，见 read）；还没给的，先用现有 sections 里同一个数（六类条数、三个读数、材料和依据的四个数）。
+// 数在哪：项目详情 sections[].metrics[] 里按 id 找，见 read。
 (() => {
   'use strict';
   const U = window.LiveUI, esc = U.esc;
@@ -36,35 +36,39 @@
   const words = v => typeof v === 'string' ? SCOPE_WORDS[v.trim()] || v : '';
   const records = section => `/live/records/?project=daily-preferences&section=${encodeURIComponent(section)}`;
 
-  // —— 数据：manual 是后台给这页的字段；还没给的项从现有 sections 里取同一个数 ——
+  // —— 数据：都在项目详情 sections[].metrics[] 里按 id 找（后台 11-27 定的位置）——
+  // 首格 cognitions；六类 group-0…5；抬头 latest、recent、updated7、monthly_update.value{last_date,next_date}；
+  // 五行 recent_cards.value.items[]{category,title,at,section,href,record_id}；三条说法 cooperation.value{items,visibility}；
+  // 材料和依据 records、providers、evidence、statements_used（各用自己的 at 写截止）
   function read(raw) {
     const sections = Array.isArray(raw.sections) ? raw.sections : [];
     const sec = id => sections.find(s => s?.id === id) || null;
-    const metric = (sid, mid) => sec(sid)?.metrics?.find(m => m?.id === mid) || null;
+    const all = sections.flatMap(s => Array.isArray(s?.metrics) ? s.metrics : []);
+    const metric = id => all.find(m => m?.id === id) || null;
     const val = m => m && (finite(m.value) || typeof m.value === 'string') ? m.value : m?.value?.value ?? null;
-    const through = m => m?.through || m?.as_of || m?.at || '';
-    const mx = raw.manual && typeof raw.manual === 'object' ? raw.manual : {};
-    const cog = metric('understanding', 'cognitions');
-    const cards = mx.cards || (finite(val(cog)) ? { count: val(cog), through: through(cog) } : null);
-    const groups = Array.isArray(mx.groups) ? mx.groups : (sec('understanding')?.metrics || []).filter(m => /^group-[0-5]$/.test(m?.section || ''))
-      .map(m => ({ section: m.section, label: m.label, count: finite(m.count) ? m.count : val(m), updated: m.updated || m.at }));
-    const r = mx.recent || {};
+    const obj = m => m?.value && typeof m.value === 'object' ? m.value : {};
+    const cog = metric('cognitions');
+    const cards = finite(val(cog)) ? { count: val(cog), through: cog.at } : null;
+    const groups = all.filter(m => /^group-[0-5]$/.test(m?.id || ''))
+      .map(m => ({ section: m.section || m.id, label: m.label, count: finite(m.count) ? m.count : val(m), updated: m.at }));
+    const monthly = obj(metric('monthly_update')), updated7 = metric('updated7');
     const recent = {
-      latest: r.latest_at ?? val(metric('freshness', 'latest')), context: r.context_at ?? val(metric('freshness', 'recent')),
-      updated7: r.updated7 ?? val(metric('freshness', 'updated7')), monthly: r.monthly || null,
-      items: Array.isArray(r.items) ? r.items.filter(it => it?.section && it.at) : [],
-      notes: [...new Set([r.note, sec('freshness')?.about, sec('freshness')?.note, metric('freshness', 'latest')?.scope, words(metric('freshness', 'updated7')?.scope) && `近 7 天整理：${words(metric('freshness', 'updated7')?.scope)}`].filter(Boolean))],
+      latest: val(metric('latest')), context: val(metric('recent')), updated7: val(updated7),
+      monthly: monthly.last_date || monthly.next_date ? { last: monthly.last_date, next: monthly.next_date } : null,
+      items: (Array.isArray(obj(metric('recent_cards')).items) ? obj(metric('recent_cards')).items : []).filter(it => it?.section && it.at),
+      notes: [...new Set([sec('freshness')?.about, sec('freshness')?.note, metric('latest')?.scope, words(updated7?.scope) && `近 7 天整理：${words(updated7.scope)}`].filter(Boolean))],
     };
-    const m0 = mx.materials || {}, rec = metric('materials', 'records'), prov = metric('materials', 'providers'), ev = metric('basis', 'evidence'), st = metric('basis', 'statements_used');
+    const rec = metric('records'), prov = metric('providers'), ev = metric('evidence'), st = metric('statements_used');
     const materials = {
-      records: m0.records ?? val(rec), providers: m0.providers ?? val(prov), through: m0.through || through(rec) || through(prov),
-      evidence: m0.evidence ?? val(ev), statements: m0.statements ?? val(st), basisThrough: m0.basis_through || through(ev) || through(st),
-      notes: [...new Set([m0.note, sec('materials')?.about, sec('materials')?.note, rec?.scope, words(prov?.scope) && `来源种数：${words(prov.scope)}`, sec('basis')?.about, sec('basis')?.note, ev?.scope, st?.scope].filter(Boolean))],
+      records: val(rec), recordsAt: rec?.at, providers: val(prov), providersAt: prov?.at,
+      evidence: val(ev), evidenceAt: ev?.at, statements: val(st), statementsAt: st?.at,
+      notes: [...new Set([sec('materials')?.about, sec('materials')?.note, rec?.scope, words(prov?.scope) && `来源种数：${words(prov.scope)}`, sec('basis')?.about, sec('basis')?.note, ev?.scope, st?.scope].filter(Boolean))],
     };
     const und = sec('understanding');
     const groupNotes = [und?.about, cards && '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“材料和依据”。',
       words(cog?.scope), typeof und?.note === 'string' && und.note.replace('资料速查只给标题，金额、测量值和秘密不进入页面。', '资料速查明细会显示已记录的数值和单位。')].filter(Boolean);
-    const conventions = (Array.isArray(mx.conventions) ? mx.conventions : []).filter(t => typeof t === 'string' && t.trim());
+    const coop = obj(metric('cooperation'));
+    const conventions = { items: (Array.isArray(coop.items) ? coop.items : []).filter(x => typeof x === 'string' && x.trim()), rewritten: coop.visibility === 'rewritten' };
     return { cards, groups, groupNotes, recent, materials, conventions };
   }
   function adapt(raw) {
@@ -105,7 +109,8 @@
 
   // —— 左栏大卡：整理成主题卡的认识（六类） ——
   function groupsHtml(v, viewer) {
-    const conv = v.conventions.length ? `<div class="mn-conv">${U.visitorRewrittenTag('这几条约定', '', 'public')}<ul>${v.conventions.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : '';
+    const c = v.conventions;
+    const conv = c.items.length ? `<div class="mn-conv">${c.rewritten ? U.visitorRewrittenTag('这几条约定', '', 'public') : '<span></span>'}<ul>${c.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
     return `<ul class="mn-groups">${v.groups.map(g => {
       const tag = viewer === 'owner' && HIDDEN.has(g.section) ? U.visitorHiddenTag(`这一类的认识原文，只看到${g.count > 2 ? '一句说明' : '每条的标题'}`, '', viewer) : '';
       const meta = [finite(g.count) && `${int(g.count)} 张`, md(g.updated) && `本组更新 ${md(g.updated)}`].filter(Boolean).join(' · ');
@@ -136,22 +141,28 @@
       const title = typeof it.title === 'string' && it.title.trim() ? it.title.trim() : '';
       const tag = viewer === 'owner' && !TITLED.has(it.section) ? U.visitorHiddenTag('这张主题卡的标题和内容', '', viewer) : '';
       const when = viewer === 'owner' ? dash(it.at) : md(it.at);
-      const href = typeof it.href === 'string' && it.href.startsWith('/') ? it.href : records(it.section);
-      return `<li class="mn-row${title ? '' : ' is-untitled'}"><a href="${esc(href)}"><span class="mn-row__cls">${esc(it.label || '')}</span>${title ? `<span class="mn-row__title">${esc(title)}</span>` : ''}<span class="mn-row__at">${esc(when)}</span><span class="more__chev">›</span></a>${tag}</li>`;
+      // 点回那一张所在的明细；后台给了 record_id 的带上 card=，明细页按它落到那一张
+      const base = typeof it.href === 'string' && it.href.startsWith('/') ? it.href : records(it.section);
+      const href = it.record_id != null && it.record_id !== '' ? `${base}${base.includes('?') ? '&' : '?'}card=${encodeURIComponent(it.record_id)}` : base;
+      return `<li class="mn-row${title ? '' : ' is-untitled'}"><a href="${esc(href)}"><span class="mn-row__cls">${esc(it.category || '')}</span>${title ? `<span class="mn-row__title">${esc(title)}</span>` : ''}<span class="mn-row__at">${esc(when)}</span><span class="more__chev">›</span></a>${tag}</li>`;
     }).join('');
     return `${reads}${bar}${rows ? `<ul class="mn-rows">${rows}</ul>` : ''}`;
   }
 
   // —— 右栏：材料和依据 ——
+  // 一块两个数：截止同一天写一次；不同天各写各的
+  const cuts = (a, aName, b, bName) => md(a) && md(b) && md(a) !== md(b) ? `${aName}${cutoff(a)} · ${bName}${cutoff(b)}` : cutoff(a) || cutoff(b);
   function materialsHtml(v) {
     const m = v.materials, out = [];
     if (finite(m.records) || finite(m.providers)) {
       const line = [finite(m.records) && wan(m.records), finite(m.providers) && `<b>${esc(int(m.providers))}</b> 种来源`].filter(Boolean).join('<i>·</i>');
-      out.push(`<div class="mn-mat"><p class="mn-mat__k">已入库</p><p class="mn-mat__v">${line}</p>${cutoff(m.through) ? `<p class="mn-mat__cut">${esc(cutoff(m.through))}</p>` : ''}</div>`);
+      const cut = cuts(finite(m.records) ? m.recordsAt : '', '条数', finite(m.providers) ? m.providersAt : '', '来源');
+      out.push(`<div class="mn-mat"><p class="mn-mat__k">已入库</p><p class="mn-mat__v">${line}</p>${cut ? `<p class="mn-mat__cut">${esc(cut)}</p>` : ''}</div>`);
     }
     if (finite(m.evidence) || finite(m.statements)) {
       const line = [finite(m.evidence) && `被认识引用的原始资料 <b>${esc(int(m.evidence))}</b> 条`, finite(m.statements) && `用到的本人原话 <b>${esc(int(m.statements))}</b> 句`].filter(Boolean).join('<i>、</i>');
-      out.push(`<div class="mn-mat"><p class="mn-mat__k">依据</p><p class="mn-mat__v">${line}</p>${cutoff(m.basisThrough) ? `<p class="mn-mat__cut">${esc(cutoff(m.basisThrough))}</p>` : ''}</div>`);
+      const cut = cuts(finite(m.evidence) ? m.evidenceAt : '', '原始资料', finite(m.statements) ? m.statementsAt : '', '原话');
+      out.push(`<div class="mn-mat"><p class="mn-mat__k">依据</p><p class="mn-mat__v">${line}</p>${cut ? `<p class="mn-mat__cut">${esc(cut)}</p>` : ''}</div>`);
     }
     out.push(`<a class="mn-mat__go" href="${FINANCE}">消费记录在账房先生 <span class="more__chev">›</span></a>`);
     return out.join('');
