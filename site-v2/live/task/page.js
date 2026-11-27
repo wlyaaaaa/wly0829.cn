@@ -145,9 +145,9 @@
   }
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
-  const weekLabel = { ok: '有成功记录', failed: '有出错记录', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
+  const weekLabel = { ok: '有成功记录', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
   // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
-  // 后台没给分档、或给的是 unknown（次数读不全）的，照下面原来的判法
+  // 旧包只有一次出错的证据时用黄格提醒，全天明确全出错才用红格。
   const TIER = { success: ['ok', '全部成功'], mostly_successful: ['mostly', '有出错，大部分成功'], partial_success: ['partial', '有出错，部分成功'],
     failed: ['failed', '全部出错'], warn: ['warn', '有部分完成'] };
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0
@@ -168,10 +168,10 @@
       const sawRun = evidence.has(day.date), outcome = evidence.get(day.date);
       const failed = day.state === 'failed' || outcome === 'failed';
       // 当天有部分完成（后台 days7 的 state=warn；旧包从已读到的轮次看出）：同一天先算出错，其次成功，再次部分完成（M676）
-      const state = failed ? 'failed' : day.state === 'ok' || outcome === 'ok'
+      const state = failed ? 'observed-failed' : day.state === 'ok' || outcome === 'ok'
         ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn' : day.state === 'none' && !sawRun ? 'none' : 'unknown';
       const started = day.started || sawRun;
-      const name = failed && (day.partial || day.state !== 'failed') ? '至少一轮出错' : weekLabel[state === 'unknown' && started ? 'started' : state];
+      const name = weekLabel[state === 'unknown' && started ? 'started' : state];
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
       return { ...day, state: state === 'unknown' && started ? 'started' : state, name, started };
     });
@@ -206,8 +206,12 @@
     const timed = n(s.duration_count), avg = timed && Number.isFinite(s.avg_duration_ms) ? duration(s.avg_duration_ms / 1000) : '';
     const average = ['average', '平均用时', avg, timed ? `按 ${timed} 次有起止时刻的记录计算` : '没有读到完整起止时刻',
       timed || !plan ? '' : running ? '还在跑' : total ? '没记到结束' : ''];
-    return { covered: s.covered === true, coverage: d.coverage,
+    return { covered: s.covered === true, coverage: d.coverage, outcome: outcomeTone(s.outcome, ok, failed, s.success_exact === true && ok + failed === total),
       rows: kind === 'pickup' ? [['today', '今天', count(s.today, s.today_exact === true)], totalRow, success, average] : [totalRow, success, failure, average] };
+  }
+  function outcomeTone(outcome, ok, failed, exact) {
+    return TIER[outcome?.state]?.[0] || (ok > 0 && failed > 0 ? ok >= failed ? 'mostly' : 'partial'
+      : failed > 0 ? exact ? 'failed' : 'warn' : '');
   }
   function metrics(d, runs, kind) {
     if (d.runs_summary && typeof d.runs_summary === 'object') return summaryMetrics(d, d.runs_summary, kind, runs);
@@ -242,7 +246,7 @@
     const avg = duration(durations.length ? durations.reduce((sum, n) => sum + n, 0) / durations.length : NaN);
     const average = ['average', '平均用时', avg, durations.length ? `按 ${durations.length} 次有起止时刻的记录计算` : '没有读到完整起止时刻',
       durations.length || !plan ? '' : running ? '还在跑' : counted.length ? '没记到结束' : ''];
-    return { covered, rows: kind === 'pickup' ? [['today', '今天', todayCount], total, success, average] : [total, success, failure, average], coverage };
+    return { covered, outcome: outcomeTone(null, good.length, bad.length, exact && knownOutcomes), rows: kind === 'pickup' ? [['today', '今天', todayCount], total, success, average] : [total, success, failure, average], coverage };
   }
   function readNotice(d, coverage, runs, covered) {
     const from = time(coverage?.from), to = time(coverage?.to);
@@ -446,11 +450,11 @@
     document.body.dataset.variant = kind;
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
-    const { rows, coverage, covered } = metrics(d, runs, kind);
+    const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
     const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? `还没跑过${upcoming[0] ? `，第一次在 ${stamp(upcoming[0], true)}` : ''}` : '');
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
-    // “出错”那格照后台对这些轮次的分档上色（runs_summary.outcome，没有就看近 7 天 week_outcome）：大部分成功黄、部分成功橙、全出错红、全成功不上色；没给分档照旧粉色（M779）
-    $('task-stats').dataset.outcome = TIER[(d.runs_summary?.outcome ?? d.week_outcome)?.state]?.[0] || '';
+    // 统计格用同一批次的结果；旧包按格里使用的次数分档。
+    $('task-stats').dataset.outcome = kind === 'plan' ? outcome : '';
     // “已读部分没有”要和格名连着读：合成一整句（“已读部分没有出错”）写在一行，格名不再另起一行（主控 11-26 看 07a、07b：原来拆成“已读部分没有／出错”两行）。
     // 出错那格读到的是 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色，0 次和“全成功不上色”同一个意思（M779）
     write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => {

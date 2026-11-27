@@ -22,6 +22,7 @@
 .laptop-hero p { margin: 9px 0 0; font-size: 18px; }
 #laptop-state, #laptop-system, .laptop-metrics small, .laptop-panel small { color: var(--muted); }
 .laptop-good { color: #00a650; font-weight: 650; }
+#laptop-state.laptop-state--dot { display: flex; align-items: baseline; gap: .3em; }
 .laptop-metrics { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 10px; margin: 24px 0 26px; }
 .laptop-metrics > div { padding: 19px 24px; min-height: 154px; }
 .laptop-metrics dt, .laptop-panel h2 { display: flex; align-items: center; gap: 8px; font-weight: 600; }
@@ -43,6 +44,7 @@
 .laptop-panel table { width: calc(100% - 60px); margin: 0 30px 16px; table-layout: fixed; font-variant-numeric: tabular-nums; }
 .laptop-panel th:first-child { width: 55%; }
 .laptop-panel td { overflow-wrap: anywhere; }
+.laptop-panel > .more { align-self: flex-start; margin: 0 0 16px 46px; }
 .laptop-panel td, .laptop-panel th { padding: 9px 16px; }
 .laptop-panel td { height: 43px; font-size: 17px; }
 .laptop-program { display: flex; align-items: center; gap: 13px; }

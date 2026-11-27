@@ -667,15 +667,34 @@
   };
   const MANY_TITLE = { decline: '这 N 件都不办了？', done: '复制这 N 件的办理结果？', decline_copy: '复制这 N 件的后续给 AI？',
     later: '这 N 件都晚点再提醒？', ack: '这 N 件都确认已知？', close_report: '关掉这 N 份汇报？' };
-  // 没保存上时给本人看的原因：后台回的错误名换成人话（错误名留在回执的 data-error 上，查问题用）
+  // 后台原原因留在回执和日志里。页面只给能读懂的办理提示。
   const FAILED_TEXT = {
     cockpit_action_not_allowed: '后台现在不让这张卡这样办，没保存上。卡先留着，可以点“问情况”交给 AI 处理。',
-    cockpit_item_changed: '这张卡刚有变化，没保存上。点“再点一次”会按最新的再保存。',
-    cockpit_item_buttons_disabled: '电脑这会儿没开放卡上的按钮，没保存上。稍后再点一次。',
     cockpit_owner_required: '这台设备没配对，没保存上。',
-    cockpit_device_rate_limited: '点得太多了，没保存上。过几分钟再点一次。',
-    cockpit_action_missing: '这一下没送到后台，没办；卡还在，可以再点一次（再点沿用原来的编号，后台认得出是同一笔，不会办两次）。',
   };
+  const ITEM_FAILURE_MESSAGES = new Map([
+    ['这次提交编号不正确。', '这次提交的编号不对，刷新页面再点一次。'],
+    ['事项版本格式不正确，请刷新。', '页面上这条不是最新的，刷新页面再点一次。'],
+    ['这次提交编号已用过，请刷新后重试。', '这一下之前已经提交过，刷新看看是不是已经保存上了。'],
+    ['事项已经变化，无法写回，请刷新。', '这条事项刚被改过，刷新看到最新的再操作。'],
+    ['事项内容已经变化，操作没有保存，请刷新。', '这条事项刚被改过，刷新看到最新的再操作。'],
+    ['这台设备已在写回期间撤销，本次修改已撤回。', '保存时这台设备的配对被取消了，这次修改没生效；重新配对后再点。'],
+  ]);
+  const ITEM_FAILURE_CODES = new Map([
+    ['public_origin_not_allowed', '只能在 wly0829.cn 打开的页面里操作，到那里再点一次。'],
+    ['public_request_invalid', '这次提交的内容不对，刷新页面再点一次。'],
+    ['public_request_too_large', '这次提交的内容太多，少选几条再点。'],
+  ]);
+  const ITEM_RECEIPT_ACCEPTED = '已收下，还在写', ITEM_RECEIPT_UNKNOWN = '还没查到结果，会接着查这一次';
+  const ITEM_RECEIPT_MISSING = '没查到这一次的记录，可能没送到；刷新看看事项变了没有，没变就再点一次。';
+  function readableWriteReason(receipt) {
+    const { error, message } = receipt || {};
+    const text = typeof message === 'string' ? message.trim() : '';
+    const translated = ITEM_FAILURE_MESSAGES.get(text) || ITEM_FAILURE_CODES.get(error);
+    if (translated) return translated;
+    if (/\p{Script=Han}/u.test(text) && !/\b\w+_\w+\b|\b[A-Z]{4,}\b|\b\w*(?:Error|Exception)\b|\bHTTP\s+\d+|提交编号|事项版本格式|写回|数据库|序列化|堆栈/u.test(text)) return text;
+    return Object.hasOwn(FAILED_TEXT, error) ? '' : '后台没给能看懂的原因，刷新看看保存上没有。';
+  }
   const itemWrites = new Set();
   function itemIntent(item, action) {
     if (item.closed || !action || !['copy', 'direct'].includes(action.kind)) return '';
@@ -693,11 +712,11 @@
   }
 
   // 一件一件写回，各记各的结果：没生效的写清是哪件、为什么；写回接口说“还没确认”的（unconfirmed）单算，不当失败。
-  async function writeItems(live, items, action, followReceipt = false, resume = false) {
+  async function writeItems(live, items, action, followReceipt = false, resume = false, onAccepted) {
     const saved = [], failed = [], receipts = {};
     let pending = 0, unconfirmed = 0;
     // 每件各发一笔；后台慢、没回的，按同一提交编号接着查到真结果（定稿：异步的成功失败回执）。
-    const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt, resume));
+    const requests = items.map(item => live.applyOwnerItems([item], action, followReceipt, resume, onAccepted));
     for (const [index, result] of (await Promise.all(requests)).entries()) {
       const item = items[index];
       Object.assign(receipts, result.receipts);
@@ -715,19 +734,74 @@
 
   // 刚办成的卡：后台读数要过几分钟才跟上，这期间刷新页面也先不显示它（按卡的版本认，读数一变就照读数显示；最多 10 分钟）
   const SAVED_KEY = 'wly-live-saved-writes';
+  let savedInPage = {};
   function savedWrites() {
-    try { const all = JSON.parse(localStorage.getItem(SAVED_KEY) || '{}'), now = Date.now(); for (const [id, v] of Object.entries(all)) if (!(now - v.at < 600000)) delete all[id]; return all; }
-    catch { return {}; }
+    let all = savedInPage;
+    try { all = { ...JSON.parse(localStorage.getItem(SAVED_KEY) || '{}'), ...savedInPage }; } catch {}
+    const now = Date.now();
+    for (const [id, v] of Object.entries(all)) if (!(now - v?.at < 600000)) delete all[id];
+    return all;
   }
-  function rememberSaved(rows) {
+  function rememberSaved(rows, intent, receipts) {
     if (!rows.length) return;
-    try { const all = savedWrites(); for (const item of rows) all[item.id] = { version: item.item_version, kind: item.kind, at: Date.now() }; localStorage.setItem(SAVED_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
+    const all = savedWrites();
+    for (const item of rows) {
+      const { until, created_at } = receipts[item.id] || {};
+      const saved = { version: item.item_version, kind: item.kind, intent, until, created_at, at: Date.now() };
+      if (intent === 'ack' || intent === 'decline') {
+        // 待办可能先撤下，退出记录稍后才到。只保留重摆这张退出卡所需的字段。
+        const { id, kind, text, title, project, visibility, public: audience, visitor_labels } = item;
+        saved.exit = { id, kind, text, title, project, visibility, public: audience, visitor_labels };
+      }
+      all[item.id] = saved;
+    }
+    try { localStorage.setItem(SAVED_KEY, JSON.stringify(all)); savedInPage = {}; }
+    catch { savedInPage = all; }
   }
-  function justSaved(item) { const hit = item && savedWrites()[item.id]; return !!hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind; }   // 晚点提醒后到了“你放着”就照常显示
+  function savedWrite(item) {
+    const hit = item && savedWrites()[item.id];
+    return hit && !item.closed && hit.version === item.item_version && hit.kind === item.kind ? hit : null;
+  }
+  const savedItemClosures = () => Object.values(savedWrites()).filter(write => write.exit || write.ack);
+  const justSaved = item => !!savedWrite(item);
+  function savedReminder(item) {
+    const hit = savedWrite(item);
+    return hit?.intent === 'later' ? hit : null;
+  }
+  const confirmedItemState = item => CONFIRM_ITEM[savedWrite(item)?.intent]?.state || '';
   // 回执弹窗（定稿：异步的成功失败回执；本人 11-23 11:51 要弹窗告诉他保存成功还是失败）：先写“正在保存…”，后台真结果回来再换；失败的留着，能再点一次。
   // 用全站共用的通知浮窗（trust-modal.js 的 SiteNotice），列表还是 #item-action-receipts，等你的事页在它上面听 item-write。
-  function itemReceipt(head = '正在保存…', detail = '') { return window.SiteNotice(head, detail, 'item-action-receipts'); }
-  function itemFeedback(trigger, message) { itemReceipt().set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
+  const itemTextUnits = html => html
+    .replace(/<span class="live-unit">((?:\d{4}-)?\d{1,2}-\d{2})<\/span>( +)<span class="live-unit">(\d{1,2}:\d{2}(?::\d{2})?)<\/span>/g, '$1$2$3')
+    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
+      (value, tag) => tag || `<span class="live-unit">${value}</span>`);
+  function itemReceipt(head = '正在保存…', detail = '', trigger = null) {
+    const lane = document.getElementById('item-action-receipts');
+    const ownSpace = lane && document.body.matches('.page--items, .page--live:has(#needs)');
+    // 清单滚到某组才操作时，胶囊在那组的标题与事项之间占位，保持原来的通知样式。
+    const groups = ownSpace && document.querySelector('.page--items #groups');
+    const card = trigger?.closest('.lb-card');
+    if (groups) (card?.id === 'reports' ? groups : card?.querySelector('.lb-rows') || groups).before(lane);
+    const receipt = window.SiteNotice(head, detail, 'item-action-receipts');
+    const format = () => {
+      for (const text of receipt.note.querySelectorAll('.site-notice__head, .site-notice__name')) text.innerHTML = itemTextUnits(esc(text.textContent));
+    };
+    const reveal = () => {
+      if (ownSpace || lane && document.body.dataset.record === 'item' && receipt.note.classList.contains('is-fail')) {
+        lane.scrollIntoView({ block: 'nearest' });
+      }
+    };
+    format(); reveal();
+    return { ...receipt, set(...args) {
+      const box = receipt.note.getBoundingClientRect(), visible = box.bottom > 0 && box.top < innerHeight;
+      // 结束最后一份普通汇报、或者改变筛选时，回执不能留在收起的卡里。
+      const moved = groups && lane.closest('[hidden], .is-away');
+      if (moved) groups.before(lane);
+      receipt.set(...args); format();
+      if (visible || moved) reveal();
+    } };
+  }
+  function itemFeedback(trigger, message) { itemReceipt(undefined, '', trigger).set(/^(?:已|好)/.test(message) ? 'ok' : 'fail', message); }
   // 再点一次用页面上最新的那份（版本变了的卡，重读后按新版本提交）。
   const latestItem = item => [...actionSets.values()].reverse().find(it => it.id === item.id && it.item_version) || item;
   // 点了确认、还没回结果就刷新或离开：记下这次办的是哪几件（30 分钟），回到同一页按同一次操作接着查、照常弹回执；有了结果的就不再记（M945）
@@ -739,27 +813,7 @@
   function keepWriting(rows, entry) {
     try { const all = writingItems(); for (const item of rows) { if (entry) all[item.id] = { ...entry, row: item }; else delete all[item.id]; } localStorage.setItem(WRITING_KEY, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ }
   }
-  // “还没确认”的那几次：页面读回来的清单里看到这件的退出记录（晚点提醒是这件换了新版本到了“你放着”），就照后台读数把回执改成办成了。
-  // 用的是后台读数，不是先当成功（主持 11-26 01:24）。页面传 found(件, 办法, 点的时刻) 进来，找到就回读到的那条
-  const watching = new Set();
-  let lastFound = null;   // 页面上回传进来的 found：刚记下“还没确认”时，清单可能早已读回来了，先拿它对一遍
-  function settleItemWrites(found = lastFound) {
-    if (!found) return;
-    lastFound = found;
-    for (const watch of [...watching]) {
-      if (Date.now() - watch.since > WRITING_KEEP) { watching.delete(watch); continue; }
-      const hits = watch.open().map(item => [item, found(item, watch.intent, watch.since)]).filter(([, row]) => row);
-      if (hits.length) watch.settle(hits);
-    }
-  }
-  // 还在等的这几次照办理回查的节奏接着重读清单（前一分钟每 3 秒，之后每 15 秒，最多两分半），每读回来一次 settleItemWrites 对一遍；之后跟着页面平常的重读
-  let followTimer = 0;
-  function followWatching() {
-    clearTimeout(followTimer);
-    const now = Date.now(), noted = [...watching].map(w => w.noted).filter(at => now - at < 150000);
-    if (!noted.length || !lastFound) return;
-    followTimer = setTimeout(() => window.Live.refresh().finally(followWatching), now - Math.min(...noted) < 60000 ? 3000 : 15000);
-  }
+  const failedReceipts = new WeakMap();
   // 写回、跟查到真结果、弹回执。resume：回到页面接着查上回那一次，只按那次的提交编号查，不另起一笔。
   async function saveItems(rows, intent, { trigger = null, extra = '', complete = () => {}, resume = null } = {}) {
     const wording = CONFIRM_ITEM[intent], live = window.Live, lane = document.getElementById('item-action-receipts'), started = resume?.at ?? Date.now();
@@ -779,60 +833,60 @@
     rows.forEach(item => itemWrites.add(item.id));
     if (!resume) keepWriting(rows, { batch: started + '-' + Math.random().toString(36).slice(2, 8), at: started, intent, page: location.pathname });
     busy(true); project(null);
-    const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]));
+    const receiptKey = items => JSON.stringify([intent, ...items.map(item => item.id).sort()]);
+    const key = receiptKey(rows);
+    for (const note of lane?.querySelectorAll('.is-fail') || []) {
+      const previous = failedReceipts.get(note);
+      if (previous?.key === key) previous.close();
+    }
+    const source = trigger?.isConnected ? trigger : document.querySelector(`.lb-item[data-key="${CSS.escape(rows[0].id)}"]`);
+    const receipt = itemReceipt('正在保存…', rows.length > 1 ? `${rows.length} 件` : nameOf(rows[0]), source);
     try {
-      // 后台忙时一笔要几分钟才写进去：没结果就按同一编号接着查，回执先写“还在保存”，最多再查三轮（约 7 分钟）
-      // 回到页面接着查（resume）只看本机记下的结果，查一轮就够：后台没有只读的查回执口，不拿原编号重发
+      // 没结果就按同一编号接着只读查。回到页面恢复时查一轮，留在本页最多再查三轮。
       const saved = [], failed = [], receipts = {};
       let pending = rows;
+      const allAccepted = items => items.every(item => receipts[item.id]?.status === 'waiting_undo');
+      const onAccepted = rows.length === 1 ? () => receipt.set('busy', ITEM_RECEIPT_ACCEPTED) : null;
       for (let round = 0; pending.length && round < (resume ? 1 : 4); round++) {
-        if (round) receipt.set('busy', '还在保存…电脑这会儿忙，结果回来就告诉你');
-        const result = await writeItems(live, pending, wording.action, true, !!resume);
+        if (round) receipt.set('busy', allAccepted(pending) ? ITEM_RECEIPT_ACCEPTED : ITEM_RECEIPT_UNKNOWN);
+        const result = await writeItems(live, pending, wording.action, true, !!resume || round > 0, onAccepted);
         saved.push(...result.saved); failed.push(...result.failed); Object.assign(receipts, result.receipts);
         pending = pending.filter(item => !result.saved.includes(item.id) && !result.failed.some(f => f.item === item));
       }
       const unsure = rows.filter(item => !saved.includes(item.id) && !failed.some(f => f.item === item));
-      // 结果不明的留着，下回打开这页接着按同一次操作查；保存上和没保存上的不再记。回到页面查过一回的也不再记：再查也查不到新东西，每次打开都弹同一句就成了打扰
-      keepWriting(resume ? rows : rows.filter(item => !unsure.includes(item)), null);
-      rememberSaved(rows.filter(item => saved.includes(item.id)));
+      // 读不到结果时仍保留原提交编号，之后可以继续只读查询。
+      keepWriting(rows.filter(item => !unsure.includes(item)), null);
+      rememberSaved(rows.filter(item => saved.includes(item.id)), intent, receipts);
       project(saved, receipts);
-      const detail = saved.length === 1 && rows.length === 1 && trigger?.closest('.dossier-card');
-      const state = detail && detail.querySelector('[data-part="state"]');
-      if (state) { state.textContent = wording.state; detail.querySelectorAll('[aria-haspopup="dialog"]').forEach(button => button.remove()); }
-      // 回执照现在知道的结果写；清单读回来看到“还没确认”那几件办成了，再照读数改写一遍（settleItemWrites）
-      const show = () => {
+      // 只用本次操作的回执确认办成。退出名单不说明是哪次操作写成的。
       const left = rows.filter(item => !saved.includes(item.id));
       // 晚点提醒几点再提醒照后台回执说（回执的 until，没有就用后台回话里的“X月X日 10:00 再提醒”），后台没说就不写几点
       const remind = intent === 'later' && [...new Set(saved.map(id => receipts[id]).map(r => r?.until ? `${date(r.until).split('-').map(Number).join('月')}日 ${time(r.until)}` : String(r?.message || '').match(/(\d{1,2}月\d{1,2}日 \d{1,2}:\d{2}) 再提醒/)?.[1] || ''))];
       const savedText = remind ? '已放到你放着' + (remind.length === 1 && remind[0] ? `，${remind[0]} 再提醒` : '') : wording.saved;
-      if (!left.length) { watching.delete(watch); receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) }); }
+      if (!left.length) receipt.set('ok', savedText + (rows.length > 1 ? `（${rows.length} 件）` : ''), { name: extra || (rows.length > 1 ? '' : nameOf(rows[0])) });
       else {
-        // 多选时分开说保存上几件、没保存上几件、还没确认几件：结果不明的不算进“没保存上”。后台回了“已收下、还在写”（waiting_undo）的照实说
-        const accepted = unsure.length > 0 && unsure.every(item => receipts[item.id]?.status === 'waiting_undo');
-        const why = [...failed.map(f => (rows.length > 1 ? `「${f.name}」：` : '') + (FAILED_TEXT[f.error] || f.message)),
-          unsure.length && (rows.length > 1 && failed.length ? (accepted ? `还在写的 ${unsure.length} 件：` : `还没确认的 ${unsure.length} 件：`) : '') + (accepted ? '后台已经收下，还在写；写成了这里会跟着改。' : resume ? '刷新、离开前点的这一下没等到结果。等清单读回来：' + (rows.length > 1 ? '不见了的就是办成了，还在的可以再点一次。' : '这件不见了就是办成了，还在可以再点一次。') : '电脑在忙，还没回结果；稍后刷新看，或者再点一次。')].filter(Boolean).join('\n');
-        const head = rows.length > 1 ? [saved.length && `保存上 ${saved.length} 件`, failed.length && `没保存上 ${failed.length} 件`, unsure.length && (accepted ? `已收下、还在写 ${unsure.length} 件` : `还没确认 ${unsure.length} 件`)].filter(Boolean).join('，')
-          : failed.length ? (failed[0].error === 'cockpit_action_missing' ? '这一下没送到后台' : '没保存上') : accepted ? '已收下，还在写' : '还没确认保存上';
+        const accepted = unsure.length > 0 && allAccepted(unsure);
+        const waitingText = accepted ? ITEM_RECEIPT_ACCEPTED : ITEM_RECEIPT_UNKNOWN;
+        const missing = failure => failure.error === 'cockpit_action_missing';
+        const reasonFor = failure => readableWriteReason(receipts[failure.item.id]);
+        const failure = failed[0], batch = rows.length > 1;
+        const reason = failure && !missing(failure) && reasonFor(failure);
+        const missingCount = failed.filter(missing).length, failedCount = failed.length - missingCount;
+        const unknownCount = (accepted ? 0 : unsure.length) + missingCount;
+        const head = batch ? [
+          saved.length && `保存上 ${saved.length} 件`, failedCount && `没保存上 ${failedCount} 件`,
+          accepted && `已收下、还在写 ${unsure.length} 件`, unknownCount && `还没确认 ${unknownCount} 件`,
+        ].filter(Boolean).join('，') : failure
+          ? (missing(failure) ? ITEM_RECEIPT_MISSING : reason ? `没保存上：${reason}` : '没保存上') : waitingText;
+        const details = batch ? [...failed.map(f => {
+          const detail = missing(f) ? ITEM_RECEIPT_MISSING : reasonFor(f) || FAILED_TEXT[f.error];
+          return `「${f.name}」：${detail}`;
+        }), unsure.length && waitingText] : [nameOf(rows[0]), failure && !reason && !missing(failure) && FAILED_TEXT[failure.error]];
         receipt.set('fail', head,
-          { name: (rows.length > 1 ? '' : nameOf(rows[0]) + '\n') + why + (extra ? '\n' + extra : ''), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => { watching.delete(watch); saveItems(left.map(latestItem), intent, { trigger, complete }); } });
+          { name: [...details, extra].filter(Boolean).join('\n'), error: failed.map(f => f.error).filter(Boolean).join(','), retry: () => saveItems(left.map(latestItem), intent, { trigger, complete }) });
+        failedReceipts.set(receipt.note, { key: receiptKey(left), close: receipt.close });
       }
-      };
-      // “还没确认”只是还不知道，不是没保存上；读到这件已经办成，就算保存上，回执跟着改（晚点提醒用读到的提醒时刻）
-      // 盯着的：还没确认的，和查回来“没送到后台”的（原请求要是晚到、真办成了，读到退出记录照样改）
-      const watch = { intent, since: started, noted: Date.now(), unsure, open: () => [...unsure, ...failed.filter(f => f.error === 'cockpit_action_missing').map(f => f.item)], settle(hits) {
-        for (const [item, row] of hits) {
-          if (unsure.includes(item)) unsure.splice(unsure.indexOf(item), 1); else failed.splice(failed.findIndex(f => f.item === item), 1);
-          saved.push(item.id);
-          if (intent === 'later' && row.act_from) receipts[item.id] = { until: row.act_from };
-        }
-        keepWriting(hits.map(([item]) => item), null);
-        show(); complete(hits.map(([item]) => item.id));
-        if (!watch.open().length) watching.delete(watch);
-      } };
-      if (watch.open().length) watching.add(watch);
-      show();
       complete(saved);
-      if (watch.open().length) { settleItemWrites(); followWatching(); }
       await live.refresh();
     } finally {
       rows.forEach(item => itemWrites.delete(item.id));
@@ -1202,7 +1256,7 @@
   // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
   const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
   let connBack = 0, connNow = 'online';
-  const pillHooks = new Set();   // 页眉“几点读到”按钮跟着卡一起换成“正在重试”
+  const pillHooks = new Set();   // 页眉读数按钮和连接条用同一份主读口状态
   const connStage = () => document.querySelector?.('body.page--live main.stage');
   const connFit = card => {
     const was = card.hidden;
@@ -1264,10 +1318,11 @@
       put(link.querySelector('.live-conn__at'), c.at);
       put(link.querySelector('.live-conn__why'), c.wait);
     } else if (link && !link.classList.contains('is-back')) {
+      const refreshed = link.dataset.stage === 'retrying';
       link.classList.add('is-back');
       link.dataset.stage = 'back';
-      const upTo = window.Live?.upTo?.() || state.shownAt;
-      put(link.querySelector('b'), '已连上');
+      const upTo = c.shownAt;
+      put(link.querySelector('b'), refreshed ? '已刷新' : '已连上');
       put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
       put(link.querySelector('.live-conn__why'), '');   // 断线时那句（“先留着这份一直重试”之类）连上了就不留在“已连上”下面
       connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
@@ -1318,12 +1373,11 @@
     const at = group.querySelector('.live-at');
     const askBtn = group.querySelector('.live-ask');
     const pageTitle = document.title || '实况';
-    let label = '', busy = false, paused = false, last = null;
-    // 刷新图标用画好的 SVG：一段顺时针 300° 的圆弧，右上偏上一个实心三角箭头（字体里的 ↻ 在不同字体里样子怪）。
-    // 不用“直角折线”箭头（转到缺口朝上像电源键）；箭头小了、线细了又像字母 C。线宽 2.25（显示约 1.5px，和 14px 字的笔画一样重），
-    // 箭头尖离圆弧起点约 2px，转到哪个角度都像一个圆在转。
-    const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
-    const show = (text) => html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${icon}</span><span class="live-refresh-text">${esc(text)}</span>`);
+    let label = '', busy = false, paused = false, disconnected = false, last = null;
+    const show = (text) => {
+      at.setAttribute('aria-label', text);
+      html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${CONN_ICON}</span><span class="live-refresh-text">${esc(text)}</span>`);
+    };
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
     // 点一下就等于浏览器刷新（本人 M513：页面上的刷新没用、浏览器刷新就好）：整页重新载入，拿到最新版网页和最新数据。
     // 动画照 r62：药丸先收成圆（--live-at-slide）再重新载入；新页面一出来就是收好、接着转的样子，这一轮数据读完、
@@ -1343,10 +1397,22 @@
         busy = false; at.classList.remove('is-refreshing'); at.removeAttribute('aria-busy'); at.setAttribute('aria-label', label); show(label);
       });
     }
-    at.addEventListener('click', () => {
+    at.addEventListener('click', async () => {
       if (busy) return;
       busy = true;
       at.setAttribute('aria-busy', 'true');
+      if (!paused && disconnected) {
+        at.classList.add('is-reconnecting');
+        show('正在重连');
+        try { await window.Live.reconnectMain(); }
+        finally {
+          busy = false;
+          at.classList.remove('is-reconnecting');
+          at.removeAttribute('aria-busy');
+          show(label);
+        }
+        return;
+      }
       if (!paused) at.setAttribute('aria-label', '正在重读');
       at.querySelector('.live-refresh-text')?.classList.remove('is-swapped');
       at.classList.add('is-refreshing');
@@ -1359,7 +1425,7 @@
       if (text) flash(askBtn, (await copy(text)) ? '已复制' : '没复制成');
     });
     const api = {
-      // 用假数据写“示意数”；真数写“04:12 读到”；读不到正在重试写“正在重试”（本人 11-24 20:34：不写连不上）
+      // 重连的结果只用主读口的状态，时刻取页面实际拿到的读数。
       set(state) {
         last = state;
         const nextViewer = state.viewer?.kind === 'public' ? 'public' : 'owner';
@@ -1379,15 +1445,18 @@
           clearTimeout(waiting); readDone();
           label = state.text;
           document.title = `${label} · 实况`;
-          at.setAttribute('aria-label', label);
+          at.title = '点一下重读';
           show(label);
           return;
         }
-        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} ${state.offline ? '最后一份' : '读到'}` : '';
-        const retry = state.meta?.source !== 'fixture' && ['retrying', 'lost'].includes(state.conn?.stage);
-        if (stamp || state.offline || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
-        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : retry ? '正在重试'
-          : atText || (state.offline ? '电脑关机了' : state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
+        const stage = state.conn?.stage;
+        disconnected = stage ? stage === 'lost' || stage === 'off' : !!state.offline;
+        at.title = disconnected ? '点一下重连' : '点一下重读';
+        const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
+        const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
+        if (stamp || disconnected || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
+        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
+          : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
       },
@@ -1807,5 +1876,5 @@
     const when = mem.source_at ?? at;
     return parts.length ? [...parts, Number.isFinite(Date.parse(when)) ? `截至 ${date(when)}` : ''].filter(Boolean).join(' · ') : '';
   }
-  window.LiveUI = { memorySpec, justSaved, settleItemWrites, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

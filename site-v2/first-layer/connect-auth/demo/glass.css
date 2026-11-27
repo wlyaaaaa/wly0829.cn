@@ -304,7 +304,7 @@ body {
   flex-direction: column;
   min-height: clamp(188px, 24vh, 260px);
 }
-.page--auth .cell__acts { margin-top: auto; padding-top: 18px; }
+.page--auth .cell__acts { flex-wrap: wrap; margin-top: auto; padding-top: 18px; }
 .page--auth .links .link__glass { min-height: clamp(116px, 14vh, 156px); }
 
 /* 灯：放在右上角，像一件东西上的指示灯，和名字齐 */
@@ -461,7 +461,7 @@ body {
 /* 自己填：一个空格子加“小时”，像填空 */
 .chip--own { cursor: text; padding-right: 11px; }
 .chip--own input {
-  width: 2.4em;
+  width: 2.7em;
   height: 18px;
   margin-right: 4px;
   padding: 0;
@@ -624,6 +624,8 @@ body {
   transition: transform .5s var(--ease), width .5s var(--ease);
 }
 .seg__thumb.is-instant { transition: none; }
+/* 两台都接不了这家：没有选中的那格，黑块收起 */
+.seg.is-none .seg__thumb { opacity: 0; }
 
 .seg__opt {
   position: relative;
@@ -796,6 +798,7 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
   font-size: 12.5px;
   letter-spacing: .05em;
 }
+.copy.is-failed { color: #ad6248; }
 .copy.is-done {
   background: var(--ink);
   color: #fff;
@@ -1029,6 +1032,8 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .page--auth .cell.is-on .cell__glow { animation: auth-breathe 8s ease-in-out infinite; }
 @keyframes auth-breathe { 50% { background-size: 116% 116%; filter: brightness(1.1) saturate(1.2); } }
 .page--auth .field { animation: auth-drift 8s ease-in-out infinite; }
+/* 光斑漂移会伸出窗口右边，手机上整页能左右挪十来像素：照连接电脑页（M236）只在窗口这一层裁掉，样子不变 */
+html:has(> body.page--auth), body.page--auth { overflow-x: clip; }
 @keyframes auth-drift { 50% { transform: translate3d(34px, -20px, 0) scale(1.04); } }
 
 /* ③ 办成那一刻：绿点荡开光波，卡片泛起绿光，时间数字翻到位（1 秒，一次） */

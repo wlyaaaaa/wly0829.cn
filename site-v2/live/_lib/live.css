@@ -390,7 +390,7 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
 .live-conn__at { font-weight: 500; }
 .live-conn__wait { display: inline-flex; flex-basis: 100%; align-items: center; gap: 8px; margin-left: 25px; color: var(--muted); font-size: 15px; transition: opacity .45s ease; }
 .live-conn__row.is-back .live-conn__wait { opacity: 0; }
-.live-conn__spin { display: inline-flex; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
+.live-conn__spin { display: inline-flex; flex: none; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
 .live-conn__spin svg { width: 100%; height: 100%; }
 @keyframes live-conn-breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.82); } }
 @keyframes live-conn-spin { to { transform: rotate(360deg); } }
@@ -428,6 +428,8 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
   box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1), 0 2px 6px rgb(20 20 19 / .04);
   transition: left var(--live-at-t) var(--live-at-ease), right var(--live-at-t) var(--live-at-ease), background .2s ease;
 }
+/* 刚建出来还没有字（数据没回、也没到 2.5 秒写“正在读”）时先不占位，免得页头挂一个空白小胶囊 */
+.topbar .live-at:empty { display: none; }
 .topbar .live-at:hover { background: transparent; box-shadow: none; color: #141413; }
 .topbar .live-at:hover::before { background: rgb(255 255 255 / .94); }
 .live-refresh-icon { position: absolute; left: 15px; top: calc(50% - 8px); display: block; width: 16px; height: 16px; transition: left var(--live-at-t) var(--live-at-ease); }
@@ -440,7 +442,7 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
 .is-refreshing .live-refresh-icon { left: calc(50% - 8px); animation: live-refresh-turn calc(var(--live-at-turn) * var(--sp, 1)) cubic-bezier(.45, .1, .45, .9) var(--live-at-t) infinite; }
 .is-refreshing .live-refresh-text { opacity: 0; transition-duration: calc(var(--live-at-t) * .3); transition-delay: 0s; }
 /* 读不到、正在重试：字写“正在重试”，图标原地一直转（本人 11-24 20:34） */
-.topbar .live-at.is-retrying:not(.is-refreshing) .live-refresh-icon { animation: live-refresh-turn 1.4s linear infinite; }
+.topbar .live-at:is(.is-retrying, .is-reconnecting):not(.is-refreshing) .live-refresh-icon { animation: live-refresh-turn 1.4s linear infinite; }
 @keyframes live-refresh-turn { to { rotate: 1turn; } }
 .topbar .live-ask { margin-right: 10px; }
 .head__link { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; color: inherit; text-decoration: none; border-radius: 8px; }
@@ -810,6 +812,21 @@ span.fog__slow { margin: 0 0 0 8px; }
 
 /* 窄电脑窗口：只收紧实况新增的按钮；灯固定在标题第一行，长标题在灯右边换行。 */
 .live-unit { display: inline; white-space: nowrap; }
+
+/* 首页、清单的回执和事项详情的失败回执在正文里占位。 */
+:is(.page--items, .page--live:has(#needs)) #item-action-receipts,
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-fail) { position: relative; inset: auto; transform: none; margin: 10px auto 14px; max-width: min(480px, 100%); scroll-margin-top: calc(var(--bar-bottom, 70px) + 12px); }
+:is(.page--items, .page--live:has(#needs)) #item-action-receipts::before,
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-fail)::before { top: -8px; height: 8px; }
+#item-action-receipts .site-notice { min-width: min(300px, 100%); }
+#item-action-receipts .site-notice__head, #item-action-receipts .site-notice__name { text-wrap: pretty; }
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-ok:only-child) { top: 72px; }
+[data-record="item"] #item-action-receipts:has(> .site-notice.is-ok:only-child)::before { top: -5px; height: 5px; }
+#item-action-receipts > .site-notice.is-ok { padding-block: 6px 10px; }
+#item-action-receipts .is-ok .site-notice__head { line-height: 18px; }
+#item-action-receipts .is-ok .site-notice__name { line-height: 16px; }
+#item-action-receipts .is-ok .site-notice__line { bottom: 4px; }
+#item-action-receipts .is-ok .site-notice__x { top: 50%; translate: 0 -50%; }
 @media (max-width: 1440px) {
   .live-unit { display: inline; white-space: nowrap; }
   .page--live .row__kind { white-space: nowrap; }
@@ -1005,17 +1022,14 @@ html .live-conn > #notices > li + li, html .live-conn__rows:not(:empty) + #notic
 .notice-message__body > summary:hover { text-decoration: underline; text-underline-offset: 3px; }
 .notice-message__body[open] > summary { color: #00A650; }
 .notice-message__body > p { margin: 6px 0 4px; font-weight: 400; white-space: pre-line; overflow-wrap: anywhere; }
-/* 等你的事（实况首页那张卡、等你的事页）的按钮：每种按钮占固定的一列，右对齐，哪行少一个按钮别的也不挪位（本人 11-23 圈的对不齐）；
-   一组里谁都没有的那种按钮，那一列收成 0 */
-:is(.page--items .lb-item, .page--live #needs .row) > .row__acts:has(> [data-slot]) { display: grid; grid-template-columns: auto var(--slot-ask, 72px) var(--slot-close, 88px) var(--slot-later, 88px) var(--slot-pick, 0px); justify-content: end; justify-items: end; align-items: center; column-gap: 0; max-width: none; flex-wrap: nowrap; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="ask"])) { --slot-ask: 0px; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="close"])) { --slot-close: 0px; }
-:is(.page--items .lb-card, .page--live #needs):not(:has([data-slot="later"])) { --slot-later: 0px; }
-.page--items .lb-card:has([data-slot="pick"]) { --slot-pick: 34px; }
-.row__acts:has(> [data-slot]) > [data-slot] { grid-row: 1; }
-.row__acts:has(> [data-slot]) > [data-slot="go"] { grid-column: 1; grid-row: auto; margin-right: 6px; }
-.row__acts:has(> [data-slot]) > [data-slot="ask"] { grid-column: 2; }
-.row__acts:has(> [data-slot]) > [data-slot="close"] { grid-column: 3; }
-.row__acts:has(> [data-slot]) > [data-slot="later"] { grid-column: 4; }
-.row__acts:has(> [data-slot]) > [data-slot="pick"] { grid-column: 5; }
+/* 等你的事各入口共用按钮间距。按实际按钮宽度排，少一个按钮就少一个位置。 */
+:is(.page--items, .page--live #needs, .page--l3[data-record="item"]) { --item-action-gap: 8px; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--item-action-gap); max-width: 100%; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot] { margin: 0; }
+.row__acts > [data-slot="go"] { margin-right: 6px; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="go"] { order: -2; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="ask"] { order: -1; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="later"] { order: 1; }
+:is(.page--items .lb-item, .page--live #needs .row) > .row__acts > [data-slot="pick"] { order: 2; }
+.page--l3[data-record="item"] .dossier-card--state .rec-acts { gap: var(--item-action-gap); }
 .row__acts > .btn.is-busy { opacity: .75; cursor: progress; }

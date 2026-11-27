@@ -17,6 +17,10 @@
   const artifactRecordFields = { freeze_records: 'at', phone_batch: 'last_received_at', inventory_report: 'at', governance: null };
   const recordAt = id === 'pcconfig' && Object.hasOwn(artifactRecordFields, section) && params.get('record');
   const archives = section === 'archives', knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(section);
+  // 只在最外面挂一个（LOOKS1126 ②）：本人版说明书这一类（资料速查除外）类名旁已挂“这一类的认识原文访客看不到”，
+  // 下面各条正文、详细内容再标“访客看不到”的不再重复挂；“对外换了说法”照旧挂。类名本身被标了的，类名旁挂的是那个签，各条照旧挂
+  const quietRows = () => knowledge && recordViewer === 'owner' && section !== 'group-4'
+    && !U.visitorFieldKind(project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section), ['$', 'label']);
   const enc = encodeURIComponent;
   // 只有 403 表示不给公开；404/503 表示这块暂时取不到，不推断为私人内容。
   const locked = s => s.meta?.status === 403 && s.meta?.viewer?.kind === 'public';
@@ -129,7 +133,8 @@
     // 正文里有“〔…省略〕”的：源头导出时就省掉了，后台给缺因（body_gap），紧跟正文写一句为什么
     if (typeof r.body_gap === 'string' && r.body_gap) parts[1] += `<p class="knowledge-prose" style="color:var(--muted, #8f8d86)">${esc(r.body_gap)}</p>`;
     // 后台在这一条的正文、详细内容上标了 visitor_labels 的，紧跟那一段挂签（本人版两种都挂，访客版只挂“对外换了说法”）
-    const textTag = r.text ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
+    const quiet = key => quietRows() && U.visitorFieldKind(r, key) === 'hidden';
+    const textTag = r.text && !quiet('text') ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail && !quiet('detail') ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
     if (textTag) parts[1] += `<p class="knowledge-prose">${textTag}</p>`;
     if (detailTag) parts[3] = parts[3].replace(/^(<div class="knowledge-md">[\s\S]*?<\/div>|<p class="knowledge-prose">[\s\S]*?<\/p>)/, `$1<p class="knowledge-prose">${detailTag}</p>`);
     return parts;
@@ -425,7 +430,8 @@
   function drawRecordNote(d, extra = []) {
     if (groupPrivate && recordViewer === 'public') {
       const name = U.fieldText(sectionName) || '这一组', n = knowledge ? knowledgeCount(d.items?.[0]) : null;
-      U.html($('record-note'), esc(knowledge ? `这里是${n == null ? '' : ` ${n.toLocaleString('zh-CN')} 条`}关于${name}的认识，本人版能看到全部，所以不予展示` : `${name}的原文仅本人可见。`));
+      // M1000：说明书一类访客看不到时，那一片铺一整块拼布被面，两行字写在中间那条绿针脚布标签上（样子在 page.css 的 .record-veil__tag）
+      U.html($('record-note'), knowledge ? `<span class="record-veil__tag"><b>${esc(`这里是${n == null ? '' : ` ${n.toLocaleString('zh-CN')} 条`}关于${name}的认识`)}</b><span>本人版能看到全部，所以不予展示</span></span>` : esc(`${name}的原文仅本人可见。`));
       return;
     }
     U.html($('record-note'), [d.note && text(d.note), ...extra].filter(Boolean).join(' · '));
@@ -560,7 +566,7 @@
       bar: skills ? num(r.count) : null,
     };
   }
-  // 点开一行看到的：接口给的那句说明；技能还把 Claude、Codex 各自的次数和最近一次摆出来（只摆接口给了的字段）
+  // 点开一行看到的：接口给的那句说明，以及各家已有的技能次数和最近一次
   function detailOf(r) {
     // 接口那句只是“名字：近 30 天（有）N 次（记录）”、和次数那一列同一个数时不再重复写；空格、冒号写法不同也算同一句
     const squash = s => U.sp(String(s)).replace(/\s+/g, '').replace(/：/g, ':');
@@ -569,9 +575,11 @@
         .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
     const say = !duplicate && r.text && (r.name || r.label) && text(r.text) !== marker(r, recordViewer) ? `<p>${text(r.text)}</p>` : '';
     if (!skills) return say;
-    const n = v => `${Number(v).toLocaleString('zh-CN')} 次`;
-    const hosts = [['claude', 'Claude'], ['codex', 'Codex']].map(([k, label]) => {
-      const parts = [k in r && `近 30 天 ${r[k] == null ? U.collectionText() : n(r[k])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
+    const hosts = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']].map(([k, label]) => {
+      const lowerBound = k === 'antigravity';
+      const d30 = lowerBound ? 'antigravity_d30' : k;
+      const n = v => `${lowerBound ? '至少 ' : ''}${Number(v).toLocaleString('zh-CN')} 次`;
+      const parts = [d30 in r && `近 30 天 ${r[d30] == null ? U.collectionText() : n(r[d30])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
         `${k}_total` in r && `累计 ${r[`${k}_total`] == null ? U.collectionText() : n(r[`${k}_total`])}`, `${k}_last` in r && `最近 ${r[`${k}_last`] == null ? U.collectionText() : stamp(r[`${k}_last`])}`].filter(Boolean);
       return parts.length ? `<span class="book-detail__host"><b>${label}</b><span class="book-detail__metrics">${parts.map(s => `<span class="book-detail__metric">${text(s)}</span>`).join('')}</span></span>` : '';
     }).join('');

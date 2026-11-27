@@ -13,9 +13,9 @@
   const count = (item, key, format) => item?.[key] == null ? offline() ? '—' : U.collectionText(({ count: '份数', total: '总份数', bytes: '大小', failed: '失败份数' })[key] || '', item) : D.count(item, key, format);
   const gap = item => offline() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|未读/.test(item?.gap || '') ? '' : D.gap(item);
   let pointLimit = 5, assetLimit = 5, fileLimit = 5;
-  const pathHtml = (value, what = '备份位置') => {
+  const pathHtml = (value, what = '备份位置', showFull = false) => {
     const shown = said(value, what), plain = U.fieldText(value, viewer);
-    if (U.sp(value).length > 28) return `<details class="backup-path"><summary>${shown}</summary><div>${shown}</div></details>`;
+    if (!showFull && U.sp(value).length > 28) return `<details class="backup-path"><summary>${shown}</summary><div>${shown}</div></details>`;
     return shown === esc(plain) && /^[a-z]:[\\/]/i.test(plain)
       ? `<span class="backup-locator">${shown.replace(/([\\/])(?=[^\\/])/g, '$1<wbr>')}</span>` : shown;
   };
@@ -43,6 +43,8 @@
 
   const PROTECTION = { failed: '备份失败', missing: '没有副本', stale: '副本旧了', partial: '副本不齐' };
   const PLACES = [['local', '本机'], ['g', 'G 盘'], ['h', 'H 盘']], CLOUDS = { drive: 'Drive', photos: '照片云' };
+  const RUN_STATUS = { complete: '备好了', failed: '没备成', unfinished: '没做完' };
+  const DRIVE_RUN_STATUS = { complete: '云盘任务完成', failed: '云盘任务失败', unfinished: '云盘任务未完' };
   const notApplicable = copy => copy?.state === 'not_applicable' || (Object.hasOwn(copy || {}, 'applicable') ? copy.applicable === false : copy?.required === false);
   const absentReason = (data, key) => {
     const value = data?.missing?.[key], code = value?.reason_code || value;
@@ -60,7 +62,11 @@
       : !published && ['ready', 'complete', 'completed'].includes(current) && !!copy?.content_at;
     const problems = original ? { failed: '原件读取失败', missing: '原件缺失', stale: '原件记录已过期', partial: '只核实部分原件' } : PROTECTION;
     // G、H 盘这一轮按备上、没备上的份数分了档（outcome.state）：少数没备上写“大部分成功”，较多没备上写“部分成功”，和备份总表一个说法（M780）
-    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({ mostly_successful: '大部分成功（没备上的不超过一半）', partial_success: '部分成功（没备上的超过一半）' })[copy?.outcome?.state];
+    const exact = copy?.outcome?.exact === true;
+    const tier = (key === 'g' || key === 'h') && (copy?.state === 'failed' || copy?.failed > 0) && ({
+      mostly_successful: exact ? '大部分成功（没备上的不超过一半）' : '大部分成功（备份程序自己报的，份数没数全）',
+      partial_success: exact ? '部分成功（没备上的超过一半）' : '部分成功（备份程序自己报的，份数没数全）',
+    })[copy?.outcome?.state];
     // 括号里的分界。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现备上数大于等于没备上数算大部分成功；变了改这句
     const anomaly = tier || (copy?.failed > 0 ? (original ? problems.failed : `失败 ${D.transferCount(copy, 'failed', key)}`)
       : problems[copy?.state] || problems[current] || (copy?.stale === true ? problems.stale : copy?.refresh_state === 'failed' ? '本次未刷新' : ''));
@@ -70,7 +76,7 @@
     const content = copy?.content_at ? `${stamp(copy.content_at)} ${published ? '恢复集发布' : original ? '原件记录日期' : '内容日期'}` : '';
     const listedAt = (summary?.target === key ? summary.checked_at : null) ?? copy?.checked_at;
     const checked = confirmed && copy?.confirmed_at ? `${stamp(copy.confirmed_at)} 核对` : listedAt ? `${stamp(listedAt)} 清单核对` : '';
-    const lead = [anomaly, status, quantity && `已读 ${quantity}`].filter(Boolean).join(' · ');
+    const rest = [status, quantity && `已读 ${quantity}`].filter(Boolean), lead = [anomaly, ...rest].filter(Boolean).join(' · ');
     const unverified = [['count', '份数'], ['bytes', '大小'], ['content_at', '内容日期'], ['checked_at', '核对时间']]
       .filter(([k]) => copy?.[k] == null && (k !== 'checked_at' || !checked)).map(([k, label]) => [label, absentReason(copy, k)]);
     const unknown = unverified.filter(([, reason]) => !reason).map(([label]) => label);
@@ -79,15 +85,20 @@
       `<span class="backup-evidence-label">${label}：</span>${said(reason, label)}`);
     if (unknown.length) reasons.unshift(`${unknown.join('、').replace(/、([^、]+)$/, '和$1')}尚未核实`);
     // 这次没备份成：回包里给了几点试的、为什么、下一步，放在说明最前面（M376）。
-    const failedAt = anomaly && copy?.last_attempt_at ? `${stamp(copy.last_attempt_at)} 这次没备份成` : '';
-    const cause = anomaly && copy?.failure_reason != null ? copy.failure_reason : null;
+    const failedAt = !original && !tier && (copy?.state === 'failed' || copy?.failed > 0) && copy?.last_attempt_at
+      && copy.last_attempt_at !== copy.last_success_at ? `${stamp(copy.last_attempt_at)} 这次没备份成` : '';
+    const cause = anomaly && !(copy?.failure_reason === 'cold_group_failed' && copy.status_text && status) ? D.backupFailureReason(copy?.failure_reason) : null;
     const failure = [failedAt && esc(failedAt) + (cause != null ? '：' + said(cause, '失败原因') : ''),
       !failedAt && cause != null && `<span class="backup-evidence-label">失败原因：</span>${said(cause, '失败原因')}`,
       anomaly && copy?.next_step != null && `<span class="backup-evidence-label">下一步：</span>${said(copy.next_step, '下一步')}`].filter(Boolean).join(' · ');
     if (failure) reasons.unshift(failure);
     const failureText = failedAt ? failedAt + (cause != null ? '：' + U.fieldText(cause, viewer) : '') : cause != null ? `失败原因：${U.fieldText(cause, viewer)}` : '';
     const first = anomaly || status ? `${name} ${lead}` : quantity ? `已读 ${name} ${quantity}` : checked || content ? name : '';
-    return { name, text: [first, failureText, checked, content].filter(Boolean).join(' · '), lead, checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
+    const tone = tier ? copy.outcome.state === 'mostly_successful' ? 'mostly' : 'partial'
+      : !retired && (current === 'failed' || copy?.failed > 0) ? 'failed' : '';
+    const evidence = rest.map(value => value === '上次确认有副本'
+      ? `<span class="backup-evidence-label">${esc(value)}</span>` : esc(value));
+    return { name, text: [first, failureText, checked, content].filter(Boolean).join(' · '), lead: [tone ? `<span class="backup-copy-state" data-state="${tone}">${esc(anomaly)}</span>` : esc(anomaly), ...evidence].filter(Boolean).join(' · '), checked, content, quantity, why: reasons.join(' · '), anomaly, confirmed, retired };
   }
   function copySummary(d) {
     const copies = PLACES.map(([key, name]) => copyEvidence(d[key], key, name, d.copy_summary));
@@ -158,6 +169,19 @@
     const reason = copy?.missing?.location?.reason_code;
     return said(({ generated_from_system_inventory: '由系统信息生成，没有原件目录', task_profile_binding_unavailable: '这次备份使用的用户目录还没记录', backup_manifest_unavailable: '备份清单暂时读不到', source_config_unavailable: '来源配置暂时读不到', not_recorded: '还没记录位置', read_failed: '位置读取失败', not_applicable: '不适用' })[reason] || (offline() ? '—' : U.collectionText('备份位置')), '备份位置');
   }
+  function backupHistory(runs) {
+    if (!runs.length) return '';
+    const time = run => `<time datetime="${esc(run.at)}">${esc(stamp(run.at))}</time>`;
+    const result = run => (run.target === 'drive' ? DRIVE_RUN_STATUS : RUN_STATUS)[run.status];
+    const tags = runs.map(run => `<li data-state="${run.status}">${time(run)}${result(run)}</li>`);
+    const reasons = runs.map(run => {
+      const reason = D.backupFailureReason(run.reason_code);
+      const detail = reason && reason !== run.reason_code ? reason
+        : reason ? `记录的原因代码是 ${reason}` : run.status === 'failed' ? '没有记录失败原因' : '';
+      return detail && `<p class="fe-l3b-note">${time(run)} · ${result(run)}：${said(detail, '备份原因')}</p>`;
+    }).join('');
+    return `<div class="dossier-card__part backup-history"><p class="dossier-card__sub">最近几次备份</p><ul aria-label="最近几次备份">${tags.join('')}</ul>${reasons}</div>`;
+  }
   function verificationTime(row) {
     return row.at && row.at_precision && !['run_completed', 'not_recorded'].includes(row.at_precision) ? stamp(row.at) : '';
   }
@@ -166,7 +190,7 @@
     document.title = `${sp(set.name || '一类备份')} · 实况`;
     const { copies, ...summary } = copySummary(set);
     U.html($('head'), lampTo(summary.lamp) + U.head(set.name || '一类备份', { lamp: false }));
-    const size = set.bytes == null ? '' : [count(set, 'bytes', U.gb), D.sizeEvidence(set, stamp)].filter(Boolean).join(' · ');
+    const size = set.bytes == null ? set.missing?.bytes === 'read_failed' ? '这次没读到大小' : U.collectionText('大小', set, null, 'bytes') : [count(set, 'bytes', U.gb), D.sizeEvidence(set, stamp)].filter(Boolean).join(' · ');
     U.html($('meta'), `${size ? `<span>${esc(size)}</span>` : ''}${gap(set)}`); $('meta').hidden = !$('meta').textContent;
     const overview = $('copy-overview');
     U.html(overview.querySelector('div'), [summary.text && `<p>${said(summary.text, '副本情况摘要')}</p>`, summary.why && `<p>${summary.why}</p>`].filter(Boolean).join(''));
@@ -175,13 +199,24 @@
     Light.tone(hero, set);
     $('media-section').hidden = id !== 'personal_media';
     if (id === 'personal_media') U.html($('media-counts'), table(['类别', '个数', '大小'], [['photos', '照片'], ['videos', '视频'], ['music', '音乐'], ['audio', '录音']].map(([key, name]) => { const m = set.media?.find(m => m.id === key); return [name, count(m, 'count') + gap(m), esc(count(m, 'bytes', U.gb.scaled))]; }), '照片、视频、音乐、录音'));
-    U.html($('copies'), table(['去处', '本地文件夹', '情况', '内容时间', '核对时间'], PLACES.map(([key, name], i) => {
+    const localPackage = set.local_package;
+    const targets = notApplicable(set.transfer_summary) ? [] : Object.keys(CLOUDS).filter(key => !notApplicable(set[key]));
+    const runs = (set.recent_runs || []).filter(run => (run.target !== 'drive' || targets.includes('drive')) &&
+      Object.hasOwn(RUN_STATUS, run.status) && Number.isFinite(Date.parse(run.at))).slice(0, 5);
+    const rows = PLACES.map(([key, name], i) => {
+      if (key === 'local' && (localPackage || runs.length)) name = '本机原件';
       const copy = set[key], c = copies[i], localNote = key === 'local' && set.local_location_note;
       if (c.skip) return [name, localNote ? said(localNote, '本机原件说明') : '—', '不适用', '—', '—'];
       const detail = [copy?.bytes != null && esc(count(copy, 'bytes', U.gb)), copy && c.why, key === 'local' && esc(D.sourceSubset(copy, stamp)), c.retired && copy.reason && said(copy.reason, '停用说明')].filter(Boolean).join(' · ');
-      return [`${name}${copy?.scope ? `<small>${said(copy.scope === set.id ? set.name : copy.scope, '备份范围')}</small>` : ''}`, locationHtml(copy, key === 'local' ? set.local_paths : null, localNote), `${esc(c.lead)}${detail ? `<small>${detail}</small>` : ''}${gap(copy)}` || '—', evidenceTime(c.content), evidenceTime(c.checked)];
-    })));
-    const targets = notApplicable(set.transfer_summary) ? [] : Object.keys(CLOUDS).filter(key => !notApplicable(set[key])), clouds = targets.filter(key => set[key]);
+      return [`${name}${copy?.scope ? `<small>${said(copy.scope === set.id ? set.name : copy.scope, '备份范围')}</small>` : ''}`, locationHtml(copy, key === 'local' ? set.local_paths : null, localNote), `${c.lead}${detail ? `<small>${detail}</small>` : ''}${gap(copy)}` || '—', evidenceTime(c.content), evidenceTime(c.checked)];
+    });
+    if (localPackage) {
+      const completed = `<span class="backup-time">${esc(stamp(localPackage.completed_at))}</span>`;
+      const path = `<span class="backup-package-path">${pathHtml(localPackage.path, '备份位置', true)}</span>`;
+      rows.splice(1, 0, ['本机备份包', path, `最近一次备好了 · ${U.trafficBytes(localPackage.bytes)}`, completed, completed]);
+    }
+    U.html($('copies'), table(['去处', '本地文件夹', '情况', '内容时间', '核对时间'], rows) + backupHistory(runs));
+    const clouds = targets.filter(key => set[key]);
     $('cloud-section').hidden = !targets.length;
     U.html($('cloud'), table(['去处', '位置', '已传 / 共', '在等', '没传成'], clouds.map(key => {
       const cloud = set[key], pending = waiting(cloud);
@@ -191,6 +226,8 @@
     const groups = bundle.restore?.filter(group => group.set === id);
     const points = groups?.flatMap(group => (group.points || []).map(p => ({ ...p, kind: group.kind }))).sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
     const latest = points?.find(p => p.at), restore = set.restore_summary;
+    const hasRestorePoint = Number(restore?.count) > 0 && restore?.q !== 'unknown' || !!latest;
+    $('points-section').querySelector('.dossier-icon').dataset.icon = hasRestorePoint ? 'restore' : 'clock';
     const dates = [...new Set([restore?.earliest_date, restore?.latest_date].filter(Boolean))].join(' 至 ');
     const restoreResult = Object.hasOwn(set, 'restore_summary')
       ? restore?.count == null || restore.q === 'unknown' ? said(restore?.reason || missing('恢复点清单'), '恢复点清单')
@@ -203,7 +240,7 @@
       : point && id !== 'recovery-kit' && !selectedPoint
         ? groups?.some(group => group.q === 'ok') ? '这条链接无法定位原恢复点，下面是当前清单。' : '这次没有读到可供定位的恢复点清单。' : '';
     if (pointsResult) { U.html(pointsResult, [pointMissing, restoreResult].filter(Boolean).join(' · ')); pointsResult.hidden = false; }
-    const seen = new Set(), notes = (...parts) => parts.filter(text => text && !seen.has(text) && seen.add(text)).map(sp).join(' · ');
+    const seen = new Set(), notes = (...parts) => parts.filter(text => text && !seen.has(text) && seen.add(text)).map(text => sp(D.backupRestoreNote(text))).join(' · ');
     const fullDate = at => at ? `${new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(at))} ${U.time(at)}` : '';
     const restored = U.mergePrivateRows(points || [], { value: p => p.scope || p, kind: viewer }).map(p => {
       if (p.private_count) return { key: p.key, cls: 'run', html: U.privateSummary(p.private_count) };
@@ -223,9 +260,9 @@
     for (const group of groups || []) { const text = group.points?.length ? '' : notes(group.restore_sessions?.text, group.gap); if (text) restored.push({ key: `restore-history:${group.kind}`, cls: 'run', html: `<p class="fe-l3b-point-note">${U.fieldHtml(text, { name: '备份内容', kind: viewer })}</p>` }); }
     const failedRows = (groups || []).flatMap(group => (group.failed_points || []).map(p => {
       const status = p.state === 'unknown' ? '未核实' : '备份失败';
-      const reason = p.reason ? `<p class="fe-l3b-point-note">${said(p.reason, '失败原因')}</p>` : '';
+      const reason = p.reason ? `<p class="fe-l3b-point-note">${said(D.backupFailureReason(p.reason), '失败原因')}</p>` : '';
       return { key: `restore-failed:${group.kind}:${p.id ?? p.at}`, cls: 'run',
-        html: `<p class="run__main">${stamp(p.at)} · ${status}</p>${reason}` };
+        html: `<p class="run__main">${stamp(p.at)} · <span class="backup-copy-state" data-state="${p.state === 'unknown' ? 'unknown' : 'failed'}">${status}</span></p>${reason}` };
     }));
     restored.splice(points?.length ? 1 : 0, 0, ...failedRows);
     if (point) pointLimit = Math.max(pointLimit, restored.findIndex(row => row.key === point) + 1);
@@ -328,7 +365,8 @@
   }
   const filesResource = () => `backups/${encodeURIComponent(id)}/files${params.has('fixture') && filesTarget === 'photos' ? '-photos' : ''}`;
   const filesQuery = cursor => ({ target: filesTarget === 'photos' ? 'photos' : null, cursor });
-  const filesUnavailable = state => state.data == null || !offline() && [404, 503].includes(state.meta?.status)
+  // 后台这次回 503（重启后首轮发布没齐这类）时手上有数就留着、由共用那句标几点的；只有真没数或 404 才写读不到（D6）
+  const filesUnavailable = state => state.data == null || !offline() && state.meta?.status === 404
     || state.viewer?.kind === 'owner' && viewer !== 'owner';
   function watchFiles() {
     if (!set || !filesOpen() || notApplicable(set.transfer_summary) || notApplicable(set[filesTarget])) return false;
@@ -428,13 +466,14 @@
       link(state) {
         bundleSource = state.meta?.source; disconnected = state.offline; bar?.set(state); Light.offline(state.offline);
         U.list($('notices'), state.offline ? [{ key: 'link', cls: 'notice glass', html: esc(state.text) }] : []);
-        if (!state.offline && [404, 503].includes(state.meta?.status)) showUnavailable();
+        if (!state.offline && [404, 503].includes(state.meta?.status) && state.data == null) showUnavailable();
         else if (set) renderSet();
         else if (bundle || state.phase === 'none') {
           showUnavailable();
           if (verification) renderVerification();
         } else { heroRead.set(state); copiesRead.set(state); if (state.phase === 'gone') $('rec').hidden = true; }
-        [hero.querySelector('.card__body'), $('copies-section')].forEach(el => U.blockNote(el, state));
+        // 这页只有这一块：从几点起读不到、手上是几点的，页顶那张卡已经说了，块里不再说第二遍（和自动任务、开场页只留页顶卡一样；D6 复查）
+        [hero.querySelector('.card__body'), $('copies-section')].forEach(el => U.blockNote(el, null));
       }
     });
     if (id === 'recovery-kit') {
@@ -444,7 +483,7 @@
         phase(state) { if (!verification) read.set(state); },
         data(data, meta) { viewer = meta.viewer.kind; verification = data; verificationAt = meta.at; },
         link(state) {
-          if (!state.offline && [404, 503].includes(state.meta?.status)) read.set({ ...state, data: null, phase: 'none' });
+          if (!state.offline && [404, 503].includes(state.meta?.status) && !verification) read.set({ ...state, data: null, phase: 'none' });
           else if (verification) { renderVerification(); read.done(); }
           else { read.set(state); if (state.phase === 'none') U.html($('verified'), `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`); }
           U.blockNote($('verification'), state);

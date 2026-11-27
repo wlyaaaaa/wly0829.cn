@@ -5,6 +5,7 @@
   syncGlow();
 
   let data = null, offlineNote = '', reading = true;   // 第一次回话之前写“正在读…”，不写像没有这种接法的“还没读到”
+  let loadNote = '';   // 共用脚本没下到、又没有随站固定接法时，接法那里写的一句
   const pick = { who: 'chatgpt', pc: 'main' };
   // 固定的接法（地址、认证、客户端 ID、命令）构建时已从现役登记写进页面（组装.py 的 connect_fixed）：
   // 进页先照它画，不等实时读数；读到以后照读到的。没写进来的（试看页）照旧等读数。
@@ -44,12 +45,16 @@
 
   function markSegs(instant) {
     const supported = pc => known()?.endpoints?.[pc]?.plans?.[pick.who];
-    if (known() && !supported(pick.pc)) pick.pc = supported('main') ? 'main' : 'sub';
+    // 两台都没有这家的接法：不把选中推到副机冒充能选；两格都置灰、黑块收起，下面照实写两台都接不了这个软件
+    const none = !!known() && !supported('main') && !supported('sub');
+    if (known() && !none && !supported(pick.pc)) pick.pc = supported('main') ? 'main' : 'sub';
     for (const [name, seg] of Object.entries(segs)) {
+      const empty = name === 'pc' && none;
+      seg.classList.toggle('is-none', empty);
       for (const opt of seg.querySelectorAll('.seg__opt')) {
-        const v = opt.dataset.v;
-        opt.setAttribute('aria-checked', String(pick[name] === v));
-        opt.tabIndex = pick[name] === v ? 0 : -1;
+        const v = opt.dataset.v, on = pick[name] === v && !empty;
+        opt.setAttribute('aria-checked', String(on));
+        opt.tabIndex = on ? 0 : -1;
         if (name === 'pc') opt.disabled = !!known() && !supported(v);
       }
       place(seg, instant);
@@ -75,7 +80,8 @@
     }
   }
 
-  function copyBtn(text) {
+  // 浏览器不让写剪贴板：按钮上照实说没复制上，并把那段原文选中，按 Ctrl+C 就能手动复制
+  function copyBtn(text, source) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'btn copy';
@@ -83,14 +89,15 @@
     b.textContent = '复制';
     b.addEventListener('click', async () => {
       const ok = await writeClip(text);
-      if (!ok) return;
       clearTimeout(b._t);
-      b.textContent = '已复制';
-      b.classList.add('is-done');
+      b.textContent = ok ? '已复制' : '没复制上，请手动复制';
+      b.classList.toggle('is-done', ok);
+      b.classList.toggle('is-failed', !ok);
+      if (!ok && source) getSelection()?.selectAllChildren(source);
       b._t = setTimeout(() => {
         b.textContent = '复制';
-        b.classList.remove('is-done');
-      }, 1600);
+        b.classList.remove('is-done', 'is-failed');
+      }, ok ? 1600 : 4000);
     });
     return b;
   }
@@ -106,7 +113,12 @@
   function build() {
     const plan = plans()[pick.who];
     const out = [];
-    if (!plan) return [el('p', 'say', offlineNote || (reading && !data ? '正在读这个接法…' : '还没读到这个接法。'))];
+    if (!plan) {
+      // 读到了、两台都没有这家的接法：照实说接不了，别写成像还在读（访客会干等）
+      const none = !!known() && !known().endpoints?.main?.plans?.[pick.who] && !known().endpoints?.sub?.plans?.[pick.who];
+      const label = segs.who?.querySelector(`.seg__opt[data-v="${pick.who}"]`)?.textContent.trim();
+      return [el('p', 'say', offlineNote || loadNote || (reading && !data ? '正在读这个接法…' : none && label ? `两台电脑现在都接不了“${label}”。` : '还没读到这个接法。'))];
+    }
     // Claude、Codex：先写明是哪台上的程序去连
     if (plan.where) {
       const box = el('div', 'rows');
@@ -118,9 +130,9 @@
     if (plan.rows) {
       const box = el('div', 'rows');
       for (const [k, v, copy, word] of plan.rows) {
-        const row = el('div', 'row');
-        row.append(el('span', 'row__k', k), el('span', word ? 'row__v row__v--word' : 'row__v', v));
-        row.append(copy ? copyBtn(v) : el('span'));
+        const row = el('div', 'row'), value = el('span', word ? 'row__v row__v--word' : 'row__v', v);
+        row.append(el('span', 'row__k', k), value);
+        row.append(copy ? copyBtn(v, value) : el('span'));
         box.append(row);
       }
       out.push(box);
@@ -128,8 +140,8 @@
     if (plan.cmds) {
       const box = el('div', 'cmds');
       for (const c of plan.cmds) {
-        const row = el('div', 'cmd');
-        row.append(el('pre', 'cmd__v', c), copyBtn(c));
+        const row = el('div', 'cmd'), value = el('pre', 'cmd__v', c);
+        row.append(value, copyBtn(c, value));
         box.append(row);
       }
       out.push(box);
@@ -185,6 +197,7 @@
     seg.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       const opts = [...seg.querySelectorAll('.seg__opt:not(:disabled)')];
+      if (!opts.length) return;
       const i = opts.findIndex((o) => o.dataset.v === pick[name]);
       const next = opts[(i + (e.key === 'ArrowRight' ? 1 : -1) + opts.length) % opts.length];
       e.preventDefault();
@@ -196,7 +209,31 @@
   // 先画固定的接法，不等实况脚本下载完
   markSegs(true);
   show(false);
-  if (!window.Live) await new Promise((resolve, reject) => { const s = document.createElement('script'); s.src = '/live/_lib/live-client.js'; s.onload = resolve; s.onerror = reject; document.head.append(s); });
+  // 共用的实况脚本第一次没下到（断网、被拦）：已经画好的固定接法照旧留着，能看能复制；
+  // 网络回来、页面回到前台，或在前台每过一分钟，再取一次，取到了照常读实时接法（M983）
+  if (!window.Live) await new Promise(resolve => {
+    let fetching = false, retry = 0;
+    const done = () => {
+      clearInterval(retry);
+      removeEventListener('online', fetchClient);
+      document.removeEventListener('visibilitychange', fetchClient);
+      if (loadNote) { loadNote = ''; reading = true; show(false); }
+      resolve();
+    };
+    function fetchClient(first) {
+      if (window.Live) return done();
+      if (fetching || (document.hidden && first !== true)) return;
+      fetching = true;
+      const s = document.createElement('script');
+      s.src = '/live/_lib/live-client.js';
+      s.onload = done;
+      s.onerror = () => { fetching = false; s.remove(); loadNote = '连接状态还没读到，请重新加载。'; reading = false; show(false); document.body.classList.add('is-ready'); retry ||= setInterval(fetchClient, 60000); };
+      document.head.append(s);
+    }
+    addEventListener('online', fetchClient);
+    document.addEventListener('visibilitychange', fetchClient);
+    fetchClient(true);
+  });
   function renderLink(s) {
     const at = s.shownAt || s.cutoffAt;
     if (!['idle', 'wait', 'slow'].includes(s.phase)) reading = false;
@@ -214,4 +251,9 @@
 
   const ready = () => document.body.classList.add('is-ready');
   requestAnimationFrame(() => requestAnimationFrame(ready));
-})().catch(() => { document.body.classList.add('is-ready'); document.getElementById('sheet').textContent = '连接状态还没读到，请重新加载。'; });
+})().catch(() => {
+  document.body.classList.add('is-ready');
+  // 已经画出能用的接法就留着，不拿一句“没读到”盖掉
+  const sheet = document.getElementById('sheet');
+  if (!sheet.querySelector('.rows, .cmds')) sheet.textContent = '连接状态还没读到，请重新加载。';
+});

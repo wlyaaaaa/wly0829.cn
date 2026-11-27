@@ -24,6 +24,8 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents']);
+  let interfaceLoad;
   const artifactVersion = id === 'agents' && /^E\d+$/.test(params.get('artifact') || '') && params.get('artifact');
   function projectLookKey(id) {
     let hash = 0x811c9dc5;
@@ -197,7 +199,7 @@
   }
   const subText = text => {
     const pieces = String(text).split(/(<button\b[^>]*>[\s\S]*?<\/button>|<span\b[^>]*>[^<]*<\/span>)/g);
-    return `<span class="pj-note-piece">${pieces.map((part, i) => i % 2 ? part : part.replaceAll(' · ', ' </span><span class="pj-note-piece">· ').replace(/\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|GHz|MHz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条)(?:前|后)?/g, '<span class="pj-unit">$&</span>')).join('')}</span>`;
+    return `<span class="pj-note-piece">${pieces.map((part, i) => i % 2 ? part : part.replaceAll(' · ', ' </span><span class="pj-note-piece">· ').replace(/\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|GHz|MHz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条)(?:前|后)?[。，、；：）]?/g, '<span class="pj-unit">$&</span>')).join('')}</span>`;
   };
   const attention = it => ['waiting', 'pending'].includes(it.state) || ['waiting', 'pending', '在等'].includes(it.state_text);
   const recordKey = it => it.id || it.name || it.label || it.text;
@@ -306,8 +308,12 @@
     // M684：本人版成品名称旁按后台 visitor_labels.title 挂签；后台还没标、但访客版另有名字（public_title 和本人版的名字不一样）的，就是成品改了名字，挂第二种签。
     const renamed = projectViewer === 'owner' && typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(it.recent_title || it.title, projectViewer).trim();
     // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：本人版名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
-    const wholeTag = projectViewer === 'owner' && U.visitorWholeHidden(it, ['$']) ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
-    const nameTag = !name ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
+    // 只在最外面挂一个（LOOKS1126 ②）：这个项目整个访客看不到时，页头已挂“访客看不到”，成品各行一个签都不再挂；
+    // 只是这份成品整条看不到时，签挂在名称旁，“在电脑上打开”旁不再重复挂
+    const quiet = projectViewer === 'owner' && U.visitorWholeHidden(proj, ['$', 'name']);
+    const whole = projectViewer === 'owner' && U.visitorWholeHidden(it, ['$']);
+    const wholeTag = whole && !quiet ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
+    const nameTag = !name || quiet ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
     const changes = canShorten && Array.isArray(it.changes) && it.changes.length ? it.changes : display !== title ? [typeof title === 'string' ? title.replace(/([。！？])\s*；/g, '$1') : title] : [];
     const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${text(change)}</p>`).join('')}</details>` : '';
     const publicLink = projectViewer === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
@@ -318,7 +324,7 @@
     const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
     const action = target ? projectViewer === 'public' && typeof target.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>${U.visitorLabel(it, 'open', '这份成品的正文', projectViewer)}`
-      : pcActions(item, [target]) + (U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
+      : pcActions(item, [target]) + (quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
     const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
     const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');
@@ -339,11 +345,45 @@
   // 最后是这一段的小字和“另有 N 项仅本人可见”
   const LIST = { figs: 'pj-figs', kv: 'pj-kv', rows: 'rows list' };
   const SHOW = { figs: 8, kv: 5, rows: 5 };
-  function groupedRows(rows, preview = SHOW.rows, expanded = false) {
+  // 分批展开（R147）：先露 SHOW 那几条，点“展开（还有 N 条）”一次多露一批，露到底变“收起”；一批多少按排版定
+  const BATCH = { figs: 8, kv: 10, rows: 10 };
+  // reveal：这一块每组已多露了几条（组名 → 条数），重画时照着露；more(key)：这一组读完了、后面还能接着读（更早的改动、更多产物），这时不写“收起”，由那颗按钮接着读
+  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null) {
     const groups = new Map();
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
-    return [...groups].map(([key, items]) => ({ key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview))}${items.length > preview ? `<details${expanded ? ' open' : ''}><summary class="live-disclosure"><span class="disclosure-closed">展开（还有 ${items.length - preview} 条）</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${list(items.slice(preview))}</details>` : ''}` }));
+    return [...groups].map(([key, items]) => {
+      const extra = Math.max(0, items.length - preview), open = Math.min(extra, reveal.get(key) || 0), left = extra - open;
+      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
+    });
+  }
+  // 点了分组底下那颗“展开（还有 N 条）／收起”：只重画这一块，不重摆两栏（免得卡片在眼前换栏）
+  function stepGroup(b, key, close) {
+    b.reveal ??= new Map();
+    b.reveal.set(key, close ? 0 : (b.reveal.get(key) || 0) + (b.step || BATCH.rows));
+    drawGroups(b);
+  }
+  function drawGroups(b) {
+    if (!b.groupSrc?.length) return;
+    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore), { animate: false });
+    syncPage(b);
+  }
+  // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
+  function syncPage(b) {
+    if (!b.changes && !b.artifacts) return;
+    const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - (b.reveal?.get('') || 0));
+    b.page.hidden = !b.hasNext || left > 0;
+    if (b.changes) changeCounts(b);
+  }
+  // 卡里收着的读数（数字格、两列小表）：同样一批一批露
+  function drawRest(b, animate) {
+    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0, n = Math.min(all.length, b.restShown || 0), left = all.length - n;
+    U.list(b.rest, [...all.slice(0, n), ...(open && !left ? unread : [])], { animate });
+    b.box.classList.toggle('is-open', open); b.box.inert = !open; b.box.setAttribute('aria-hidden', String(!open));
+    b.more.setAttribute('aria-expanded', String(open && !left));
+    const closed = [left && `展开（还有 ${num(left)} 条）`, !left && !open && !U.offline?.() && unread.length && U.collectionText('其余项目')].filter(Boolean).join(' · ');
+    U.html(b.more, `${closed || '收起'} <span class="more__chev">›</span>`);
   }
   const blocks = new Map();
   function block(key, kind) {
@@ -356,15 +396,20 @@
     // 头一行段名和一句话；reading 是逐项清单那类读数的一句读数；最后是收起来的“说明”和整张卡都一样的截止时刻
     el.innerHTML = `<p class="pj-part" data-p="head"></p><p class="pj-reading" data-p="reading" hidden></p><p class="pj-note" data-p="cutoff" hidden></p>
       <ul class="${LIST[kind]}" data-p="main"></ul>
-      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a></div>
       <div class="fold" data-p="box"><div><ul class="${LIST[kind]}" data-p="rest"></ul></div></div>
+      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a></div>
       <p class="pj-note" data-p="note" hidden></p>
       <p class="pj-hidden" data-p="hidden" hidden></p>
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
       <div class="pj-tail"><details class="pj-notes"><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
     b = { key, kind, el, ...Object.fromEntries([...el.querySelectorAll('[data-p]')].map((n) => [n.dataset.p, n])) };
-    U.fold(b.more, b.box);
-    b.more.addEventListener('click', () => U.html(b.more, `${b.more.getAttribute('aria-expanded') === 'true' ? '收起' : b.closed} <span class="more__chev">›</span>`));
+    b.box.inert = true; b.box.setAttribute('aria-hidden', 'true');
+    b.more.setAttribute('aria-expanded', 'false');
+    b.more.addEventListener('click', () => {
+      const all = b.restRows?.length || 0, shown = Math.min(all, b.restShown || 0);
+      b.restShown = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
+      drawRest(b, true);
+    });
     b.page.addEventListener('click', () => b.changes ? loadChanges(b) : loadArtifacts(b));
     blocks.set(key, b);
     return b;
@@ -408,16 +453,20 @@
     b.headOnly = headOnly;
     b.head.hidden = !label && !about;
     U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${U.fieldHtml(about)}</span>` : ''}`);
-    const rowCount = rows.length; if (b.kind === 'rows' && rows.length) rows = groupedRows(rows, b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows, b.changes && b.allDetails?.open);
+    const rowCount = rows.length;
+    if (b.kind === 'rows') {
+      b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
+      b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
+      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore);
+    }
     const show = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
     const shown = rows.length ? rows.slice(0, show) : unread.length || (hidden && !hiddenText) ? [] : [{ key: 'none', cls: b.kind === 'rows' ? 'row row--flat row--empty' : 'pj-empty', html: `${b.kind === 'rows' ? '<span></span>' : ''}<p class="row__sub">${U.fieldHtml(metricText(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(empty || '') ? '这块没存下来，连上后补上。' : hiddenText || empty))}</p>` }];
     if (b.artifacts && rows.length) clearArtifactEmpty(b);
     U.list(b.main, shown, { animate });
-    U.list(b.rest, [...rows.slice(show), ...unread], { animate });
+    b.restRows = rows.slice(show); b.unread = unread;
+    drawRest(b, animate);
     const rest = Math.max(0, rows.length - show);
     b.more.hidden = !rest && !unread.length;
-    b.closed = [rest && `展开（还有 ${rest} 条）`, !U.offline?.() && unread.length && U.collectionText('其余项目')].filter(Boolean).join(' · ');
-    U.html(b.more, `${b.more.getAttribute('aria-expanded') === 'true' ? '收起' : b.closed} <span class="more__chev">›</span>`);
     b.link.hidden = !link;
     if (link) { b.link.href = link.href; U.html(b.link, `${esc(link.text)} <span class="more__chev">›</span>`); }
     b.foot.hidden = !rest && !unread.length && !link;
@@ -525,13 +574,17 @@
     const view = JSON.stringify([changeLog?.items, changeLog?.total, changeLog?.shown, changeLog?.next, changeIssue, cutoff]);
     if (view !== changeView) { changeView = view; if (!first) U.anchor(() => renderBoard(true)); }
   }
+  // 没读到时写从几点起读不到（这一页先读到过才有，M982）；手上那份截至几点另由“上次改动记录截至”那句写
+  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${what}自 ${stamp(result.failingSince)} 起暂时读不到。` : `${what}暂时读不到。`;
   async function readChanges() {
     const read = ++changeRead;
     const result = await getChanges();
     if (read !== changeRead) return;
+    // 没读到：本页主数据确认接通后自己再读一次，不等项目数据换代（M982）
+    result?.again?.then(() => { if (read === changeRead) readChanges(); });
     const first = changePacket(result), hint = first?.gap || first?.stale_text || first?.note || first?.text;
     const missing = result?.meta?.status >= 400 || !first || !first.items.length && (['unknown', 'missing', 'partial', 'stale'].includes(first.q) || /没读到|未读到|读不到|缺测|没有读到|读取失败|暂不可用|上次记录|最近一次记录/.test(U.fieldText(hint, projectViewer)));
-    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || '改动记录暂时读不到。'); return; }
+    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || unreadText(result)); return; }
     const head = JSON.stringify([changeSource(first), first.items, first.total, first.next]);
     if (head === changeHead) {
       changeRefill = 0;
@@ -552,20 +605,24 @@
         changeLog = replacement; changeHead = head;
       } finally { if (changeRefill === read) changeRefill = 0; }
     }
-    publishChanges(missing ? hint || '改动记录暂时读不到。' : '');
+    publishChanges(missing ? hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
     const read = ++sideReads;
     if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
       if (sameViewer(meta) && d?.stats?.owner_corrections) { additions.corrections = d.stats.owner_corrections; if (!first) renderBoard(false); }
     } });
-    reads.push(readChanges(), window.Live.get('projects', { state: d.phase === 'archived' || d.state === 'frozen' ? 'frozen' : 'active' }).then(r => {
+    const scope = d.phase === 'archived' || d.state === 'frozen' ? 'frozen' : 'active';
+    const readActivity = () => window.Live.get('projects', { state: scope }).then(r => {
+      // 没读到：本页主数据确认接通后自己再读一次（M982）
+      r?.again?.then(() => { if (read === sideReads) readActivity(); });
       const a = sameViewer(r?.meta) ? r?.data?.activity : null, row = a?.items?.find(x => x.id === id);
       return Array.isArray(a?.days) && Array.isArray(row?.commits) ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
     }).catch(() => null).then(next => {
       if (read !== sideReads || !next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
       activity = next; if (!first) renderStrip(proj);
-    }));
+    });
+    reads.push(readChanges(), readActivity());
   }
   function changeRow(it, index) {
     const protectedRow = restricted(it), locked = protectedRow || restricted(it.text), field = protectedRow ? it : it.text ?? it;
@@ -582,17 +639,25 @@
       const result = await getChanges(cursor);
       if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
       const page = result?.meta?.status < 400 && changePacket(result);
-      if (!page?.items.length) { publishChanges('下一页暂时读不到，已读到的留在这里。'); return; }
+      if (!page?.items.length) {
+        publishChanges('下一页暂时读不到，已读到的留在这里。');
+        // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
+        result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
+        return;
+      }
       const extended = extendChanges(changeLog, page);
       if (!extended) { await readChanges(); return; }
+      // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
+      b.reveal ??= new Map(); b.reveal.set('', Math.max(0, changeLog.items.length - (b.groupPreview || 0)) + (b.step || BATCH.rows));
       changeLog = extended; publishChanges();
     } finally { b.page.disabled = false; U.html(b.page, label, false); }
   }
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
-    const shown = b.allDetails?.open ? loaded : preview;
+    const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
     const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
-    const available = [shown < loaded && `还有 ${num(loaded - shown)} 条可展开`, Number.isFinite(total) && total > loaded && `另有 ${num(total - loaded)} 条待取`].filter(Boolean).join('，');
+    // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
+    const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '正在读改动记录…');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
@@ -605,9 +670,27 @@
     try {
       const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
       if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
-      if (result.data) { arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; renderBoard(true); }
-      else { b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer })); }
+      // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
+      if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
+      else {
+        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer }));
+        // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
+        result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
+      }
     } finally { b.page.disabled = false; U.html(b.page, label, false); }
+  }
+  // 从规则页按版本跳进来（?artifact=E…）：这一版不在已读到的几页里，就接着往后读，读到这一版或读完为止（R55）
+  const versionHit = it => it.kind === 'rules' && typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion;
+  async function readVersion(b) {
+    if (b.versionRead) return;
+    b.versionRead = true;
+    try {
+      while (artifactVersion && arts?.next && !arts.items?.some(versionHit)) {
+        const cursor = arts.next;
+        await loadArtifacts(b);
+        if (arts?.next === cursor) { b.versionFailed = true; renderBoard(false); break; }
+      }
+    } finally { b.versionRead = false; }
   }
   function graphBlock(key, label) {
     const b = block(key, 'figs'); b.el.classList.add('pj-sec--chart');
@@ -615,17 +698,27 @@
     if (!b.viz) { b.viz = document.createElement('div'); b.viz.className = 'pj-viz'; b.cutoff.after(b.viz); }
     drawRecordCutoff(b); return b;
   }
+  // 热门页榜：先读第一页、先露 5 行，往下一批一批露，露完了再读下一页（R147）；每天的柱子图仍读全再画
+  const PAGE_NAMES = { '/': '首页', '/live/': '实况', '/skills/': '技能', '/projects/': '项目', '/rules/': '规则' };
+  function pageRankRow(r) {
+    const V = window.LiveProjectViz, partial = V.lower(r, 'opens');
+    return { key: r.page, name: r.title || r.name || PAGE_NAMES[r.page] || r.page, value: r.opens, text: r.opens == null ? U.collectionText('打开次数', r) : partial ? `至少 ${r.opens} 次` : undefined, sub: partial ? V.gap(r) : r.note, hue: 'blue' };
+  }
   async function loadGraph(b, m) {
     b.metric = m;
+    const paged = m.id === 'top_pages' && window.ProjectSiteReadings?.pagedRank;
+    const read = cursor => window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
     let rows = [], cursor = null, result, staleAt = null;
     do {
-      result = await window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
+      result = await read(cursor);
       if (!result.data || !Array.isArray(result.data.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
       if (isStale(result.data)) staleAt ||= result.data.at || result.meta.at;
       rows.push(...(result.data.items || [])); cursor = result.data.next;
-    } while (cursor);
+    } while (cursor && !paged);
     b.recordStaleAt = staleAt; drawRecordCutoff(b);
-    window.LiveProjectViz.chart(b.viz, m.id, rows);
+    const after = next => next ? async () => { const page = await read(next); return page.data && Array.isArray(page.data.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
+    if (paged) window.ProjectSiteReadings.pagedRank(b.viz, { rows: rows.map(pageRankRow), total: result.data.total, load: after(cursor), rank: { unit: '次', empty: '这段时间没有打开记录' } });
+    else window.LiveProjectViz.chart(b.viz, m.id, rows);
     const { line, extra } = lineOf(m);
     b.note.hidden = !line; U.html(b.note, line ? subText(line) : '');
     b.explain.hidden = !extra.length; U.html(b.explain, extra.join('<br>'));
@@ -657,11 +750,10 @@
   function setAll(c, list) {
     const content = list.filter(b => !b.headOnly && !b.quiet), rows = content.filter(b => !b.array);
     let pick = null;
+    // 右上角“看全部 ›”只用来去逐项明细；原地展开的改成卡里一批一批露（R147），右上角不再一下全摊开
     for (const b of rows) {
       if (b.allHref) { pick = { href: b.allHref, b }; break; }
-      if (b.allFold && !b.more.hidden) { pick = { fold: b.more, b }; break; }
-      const det = b.allDetails?.isConnected ? b.allDetails : b.main?.querySelector?.(b.artifacts ? '.pj-list-group > details' : 'details');
-      if (det) { pick = { details: det, b }; break; }
+      if (b.allFold && !b.more.hidden || b.main?.querySelector?.('.pj-step, details') || b.allDetails?.isConnected) break;
     }
     if (!pick && !rows.length && content.length === 1 && content[0].allHref) pick = { href: content[0].allHref, b: content[0] };
     // 右上角接管了的那个“展开”不再在卡底重复露一次
@@ -840,32 +932,35 @@
       if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
+        // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
+        b.step = 5; b.hasNext = !artifactVersion && !!arts?.next;
         const missingArts = !Array.isArray(arts?.items) && !(arts?.hidden || proj.artifacts?.hidden);
-        const items = (arts?.items || []).filter(it => !artifactVersion || it.kind === 'rules' &&
-          typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion);
+        const items = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '正在读最近产物' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
-        b.page.hidden = !!artifactVersion || !arts?.next;
+        syncPage(b);
+        if (versionMore) readVersion(b);
         U.blockNote(b.el, artsState);
         right.unshift(b);
       }
       const mine = changeLog?.items || [];
       if (mine.length || id === 'agents' && (!changeLog || changeIssue)) {
         const b = block('changes', 'rows'); b.group = 'changes'; b.changes = true; b.el.classList.add('pj-sec--flat', 'pj-sec--timeline');
+        // 一批 10 条往下露；已读到的露完了才出“更早的改动”接着读
+        b.step = BATCH.rows; b.hasNext = !!changeLog?.next;
         b.loaded = changeLog?.loaded === mine.length ? changeLog.loaded : mine.length;
         const preview = changeLog?.shown;
         b.preview = Math.min(b.loaded, Number.isInteger(preview) && preview >= 0 ? preview : SHOW.rows);
         fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '' }, animate);
-        b.allDetails = b.main.querySelector('.pj-list-group > details');
         const changed = !mine.length && proj.changed?.at ? proj.changed : null;
         const hasText = changed?.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(changed.text, projectViewer));
         b.reading.hidden = !changed;
         U.html(b.reading, changed ? `最近一次提交 ${esc(stamp(changed.at))}${hasText ? ` · ${U.fieldHtml(restricted(changed) ? changed : changed.text, { name: '提交说明', kind: projectViewer })}` : ''}` : '');
-        changeCounts(b);
-        b.page.hidden = !changeLog?.next;
+        syncPage(b);
         if (b.page.textContent !== '正在读…') U.html(b.page, '更早的改动 <span class="more__chev">›</span>');
         right.push(b);
       }
@@ -919,8 +1014,13 @@
     const total = key => { const got = two.map(w => w[key]).filter(Number.isFinite); return got.length ? `${two.some(w => w.partial && w[key] > 0) ? '至少 ' : ''}${got.reduce((a, b) => a + b, 0)} 次` : '没有记录'; };
     // 两周都没有任何记录：不画两个空框
     const chart = !two.some(w => w.published != null || w.rolled_back != null) ? '' : `<div class="pj-wk"><p class="pj-wk__cap"><span class="pj-wk__sum">近两周：发布 ${total('published')}、退回 ${total('rolled_back')}</span><span class="pj-wk__legend"><span><i class="is-pub"></i>发布</span><span><i class="is-back"></i>退回</span></span></p><div class="pj-wk__plot">${two.map(week).join('')}</div><div class="pj-wk__x">${two.map(w => `<span>${text(w.label)}</span>`).join('')}</div></div>`;
-    // 逐版记录和更早没记录的缘由收在“看全部”里
-    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary>${events.map(e => `<p>${e}</p>`).join('')}${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    // 逐版记录和更早没记录的缘由收在“逐版记录”里；打开先列 10 条，一次多露 10 条，露到底“收起”（R147）
+    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    // 最新的在上，和上面的逐版时间线、“最近改动”一样新的在前；先露最近 10 个版本，再往更早的露（主持 11-26 10:3x 定）
+    host._ruleEvents = [...events].reverse();
+    const opened = host.querySelector('.pj-rh-events');
+    if (opened && !opened._stepBound) { opened._stepBound = true; opened.addEventListener('toggle', () => { if (!opened.open) { host._ruleShown = 0; drawRuleEvents(host); } }); }
+    drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
     if (axis && left < 0) axis.scrollLeft = left;
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
@@ -929,6 +1029,13 @@
     });
   }
 
+  const RULE_STEP = 10;
+  function drawRuleEvents(host) {
+    const box = host.querySelector('.pj-rh-list');
+    if (!box) return;
+    const all = host._ruleEvents || [], n = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0)), left = all.length - n;
+    box.innerHTML = all.slice(0, n).map(e => `<p>${e}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
+  }
   function ruleTimeline(kept, current, text) {
     const index = kept.findLastIndex(e => e.version === current);
     const dot = (e, i) => `<li${i === index ? ' aria-current="true"' : ''} class="${i === index ? 'is-now' : e.kind === 'rolled_back' ? 'is-back' : ''}"><i></i><b>${ruleLink(text(e.version))}</b><small>${text([e.kind === 'rolled_back' && '退回', e.at ? stamp(e.at) : '时刻未留'].filter(Boolean).join(' · '))}</small>${e.time_gap ? `<small>${text(e.time_gap)}</small>` : ''}</li>`;
@@ -993,7 +1100,8 @@
       const v = value(m), { line: said, moment, cadence } = lineOf(m, v), line = [said, moment].filter(Boolean).join(' · ');
       // 读数是一句字、超过 11 个字的（“10-04（52 天前）”，项目页卡 is-long 也从 11 个字起）：和整句读数一样占两格、一行写全，不截成“10-04（5…”
       const words = v.long || /class="pj-text"/.test(v.html) && [...v.plain].length > 11;
-      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
+      const wrap = id === 'video-scaffold' && m.id === 'films' || id === 'pc-panel-hub' && m.id === 'updated';
+      head.push(cell(readingLabel(m.label) + (cadence || ''), v.html, { kind: words ? 'text' : wrap ? 'wrap' : '', wide: v.long ? sentence(v.plain) : words, title: `${metricText(m.label)} ${v.plain}`, href: metricHref(m), sub: id === 'agents' && m.id === 'release' && m.at ? esc(`${stamp(m.at)} 生效`) : line }));
     }
     if (d.changes7 != null) {
       const cutoff = d.changes7_stale && d.changes7_at && esc(`上次记录截至 ${stamp(d.changes7_at)}`);
@@ -1041,6 +1149,10 @@
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
     U.html(strip, html);
+    if (interfaceProjects.has(id) && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip))
+        .catch(() => { interfaceLoad = null; });
+    }
   }
   // 名字旁边：项目介绍（外链）、问情况
   function projectItemReferences(action) {
@@ -1164,6 +1276,25 @@
     requestAnimationFrame(go);
   }
 
+  // 规则版本卡“逐版记录”底下的“展开（还有 N 条）／收起”
+  board.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('.pj-rh-step'), host = btn?.closest('.pj-viz');
+    if (!host) return;
+    if (btn.hasAttribute('data-open')) {
+      const details = btn.closest('details');
+      details.open = false;
+      if (details.getBoundingClientRect().top < 0) details.scrollIntoView({ block: 'start', behavior: 'instant' });
+    } else { host._ruleShown = Math.max(RULE_STEP, host._ruleShown || 0) + RULE_STEP; drawRuleEvents(host); }
+  });
+  // 分组底下的“展开（还有 N 条）／收起”
+  board.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
+    if (!b) return;
+    const close = btn.hasAttribute('data-open'), sec = b.el;
+    stepGroup(b, btn.dataset.step, close);
+    // 收起后卡头跑到屏幕上面去了：滚回这一块的开头，不让人找不到刚才看的地方
+    if (close && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏

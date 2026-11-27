@@ -274,7 +274,7 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
    zoom：小绿灯也放不下（实况页右边多两颗），整条页眉按比例缩小，入口一个不丢。
    用 :where 压低优先级，实况项目页自己那套窄窗排法照旧。不到 680 宽时按钮再收紧一点（只对鼠标设备）。 */
 :where(.topbar):is([data-fit="tight"], [data-fit="lamp"], [data-fit="zoom"]) { grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); column-gap: 12px; }
-:where(.topbar):is([data-fit="lamp"], [data-fit="zoom"]) .brand__word { width: 0; margin-left: 0; }
+:where(.topbar):is([data-fit="lamp"], [data-fit="zoom"]) .brand__word { width: 0; margin-left: 0; overflow: clip; }
 :where(.topbar):is([data-fit="lamp"], [data-fit="zoom"]) .brand .ch { opacity: 0; }
 :where(.topbar)[data-fit="zoom"] { zoom: var(--fit-zoom, 1); }
 :where(.topbar)[data-fit-first] :is(.brand__word, .ch) { transition: none; }

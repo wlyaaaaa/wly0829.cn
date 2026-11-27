@@ -16,7 +16,7 @@
   }
   const lower = (m, key) => m?.q === 'partial' && (!Array.isArray(m.partial) || m.partial.includes(key));
   const gap = m => m?.gap || '';
-  function summary(host, data, viewer) {
+  function summary(host, data, viewer, sizeDate) {
     const wan = n => esc((n / 1e4).toLocaleString('zh-CN', { maximumFractionDigits: 1 }));
     // 代码：字数是主数，行数用小字放在它下面（本人 11-25 06:39，M846）。名册 code_size：全覆盖给 code_chars，没数全给 observed_code_chars 和数到几个；
     // 字数一样没有时照旧只写行数。文档行数后台还没有（code_size 只有 docs_chars、code_chars、code_lines），文档下面暂不放行数。
@@ -29,7 +29,8 @@
       if (key === 'code_lines' && chars) return `<span><small>${name}</small><span class="pj-summary-stack"><span>${chars}</span><small class="pj-summary-lines">${value} ${unit}</small></span></span>`;
       return `<span><small>${name}</small><b>${value}</b><small>${unit}</small></span>`;
     });
-    host.innerHTML = parts.join('') + (data?.q === 'partial' && gap(data) ? `<small>${esc(gap(data))}</small>` : '') + (missing.length ? `<span class="pj-summary-none">${U.offline?.() ? parts.some(Boolean) ? '' : emptyText('') : esc(U.collectionText(missing.join('、'), data))}</span>` : '');
+    const note = [sizeDate && `文档和代码按 ${sizeDate} 汇总`, data?.q === 'partial' && gap(data)].filter(Boolean).join(' · ');
+    host.innerHTML = parts.join('') + (note ? `<small>${esc(note)}</small>` : '') + (missing.length ? `<span class="pj-summary-none">${U.offline?.() ? parts.some(Boolean) ? '' : emptyText('') : esc(U.collectionText(missing.join('、'), data))}</span>` : '');
   }
   const heat = n => n == null || n === 0 ? 0 : n <= 2 ? .35 : n <= 5 ? .65 : 1;
   function heatmap(host, data, viewer, route, { aligned = false } = {}) {

@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 import re
+import runpy
+from shutil import copyfile
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
@@ -15,6 +17,9 @@ RELEASES = Path("E:/.agents/releases")
 ORIGIN = "https://wly0829.cn/"
 CONTROL_FILES = {"release-identity.json", "release-manifest.json", "sitemap.xml"}
 PRIVATE_OWNER_PAGES = Path("E:/Data/RemoteComputerMCP/state/owner-rule-pages")
+SHARED_CSS = Path("公用/page.css")
+SHARED_FONT_DIR = Path("公用/assets/fonts")
+SHARED_FONT = re.compile(rb"\b(body-bold|body|title)-[0-9a-f]{16}\.woff2\b")
 
 
 def read(path):
@@ -34,10 +39,71 @@ def rule_page(path):
     return path.startswith("rules/") and path.endswith(".html")
 
 
+def stage_live_project_settings(worktree, pcconfig):
+    registry = read(pcconfig / 'registries/dashboard_sources.json')
+    sources = registry['project_sources']['wlyaaaaa/wly0829.cn']['sources']
+    paths = {audience: sources[f'website.{audience}']['path'] for audience in ('public', 'owner')}
+    config = worktree / '.publish/private/live-project.json'
+    config.parent.mkdir(parents=True, exist_ok=True)
+    config.write_text(json.dumps(paths, ensure_ascii=False), 'utf-8')
+
+
 def run(args, cwd, *, env=None, output=None, capture=False):
     return subprocess.run([str(arg) for arg in args], cwd=cwd, env=env, check=True, text=True,
                           encoding="utf-8", errors="replace", stdout=subprocess.PIPE if capture else output,
                           stderr=output, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0)).stdout
+
+
+def shared_font_names(css):
+    names = {match[1]: match[0].decode("ascii") for match in SHARED_FONT.finditer(css)}
+    if names.keys() != {b"body", b"body-bold", b"title"}:
+        raise ValueError("规则日更无法辨认已发布的三份共用字体")
+    return names
+
+
+def stage_published_shared_assets(saved, destination):
+    objects = saved["manifest"]["oss"]["objects"]
+
+    def stage(relative):
+        record = objects[relative.as_posix()]
+        local = Path(saved["dist_root"]) / relative
+        raw = local.read_bytes() if local.is_file() else b""
+        if hashlib.sha256(raw).hexdigest() != record["sha256"]:
+            raw = public(record["url"])
+        if hashlib.sha256(raw).hexdigest() != record["sha256"]:
+            raise ValueError("共用资源与上次成功发布不一致：" + relative.as_posix())
+        target = destination / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+        return raw
+
+    fonts = shared_font_names(stage(SHARED_CSS))
+    paths = [SHARED_CSS, *(SHARED_FONT_DIR / name for name in fonts.values())]
+    for relative in paths[1:]:
+        stage(relative)
+    return paths
+
+
+def build_rules_site(destination, shared):
+    # Replace the font inputs before the ordinary builder records and seals its inventory.
+    build = runpy.run_path("scripts/build-site.py")["build"]
+    seal = build.__globals__["seal"]
+    published = shared_font_names((shared / SHARED_CSS).read_bytes())
+
+    def seal_with_published_fonts(dist, *args):
+        css = dist / SHARED_CSS
+        raw = css.read_bytes()
+        generated = shared_font_names(raw)
+        for name in set(generated.values()) - set(published.values()):
+            (dist / SHARED_FONT_DIR / name).unlink()
+        for name in published.values():
+            relative = SHARED_FONT_DIR / name
+            copyfile(shared / relative, dist / relative)
+        css.write_bytes(SHARED_FONT.sub(lambda match: published[match[1]].encode("ascii"), raw))
+        return seal(dist, *args)
+
+    build.__globals__["seal"] = seal_with_published_fonts
+    build(destination.resolve())
 
 
 def update(args, result, log):
@@ -53,9 +119,10 @@ def update(args, result, log):
         log.write("+ " + subprocess.list2cmdline([str(arg) for arg in cmd]) + "\n")
         return run(cmd, cwd, env=env, output=log, capture=capture)
 
+    python_exe = sys.executable.replace("pythonw.exe", "python.exe")
+
     def python(path, *options):
-        command(sys.executable.replace("pythonw.exe", "python.exe"), "-B", "-X", "utf8", path, *options,
-                cwd=worktree, env=env)
+        command(python_exe, "-B", "-X", "utf8", path, *options, cwd=worktree, env=env)
 
     def lock(mode):
         command("pwsh", "-NoProfile", "-File", "E:/.agents/tools/Invoke-ShortLock.ps1", "-Mode", mode,
@@ -75,27 +142,29 @@ def update(args, result, log):
         worktree, dist = scratch / "src", scratch / "dist"
         previous = scratch / "previous.json"
         previous.write_text(json.dumps(prior, ensure_ascii=False), "utf-8")
+        shared_assets = scratch / "published-shared"
+        shared_paths = stage_published_shared_assets(saved, shared_assets)
+        pcconfig = args.pcconfig.resolve()
+        exporter = pcconfig / "tools/remote-computer-mcp/export_public_fallback.py"
         fallback = scratch / "fallback.json"
-        expected = prior["oss"]["objects"]["live/_fallback.json"]
-        local = Path(saved["dist_root"]) / "live/_fallback.json"
-        raw = local.read_bytes() if local.is_file() else b""
-        if hashlib.sha256(raw).hexdigest() != expected["sha256"]:
-            raw = public(expected["url"])
-        if hashlib.sha256(raw).hexdigest() != expected["sha256"]:
-            raise ValueError("实况垫底文件与上次成功发布不一致")
-        fallback.write_bytes(raw)
-        env = dict(os.environ, WLY_RULES_RELEASE=active, WLY_LIVE_PCCONFIG_ROOT=str(args.pcconfig),
+        env = dict(os.environ, WLY_RULES_RELEASE=active, WLY_LIVE_PCCONFIG_ROOT=str(pcconfig),
                    WLY_OWNER_RULES_OUT=str(PRIVATE_OWNER_PAGES if args.publish else scratch / "owner"),
                    WLY_LIVE_FALLBACK_CMD=f'copy /b /y "{fallback}" "{{out}}"')
         env.pop("WLY_RULES_SIGNED_PAGES", None)
+        command(python_exe, "-B", "-X", "utf8", exporter, "--strict", "--out", fallback, env=env)
         command("git", "worktree", "add", "--detach", worktree, source)
         try:
             python(args.prepare, "prepare", "--worktree", worktree)
-            python("scripts/build-site.py", "--dist", dist)
+            python(Path(__file__).resolve(), "--build-rules-site", dist, shared_assets)
             if version((dist / "rules/index.html").read_bytes()) != active:
                 raise ValueError("规则成品版本与本轮检查不一致")
             manifest = dist / "release-manifest.json"
             built = read(manifest)
+            for relative in shared_paths:
+                name = relative.as_posix()
+                before, after = (value["oss"]["objects"][name] for value in (prior, built))
+                if any(before[field] != after[field] for field in ("sha256", "key")):
+                    raise ValueError("规则日更将改变已发布的共用资源：" + name)
             pages = {path: row for path, row in built["files"].items() if rule_page(path)}
             routes = ["/" + (path[:-10] if path.endswith("/index.html") else path) for path in sorted(pages)]
             batch = scratch / "batch.json"
@@ -112,7 +181,8 @@ def update(args, result, log):
             documents = plan["site_dist"]["changed_files"]
             unexpected = [p for p in documents if not (rule_page(p) or p in CONTROL_FILES)]
             assets = plan["planned_assets"] + plan["planned_origin_readbacks"]
-            unexpected += [p for p in assets if not p.startswith(("rules/", "公用/assets/fonts/", "公用/fonts/"))]
+            unexpected += [p for p in assets if p != "live/_fallback.json"
+                           and not p.startswith(("rules/", "公用/assets/fonts/", "公用/fonts/"))]
             result.update(pages=[p for p in documents if rule_page(p)], assets=len(assets),
                           control_files=sorted(set(documents) & CONTROL_FILES), unexpected=unexpected)
             if unexpected:
@@ -123,6 +193,7 @@ def update(args, result, log):
                     current = json.loads(public(ORIGIN + "release-identity.json"))["release_id"]
                     if current != prior["release_id"] or read(pointer)["manifest"]["release_id"] != current:
                         raise ValueError("预演后有其他版本上线，本轮停止发布")
+                    stage_live_project_settings(worktree, args.pcconfig)
                     python(*publish)
                 finally:
                     lock("Release")
@@ -161,4 +232,7 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    if sys.argv[1:2] == ["--build-rules-site"]:
+        build_rules_site(*(Path(value) for value in sys.argv[2:]))
+    else:
+        sys.exit(main())

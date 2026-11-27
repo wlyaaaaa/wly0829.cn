@@ -10,6 +10,8 @@
 .dossier-card--state #facts:has(.issue-reading) .rec-fact { grid-template-columns: 116px minmax(0, 1fr); }
 .rec-tail { white-space: nowrap; }
 .page--l3[data-record="issue"] [data-part="head"] { padding-left: 0; }
+[data-record="item"] .dossier__hero:has(.head__rewrite) { container-type: inline-size; }
+[data-record="item"] .dossier__hero .card__head:has(> .head__rewrite) { max-inline-size: max(7em, calc(100cqw - clamp(340px, 40cqw, 540px) - 52px)); }
 
 /* 左右都有记录时，把对应的卡排成两行，原始记录放在下面。 */
 [data-record="item"] .dossier__grid[data-shape="two"]:not(:has(#questions:not([hidden]))):has(#related:not([hidden])) {

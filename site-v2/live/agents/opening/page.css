@@ -63,6 +63,9 @@
 .op-fr__num { font-size: 14.5px; color: #2f2f2b; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
 .op-fr__num b { font-size: 16px; font-weight: 800; color: var(--ink); }
 .op-fr .op-ev { justify-self: end; }
+/* 后台这次算不出 token、用的是上次存下的估算：卡头合计和“三家比一比”每家那格的数后面一句小字“上次估算于 HH:mm” */
+.op-stale { font-family: var(--sans); font-size: 12.5px; font-weight: 400; line-height: 18px; color: #6c6b64; white-space: nowrap; }
+.op-cmp__num .op-stale { margin-left: 8px; }
 .op-files__total { margin: 12px 0 10px; font-family: var(--black); font-size: 18px; line-height: 26px; font-variant-numeric: tabular-nums; }
 .op-files__legend { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 13.5px; line-height: 22px; color: #57564f; }
 .op-files__legend li { display: flex; align-items: center; gap: 10px; }

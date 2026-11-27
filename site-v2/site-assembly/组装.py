@@ -1072,7 +1072,7 @@ RUNTIME_REFS = {
     # 只在本地双击打开（file:）时读；网上用页面里的图。Windows 安全中心把这份 base64 图误报隔离，构建里可能没有它
     'fx/mount.js': {'images/screen1.b64.js'},
 }
-RUNTIME_REFS['live/_lib/live-client.js'].add('/__computer/cockpit/actions')
+RUNTIME_REFS['live/_lib/live-client.js'].update(('/__computer/cockpit/actions', '/__computer/cockpit/actions/receipt'))
 
 
 def check_public_words(root, policy, files=None, expression=public_word_pattern, approved=None):

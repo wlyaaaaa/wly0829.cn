@@ -922,12 +922,14 @@
   };
   groupHash();
   window.addEventListener('hashchange', groupHash);
-  window.Live.watch('projects/phone-collector', null, { data(d, meta) {
+  // 手机读数（phone）先订，当本页主数据：连不上时页顶写的“下面是几点的数据”、确认关机后重开这页留不留着上次那份，都说手机这一份；
+  // 项目文档那份（流量近 30 天用）排到下一拍再订（D6，同 M960 自动任务页的改法）
+  queueMicrotask(() => window.Live.watch('projects/phone-collector', null, { data(d, meta) {
     trafficProject = { data: d, viewer: meta.viewer?.kind };
     if (!d?.sections?.some(s => s.metrics?.some(m => m.id === 'traffic_days30' && m.expandable))) { trafficDaysWatch?.stop(); trafficDaysWatch = null; trafficDays = null; }
     if (!trafficDaysWatch && d?.sections?.some(s => s.metrics?.some(m => m.id === 'traffic_days30' && m.expandable))) trafficDaysWatch = window.Live.watch('projects/phone-collector/records', { section: 'traffic_days30' }, { data(rows, meta) { trafficDays = { data: rows, viewer: meta.viewer?.kind }; if (phone) refresh(); } });
     if (phone) refresh();
-  } });
+  } }));
   window.Live.watch('phone', null, { phase(s) { if (s.data == null) read.set(s); },
     data(d, meta) { phone = U.withoutSnapshotCutoff(d, meta.at); viewer = meta.viewer?.kind || 'public'; done = true; render(); read.done(); lightUp(); },
     link(s) {

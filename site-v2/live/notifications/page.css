@@ -17,7 +17,6 @@
 #attention .stut { grid-template-columns: repeat(2,minmax(0,1fr)); }
 #attention .stut__card { min-height: 0; grid-template-columns: 80px 136px minmax(0,1fr); align-items: center; }
 #attention .stut__t { grid-row: auto; }
-#attention .stut__card[data-status="unsure"] .stut__s,#attention .stut__card[data-status="not_started"] .stut__s { color: #a36a21; }
 #attention .grp__chapter { min-height: 0; }
 #attention .grp:not(.is-open) .grp__chapter { min-height: 0; }
 #attention .card__glow { opacity: .08; }
@@ -63,7 +62,8 @@
 .page--notifications .notify-took { display: block; color: var(--muted); font-size: 12px; }
 .page--notifications .notify-link .more { margin-left: 0; padding-left: 0; translate: none; }
 .page--notifications .notify-private { color: var(--muted); }
-.delivery-table tr[data-status]:not([data-status="sent"]) .notify-state { color: #a36a21; }
+.page--notifications [data-status="failed"] :is(.stut__s, .notify-state) { color: #c2407f; }
+.page--notifications :is([data-status="unsure"], [data-status="not_started"]) :is(.stut__s, .notify-state) { color: #a36a21; }
 .delivery-table th:nth-child(2) { width: 30%; }
 .notify-all { margin-top: 22px; }
 .notify-all__head { display: flex; align-items: baseline; gap: 18px; padding: 24px 64px; border-radius: var(--radius, 28px); cursor: pointer; list-style: none; transition: background-color .2s; }
@@ -78,7 +78,8 @@
 .notify-all .l2-board { margin-top: 18px; }
 .page--notifications .notify-coverage { margin: 18px 0 0 64px; }
 /* 首句太长时换行，不截（M278）：前半句大字可以折行，分渠道那半句在 head__tail 里轻一号 */
-.page--notifications #head .head__lead { flex: 1 1 0; min-width: 0; white-space: normal; text-wrap: balance; }
+.page--notifications #head :is(.head__lead, .head__tail) { white-space: normal; word-break: keep-all; overflow-wrap: break-word; }
+.page--notifications #head .head__lead { flex: 1 1 0; min-width: 0; text-wrap: balance; }
 .page--notifications #head > .head__tail { flex-basis: 100%; }
 .page--notifications #head:has(> .lamp) > .head__tail { padding-left: var(--gut); }
 

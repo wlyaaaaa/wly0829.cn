@@ -21,12 +21,23 @@
 .route-mid > .route-crew { flex: none; }
 .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .route-mid[hidden] { display: none; }
-.route-log .route-foot:empty { display: none; }
+#log-more:not(:empty) { margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--route-line); }
+#log-more .route-more:not(.route-more--quiet) { height: 32px; padding: 0; background: none; box-shadow: none; color: var(--route-accent-deep); font-weight: 700; }
+#log-more .route-more:not(.route-more--quiet) .route-ico { color: inherit; }
+#log [data-clip] { display: block; -webkit-line-clamp: unset; }
+#log [data-clip]:not(.is-open) { max-height: 4lh; overflow: hidden; }
+#log .route-row__line > .lamp { align-self: flex-start; margin-top: 7px; }
 #plan-box { scroll-margin-top: 70px; }
 /* “现在”那张卡收掉跟页头重复的字以后一个字不剩时整张不出（page.js drawNow），剩下的栏照原来的比例排开 */
 .route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
 .route-cols:has(> .route-now[hidden]):has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
+/* 窄窗口把过程记录移到下一排，给时刻、事件名和说明足够的行宽。 */
+@media (max-width: 1080px) {
+  .route-cols { grid-template-columns: minmax(0, .94fr) minmax(0, 1.1fr); }
+  .route-cols:has(> .route-now[hidden]), .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
+  .route-cols > .route-log { grid-column: 1 / -1; }
+}
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
 /* 思考摘要“原句 · 译文”每段一块（page.js thoughtSegments）：放得下整段挪到下一行，比一行还长的在块里照常折 */

@@ -52,14 +52,16 @@
     const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: 0, runs: 0 }; });
     for (const r of week) { const day = days.find(x => x.key === K.dayKey(at(r.finished_at))); if (day) { day.bytes += num(r.freed_bytes) || 0; day.runs++; } }
     const errors = week.filter(r => r.result === 'error'), deleted = week.reduce((n, r) => n + (num(r.protected_deleted) || 0), 0);
-    const hours = num(c.interval_hours) || 6;
+    // 按需更新快核（M928）：对照任务触发器的 Repetition.Interval 和接口 cleanup.interval_hours。
+    const hours = c.interval_hours > 0 ? num(c.interval_hours) : null;
+    const running = runs[0]?.result === 'running' ? runs[0] : null;
     let next = at(c.next_run_at), estimated = false;
-    if (!next && last) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
-    const overdue = !!last && now - at(last.finished_at) > lateHours(hours) * 3600000;
-    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running: runs[0]?.result === 'running' ? runs[0] : null };
+    if (!next && last && hours && !running) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
+    const overdue = !!(!running && hours && last && now - at(last.finished_at) > lateHours(hours) * 3600000);
+    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running };
   }
 
-  // 多久没跑完一轮算“没按时跑”：两轮间隔再加 1 小时（M928 机制说明写在“下次”那格）。间隔读回包 interval_hours，不用按需更新快核
+  // 按需更新快核（M928）核法：“没按时跑”由下面 lateHours 计算，现两轮间隔再加 1 小时（间隔取 cleanup.interval_hours，现 6 小时，合计 13 小时）；变了核对“下次”那格
   function lateHours(hours) { return hours * 2 + 1; }
 
   // 给页首用：保护名单被删 > 出错或没按时跑；都没有返回 null（再看盘会不会满）。
@@ -78,6 +80,7 @@
     if (g.last?.result === 'error') return '<span class="cl-pill" data-tone="amber"><i></i>上一轮出错</span>';
     if (g.overdue) return '<span class="cl-pill" data-tone="amber"><i></i>没按时跑</span>';
     if (g.running) return '<span class="cl-pill" data-tone="green"><i></i>正在跑</span>';
+    if (!g.hours) return `<span class="cl-pill" data-tone="gray"><i></i>上次 ${esc(hm(g.last.finished_at))} 跑完</span>`;
     return '<span class="cl-pill" data-tone="green"><i></i>运行正常</span>';
   }
 
@@ -205,8 +208,9 @@
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
-      g.last && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
+      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
+    // 按需更新快核（M928）核法：E:/PCConfig/tools/auto_cleanup_conversations.py 的 preserve_quotes，现 Codex、Claude 清前确认原话已存，缺时补存并回读，通过才继续；变了改下方提示
     const kept = num(g.last?.skipped_unsaved_conversations);
     const firstTile = g.last ? first : `<li data-tone="gray">${ICON.ok}<div><b>出错</b><span class="cl-dash">—</span></div></li>`;
     const secondTile = g.last ? second : `<li data-tone="gray">${ICON.shield}<div><b>保护名单被删</b><span class="cl-dash">—</span></div></li>`;
@@ -300,7 +304,7 @@
     for (const [a, b] of data.gaps) {
       const x0 = x(a), x1 = x(b);
       svg.push(`<rect x="${x0.toFixed(1)}" y="${T}" width="${(x1 - x0).toFixed(1)}" height="${H - T - B}" fill="url(#cl-hatch)"/>`);
-      if (x1 - x0 > 46) svg.push(`<text class="cl-gaptxt" x="${((x0 + x1) / 2).toFixed(1)}" y="${((T + H - B) / 2 + 4).toFixed(1)}" text-anchor="middle">没记录</text>`);
+      if (x1 - x0 > 46) svg.push(`<text class="cl-gaptxt" x="${((x0 + x1) / 2).toFixed(1)}" y="${T - 8}" text-anchor="middle">没记录</text>`);
     }
     const n = Math.max(2, Math.min(5, Math.floor((W - L - R) / 130)));
     for (let i = 0; i < n; i++) { const t = data.from + (data.to - data.from) * i / (n - 1); svg.push(`<text class="cl-xtxt" x="${x(t).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${esc(i === n - 1 ? '今天' : K.dayKey(t))}</text>`); }
@@ -325,9 +329,19 @@
     const lift = fresh.length ? Math.max(0, Math.max(...fresh.map(f => f.y)) - (H - B - 4)) : 0;
     for (const f of fresh) svg.push(`<text class="cl-newtxt" x="${f.x.toFixed(1)}" y="${(f.y - lift + 4).toFixed(1)}" text-anchor="end" fill="${f.s.color}">${esc(`${K.letter(f.s.v)} 盘刚开始记`)}</text>`);
     ends.sort((a, b) => a.y - b.y);
-    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 17) ends[i].y = ends[i - 1].y + 17;
-    const overflow = ends.length ? Math.max(0, ends.at(-1).y - (H - B)) : 0;
-    for (const e of ends) svg.push(`<text class="cl-end" x="${(Math.min(e.x, W - R) + 8).toFixed(1)}" y="${(e.y - overflow + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
+    // 盘符贴着各自的线尾、互相不压。两条线的线尾几乎一样高（差不到 8px）时，两个字母左右并排、放在两条线尾中间那个高度；
+    // 别的挨得近的合成一串。现在 13px 粗体的文字框实量 18px，按 21px 排开；
+    // 整串不出图顶，最下面那个字母的底边留在底线上方 4px，不贴横轴日期（M1009）
+    const gap = 21, floor = H - B - 13, slots = [];
+    for (const e of ends) { const s = slots.at(-1); if (s && s.items.length === 1 && e.y - s.y < 8 && Math.abs(e.x - s.items[0].x) < 7 && K.letter(e.s.v) && K.letter(s.items[0].s.v)) { s.items.push(e); s.y = (s.y + e.y) / 2; } else slots.push({ items: [e], y: e.y }); }
+    const runs = slots.map(s => ({ items: [s], at: s.y }));
+    const place = r => { const n = r.items.length; r.at = Math.max(T, Math.min(floor - (n - 1) * gap, r.items.reduce((sum, s, i) => sum + s.y - i * gap, 0) / n)); };
+    for (let merged = true; merged;) {
+      merged = false; runs.forEach(place);
+      for (let i = 1; i < runs.length && !merged; i++) if (runs[i].at < runs[i - 1].at + runs[i - 1].items.length * gap) { runs[i - 1].items.push(...runs.splice(i, 1)[0].items); merged = true; }
+    }
+    runs.forEach(r => r.items.forEach((s, i) => s.items.forEach((e, j) => { e.ly = r.at + i * gap; e.lx = Math.max(...s.items.map(item => item.x)) + j * 14; })));
+    for (const e of ends) svg.push(`<text class="cl-end" x="${(e.lx + 8).toFixed(1)}" y="${(e.ly + 4).toFixed(1)}" fill="${e.s.color}">${esc(K.letter(e.s.v) || K.volName(e.s.v))}</text>`);
     const big = [...data.marks].sort((a, b) => b.bytes - a.bytes);
     big.forEach((m, i) => {
       const mx = x(m.t), my = y(m.v);
@@ -363,9 +377,13 @@
     if (!card) return;
     const g = digest(d);
     K.put(document.getElementById('cleanup-pill'), pill(g));
-    const hours = g?.hours || 6;
-    const note = K.field(g?.c?.summary, '自动清理说明', viewer) || `每 ${hours} 小时一轮 · 到期的缓存、临时目录、施工产物和旧 AI 对话直接永久删`;
-    K.put(document.getElementById('cleanup-note'), esc([note, withheld].filter(Boolean).join(' · ')));
+    // 按需更新快核（M928）核法：E:/PCConfig/registries/automatic_cleanup.json 的 rules[].days、protection、conversation_cleanup.main_body_days，现常见网站和 AI 临时目录 1 天、主对话正文 45 天。
+    // 直删和回收站分别对照 automatic_cleanup.py 与 Invoke-RecycleBinCleanup.ps1。
+    const note = [
+      '每 6 小时和开机时各清一轮：登记过的缓存、临时目录、施工产物和旧 AI 对话到期直接删，不进回收站，删了找不回。',
+      '回收站另算：每小时看一次，一般的东西留 7 天（G、H 盘也是 7 天），登记过的 AI 产物可以马上清，D 盘不动。',
+    ].map(esc).join('<br>').replaceAll('登记过', '<span class="live-unit">登记过</span>');
+    K.put(document.getElementById('cleanup-note'), note + (withheld ? ` · ${esc(withheld)}` : ''));
     K.put(document.getElementById('cleanup-total'), total(g, viewer));
     K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
     K.put(document.getElementById('cleanup-vols'), volumes(d, g, viewer));

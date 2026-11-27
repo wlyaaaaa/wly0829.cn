@@ -299,7 +299,7 @@ def check_site_links(dist, cached_warnings=None):
     return page_warnings
 
 
-def build(dist, full=False, cache_dir=None):
+def build(dist, full=False, cache_dir=None, *, record_local=False):
     started = time.monotonic()
     destination = dist
     dist = ROOT / '.cache/site-build' / hashlib.sha256(str(destination).encode()).hexdigest()[:16]
@@ -313,7 +313,7 @@ def build(dist, full=False, cache_dir=None):
     runtime = load('site_build_runtime', 'site-astro/tools/build_runtime.py')
     previous = destination / '.build-receipt.json'
     fallback = os.environ.get('WLY_LIVE_FALLBACK_CMD', '').strip() or (destination / 'live/_fallback.json').exists()
-    if not full and not fallback and previous.is_file():
+    if not full and not fallback and not record_local and previous.is_file():
         cached = read(previous)
         _, sources, identity = step('source_fingerprints', lambda: source_inputs(runtime))
         proof = cached.get('input_fingerprints', {})
@@ -360,7 +360,7 @@ def build(dist, full=False, cache_dir=None):
     runtime.oss.write(destination / '.build-receipt.json', receipt)
     try:
         import live_project
-        live_project.record('build', ROOT, destination, receipt)
+        live_project.record('build', ROOT, destination, receipt, record_local=record_local)
     except Exception as error:
         print('构建已成功，实况登记失败：' + str(error), file=sys.stderr)
     print(json.dumps({'status': 'built', 'html_files': receipt['html_files'], 'preserved_cockpit_files': 0,
@@ -373,5 +373,6 @@ if __name__ == '__main__':
     parser.add_argument('--dist', type=Path, default=ROOT / 'dist')
     parser.add_argument('--full', action='store_true', help='Bypass assembly and finalization caches')
     parser.add_argument('--cache-dir', type=Path, help='Isolated assembly cache for a cold build')
+    parser.add_argument('--record-local', action='store_true', help='登记本人本地组装成品和实际输出路径')
     args = parser.parse_args()
-    build(args.dist.resolve(), args.full, args.cache_dir)
+    build(args.dist.resolve(), args.full, args.cache_dir, record_local=args.record_local)

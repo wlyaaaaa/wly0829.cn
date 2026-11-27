@@ -35,6 +35,10 @@
 /* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
 .page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
 .page--backups .backup-at > span { white-space: nowrap; }
+@media (min-width: 1280px) {
+  .page--backups .backup-grid col:nth-child(-n+2) { width: 15.25% !important; }
+  .page--backups .backup-grid col:nth-child(3) { width: 11.5% !important; }
+}
 /* 窗口不到 1440 宽：大小列放不下整个时刻（“11-16 07:38”伸出灰底），日期和钟点分两行；1440 宽不变（M781） */
 @media (max-width: 1439px) { .page--backups .backup-grid td:nth-child(3) .backup-at { white-space: normal; } }
 .page--backups .backup-grid b { font-weight: 400; }
@@ -63,6 +67,7 @@
 .page--backups .backup-grid summary { cursor: pointer; color: var(--muted); font-size: 12px; }
 .page--backups .backup-note > summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; list-style-position: inside; }
 .page--backups .backup-note > div { font-size: 12px; font-weight: 400; }
+.page--backups .backup-grid .backup-narrow-detail { display: none; }
 .page--backups .backup-summary { grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; }
 .page--backups .backup-summary b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .page--backups .backup-summary .backup-drive { min-width: 0; word-break: normal; overflow-wrap: normal; }
@@ -96,6 +101,9 @@
   .page--backups .backup-grid tr > :nth-child(3) { grid-column: span 2; }
   .page--backups .backup-grid tr > [colspan] { grid-column: 1 / -1; }
   .page--backups .backup-grid tbody tr { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair); }
+  .page--backups .backup-grid :is(.backup-failure-long, .backup-failure-long ~ .backup-note) { display: none; }
+  .page--backups .backup-grid .backup-narrow-detail { display: inline-block; color: var(--muted); font-size: 12px; text-decoration: underline; }
+  .page--backups .backup-grid tr[data-set="devconfig"] td[data-copy="h"] .backup-at { display: inline-block; overflow-wrap: normal; }
 }
 </style>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>

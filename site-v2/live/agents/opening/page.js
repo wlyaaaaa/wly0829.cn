@@ -76,6 +76,10 @@
     });
     return out.length ? out : null;
   }
+  // 后台这次算不出 token、拿上次存下的估算顶上时给 tokens_stale: true 和那次估算的时刻 tokens_at（这一家合计和单份文件都可能有）；
+  // 数字照旧，后面补一句“上次估算于 HH:mm”：每张“读哪几份”卡只在卡头合计标一次，文件行、底部合计、下面原文的标题行不再重复标；
+  // “三家比一比”每家一格各标一次（各家时刻可能不同）。没标 tokens_stale 的照旧不加字（tokens_at 平常也给，不看它）
+  const staleAt = x => x?.tokens_stale === true && T.stamp(x.tokens_at) ? x.tokens_at : null;
   function opened(r) {
     if (!r || typeof r !== 'object' || r.available === false) return null;
     const files = list(r.files).map(f => {
@@ -86,7 +90,7 @@
       return { ...row, doc: Object.hasOwn(f, 'text') ? file(f) : null };
     });
     return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens), characters: num(r.characters),
-      method: String(r.count_method || ''), limit: num(r.token_limit), left: num(r.tokens_remaining) };
+      method: String(r.count_method || ''), limit: num(r.token_limit), left: num(r.tokens_remaining), staleAt: staleAt(r) };
   }
   // 开场时补的几行：这一家最近一次开场（同一次开场的几条钩子前后差不到 2 分钟），按先后接起来原样给
   function opening(rows, h) {
@@ -234,6 +238,7 @@
   const whenOpen = o => o.id === 'no_project' ? `${o.name}时` : `选${/^[A-Za-z0-9]/.test(o.name) ? ' ' : ''}${o.name}时`;
   const approx = r => r?.method === 'o200k_base_estimate';
   const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> token` : 'token 没算出';
+  const staleNote = x => x?.staleAt ? `<small class="op-stale">上次估算于 ${esc(when(x.staleAt))}</small>` : '';
   const EV = { observed: '看到的', inferred: '按加载规则推算', unavailable: '读不到' };
   const ev = kind => `<span class="op-ev" data-ev="${EV[kind] ? kind : 'unavailable'}">${EV[kind] || '没标'}</span>`;
   function modeRow(m, h) {
@@ -282,14 +287,14 @@
         ${known(r.tokens) ? `<div class="op-gauge"${over ? ' data-tone="over"' : ''}><i style="width:${Math.min(100, r.tokens / r.limit * 100).toFixed(1)}%"></i></div>` : ''}`;
     } else {
       const base = m.modes.find(x => x.id === 'no_project')?.hosts[h.id], more = o.id !== 'no_project' && base ? r.count - base.count : null;
-      sum = `<p class="op-files__sum">合计${known(r.tokens) ? `${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> token` : ' token 没算出'}${known(more) ? `<em>${more > 0 ? `比无项目多读 ${int(more)} 份` : '和无项目读的一样'}</em>` : ''}</p>`;
+      sum = `<p class="op-files__sum">合计${known(r.tokens) ? `${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> token${staleNote(r)}` : ' token 没算出'}${known(more) ? `<em>${more > 0 ? `比无项目多读 ${int(more)} 份` : '和无项目读的一样'}</em>` : ''}</p>`;
     }
     const own = r.files.filter(f => !f.project).length, extra = r.files.length - own;
     const rows = r.files.map((f, i) => (extra && i === 0 ? '<h3 class="op-files__group">全局入口</h3>' : '')
       + (extra && i === own ? `<h3 class="op-files__group">${esc(o.name)}多读的 ${int(extra)} 份</h3>` : '') + fileRow(f, i, r)).join('');
     const total = [`合计 ${int(r.count)} 份`, known(r.bytes) ? `${int(r.bytes)} 字节` : '字节数没读全', known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} token` : 'token 没算全'];
     // 签的说明只写这一家这种开法里真出现的那几种（Claude 全是“按加载规则推算”时，不再列一条用不上的“看到的”）
-    const SAYS = { observed: `${h.id === 'antigravity' ? 'Antigravity 设置页' : '宿主自己的界面'}上列着这一份，数也对得上。`,
+    const SAYS = { observed: `${h.id === 'antigravity' ? 'Antigravity 设置页' : `${h.name} 自己的界面`}上列着这一份，数也对得上。`,
       inferred: '文件和大小是磁盘上的实数，开对话读不读，是照厂商写的加载规则推的。' };
     const used = Object.keys(SAYS).filter(k => r.files.some(f => f.load === k));
     return `<section ${attrs}><div class="op-files__head"><h2>${esc(whenOpen(o))}读这 ${int(r.count)} 份</h2>${sum}</div>
@@ -365,7 +370,7 @@
   function cmpNum(m, h) {
     if (!m.modes) return `<span class="op-cmp__num">${h.present ? `${words(h.characters)} · 只它有的 ${h.only.length} 段` : '这一轮没读到'}</span>`;
     const r = modeOf(m).hosts[h.id];
-    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? 'token 没算出' : known(r.limit) ? `${int(r.tokens)} / ${int(r.limit)} token` : `${approx(r) ? '约 ' : ''}${int(r.tokens)} token`}`;
+    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? 'token 没算出' : known(r.limit) ? `${int(r.tokens)} / ${int(r.limit)} token` : `${approx(r) ? '约 ' : ''}${int(r.tokens)} token${staleNote(r)}`}`;
     return `<span class="op-cmp__num">${size}</span>${h.present ? `<span class="op-cmp__num">只它有的 ${h.only.length} 段</span>` : ''}`;
   }
   function compare(m) {

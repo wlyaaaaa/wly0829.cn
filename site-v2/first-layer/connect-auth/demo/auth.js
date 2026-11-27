@@ -1,8 +1,31 @@
 // 真状态由共享读层提供；写操作复用原授权模型及 Cookie 会话。
 (async () => {
+  // 第一次共用脚本（授权模块、实况脚本）没下到（断网、被拦）：先挂一句“授权状态还没读到，请重新加载。”；
+  // 网络回来、页面回到前台，或在前台每过一分钟，再取一次没下到的那份，取到了收起这句、照常往下走（M983）。模块失败过浏览器会记着，再取时带个序号
+  const MODEL = '/app/computer-access-model.js';
+  let model = null, tries = 0;
+  await new Promise(resolve => {
+    let fetching = false, note = null, retry = 0;
+    const script = src => new Promise((ok, fail) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => { s.remove(); fail(); }; document.head.append(s); });
+    async function fetchShared(first) {
+      if (fetching || (document.hidden && first !== true)) return;
+      fetching = true;
+      try {
+        model ||= await import(tries ? `${MODEL}?retry=${tries}` : MODEL);
+        if (!window.Live) await script('/live/_lib/live-client.js');
+      } catch {
+        tries++; fetching = false; retry ||= setInterval(fetchShared, 60000);
+        if (!note) { note = document.createElement('p'); note.textContent = '授权状态还没读到，请重新加载。'; document.getElementById('stage').prepend(note); document.body.classList.add('is-ready'); }
+        return;
+      }
+      clearInterval(retry); removeEventListener('online', fetchShared); document.removeEventListener('visibilitychange', fetchShared);
+      note?.remove(); resolve();
+    }
+    addEventListener('online', fetchShared); document.addEventListener('visibilitychange', fetchShared);
+    fetchShared(true);
+  });
   const { HOST_ORIGIN, apiRequest, createGrantAttempt, createGrantRecovery, grantResultNeedsQuery, canRestartUnsubmittedGrant, isAccessOrigin,
-    durationMinutes, remainingMinutes, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot } = await import('/app/computer-access-model.js');
-  if (!window.Live) await new Promise((resolve, reject) => { const s = document.createElement('script'); s.src = '/live/_lib/live-client.js'; s.onload = resolve; s.onerror = reject; document.head.append(s); });
+    durationMinutes, remainingMinutes, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot } = model;
   const local = !isAccessOrigin(location.origin, window.top === window);
   const base = location.origin === HOST_ORIGIN ? '' : HOST_ORIGIN;
   const fields = { pd: 'personal_data', ur: 'unrestricted', win: 'windows' };
@@ -23,6 +46,8 @@
   let windowsUnlockCooldown = 0, windowsUnlockReceipt = '', winUnlock = false;
   if (!local) { try { pending = JSON.parse(sessionStorage.getItem(storageKey) || 'null'); } catch {} }
   if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
+  // 锁屏结果还没出来：卡上状态照实留着，“锁屏结果还没确认”写在状态下面那行，直到查到结果
+  if (pending?.action === 'windows') winMessage = '锁屏结果还没确认';
   const clock = () => (serverClock ? Date.parse(serverClock.at) + performance.now() - serverClock.received : Date.now()) / 1000;
   // 照定稿样板：到今天 18:30／到明天 10:04／到周一 10:04，按北京时间换日。
   const BJ = 8 * 3600e3;
@@ -127,6 +152,9 @@
     notice?.set(ok ? 'ok' : 'fail', head, { name, hold: ok ? 7000 : 10000 });
   }
   const keysOf = value => ['pd', 'ur'].filter(k => value?.[fields[k]] && value[fields[k]].state !== 'not_requested');
+  // 两项一起办只办成一项（partial）：两项都有了结果就不用再查；还有一项没出结果的照旧查原号
+  const openParts = value => keysOf(value).filter(k => ['unknown', 'pending', 'verifying'].includes(value[fields[k]].state));
+  const needsQuery = value => value?.state === 'partial' && !value.action ? openParts(value).length > 0 : grantResultNeedsQuery(value);
   // 等结果：那一块的边框绕一圈绿光、码格里一道光流过，直到出结果
   function waiting(keys, on) {
     for (const k of Object.keys(cells)) cells[k].classList.toggle('is-waiting', on && keys.includes(k));
@@ -181,7 +209,7 @@
     return ['办好了', ''];
   }
   function remember(value) {
-    pending = value && grantResultNeedsQuery(value) ? { request_id: value.request_id, action: value.action, state: value.state, factor_submitted: value.factor_submitted, request_created: value.request_created, key: openKey || pending?.key || ({ 'personal-data': 'pd', unrestricted: 'ur' }[value.action]) } : null;
+    pending = value && needsQuery(value) ? { request_id: value.request_id, action: value.action, state: value.state, factor_submitted: value.factor_submitted, request_created: value.request_created, key: openKey || pending?.key || ({ 'personal-data': 'pd', unrestricted: 'ur' }[value.action]) } : null;
     // Store no factor, CSRF token or local authority; reload only queries this ID.
     if (pending) sessionStorage.setItem(storageKey, JSON.stringify(pending)); else sessionStorage.removeItem(storageKey);
   }
@@ -215,10 +243,8 @@
     }
     if (Number.isFinite(value.cooldown_until_unix)) cooldownUntil = value.cooldown_until_unix;
     const lockedKey = ({ 'personal-data': 'pd', unrestricted: 'ur' })[value.action];
-    if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') {
-      const d = new Date(Date.now() + BJ);
-      lockedAt[lockedKey] = `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
-    }
+    // 没配对的设备看不到真状态，锁上／结束成功后卡上记一笔“已锁上／已结束”。电脑的回执不带办理时刻，就不写时刻，不拿浏览器时间补
+    if (directWrite && value.state === 'succeeded' && lockedKey && state?.[fields[lockedKey]]?.state === 'private') lockedAt[lockedKey] = true;
     {
       waiting([], false);
       const windows = value.action === 'windows';
@@ -232,8 +258,29 @@
         const [head, name] = successText(value, before);
         setOpen(null); toast(true, head, name);
         if (!value.action) celebrate(keysOf(value));
-      } else if (value.state === 'cancelled' && !grantResultNeedsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
-      else if (grantResultNeedsQuery(value)) { if (windows) winMessage = '锁屏结果还没确认'; else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
+      } else if (value.state === 'partial' && !value.action) {
+        // 两项一起办只办成一项：办成的那项照回执画上新截止、卡片亮一下，浮窗逐项写哪项办成、哪项没成；
+        // 另一项还没出结果的，只确认办成的那项，另一项写“结果还没确认”，接着查原号
+        // 同一次请求会再查几次，“办成了”不分解锁还是延长（查第二次时卡上已是新截止），卡片只在截止头一回换上时亮一下
+        const keys = keysOf(value), open = openParts(value);
+        const ok = keys.filter(k => value[fields[k]].state === 'succeeded'), drawn = ok.filter(k => value[fields[k]].expires_at_unix > 0);
+        if (drawn.length) {
+          const next = { ...state, state_version: '' };
+          for (const k of drawn) next[fields[k]] = { ...state?.[fields[k]], state: value[fields[k]].current_state || (k === 'pd' ? 'unlocked' : 'active'), expires_at_unix: value[fields[k]].expires_at_unix };
+          const fresh = drawn.filter(k => state?.[fields[k]]?.expires_at_unix !== value[fields[k]].expires_at_unix);
+          shown = { at: clock(), parts: Object.fromEntries(drawn.map(k => [fields[k], next[fields[k]]])) };
+          state = next; celebrate(fresh);
+        }
+        const name = { pd: '个人资料', ur: '无限制授权' };
+        const lines = keys.map(k => ok.includes(k) ? `${name[k]}办成了${drawn.includes(k) ? ' · ' + untilText(value[fields[k]].expires_at_unix * 1000) : ''}`
+          : open.includes(k) ? `${name[k]}结果还没确认` : `${name[k]}没办成`);
+        if (open.length) message(`${lines.join('；')}，页面会自己再核对。`);
+        else { setOpen(null); toast(false, '办成一项，请看各自状态', lines.join('；')); }
+      } else if (value.state === 'cancelled' && value.request_created === false) {
+        // 点取消时请求根本没建成（比如被电脑拒了）：不弹“已取消”的绿勾，照实说这次没发出去、为什么
+        const why = errorMessages[value.reason || value.error]; message(''); toast(false, '那次请求没发出去，不用再取消', why ? '没发出的原因：' + why : '');
+      } else if (value.state === 'cancelled' && !needsQuery(value)) { message(''); toast(true, '已取消这次请求'); }
+      else if (needsQuery(value)) { if (windows) { winMessage = '锁屏结果还没确认'; if (openKey === 'win') setOpen(null); } else message(cooldownText() || errorMessages[value.error] || stateText || unsure); }
       else {
         if (!value.action && openKey !== key) setOpen(key, false);
         if (openKey === key) message(cooldownText());
@@ -266,9 +313,11 @@
     if (local) return entry();
     if (busy || !pending) return;
     busy = true; if (cancel) actionSequence++; render();
+    const old = pending;
     try {
-      const old = pending, path = '/requests/' + encodeURIComponent(old.request_id);
+      const path = '/requests/' + encodeURIComponent(old.request_id);
       let value = await apiRequest(base, path);
+      if (pending !== old) return;   // 查的途中这次请求已经有了结果（比如“取消请求”先回了话），这次查到的不再算数
       if (old.action && value.error === 'public_request_not_found') return lost(old);
       if (cancel && value.csrf_token) value = await apiRequest(base, path + '/cancel', { method: 'POST', csrf: value.csrf_token, body: {} });
       const awaitingCode = !old.action && old.factor_submitted === false && value.state === 'pending';
@@ -276,6 +325,7 @@
         factor_submitted: value.factor_submitted ?? old.factor_submitted,
         ...(awaitingCode && { error: 'public_factor_not_submitted' }) });
     } catch (error) {
+      if (pending !== old) return;
       if (!pending?.action && canRestartUnsubmittedGrant(pending, null, error)) { message('码还没提交，请重新办。'); remember(null); }
       else if (pending?.action && error?.data?.error === 'public_request_not_found') lost(pending);
       else if (pending?.action === 'windows-unlock') windowsUnlockReceipt = '解锁结果待确认';
@@ -375,18 +425,18 @@
     const boxes = [...root.querySelectorAll('.code input')], go = root.querySelector('.go__btn');
     const both = root.querySelector('.both input'), ownChip = own.closest('.chip--own'); let hours = '', touched = false;
     function pick(h) { hours = String(h); chips.forEach(c => c.setAttribute('aria-checked', String(c.dataset.h === hours))); own.value = chips.some(c => c.dataset.h === hours) ? '' : hours; ownChip.setAttribute('aria-checked', String(!!own.value)); }
-    // 还能加多少：总上限（72 小时）减去这次要办的那几项里剩得最多的；按 0.1 小时往下取整，不会超
+    // 还能加多少：总上限（72 小时）减去这次要办的那几项里剩得最多的（以分钟计）。
     function room() {
       const p = state?.policy;
       if (!p || !Number.isFinite(p.maximum_minutes)) return null;
       const keys = both.checked ? ['personal_data', 'unrestricted'] : [fields[key]];
       return Math.max(0, p.maximum_minutes - Math.max(...keys.map(k => remainingMinutes(state[k], clock()) || 0)));
     }
-    const roomHours = m => Math.floor(m / 6) / 10;
+    const roomHours = m => Number((m / 60).toFixed(2));
     // 填的超过还能加的，直接收回到上限（本人 11-24）
     function clamp() {
       const m = room(), asked = parseFloat(hours);
-      if (m === null || !(asked > 0) || asked * 60 <= m || m < (state.policy.minimum_minutes || 30)) return;
+      if (m === null || !(asked > roomHours(m)) || m < (state.policy.minimum_minutes || 30)) return;
       pick(roomHours(m));
     }
     chips.forEach(c => c.onclick = () => { touched = true; pick(c.dataset.h); sync(); });
@@ -416,10 +466,27 @@
       if (retry) { go.disabled = busy || disconnected || !/^\d{6}$/.test(code()) || cooldownUntil > clock(); return; }
       go.disabled = busy || !!pending || !keys.every(fresh) || !/^\d{6}$/.test(code()) || minutes === null || !p?.factor?.available || cooldownUntil > clock() || minutes < p.minimum_minutes || keys.some(k => (remainingMinutes(state[fields[k]], clock()) || 0) + minutes > p.maximum_minutes);
     }
+    // 整段码（粘贴、手机键盘的剪贴板条、短信自动填、苹果的一次性码）：格子不限 1 位，整段进来再分到各格。
+    // 够 6 位就从第 1 格填满（在哪一格粘都一样），不够 6 位从这一格往后填；光标停在最后填上的那格。
+    // 全角数字照半角算，空格、横杠去掉；整段短信里有一串正好 6 位的数，就取那一串。
+    const digitsOf = text => String(text || '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\D/g, '');
+    const codeOf = text => { const plain = String(text || '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)); return plain.match(/(?:^|\D)(\d{6})(?!\d)/)?.[1] || digitsOf(plain); };
+    const spread = (i, digits) => {
+      root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; });
+      const from = digits.length >= boxes.length ? 0 : i, part = digits.slice(0, boxes.length - from);
+      [...part].forEach((n, j) => { boxes[from + j].value = n; });
+      const last = boxes[from + part.length - 1]; last.focus(); last.setSelectionRange?.(1, 1); sync();
+    };
     boxes.forEach((box, i) => {
-      box.oninput = () => { if (root.classList.contains('has-error')) { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); } box.value = box.value.replace(/\D/g, '').slice(-1); if (box.value) boxes[i + 1]?.focus(); sync(); };
+      box.oninput = e => {
+        // 一位一位手打：只留这次打的那一位；一次进来不止一位（没走粘贴事件、直接插进格子的整段）：照整段分到各格
+        const typed = /^insert(Text|CompositionText)$/.test(e.inputType || '') ? digitsOf(e.data) : '';
+        if (digitsOf(box.value).length > 1 && typed.length !== 1) return spread(i, codeOf(box.value));
+        if (root.classList.contains('has-error')) { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); }
+        box.value = typed || digitsOf(box.value).slice(-1); if (box.value) boxes[i + 1]?.focus(); sync();
+      };
       box.onkeydown = e => { if (e.key === 'Backspace' && !box.value) boxes[i - 1]?.focus(); if (e.key === 'Enter' && !go.disabled) go.click(); };
-      box.onpaste = e => { root.classList.remove('has-error'); boxes.forEach(b => { b.placeholder = ''; }); e.preventDefault(); [...e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6 - i)].forEach((n, j) => { boxes[i + j].value = n; }); sync(); };
+      box.onpaste = e => { e.preventDefault(); const digits = codeOf(e.clipboardData?.getData('text')); if (digits) spread(i, digits); };
     });
     both.onchange = sync;
     // 提交时把光标从码格里拿走：回车提交后格子里不留闪着的光标和黑框（本人 11-24 M800）
@@ -452,7 +519,7 @@
       const stateLine = cell.querySelector('.cell__state');
       const loading = reading && !disconnected && !state;
       stateLine.textContent = disconnected ? '连不上' : loading ? '正在读…' : !state ? missingStatus
-        : privateState ? '' : key === 'win' ? winMessage || ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
+        : privateState ? '' : key === 'win' ? ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
         : active ? untilText(grant.expires_at_unix * 1000) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
       if (privateState && !disconnected) {
         const note = document.createElement('button'); note.type = 'button'; note.className = 'trust-note'; note.dataset.trustView = '';
@@ -461,10 +528,10 @@
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
       if (key === 'win' && windowsHint && !windowsHints[windowsHint]()) windowsHint = '';
-      const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
+      const winNote = key === 'win' && ((windowsHint && windowsHints[windowsHint]()) || winMessage || windowsUnlockReceipt || (windowsReadAs('no_session') ? noSessionText : ''));
       result.hidden = disconnected || !(key === 'win' ? winNote : lockedAt[key]); result.replaceChildren();
       if (!result.hidden && key === 'win') result.textContent = winNote;
-      else if (!result.hidden) { const title = document.createElement('strong'), time = document.createElement('span'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; time.textContent = `${lockedAt[key]} ${key === 'pd' ? '锁上' : '结束'}`; result.append(title, time); }
+      else if (!result.hidden) { const title = document.createElement('strong'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; result.append(title); }
       const acts = cell.querySelector('.cell__acts'); acts.replaceChildren();
       cell.querySelector('.cell__inline')?.remove();
       const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? [['锁屏', 'close'], ['解锁', 'unlock']]
@@ -555,7 +622,7 @@
     }
     render();
   }
-  window.Live.watch('access', {}, { data(value) { state = keepShown(value); winMessage = ''; }, link: renderLink });
+  window.Live.watch('access', {}, { data(value) { state = keepShown(value); if (pending?.action !== 'windows') winMessage = ''; }, link: renderLink });
   // 进场那一下绿点逐个亮起；之后状态变了灯立刻跟着变
   document.body.classList.add('auth-entering'); setTimeout(() => document.body.classList.remove('auth-entering'), 2600);
   render(); document.body.classList.add('is-ready');

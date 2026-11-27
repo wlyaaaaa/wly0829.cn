@@ -205,10 +205,11 @@
     return { root, tick };
   }
   const viewerOf = state => state?.meta?.viewer?.kind === 'owner' || state?.viewer?.kind === 'owner' ? 'owner' : 'public';
-  // 连不上时那句（live-client 拼的）本来就以句号收尾，不再补一个（M959：原来写成“……的数据。。”）
-  const stateNote = (state, label) => state?.offline ? `<p class="tp-note" data-tone="off">${esc((state.text || '电脑连不上').replace(/。?$/, '。'))}</p>`
-    : state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
-  const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? '这块没存下来，连上后补上。'
+  // 连不上时不在标题下再写一遍：页顶那张卡（全站同一个，live-ui）已经写了几点起连不上、下面是几点的数据，
+  // 这里再写就是同一句话两处（D6；同本人 R11 实况首页断线和灰提醒合成一条）。暂停公开照旧写。
+  const stateNote = (state, label) => state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
+  // 整页没存下来时直接说哪一块没存下来：“自动任务没存下来，连上后补上。”（这一页没有别的标题；首页有卡名的卡照旧写“这块没存下来，连上后补上。”）
+  const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? `${label}没存下来，连上后补上。`
     : ['none', 'gone', 'error'].includes(state?.phase) || state?.meta?.status >= 400 ? `${label}暂时没读到。` : `正在读${label}…`)}</p>`;
   // 保留展开、收起状态后整块重画
   function paint(root, html) {

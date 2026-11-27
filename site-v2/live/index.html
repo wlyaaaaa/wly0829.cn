@@ -15,6 +15,12 @@
 .live-first-read .board { visibility: hidden; }
 .live-first-status { display: none; }
 .live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
+/* 和电脑页一样，滚过正文时底色随顶栏移动，只淡出导航字。 */
+#topbar[data-state="compact"] .topbar__glass { background-color: var(--paper); }
+#topbar[data-state="compact"] { opacity: 1; }
+#topbar[data-state="compact"] :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+#topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav #topbar[data-state="compact"][data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
 .page--live :is(.row, .project-cell):has(.home-detail-link) { position: relative; }
 .page--live .home-detail-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
 .page--live .home-detail-link:focus-visible { outline: none; }
@@ -104,7 +110,8 @@
 .page--live #automation .auto-a-row .auto-tag { margin-top: 1px; }
 .page--live #backups .restore__line { font-weight: 400; }
 .page--live #backups .restore__line .row__title { margin-right: 8px; }
-.page--live #phone .head__lead { white-space: nowrap; font-size: clamp(24px, 1.75vw, 34px); }
+.page--live #phone .head__lead { white-space: nowrap; }
+.page--live:not(.live-empty-home) #phone .head__lead { font-size: clamp(24px, 1.75vw, 34px); }
 .page--live .board .row__title { word-break: normal; }
 /* 等你的事、AI 对话两张卡的标题：只在空格和标点处折行，连着的中文不从中间断开（“解锁”不拆成“解／锁”）；一段长过整行才硬断（M743） */
 .page--live .board :is(#needs, #chats) .row__title { word-break: keep-all; overflow-wrap: break-word; }
@@ -131,7 +138,12 @@
 .page--live.live-unreadable .board .card .card__head, .live-unreadable #phone .card__head { display: flex; margin: 0; padding: 0; border: 0; align-items: center; }
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
-.page--live.live-unreadable #phone .head__lead { font-size: 18px; }
+.page--live.live-unreadable:not(.live-empty-home) #phone .head__lead { font-size: 18px; }
+/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+.page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
+.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
+.live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
@@ -189,37 +201,16 @@
 .page--live #needs .row__main { grid-column: 2; grid-row: 1; }
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
-/* 等你的事卡每件事三行（M752，本人 11-24 16:09 点头的样子）：第一行“要本人做 ·”加标题占满整行，长了照原样折行；
-   第二行按钮从左排，种类、顺序照旧；第三行原来的灰字。卡窄到一行放不下这些按钮时，按钮自己折行。
-   按钮那一行（M998，本人 11-26 圈的“间距不匀、各行起点不齐”）：整张卡的几行共用一套列（去办／问情况／关掉类／晚点提醒），
-   每列按这一列最宽的那颗按钮定宽，按钮之间一样留 8px；哪行没有“去办”，后面几颗照旧和别的行对成一列；整张卡都没有“去办”时那一列不占地方。
-   按钮照旧是首页各卡那种白底按钮（本人 11-26 04:2x：浅灰描边在首页不明显），去办照旧绿底。 */
-.page--live #needs [data-part="main"] { container-type: inline-size; display: grid; grid-template-columns: [go] auto [ask] auto [close] auto [later] auto [end] minmax(0, 1fr); }
-.page--live #needs [data-part="main"] > .row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
-.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; left: 2px; top: 14px; margin: 0; }
+/* 等你的事卡三行依次排标题、按钮和小字，按钮窄时照常折行。 */
+.page--live #needs [data-part="main"] > .row { grid-template-columns: minmax(0, 1fr); row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
+.page--live #needs [data-part="main"] > .row:has(> .lamp) { padding-left: max(24px, var(--gut)); }
+.page--live #needs [data-part="main"] > .row > .lamp { position: absolute; grid-column: auto; left: 2px; top: 14px; margin: 0; }
 .page--live #needs [data-part="main"] > .row .row__main { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts, .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { grid-column: 1 / -1; grid-row: 2; padding-left: 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: grid; grid-template-columns: subgrid; justify-content: start; justify-items: start; align-items: center; column-gap: 0; row-gap: 6px; max-width: none; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot] { grid-row: 1; margin: 0 8px 0 0; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="go"] { grid-column: go; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="ask"] { grid-column: ask; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="close"] { grid-column: close; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="later"] { grid-column: later; margin-right: 0; }
-/* 别的件有绿色“去办”、这件没有时：这件的按钮不跟别的行对列，“问情况”从最左边起，后面几颗紧跟着排，间距照旧 8px（r83 返修第三轮）。
-   上一轮只把每颗挪进前一列，列宽还按别的行（去办那一列按“登录脉脉”定宽），空当挪到了“问情况”和“不办了”中间，“晚点提醒”还把那一列撑宽、带去办的几行跟着右移。
-   整张卡都没有去办时照旧对列（去办那一列不占地方）。 */
-.page--live #needs [data-part="main"]:has(> .row > .row__acts > [data-slot="go"]) > .row > .row__acts:not(:has(> [data-slot="go"])):has(> [data-slot]) { display: flex; flex-wrap: wrap; align-items: center; row-gap: 6px; }
-.page--live #needs [data-part="main"] > .row > .row__acts > [data-slot="pick"] { grid-column: end; }
-.page--live #needs [data-part="main"] > .row > .row__acts > :not([data-slot]) { grid-column: 1 / -1; grid-row: 2; }
+.page--live #needs [data-part="main"] > .row > .row__acts { grid-column: 1 / -1; grid-row: 2; padding-left: 0; justify-content: flex-start; }
 .page--live #needs [data-part="main"] > .row .row__text > :not(.row__main), .page--live #needs [data-part="main"] > .row > :not(.row__acts):not(.row__text):not(.lamp) { grid-column: 1 / -1; margin-top: 0; }
-/* 卡窄到四颗按钮一行摆不下（约 320px，如 1100 宽以下的窗口）：按钮从左排、自己折行，不再对列 */
-@container (max-width: 319px) {
- .page--live #needs [data-part="main"] > .row > .row__acts:has(> [data-slot]) { display: flex; flex-wrap: wrap; gap: 6px 8px; max-width: 100%; }
- .page--live #needs [data-part="main"] > .row > .row__acts > [data-slot] { margin: 0; }
-}
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, 1fr) auto; }
 .page--live #backups .row__title { font-weight: 400; }
-.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"]) { margin-inline-start: 25px; }
+.page--live:not(.live-unreadable) .card__body:has(.card__head > .lamp) > :is([data-part="status"],[data-part="gap"],[data-part="why"],.live-fallback-note,.chat-background) { margin-inline-start: 25px; }
 .page--live #projects .card__body { padding-right: 0; }
 .page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
 .page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
@@ -240,21 +231,26 @@
 .page--live #projects .project-cell:has(.project-recent) { background: #f0f8ff; }
 .page--live :is(#computer,#phone) :is(.row__sub,.card__note,[data-part="why"]) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .page--live #phone .card__note:has(> .btn) { display: flex; align-items: center; overflow: visible; }
-.page--live #phone .card__note-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.page--live #phone :is(.card__note,.card__note-text) { min-width: 0; white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #phone .card__note > .btn { flex: none; }
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
-.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
+.page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
+.page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
-.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; container-type: inline-size; }
+.page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
 .page--live #chats .chat-head-title > .head__lead { white-space: nowrap; }
 .page--live #chats .chat-head-scope { color: var(--muted); font-size: 13px; }
-.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: nowrap; overflow-wrap: normal; margin-left: 0; font-size: min(13.5px, 2.28cqi); letter-spacing: 0; }
+.page--live #chats .chat-head-link > .chat-head-summary { display: block; white-space: normal; overflow-wrap: anywhere; text-wrap: pretty; margin-left: 0; font-size: 13.5px; letter-spacing: 0; }
 .page--live #phone .phone-head-cutoffs.row__sub { white-space: normal; }
 .page--live #phone .phone-reading-time { display: inline-block; white-space: nowrap; overflow-wrap: normal; }
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) [data-part="head"] > .row__sub { flex-basis: 100%; margin-left: var(--gut); }
 .page--live :is(#chats,#tasks,#backups) [data-part="head"] > br { display: none; }
-.page--live #needs .notice-detail[open] > p { white-space: normal; overflow-wrap: anywhere; }
+body.page--live #needs .row.notice-target { outline-offset: -2px; }
+.page--live #needs .notice-detail[open] > p { color: var(--ink-soft); overflow-wrap: anywhere; }
+.page--live #needs .notice-detail .item-open { display: flex; width: fit-content; height: auto; margin: var(--item-action-gap) 0 0; padding: 0; translate: none; color: #00A650; font-weight: 600; line-height: 22px; }
+.page--live #needs .notice-detail .item-open:hover { background: none; color: #00A650; text-decoration: underline; }
 .page--live .board .row__main { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal !important; overflow: hidden !important; }
 /* 等你的事、计划任务、备份卡的每条标题整句显示，放不下就换行，不收成两行“…”（M760） */
 .page--live .board :is(#needs,#tasks,#backups) .row__main { display: block; -webkit-line-clamp: unset; overflow: visible !important; }
@@ -268,7 +264,10 @@
 .page--live .card--empty { --headline-lamp-top: 6px; }
 .page--live:not(.live-unreadable) :is(#needs,#chats,#computer,#tasks,#automation,#backups) [data-part="head"]:has(> .lamp) > :is(.head__marker,.head__cutoff,.row__sub) { margin-left: 0; }
 @media (max-width: 1200px) {
- .page--live #phone :is(.card__head, .kv__row dd):has(.phone-reading-time) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live:not(.live-unreadable) #phone .card__head,
+ .page--live #phone :is(.kv__row dd:has(.phone-reading-time), .card__note, [data-missing-groups="yes"]) { margin-inline-end: calc(24px - var(--win)); }
+ .page--live #phone .phone-head-tail { max-width: 100%; white-space: normal; }
+ .page--live #phone .phone-head-tail > .head__tail:first-child { white-space: normal; overflow-wrap: anywhere; }
 }
 /* 电脑窗口窄（如 1024 宽）：AI 对话行尾两个按钮挪到这一行下面，标题和型号用整行宽（M498） */
 @media (max-width: 1279px) {
@@ -285,6 +284,16 @@
  .page--live #chats .row--chat > .row__acts { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: 0; padding-left: 0; }
 }
 .page--live .b6-card .card__glass { min-height: 195px; }
+/* 加绿（本人 11-26 00:14 点头，GREENIMG1126 选 A，照 G-实况首页-v5 和按钮小图第二行那颗）：只加颜色，版式和字不动 */
+/* “问情况”“打开对话”：绿字、绿描边、白底；绿底的“登录 ×× ↗”、复制好了的黑底、正在办的那颗照旧 */
+.page--live .btn.btn--sm:is([data-slot="ask"], [data-slot="go"]):not(.btn--go, .is-done, [aria-expanded="true"]) { color: #00A650; font-weight: 600; background: #fff; box-shadow: inset 0 0 0 1px #00A650, 0 1px 2px rgb(20 20 19 / .07), 0 4px 10px -6px rgb(20 28 36 / .16); }
+.page--live .btn.btn--sm:is([data-slot="ask"], [data-slot="go"]):not(.btn--go, .is-done, [aria-expanded="true"]):is(:hover, :focus-visible) { color: #008a43; background: #fff; box-shadow: inset 0 0 0 1.5px #008a43, 0 10px 20px -12px rgb(0 120 60 / .35); }
+/* 等你几件：没有状态灯时标题前一根绿竖条（有灯就只留灯）；件数的数字用强调绿 */
+.page--live .board #needs .card__head:not(:has(> .lamp)) .head__lead::before { content: ""; display: inline-block; width: 5px; height: .82em; margin-right: 10px; border-radius: 3px; background: #00A650; vertical-align: -.06em; }
+.page--live .board #needs .head__lead .needs-num { color: #00A650; }
+/* 电脑卡：显卡占用（不到 90% 时）和最紧的盘还剩多少用强调绿；这一行亮了提醒灯（盘快满）就照旧黑字 */
+.page--live .board #computer .kv-good { color: #00A650; }
+.page--live .board #computer .kv__row:not(:has(> .lamp)) .kv__link:has(> .disk-note) > .live-unit { color: #00A650; }
 /* 智能体、自动任务、AI 账本三张卡的画和别的卡同一种（H2，本人 11-26：首页混着两种插图）：整幅场景画贴卡片右边、铺满整张卡的高度，
    卡变高变矮跟着铺满，朝字那一侧淡进玻璃，玻璃后面垫同一张画的虚影；画的宽度、淡出和别的卡共用 live.css 的 .card[data-pic]。字让开的宽度照旧 */
 .page--live #automation { --pic-x: 44%; }
@@ -433,6 +442,7 @@ a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166
   <div class="field" aria-hidden="true"></div>
 
   <ul class="notices" id="notices" aria-live="polite"></ul>
+  <ul class="site-notices" id="item-action-receipts"></ul>
   <p class="live-first-status row__sub" role="status">正在读实况…</p>
 
   <div class="board">
