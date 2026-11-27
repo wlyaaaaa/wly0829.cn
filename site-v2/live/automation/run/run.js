@@ -75,6 +75,7 @@
     return F(r.headline, '这一轮的结局');
   }
   function title(r) {
+    if (r.excerptFallback) return '没写成摘要';
     const own = ownHeadline(r);
     if (own) return own;
     // 第几轮只用后台给的 subject.round；没给就不写（和列表对得上，验收 11-24 07:15）
@@ -91,6 +92,7 @@
   // 后台的 headline 自成一句、拿来当了大标题时，看 headline 那个键
   // summary 的签说的是整段换了说法；标题只留了第一句时，换掉的可能在后半句，签挂到写全这段的“收到结论”上（主控 11-26 11:02，331 轮）
   function titleTag(r) {
+    if (r.excerptFallback) return '';
     const key = ownHeadline(r) ? 'headline' : r.deferred ? '' : r.status === 'incomplete' ? 'reason' : r.status === 'running' && r.subject ? '' : 'summary';
     if (key === 'summary') {
       const whole = withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), r.subject ? F(r.subject.title, '这件活') : ''), r);
@@ -291,6 +293,11 @@
       const why = F(r.reason, '为什么先放着'), whyPlain = plainOf(r.reason), note = R.deferredNote(r, F);
       const hasWhy = whyPlain && whyPlain !== '暂时不修', dupNote = hasWhy && note && loose(whyPlain).includes(loose(note.replace(/<[^>]+>/g, '')));
       body = `收到结论：暂时不修，等下一次检查再看。${hasWhy ? `<br>为什么先放着：${why}` : ''}${note && !dupNote ? `<br>${hasWhy ? '这一轮做了：' : ''}${note}` : ''}`; tone = 'off';
+    } else if (r.excerptFallback) {
+      const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
+        .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
+      const original = r.receipt.originalText.trim() ? '<br>用的是：<span data-excerpt-original></span>' : '';
+      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
@@ -504,6 +511,8 @@
     paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
+    const original = page.root.querySelector('[data-excerpt-original]');
+    if (original) original.textContent = r.receipt.originalText;
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

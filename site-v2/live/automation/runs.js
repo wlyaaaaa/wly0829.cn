@@ -71,6 +71,7 @@
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
       key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
+      excerptFallback: category === 'excerpt' && status === 'incomplete' && r.outcome === 'fallback',
       queuedAt: r.queued_at, startedAt: started, finishedAt: r.finished_at, lastAt: r.last_activity_at || r.finished_at || started,
       minutes, summary: r.summary, reason: r.reason, activity: r.activity, subject,
       outputs: list(r.outputs).map(o => output(o, viewer)), outputCount: num(r.output_count),
@@ -150,7 +151,8 @@
       // 暂缓那一轮的“暂时不修”一步是灰点：后台对记成没做成的给 warn（这里落成灰），记成跑完的却给 ok（绿），这里一律落成灰（主控 11-25）
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
-      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan },
+      receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan,
+        originalText: typeof receipt.original_text === 'string' && (viewer === 'owner' || !receipt.source?.content_locked) ? receipt.original_text : '' },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
       // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、
       // AI 约好的事是谁约的（promised_by）。后台没给的是 null，页面照现在的样子退回

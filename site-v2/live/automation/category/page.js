@@ -42,6 +42,7 @@
 
   // —— 一轮的样子：灯、几个字的结局 ——
   function tag(r) {
+    if (r.excerptFallback) return { text: '没写成摘要', tone: 'bad' };
     const label = typeof r.statusLabel === 'string' && r.statusLabel.trim() ? F(r.statusLabel, '状态') : '';
     const [text, tone] = r.status === 'running' ? ['正在跑', 'run'] : r.deferred ? ['暂时不修', 'off'] : r.status === 'incomplete' ? ['没做成', 'bad']
       : r.status === 'completed' ? ['做成', 'ok'] : ['没记下结局', 'off'];
@@ -61,8 +62,8 @@
     // 没有那件活的名字时：结果的第一句当标题，其余放下面小字；第一句太长就截一段当标题，整句照放小字里，不丢字
     const plain = R.oneVersion(U.fieldText(r.summary, viewer).trim()), first = plain.split(/(?<=[。；！？])/)[0] || '';
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
-    const title = thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
-    const note = thing ? R.withoutSubject(summary, thing) || reason
+    const title = r.excerptFallback ? '这次用了原来的回复。' : thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
+    const note = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, thing) || reason
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
     const nth = r.subject && known(r.subject.round) && r.subject.round > 0 ? `第 ${int(r.subject.round)} 轮` : '';
     const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `<span class="au-nw">跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}</span>` : '') : known(r.minutes) ? `<span class="au-nw">用了 ${minutes(r.minutes * 60)}</span>` : '';
