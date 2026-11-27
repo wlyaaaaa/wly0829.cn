@@ -538,10 +538,17 @@
     const mainAt = main && dataAt(main), atLine = mainAt ? showing(` ${shortStamp(mainAt)} 的数据`, ` ${shortStamp(mainAt)} 读到的内容`) : rest;
     // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
     const since = main && failingStamp(main);
+    const link = latestConnection();
+    const compactHome = home && main.answered && main.data === null && /^\/live\/(?:index\.html)?$/.test(location.pathname);
+    const reachableWithoutData = main?.status === 503 && main.lagging && !main.missCount && main.validatedLink?.state === 'online';
+    if (compactHome && !hostOffline(link) && (reachableWithoutData || offline())) {
+      return { stage: reachableWithoutData ? 'retrying' : 'lost', emptyHome: true, homeSummary: true,
+        say: reachableWithoutData ? '实况服务暂时读不到，电脑开着，正在重试' : '连不上电脑，正在重试',
+        at: reachableWithoutData ? '' : ' · 电脑没确认关机', wait: '' };
+    }
     if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
       ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', shownAt: mainAt, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
           : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online', shownAt: mainAt };
-    const link = latestConnection();
     if (!hostOffline(link)) {
       // 这台浏览器没存过、先退到了最近一次更新网站时带的那份（没确认关机也退，和 r80 一样，见 useBackup）：写明是哪一份，不说“没有可显示的”。
       // 只看本页主数据：别的块退到那份、主数据手上是这个窗口刚读到的时，不说“这台浏览器没存过”（D6，项目总表页顶前后打架）
@@ -574,7 +581,7 @@
     const meta = main?.backupMeta;
     const metaNote = meta && `${meta.from === 'cloud' ? `${cloud}只记了最后一份是 ${shortStamp(meta.at)}` : `${releaseName()}只记了时刻`}，没存内容；开机连上后自动显示`;
     // 等主数据和备用包都读完再收成十张标题卡。有任意一份正文时保持原样（COLDOFF）。
-    if (home && main.answered && main.data === null && /^\/live\/(?:index\.html)?$/.test(location.pathname)) {
+    if (compactHome) {
       const times = [offlineAt && `${shortStamp(offlineAt)} 起离线`, metaNote].filter(Boolean);
       return { stage: 'off', emptyHome: true, say: '电脑关机了，开机后自动出来', at: '', wait: times.join('，') };
     }

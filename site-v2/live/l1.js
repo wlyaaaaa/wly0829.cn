@@ -917,6 +917,7 @@
       return { ...prior };
     });
   }
+  const keepComputerWords = html => html.replace(/(?:明细|记录到)(?![^<>]*>)/g, '<span class="live-unit">$&</span>');
   function renderComputer(d, screen, phoneData) {
     const trafficBytes = bytes => U.trafficBytes(bytes);  // 按 1024 进位，和海外流量页同一个函数
     const p = parts.computer;
@@ -942,14 +943,14 @@
       if (!notes.length) return text;
       const same = notes.length === sources.length && notes.every(([, sample]) => sample.key === notes[0][1].key);
       const detail = same ? notes[0][1].text : join(notes.map(([label, sample]) => `${label} ${sample.text}`));
-      return text + `<small>${esc(detail)}</small>`;
+      return text + `<small>${keepComputerWords(esc(detail))}</small>`;
     };
     const uptime = screen?.uptime ?? m.uptime?.value;
     const summary = typeof d.text === 'string' ? d.text : '';
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    U.html(p.head, cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }));
+    U.html(p.head, keepComputerWords(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') })));
     const devices = (d.devices || []).map(U.laptopConnection);
     laptopState = devices.find(x => x.id === 'secondary_laptop')?.state;
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
@@ -1184,6 +1185,7 @@
       p.head.querySelector(':scope > .lamp')?.remove();
       if (lamp) p.head.insertAdjacentHTML('afterbegin', lamp);
       Light.tone(cards[id], tone);
+      cards[id].dataset.hasReadings = counts.length ? 'yes' : '';
       p.status.hidden = !summary;
       U.html(p.status, U.nowrap(summary), false);
       // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
@@ -1407,7 +1409,7 @@
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const statusHtml = ['computer', 'phone'].includes(id) && note ? note.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : note;
-    p.status.hidden = !note; U.html(p.status, statusHtml);
+    p.status.hidden = !note; U.html(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
   const headline = (it, withLabel = true) => {
@@ -1799,11 +1801,14 @@
     link(state) {
       // 第一次画的时候没有“正在看的那一行”，不锚视口；锚了会跟着页顶横条长出来往下滚，把横条和页眉标题挤走
       const changed = !!lastState?.offline !== !!state.offline, firstLink = !lastState, oldNow = lastState?.now;
+      const compact = !!state.conn?.emptyHome, wasCompact = !!lastState?.conn?.emptyHome;
       lastState = state;
-      document.body.classList.toggle('live-empty-home', !!state.conn?.emptyHome);
+      document.body.classList.toggle('live-empty-home', compact);
+      document.body.classList.toggle('live-home-summary', !!state.conn?.homeSummary);
       bar?.set(state);
       Light.offline(state.offline);
-      if (changed && home) {
+      if (!compact && (changed || wasCompact) && home) {
+        document.body.classList.remove('live-unreadable');
         const render = () => { balanceHome(); renderCards(home); };
         if (!settling() && !firstLink) U.anchor(render); else render();
       }
@@ -1819,7 +1824,7 @@
         };
         if (firstLink || settling()) render(); else U.anchor(render);
       }
-      if (!home && (state.offline || ['none', 'gone'].includes(state.phase))) {
+      if (compact || !home && (state.offline || ['none', 'gone'].includes(state.phase))) {
         unreadable();
       }
       const fallbackNote = state.fallbackNote || state.meta?.fallbackNote;
