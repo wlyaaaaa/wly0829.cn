@@ -281,7 +281,7 @@
   }
   const sync = C.sync();
   const chapters = [
-    { key: 'day', name: '这三天', pic: '/live/img/s1900-usage-clock-v1.webp', palette: ['apricot', 'pink'],
+    { key: 'day', name: '时间线', pic: '/live/img/s1900-usage-clock-v1.webp', palette: ['apricot', 'pink'],
       line: (d) => { const w = longestWork(d?.day, workIdx()); return w ? `连续在用最长一段 ${S.partial(d.day, 'spans') ? '至少 ' : ''}${dur(w[1] - w[0])}（${md(w[0])} ${hm(w[0])}–${md(w[1]) === md(w[0]) ? '' : md(w[1]) + ' '}${hm(w[1])}）` : ''; },
       build(el) {
         el.innerHTML = '<div data-x="tl"></div><p class="use-note" data-x="tl-note" hidden></p>';
@@ -682,7 +682,7 @@
     board.blocks(display, { day: ['summary', 'states', 'day'], year: ['states', 'year'], where: ['categories', 'apps', 'titles'], focus: ['summary', 'focus', 'recent', 'apps'] }, !!U.offline?.());
     board.set(chapters.map((c) => {
       const group = usage?.groups?.find(g => g.key === c.key);
-      return { ...group, sourceNotes: false, level: ['ok', 'green'].includes(group?.level) ? undefined : group?.level, key: c.key, name: c.key === 'day' ? sp(usage?.window?.label || rangeLabel()) : typeof c.name === 'function' ? c.name(usage) : c.name, pic: c.pic, side: c.side, palette: c.palette, line: usage ? c.line(usage) : '', build: c.build };
+      return { ...group, sourceNotes: false, level: ['ok', 'green'].includes(group?.level) ? undefined : group?.level, key: c.key, name: typeof c.name === 'function' ? c.name(usage) : c.name, pic: c.pic, side: c.side, palette: c.palette, line: usage ? c.line(usage) : '', build: c.build };
     }));
     changedChapters = null;
     document.querySelectorAll('[data-gf]').forEach((a) => a.setAttribute('data-needs-pc', ''));

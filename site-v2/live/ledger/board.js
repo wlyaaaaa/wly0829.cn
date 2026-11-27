@@ -9,7 +9,8 @@
   const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
   const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
-  const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner' };
+  const HISTORY_OUTCOMES = { ...SETTLED, handed_off: '交给别的线', not_worth: '不值得修' };
+  const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner', handed_off: 'handoff', not_worth: 'not-worth' };
   const EVENT = { Add: '登记', Reopen: '又出现', Review: '看了一次', attempt: '处理了一轮', Close: '了结', Claim: '接手', ReleaseClaim: '放手，等人接', Handoff: '交接', Defer: '改期', Snooze: '改期', Check: '看了一次' };
   const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
@@ -37,7 +38,7 @@
   const owed = d => list(d.items).filter(it => it.state);
   const decided = d => list(d.items).filter(it => !it.state && it.outcome === 'wont_fix');
   const outcomeOf = row => row.resolution === 'recovered' || row.outcome === 'recovered' ? 'recovered' : row.resolution || row.outcome;
-  const settledLabel = key => key === 'to_owner' ? `转给${you()}` : SETTLED[key];
+  const settledLabel = key => key === 'to_owner' ? `转给${you()}` : HISTORY_OUTCOMES[key];
   const waitText = v => { const t = U.fieldText(v, viewer).trim(); return t && !t.startsWith('等') ? `等：${F(v, '等的原因')}` : F(v, '等的原因'); };
   // check_count 是已经看过的次数；看满了 AI 停手
   const positive = n => Number.isInteger(n) && n > 0;
@@ -181,8 +182,8 @@
     const legend = '<p class="tp-legend lg-key"><span><i class="lg-key__bar"></i>记下到现在</span><span><i class="lg-key__check"></i>看过</span><span><i class="lg-key__next"></i>下次看</span><span><i class="lg-key__over"></i>到了日子还没看</span></p>';
     const keyIn = blocks.parked.length ? 'parked' : 'owed';
     const board = (group, empty) => {
-      const items = blocks[group], shown = showAll[group] ? items : items.slice(0, 10);
-      const more = items.length > 10 ? `<button type="button" class="lg-more" data-more="${group}" aria-expanded="${showAll[group]}"><span class="tp-chev">${showAll[group] ? '收起' : `再看 ${items.length - 10} 件`}</span></button>` : '';
+      const items = blocks[group], fold = U.shouldFold(items.length - 10), shown = showAll[group] || !fold ? items : items.slice(0, 10);
+      const more = fold ? `<button type="button" class="lg-more" data-more="${group}" aria-expanded="${showAll[group]}"><span class="tp-chev">${showAll[group] ? '收起' : `再看 ${items.length - 10} 件`}</span></button>` : '';
       return items.length ? `<div class="lg-board"><div class="lg-head"><span></span>${axis}</div><div class="lg-tracks"><ul class="lg-list">${shown.map(it => row(it, group)).join('')}</ul><div class="lg-now" style="--x:${x(now)}" data-from="${from}" data-span="${span}"><span>现在</span></div></div></div>${more}${keyIn === group ? legend : ''}`
         : `<p class="tp-empty">${kind ? `“${KINDS.find(([k]) => k === kind)[1]}”里` : 'AI 手上'}${empty}</p>`;
     };
@@ -202,16 +203,17 @@
     const kept = decided(d).map(it => ({ ...it, at: it.at || it.outcome_at || it.accepted }));
     for (const row of [...list(d.history), ...older, ...kept]) {
       const key = row.issue || row.id, out = outcomeOf(row);
-      if (!SETTLED[out] || open.has(key) || seen.has(key)) continue;
+      if (!HISTORY_OUTCOMES[out] || open.has(key) || seen.has(key)) continue;
       seen.add(key); rows.push({ ...row, settled: out });
     }
     return rows.sort((a, b) => (stamp(b.at) || 0) - (stamp(a.at) || 0));
   }
-  // 标题一样、结果一样的几件并成一行（标题藏起来的不并）
+  // 标题一样、结果一样的几件并成一行；交接目标、不修理由各自展示。
   function groupRows(rows) {
     const groups = [], byKey = new Map();
     for (const r of rows) {
-      const t = titleOf(r), key = typeof t === 'string' ? `${r.settled}|${t.trim()}` : null, g = key && byKey.get(key);
+      const t = titleOf(r), key = typeof t === 'string' && !['handed_off', 'not_worth'].includes(r.settled) ? `${r.settled}|${t.trim()}` : null;
+      const g = key && byKey.get(key);
       if (g) g.rows.push(r); else { const n = { rows: [r] }; groups.push(n); if (key) byKey.set(key, n); }
     }
     return groups;
@@ -225,18 +227,32 @@
     const end = /[。！？；…!?;.]$/u.test(text) ? ' ' : ' · ';
     return F(b.text, '口径说明') + (said ? '' : `${end}<span class="live-unit">${esc(d)} 起</span>`);
   }
+  const unworthyReason = v => U.fieldText(v, viewer).trim().replace(/^AI 判不值得修(?:[：:]\s*|$)/, '');
+  function settledNote(r) {
+    if (r.settled === 'handed_off') {
+      const who = U.fieldText(r.repair_summary || r.outcome_text, viewer).trim().replace(/^交给了/, '交给');
+      const href = typeof r.evidence_ref === 'string' && r.evidence_ref.startsWith('/live/') ? T.path(r.evidence_ref) : '';
+      const value = href.startsWith('/live/') ? link(href, `${esc(who || HISTORY_OUTCOMES.handed_off)} ›`) : esc(who);
+      return value ? `<span class="lg-settled__note">${value}</span>` : '';
+    }
+    if (r.settled === 'not_worth') {
+      const reason = [r.repair_summary, r.outcome_text, r.reason].map(unworthyReason).find(Boolean);
+      return reason ? `<span class="lg-settled__note">AI 判不值得修：${esc(reason)}</span>` : '';
+    }
+    return '';
+  }
   function settled(d) {
     const rows = settledRows(d), shown = rows.filter(r => !filter || r.settled === filter);
     const fixed7 = d.counts?.outcomes7?.fixed, why7 = basis(d.outcomes7_basis ?? d.counts?.outcomes7_basis);
-    const counts = Object.fromEntries(Object.keys(SETTLED).map(k => [k, rows.filter(r => r.settled === k).length]));
+    const counts = Object.fromEntries(Object.keys(HISTORY_OUTCOMES).map(k => [k, rows.filter(r => r.settled === k).length]));
     const next = older.length ? olderNext : d.next;
     return `<section class="tp-panel lg-done" id="history"><div class="tp-panel__head"><h2>最近了结的</h2></div>
-      <div class="tp-seg" role="group" aria-label="按结果看" aria-describedby="lg-settled-basis"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(SETTLED).map(k =>
+      <div class="tp-seg" role="group" aria-label="按结果看" aria-describedby="lg-settled-basis"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(HISTORY_OUTCOMES).map(k =>
         `<button type="button" data-filter="${k}" aria-pressed="${filter === k}">${settledLabel(k)} ${int(counts[k])}</button>`).join('')}</div>
       <p class="tp-small lg-basis" id="lg-settled-basis">按每件最后的结局算，一件只算一次。</p>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 次：${why7}</p>` : ''}
       <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
-        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
+        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}${settledNote(r)}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
       <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-older${olderBusy ? ' disabled' : ''}>${olderBusy ? '正在读…' : '看更早的 ›'}</button>` : ''}<span class="tp-small">已读到 ${int(rows.length)} 件${next ? '，还有更早的' : ''}</span></div></section>`;
   }
@@ -462,7 +478,13 @@
       T.keep(page.root, `[data-kind="${kind}"]`, draw); return;
     }
     const more = e.target.closest('[data-more]');
-    if (more) { showAll[more.dataset.more] = !showAll[more.dataset.more]; T.keep(page.root, `[data-more="${more.dataset.more}"]`, draw); return; }
+    if (more) {
+      const key = more.dataset.more, selector = `[data-more="${key}"]`, close = showAll[key];
+      showAll[key] = !close;
+      if (close) U.anchorFold(more, draw, () => page.root.querySelector(selector));
+      else T.keep(page.root, selector, draw);
+      return;
+    }
     if (e.target.closest('[data-older]')) readOlder();
     if (e.target.closest('[data-viewmore]')) readViewMore();
   });

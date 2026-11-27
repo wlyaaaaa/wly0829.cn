@@ -31,9 +31,15 @@
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
   const bar = U.topbar({ ask: () => `请看实况备份：${headline || U.collectionText()}。请说明现在的情况。` });
-  L.add(hero); U.fold($('more'), $('rest-box')); document.querySelector('[data-back]').href = route('/live/#backups');
+  L.add(hero); U.fold($('more'), $('rest-box'), null, true); document.querySelector('[data-back]').href = route('/live/#backups');
   // 右栏每类小标题右边的“展开／收起”：状态记在按钮的 aria-expanded 上，刷新重画时保留
-  $('points').addEventListener('click', e => { const btn = e.target.closest('.backup-toggle'); if (btn) btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true')); });
+  $('points').addEventListener('click', e => {
+    const btn = e.target.closest('.backup-toggle');
+    if (!btn) return;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    const set = () => btn.setAttribute('aria-expanded', String(!open));
+    if (open) U.anchorFold(btn, set); else set();
+  });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”“没核实”连在一起（M781）；
   // 时刻里的日期和钟点各包一层，窄窗口的大小列放不下整个时刻时只在两者之间折行（见页内样式）；时刻后面紧跟的句号、逗号等一起包进去，折行时不剩一个“。”在下一行开头
@@ -182,7 +188,7 @@
         // 份数是哪一份清单上的：带上清单时刻，和表头“本次读于”分开（M580）。
         !cloud && copy?.count != null && `${D.count(copy, 'count')} 份${copy.checked_at ? ` · 按 ${stamp(copy.checked_at).trim()} 清单` : ''}`,
         copy?.failed > 0 && `失败 ${D.transferCount(copy, 'failed', key)}`,
-        showConfirmation && confirmedAt && `上次核对 ${stamp(confirmedAt).trim()}`,
+        showConfirmation && confirmedAt && (cloud || copy?.count == null || Date.parse(confirmedAt) !== Date.parse(copy.checked_at)) && `上次核对 ${stamp(confirmedAt).trim()}`,
         original && D.sourceSubset(copy, stamp),
         copy?.content_at && `${content} ${stamp(copy.content_at).trim()}`,
         // G、H 盘没核实又没有副本日期的，写明副本日期没登记（后台补上日期才判得了齐没齐）
@@ -328,9 +334,10 @@
     const others = all.length - picked.length, unchecked = all.filter(s => !noticed(s) && protection(s) === 'unknown').length;
     const restLine = !all.length ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
     const tail = restLine ? [{ key: 'backup-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><p class="row__sub">${esc(restLine)}</p>` }] : [];
-    const rows = all.length ? sets.slice(0, 5).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));
+    const limit = U.shouldFold(sets.length - 5) ? 5 : sets.length;
+    const rows = all.length ? sets.slice(0, limit).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));
     if (d.verification && !all.some(s => s.id === 'recovery-kit')) rows.push({ key: 'verification', cls: 'row row--flat', html: `<span></span><a class="row__title" href="${esc(route('/live/backup/?id=recovery-kit'))}">恢复材料校验 ›</a>` });
-    U.list($('sets'), sets.length > 5 ? rows : [...rows, ...tail]); U.list($('rest'), sets.length > 5 ? [...sets.slice(5).map(s => setRow(s, d)), ...tail] : []); $('more').hidden = sets.length <= 5; U.html($('more'), `<span class="more__shut">还有 ${Math.max(sets.length - 5, 0)} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
+    U.list($('sets'), sets.length > limit ? rows : [...rows, ...tail]); U.list($('rest'), sets.length > limit ? [...sets.slice(limit).map(s => setRow(s, d)), ...tail] : []); $('more').hidden = sets.length <= limit; U.html($('more'), `<span class="more__shut">还有 ${Math.max(sets.length - 5, 0)} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
     // 右栏：最上面写最近一次恢复；每类一个小标题（右边“展开／收起”），下面只列能退回的日期；末尾说其余几类没有恢复点和恢复记录的去向（样子见 B2）
     const kindText = kind => kind === 'system' ? '整机恢复' : '文件恢复';
     const groups = byImportance((d.restore || []).filter(g => g.points?.length || g.restore_sessions?.last_at), g => g.set);
@@ -350,9 +357,9 @@
       // 和详情页一样新的在前（M419）
       const newest = U.mergePrivateRows([...(g.points || [])].sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0)), { value: pt => pt.scope || pt, kind: viewer });
       // 说明只剩“最近一次记录于 …”的（后台标了这条记录旧了），写在它自己那一行下面：“旧了 · 最近一次记录于 …”，不并到栏底；这样的一条不收进“展开”，一眼看得到是哪条旧了
-      const oldNote = item => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了 · ${esc(sp(item.gap).replace(/[。.]$/, ''))}</small>` : '';
+      const oldNote = (item, shown) => U.isCutoffNote(item?.gap) ? `<small class="backup-old">旧了${shown && U.sameCutoffNote(item.gap, `数据截至 ${shown}`) ? '' : ` · ${esc(sp(item.gap).replace(/[。.]$/, ''))}`}</small>` : '';
       let folded = 0;
-      const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
+      const dates = newest.map((pt, i) => { const old = !pt.private_count && oldNote(pt, pt.at && (U.date(pt.at) === U.date(Date.now()) ? U.time(pt.at) : stamp(pt.at).trim())), more = i && !old; if (more) folded++; return `<li${more ? ' data-more' : ''}>${pt.private_count ? U.privateSummary(pt.private_count)
         : `<span class="backup-can">能退回</span> <a href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at).trim() : '恢复点时间未登记')}</a>${old}`}</li>`; }).join('');
       // 恢复点覆盖的范围和类名不一样时（如系统盘整盘镜像：Windows 系统和选定电脑配置）照旧写一句“范围：…”，同一类只写一次
       const scopes = [...new Set((g.points || []).map(pt => pt.scope).filter(scope => scope && sp(U.fieldText(scope, viewer)) !== sp(U.fieldText(setName(g), viewer))).map(scope => U.fieldHtml(scope, { name: '备份范围', place: 'body', kind: viewer })))];
@@ -360,7 +367,7 @@
       // 一条恢复记录都没有时，最上面“最近一次恢复：没有恢复过的记录”已经说了，各类下面不再各写一遍
       const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : latest ? '没有恢复过的记录' : '';
       const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
-      const toggle = folded ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
+      const toggle = U.shouldFold(folded) ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
       const subs = [scopes.length && `范围：${scopes.join('、')}`, line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
       restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${subs}</div>` });
     }

@@ -67,7 +67,7 @@
   }
   const envFolds = new Map();
   const foldAttrs = key => ` data-env-fold="${esc(key)}"${envFolds.get(key) ? ' open' : ''}`;
-  const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open);
+  const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open && !detail.hasAttribute('data-fold-flat'));
   const details = () => [...$('board').querySelectorAll('details[data-env-fold]')].filter(d => !d.closest('.grp--private,.is-unread'));
   // 软件版本表按“要不要你管”分组（本人 11-26 选 ENV1 的 A，照图 ENV-1）：要你点头才更新的、会自动更新但还没更新上的、已是最新的。
   // 分组读后台每行的 update_mode（automatic／owner_approval）和自动项的 last_update；后台还没给 update_mode 时只分“落后／已是最新”，“怎么更新”写还没读到。
@@ -106,21 +106,22 @@
     const what = u.status === 'unknown' || !u.status ? '还没有自动更新的记录' : `${when}${({ deferred: '被推迟：', failed: '没更新成功：' })[u.status] || ''}${sp(u.reason || '')}`;
     return { level: 'yellow', text: what };
   }
-  function versionRow(r) {
+  function versionRow(r, group) {
     const now = nowState(r), way = updateWay(r);
+    const visibleState = group === 'behind' && now.text === '落后' ? '' : now.text;
     const wayText = esc(way).replace(/^(?:每周[日一二三四五六]自动|(?:你|本人)说一声，)|AI 来更新/g, '<span class="env-nw">$&</span>');
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${visibleState.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
     const body = versionGroups(rows).map(g => {
       const list = g.key === 'latest' && g.rows.length > LATEST_FIRST + 1 ? g.rows.slice(0, latestShown) : g.rows, left = g.rows.length - list.length;
       const more = left > 0 ? `<tr class="env-more-row"><td colspan="5"><button type="button" class="more" data-latest-more>${left > LATEST_STEP ? `再看 ${LATEST_STEP} 个（还有 ${left} 个）` : `再看剩下 ${left} 个`} ›</button></td></tr>` : '';
-      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span> · ${count(g.rows.length, '个', data.software)}</th></tr>${list.map(versionRow).join('')}${more}</tbody>`;
+      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span>${g.key === 'behind' ? '' : ` · ${count(g.rows.length, '个', data.software)}`}</th></tr>${list.map(r => versionRow(r, g.key)).join('')}${more}</tbody>`;
     }).join('');
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
   }
   function limitedRows(rows, render, key) {
-    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
+    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details" data-fold-count="${rows.length - 5}"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
   }
   function software(el) {
     el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div>';

@@ -602,7 +602,7 @@
     const rows = U.mergePrivateRows(list, { value: item => item.name ?? item.text ?? item, kind: viewer }), top = rows.slice(0, show), rest = rows.slice(show);
     const render = (item, i) => item.private_count ? `${listItems ? '<li class="row">' : '<p class="use-note">'}${U.privateSummary(item.private_count, { unit })}${listItems ? '</li>' : '</p>'}` : row(item, i);
     const remaining = rest.reduce((n, item) => n + (item.private_count || 1), 0);
-    return top.map(render).join('') + (rest.length ? `${listItems ? '<li>' : ''}<details><summary class="more">展开（还有 ${remaining} ${unit}）</summary>${listItems ? '<ul class="rows">' : ''}${rest.map((item, i) => render(item, i + show)).join('')}${listItems ? '</ul>' : ''}</details>${listItems ? '</li>' : ''}` : '');
+    return top.map(render).join('') + (rest.length ? `${listItems ? '<li>' : ''}<details data-fold-count="${rest.length}"><summary class="more">展开（还有 ${remaining} ${unit}）</summary>${listItems ? '<ul class="rows">' : ''}${rest.map((item, i) => render(item, i + show)).join('')}${listItems ? '</ul>' : ''}</details>${listItems ? '</li>' : ''}` : '');
   };
   function collectionChain(d) {
     return [['手机采集器', d?.collector], ['电脑汇总', d?.export], ['理解库导入', d?.preferences_import]].map(([label, step]) => {

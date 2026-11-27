@@ -142,7 +142,7 @@
       const name = h.name || U.fieldHtml({ visibility: 'owner' }, { name: '帮手名', kind: viewer });
       return `<div class="route-round__helper${h.failed ? ' is-failed' : ''}">${[esc(h.model), name, esc(h.result)].filter(Boolean).join(' · ')}</div>`;
     });
-    const disclosure = `<details class="route-round__helpers"${open ? ' open' : ''}><summary class="route-clip__more"><span>展开帮手</span><span>收起</span></summary>${rows.join('')}</details>`;
+    const disclosure = `<details class="route-round__helpers" data-fold-anchor${open ? ' open' : ''}><summary class="route-clip__more"><span>展开帮手</span><span>收起</span></summary>${rows.join('')}</details>`;
     return [`派了 ${helpers.length} 个帮手，${lead}${reasons}${summary}`, disclosure];
   }
   function drawLog() {
@@ -152,9 +152,9 @@
     U.html($('log-part'), hasRoundList && list.length ? `${tally}共 ${list.length} 轮` : '');
     const opened = new Set([...$('log').querySelectorAll('.route-round__helpers[open]')].map(el => el.closest('li').dataset.key));
     U.list($('log'), list.slice(0, batch.shown).map(r => {
-      const reply = r.reply ? r.reply + (r.replyAt ? U.nowrap(`（${r.replyAt}）`) : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
+      const reply = r.reply ? [!pageWords.has(flatWords(r.reply)) && r.reply, r.replyAt && U.nowrap(`（${r.replyAt}）`)].filter(Boolean).join('') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
       const work = roundWork(r, opened.has(r.key));
-      const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], ['交回', reply]];
+      const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], reply && ['交回', reply]].filter(Boolean);
       const body = fields.map(([label, value, extra = ''], i) => {
         const key = `${r.key}-${i}`;
         return `<div class="route-round__line"><b>${label}</b><div><div class="route-round__text" id="${key}" data-clip="${key}">${value}</div>${logMore(key)}${extra}</div></div>`;
@@ -204,7 +204,10 @@
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
-    const { locked, name, hiddenName, title, missingReply, plan, progress, rawReply, hasReply, meta, project, app } = V.pageMeta();
+    const { locked, name, hiddenName, title, missingReply, plan, progress, rawReply, hasReply, log, meta: rawMeta, project, app } = V.pageMeta();
+    // 旧回包的最近一条记录也会取主对话更新时刻；新回包单列的数据截止有自己的来源。
+    const sameLegacyUpdate = !V.hasNewTimes() && V.validTime(chat.at) && Date.parse(V.recordEnd(log)) === Date.parse(chat.at);
+    const meta = sameLegacyUpdate ? rawMeta.filter(value => value !== `最近一条记录 ${when(chat.at)}`) : rawMeta;
     document.title = `${title} · 实况`;
     const model = who(chat, true);
     // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀。

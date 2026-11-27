@@ -250,7 +250,8 @@
     const source = recordSource || group?.metrics?.find(m => m.section === section || m.id === section) || group || project;
     // 页头第二行已写“截至 …”时，状态说明里同一时刻的“数据截止 …”不再说第二遍（M746）
     const status = U.status({ ...source, level: source?.header_level ?? source?.level }, { cutoffShown: shownCutoff });
-    U.html($('head'), status.lamp + U.head([titleText(project.name, '项目') || '项目', '项目逐项明细'].map(sp).join(' · '), { lamp: false }));
+    const projectTitle = id === 'pcconfig' && section === 'freeze_records' && recordAt ? '' : titleText(project.name, '项目') || '项目';
+    U.html($('head'), status.lamp + U.head([projectTitle, '项目逐项明细'].filter(Boolean).map(sp).join(' · '), { lamp: false }));
     L.tone(hero, status.tone);
     const meta = [project.changed?.at && `最近变化 ${stamp(project.changed.at)}`].filter(Boolean);
     U.html($('meta'), meta.map(s => `<span>${text(s)}${project.changed?.text ? `：${U.fieldHtml(project.changed.text, { name: '最近变化', kind: recordViewer })}` : ''}</span>`).join('') + status.note); $('meta').hidden = !meta.length && !status.note;
@@ -607,9 +608,12 @@
     if (!btn) return;
     archiveOpen = !archiveOpen;
     if (archiveOpen) watchRecords();
-    $('record-section').hidden = $('record-title').hidden = !archiveOpen;
-    btn.setAttribute('aria-expanded', String(archiveOpen));
-    btn.textContent = archiveOpen ? '收起逐份档案 ›' : '展开逐份档案 ›';
+    const set = () => {
+      $('record-section').hidden = $('record-title').hidden = !archiveOpen;
+      btn.setAttribute('aria-expanded', String(archiveOpen));
+      btn.textContent = archiveOpen ? '收起逐份档案 ›' : '展开逐份档案 ›';
+    };
+    if (archiveOpen) set(); else U.anchorFold(btn, set);
   });
   // 账簿的样子：技能用量带次数条和“用得最多”“很久没用”两张摘要卡；“认识”一行好几句话，用一整页；别的明细左右两页
   function bookSetup() {

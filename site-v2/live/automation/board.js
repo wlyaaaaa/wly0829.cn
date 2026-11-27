@@ -10,16 +10,16 @@
   'use strict';
   const params = new URLSearchParams(location.search);
   // 按需更新快核（总表分类次序）核法：对照 AUTOPAGES1126 选 A 的《页面说明·自动任务》总表和 /automation 的 categories，再核 E:/PCConfig/tools/remote-computer-mcp/automation/core.py 的 CATEGORIES。
-  // 现依次为自动修理、看新消息、翻译官、规矩复核、实况核对、摘一句、AI 约好的事。笔记本周检只留旧轮，核在用类别与改名时一起看旧入口。
-  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  const R = window.AutomationRuns, IDS = R.CATS;
   // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
-  const PAST = ['weekly-laptop'];
+  const PAST = ['weekly-live'];
   const RUN_IDS = [...IDS.filter(x => x !== 'excerpt'), ...PAST];
   const typeParam = params.get('type');
   if (params.has('run')) {
     location.replace('/live/automation/run/' + location.search + location.hash);
     return;
   }
+  if (PAST.includes(typeParam)) { location.replace('/live/automation/'); return; }
   if (params.has('work') || params.has('project') || (typeParam && !IDS.includes(typeParam))) {
     location.replace('/live/automation/work/' + location.search + location.hash);
     return;
@@ -35,7 +35,7 @@
     location.replace(path.pathname + path.search + path.hash);
     return;
   }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
   const { list, known, int, dec, link, when, big, clock } = T;
   let state, viewer = 'public', busy = false, feedback = null, landed = false, pausing = null, olderOpen = false;
   // 长列表全站一个规则（本人 11-26 02:12）：先摆一部分，点一次再多摆一批，一直能摆到底
@@ -47,7 +47,7 @@
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
-  // 总表里的类：后台列表里有、页面也认的那几类（笔记本每周巡检已取消，后台删掉之前列表里还有它也不显示）
+  // 总表只列后台仍在提供的现役类别。
   const shownCats = d => IDS.map(id => list(d?.categories).find(c => c.id === id)).filter(Boolean);
   // 写在字里的类数照总表实际几行：七类；一行也没有时不写数
   const kinds = d => { const n = shownCats(d).length; return n ? `${n <= 10 ? '一二三四五六七八九十'[n - 1] : n}类` : '各类'; };
@@ -668,8 +668,6 @@
     const rows = list(d.scheduled_activities), gaps = list(d.scheduled_gaps).map(g => U.fieldText(g, viewer)).filter(Boolean);
     const hosts = ['Claude', 'Codex', 'Antigravity'];
     for (const r of rows) if (r.producer && !hosts.includes(r.producer)) hosts.push(r.producer);
-    // 定时的名字只有一个数字（如 Codex、Antigravity 里叫“1”的那个）时，写成“名为“1”的定时”，不单摆一个看不出是什么的数字
-    const label = r => typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label) ? esc(`名为“${r.label.trim()}”的定时`) : F(r.label, '这个定时');
     // 上次跑：定时唤醒的那一场对话（后台 last_wake：时刻、对话标题、对话链接），点回原对话（M921“跑完能找回原对话”）；
     // 访客看不到的那场后台给标题“仅本人可见”、链接为空，照写
     // 同一时刻已有一遍且能点回原对话时，只留对话链接；没有链接时仍标明这是上次跑。
@@ -683,9 +681,7 @@
     };
     const item = r => {
       const when1 = plan(r);
-      const codexNumber = r.producer === 'Codex' && typeof r.label === 'string' && /^\s*\d+\s*$/.test(r.label);
-      const href = (codexNumber && T.path(r.last_wake?.chat_href)) || r.href;
-      const name = `<span class="au-schedule-name">${link(href, codexNumber && T.path(href) ? `${esc(r.label.trim())} ›` : label(r))}</span>`;
+      const name = `<span class="au-schedule-name">${link(r.href, F(r.label, '这个定时'))}</span>`;
       const left = when(r.next_at || r.at);
       if (!when1) return `<li><b>${esc(left)}</b>${name}<small>${[F(r.period), F(r.state_text)].filter(Boolean).join(' · ')}</small>${wake(r, left)}</li>`;
       // 后台给了估计的实际启动时刻（next_estimated_at）和排的钟点（next_nominal_at）不在同一分钟：说清这次早几分钟或晚几分钟，

@@ -517,10 +517,10 @@
   function renderProjectGroups(data) {
     projectExtraLinks(data);
     const limit = defaultCounts.projectGroup;
-    const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more')?.open ? ' open' : '';
+    const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more[open]:not([data-fold-flat])') ? ' open' : '';
     const person = '<svg class="project-group__icon" viewBox="0 0 24 24" width="1.3em" height="1.3em" fill="none" stroke="#e8913a" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-4 3.9-6.5 7.5-6.5s6.7 2.5 7.5 6.5"/></svg>';
     const groups = projectGroups(data.items), labels = { daily: ['日用', '🖥️'], personal: ['个人', person], occasional: ['偶用', '🌐'], unknown: ['分档还没读到', ''] };
-    paintHTML(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
+    paintHTML(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more" data-fold-count="${groups[key].length - limit}"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
     const count = Number.isFinite(data.frozen) ? quantity(data, 'frozen') : null;
     paintHTML(parts.projects.frozen, `${count == null ? '看冻结项目' : `冻结 ${count} 个`} ›`);
     parts.projects.frozen.href = route('/live/projects/?state=frozen');
@@ -1031,8 +1031,8 @@
     const summary = typeof d.text === 'string' ? d.text : '';
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
-    const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    paintHTML(p.head, U.itemTextUnits(keepComputerWords(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }))));
+    const bootTime = screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime);
+    paintHTML(p.head, U.itemTextUnits(keepComputerWords(cardHead([boot && boot + (bootTime && !(sharedNote && bootTime.text === cpuSample.text) ? `（${bootTime.text}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }))));
     const devices = (d.devices || []).map(U.laptopConnection);
     laptopState = devices.find(x => x.id === 'secondary_laptop')?.state;
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
@@ -1417,13 +1417,14 @@
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
-    // 两张卡的灰项由后台从同次名册读数派生，只有同一采样才合并灰项与卡底说明。
     const cardReading = id === 'needs' || id === 'backups';
-    const sameSample = cardReading && timed(end) && end === data?.at && !(id === 'needs' &&
-      data.items?.some(row => row.light === 'gray' && blockAt(row) !== end));
+    const sameSample = cardReading && timed(end) && Date.parse(end) === Date.parse(data?.at);
+    // 有更早的灰项时，不拿名册的时刻替代单项采时。
+    const sameGraySample = sameSample && !(id === 'needs' &&
+      data.items?.some(row => row.light === 'gray' && Date.parse(blockAt(row)) !== Date.parse(end)));
     const shortEnd = cardReading && timed(end) && `数据截至 ${U.time(end, data.at_precision)}`;
     const cardCutoff = text => shortEnd && (U.sameCutoffNote(shortEnd, text) || U.sameCutoffNote(endNote, text));
-    const sameNote = (a, b) => (!cardReading || sameSample) && (U.sameCutoffNote(a, b) || cardCutoff(a) && cardCutoff(b));
+    const sameNote = (a, b) => (!cardReading || sameGraySample) && (U.sameCutoffNote(a, b) || cardCutoff(a) && cardCutoff(b));
     const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
     const describedReading = `最后读到 ${describedAt}`;
     // 备份名册的原采时和卡底截至可以落在同一分钟。昨日前的独立截至保留日期，告警和灰项的同源时刻仍只报一次。
@@ -1485,7 +1486,9 @@
       const said = g => { const why = g.reason ?? g.why; return sp(U.fieldText(why, viewer) || '').trim() ? U.fieldHtml(why, { name: '异常说明', kind: viewer }) : name(g); };
       // 这一句用电脑页页顶“已确认异常”那行同一个颜色和字重，一眼看得出；旁边的说明照旧浅灰
       const text = `<b>${sure.length === 1 ? `要处理：${said(sure[0])}` : `${sure.length} 项要处理：${sure.slice(0, 3).map(name).join('、')}${sure.length > 3 ? ' 等' : ''}`}</b>`;
-      state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : part).join(' · ');
+      const reason = plain(U.fieldHtml(data.why, { name: '状态说明', kind: viewer }));
+      const repeatedReason = sure.length === 1 && reason === plain(said(sure[0]));
+      state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : repeatedReason && plain(part) === reason ? '' : part).filter(Boolean).join(' · ');
     }
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
     // 相邻几组原因一样时并成一句，写在最后一组后面（“CPU 温度、磁盘余量、网络丢包（最近一次记录于 10:26，此后没有新读数）”），不每组各写一遍（r83 返修第三轮）
@@ -1498,11 +1501,19 @@
       p.head.insertAdjacentHTML('afterbegin', state.lamp);
       if (id === 'phone' && lastState?.offline) p.head.firstElementChild.dataset.tone = 'gray';
     }
+    if (id === 'backups' && data?.attention_count > 1 && U.fieldText(data.why, viewer).trim().endsWith(`等 ${data.attention_count} 项`)) {
+      state.note = state.note.split(' · ').filter(part => part !== `${data.attention_count} 项要处理`).join(' · ');
+    }
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
     const alreadyDated = text => [...oldDetails].some(reason => sameNote(reason, text));
+    const shownCutoffs = [];
     const redundantCutoff = text => {
       const value = plain(text);
-      return alreadyDated(value) || (existing || cutoff) && matchesCutoff(value) || cutoff && cardCutoff(value);
+      if (alreadyDated(value) || (existing || cutoff) && matchesCutoff(value) || cutoff && !cardReading && cardCutoff(value)) return true;
+      if (!sameSample || !U.isCutoffNote(value)) return false;
+      if (shownCutoffs.some(shown => U.sameCutoffNote(shown, value) || cardCutoff(shown) && cardCutoff(value))) return true;
+      shownCutoffs.push(value);
+      return false;
     };
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
       : [lackNote, stutterNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !((lackNote || stutterMissing) && /^缺：/.test(text)) && !saidInLack(text)), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
