@@ -513,6 +513,10 @@
     const since = main && failingStamp(main);
     const link = latestConnection();
     const compactHome = home && liveHome && main.data === null;
+    if (compactHome && main.publicationRevoked && !offline()) {
+      return { stage: 'online', emptyHome: true, homeSummary: true, homePublication: true,
+        say: '首页大部分读数正在更新访客版，稍后自动补上。', at: '', wait: '' };
+    }
     const reachableWithoutData = main?.status === 503 && main.lagging && !main.missCount && main.validatedLink?.state === 'online';
     if (compactHome && !hostOffline(link) && (reachableWithoutData || offline())) {
       return { stage: reachableWithoutData ? 'retrying' : 'lost', emptyHome: true, homeSummary: true,
@@ -602,7 +606,8 @@
     e.lastCells = [...previous.values()];
   }
   function forgetData(e) {
-    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '', backupMeta: null });
+    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null,
+      fallbackNote: '', backupMeta: null, publicationRevoked: false });
   }
   function audience(e, viewer) {
     if (!viewer) return;
@@ -610,10 +615,17 @@
     if (viewer.device === 'invalid' && e.token && rejectedToken !== e.token) { rejectedToken = e.token; publicationVersion++; }
     if (viewer.kind === 'owner' && rejectedToken === e.token) rejectedToken = '';
     window.LiveView?.owner(viewer);
+    const ownerConfirmed = viewer.kind === 'owner' && (viewerToken !== e.token || viewerKind !== 'owner');
     viewerToken = e.token; viewerKind = viewer.kind;
     storedViewer(e.identity, viewer);
     if (viewer.kind !== e.viewer.kind) forgetData(e);
     e.viewer = viewer;
+    if (ownerConfirmed && liveHome) {
+      // 首页主包未答时，独立读口也能证实这是本人版。
+      const main = currentEntries().find(other => other !== e && overview(other) && other.listeners.size &&
+        other.data === null && other.viewer.kind === 'public' && other.viewer.device !== 'invalid');
+      if (main) { main.viewer = viewer; emit(main); }
+    }
     if (viewer.device === 'invalid') {
       // 明确失效后，同设备其它资源也不能继续展示本人内容。
       for (const other of entries.values()) {
@@ -827,7 +839,7 @@
       if (obsolete()) return discarded();
       const oss = response.headers.get('X-Live-Source') === 'oss';
       if (!oss && body?.error === 'live_public_paused') return pausePublication(e);
-      if (!oss && body?.error === 'live_publication_revoked') {
+      if (!oss && response.status === 503 && body?.error === 'live_publication_revoked') {
         revokePublication(e, body);
         const revoked = publicationVersion;
         if (!e.stopped) await retryFailure(e, false);
@@ -853,7 +865,7 @@
         if (e.data !== null || offline()) settle(e);
         return emit(e);
       }
-      e.status = response.status; e.error = '';
+      e.status = response.status; e.error = ''; e.publicationRevoked = false;
       if (response.status === 304) {
         clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.failSince = 0; e.missCount = 0; e.fallbackNote = ''; e.lagging = false; e.backupMeta = null;
         observedConnection(e, via === 'host-off' ? { state: 'offline', basis: 'response', reason: via, offSince }
@@ -1186,7 +1198,7 @@
     }
     return changed;
   }
-  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome, clock,
+  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome, clock, viewerKind: () => viewerKind,
     get, refreshPath, reconnectMain, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {

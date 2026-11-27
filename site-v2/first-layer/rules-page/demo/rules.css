@@ -261,7 +261,11 @@ body {
   border-left: 1px solid #d9d5ca;
 }
 
-.rules-meta .meta-topics a { position: relative; }
+.rules-meta .meta-topics a {
+  position: relative;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
 
 .rules-meta .meta-topics a[aria-current]::before {
   content: "";

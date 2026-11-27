@@ -125,7 +125,7 @@
   const tight = matchMedia('(max-width: 1440px)');
   const nowrap = s => esc(s).replace(/数据截止(?=\s+\d)/g, '数据截至').replace(/AI[ \t]+在修[ \t]+\d+[ \t]+件|（(?:(?:记录到|截至|上次)\s*)?(?:\d{1,2}-\d{2}\s+)?\d{1,2}:\d{2}(?::\d{2})?）|(?:还剩|共)\s*\d+(?:\.\d+)?\s*[GMKT]B|\d+[ \t]*(?:天|小时|分钟|秒|分)(?:[ \t]*\d+[ \t]*(?:天|小时|分钟|秒|分))+(?:前|后)?|\d{4}-\d{2}-\d{2}|\d{1,2}-\d{2}|\d{1,2}:\d{2}(?::\d{2})?|\d+×\d+|\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|[GM]?Hz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条|帧(?:\/秒)?)(?:前|后)?/g, '<span class="live-unit">$&</span>');
   tight.addEventListener?.('change', () => {
-    for (const span of document.querySelectorAll('main .live-unit')) { const parent = span.parentNode; span.replaceWith(...span.childNodes); parent.normalize(); }
+    for (const span of document.querySelectorAll('main .live-unit:not(.l1-unit)')) { const parent = span.parentNode; span.replaceWith(...span.childNodes); parent.normalize(); }
     const walker = document.createTreeWalker(document.querySelector('main'), NodeFilter.SHOW_TEXT), nodes = []; let node;
     while ((node = walker.nextNode())) if (!node.parentElement.closest('script,style,svg,textarea,select')) nodes.push(node);
     for (const text of nodes) {
@@ -246,7 +246,7 @@
     return keys.length ? { ...data, ...Object.fromEntries(keys.map(key => [key, ''])) } : data;
   }
   const olderNote = (at, data) => staleText(data, at);
-  function blockNote(el, state) {
+  function blockNote(el, state, format) {
     if (el?.matches?.('.grp')) el = el.querySelector('.grp__body');
     if (!el) return;
     let note = el.querySelector(':scope > .live-fallback-note');
@@ -254,7 +254,8 @@
     if (!text) { note?.remove(); return; }
     if (!note) { note = document.createElement('p'); note.className = 'row__sub live-fallback-note'; el.append(note); }
     if (el.classList?.contains?.('grp__body')) note.style.margin = '0 26px 16px 64px';
-    note.textContent = text;
+    if (format) html(note, format(esc(text)), false);
+    else note.textContent = text;
   }
 
   // 多久以前：按后端给的 now 算，不按这台电脑的钟
@@ -351,7 +352,10 @@
     const tone = { green: 'green', yellow: 'amber', red: 'red', gray: 'gray', blue: 'blue', ok: 'green', amber: 'amber', off: 'gray' }[data?.level];
     if (!tone) return { tone: 'none', lamp: '', note: '' };
     const notes = [];
-    if (tone === 'blue') notes.push('有问题，AI 已接手在修，不用你动手');
+    if (tone === 'blue') {
+      const who = (window.Live?.viewerKind?.() ?? viewer) === 'owner' ? '你' : '本人';
+      notes.push(`有问题，AI 已接手在修，不用${who}动手`);
+    }
     const why = data.why, at = readingAt(data), shared = sameReadingReason(data, cover);
     const measured = Date.parse(at), coveredCutoff = Number.isFinite(measured) && measured === Date.parse(readingAt(cover))
       && [cover?.why, cover?.text, cover?.stale_text].some(isReadingCutoff);
@@ -1309,7 +1313,7 @@
     let link = rows.querySelector('.live-conn__row[data-key="link"]');
     const c = state.conn || { stage: 'online' };
     if (c.stage !== connNow) { connNow = c.stage; for (const hook of pillHooks) hook(c); }
-    if (['retrying', 'lost', 'off'].includes(c.stage)) {
+    if (c.homePublication || ['retrying', 'lost', 'off'].includes(c.stage)) {
       clearTimeout(connBack); connBack = 0;
       if (!link) {
         link = row('link');
@@ -1318,12 +1322,19 @@
       }
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
       link.classList.remove('is-back');
-      link.dataset.stage = c.stage;
-      put(link.querySelector('b'), c.say);
-      put(link.querySelector('.live-conn__at'), c.at);
-      put(link.querySelector('.live-conn__why'), c.wait);
+      link.dataset.stage = c.homePublication ? 'publication' : c.stage;
+      const say = link.querySelector('b');
+      if (c.homePublication && say.textContent !== c.say) {
+        say.innerHTML = esc(c.say).replace(/访客版|补上。/g, '<span class="live-unit">$&</span>');
+      } else put(say, c.say);
+      const at = link.querySelector('.live-conn__at');
+      if (at.textContent !== c.at) at.innerHTML = esc(c.at).replace('没存下来', '<span>没存下来</span>');
+      const why = link.querySelector('.live-conn__why');
+      if (why.textContent !== (c.wait || '')) {
+        why.innerHTML = esc(c.wait).replace('重读一次', '重读<span style="white-space:nowrap">一次</span>');
+      }
     } else if (link && !link.classList.contains('is-back')) {
-      const refreshed = link.dataset.stage === 'retrying';
+      const refreshed = ['retrying', 'publication'].includes(link.dataset.stage);
       link.classList.add('is-back');
       link.dataset.stage = 'back';
       const upTo = c.shownAt;
@@ -1380,7 +1391,7 @@
     const pageTitle = document.title || '实况';
     let label = '', busy = false, paused = false, disconnected = false, last = null;
     const show = (text) => {
-      at.setAttribute('aria-label', text);
+      at.setAttribute('aria-label', text || at.title);
       html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${CONN_ICON}</span><span class="live-refresh-text">${esc(text)}</span>`);
     };
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
@@ -1459,8 +1470,11 @@
         at.title = disconnected ? '点一下重连' : '点一下重读';
         const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
         const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
-        if (stamp || disconnected || retry || state.phase === 'none') { clearTimeout(waiting); readDone(); }
-        label = state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
+        const revoked = !disconnected && state.meta?.publicationRevoked;
+        const homeSummary = (revoked && state.conn?.homePublication) || (stage === 'off' && state.conn?.emptyHome);
+        if (stamp || disconnected || retry || revoked || state.phase === 'none') { clearTimeout(waiting); readDone(); }
+        label = homeSummary ? '' : revoked ? '这块正在更新访客版，稍后自动补上。'
+          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
           : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
@@ -1543,7 +1557,7 @@
   };
 
   // 列表按条目编号更新：没变的不动；变了的原地淡换；新来的先撑开位置再落下淡入；下去的淡出、下面的合拢
-  function list(ul, rows, { animate = true } = {}) {
+  function list(ul, rows, { animate = true, format } = {}) {
     if (offline()) {
       animate = false;
       if (ul.id === 'notices') rows = rows.filter(r => !/电脑(?:自 |不在线)|连不上(?:电脑|实况服务)|实况服务暂不可用|当前设备未连接网络|暂时读不到本人实况/.test(r.html));
@@ -1560,16 +1574,17 @@
     });
     let prev = null;
     for (const r of rows) {
+      const content = format ? format(r.html) : r.html;
       let li = old.get(r.key);
       if (li) {
         old.delete(r.key);
         li.className = r.cls + (li.classList.contains('is-expanded') ? ' is-expanded' : '') + (li.classList.contains('notice-target') ? ' notice-target' : '');
-        html(li, r.html, animate);
+        html(li, content, animate);
       } else {
         li = document.createElement('li');
         li.className = r.cls;
         li.dataset.key = r.key;
-        html(li, r.html, false);
+        html(li, content, false);
         if (animate && r.enter !== false && ul.isConnected && ul.children.length) enter(li, k);
       }
       let at = prev ? prev.nextElementSibling : ul.firstElementChild;

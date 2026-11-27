@@ -335,10 +335,12 @@ test('authority clears a withdrawn detail and never fills it from a saved public
   response = () => Response.json({error: 'live_detail_unavailable'}, {status: 503});
   const warming = await client.get('chats/example');
   assert.equal(warming.meta.withdrawn, false);
+  assert.equal(warming.meta.publicationRevoked, false);
   assert.equal(warming.data.title, 'synthetic title');
   response = () => Response.json({error: 'live_missing'}, {status: 404});
   const gone = await client.get('chats/example');
   assert.equal(gone.meta.withdrawn, true);
+  assert.equal(gone.meta.publicationRevoked, false);
   assert.equal(gone.phase, 'none');
   assert.equal(gone.data, null);
   assert.equal([...storage.values()].some(value => value.includes('synthetic title')), false);
@@ -349,8 +351,8 @@ test('authority clears a withdrawn detail and never fills it from a saved public
   response = () => Response.json({error: 'live_publication_revoked'}, {status: 503});
   const revoked = await client.get('home');
   assert.equal(revoked.meta.withdrawn, true);
-  assert.equal(revoked.data, null);
   assert.equal(revoked.meta.publicationRevoked, true);
+  assert.equal(revoked.data, null);
   assert.equal(revoked.text, '这块正在更新访客版，稍后自动补上。');
   assert.deepEqual(shown, ['synthetic title', null, 'synthetic title']);
   assert.equal(requested.filter(url => !url.startsWith('/release-identity.json')).every(url => url.startsWith('https://live.wly0829.cn/')), true);

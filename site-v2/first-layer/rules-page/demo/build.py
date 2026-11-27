@@ -19,12 +19,12 @@ import mistune
 HERE = Path(__file__).resolve().parent
 REWRITE_RESULTS = []
 TOPICS = [
-    ("authorization", "用户授权"), ("protected-actions", "重大动作与本人验证"),
-    ("privacy-data", "个人资料与数据处理"), ("context-sources", "事实来源与任务上下文"),
-    ("execution-coordination", "分工与并行施工"), ("engineering-delivery", "工程与交付"),
-    ("capabilities-runtime", "能力与运行方式"), ("rule-release", "规则发布与恢复"),
-    ("claude-adapter", "Claude 适配"), ("codex-adapter", "Codex 适配"),
-    ("antigravity-adapter", "Antigravity 适配"),
+    ("authorization", ("用户授权",)), ("protected-actions", ("重大动作与", "本人验证")),
+    ("privacy-data", ("个人资料与", "数据处理")), ("context-sources", ("事实来源与", "任务上下文")),
+    ("execution-coordination", ("分工与", "并行施工")), ("engineering-delivery", ("工程与交付",)),
+    ("capabilities-runtime", ("能力与", "运行方式")), ("rule-release", ("规则发布与", "恢复")),
+    ("claude-adapter", ("Claude 适配",)), ("codex-adapter", ("Codex 适配",)),
+    ("antigravity-adapter", ("Antigravity 适配",)),
 ]
 MD = MarkdownIt("commonmark", {"html": True}).enable("table")
 AST = mistune.create_markdown(renderer="ast", plugins=["table"])
@@ -410,7 +410,7 @@ def main():
     records.mkdir(parents=True, exist_ok=True)
     policy_path = HERE.parents[2] / "配置/规则公开改写.json"
     policy = load_policy(json.loads(policy_path.read_text(encoding="utf-8-sig")), str(policy_path))
-    topics_in_release = [(key, name) for key, name in TOPICS
+    topics_in_release = [(key, name_parts) for key, name_parts in TOPICS
                          if key != "antigravity-adapter" or (release / f"docs/contracts/agents.{key}.md").is_file()]
     documents = documents_for(release, topics_in_release, policy)
     (records / "流水线-规则改写结果.json").write_text(json.dumps(REWRITE_RESULTS, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -441,7 +441,7 @@ def main():
             parts = document_parts(doc, documents, config)
             topics = "\n".join(f'<li><a href="topic-{key}.html"' +
                                (' aria-current="page"' if doc["output"] == f"topic-{key}.html" else '') +
-                               f'>{name}</a></li>' for key, name in topics_in_release)
+                               f'>{"<wbr>".join(map(escape, name_parts))}</a></li>' for key, name_parts in topics_in_release)
             charter = ('<a href="index.html"' + (' aria-current="page"' if doc["output"] == "index.html" else '') +
                        f'>{charter_title}</a>')
             kicker = ('' if doc["output"] == "index.html" else

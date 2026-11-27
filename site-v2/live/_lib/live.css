@@ -388,6 +388,7 @@ body.page--computer .live-conn:has(.live-conn__row[data-key="link"][data-stage="
 .live-conn__say { flex: 1 1 0; min-width: 0; }
 .live-conn__say b { font-family: var(--black); font-weight: 900; font-size: 26px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }
 .live-conn__at { font-weight: 500; }
+.live-conn__at > span { white-space: nowrap; }
 .live-conn__wait { display: inline-flex; flex-basis: 100%; align-items: center; gap: 8px; margin-left: 25px; color: var(--muted); font-size: 15px; transition: opacity .45s ease; }
 .live-conn__row.is-back .live-conn__wait { opacity: 0; }
 .live-conn__spin { display: inline-flex; flex: none; width: 18px; height: 18px; color: #7d838c; animation: live-conn-spin 3.2s linear infinite; }
