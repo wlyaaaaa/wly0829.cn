@@ -4,6 +4,16 @@
 .pj-interface-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 12px; }
 @media (max-width: 1060px) { .pj-interface-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .pj-interface figure { margin: 0; min-width: 0; }
+/* 只有一张图：图占卡内六成、图注放右边；窄了放不下就图占满、图注挪到下面 */
+.pj-interface-grid:has(> figure:only-child) { grid-template-columns: minmax(0, 1fr); }
+.pj-interface-grid > figure:only-child { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 20px; align-items: start; }
+.pj-interface-grid > figure:only-child .pj-interface-thumb { aspect-ratio: auto; }
+.pj-interface-grid > figure:only-child .pj-interface-thumb img { height: auto; }
+.pj-interface-grid > figure:only-child figcaption { margin-top: 0; font-size: 15px; line-height: 24px; }
+@media (max-width: 760px) {
+  .pj-interface-grid > figure:only-child { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pj-interface-grid > figure:only-child figcaption { margin-top: 7px; }
+}
 .pj-interface figcaption { margin-top: 7px; font-size: 14px; line-height: 21px; color: var(--ink); overflow-wrap: anywhere; }
 .pj-interface-thumb {
   position: relative; display: block; width: 100%; aspect-ratio: 11 / 8; padding: 0;

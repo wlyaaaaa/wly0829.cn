@@ -106,6 +106,8 @@
     return `${fields.year === '2026' ? '' : fields.year + '-'}${fields.month}-${fields.day} ${fields.hour}:${fields.minute}`;
   }
   const shortDate = stamp;
+  // 照本人定的写法写成“11月26日 13:30”（只给了日期的只写日期）
+  const dayStamp = at => stamp(at).replace(/^(?:(\d{4})-)?(\d\d)-(\d\d)/, (_, y, m, d) => `${y ? `${y}年` : ''}${+m}月${+d}日`);
   const isStamp = v => typeof v === 'string' && /^\d{4}-\d\d-\d\d(?:T|$)/.test(v);
   // 读数句子里夹着的机器时刻（2026-11-17T15:47:23.82+08:00）按北京时间写成“11-17 15:47”
   const isoText = t => typeof t === 'string' ? t.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, x => { const at = /(?:Z|[+-]\d\d:\d\d)$/.test(x) ? x : `${x}+08:00`; return Number.isFinite(Date.parse(at)) ? stamp(x) : x; }) : t;
@@ -665,7 +667,8 @@
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
     const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
-    const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
+    // 三个数一样时只写一次（“共 3 条”），不一样的才分开写
+    const said = new Set(), count = loaded ? [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n) && !said.has(n) && said.add(n)).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '正在读改动记录…');
@@ -1133,6 +1136,10 @@
         tail.push(cell('代码', bigCell(size.code_lines, '行'), { title: `代码 ${big(size.code_lines, '行')}${chars ? ` · ${chars}` : ''}`, sub: esc(chars || '') }));
       }
     }
+    // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
+    const sizeAt = size && (size.source_at || size.at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
+    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null)) tail.push(cell('规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
+      { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}`, sub: old ? '<span class="pj-old">旧了</span>' : '' }));
     return { head, tail };
   }
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
@@ -1158,11 +1165,24 @@
     // 小折线放在数字下面，占满这一格的宽（一行九格时数字旁边放不下）
     return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title }).replace(/<\/div>$/, `${svg}</div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
   }
+  // 一排最多 10 格、每格至少 106 像素（同 look.css）；一排放不下时按排数均分，不让最后一格单独占一排、右边空一大片
+  function fitStrip() {
+    const strip = part('links'), n = +strip.dataset.units || 0, css = getComputedStyle(strip);
+    const room = Math.min(10, Math.max(1, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / 106)));
+    strip.style.setProperty('--pj-cells', String(n <= room ? Math.max(n, 4) : Math.ceil(n / Math.ceil(n / room))));
+    // 折成几排、最后一排还空着格位：最后一格往右占满（各页自己改了列数的也照实际排出来的量）
+    const cells = strip.querySelectorAll(':scope > .pj-cell'), last = cells[cells.length - 1];
+    if (!last) return;
+    last.style.gridColumnEnd = '';
+    const track = parseFloat(getComputedStyle(strip).gridTemplateColumns), box = last.getBoundingClientRect();
+    const rest = track > 0 ? Math.round((strip.getBoundingClientRect().right - parseFloat(css.paddingRight) - box.right) / track) : 0;
+    if (rest > 0 && last.offsetTop > cells[0].offsetTop) last.style.gridColumnEnd = `span ${Math.round(box.width / track) + rest}`;
+  }
   function renderStrip(d) {
     const strip = part('links'), { head, tail } = heroCells(d), html = (custom?.strip?.(d, projectViewer) || '') + head.join('') + links(d) + tail.join('');
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
-    strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
-    U.html(strip, html);
+    strip.hidden = !html; strip.dataset.units = n;
+    U.html(strip, html); fitStrip();
     if (interfaceProjects.has(id) && !interfaceLoad) {
       interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip))
         .catch(() => { interfaceLoad = null; });
@@ -1212,7 +1232,8 @@
     const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(stamp(ch.at))}</span>`, say && `<span class="pj-about">${U.fieldHtml(say, { name: '项目说明', kind: projectViewer })}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
-    const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : `<span class="pj-when">${esc(stamp(ch.at))}</span>${ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : ''}`;
+    // 提交时刻页头那行已写，这里只写这次改了什么
+    const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : '';
     const chars = size?.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
     const sizeText = size && [size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, size.code_lines != null && `代码 ${big(size.code_lines, '行')}`].filter(Boolean).join(' · '), chars].filter(Boolean).join(' · ');
     const sized = !size ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>`
@@ -1221,13 +1242,14 @@
     // 后台没给近 7 天改动数、而最近一次提交在 7 天以前：近 7 天就是 0 次
     const quiet = d.changes7 == null && Number.isFinite(Date.parse(ch?.at)) && (Date.parse(d.at || at) || Date.now()) - Date.parse(ch.at) > 7 * 86400000;
     // 后台说了为什么没数（changes7_gap）就只写原因，不再前面摆“没有记录”；数没核全（changes7_complete 为 false）写“至少”
-    const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : `${d.changes7_complete === false ? '至少 ' : ''}${num(d.changes7)} 次`, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).join(' · ');
+    // 次数已在页头下那一条的“近 7 天影响改动”格里，这里不再写一遍，只留口径和缺口
+    const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : null, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).join(' · ');
     const impactNote = !window.ProjectAdditions?.personalDetail(id) && Number.isFinite(d.changes7) && Number.isFinite(d.changes7_missing_note)
       ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在<span class="pj-no-split">下面。</span></small>' : '';
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
-    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${impactNote}${changes}</dd></div>${sized ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
+    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}${impactNote || changes ? `<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${impactNote}${changes}</dd></div>` : ''}${sized ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
     part('detail').hidden = false;
     renderStrip(d);
     let cover = $('pj-cover');
@@ -1315,7 +1337,7 @@
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏
   document.fonts?.ready?.then(() => balance());
-  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(balance, 200); });
+  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(() => { fitStrip(); balance(); }, 200); });
 
   if (!id) {
     await lookReady;

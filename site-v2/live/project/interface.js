@@ -79,7 +79,8 @@ export async function mountInterface(id, strip) {
   }, { rootMargin: '0px 0px 160px' });
   section.querySelectorAll('.pj-interface-thumb').forEach((button, index) => {
     const thumb = button.querySelector('img');
-    thumb.dataset.thumb = shots[index][0];
+    // 只有一张图时图放大到卡内六成，缩略图（560 像素宽）不够清楚，直接用原图
+    thumb.dataset.thumb = shots[index][shots.length === 1 ? 1 : 0];
     observer.observe(thumb);
     button.onclick = () => { show(index); dialog.showModal(); };
   });

@@ -139,6 +139,9 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-cell--wide { grid-column: span 2; }
 .pj-cell--wide .pj-cell__v.is-text { margin-top: 4px; font-size: 15px; font-weight: 500; line-height: 23px; }
 .pj-cell__sub { font-size: 12px; line-height: 17px; color: #68665f; overflow-wrap: anywhere; }
+/* 最后一格“规模 截止”：时刻照正文小字写，窄了只在日期和钟点之间折行；数旧了挂一个“旧了” */
+.pj-cell__v.is-scale { margin-top: 5px; font-size: 14px; line-height: 22px; color: #5d5c56; white-space: normal; }
+.pj-old { display: inline-block; padding: 0 8px; border-radius: 8px; background: #fbe3b5; color: #8a5a00; font-size: 12px; line-height: 18px; font-weight: 700; }
 .pj-change-field { white-space: nowrap; }
 .pj-spark { flex: none; width: 76px; height: 26px; overflow: visible; }
 .pj-spark polyline { fill: none; stroke: var(--pj-spark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
