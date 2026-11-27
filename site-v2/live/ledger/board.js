@@ -32,7 +32,7 @@
   }
   // 照后台 visitor_labels 在原位挂签：本人版两种（访客看不到、对外换了说法），访客版只挂“对外换了说法”（M930，全站共用的签自己分）
   const vtag = (obj, keys, what) => { const t = obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
-  const taskWords = html => html.replace(/(<[^>]+>)|认领|处理|运行证据|证据/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+  const taskWords = html => html.replace(/(<[^>]+>)|认领|处理|超时|太久没有|新的运行证据|运行证据|证据/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
   // 还欠着的只算在做、在等、暂时不修这三种（后台 summary.open 也这样算）；本人定了不修的不算欠着，放进“最近了结的”
   const owed = d => list(d.items).filter(it => it.state);

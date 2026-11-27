@@ -584,7 +584,7 @@
       if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
     if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
-    if (c.id === 'excerpt') sub = sub.replace(/<[^>]+>|结果/g,
+    if (c.id === 'excerpt') sub = sub.replace(/<[^>]+>|有回复|任务结果|账本登记|新成品|马上摘/g,
       part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
   }
