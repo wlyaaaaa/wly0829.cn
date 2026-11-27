@@ -359,6 +359,8 @@
     const projectCell = marked(project, d, 'project_name', '所属项目');
     const rows = [
       ['做什么', purpose(d, kind)],
+      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(field(d.expected_result, '怎么算做完'), d, 'expected_result', '怎么算做完')
+        || '<span class="task-fact-missing">登记时没写怎么算做完</span>'],
       ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
         : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field((kind === 'schedule' ? bjSchedule(d) : null) ?? d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],

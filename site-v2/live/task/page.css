@@ -136,6 +136,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
 .task-card dl dt { color: #505565; }
 .task-card dl dd { margin: 0; overflow-wrap: anywhere; text-wrap: balance; }
+.task-fact-missing { color: var(--muted); }
 .task-card dl div:last-child { border: 0; }
 .task-card :is(p,li,td,th,summary,dl) { font-size: 14px; line-height: 1.45; }
 .task-card.task-prompt { margin-top: 13px; padding: 16px 22px; background: #fff; }
