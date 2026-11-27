@@ -74,7 +74,15 @@
   const reads = Object.fromEntries(['active', 'frozen', 'changes'].map(key => [key, U.reading($(key), { ghost: key === 'changes' ? U.ghost.rows(4) : projectGhost, slow: key !== 'active' })]));
   // 冻结那组平常收在“冻结 N 个”按钮后面、没有自己的小标题：连不上又没存下来时不另写“这块没存下来”，
   // 不然紧接在“在用的”那句下面再写一遍，读着像同一句连写两遍（D6 复查）；列表那边同样不写
-  const phase = (key, s) => { if (s.data != null) return; if (key === 'home') { homeRead.set(s); if (p.has('fixture') && !frozenOnly) reads.active.set(s); } else if (key === 'frozen' && !frozenOnly && (s.offline || s.phase === 'gone')) reads.frozen.done(); else reads[key].set(s); };
+  const headerUpdating = s => s?.meta?.publicationRevoked && !s.offline;
+  const phase = (key, s) => {
+    if (s.data != null) return;
+    if (key === 'home') {
+      if (headerUpdating(s)) homeRead.done(false); else homeRead.set(s);
+      if (p.has('fixture') && !frozenOnly) reads.active.set(s);
+    } else if (key === 'frozen' && !frozenOnly && (s.offline || s.phase === 'gone')) reads.frozen.done();
+    else reads[key].set(s);
+  };
   const primed = new Set(), update = (key, paint) => { if (primed.has(key)) U.anchor(paint); else paint(); primed.add(key); };
   L.add(hero);
   const bar = U.topbar({ ask: () => `请看实况项目：${home?.text ? U.fieldText(home.text) : '请说明现在的情况'}。` });
@@ -135,7 +143,8 @@
     // 页头已写“项目汇总截至／上次项目汇总 …”时，状态说明里同一时刻的“最近一次记录于／数据截止 …”不再说第二遍（M746）
     const status = U.status(source, { cutoffShown: text => !!at && U.sameCutoffNote(U.fieldText(text), U.staleText({ stale: true }, sourceAt)) });
     const empty = U.offline?.() ? '这块没存下来，连上后补上。' : '项目暂时读不到';
-    U.html($('head'), status.lamp + U.head(text || (privateSummary ? '项目' : empty), { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
+    const title = headerUpdating(states.get('home')) ? '项目页头正在更新' : text || (privateSummary ? '项目' : empty);
+    U.html($('head'), status.lamp + U.head(title, { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
   }
   let changesPack = null;
   function fill(key, rows, none) {
@@ -208,7 +217,10 @@
   function renderActive(items) {
     fill('active', items?.filter(it => it.name || it.label).sort((a, b) => groupRank(a) - groupRank(b) || (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
-      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
+      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner');
+      const shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })
+        .replace(/名册(?![^<>]*>)/g, '<span style="white-space:nowrap">$&</span>');
+      const note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
       const hasText = !!(text || marked), valueHtml = marked || remote ? U.fieldHtml(marked || text, { name: '项目读数', kind: viewer }) : rosterStat(text);
@@ -357,7 +369,7 @@
     if (rosterChanged && changeRows?.length) renderChanges();
     if (disconnected !== undefined && disconnected !== s.offline) for (const draw of repaints.values()) draw();
     disconnected = s.offline; L.offline([...states.values()].some(x => x.offline));
-    const notice = [...states].find(([, x]) => x.offline || (!x.data && !x.warming && x.text));
+    const notice = [...states].find(([name, x]) => x.offline || (!(name === 'home' && headerUpdating(x)) && !x.data && !x.warming && x.text));
     const connection = notice?.[1].offline ? notice[1].text.split(' · ')[0] : notice?.[1].text;
     U.list($('notices'), notice ? [{ key: notice[0], cls: 'notice glass', html: `<span>${U.fieldHtml(connection, { name: '连接情况', kind: viewer })}</span>` }] : []);
     if (!s.data && ['none', 'gone'].includes(s.phase)) { if (key === 'home' || key === 'active') renderOverview(states.get('active')?.data || home); if (key === 'changes') { changes = changeRows = next = null; renderChanges(); } if (key === 'active') renderActive(null); else if (!['home', 'changes'].includes(key)) fill(key, null); }

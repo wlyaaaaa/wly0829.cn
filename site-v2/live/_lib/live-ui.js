@@ -1325,7 +1325,10 @@
       put(link.querySelector('b'), c.say);
       const at = link.querySelector('.live-conn__at');
       if (at.textContent !== c.at) at.innerHTML = esc(c.at).replace('没存下来', '<span>没存下来</span>');
-      put(link.querySelector('.live-conn__why'), c.wait);
+      const why = link.querySelector('.live-conn__why');
+      if (why.textContent !== (c.wait || '')) {
+        why.innerHTML = esc(c.wait).replace('重读一次', '重读<span style="white-space:nowrap">一次</span>');
+      }
     } else if (link && !link.classList.contains('is-back')) {
       const refreshed = ['retrying', 'publication'].includes(link.dataset.stage);
       link.classList.add('is-back');
@@ -1384,7 +1387,7 @@
     const pageTitle = document.title || '实况';
     let label = '', busy = false, paused = false, disconnected = false, last = null;
     const show = (text) => {
-      at.setAttribute('aria-label', text);
+      at.setAttribute('aria-label', text || at.title);
       html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${CONN_ICON}</span><span class="live-refresh-text">${esc(text)}</span>`);
     };
     const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
@@ -1464,16 +1467,13 @@
         const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
         const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
         const revoked = !disconnected && state.meta?.publicationRevoked;
-        const homeSummary = revoked && state.conn?.homePublication;
+        const homeSummary = (revoked && state.conn?.homePublication) || (stage === 'off' && state.conn?.emptyHome);
         if (stamp || disconnected || retry || revoked || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = homeSummary ? '' : revoked ? '这块正在更新访客版，稍后自动补上。'
           : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
           : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
-        if (!busy) {
-          show(label);
-          if (homeSummary) at.setAttribute('aria-label', at.title);
-        }
+        if (!busy) show(label);
       },
     };
     pillHooks.add(c => { if (last && !paused) api.set({ ...last, conn: c }); });
