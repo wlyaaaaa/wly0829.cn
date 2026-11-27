@@ -280,6 +280,10 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
 
 本网站每页首屏先放当前状态，再展开说明；首屏采用看板式的信息次序。
 
+### 实况页上的标识
+
+- **不显示没人维护的标识：** 实况页禁止显示没人维护、没人更新的标识（手写的时间、状态、条数、说明脚注这类）：要么不显示，要么找人或者程序更新。禁令（本人 2026-11-27，源 2912d4cf-7dd7-4ed5-bd22-59f3b0b299d8），要改先问本人。哪些改成程序生成、哪些留在按需更新清单上、哪些撤掉，见 [按需更新](../update.md) 第九节。
+
 ## Public-content gate
 
 讲钩子时，从基座 `docs/operations/context-hooks.md` 核两边的实现；已实现、已启用、确有触发记录分开讲，相同的讲一次，不同的点名。
