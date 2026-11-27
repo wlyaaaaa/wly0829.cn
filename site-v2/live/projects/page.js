@@ -240,8 +240,11 @@
       return { key: it.id, href: it.href, secret: hidden, group: ({ daily: '日用', occasional: '偶用' })[it.phase] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
   }
-  function shortText(value, options) {
-    const full = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
+  function shortText(value, { keepChangeWords = false, ...options }) {
+    const html = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
+    const full = keepChangeWords
+      ? html.replace(/<[^>]+>|一次|讲解页/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
+      : html;
     const first = plain.match(/^[^。！？\n]*[。！？]?/)?.[0] || plain;
     const preview = [...first].slice(0, 80).join('');
     if (preview === plain) return full;
@@ -262,7 +265,7 @@
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
-    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
+    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
   // 全部变化、成品两块标题右边一排“近 7 天｜近 30 天｜全部”，默认近 7 天（本人 11-24 20:34）；样子和智能体页工期、工作量、钩子那三排一样（index.html 的 .pj-tseg）。
   // 近 7 天照旧用变化接口和名册送来的那份；近 30 天、全部点了才读 projects/changes?range=、projects/artifacts?range=（翻页同样带 cursor）。
   // 回包里 range 和点的那档对得上才用；后台还没给就写“后台还没送来”，不拿近 7 天的数顶上。
