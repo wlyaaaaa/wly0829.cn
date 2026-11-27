@@ -164,7 +164,7 @@
 .dk-rest { margin-top: 4px; }
 .dk-rest__sum { cursor: pointer; padding: 4px 8px; font-size: 12.5px; line-height: 18px; color: var(--muted); list-style: none; }
 .dk-rest__sum::-webkit-details-marker { display: none; }
-.page--storage :is(.row__title,.dk-list li > span,.dk-cap,.dk-about,.cl-vol__t,.cl-rules span,.cl-tiles b,.cl-tiles li > div > span,.head__tail,.vz-rank__name,.vz-rank__label,#ssd-table .storage-path,#disk-health .vz-fig__v) {
+.page--storage :is(.row__title,.dk-list li > span,.dk-cap,.dk-about,.cl-vol__t,.cl-rules li > span,.cl-tiles b,.cl-tiles li > div > span,.head__tail,.vz-rank__name,.vz-rank__label,#ssd-table .storage-path,#disk-health .vz-fig__v) {
   white-space: normal; word-break: normal; overflow-wrap: anywhere; overflow: visible; text-overflow: clip;
 }
 .page--storage #hero-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

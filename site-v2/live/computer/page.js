@@ -952,6 +952,8 @@
     const up = d.metrics?.find((m) => m.id === 'uptime');
     return up?.value && typeof up.value === 'object' ? up.value : up?.value != null ? `${Stat.text(up.value, up.unit, up)} · 连续开机${Stat.gap(up) ? ` · ${Stat.gap(up)}` : ''}` : tagText('cpu') || (offline() ? '电脑' : U.collectionText());
   }
+  const keepHeroWords = html => html.replace(/<[^>]*>|程序身份筛查|防护状态|防火墙|网络丢包|后台任务|客户端连接|确认|读到|接手|运行/g,
+    token => token.startsWith('<') ? token : `<span class="live-unit">${token}</span>`);
   function renderCount(c) {
     const extra = ['yellow', 'red'].includes(computer?.stability?.level) ? [{ key: 'stability', name: '台式机稳定性', level: computer.stability.level, reason: computer.stability.text }] : [];
     const remote = (computer?.remote || []).filter(x => x.state === 'offline' || ['yellow', 'red', 'blue'].includes(x.level)).map(x => ({ ...x, key: 'remote-' + x.id, reason: x.why || x.text || '连不上' }));
@@ -1024,7 +1026,7 @@
       lacking.length && `有 ${lacking.length} 项这次没读到（${lacking.join('、')}），电脑好不好先按读到的判断`,
       review.length && `<b>需核实 ${review.length} 组</b> · ${review.join('、')}`].filter(Boolean);
     part('count').hidden = !known;
-    U.html(part('count'), known ? lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join('') : '');
+    U.html(part('count'), known ? lines.map(line => `<span style="flex-basis:100%">${keepHeroWords(line)}</span>`).join('') : '');
     part('warns').hidden = !warnings.length;
     U.html(part('warns'), warnings.map((g) => g === update
       ? `<li><a href="${esc(route('/live/security/') + '#grp-protection')}" style="white-space:nowrap">系统更新已装好，重启电脑后生效 ›</a></li>`
@@ -1224,7 +1226,7 @@
       : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;
     return Number.isFinite(Date.parse(since)) ? `${stamp(since)} 起离线` : '';
   }
-  function unitHtml(text, name = '硬件信息') { const body = U.fieldHtml(text, { name }); return body.includes('live-mark') ? body : body.replace(/\d+(?:[.,]\d+)*\s*(?:[GMKT]B|ms|GHz|MHz|Hz|℃|次|个|%)/g, '<span class="computer-unit">$&</span>'); }
+  function unitHtml(text, name = '硬件信息') { const body = U.fieldHtml(text, { name }); return body.includes('live-mark') ? body : body.replace(/踏雪|\d+(?:[.,]\d+)*\s*(?:[GMKT]B|ms|GHz|MHz|Hz|℃|次|个|%)/g, '<span class="computer-unit">$&</span>'); }
   function remoteEntries(items) {
     if (!items?.length) return U.offline?.() ? '' : `<span class="dev-spec row__sub">远程入口${U.collectionText()}</span>`;
     return items.filter(x => !U.offline?.() || x.state !== 'unknown').map(x => {
@@ -1238,7 +1240,7 @@
       const nameNote = [x.name, x.state].map(value => U.fieldHtml(value, { name: '远程入口' })).filter(html => html.includes('live-mark')).join(' · ');
       const stamp = readingStamp(x.state === 'online' && x.authenticated_at || x.at), stampText = stamp && `${esc(stamp)} ${probed ? '探测' : '实测'}`;
       // 串流和旁边两条 MCP 一样标上读到的时刻（M759）。
-      if (x.connection_type === 'moonlight') return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, stampText, ...[x.host, x.connect_hint].filter(Boolean).map(value => U.fieldHtml(value, { name: '串流连接信息' }))].filter(Boolean).join(' · ')}</p>${x.streaming ? window.ComputerDraw10?.streaming(x.streaming, netViewer, streamProject) || '' : ''}</div>`;
+      if (x.connection_type === 'moonlight') return `<div class="dev-spec" data-remote="${esc(x.id || '')}"><span class="dev-pill">${inner}</span><p class="row__sub">${[nameNote, stampText, ...[x.host, x.connect_hint].filter(Boolean).map(value => keepHeroWords(U.fieldHtml(value, { name: '串流连接信息' })))].filter(Boolean).join(' · ')}</p>${x.streaming ? window.ComputerDraw10?.streaming(x.streaming, netViewer, streamProject) || '' : ''}</div>`;
       // MCP 接口本身只认 AI 客户端，浏览器打开是一页 405；“MCP 地址”改去连接电脑页，那里写着地址和怎么连。
       const mcpPage = isMcp && !localLink && route(`/mcp/?pc=${x.id === 'secondary-mcp' ? 'sub' : 'main'}`);
       const label = localLink ? '连接电脑 ›' : isMcp ? 'MCP 地址和连法 ›' : href;
@@ -1276,7 +1278,7 @@
     const note = U.status({ ...d, why, attention_count: null, gray_count: null }, { showZeroFixing: false }).note;
     const hardwareNote = computer && !offline() && publicationRevoked(hardware?.meta) ? `<span>${esc(publicationNote('电脑读数'))}</span>` : '';
     part('note').hidden = !(said || note || links || hardwareNote);
-    U.html(part('note'), note + (said ? `<span>${U.fieldHtml(said, { name: '重启影响' })}</span>` : '') + gap + links + hardwareNote);
+    U.html(part('note'), keepHeroWords(note + (said ? `<span>${U.fieldHtml(said, { name: '重启影响' })}</span>` : '') + gap) + links + hardwareNote);
     renderGrafana();
     renderDevices(d);
     renderTags();

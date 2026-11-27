@@ -368,6 +368,8 @@ body.page--live .btn.btn--go:active { background: #007639; }
   mask-image: linear-gradient(270deg, #000 0%, #000 60%, rgb(0 0 0 / .86) 67%, rgb(0 0 0 / .66) 74%, rgb(0 0 0 / .44) 81%, rgb(0 0 0 / .24) 88%, rgb(0 0 0 / .09) 94%, transparent 100%); }
 .live-conn__tint { inset: 0; background: var(--conn-art) 80% 40% / cover no-repeat; filter: blur(30px) saturate(1.1); opacity: .2;
   -webkit-mask-image: linear-gradient(270deg, #000 0 30%, transparent 70%); mask-image: linear-gradient(270deg, #000 0 30%, transparent 70%); }
+.live-conn:has(.live-conn__row:is([data-stage="off"], [data-stage="lost"])) { --conn-art: url("/live/img/connection-offline-v1.webp"); }
+.live-conn:has(.live-conn__row:is([data-stage="off"], [data-stage="lost"])) .live-conn__pic { background-size: auto min(100%, 120px); }
 .live-conn__rows, .live-conn > #notices { position: relative; z-index: 1; padding-right: calc(var(--win) * .62); }
 .live-conn__row { position: relative; display: flex; flex-wrap: wrap; align-items: center; column-gap: 13px; row-gap: 4px; padding: 14px 28px; box-sizing: border-box;
   font-size: 16.5px; line-height: 24px; letter-spacing: .03em; color: var(--ink-soft); transition: height .5s var(--mo-out, ease), opacity .5s ease, padding .5s ease; }

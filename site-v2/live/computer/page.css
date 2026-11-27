@@ -79,6 +79,13 @@
 .page--computer #weave { --wn: 230px; --wv: 156px; }
 .page--computer #weave .vz-weave__hit { min-height: 42px; height: auto; }
 .page--computer #weave .vz-weave__name { white-space: normal; overflow-wrap: anywhere; line-height: 19px; }
+.page--computer #weave [data-series="memory-capacity"] .vz-reading { grid-template-rows: 26px auto !important; }
+.page--computer #weave [data-series="memory-capacity"] .vz-reading__caption {
+  margin-inline-start: calc(var(--wgap) * -0.5);
+  overflow: visible !important;
+  white-space: normal !important;
+  text-wrap: balance;
+}
 .page--computer .grp[data-key="apps"] .vz-rank__name { display: block; white-space: normal; }
 .page--computer .grp[data-key="apps"] .vz-rank__name small { display: block; margin: 2px 0 0; }
 .page--computer .grp__status, .page--computer .grp__said { word-break: keep-all; }
