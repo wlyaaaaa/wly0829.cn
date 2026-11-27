@@ -814,10 +814,9 @@ def build_rules():
         shutil.copy2(RULES_SRC / name, out / name)
     header = make_header('规则')
     extra = ''
-    for row in SETTINGS.get('规则页右栏多加', []):         # 本人：规则右边的“钩子”跳到实况智能体页的钩子那块（11-27 定，M1115）
+    for row in SETTINGS.get('规则页右栏多加', []):         # 本人 11-13 19:21：规则右边多一个“钩子”，跳到 agents 项目
         target = row['去哪']
-        path = target.lstrip('/').split('#')[0]       # 讲解页在 WEB 下，实况页在 site-v2/live 下
-        if (WEB / path).exists() or (S / path).exists():
+        if (WEB / target.lstrip('/').split('#')[0]).exists():
             dd = f'<a href="{html.escape(target)}">{html.escape(row["字"])}</a>'
         else:
             dd = f'{html.escape(row["字"])}（那一页还在做）'
