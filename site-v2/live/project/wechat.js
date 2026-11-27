@@ -81,7 +81,7 @@
   const noteBox = (notes, tags = {}) => notes.length ? `<div class="wc-note" hidden>${notes.map(n => esc(n) + (tags[n] || '')).join('<br>')}</div>` : '';
   document.addEventListener('click', e => {
     const btn = e.target.closest?.('.wc-explain');
-    const note = btn?.closest('.wc-card')?.querySelector('.wc-note');
+    const note = btn?.closest('.pj-card')?.querySelector('.wc-note');
     if (!note) return;
     note.hidden = !note.hidden;
     btn.setAttribute('aria-expanded', String(!note.hidden));
@@ -273,8 +273,16 @@
   }
 
   // —— 两栏里右边一张“去哪看细节”；最近改动（page.js 画）放左边 ——
+  // —— 最近改动（page.js 画的共用卡）照批准图在卡底加“说明 ›”：两版同一句；卡摆好后补上，重画后再补 ——
+  const CHANGES_NOTE = '这个项目最近几次改动，取自项目的提交记录；自动任务约 10 分钟读一次。';
+  function changesNote(boardEl) {
+    const card = boardEl?.querySelector('.pj-card[data-card="changes"]');
+    if (!card || card.querySelector(':scope > .wc-changes-foot')) return;
+    card.insertAdjacentHTML('beforeend', `${noteBox([CHANGES_NOTE])}<div class="wc-foot wc-changes-foot">${explainBtn([CHANGES_NOTE])}</div>`);
+  }
   function board(d, viewer, graphBlock, boardEl) {
     boardEl?.classList.add('pj-board--wechat');
+    requestAnimationFrame(() => changesNote(boardEl));
     if (!d.wechatView) return [];
     last = { d, viewer, boardEl };
     load(viewer, draw);
