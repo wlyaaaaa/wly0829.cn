@@ -78,7 +78,7 @@
     const dots = ready && (vs.total > 120 ? `<progress class="mat-progress" aria-label="走完的来源" max="${vs.total}" value="${done}"></progress>`
       : `<div class="mat-dots" aria-hidden="true">${Array.from({ length: vs.total }, (_, i) => dot(i < done)).join('')}</div>`);
     const names = rows?.slice(0, 5).map((row, index, list) => `<span class="mat-source">${U.fieldHtml(row.label, { kind: viewer })}${U.visitorLabel(row, ['$', 'label'], '来源名称', viewer)}${index < list.length - 1 ? '、' : ''}</span>`).join('');
-    const today = dayOf(data.readings.refresh_partial?.at) === date.format(new Date());
+    const today = dayOf(info?.newest) === date.format(new Date());
     const content = ready ? `${large(today ? '今天' : '', `${n(done)}/${n(vs.total)}`, '处走完')}${dots}
       <p class="mat-legend">${dot(true)}走完 ${dot(false)}<span>没走完（先用上次完整清单）</span></p>
       ${vs.partial ? `<p class="mat-names">没走完的 ${count(vs.partial, '处')}：${names || '暂时读不到'}</p>` : ''}
