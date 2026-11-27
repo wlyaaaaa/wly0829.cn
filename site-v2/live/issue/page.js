@@ -189,18 +189,23 @@
   }
 
   // 先取单件的当前故障次数。老读口缺这项时，可用账本里同一件的数补齐。
-  const faults = d => Number.isInteger(d.broken_30d) ? d : repeat;
+  const hasWindowCount = d => Number.isInteger(d.faults_in_window) || Number.isInteger(d.broken_30d);
+  const faults = d => hasWindowCount(d) ? d : repeat ?? d;
   function repeatCard(d) {
     if (!faultOf(d)) return '';
     const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
     const f = faults(d), windowDays = policy?.repeat_window_days;
-    const days = positive(windowDays) ? windowDays : 30;
+    const newCount = Number.isInteger(d.faults_in_window) ? d.faults_in_window : null;
+    const range = positive(windowDays) ? `近 ${esc(windowDays)} 天` : newCount != null ? '当前统计期内' : '近 30 天';
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
     const rule = esc(`反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`);
-    const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
+    const reopen = Number.isInteger(d.reopen_count) ? d.reopen_count : f.reopen_count;
+    const once = repeat === null && positive(windowDays) && !Number.isInteger(reopen);
+    const n = newCount ?? (Number.isInteger(f.broken_30d) ? f.broken_30d : once ? 1 : null);
+    const dates = (f.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
-    const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，<span class="live-unit">最近一次</span> ${clock(lastAt)}` : ''}。`
-      : Number.isInteger(f?.reopen_count) ? f.reopen_count > 0 ? `修好以后又出现过 ${esc(f.reopen_count)} 次。` : '修好以后没再出现过。' : '这件坏了几次，这次没读到。';
+    const said = n != null ? `${range}坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，<span class="live-unit">最近一次</span> ${clock(lastAt)}` : ''}。`
+      : Number.isInteger(reopen) ? reopen > 0 ? `修好以后又出现过 ${esc(reopen)} 次。` : '修好以后没再出现过。' : '这件坏了几次，这次没读到。';
     const handed = f?.handed_to_owner ? `已转给${you()}${site(f.owner_href) ? ` ${go(f.owner_href, '看那张卡')}` : ''}。` : rule;
     return card(said + handed);
   }
@@ -263,14 +268,15 @@
 
   // 单件的现行读口已带齐时，省掉对账本列表的补读。
   async function loadRepeat() {
-    if (repeatAsked || !item || !faultOf(item) || Number.isInteger(item.broken_30d) && policy) return;
+    if (repeatAsked || !item || !faultOf(item) || hasWindowCount(item) && policy) return;
     repeatAsked = true;
     const want = item, kind = viewer;
     const r = await window.Live.get('ledger', null).catch(() => null);
     if (item !== want && item?.id !== want.id || kind !== viewer) { repeatAsked = false; return; }
     policy ??= r?.data?.policy;
-    const rows = r?.data?.repeat_fixes?.items;
-    repeat = Array.isArray(rows) ? rows.find(x => x && (x.id === item.id || x.issue && x.issue === item.issue)) || null : undefined;
+    const repeats = r?.data?.repeat_fixes, rows = repeats?.items;
+    repeat = Array.isArray(rows) && !repeats.missing
+      ? rows.find(x => x && (x.id === item.id || x.issue && x.issue === item.issue)) ?? null : undefined;
     if (item) render();
   }
 
