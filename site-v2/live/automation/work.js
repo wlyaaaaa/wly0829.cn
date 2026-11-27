@@ -224,11 +224,8 @@
   // 新八类的一页：照类型页的样子摆开关、暂停、型号档位，现在怎样（暂停原因、下次、在等什么），最近几次和设置记录。
   function categoryPage(data, c) {
     const pause = pauseFor(data, c.id), running = c.running === true;
-    const setting = c.setting;
-    const reason = ['website', 'rules'].includes(c.id) && ['off', 'paused'].includes(setting?.mode) && setting.reason
-      ? field(setting.reason, '停开的原因') : '';
     const now = pause ? `停着，${pauseText(pause)}` : running ? '正在跑'
-      : reason || (at(c.next_at) ? `下次 ${when(c.next_at)}` : c.waiting_for ? field(c.waiting_for, '在等什么') : '');
+      : at(c.next_at) ? `下次 ${when(c.next_at)}` : c.waiting_for ? field(c.waiting_for, '在等什么') : '';
     const last = c.last_result && at(c.last_result.at) ? `${when(c.last_result.at)} · ${field(c.last_result.text, '结果')}` : '';
     const controls = c.setting ? settingBar(c) : modelText(c) ? `<p class="aw-type__model">${modelText(c)}</p>` : '';
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(ART[c.id] || hero)}" class="aw-art">
