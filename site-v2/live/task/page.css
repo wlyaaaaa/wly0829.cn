@@ -36,6 +36,7 @@ html:has(.page--task[data-variant="schedule"]) { --task-bg: #dff1f7; --task-tint
 }
 .page--task[data-variant="schedule"] .task-hero { --task-tint: #cfebf5; }
 .task-hero h1 { margin: 0 0 7px; font: 800 38px/1.18 var(--sans); overflow-wrap: anywhere; }
+.task-hero .task-phrase { white-space: nowrap; }
 .task-hero p { margin: 4px 0; color: #4d515d; font-size: 15px; line-height: 1.48; overflow-wrap: anywhere; }
 .task-hero #task-status { color: var(--ink); font-weight: 600; font-size: 16px; }
 .task-status__note { display: block; margin-top: 2px; color: #5b6070; font-size: 13px; font-weight: 400; }

@@ -18,6 +18,8 @@
 .page--tasks .lb-card[data-art="ai-schedule"] { --lb-art: url("/live/img/tasks-grp-ai-schedule.webp"); }
 .page--tasks .lb-card[data-art="idle"] { --lb-art: url("/live/img/tasks-grp-idle.webp"); }
 .page--tasks .hero__note { display:block; letter-spacing:0; word-spacing:normal; }
+.page--tasks :is(#task-intro span, .task-phrase) { white-space: nowrap; }
+.page--tasks #hero[data-publication-revoked] #head .head__lead { min-width: 0; white-space: normal; text-wrap: balance; }
 /* 维护明细（?scope=ai-today）的标题长：标题和说明在左边自己那一栏里折行，不伸到中间读数卡底下 */
 .tasks--ai-today .lbp-title > div { min-width: 0; }
 .tasks--ai-today .lbp-title h1 { white-space: normal; word-break: keep-all; }
@@ -65,7 +67,7 @@
 .page--tasks .task-compact { min-height: 46px; padding-block: 5px; }
 .task-compact .lb-cell--name p { margin: 0; }
 .task-compact .lb-cell--name { overflow-wrap: normal; }
-.task-compact .lb-cell--name > p:first-child { text-wrap: pretty; }
+.task-compact .lb-cell--name > p:first-child { text-wrap: balance; }
 .task-compact .task-purpose { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* 任务名下面那行用途整句显示，放不下就换行，不截成“…”（M760） */
 .page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
@@ -124,7 +126,7 @@ body.page--tasks .lb-row.notice-target { outline: 2px solid rgb(38 60 55 / .6); 
 <body class="page page--live page--l2 page--board page--tasks"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#tasks" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
 <div class="lbp-top">
-<div class="lbp-title" data-mo-rise><img src="/live/img/tasks-icon.webp" width="360" height="360" alt="" aria-hidden="true"><div><h1>计划任务</h1><p id="task-intro">Windows 任务计划程序登记的任务，按用途分组。</p><p class="lbp-asof" id="asof" hidden></p></div></div>
+<div class="lbp-title" data-mo-rise><img src="/live/img/tasks-icon.webp" width="360" height="360" alt="" aria-hidden="true"><div><h1>计划任务</h1><p id="task-intro">Windows 任务计划程序登记的任务，<span>按用途分组。</span></p><p class="lbp-asof" id="asof" hidden></p></div></div>
 <article class="card card--hero" id="hero" data-pic="right" data-mo-rise><div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/tasks.webp" alt="" aria-hidden="true">
 <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/tasks.webp" width="1000" height="1000" alt=""></span><div class="card__body">
 <p class="card__head" id="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">正在读</span></p><p class="hero__note" id="note">正在读</p><div class="lbp-stats" id="stats"></div></div></div></article>

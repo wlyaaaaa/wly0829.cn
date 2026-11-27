@@ -304,7 +304,21 @@
   }
   function render(d, revoked = false) {
     data = d; const unavailable = !d || inventoryUnknown(d) && !d.restore?.length; document.querySelector('.l2-board').hidden = $('backup-summary').hidden = $('backup-matrix').hidden = unavailable;
-    if (unavailable) { headline = revoked ? updating : missing(); U.html($('head'), U.status(d).lamp + U.head(headline, { lamp: false })); U.html($('note'), wrapSummary(U.status(d).note)); $('note').hidden = !U.status(d).note; L.tone(hero, d); if (offline() || revoked) homeRead.done(false); else homeRead.set({ phase: 'none', data: null }); $('coverage').textContent = ''; if (revoked) { cells.clear(); for (const id of ['backup-summary', 'backup-matrix', 'sets', 'rest', 'points']) $(id).replaceChildren(); } return; }
+    hero.toggleAttribute('data-publication-revoked', unavailable && revoked);
+    if (unavailable) {
+      headline = revoked ? updating : missing();
+      const title = U.head(headline, { lamp: false });
+      const status = U.status(d);
+      U.html($('head'), status.lamp + (revoked ? title.replace(/(备份总表正在更新|访客版，|稍后自动补上。)/g, '<span class="backup-phrase">$&</span>') : title));
+      U.html($('note'), wrapSummary(status.note)); $('note').hidden = !status.note; L.tone(hero, d);
+      if (offline() || revoked) homeRead.done(false); else homeRead.set({ phase: 'none', data: null });
+      $('coverage').textContent = '';
+      if (revoked) {
+        cells.clear();
+        for (const id of ['backup-summary', 'backup-matrix', 'sets', 'rest', 'points']) $(id).replaceChildren();
+      }
+      return;
+    }
     const emptySets = d.summary?.sets === 0 || d.q === 'ok' && d.sets?.length === 0 && !Object.hasOwn(d.summary || {}, 'sets');
     mergedTable(d, summary(d), emptySets);
     // 左栏：只列要留意的几类和一句为什么，其余几类一句话带过（本人 11-25 选 A，样子见 B1）

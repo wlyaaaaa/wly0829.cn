@@ -222,7 +222,7 @@
     let ul = $('task-empty') || (!sections.size ? $('groups').querySelector('ul') : null);
     if (!ul) { ul = document.createElement('ul'); ul.className = 'rows list'; ul.id = 'task-empty'; $('groups').append(ul); }
     ul.hidden = revoked; U.list(ul, revoked ? [] : empty(text));
-    U.html($('coverage'), U.fieldHtml(text, { name: '读取情况', place: 'body', kind: viewer }));
+    U.html($('coverage'), revoked ? '' : U.fieldHtml(text, { name: '读取情况', place: 'body', kind: viewer }));
     U.html(changesTitle, '任务变化');
     if (revoked) $('changes').replaceChildren(); else U.list($('changes'), empty(text));
     $('next').hidden = true;
@@ -232,6 +232,7 @@
     for (const el of [s.main, s.rest, s.sub]) el.replaceChildren();
   }
   const updating = '计划任务正在更新访客版，稍后自动补上。';
+  const nextPage = $('next'), nextLabel = nextPage.textContent;
   const GROUP_STEP = 10;
   const backSteps = performance.getEntriesByType('navigation')[0]?.type === 'back_forward' ? history.state?.taskGroupSteps : null;
   function drawGroup(s) {
@@ -374,7 +375,7 @@
       html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
     }))] : empty(moved.empty));
     taskHead(moved);
-    cursor = d.next; $('next').hidden = !cursor; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
+    cursor = d.next; nextPage.hidden = !cursor; nextPage.textContent = nextLabel; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
     if (!maintenance) drawUpcoming(listedTasks(groups)); U.land(); taskWords();
   }
   async function readAllTasks(first, fetchPage, limit = 10) {
@@ -477,7 +478,8 @@
     U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
     if (s.meta?.publicationRevoked) {
       waiting(updating, true);
-      $('coverage').hidden = false;
+      $('coverage').hidden = true;
+      taskHead(null, true);
       groupsRead.done(false); changesRead.done(false); heroRead.done(false);
       if (board) pickGroup();
       if (projectList !== null) pickProjects();
@@ -531,7 +533,7 @@
     });
   }
   $('q').value = query; let timer; $('search').addEventListener('submit', e => { e.preventDefault(); clearTimeout(timer); query = $('q').value.trim(); const u = new URL(location.href); query ? u.searchParams.set('q', query) : u.searchParams.delete('q'); history.replaceState(null, '', u); load(); }); $('q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('search').requestSubmit(), 300); });
-  $('next').addEventListener('click', async (event) => {
+  nextPage.addEventListener('click', async (event) => {
     const button = event.currentTarget, ticket = generation, label = button.textContent;
     button.disabled = true; button.textContent = '正在读…';
     try {
@@ -540,11 +542,13 @@
       if (r.data && r.meta?.at === batchAt && r.meta?.viewer?.kind === viewer) U.anchor(() => render(r.data, true));
       else if (r.meta?.publicationRevoked) showRevokedPage();
       else U.html($('coverage'), U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer }));
-    } finally { button.disabled = false; button.textContent = label; }
+    } finally {
+      button.disabled = false;
+      if (button.textContent === '正在读…') button.textContent = label;
+    }
   });
   function showRevokedPage() {
-    $('coverage').textContent = updating;
-    $('coverage').hidden = false;
+    nextPage.textContent = updating;
   }
   function scheduledRunning(packet) {
     if (maintenance || !packet || !dataAt) return null;
@@ -556,18 +560,19 @@
       : items.filter(t => (!pageOnly || t.source_readable === true) && taskState(t) === 'running').length;
     return count || !partial ? { count, at: dataAt, partial, pageOnly } : null;
   }
-  function taskHead(moved) {
+  function taskHead(moved, revoked = false) {
+    hero.toggleAttribute('data-publication-revoked', revoked);
     if (page?.q === 'warming') { headline = '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); heroRead.done(); return; }
     const total = page?.total, rounds = maintenanceRounds(page);
     const observed = Number.isInteger(rounds) && (rounds > 0 || rounds === 0 && page?.q === 'ok');
     // 新私事规则（本人 11-24 02:56）：访客版不再按项藏，总数旁边不再写“另有 N 项仅本人可见”。
     const ownerOnly = 0;
-    headline = maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
+    headline = revoked ? updating : maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
       : total != null ? `登记 ${total} 项计划任务${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
     const cutoff = /^数据截止 /;
     const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
-    const heading = status.lamp + U.head(headline, { lamp: false });
-    U.html($('head'), heading);
+    const title = U.head(headline, { lamp: false });
+    U.html($('head'), status.lamp + (revoked ? title.replace(/(计划任务正在更新|访客版，|稍后自动补上。)/g, '<span class="task-phrase">$&</span>') : title));
     if (project) U.html($('project-label'), [linkedProject(project) && typeof page?.project_name === 'string' ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(project)}`))}">${U.fieldHtml(page.project_name, { name: '项目筛选', kind: viewer })} ›</a>` : U.fieldHtml(page?.project_name || page?.project_name_gap || U.collectionText('项目名称', page), { name: '项目筛选', kind: viewer }), !maintenance && U.fieldHtml(total != null ? `${String(total).startsWith('至少') ? '' : '共 '}${total} 件` : U.collectionText('任务总数', page), { name: '项目筛选', kind: viewer })].filter(Boolean).join(' · '));
     // 小方块黄橙怎么分。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现出错次数不超过成功次数算大部分成功；变了改这句
     const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)) && `近 7 天出过事的任务画小方块。灰格是那天没记录。黄格“大部分成功”是出错次数不超过成功次数，旧记录的黄格也可能是“${observedFailure}”。橙格“部分成功”是出错多于成功`, ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');

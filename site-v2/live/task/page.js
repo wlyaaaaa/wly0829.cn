@@ -512,10 +512,12 @@
       }));
     }
   }
-  function empty(message, denied = false) {
+  function empty(message, denied = false, revoked = false) {
     stopChecks(); task = null; document.title = '任务详情 · 实况';
     for (const key of ['task-body', 'task-status', 'task-meta', 'task-purpose', 'task-week', 'task-acts', 'crumb-name', 'crumb-group']) $(key).hidden = true;
-    U.html($('name'), denied ? field({ visibility: 'owner' }, '这个任务的内容') : esc(message), false);
+    const text = esc(message);
+    U.html($('name'), denied ? field({ visibility: 'owner' }, '这个任务的内容')
+      : revoked ? text.replace('访客版', '<span class="task-phrase">访客版</span>') : text, false);
   }
   if (!id) empty('没有说是哪个任务');
   else {
@@ -540,11 +542,12 @@
         else if (task?.q === 'warming') empty('正在准备任务记录');
         else if (task && (changed || before !== offline)) { render(task); reading.done(); }
         else if (!task && !['idle', 'wait', 'slow'].includes(state.phase)) {
-          if (state.meta?.publicationRevoked) {
+          const revoked = state.meta?.publicationRevoked;
+          if (revoked) {
             for (const key of ['task-status', 'task-meta', 'task-purpose', 'task-week', 'task-acts', 'crumb-name', 'crumb-group',
               'task-stats', 'failure-text', 'failure-checks', 'runs', 'runs-rest', 'run-coverage', 'future-runs', 'future-note', 'facts']) $(key).replaceChildren();
           }
-          empty(state.meta?.publicationRevoked ? updating('任务详情') : state.meta?.status === 404 ? '没有这个任务' : state.say || '任务详情暂时读不到');
+          empty(revoked ? updating('任务详情') : state.meta?.status === 404 ? '没有这个任务' : state.say || '任务详情暂时读不到', false, revoked);
           reading.done();
         }
         changed = false;

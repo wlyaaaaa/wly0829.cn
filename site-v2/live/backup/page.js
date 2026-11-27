@@ -142,7 +142,10 @@
   backLink.addEventListener('click', U.restoreBack);
   const bar = U.topbar({ ask: () => set ? `请看实况备份 ${sp(set.name || '一类备份')}：${copySummary(set).text}。请说明这类资料的副本和校验情况。` : '' });
   function showUnavailable(text = missing()) {
-    heroRead.done(false); copiesRead.done(false); U.html($('head'), lampTo('') + U.head(text, { lamp: false })); $('rec').hidden = true; Light.tone(hero, null);
+    const title = U.head(text, { lamp: false });
+    heroRead.done(false); copiesRead.done(false);
+    U.html($('head'), lampTo('') + (mainRevoked ? title.replace('访客版', '<span class="backup-phrase">访客版</span>') : title));
+    $('rec').hidden = true; Light.tone(hero, null);
     if (mainRevoked) {
       document.title = '一类备份 · 实况';
       for (const key of ['meta', 'actions', 'copies', 'cloud', 'points', 'points-result', 'coverage', 'media-counts']) $(key).replaceChildren();
@@ -421,7 +424,7 @@
       : `${pending ? '这份清单只列在等、没传成或还没核对的文件' : '这份清单列的是这次备份的文件'}，${total == null ? '共几个还没核实' : `共 ${number(total)} 个`}`;
     const hiddenText = hidden > 0 && hidden < total ? `其中 ${number(hidden)} 个的文件名只给本人看` : '';
     const showTime = id !== 'recovery-kit' || files.some(item => verificationTime(item));
-    U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', esc(size + (hiddenText ? `。${hiddenText}` : '')), oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}</p>`
+    U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', esc(size + (hiddenText ? `。${hiddenText}` : '')).replace(/本人版?/g, '<span class="backup-phrase">$&</span>'), oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}</p>`
       + (d.types?.length ? table(['资料类别', '份数'], d.types.filter(t => t.type).map(t => [said(t.type), count(t, 'count') + gap(t)]), '资料类别') : !Array.isArray(d.types) && !offline() ? `<p class="fe-l3b-note">${esc(U.collectionText('资料分类', d))}</p>` : '')
       + (named.length ? table(['资料', '去处', '情况 / 原因', ...(showTime ? ['时刻'] : [])], named.slice(0, fileLimit).map(item => [fileName(item.name) + fileTag(item), said(CLOUDS[item.target]), `${STATE[item.state] ? said(STATE[item.state]) : ''}${item.reason ? `<small>${said(item.reason, '没传成的原因')}</small>` : ''}`, ...(showTime ? [id === 'recovery-kit' ? verificationTime(item) : stamp(item.at)] : [])]), '在等、没传成的资料') : '') + (U.olderNote?.(state.at, state) ? `<p class="fe-l3b-note">${esc(U.olderNote(state.at, state))}</p>` : ''));
     const nextPage = fileLimit >= named.length && Boolean(d.next);
