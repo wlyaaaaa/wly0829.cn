@@ -64,9 +64,16 @@
   const hiddenBatch=r=>viewer!=='owner'&&(r.hidden||marked(r));
   // 标题在本人版的 reminders[].title 里（一次可能含几件事）；开头和类别重名的那段去掉，免得写两遍（M306）
   const bare=(t,c)=>c&&typeof t==='string'&&t.startsWith(c)&&/^\s*[｜|·:：]/.test(t.slice(c.length))?t.slice(c.length).replace(/^\s*[｜|·:：]\s*/,'')||t:t;
-  // 本人版：后台在 reminders[].visitor_labels.title 标了 hidden 的（访客那边属于被标了的对话），标题旁挂共用的“访客看不到”签，和别处一个样子；没标照常
-  const reminderTag=x=>x?.visitor_labels?.title==='hidden'?U.visitorHiddenTag('这条提醒的标题','',viewer):'';
-  const reminderTitles=r=>{const seen=new Map();for(const x of Array.isArray(r.reminders)?r.reminders:[]){const t=x?.title;if(t==null||t==='')continue;seen.set(t,seen.get(t)||reminderTag(x));}return [...seen];};
+  const reminderTag=x=>U.visitorLabel(x,'title','这条提醒的标题',viewer);
+  const reminderTitles=r=>{
+    const seen=new Map();
+    for(const reminder of Array.isArray(r.reminders)?r.reminders:[]){
+      const title=reminder?.title;if(title==null||title==='')continue;
+      const previous=U.visitorFieldKind(seen.get(title),'title');
+      if(!previous||previous==='rewritten'&&U.visitorFieldKind(reminder,'title')==='hidden')seen.set(title,reminder);
+    }
+    return Array.from(seen,([title,reminder])=>[title,reminderTag(reminder)]);
+  };
   const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题');return s&&s+tag;}).filter(Boolean).join('；');};
   // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
   const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
