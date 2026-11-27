@@ -1273,7 +1273,7 @@ body{background:#f7f2ec}.not-found{position:relative;margin-top:79px}.not-found>
     (SITE / '404.html').write_text(text, encoding='utf-8')
 
 
-def build_page_heads(real_pages):
+def build_page_heads(real_pages, skill_cards):
     """只在组装副本的 head 里加正式地址、摘要、分享图和浅色声明，文字来自现有稿，并返回发布页面采用的正文图。"""
     from urllib.parse import quote
     metadata, titles = {}, {}
@@ -1301,6 +1301,10 @@ def build_page_heads(real_pages):
             if variants:
                 image = next((url for width, url in variants if width >= 960), variants[-1][1])
             metadata[path] = (description, image)
+    guides = {c['ID']: [c['地址'], re.split(r'(?<=[。！？])', metadata[SITE / c['地址'].lstrip('/')][0], maxsplit=1)[0]]
+              for c in skill_cards if c['真']}
+    moved = SITE / 'live/agents/moved.js'
+    moved.write_text('window.AgentSkillGuides = ' + json.dumps(guides, ensure_ascii=False) + ';\n' + moved.read_text(encoding='utf-8'), encoding='utf-8')
     for path in SITE.rglob('*.html'):
         text = path.read_text(encoding='utf-8')
         original_title = html.unescape(re.search(r'<title>(.*?)</title>', text, re.S)[1])
@@ -1409,7 +1413,7 @@ def assemble():
     step(build_principles)
     step(build_not_found)
     step(build_live)
-    illustrations = step(build_page_heads, real_pages)
+    illustrations = step(build_page_heads, real_pages, scards)
     step(subset_fonts)
     step(web_fonts)
     real_p = [c['名字'] for c in pcards if c['真']]

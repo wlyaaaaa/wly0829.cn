@@ -39,7 +39,9 @@
   function row(d, index) {
     const h = V.helperRow(d, index);
     if (h.warming) return { key: h.key, cls: 'route-row route-row--empty', html: '<p class="route-row__line">正在准备</p>' };
-    return { key: h.key, cls: `route-row${h.running ? ' is-now' : ''}`, html: `${h.lamp}${R.ico('doc', 'route-row__ico')}<div class="route-row__main"><p class="route-row__line">${h.state ? `<b class="route-word">${esc(h.state)}</b>` : ''}<span class="route-row__name">${h.head}</span></p><p class="route-row__sub">${U.fieldHtml(h.meta, { name: '对话内容', kind: viewer })}</p>${h.detail}${h.more}</div><div class="route-row__acts">${h.canOpen ? actions(d) : ''}</div>` };
+    const name = h.head.replace(/(^|>)([^<]+)/g,
+      (_, start, text) => start + text.replace(/加载|恢复|删除/g, '<span class="live-unit">$&</span>'));
+    return { key: h.key, cls: `route-row${h.running ? ' is-now' : ''}`, html: `${h.lamp}${R.ico('doc', 'route-row__ico')}<div class="route-row__main"><p class="route-row__line">${h.state ? `<b class="route-word">${esc(h.state)}</b>` : ''}<span class="route-row__name">${name}</span></p><p class="route-row__sub">${U.fieldHtml(h.meta, { name: '对话内容', kind: viewer })}</p>${h.detail}${h.more}</div><div class="route-row__acts">${h.canOpen ? actions(d) : ''}</div>` };
   }
 
   // —— 航线：计划逐行作站点，不改名、不加项；只照数据画勾和“在做”，当前这一步按 step_index 标出（每一站的字由共用模块出） ——

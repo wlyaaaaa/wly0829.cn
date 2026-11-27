@@ -18,9 +18,15 @@
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
-  // 访客版称呼：本页上“你”都写“本人”，后台写进句子里的也算（“你们”不动）；本人版原样
-  const say = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
-  const put = (el, html) => U.html(el, say(html));
+  const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
+  // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
+  function publicHtml(html, viewer) {
+    if (viewer === 'owner' || !html.includes('你')) return html;
+    return html.replace(/<[^>]+>|“(?:[^<”]|<\/?(?:span|a|b|strong|em|i|wbr|time)\b[^>]*>)*”|你(?!(?:<[^>]+>)*们)/g, part =>
+      part === '你' ? '本人' : part.replace(/<[^>]+>/g, tag => tag.replace(/(\s[\w:.-]+=)(["'])([\s\S]*?)\2/g,
+        (attribute, name, quote, value) => name.trim() === 'title=' ? name + quote + publicText(value) + quote : attribute)));
+  }
+  const put = (el, html) => U.html(el, publicHtml(html, viewer));
   const timed = R.timed, ms = x => Date.parse(x);
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
   const clock = x => `<time datetime="${esc(x)}">${esc(when(x))}</time>`;
@@ -116,7 +122,8 @@
     document.title = `${T(title) || '账本一件'} · 实况`;
     const head = part('head');
     // 这件事对外换了说法的标题后面挂“对外换了说法”（两版都挂，M930）；本人版访客看不到的挂“访客看不到”
-    put(head, `<span class="head__lead">${F(title, '这件事')}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
+    const shownTitle = publicHtml(F(title, '这件事'), viewer);
+    U.html(head, `<span class="head__lead">${shownTitle}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看

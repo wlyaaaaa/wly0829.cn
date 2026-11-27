@@ -325,7 +325,7 @@
   function emptyCard(id, d) {
     const card = cards[id], p = parts[id], warming = d?.q === 'warming';
     card.classList.add('card--empty'); card.classList.toggle('card--warming', warming);
-    const named = id === 'chats', name = NAME[id];
+    const named = id === 'chats', name = id === 'needs' ? addressed(NAME[id]) : NAME[id];
     const caption = id === 'needs' && d ? addressed('等你的事 · 没有记录') : d?.text || `${name}暂时读不到`;
     // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
     const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
@@ -343,7 +343,7 @@
   const reads = Object.fromEntries(HOME_IDS.map((id) => {
     const body = cards[id].querySelector('.card__body');
     if (id === 'ledger' || id === 'projects') body.classList.add('fog-bare');   // 没灯的卡：雾里也不摆灯
-    return [id, U.reading(body, { ghost: U.ghost.card(LINES[id] || 2), name: NAME[id], slow: id === 'needs' })];
+    return [id, U.reading(body, { ghost: U.ghost.card(LINES[id] || 2), name: NAME[id], publicName: id === 'needs' ? U.addressed(NAME[id], 'public') : '', slow: id === 'needs' })];
   }));
 
   // 灯由后端给定；行灯使用该行自己的状态。
@@ -663,11 +663,12 @@
   }
   const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   function closedNoticeRow({ id, item, closed }) {
-    const outcome = closed?.text || CLOSED[closed?.kind];
+    const outcome = closed?.text || addressed(CLOSED[closed?.kind] || '');
     if (!outcome || !Number.isFinite(Date.parse(closed.at))) return null;
-    const label = U.fieldHtml(typeof outcome === 'string' ? addressed(outcome) : outcome, { name: '了结情况', kind: viewer });
+    const label = U.fieldHtml(outcome, { name: '了结情况', kind: viewer })
+      .replace(/(<[^>]*>)|(?:你|本人)?办完了|已?核实/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
     const link = title({ ...item, id: item?.id || id }, item?.text || '查看原事项', 'items');
-    return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
+    return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main" style="margin-inline-end: clamp(0px, calc(1280px - 100vw), 14px)">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }
   // 展开后的事项详情整段照原文显示，不按字数截（M690）；卡面收起时那一行摘要的字数限制不动
   function noticeDetail(item) {

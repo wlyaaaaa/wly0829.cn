@@ -22,8 +22,14 @@
   let viewMore = [], viewNext, viewBusy = false;
   const F = (v, name) => T.field(v, viewer, name);
   const you = () => T.you(viewer);
-  // 访客版称呼：本页上“你”都写“本人”，后台写进句子里的也算（“你们”不动）；本人版原样
-  const say = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
+  const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
+  // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
+  function publicHtml(html, viewer) {
+    if (viewer === 'owner' || !html.includes('你')) return html;
+    return html.replace(/<[^>]+>|“(?:[^<”]|<\/?(?:span|a|b|strong|em|i|wbr|time)\b[^>]*>)*”|你(?!(?:<[^>]+>)*们)/g, part =>
+      part === '你' ? '本人' : part.replace(/<[^>]+>/g, tag => tag.replace(/(\s[\w:.-]+=)(["'])([\s\S]*?)\2/g,
+        (attribute, name, quote, value) => name.trim() === 'title=' ? name + quote + publicText(value) + quote : attribute)));
+  }
   // 照后台 visitor_labels 在原位挂签：本人版两种（访客看不到、对外换了说法），访客版只挂“对外换了说法”（M930，全站共用的签自己分）
   const vtag = (obj, keys, what) => { const t = obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
@@ -387,14 +393,14 @@
     viewer = T.viewerOf(state);
     if (!d) { T.paint(page.root, T.placeholder(state, 'AI 自动任务账本')); page.tick.set([], { off: true }); return; }
     if (view) {
-      T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
-        <p class="tp-head__side">${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>${T.stateNote(state)}${viewList(d)}`));
+      T.paint(page.root, publicHtml(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>从首页 AI 自动任务账本卡点进来的那几件；点一件看它的完整经过。</p></div>
+        <p class="tp-head__side">${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>${T.stateNote(state)}${viewList(d)}`, viewer));
       page.tick.set([], { off: state.offline });
       return;
     }
-    T.paint(page.root, say(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
+    T.paint(page.root, publicHtml(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
         <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
-      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split"><div class="lg-lists">${settled(d)}${repeats(d)}</div>${detail(d)}</div>`));
+      ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split"><div class="lg-lists">${settled(d)}${repeats(d)}</div>${detail(d)}</div>`, viewer));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
     if (!landed && (location.hash || asked)) landed = T.reveal(location.hash.slice(1) || 'detail');

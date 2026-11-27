@@ -38,7 +38,11 @@
       last: Object.fromEntries(providers.map(p => [p.fam.id, p.last_at || null])), starts: Object.fromEntries(providers.map(p => [p.fam.id, dateKey(p.since)])),
       gaps: providers.filter(p => list(p.missing_months).length || list(p.unreadable_months).length).map(p => p.fam.name) };
   }
-  const keepLabel = (labels, row) => { const kind = row && typeof row === 'object' ? row.visitor_labels?.label : null; if (typeof row?.label === 'string' && ['hidden', 'rewritten'].includes(kind) && labels.get(row.label) !== 'hidden') labels.set(row.label, kind); };
+  const keepLabel = (labels, row) => {
+    if (typeof row?.label !== 'string') return;
+    const old = labels.get(row.label), kind = row.visitor_labels?.label;
+    labels.set(row.label, { id: old?.id || row.skill_id, kind: old?.kind === 'hidden' ? 'hidden' : kind || old?.kind });
+  };
   function skillModel(s) {
     const providers = providersOf(s), win = {}, labels = new Map();
     for (const [id] of PERIODS) {
@@ -115,9 +119,13 @@
     return n > 0 ? n : w.complete[h.id] && n !== null ? 0 : null;
   };
   const readSkillCount = (n, lower) => n == null ? '没采到' : `${n > 0 && lower ? '至少 ' : ''}${int(n)}`;
+  const displaySkill = name => /\p{Script=Han}/u.test(name) ? name : '技能名称待同步';
   function skillName(name, s, w) {
-    const kind = s.labels.get(name), tag = kind ? U.visitorLabel({ visitor_labels: { label: kind } }, 'label', '这个技能名', viewer) : '';
-    return `<details id="skill-${esc(encodeURIComponent(name))}"><summary class="ag-hrow__name" title="${esc(name)}">${tag ? `<span class="ag-hrow__label">${esc(name)}</span>${tag}` : esc(name)}</summary>
+    const { id, kind } = s.labels.get(name) || {}, tag = kind ? U.visitorLabel({ visitor_labels: { label: kind } }, 'label', '这个技能名', viewer) : '';
+    const guide = viewer === 'public' && kind ? null : window.AgentSkillGuides?.[id];
+    const label = esc(displaySkill(name)), href = Array.isArray(guide) ? T.path(guide[0]) : '';
+    const title = href ? `<a class="tp-link ag-skill-guide" href="${esc(href)}" data-guide-tip="${esc(guide[1])}">${label}</a>` : label;
+    return `<details id="skill-${esc(encodeURIComponent(name))}"><summary class="ag-hrow__name">${tag ? `<span class="ag-hrow__label">${title}</span>${tag}` : title}</summary>
       ${HOSTS.map(h => `<div>${h.name} ${readSkillCount(skillCount(name, h, w), s.lower[h.id])}</div>`).join('')}</details>`;
   }
   function bars(rows, keys, s, w) {
@@ -125,7 +133,7 @@
     return `<div class="ag-hrows">${rows.map(r => {
       const all = sum(r.v, keys), missing = keys.some(h => skillCount(r.name, h, w) == null);
       const right = `<b${f ? ` style="color:${fam(f).color}"` : ''}>${readSkillCount(all || (missing ? null : 0), missing || keys.some(h => lower[h.id]))}</b>${f && (all || !missing) ? '<small>次</small>' : ''}`;
-      const segs = keys.filter(k => r.v?.[k.id] > 0).map(k => `<button type="button" class="ag-hseg${lower[k.id] ? ' is-lower' : ''}" data-pick="${k.id}" style="flex:${r.v[k.id]};--fill:${k.color}" title="${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次" aria-label="${esc(r.name)} · ${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次"></button>`).join('');
+      const segs = keys.filter(k => r.v?.[k.id] > 0).map(k => `<button type="button" class="ag-hseg${lower[k.id] ? ' is-lower' : ''}" data-pick="${k.id}" style="flex:${r.v[k.id]};--fill:${k.color}" title="${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次" aria-label="${esc(displaySkill(r.name))} · ${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次"></button>`).join('');
       return `<div class="ag-hrow">${skillName(r.name, s, w)}
         <span class="ag-hrow__track"><span class="ag-hrow__fill" style="width:${all / max * 100}%">${segs}</span></span><span class="ag-hrow__num">${right}</span></div>`;
     }).join('')}</div>`;
@@ -179,7 +187,7 @@
       ${chips()}
       ${rows.length ? bars(rows, hs, s, w)
         : `<p class="tp-empty">${missing.length === hs.length ? '这段时间的技能记录这次没读到，下一轮会自动再读。' : '这段时间没记到用过技能。'}</p>`}${never}${more}
-      <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
+      <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；')).replace(/\d{2}-\d{2} 起才有记录/g, '<span class="ag-keep">$&</span>')}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
   }
   window.AgentsMoved = {
     html(d, kind, opts = {}) {

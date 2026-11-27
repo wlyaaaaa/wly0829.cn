@@ -63,6 +63,9 @@
 .page--phone [data-key="collect"] .vz-tl__row:first-child { padding-top:20px; }
 .page--phone [data-key="collect"] .vz-legend__vals { flex-direction:row; flex-wrap:wrap; gap:0 8px; font-size:12px; }
 .page--phone [data-key="collect"] .vz-legend__vals small { min-width:0; margin-right:4px; }
+.page--phone .vz-legend__item[data-state="pending"] .vz-legend__name b {
+  white-space:normal; word-break:normal; overflow-wrap:anywhere; text-overflow:clip;
+}
 .page--phone [data-key="battery"] .grp__figs { grid-template-columns:repeat(5,minmax(0,1fr)); }
 .live-offline.page--phone .phone-details:empty, .live-offline .page--phone .phone-details:empty { display:none; }
 .live-offline .page--phone .mach__pt { background:transparent; box-shadow:none; border:1px solid var(--muted); }

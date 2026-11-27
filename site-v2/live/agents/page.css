@@ -7,7 +7,6 @@
 .ag-dim { opacity: .3; transition: opacity .2s ease; }
 .ag-chip--all { --host: #57564f; }
 
-/* 一、三家比分 */
 .ag-scores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ag-score { border: 1px solid var(--tp-line); border-radius: 12px; overflow: hidden; background: #fff; }
 .ag-score > header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 2px 10px; padding: 7px 16px; background: var(--host); color: #fff; }
@@ -15,6 +14,10 @@
 .ag-score > header small { font-size: 12.5px; opacity: .92; }
 .ag-score > header a.ag-rulever { color: inherit; text-decoration: underline; text-decoration-color: rgb(255 255 255 / .6); text-underline-offset: 3px; white-space: nowrap; }
 @media (max-width: 1024px) {
+  .ag-ok { text-wrap: balance; }
+  .ag-score[data-host="codex"] .ag-diff li > span:last-child { min-width: 0; overflow-wrap: anywhere; text-wrap: pretty; }
+  .ag-status-word { display: inline-block; }
+  .ag-heat button:has(.ag-badge + .ag-badge) { column-gap: 3px; padding-inline: 8px; }
   #estimate .ag-est { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ag-est > :nth-child(2) { grid-area: 2 / 1 / auto / -1; border: 0; padding-left: 0; }
 }
@@ -34,7 +37,6 @@
 .ag-diff a:hover { border-color: currentColor; }
 .ag-diff small { display: block; font-size: 12.5px; color: var(--muted); }
 .ag-ok { margin: 4px 0 0; padding: 0 16px 16px 18px; font-size: 13.5px; color: #57564f; }
-.ag-diff small a { color: inherit; text-decoration: none; border-bottom: 1px solid rgb(20 20 19 / .2); }
 /* “差 N 处”下面写谁在修、第几轮，点到那一轮或那件事 */
 .ag-fix { margin: 0 0 4px; font-size: 14.5px; font-weight: 700; line-height: 22px; color: var(--tp-amber); }
 .ag-fix a { color: inherit; text-decoration: none; }
@@ -111,13 +113,13 @@
 .ag-config td.ag-same { text-align: left; color: #3d3d3a; }
 .ag-same__who { display: inline-block; margin-right: 10px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .ag-config td .tp-link { display: inline-block; margin-left: 10px; font-weight: 500; }
-.ag-keep { white-space: nowrap; }
+.ag-tool-name { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
+:is(.ag-keep, .ag-status-word) { white-space: nowrap; }
 .ag-foot { margin: 12px 0 0; }
 
-/* 五、钩子 */
 /* 标题“钩子”、时间那排、说明一行排开，截至靠右（照 16:35 点头的图） */
 .ag-hookhead { justify-content: flex-start; align-items: center; flex-wrap: wrap; row-gap: 8px; }
-.ag-hookhead .ag-hooklead { margin: 0; font-size: 15px; font-weight: 500; color: #6c6b64; }
+.ag-hookhead .ag-hooklead { flex: 1 1 65%; margin: 0; font-size: 15px; font-weight: 500; color: #6c6b64; text-wrap: pretty; }
 .ag-hookhead .tp-asof { margin-left: auto; }
 .ag-hooktotal small { font-size: 13px; color: var(--muted); }
 .ag-hooktotals { display: grid; gap: 4px; margin: 0 0 10px; }
@@ -127,8 +129,7 @@
 .ag-hooktable { table-layout: fixed; }
 .ag-hooktable tbody th { width: 130px; }
 .ag-heat { padding: 0 !important; background: color-mix(in srgb, var(--host) calc(var(--heat, 0) * 100%), #fff); border-left: 2px solid #fff; }
-.ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; }
-.ag-heat button { transition: background .15s ease; }
+.ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s ease; }
 .ag-heat button:hover { background: rgb(20 20 19 / .07); }
 .ag-heat button:hover .tp-chev { color: var(--ink); }
 .ag-heat button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
@@ -191,9 +192,12 @@
 .ag-hrows { display: grid; gap: 12px; margin: 14px 0 0; }
 .ag-hrow { display: grid; grid-template-columns: 330px minmax(0, 1fr) 120px; align-items: center; gap: 18px; }
 .ag-hrow__name { min-width: 0; overflow: hidden; font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.ag-hrow__name small { font-size: 14px; font-weight: 600; color: #57564f; }
+.ag-skill-guide { position: relative; }
+.ag-skill-guide:is(:hover, :focus-visible)::after { content: attr(data-guide-tip); position: absolute; z-index: 3; inset: calc(100% + 6px) auto auto 0; width: max-content; max-width: 320px;
+  padding: 8px 10px; background: #fff; border: 1px solid var(--tp-line); border-radius: 8px; color: var(--ink); font: 13px/1.5 var(--sans); white-space: normal; pointer-events: none; }
 .ag-hrow__name:has(> .live-mark) { display: flex; align-items: center; }
 .ag-hrow__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ag-hrow__name:has(.ag-skill-guide), .ag-hrow__label:has(.ag-skill-guide) { overflow: visible; }
 .ag-hrow__name > .live-mark { flex: none; }
 .ag-hrow__track { display: flex; height: 20px; border-radius: 6px; background: rgb(20 20 19 / .06); overflow: hidden; }
 .ag-hrow__fill { display: flex; min-width: 6px; height: 100%; }

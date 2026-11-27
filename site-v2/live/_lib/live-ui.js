@@ -415,6 +415,7 @@
   const actionKeys = new Map(), actionSets = new Map();
   let nextActionKey = 0;
   let viewer = 'public';
+  const you = kind => kind === 'owner' ? '你' : '本人';
   const privateField = v => !!(v?.hidden_block || v?.hidden || v?.visibility === 'owner' || v?.public === 'owner');
   const pendingField = v => v?.visibility === 'pending' || v?.rewrite === 'pending';
   function explanationButton(type, label, subject, explanation, group = false) {
@@ -773,8 +774,12 @@
   // 用全站共用的通知浮窗（trust-modal.js 的 SiteNotice），列表还是 #item-action-receipts，等你的事页在它上面听 item-write。
   const itemTextUnits = html => html
     .replace(/<span class="live-unit">((?:\d{4}-)?\d{1,2}-\d{2})<\/span>( +)<span class="live-unit">(\d{1,2}:\d{2}(?::\d{2})?)<\/span>/g, '$1$2$3')
-    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
+    .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|上午|本人选|核对|问情况|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
       (value, tag) => tag || `<span class="live-unit">${value}</span>`);
+  // 固定模板按受众取字，正文和引用走回包字段。
+  const addressed = (text, kind = viewer) => kind === 'owner' ? text : text.replaceAll('你', '本人');
+  const publicationNote = (name, meta) => meta?.publicationRevoked ? `${name}正在更新访客版，稍后自动补上。` : '';
+  const itemTitleField = item => item.text && typeof item.text === 'object' ? { ...item, ...item.text } : item.text == null && item.title != null ? { ...item, text: item.title } : item;
   function itemReceipt(head = '正在保存…', detail = '', trigger = null) {
     const lane = document.getElementById('item-action-receipts');
     const ownSpace = lane && document.body.matches('.page--items, .page--live:has(#needs)');
@@ -1764,16 +1769,25 @@
     // 一个数
     value: () => blur('正在读'),
   };
-  function reading(el, { ghost: inner = ghost.card(), name = '', inline = false, slow = true } = {}) {
+  function reading(el, { ghost: inner = ghost.card(), name = '', publicName = '', inline = false, slow = true } = {}) {
     const fog = document.createElement(inline ? 'span' : 'div');
     fog.className = 'fog';
     const card = el.closest('.card');
-    let stage = '';
+    let stage = '', shownName = '';
+    const displayName = state => {
+      if (!publicName) return name;
+      const kind = state?.viewer?.kind || root.dataset.liveViewer;
+      if (kind) return kind === 'public' ? publicName : name;
+      if (window.LiveView?.isPublic?.()) return publicName;
+      try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || '') ? name : publicName; }
+      catch { return publicName; }
+    };
     // 所有在读的块同一个节拍：动画都从页面打开那一刻算起，谁先谁后进雾都对得上
     const sync = (node) => node?.style.setProperty('--fog-sync', `${-Math.round(performance.now())}ms`);
-    function show(next, say) {
-      if (next === stage) return;
+    function show(next, say, label = displayName()) {
+      if (next === stage && label === shownName) return;
       const was = stage;
+      shownName = label;
       stage = next;
       if (!fog.isConnected) {
         // 雾放在不靠数的小标题（data-keep）后面
@@ -1781,10 +1795,10 @@
         if (keep) keep.after(fog); else el.prepend(fog);
       }
       if (next === 'unavailable') {
-        fog.innerHTML = `<p class="fog__say"><span class="lamp" aria-hidden="true"></span>${say || esc(name || '这块') + '暂时读不到'}</p>`; fog.removeAttribute('aria-hidden');
+        fog.innerHTML = `<p class="fog__say"><span class="lamp" aria-hidden="true"></span>${say || esc(label || '这块') + '暂时读不到'}</p>`; fog.removeAttribute('aria-hidden');
       } else if (next === 'gone') {
         // 存不下：一句灰色、静止的话；卡上留名字和一颗灭着的灯
-        fog.innerHTML = (name ? `<p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">${esc(name)}</span></p>` : '') +
+        fog.innerHTML = (label ? `<p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">${esc(label)}</span></p>` : '') +
           `<p class="fog__say">${/(?:^|[?&])id(?:=|&|$)/.test(typeof location === 'object' ? location.search : '') ? '电脑连不上，这一条现在看不了' : '这块没存下来，连上后补上。'}</p>`;
         fog.removeAttribute('aria-hidden');
       } else if (!was || was === 'gone' || was === 'unavailable') {
@@ -1832,8 +1846,9 @@
       set(state) {
         const next = state?.offline && state.data == null ? 'gone' : state?.phase || 'idle';
         if (next === 'ready') return;
-        if (next === 'none') { show('unavailable', state.meta?.status === 403 ? privacyLock(name || '这部分内容') : ''); return; }
-        show(next, state.say);
+        const label = displayName(state);
+        if (next === 'none') { show('unavailable', state.meta?.status === 403 ? privacyLock(label || '这部分内容') : '', label); return; }
+        show(next, state.say, label);
       },
       done,
       get phase() { return el.dataset.read || 'ready'; },
@@ -1887,5 +1902,5 @@
       unavailable_since: row.unavailable_since || expired,
       last_online: row.last_online || (row.state === 'online' && age >= 0 ? row.observed_at : null) };
   }
-  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

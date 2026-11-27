@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>等你的事 · 实况</title>
+<meta charset="utf-8"><meta name="viewport" content="width=1440"><title>等本人的事 · 实况</title>
 <link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
 <link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-board.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
 <style>
@@ -92,6 +92,7 @@
 .page--items .lbp-title h1::before { height: 30px; }
 .page--items .lbp-side > .part::before { height: 15px; }
 .page--items .lb-card__title::before { display: inline-block; height: 21px; margin-right: 10px; vertical-align: -4px; }
+.page--items .lb-card__title:empty::before { content: none; }
 .page--items .lbp-stat b.is-some, .page--items .lb-count__n { color: #00A650; }
 .page--items .lb-item .btn[data-slot="ask"] { border-color: #00A650; background: #fff; color: #00A650; font-weight: 600; }
 .page--items .lb-item .btn[data-slot="ask"]:is(:hover, :focus-visible) { border-color: #008a43; background: rgb(0 166 80 / .07); color: #008a43; }
@@ -147,7 +148,7 @@ body:has(.items-selection.is-open) .stage { padding-bottom:110px; }
 </style></head><body class="page page--live page--l2 page--board page--items"><header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
 <main class="stage" id="stage"><div class="field" aria-hidden="true"></div><a class="back" href="/live/#needs" data-back data-mo-rise>实况</a><ul class="notices" id="notices" aria-live="polite"></ul>
 <ul class="site-notices" id="item-action-receipts"></ul>
-<div class="lbp-top"><div class="lbp-title" data-mo-rise><img src="/live/img/tasks-icon.webp" alt="" width="360" height="360"><div><h1>等你的事</h1><p><span>需要你查看、确认</span><span>或处理的事项，</span><br>分组呈现，快速跟进。</p></div></div><article class="card card--hero" id="hero" data-pic="right" data-mo-rise>
+<div class="lbp-top"><div class="lbp-title" data-mo-rise><img src="/live/img/tasks-icon.webp" alt="" width="360" height="360"><div><h1>等本人的事</h1><p><span>需要本人查看、确认</span><span>或处理的事项，</span><br>分组呈现，快速跟进。</p></div></div><article class="card card--hero" id="hero" data-pic="right" data-mo-rise>
 
 <div class="card__glow" aria-hidden="true"></div><img class="card__tint" src="/live/img/needs.webp" alt="" aria-hidden="true">
 <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/needs.webp" width="1000" height="1000" alt=""></span>

@@ -30,7 +30,8 @@
     if (!items.length) return '';
     const rows = items.map(x => {
       const status = (typeof x.text === 'string' && x.text.trim()) || ({ authenticated: '已登录', expired: '登录过期', timeout: '检查超时', unknown: '状态未知' })[x.status] || '没有记录';
-      return `<li class="row__sub"><b>${field(x.name, '网站名称', viewer)}</b> · <span>${E(status)}</span> · <span>${E(stamp(x.checked_at))}</span></li>`;
+      const shown = x.id === 'muse' ? E(status).replace(/状态$/, '<span class="computer-login-term">状态</span>') : E(status);
+      return `<li class="row__sub"><b>${field(x.name, '网站名称', viewer)}</b> · <span>${shown}</span> · <span>${E(stamp(x.checked_at))}</span></li>`;
     });
     return `<p class="grp-split__k">电脑登录</p><ul class="rows computer-logins">${rows.join('')}</ul>`;
   }
@@ -63,17 +64,22 @@
     const projectStart = !stamp(s.started_at) && stamp(lastAt);
     const rows = [['最近接入', render(stamp(s.started_at) || projectStart) +
       (projectStart && (!projectPicture || sourcedAt(last) !== sourcedAt(picture)) ? from(last) : '')],
-      ['时长', n('duration_seconds', '秒')], ['客户端分辨率', hasScreenData(s.resolution) && screenReading(s.resolution, render)],
-      ['客户端帧率', n('fps', '帧/秒')], ['丢帧', n('dropped_frames', '帧')], ['延迟', n('latency_ms', 'ms')]];
-    const hasClientReadings = rows.slice(1).some(([, value]) => value);
+      ['时长', n('duration_seconds', '秒')]];
     if (projectPicture || hasScreenData(s.capture)) {
-      rows.push(['台式机捕获设置', screenReading(projectPicture ? picture.value : s.capture, render, true) + (projectPicture ? from(picture) : '')]);
+      rows.push(['台式机捕获设置', screenReading(projectPicture ? picture.value : s.capture, render, true)
+        + (projectPicture ? from(picture) : '') + ' · 这是台式机发出去的设置，笔记本上实际看到的画质看下面']);
     }
+    const client = [['客户端分辨率', hasScreenData(s.resolution) && screenReading(s.resolution, render)],
+      ['客户端帧率', n('fps', '帧/秒')], ['丢帧', n('dropped_frames', '帧')], ['延迟', n('latency_ms', 'ms')]];
+    rows.push(...client);
+    const noClientRecord = !client.some(([, value]) => value)
+      && ['resolution', 'fps', 'dropped_frames', 'latency_ms'].every(key => s.missing?.[key] === '没有记录');
     const known = rows.filter(([, v]) => v), note = [
-      hasClientReadings && !projectPicture && !projectStart && s.gap && field(s.gap, '串流记录的缺口', viewer),
+      noClientRecord && '笔记本上实际看到的分辨率、帧率、丢帧和延迟，这一场还没读到（没有记录）',
+      s.gap && field(s.gap, '串流记录的缺口', viewer),
       stamp(s.source_at ?? s.at) && `${U.isStale(s) ? '最后读到' : '读数时间'} ${render(stamp(s.source_at ?? s.at))}`,
     ].filter(Boolean).join(' · ');
-    if (!known.length) return '';
+    if (!known.length && !note) return '';
     return `<details class="vz-more"><summary class="more">最近一次串流</summary>${known.map(([k, v]) => `<p class="row__sub">${E(k)} · ${v}</p>`).join('')}${note ? `<p class="row__sub">${note}</p>` : ''}</details>`;
   }
   window.ComputerDraw10 = { network: (d, viewer) => official(d, viewer) + logins(d, viewer), official, logins, streaming, screenReading };

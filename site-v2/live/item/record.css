@@ -9,6 +9,8 @@
 .issue-event-extra a { color: #00A650; }
 .dossier-card--state #facts:has(.issue-reading) .rec-fact { grid-template-columns: 116px minmax(0, 1fr); }
 .rec-tail { white-space: nowrap; }
+.dossier__lead > .item-read-note { color: inherit; }
+.dossier .run__none.item-read-note { color: #6f6e68; }
 .page--l3[data-record="issue"] [data-part="head"] { padding-left: 0; }
 [data-record="item"] .dossier__hero:has(.head__rewrite) { container-type: inline-size; }
 [data-record="item"] .dossier__hero .card__head:has(> .head__rewrite) { max-inline-size: max(7em, calc(100cqw - clamp(340px, 40cqw, 540px) - 52px)); }

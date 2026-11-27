@@ -147,6 +147,14 @@
   // 和别的卡一样只写一句“××暂时读不到”（电脑连不上时写“这块没存下来”），不画一张没有数的卡
   // 卡名和有数时的标题一样（账本卡叫“AI 自动任务账本”）；电脑连不上时这句不再带卡名，标题已经写了
   const MISSING = { agents: '智能体', automation: '自动任务', ledger: 'AI 自动任务账本' };
+  const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
+  // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
+  function publicHtml(html, viewer) {
+    if (viewer === 'owner' || !html.includes('你')) return html;
+    return html.replace(/<[^>]+>|“(?:[^<”]|<\/?(?:span|a|b|strong|em|i|wbr|time)\b[^>]*>)*”|你(?!(?:<[^>]+>)*们)/g, part =>
+      part === '你' ? '本人' : part.replace(/<[^>]+>/g, tag => tag.replace(/(\s[\w:.-]+=)(["'])([\s\S]*?)\2/g,
+        (attribute, name, quote, value) => name.trim() === 'title=' ? name + quote + publicText(value) + quote : attribute)));
+  }
   function render(id, data, options) {
     const { viewer, route, href, offline, now } = options;
     if (data == null && MISSING[id]) {
@@ -154,8 +162,6 @@
       return { tone: 'off', head: cardTitle(name, href, 'off', '') + `<br><span class="row__sub">${esc(say)}</span>`, body: '' };
     }
     const own = viewer === 'owner' ? '你' : '本人', field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
-    // 自动任务卡、账本卡：访客版称呼写“本人”，后台写进句子里的“你”也换（“你们”不动）；本人版原样
-    const toPublic = html => viewer === 'owner' ? html : String(html).replace(/你(?!们)/g, '本人');
     const link = (path, text) => typeof path === 'string' && path.startsWith('/live/')
       ? `<a href="${esc(route(path))}">${text}</a>` : text;
     // 能点过去的绿字（“第 2 轮 ›”“已交自动修理 ›”）；地址不在站内就只写字、不带箭头
@@ -201,8 +207,8 @@
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
       const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 <span class="live-unit">${num(w.repaired)} 件</span>&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
-      return { tone, head, body: toPublic(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
-        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`) };
+      return { tone, head, body: publicHtml(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
+        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
     }
     if (id === 'agents') {
       const v = agentsView(d, { viewer, now });
@@ -271,7 +277,7 @@
       + `<small class="b6-muted">· ${c.late(r) ? `到点没看，原定 ${esc(clock(r.next_at))}` : `${esc(clock(r.next_at))} 看`}</small></div>`;
     const list = c.today.length ? c.today.slice(0, 3).map(dueItem).join('')
       : `<p class="b6-muted b6-lg-none">今天没有要看的${c.after ? ` · ${go(c.after.href, `下一件 ${esc(time(c.after.next_at))}`)}` : ''}</p>`;
-    return { tone, head, body: toPublic(`${top}${bar}<div class="b6-lg-list">${list}</div>${foot}`) };
+    return { tone, head, body: publicHtml(`${top}${bar}<div class="b6-lg-list">${list}</div>${foot}`, viewer) };
   }
   // AI 对话卡和 AI 对话页顶上那一行“后台另有 N 个在跑 ›”：数自动任务这会儿在跑的轮数（AI 对话不列后台的对话，本人定的）。
   function backgroundRunning(automation) {
