@@ -12,6 +12,11 @@
 .au-win .tp-big small { font-size: 19px; }
 .au-win__tail { margin: 6px 0 0; font-size: 14px; color: #57564f; }
 .au-win .tp-big.tp-fog { font-size: 20px; }
+@media (max-width: 1150px) {
+  .au-wins__grid > .au-win { padding-inline: 8px; }
+  .au-win .tp-big:not(.tp-fog) { font-size: clamp(24px, 3.5vw, 40px); }
+  .au-win .tp-big small { font-size: 14px; }
+}
 .au-use .tp-panel__head { margin-bottom: 4px; }
 .au-use__num { margin: 0 0 6px; }
 .au-use__num .tp-mid { font-size: 40px; }
