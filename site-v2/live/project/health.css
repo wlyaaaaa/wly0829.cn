@@ -16,6 +16,10 @@
   .page--project:has(.pj-board--health) .pj-strip { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .page--project:has(.pj-board--health) .pj-strip > .pj-cell:first-child { grid-column: span 2; }
   .page--project:has(.pj-board--health) .pj-strip > .pj-cell:nth-child(5)::before { content: none; }
+  /* 8 格时“近 30 天提交”（带小折线）也占两格，两行各五格排满；它在前三格时第二行从第 4 格起 */
+  .page--project:has(.pj-board--health) .pj-strip:has(> .pj-cell:nth-child(8):last-child) > .pj-cell--spark { grid-column: span 2; }
+  .page--project:has(.pj-board--health) .pj-strip:has(> .pj-cell:nth-child(8):last-child):has(> .pj-cell--spark:nth-child(-n+3)) > .pj-cell:nth-child(5)::before { content: ""; }
+  .page--project:has(.pj-board--health) .pj-strip:has(> .pj-cell:nth-child(8):last-child):has(> .pj-cell--spark:nth-child(-n+3)) > .pj-cell:nth-child(4)::before { content: none; }
 }
 
 /* ============ 通栏：手环记录齐不齐 ============ */
