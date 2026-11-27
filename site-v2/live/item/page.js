@@ -22,7 +22,7 @@
   const outcomeLabel = key => key === 'to_owner' ? addressed('转给你', viewer) : OUT[key];
   const STATE = { working: '在做', waiting: '在等', deferred: '放一放', wont_fix: '不改' };
   const EVENT = { Add: '登记', Reopen: '重新打开', Review: '核对', Close: '关闭' };
-  const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
+  const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '你已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   const KIND = { choose: '要你选', do: '要你做', later: '你放着', know: '要你知道' };
   let viewer = 'public', record = null, at = null, historyRows = [], next = null, coverage = null, first = true, searching = false, revision = 0;
   const pages = new Map();
@@ -249,7 +249,9 @@
       const who = src && rawActor(e) ? '' : actor;
       return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"${why ? ` title="${esc(why)}"` : ''}><b>${e.run ? runLink(e.run) : say(historyLabel)}</b>${who}${src}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
     });
-    U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: `<p class="run__none">${d.archiveWithoutHistory ? ARCHIVE_MISSING : U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText("经过")}</p>` }], { animate: !first });
+    const noHistory = d.archiveWithoutHistory ? `<p class="run__none item-read-note">${ARCHIVE_MISSING}</p>`
+      : `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText('经过')}</p>`;
+    U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: noHistory }], { animate: !first });
     U.list($('events-rest'), events.slice(firstRun), { animate: !first });
     if (dossier) foldedRuns = Math.max(0, events.length - firstRun);
     more.hidden = events.length <= firstRun; $('history-box').classList.toggle('has-more', events.length > firstRun); moreLabel();
@@ -276,14 +278,15 @@
   }
   function empty(message, denied = false, title = '') {
     hero.classList.toggle('is-unavailable', !U.offline?.() && /暂时读不到$/.test(message));
+    const noteClass = title ? 'rec-none item-read-note' : 'rec-none';
     // 档案卡的“现在怎样”在下面那栏里，整栏收起时这句话改写在页头正文的位置（part lead）。
-    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="rec-none">${esc(issue ? '这块没存下来，连上后补上。' : message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
+    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="${noteClass}">${esc(issue ? '这块没存下来，连上后补上。' : message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
     U.html(part('head'), denied ? marker({ visibility: 'owner' }, viewer, issue ? '这条账本的内容' : '这件事的内容') : U.head(message, { lamp: !issue }));
     for (const k of ['meta', 'say', 'acts', 'lead', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; }
     if (title) {
       U.html(part('head'), U.head(title, { lamp: false }));
       const box = part('lead') || part('say');
-      U.html(box, `<span class="rec-none">${esc(message)}</span>`);
+      U.html(box, `<span class="${noteClass}">${esc(message)}</span>`);
       box.hidden = false;
     }
     $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); L.lightUp([hero]);
@@ -369,12 +372,13 @@
   const ledgerOnly = e => { const t = String((e.text && typeof e.text === 'object' ? e.text.text : e.text) ?? '').trim(); return !e.outcome && (LEDGER_ONLY.test(t) || !t && ['Add', 'Review'].includes(e.event)); };
   function itemHistory(d) {
     const born = d.episode_at || d.born, closed = d.closed;
+    const inRound = at => !Number.isFinite(closedAt) || Date.parse(at) <= closedAt;
     const sameAt = (a, b) => a === b || Date.parse(a) === Date.parse(b);
     const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: e.occurred_at || e.at,
       label: e.label || EVENT[e.event] || (/^(登记事项|重新打开事项|核对事项|关闭事项)$/u.test(e.text) ? e.text : '') }))
-      .filter(e => !ledgerOnly(e));
+      .filter(e => !ledgerOnly(e) && inRound(e.at));
     const start = e => [e.label, e.text].some(t => /^(开始|本轮开始|登记|生成待办|重新打开|事项已加入等你的清单)/u.test(t));
-    if (born && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: d.episode_at && (rows.length || closed) ? '本轮开始' : '开始' });
+    if (born && inRound(born) && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: d.episode_at && (rows.length || closed) ? '本轮开始' : '开始' });
     if (closed && !rows.some(e => sameAt(e.at, closed.at) && (e.kind && e.kind === closed.kind || e.event === 'Close' || /关闭|办完|了结|不办/u.test(e.label) || e.text && e.text === closed.text))) {
       rows.push({ at: closed.at, text: closed.text, label: addressed(CLOSED[closed.kind] || '已了结', viewer) });
     }

@@ -53,7 +53,8 @@
   const board = window.LiveBoard.create($('groups'), { columns: [], cols: 2 });
   document.querySelector('.lbp-tools__end').insertAdjacentHTML('afterbegin', '<button id="open-next" class="more" type="button" hidden></button>');
   const openMore = $('open-next'); openMore.addEventListener('click', () => readOpen());
-  const cards = new Map(), collections = new Map(), initialReads = new Set(); let query = '', balanceKey = '';
+  const cards = new Map(), collections = new Map();
+  let query = '', balanceKey = '', settledView = '', balancePending = false;
   const hiddenWhileWriting = new Map();
   const hiddenByWrite = item => {
     const entry = hiddenWhileWriting.get(item.id);
@@ -133,7 +134,8 @@
   // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做（要拍板的转成要你选），只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
   const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到时间转成要你做或要你选，并在手机上提醒你一次；只写了日期的按当天上午 10 点算，没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”或事情本身了结才下去，不会过几天自己消失（以前登记时写了期限的，照期限）。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
-  const hintHtml = (kind, as = viewer) => U.itemTextUnits(esc(addressed(hints[kind], as)));
+  const hintUnits = /要(?:你|本人)[做选]|提醒(?:你|本人)|到时间|转成|手机上|一次|只写了|没日期的|日期|当天|上午 10 点|一直放着|我知道了|只需|了解|进展|通知|事情本身|了结|下去的事项。|下去|过几天|自己|消失|以前|登记|期限|本人/g;
+  const hintHtml = (kind, as = viewer) => esc(addressed(hints[kind], as)).replace(hintUnits, '<span class="live-unit">$&</span>');
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
     const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'green'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
     c.title.dataset.keep = ''; c.title.textContent = kind === 'reports' ? '' : addressed(labels[kind], pairedHere ? 'owner' : 'public');
@@ -146,9 +148,23 @@
   const closedCard = cards.get('closed');
   closedCard.more.setAttribute('aria-controls', 'closed-box');
   closedCard.more.after(closedCard.next);
+  const boardView = () => [viewer, innerWidth, $('kind-pick').value, $('state-pick').value, query].join('|');
+  function queueBalance() {
+    if (balancePending) return;
+    balancePending = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      balancePending = false;
+      balanceBoard(true);
+      if (collections.get('do')?.items && collections.get('closed')?.items && reportsData?.items) settledView = boardView();
+    }));
+  }
   function balanceBoard(force = false) {
+    const view = boardView();
+    // 暂缺的一块变矮时，已经摆好的卡继续待在原来的列。
+    if (settledView === view && ([...states.values()].some(s => s.offline || s.meta.publicationRevoked || s.phase === 'none')
+        || openRows?.meta.status >= 400)) return;
     const shown = [...cards].filter(([kind,c]) => kind !== 'closed' && !c.el.hidden), picked = $('kind-pick').value, closed = cards.get('closed').el;
-    const key = shown.map(([kind]) => kind).join() + picked + query + closed.hidden;
+    const key = shown.map(([kind]) => kind).join() + view + closed.hidden;
     if (!force && key === balanceKey) return; balanceKey = key;
     const heights = shown.map(([,c]) => c.el.getBoundingClientRect().height + 22); let best = 1, delta = Infinity;
     for (let mask = 1; mask < (1 << shown.length) - 1; mask++) {
@@ -524,10 +540,14 @@
   function watchOpen(render) {
     function draw(firstOpen) {
       const s = states.get('home');
-      if (lastHome?.[1]?.headerMissing) { U.anchor(() => missingHome(lastHome[1].blockMissing, lastHome[1])); return; }
+      if (lastHome?.[1]?.headerMissing) {
+        U.anchor(() => missingHome(lastHome[1].blockMissing, lastHome[1]));
+        queueBalance();
+        return;
+      }
       if (s?.data && s.viewer?.kind === openRows.kind) U.anchor(() => {
         render(s.data, { ...s.meta, now: s.now, firstOpen });
-        requestAnimationFrame(() => requestAnimationFrame(() => balanceBoard(true)));
+        queueBalance();
       });
     }
     readOpen = () => {
@@ -589,7 +609,10 @@
     subscribe({ phase(s) { if (s.data == null && !s.meta.publicationRevoked) readers[resource].forEach(r => r.set(s)); }, data(d, meta) {
       viewer = meta.viewer?.kind || 'public';
       if (resource === 'home' && d?.needs && !Object.hasOwn(d.needs, 'items') && !openStarted) { openStarted = true; watchOpen(render); }
-      const draw = () => d?.q === 'warming' ? missing('正在准备') : d ? render(d, meta) : unavailable(meta); if (first) draw(); else U.anchor(draw); if (d) { readers[resource].forEach(r => r.done()); first = false; if (!initialReads.has(resource)) { initialReads.add(resource); if (initialReads.size === 3) requestAnimationFrame(() => requestAnimationFrame(() => balanceBoard(true))); } } L.lightUp([$('hero'), $('groups'), $('closed'), $('reports'), $('notices')]); }, link(s) {
+      const draw = () => d?.q === 'warming' ? missing('正在准备') : d ? render(d, meta) : unavailable(meta);
+      if (first) draw(); else U.anchor(draw);
+      if (d) { readers[resource].forEach(r => r.done()); first = false; queueBalance(); }
+      L.lightUp([$('hero'), $('groups'), $('closed'), $('reports'), $('notices')]); }, link(s) {
       states.set(resource, s);
       if (resource === 'home' && !s.meta.publicationRevoked) bar?.set(s);
       if (resource === 'home' && s.data && s.now && s.now !== at) render(s.data, { ...s.meta, now: s.now });
@@ -688,7 +711,10 @@
       const extra = sameNote || statedTime === when || statedTime === time ? '' : `（${note}）`;
       notes.push(`${partial ? '已读的事项中，' : '其中 '}${group.length} 件沿用 ${when} 的记录${extra}`);
     }
-    if (!meta.headerMissing) U.html($('note'), notes.filter(Boolean).join(' · ').replace(/ {2,}/g, ' '));
+    if (!meta.headerMissing) {
+      if (notes[1]) notes[1] = U.nowrap(notes[1]);
+      U.html($('note'), notes.filter(Boolean).join(' · ').replace(/ {2,}/g, ' '));
+    }
     if (!meta.headerMissing) U.html($('stats'), Object.entries(KIND).map(([key, label]) => {
       const value = counts?.[key], bounded = lower(key);
       const shown = value == null || bounded && value === 0 ? '—' : `${bounded ? '至少 ' : ''}${esc(value)}`;
@@ -741,7 +767,7 @@
     renderSide();
     $('closed-next').hidden = !next;
     U.html($('closed-next'), '再往前读 ›');
-    requestAnimationFrame(() => balanceBoard(true));   // 条数变了，重新看放短栏还是两栏下面
+    queueBalance();   // 条数变了，重新看放短栏还是两栏下面
     if (restored) followLanded();
   }
   // 先摆上的那几件变了（办成、换成后台那条、到点不摆）时重画退出列表；退出列表还没读到时不先画
