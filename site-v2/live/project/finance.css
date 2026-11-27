@@ -101,3 +101,10 @@ button.fin-asof:hover .fin-tip, button.fin-asof:focus-visible .fin-tip, button.f
 .fin-long__item b { font-weight: 600; color: var(--ink); }
 .fin-long__item small { margin-left: 6px; font-size: 12px; color: #8f8d86; white-space: nowrap; }
 .fin-check { margin: 10px 0 0; font-size: 12.5px; line-height: 19px; color: #8f8d86; }
+
+/* 窗口窄（≤1100 像素）：柱子图占满整行、当月明细排到图下面，月份字不挤；下面两张卡上下排、“最近改动”整行宽，句子不折出一两个字的尾巴。宽的时候不变 */
+@media (max-width: 1100px) {
+  .fin-body { grid-template-columns: minmax(0, 1fr); }
+  .page--project #pj-board.pj-board--finance { grid-template-columns: minmax(0, 1fr); gap: var(--pj-gap); }
+  .pj-board--finance .pj-card[data-card="changes"] .pj-tl-copy { text-wrap: pretty; }
+}

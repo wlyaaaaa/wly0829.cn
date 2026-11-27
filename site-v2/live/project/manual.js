@@ -11,6 +11,7 @@
   const HIDDEN = new Set(['group-0', 'group-1', 'group-2', 'group-3', 'group-5']);   // 访客看不到认识原文的五类（资料速查访客能看原文）
   const TITLED = new Set(['group-0', 'group-4']);   // 最近改过的几张里，访客也看得到标题的两类
   const COLUMNS = { 'manual-groups': 0, changes: 0, 'manual-recent': 1, 'manual-materials': 1 };
+  const NARROW = '(max-width: 1100px)';   // 窗口窄时四张卡排成一栏（和 manual.css 的 @media 同一个宽度）
   const RULES = '/rules/', FINANCE = '/live/project/?id=personal-finance';
   // 后台两项口径只给了一个内部代号，换成人话（和 page.js 的 SCOPE_WORDS 同一句）
   const SCOPE_WORDS = { 现行主题卡: '只算现在在用的认识，退役的旧认识不算', 现有记录: '按库里现在留着的记录算' };
@@ -166,7 +167,7 @@
   function align() {
     const a = document.querySelector('.pj-card[data-card="manual-groups"]'), b = document.querySelector('.pj-card[data-card="manual-recent"]');
     for (const c of [a, b]) if (c) c.style.minHeight = '';
-    if (!a || !b || a.parentNode === b.parentNode) return;
+    if (!a || !b || a.parentNode === b.parentNode || window.matchMedia?.(NARROW).matches) return;
     const h = Math.max(a.offsetHeight, b.offsetHeight);
     a.style.minHeight = b.style.minHeight = `${h}px`;
   }
@@ -207,7 +208,8 @@
     return out;
   }
   // 卡放哪一栏：照图固定；出现别的卡（读不到、另有提示）时交回 page.js 按高度摆
-  const columns = keys => keys.every(k => k in COLUMNS) ? keys.map(k => COLUMNS[k]) : null;
+  // 窗口窄（≤1100 像素）时四张卡排成一栏，顺序见 manual.css；宽的时候照图两栏
+  const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.(NARROW).matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
 
   window.ProjectPages = Object.assign(window.ProjectPages || {}, { 'daily-preferences': { adapt, strip, board, columns } });
 })();

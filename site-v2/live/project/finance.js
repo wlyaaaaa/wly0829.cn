@@ -236,6 +236,7 @@
   });
 
   function board(d, viewer, graphBlock, boardEl) {
+    boardEl?.classList.add('pj-board--finance');
     spending(d, viewer, boardEl);
     const b = graphBlock('finance-balance', '钱现在大概多少');
     b.group = 'finance-balance';
