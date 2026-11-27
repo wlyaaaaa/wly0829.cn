@@ -60,7 +60,7 @@
   };
   const enc = encodeURIComponent;
   const missingText = (state, what = '项目') => state?.offline || U.offline?.() ? '这块没存下来，连上后补上。'
-    : [404, 503].includes(state?.meta?.status) ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
+    : [404, 503].includes(state?.meta?.status) || !(state?.meta?.status > 0) || state.meta.status >= 500 ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
 
   const hero = $('pj-hero');
   let coverSlug;
@@ -158,7 +158,7 @@
     if (reading) return { html: `<span class="pj-text">${U.fieldHtml(reading, { name: '项目读数', kind: projectViewer })}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer }))}</span>`, plain: text, long: [...text].length > 12 }; }
+    if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
       const scalar = m.value.text ?? m.value.count ?? m.value.value;
@@ -241,10 +241,11 @@
   }
   // 后台在读数名上标了 visitor_labels.label 的（访客看到的名字换过说法，或看不到），名字旁挂现有的小签；名字能点时挂在链接外面
   const labelTag = m => U.visitorLabel(m, 'label', '这一项的名称', projectViewer);
-  const metricArrow = '<span class="more__chev">›</span>';
+  // 箭头前加不断行的连接符：读数名一长，“›”不单独掉到下一行，跟最后一个词一起走（Chrome 允许“›”和前面的汉字断开）
+  const metricArrow = '&#8288;<span class="more__chev">›</span>';
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? '&nbsp;' + metricArrow : '');
     const tag = labelTag(m), label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${keepWords(U.fieldHtml(m.label, { name: '读数', place: 'label' }))}${href ? '' : tag}${cadence}</span>`;
     return {
       key: m.id, extra, labelText,
@@ -254,7 +255,7 @@
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? '&nbsp;' + metricArrow : '');
     const label = keepWords(U.fieldHtml(m.label, { name: '读数', place: 'label' })) + cadence, tag = labelTag(m);
     return {
       key: m.id, extra, labelText,
@@ -383,7 +384,10 @@
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
   // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
-  const glueDates = t => t.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-])/g, '<span class="pj-no-split">$&</span>');
+  // 色号“#00A650”整个不断（只包一层不折行的字，不做成整块：后面的“，”不会被挤到下一行打头）
+  const glueDates = t => t.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-])/g, '<span class="pj-no-split">$&</span>').replace(/(?<![&\w])#[0-9A-Fa-f]{3,8}\b/g, '<span class="pj-keep">$&</span>');
+  // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
+  const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
   function keepWords(html) {
     if (!html) return html;
     return String(html).split(/(<[^>]*>)/).map((t, i) => {
@@ -391,7 +395,7 @@
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
       if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
       const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
+      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
       const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
@@ -902,7 +906,7 @@
         // 规则仓的“后台提醒程序”整块在智能体页的钩子表里，这里只留一行链过去
         if (id === 'agents' && s.id === 'hooks') {
           const b = graphBlock(s.id, ''); b.group = s.id;
-          U.html(b.head, '<a class="pj-moved-head" href="/live/agents/#hooks">后台提醒程序跑多久、有没有出错，都在智能体页的钩子表 <span class="more__chev">›</span></a>');
+          U.html(b.head, `<a class="pj-moved-head" href="/live/agents/#hooks">${keepWords('后台提醒程序跑多久、有没有出错，都在智能体页的钩子表')}&nbsp;<span class="more__chev">›</span></a>`);
           U.html(b.viz, ''); into.push(b);
           continue;
         }
@@ -1074,6 +1078,13 @@
     if (opened && !opened._stepBound) { opened._stepBound = true; opened.addEventListener('toggle', () => { if (!opened.open) { host._ruleShown = 0; drawRuleEvents(host); } }); }
     drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
+    if (axis && !axis._whole) {
+      axis._whole = new ResizeObserver(() => {
+        const edge = axis.getBoundingClientRect().right, off = [...axis.children].map(li => li.getBoundingClientRect().right - edge).reduce((a, b) => Math.abs(b) < Math.abs(a) ? b : a, Infinity);
+        if (Number.isFinite(off) && Math.abs(off) > 1) axis.scrollLeft += off;
+      });
+      axis._whole.observe(axis);
+    }
     if (axis && left < 0) axis.scrollLeft = left;
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
       const current = axis.querySelector('.is-now');
@@ -1112,7 +1123,7 @@
     const c = d.counts || {};
     const out = [];
     const partial = key => c.q === 'partial' && lower(c, key);
-    const cell = (label, n, unit, href, title, atLeast) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell" title="${esc(title)}"><span class="pj-cell__k">${esc(label)}${href ? '<span class="more__chev">›</span>' : ''}</span><span class="pj-cell__v">${atLeast ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(n)}</b><small>${unit}</small></span></${href ? 'a' : 'div'}>`;
+    const cell = (label, n, unit, href, title, atLeast) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell" title="${esc(title)}"><span class="pj-cell__k">${esc(label)}${href ? metricArrow : ''}</span><span class="pj-cell__v">${atLeast ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(n)}</b><small>${unit}</small></span></${href ? 'a' : 'div'}>`;
     const go = (n, label, unit, href, key) => { if (n || (n === 0 && partial(key))) out.push(cell(label, n, unit, href ? route(href) : '', `${label} ${partial(key) ? '至少 ' : ''}${n} ${unit}`, partial(key))); };
     go(c.tasks, '名下计划任务', '项', d.tasks_href || `/live/tasks/?project=${enc(d.id)}`, 'tasks');
     go(c.skills, '名下技能', '个', d.skills_href || ((d.sections || []).some((s) => s.id === 'skills') ? '#skills' : ''), 'skills');
@@ -1177,8 +1188,9 @@
     // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
     // 写实际量出来的时刻（size.at）；夜里核对的时刻（source_at）只在没有 size.at 时顶上
     const sizeAt = size && (size.at || size.source_at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
-    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null || Number.isFinite(size.code_chars))) tail.push(cell('规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
-      { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}`, sub: old ? '<span class="pj-old">旧了</span>' : '' }));
+    // “旧了”签挂在格名“规模 截止”旁边（设计图在右上角），不压在日期下面
+    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null || Number.isFinite(size.code_chars))) tail.push(cell(old ? '规模 截止<span class="pj-old">旧了</span>' : '规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
+      { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}` }));
     return { head, tail };
   }
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
@@ -1274,7 +1286,7 @@
     const repo = !d.size && (d.sections || []).find(sec => sec?.id === 'repository')?.metrics || [], metric = key => repo.find(m => m?.id === key && Number.isFinite(m.value));
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
-    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(stamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
+    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
     // 提交时刻页头那行已写，这里只写这次改了什么

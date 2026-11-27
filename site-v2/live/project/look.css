@@ -101,6 +101,7 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-hero-fold .pj-facts dt { padding-right: 16px; white-space: nowrap; }
 .pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
 .pj-no-split { display: inline-block; white-space: nowrap; }
+.pj-keep { white-space: nowrap; }   /* 色号这类只要自己不断开、前后照常折的 */
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
@@ -142,6 +143,7 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 /* 最后一格“规模 截止”：时刻照正文小字写，窄了只在日期和钟点之间折行；数旧了挂一个“旧了” */
 .pj-cell__v.is-scale { margin-top: 5px; font-size: 14px; line-height: 22px; color: #5d5c56; white-space: normal; }
 .pj-old { display: inline-block; padding: 0 8px; border-radius: 8px; background: #fbe3b5; color: #8a5a00; font-size: 12px; line-height: 18px; font-weight: 700; }
+.pj-cell__k .pj-old { margin-left: 6px; vertical-align: 1px; }   /* “规模 截止”旁边那枚 */
 .pj-change-field { white-space: nowrap; }
 .pj-spark { flex: none; width: 76px; height: 26px; overflow: visible; }
 .pj-spark polyline { fill: none; stroke: var(--pj-spark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
@@ -161,7 +163,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 /* 整页的字窄了折行时不让最后一行只剩一两个字（产物说明、卡底小字、读数名都算；只调折法，不动不折行的那些，写了 balance 的照 balance） */
 .page--project .stage { text-wrap-style: pretty; }
 /* 最近改动、页首简介、详情、单图说明、卡里读数名和读数条：page.js 按词插了可断点，只在词与词之间折，词长过一整行才从中间断 */
-.pj-words :is(.pj-sec--timeline .row__title, .pj-line .pj-about, .pj-hero-fold .pj-facts dd, .pj-interface figcaption, #pj-board :is(.pj-kv__k, .pj-fig__k, .pj-fig__sub, .pj-part > span),
+.pj-words :is(.pj-moved-head, #pj-board .pj-text, .pj-sec--timeline .row__title, .pj-line .pj-about, .pj-hero-fold .pj-facts dd, .pj-interface figcaption, #pj-board :is(.pj-kv__k, .pj-fig__k, .pj-fig__sub, .pj-part > span),
   .pj-strip :is(.pj-cell__k, .pj-cell__sub, .pj-cell__v.is-text, .pj-cell__v.is-wrap, .pj-cell__v.is-scale)) { word-break: keep-all; overflow-wrap: anywhere; text-wrap-style: pretty; }
 
 /* ============ 两栏卡片 ============ */
@@ -249,7 +251,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card > .pj-sec.pj-sec--array > .pj-part { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 2px 12px; margin: 0; padding: 0; }
 .pj-card .pj-sec--array > .pj-part > b { grid-column: 1; min-width: 0; overflow-wrap: anywhere; }
 .pj-card .pj-sec--array > .pj-part > .pj-record-meta { display: block; grid-column: 1; color: var(--muted); line-height: 20px; font-size: 13px; white-space: normal; }
-.pj-card .pj-sec--array .pj-record-link { grid-area: 1 / 2 / span 2; align-self: center; margin: 0; translate: none; white-space: nowrap; }
+.pj-card .pj-sec--array .pj-record-link { grid-area: 1 / 2 / span 2; align-self: center; margin: 0 -10px 0 0; translate: none; white-space: nowrap; }
+/* “明细 ›”的字和上面读数的数字右边对齐：这一行占满整行（右边那格空着时不留空格距），按钮右边的内边距让到卡边里 */
+.pj-card .pj-sec--array:not(:has(> .pj-foot:not([hidden]))) > .pj-part:has(> .pj-record-link) { grid-column: 1 / -1; }
 .pj-card .pj-sec--array > .pj-reading { margin: 6px 0 0; font-size: 13.5px; }
 .pj-card .pj-foot { margin-top: 4px; }
 .pj-card .pj-foot .more { translate: -10px 0; }
@@ -269,8 +273,8 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-notes > summary { display: inline-flex; align-items: center; height: 28px; margin-left: -8px; padding: 0 8px; border-radius: 999px; font-size: 13.5px; letter-spacing: .04em; color: var(--ink-soft); }
 .pj-notes > summary .disclosure-chev { color: var(--pj-accent); }
 /* “展开（还有 N 条）›”“逐项明细 ›”“明细 ›”“再看 ›”也是深字、绿箭头，能点的地方一个样子 */
-.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"]) { color: var(--ink-soft); }
-.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"]) .more__chev { color: var(--pj-accent); }
+.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"], .pj-step, .pj-rh-step) { color: var(--ink-soft); }
+.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"], .pj-step, .pj-rh-step) .more__chev { color: var(--pj-accent); }
 .pj-notes > summary:hover { background: rgb(255 255 255 / .55); color: var(--ink); }
 .pj-notes > .pj-note { margin: 4px 0 0; }
 .pj-notes > .pj-note b { font-weight: 600; color: #6f6e68; }
@@ -294,7 +298,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 /* 一行的和几行的条目之间一样宽：不按通用行的最小高度撑 */
 .pj-card .pj-sec--timeline .rows .row { position: relative; grid-template-columns: 0 minmax(0, 1fr) auto; min-height: 0; padding: 6px 0 6px 24px; border-top: 0; }
 .pj-card .pj-sec--timeline .rows .row::before { content: ""; position: absolute; left: 3px; top: 13px; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #bdbbb3; }
-.pj-card .pj-sec--timeline .rows .row::after { content: ""; position: absolute; left: 7px; top: 24px; bottom: -9px; border-left: 1.5px solid rgb(20 20 19 / .09); }
+.pj-card .pj-sec--timeline .rows .row::after { content: ""; position: absolute; left: 7px; top: 24px; bottom: -9px; border-left: 1.5px solid rgb(20 20 19 / .18); }   /* 竖线要看得出来：.09 在粉、绿底上几乎看不见，点像没连起来 */
 .pj-card .pj-sec--timeline .rows .row:last-child::after { display: none; }
 .pj-card .pj-sec--timeline .pj-list-group:first-child > .rows > .row:first-child::before { box-shadow: inset 0 0 0 2.5px var(--pj-accent), 0 0 0 3px rgb(0 166 80 / .14); }
 .pj-tl-at { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -352,7 +356,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 }
 
 /* 规则仓：搬到智能体页的几块，原处只留一行链过去 */
-.pj-moved-head { display: inline-flex; align-items: center; gap: 4px; color: var(--ink); font-weight: 700; text-decoration: none; }
+.pj-moved-head { display: inline; color: var(--ink); font-weight: 700; text-decoration: none; }   /* 行内排：字一折行，“›”跟着最后一个词，不在旁边单独居中 */
 .pj-moved-head:hover { color: var(--pj-accent); }
 .pj-moved-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 14.5px; line-height: 24px; color: #3d3d3a; }
 .pj-moved-line a { color: inherit; text-decoration: none; }

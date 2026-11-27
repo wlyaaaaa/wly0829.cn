@@ -100,15 +100,16 @@
   function agentsMoved(talk, metrics, viewer) {
     const subject = viewer === 'owner' ? '你' : '本人';
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date());
-    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : `今天${subject}说了几句`;
+    // 还没读到时写“正在读”，读到的不是今天的写“还没量到”，不写成一句没有数的“今天你说了几句”
+    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : talk ? `今天${subject}说了几句还没量到` : `正在读今天${subject}说了几句`;
     const week = ['claude', 'codex', 'antigravity'].map(host => metrics.find(m => m.id === `${host}_d7`));
     const known = week.filter(m => finite(m?.value));
     // Antigravity 只记得到能核实的技能原文件读取，三家合起来一律写“至少”
     const used = known.length ? `近 7 天三家用技能 <b>${known.length < 3 || week[2] ? '至少 ' : ''}${number(known.reduce((n, m) => n + m.value, 0))}</b> 次` : '近 7 天三家用了多少技能';
     return {
       key: 'agents-moved', title: '',
-      head: `<a class="pj-moved-head" href="/live/agents/">三家用技能、跟${subject}说了几句，都在智能体页 <span class="more__chev">›</span></a>`,
-      html: `<p class="pj-moved-line"><a href="/live/agents/#talk">${said} <span class="more__chev">›</span></a><span aria-hidden="true">·</span><a href="/live/agents/#skills-used">${used} <span class="more__chev">›</span></a></p>`,
+      head: `<a class="pj-moved-head" href="/live/agents/">三家用技能、跟${subject}说了几句，都在智能体页&nbsp;<span class="more__chev">›</span></a>`,
+      html: `<p class="pj-moved-line"><a href="/live/agents/#talk">${said}&nbsp;<span class="more__chev">›</span></a><span aria-hidden="true">·</span><a href="/live/agents/#skills-used">${used}&nbsp;<span class="more__chev">›</span></a></p>`,
     };
   }
   function external(data, stamp) {
