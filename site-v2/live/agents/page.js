@@ -25,8 +25,13 @@
   const F = (v, name) => field(v, viewer, name);
   const keep = html => `<span class="ag-keep">${html}</span>`;
   const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
-  const keepWords = html => html.includes('<') ? html : html.replace(/\p{Script=Han}+/gu, text =>
-    Array.from(segmenter.segment(text), ({ segment }) => keep(segment)).join('<wbr>'));
+  const keepWords = html => html.includes('<') ? html : html.replace(/\p{Script=Han}+/gu, text => {
+    // 两边都是多字词才留换行点，单字和邻词一起走。
+    const words = Array.from(segmenter.segment(text));
+    const starts = [0, ...words.filter(({ segment }, i) => i && [...segment].length > 1 && [...words[i - 1].segment].length > 1)
+      .map(({ index }) => index)];
+    return starts.map((start, i) => keep(text.slice(start, starts[i + 1]))).join('<wbr>');
+  });
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
@@ -82,7 +87,7 @@
     const statusText = html => (h.id === 'codex' && !html.includes('<') ? html.replace(/\bPlugin\w+:[\w-]+@[\w-]+|钩子说明|钩子，?|说明|它是干什么的/g,
       word => word.startsWith('Plugin') ? `<span class="ag-truncate" title="${word}">${word}</span>` : `<span class="ag-status-word">${word}</span>`) : html).replace(/(^Codex |」)装着/, '$1' + keep('装着'));
     const fixer = i => F(i.handler_text, '谁在修') || (i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '');
-    const fixText = i => [fixer(i), known(i.round) && keep(`第 ${int(i.round)} 轮`)].filter(Boolean).join(' · ') || (owner ? '' : '还没人接手');
+    const fixText = i => [fixer(i), known(i.round) && keep(`第 ${int(i.round)} 轮`)].filter(Boolean).join(' · ');
     const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
     const issueText = i => {
       const text = F(i.text);
@@ -91,14 +96,13 @@
     const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${statusText(issueText(i))}${issues.length > 1 && fixText(i)
         ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
       : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${statusText(esc(r.text))}</a>` : esc(r.text)}</span></li>`).join('');
-    const lead = issues.find(i => fixer(i)) || issues.find(i => known(i.round)) || issues.find(i => T.path(i.href)) || issues[0];
-    const fix = owner || !(c.fail.length || issues.length) ? ''
-      : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
+    const lead = issues.find(i => fixer(i)) || issues.find(i => known(i.round));
+    const fix = !owner && lead ? `<p class="ag-fix">${fixLink(lead, fixText(lead))}</p>` : '';
     const hooks = hostHooks(d, h);
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
       <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${hooks ? ` · <wbr>${keep(`登记钩子 ${int(hooks.length)} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
-        <p class="tp-small">${c.unknown || c.fail.length ? `设置 ${c.total} 项里 ${c.pass} 项照规矩` : `设置 ${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
+        <p class="tp-small">设置 ${c.unknown || c.fail.length ? `${keep(`${c.total} 项里`)} ${keep(`${c.pass} 项照规矩`)}` : keep(`${c.total} 项都照规矩`)}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: T.TONE[tone] || T.TONE.repair })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : `<p class="ag-ok">${h.id === 'antigravity' ? '这家没有自带记忆。' : ''}${c.unknown ? '有设置还没读到。' : '没有读到需要处理的差异。'}</p>`}</article>`;
   }
@@ -357,8 +361,7 @@
   function hookCard(d, hook, withSample = false) {
     const id = HOSTS.find(h => h.name === hook.host)?.id;
     const sample = withSample && list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    const preCompact = hook.key === 'PreCompact';
-    const limit = preCompact && compactLimit(d.hosts?.[hook.host]);
+    const preCompact = hook.key === 'PreCompact', limit = preCompact && compactLimit(d.hosts?.[hook.host]);
     // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
     const summary = preCompact && typeof hook.summary === 'string'
       ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
@@ -368,23 +371,19 @@
       ${hook.reason ? `<p class="ag-hook__num">${keepWords(F(hook.reason))}</p>` : ''}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
-  function hookGroups(d, hooks) {
-    return HOOK_GROUPS.map(([id, label]) => {
-      const rows = hooks.filter(hook => hook.group === id);
-      const count = d.hook_coverage?.groups?.[id] ?? rows.length;
-      return `<section aria-labelledby="hook-group-${id}"><h3 id="hook-group-${id}" class="tp-sub">${label} · ${int(count)} 条</h3>
-        <div class="ag-hooks">${rows.map(hook => hookCard(d, hook)).join('')}</div></section>`;
-    }).join('');
-  }
+  const hookGroups = (d, hooks) => HOOK_GROUPS.map(([id, label]) => {
+    const rows = hooks.filter(hook => hook.group === id);
+    return `<section aria-labelledby="hook-group-${id}"><h3 id="hook-group-${id}" class="tp-sub">${label} · ${int(d.hook_coverage?.groups?.[id] ?? rows.length)} 条</h3>
+      <div class="ag-hooks">${rows.map(hook => hookCard(d, hook)).join('')}</div></section>`;
+  }).join('');
   function hooksSection(d) {
     const hooks = inventory(d), hs = d.hook_stats || {}, p = hookPeriod || (hs.periods ? 'all' : '7d');
     const hv = hs.periods ? hs.periods[p] : p === '7d' ? hs : null, totals = hv?.totals || {};
     // 按需更新快核：据规则仓 docs/operations/context-hooks.md 和三家现行设置核改后生效时机。
-    const rolloutNote = ['改了钩子以后：', 'Claude 开着的对话', '也会自己换上新的；', 'Codex 要新开的线程', '才用新的，', '已经开着的线程', '一般还用旧的；', 'Antigravity 要完整退出', '再打开才用新的。'].map(keep).join('');
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。${rolloutNote}</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
+    const rolloutNote = '改了钩子以后：Claude 开着的对话也会自己换上新的；Codex 要新开的线程才用新的，已经开着的线程一般还用旧的；Antigravity 要完整退出再打开才用新的。';
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">${keepWords(`钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。${rolloutNote}`)}</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
     if (!hooks) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">钩子清单还没读到。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
-    const short = HOSTS.some(h => outcomeShort(totals[h.id]));
     const head = HOSTS.map(h => {
       const t = totals[h.id] || {};
       const parts = [`登记 ${int(hostHooks(d, h).length)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
@@ -402,7 +401,7 @@
         ${alerts ? `<tr><th scope="row">推手机</th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机。<span class="ag-errorhosts">${alerts}</span></td></tr>` : ''}`;
     }).join('');
     return `<section class="tp-panel" id="hooks">${top}
-      <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${short
+      <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${HOSTS.some(h => outcomeShort(totals[h.id]))
         ? '<p class="tp-small">旧日志只记了次数和耗时，没记拦没拦、错没错；拦和错只按记了的那部分算，更早的那部分没采上，不算 0。</p>' : ''}
       <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
       <p class="tp-small ag-foot">格子越深跑得越多；点开可看这个当口的钩子和最近一次塞给 AI 的原样。</p>${hookGroups(d, hooks)}</section>`;
