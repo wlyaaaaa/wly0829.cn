@@ -24,15 +24,13 @@
       const pieces = node.data.split(protectedUnit).flatMap((part, i) => i % 2 ? [part] :
         Array.from(wordSegmenter.segment(part), entry => entry.segment));
       const words = [];
-      for (let i = 0; i < pieces.length;) {
-        let word = pieces[i++];
-        if (oneHan.test(word)) {
-          while (oneHan.test(pieces[i] || '')) word += pieces[i++];
-          if (oneHan.test(word) && wordUnit.test(pieces[i] || '')) word += pieces[i++];
-          else if (oneHan.test(word) && wordUnit.test(words.at(-1) || '')) {
-            words[words.length - 1] += word;
-            continue;
-          }
+      for (let i = 0; i < pieces.length; i++) {
+        let word = pieces[i];
+        const previous = pieces[i - 1] || '';
+        // 单字和相邻的词一起换行，只在两个多字词之间留断点。
+        if (wordUnit.test(previous) && wordUnit.test(word) && (oneHan.test(previous) || oneHan.test(word))) {
+          words[words.length - 1] += word;
+          continue;
         }
         if (/^[，。！？、；：）】”’·]$/u.test(word) && words.length) {
           if (words.length > 1 && /^\s+$/.test(words.at(-1))) word = words.pop() + word;
