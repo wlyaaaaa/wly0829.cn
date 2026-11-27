@@ -822,7 +822,8 @@
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
     const title = `<span class="chat-head-title"><span class="head__lead">AI 对话</span> <small class="chat-head-scope">不含定时和自动</small>${arrow}</span>`;
     const stamp = recorded ? `<span data-recorded="${esc(recorded)}">${esc(recorded)} 记录：</span> ` : '';
-    const stats = summary ? ` <span class="head__tail chat-head-summary" style="font-size:13.5px;white-space:normal;overflow-wrap:anywhere"${stamps ? ` data-stamps="${esc(stamps.join('|'))}"` : ''}>${stamp}${esc(summary)}</span>` : '';
+    const counts = summary && esc(summary).replace(/截至 (?:\d{1,2}-\d{2} )?\d{2}:\d{2}|近 72 小时/g, '<span class="live-unit">$&</span>');
+    const stats = counts ? ` <span class="head__tail chat-head-summary" style="font-size:13.5px;white-space:normal;overflow-wrap:anywhere"${stamps ? ` data-stamps="${esc(stamps.join('|'))}"` : ''}>${stamp}${counts}</span>` : '';
     const link = url ? `<a class="head__link chat-head-link" href="${esc(url)}">${title}${stats}</a>` : title;
     return link + (marker ? `<span class="head__marker">${U.fieldHtml(marker, { name: 'AI 对话', kind: viewer })}</span>` : '');
   }
@@ -853,23 +854,24 @@
     };
     const concurrent = has.running && `${runningText} 个${runningOld && !runningAt ? '当时' : ''}在干`;
     const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const done = has.done && `近 72 小时做完 ${quantity(history.q === 'warming' ? { ...history, q: 'stale' } : history, 'done72')} 个`;
+    const done = has.done && `近 72 小时已回复 ${quantity(history.q === 'warming' ? { ...history, q: 'stale' } : history, 'done72')} 个`;
     const own = (piece, at, label) => !piece || !at || recorded ? piece : label(piece, at);
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
-    const missing = [running.n == null && '在干数', !has.done && '近 72 小时做完数'].filter(Boolean);
+    const missing = [running.n == null && '在干数', !has.done && '近 72 小时已回复数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    // M915 的四栏数照 AI 对话页。归档总数与旧 done72 不同，现役 board 也没有归档截止，不能借旧窗口给它标日期。
+    // M915 的四栏数照 AI 对话页。当前对话沿用四栏口径，近 72 小时只报有回复的场数和它自己的截止。
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     const colTotal = key => totalOf(board?.columns[key]), colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
     const countNote = key => {
       const listed = listedOf(board?.columns[key]), n = colTotal(key);
       return listed > (n ?? 0) ? `${key === 'working' ? '在干' : addressed('等你')}清单列出 ${listed} 场` : '';
     };
-    const boardSeen = board && colTotal('working') != null && recordStamp(blockAt(d));
+    const boardSeen = board && colTotal('working') != null && recordStamp(board.as_of ?? blockAt(d));
+    const boardReply = done && doneAt ? `截至 ${doneAt} 的${done}` : done;
     const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}${boardSeen ? `（${boardSeen} 记录）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
-      `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
+      `停下没归档 ${colTotal('stopped') ?? '没读到'}`, boardReply || '近 72 小时已回复 没读到']);
     const summary = boardSummary || join(pieces);
-    const heading = chatCardHead({ summary, recorded: board ? '' : recorded, marker, url: href('chats'), stamps: board ? boardSeen && [boardSeen] : stamps });
+    const heading = chatCardHead({ summary, recorded: board ? '' : recorded, marker, url: href('chats'), stamps: board ? [boardSeen, done && doneAt].filter(Boolean) : stamps });
     const note = join(board ? ['working', 'waiting'].map(countNote) : [olderRows('running', running.n, runningAt),
       olderRows('waiting', counts.waiting, recordStamp(counts === d ? observed : counts.at))]);
     // 标题伸到插画上，窄窗的说明按画窗宽度让开。
@@ -1325,7 +1327,7 @@
     const tried = recordStamp(blockAt(d), d.at_precision);
     const reading = reasons.some(r => /还在读|warming/.test(r)), gap = d.read_error || d.refresh_error || reasons.some(r => !/还在读|warming/.test(r));
     // 后台重载后续扫完整名单：上一份完整名单还在（做完数照常有），读不全的只是“本轮还在读取”，后台随手给同一项记的 read_failed 不算真失败；
-    // 卡头已写着名单自己的截止（截至 … 的近 72 小时做完），这里不再说“没读全，正在重读”。没有留存名单或真读失败照旧。
+    // 卡头已写着名单自己的截止（截至 … 的近 72 小时已回复），这里不再说“没读全，正在重读”。没有留存名单或真读失败照旧。
     const named = new Set((d.gray_items || []).map(g => U.fieldText(g?.name, viewer)));
     const ownGap = d.read_error || d.refresh_error || [...(d.gray_items || []).map(g => g?.reason), ...Object.entries(d.missing || {}).filter(([key]) => !named.has(key)).map(([, r]) => r?.reason_code ?? r?.reason ?? r)]
       .some(r => !/还在读|warming/.test(sp(U.fieldText(r, viewer))));
