@@ -328,7 +328,9 @@
     );
     // 最新详情的各段正文没有历史版本。选中的了结早于这份内容时，只展示有时刻依据的记录。
     const born = r.episode_at || r.born;
-    record = newer ? { id: r.id, text: '这件事', closed: r.closed, reopened: r.reopened,
+    record = newer ? { id: r.id, owner_source_id: r.owner_source_id, text: '这件事', closed: r.closed, reopened: r.reopened,
+      // 问情况按原编号生成提示词，不带较新回包里的动作正文。
+      actions: r.actions?.some(a => a.kind === 'copy' && a.intent === 'ask') ? [{ kind: 'copy', intent: 'ask' }] : [],
       born: Date.parse(born) <= closedAt ? born : null, archiveWithoutHistory: r.archiveWithoutHistory } : r;
     render();
   }

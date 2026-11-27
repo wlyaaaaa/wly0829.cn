@@ -663,10 +663,10 @@
   }
   const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   function closedNoticeRow({ id, item, closed }) {
-    const outcome = closed?.text || CLOSED[closed?.kind];
+    const outcome = closed?.text || addressed(CLOSED[closed?.kind] || '');
     if (!outcome || !Number.isFinite(Date.parse(closed.at))) return null;
-    const label = U.fieldHtml(typeof outcome === 'string' ? addressed(outcome) : outcome, { name: '了结情况', kind: viewer })
-      .replace(/(<[^>]*>)|(?:你|本人)?办完了/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+    const label = U.fieldHtml(outcome, { name: '了结情况', kind: viewer })
+      .replace(/(<[^>]*>)|(?:你|本人)?办完了|已?核实/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
     const link = title({ ...item, id: item?.id || id }, item?.text || '查看原事项', 'items');
     return { key: id, cls: 'row row--flat', html: `<div class="row__text"><p class="row__main" style="margin-inline-end: clamp(0px, calc(1280px - 100vw), 14px)">${U.date(closed.at)} ${U.time(closed.at)} · ${label} · ${link}</p></div>` };
   }
