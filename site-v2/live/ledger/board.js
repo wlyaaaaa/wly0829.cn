@@ -314,6 +314,10 @@
 
   // 老读口的 broken_30d 本来就是近 30 天；停手规则只展示读到的现行值。
   const repeatDays = d => positive(d.policy?.repeat_window_days) ? d.policy.repeat_window_days : 30;
+  const segmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || text
+    .split(/(修不住|转给|知道|亲手)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
+    .map(word => /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join(''));
   // 每件写“近 30 天坏了几次”（后台 broken_30d，点是 broken_at 每次坏的时刻），本人 11-24 选的规矩按坏了几次数；
   // 以前写的是“又发生几次”（reopen_count，修好后又重开的次数，大半是 0，满屏红字“又发生 0 次”）。后台没给坏了几次的旧包照旧写重开几次。
   function repeats(d) {
@@ -330,7 +334,7 @@
     const said = it => broke(it) != null ? `近 ${int(days)} 天坏了 ${int(broke(it))} 次` : reopened(it) != null ? `修好后又出现 ${int(reopened(it))} 次` : '';
     const ticks = [...new Set(Array.from({ length: 7 }, (_, i) => Math.round(i * days / 6)))];
     let dotted = 0;   // 图上实际画了几个时点，脚注照这个说
-    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 ${int(days)} 天坏了不止一次的；${rule}</small></h2></div>
+    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 ${int(days)} 天坏了不止一次的；${keepWords(esc(rule))}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
         const times = at.map(stamp).filter(t => t && t >= from && t <= now);

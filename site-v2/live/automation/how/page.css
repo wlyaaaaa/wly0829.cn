@@ -29,6 +29,12 @@
 .ah-flow__box { display: flex; align-items: center; gap: 10px; min-height: 66px; margin: 0 !important; padding: 8px 14px; border-radius: 12px; background: var(--tp-green-soft); font-size: 17px !important; line-height: 24px !important; font-weight: 800; color: var(--ink) !important; }
 .ah-flow__box > span:first-child { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--tp-green); border-radius: 50%; font-size: 14px; color: var(--tp-green-ink); }
 .ah-flow__text { margin: 10px 0 0 !important; padding-right: 4px; font-size: 15px !important; line-height: 25px !important; color: #3d3d3a; }
+@media (max-width: 1024px) {
+  .ah-grid:has(.ah-flow--repair) { grid-template-columns: minmax(0, 1fr) 215px; }
+  .ah-flow--repair { column-gap: 18px; }
+  .ah-flow--repair li::before { left: -16px; font-size: 15px; }
+  .ah-flow--repair .ah-flow__box { gap: 5px; padding-inline: 6px; text-wrap: balance; }
+}
 
 .ah-prompt { margin-top: 10px; }
 .ah-prompt summary { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 800; color: var(--tp-green-ink); cursor: pointer; list-style: none; }

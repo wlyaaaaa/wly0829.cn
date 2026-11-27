@@ -273,7 +273,8 @@
     // 列出来的每一件：标题点了到那件；到点没看的橙点、写“到点没看，原定几点”，还没到的绿点、写“几点看”
     // 这件对外换了说法的，标题后面挂“对外换了说法”（两版都挂，M930；本人版访客看不到的另挂“访客看不到”）
     const titleTag = r => { const t = U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer); return t ? ` ${t}` : ''; };
-    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, field(r.title, '事项标题'))}${titleTag(r)}</p>`
+    const keepWords = html => html.replace(/(<[^>]+>)|处理|证据|事务/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+    const dueItem = r => `<div class="b6-lg-item">${dot(c.late(r) ? 'late' : 'ok')}<p>${goWrap(r.href, keepWords(field(r.title, '事项标题')))}${titleTag(r)}</p>`
       + `<small class="b6-muted">· ${c.late(r) ? `到点没看，原定 ${esc(clock(r.next_at))}` : `${esc(clock(r.next_at))} 看`}</small></div>`;
     const list = c.today.length ? c.today.slice(0, 3).map(dueItem).join('')
       : `<p class="b6-muted b6-lg-none">今天没有要看的${c.after ? ` · ${go(c.after.href, `下一件 ${esc(time(c.after.next_at))}`)}` : ''}</p>`;
