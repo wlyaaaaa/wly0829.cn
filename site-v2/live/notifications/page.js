@@ -75,7 +75,16 @@
     }
     return Array.from(seen,([title,reminder])=>[title,reminderTag(reminder)]);
   };
-  const titleOf=(r,format)=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题',format);const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题',format);return s&&s+tag;}).filter(Boolean).join('；');};
+  function titleOf(r,format){
+    const value=r.title??r.text??r.body;
+    if(value!=null&&value!=='')return shown(value,'提醒标题',format);
+    const category=className(r);
+    const titles=reminderTitles(r).map(([text,tag])=>[shown(bare(text,category),'提醒标题',format),tag]).filter(([text])=>text);
+    return titles.map(([text,tag],i)=>{
+      const divider=i<titles.length-1?'；':'';
+      return text+(format&&tag&&divider?`<span class="notify-nw">${tag}${divider}</span>`:tag+divider);
+    }).join('');
+  }
   // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
   const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
   function others(r){
@@ -92,7 +101,7 @@
     return `这 ${list.length} 件事走${name}：${counts.size===1?`都${list[0].state}`:[...counts].map(([s,n])=>`${s} ${n} 件`).join('、')}`;
   }
   const keepWords=text=>`<span class="notify-nw">${esc(text)}</span>`;
-  const keepDialogueWord=text=>esc(text).replace(/对话/g,keepWords);
+  const keepTitleWords=text=>text.split(/(（[^（）]+）|\([^()]+\)|对话|前端 QA)/g).map((part,i)=>i%2?keepWords(part):esc(part)).join('');
   function attentionResult(r){
     if(r.channel!=='phone')return {};
     const reminders=Array.isArray(r.reminders)?r.reminders:[];
@@ -104,7 +113,7 @@
     const queued=parse(r.queued_at),elapsed=(parse(r.at)-queued)/1000;
     const retry=firstQueue!==null&&firstQueue<60&&elapsed>0?(elapsed>=60?`${Math.floor(elapsed/60)} 分钟`:sec(elapsed)):'';
     const duration=r.is_retry===true?took({...r,queue_seconds:firstQueue>=60?firstQueue:null}):undefined;
-    const delivered=recovered?`${keepWords('补送到了')} ${keepWords(`· ${U.time(recoveredAt)} 到手机`)}`:'';
+    const delivered=recovered?`${keepWords('补送到了')}<br>${keepWords(`${U.time(recoveredAt)} 到手机`)}`:'';
     if(recovered&&sent===total){
       const classes=[].concat(r.class??[]),untilPhone=(parse(recoveredAt)-queued)/1000;
       const skipMail=classes.length===1&&classes[0]==='ai_done'&&r.app_channel!=='shell'&&untilPhone>=0&&untilPhone<=120
@@ -193,7 +202,7 @@
         if(r.private_count||hiddenBatch(r))return `<div class="delivery-private">${privateLine(r)}</div>`;
         const result=attentionResult(r),duration=result.duration??took(r),why=result.recovered?'':stuck(r);
         return `<div class="stut__card" data-status="${result.recovered?'recovered':kindOf(r)}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
-          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepDialogueWord)} · 走${shown(channel(r),'渠道')}</b>`
+          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepTitleWords)}<span class="notify-nw">&nbsp;· 走${shown(channel(r),'渠道')}</span></b>`
           +`${why?`<span class="notify-why">${esc(why)}</span>`:''}<span class="notify-other">${result.otherHtml??esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
           +`${duration?`<small class="notify-took">${shown(duration,'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`;
       });
