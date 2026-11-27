@@ -247,7 +247,7 @@
   function shortText(value, { keepChangeWords = false, ...options }) {
     const html = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
     const full = keepChangeWords
-      ? html.replace(/<[^>]+>|一次|讲解页/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
+      ? html.replace(/<[^>]+>|一次|讲解页|收工|补跑一轮/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
       : html;
     const first = plain.match(/^[^。！？\n]*[。！？]?/)?.[0] || plain;
     const preview = [...first].slice(0, 80).join('');
