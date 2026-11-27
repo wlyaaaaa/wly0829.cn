@@ -1,0 +1,160 @@
+/* 健康参谋（/live/project/?id=personal-health）自己的几块，health.js 画；别的项目页用不到这些类名。
+   卡片材质、圆角、留白照项目页共用的 .pj-card / .glass；强调色只有网站的正绿，月历另用浅绿、橙两色分状态。 */
+.page--project { --hl-green: #00a650; --hl-part: #b4e3a0; --hl-none: #f2a56e; --hl-faint: rgb(20 20 19 / .065); }
+
+/* 卡名前一道短绿竖条（这一页的几张卡和最近改动都带，照图） */
+.hl-title::before,
+.pj-board--health .pj-card > .pj-sec:first-of-type > .pj-part > b::before { content: ""; display: inline-block; width: 4px; height: 17px; margin: 0 10px 0 0; border-radius: 2px; background: var(--hl-green); vertical-align: -2px; }
+
+/* ============ 通栏：手环记录齐不齐 ============ */
+.page--project .hl-wear { margin-top: var(--pj-gap); }
+.hl-wear__head { display: flex; align-items: center; gap: 16px; margin: 0 0 12px; }
+.hl-title { font-size: 19px; line-height: 27px; letter-spacing: .04em; font-weight: 700; color: var(--ink); }
+.hl-year { display: inline-flex; align-items: center; gap: 2px; height: 28px; padding: 0 4px; border-radius: 999px; background: rgb(255 255 255 / .6); box-shadow: inset 0 0 0 1px rgb(0 166 80 / .35); }
+.hl-year b { padding: 0 4px; font-size: 15px; font-weight: 700; color: #0a6b3a; font-variant-numeric: tabular-nums; }
+.hl-year button { width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: transparent; font: inherit; font-size: 16px; line-height: 20px; color: var(--hl-green); cursor: pointer; }
+.hl-year button:hover:not(:disabled) { background: rgb(0 166 80 / .12); }
+.hl-year button:disabled { color: rgb(20 20 19 / .2); cursor: default; }
+
+/* 12 个小月历：一行 12 个、每个一样大；一周从星期一起，一天一格 */
+.hl-months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.hl-month { min-width: 0; padding: 0 6px; text-align: center; }
+.hl-month + .hl-month { border-left: 1px solid rgb(20 20 19 / .07); }
+.hl-month__name { margin: 0 0 6px; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--ink); }
+.hl-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; max-width: 98px; margin: 0 auto; }
+.hl-cal > i { aspect-ratio: 1; border-radius: 2px; background: var(--hl-faint); }
+.hl-cal > i.is-pad { background: none; }
+.hl-cal > i.is-full, .hl-legend i.is-full { background: var(--hl-green); }
+.hl-cal > i.is-part, .hl-legend i.is-part { background: var(--hl-part); }
+.hl-cal > i.is-none, .hl-legend i.is-none { background: var(--hl-none); }
+.hl-cal > i.is-wait, .hl-legend i.is-wait { background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 1px transparent; outline: 1px dashed #9d9b93; outline-offset: -1px; }
+.hl-month.is-quiet .hl-cal > i:not(.is-pad) { background: rgb(20 20 19 / .05); }
+.hl-month__sum { margin: 7px 0 0; font-size: 12.5px; line-height: 18px; color: #3d3c38; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-month.is-quiet .hl-month__sum { color: #8f8d86; }
+
+/* 图例 */
+.hl-legend { display: flex; flex-wrap: wrap; gap: 6px 26px; margin: 16px 0 0; padding: 0 0 0 8px; list-style: none; font-size: 12.5px; line-height: 18px; color: #5d5c56; }
+.hl-legend li { display: inline-flex; align-items: center; gap: 7px; }
+.hl-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--hl-faint); }
+
+/* 一排小统计：从哪天起几天、四项各几天；最近两周一句；行尾截止 */
+.hl-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 0; margin: 16px 0 0; padding: 12px 0 0; border-top: 1px solid var(--hair); }
+.hl-stat { min-width: 0; padding: 0 22px; }
+.hl-stat:first-child { padding-left: 8px; }
+.hl-stat + .hl-stat { border-left: 1px solid rgb(20 20 19 / .08); }
+.hl-stat > span { display: block; font-size: 12.5px; line-height: 18px; color: #68665f; white-space: nowrap; }
+.hl-stat > b { display: block; margin-top: 2px; font-size: 22px; line-height: 28px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-stat > b small { margin-left: 4px; font-size: 13px; font-weight: 400; color: #68665f; }
+.hl-recent { flex: 1 1 320px; min-width: 0; margin: 0; padding: 0 22px; border-left: 1px solid rgb(20 20 19 / .08); font-size: 14px; line-height: 24px; font-weight: 600; color: var(--ink); text-wrap: pretty; }
+.hl-recent b { margin: 0 2px; font-size: 22px; font-weight: 700; color: var(--hl-green); font-variant-numeric: tabular-nums; vertical-align: -1px; }
+.hl-cut { margin-left: auto; padding: 0 4px 0 12px; font-size: 12.5px; line-height: 18px; color: #8f8d86; white-space: nowrap; }
+
+/* ============ 下面三块：左（AI 答到哪天／更多数据）、中（AI 能分析哪些数据）、右（简报／最近改动），底边对齐 ============ */
+.page--project #pj-board.pj-board--health:not(.is-single) { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: stretch; }
+.pj-board--health:not(.is-single) > #pj-main { grid-template-rows: auto 1fr; align-content: stretch; }
+.pj-board--health:not(.is-single) > #pj-main:has(> [data-card="health-kinds"]) { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+.pj-board--health:not(.is-single) > #pj-side { grid-template-rows: auto 1fr; align-content: stretch; }
+.pj-board--health > #pj-main > [data-card="health-answer"] { grid-column: 1; grid-row: 1; }
+.pj-board--health > #pj-main > [data-card="health-more"] { grid-column: 1; grid-row: 2; }
+.pj-board--health > #pj-main > [data-card="health-kinds"] { grid-column: 2; grid-row: 1 / span 2; }
+/* 右栏：简报在上、最近改动在下（最近改动拉长到和左边底边对齐） */
+.pj-board--health > #pj-side > [data-card="artifacts"] { order: 0; }
+.pj-board--health > #pj-side > [data-card="changes"] { order: 1; }
+
+/* 卡头：卡名在左、右边一行小字（共几份 · 全部 ›） */
+.hl-sec > .pj-part { position: static; }
+.pj-card > .hl-sec:first-of-type > .pj-part { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding-right: 0; margin-bottom: 10px; }
+.hl-head-r { display: inline-flex; align-items: center; gap: 0; font-size: 13.5px; line-height: 20px; color: #68665f; white-space: nowrap; }
+.hl-head-r > i { margin: 0 .45em; font-style: normal; color: #8f8d86; }
+.hl-all, .hl-pill { display: inline-flex; align-items: center; gap: 2px; padding: 0; border: 0; background: none; font: inherit; color: var(--ink-soft); cursor: pointer; }
+.hl-all .more__chev, .hl-pill .more__chev { color: var(--pj-accent); transition: rotate .2s ease; }
+.hl-all[aria-expanded="true"] .more__chev, .hl-pill[aria-expanded="true"] .more__chev { rotate: 90deg; }
+.hl-all:hover { color: var(--pj-accent-ink); }
+.hl-sub { margin: 2px 0 0; font-size: 12.5px; line-height: 18px; color: #68665f; text-wrap: pretty; }
+
+/* —— AI 答健康问题用到哪天 —— */
+.hl-big { margin: 0; font-size: 42px; line-height: 52px; font-weight: 800; letter-spacing: .01em; color: var(--hl-green); font-variant-numeric: tabular-nums; }
+.hl-tiles { display: flex; flex-wrap: wrap; row-gap: 10px; margin: 16px 0 0; padding: 12px 0 0; border-top: 1px solid var(--hair); }
+.hl-tile { flex: 1 1 auto; padding: 0 10px; white-space: nowrap; }
+.hl-tile:first-child { padding-left: 0; }
+.hl-tile + .hl-tile { border-left: 1px solid rgb(20 20 19 / .08); }
+.hl-tile > span { display: block; font-size: 12.5px; line-height: 18px; color: #68665f; }
+.hl-tile > b { display: flex; align-items: center; gap: 5px; margin-top: 4px; font-size: 15px; line-height: 22px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.hl-tile > b > i { font-style: normal; font-weight: 800; }
+.hl-tile > b.is-ok > i { color: var(--hl-green); }
+.hl-tile > b.is-bad > i { color: #d4762f; }
+.hl-tile > small, .hl-tile__sub { display: block; margin-top: 2px; font-size: 12px; line-height: 18px; color: #5d5c56; font-variant-numeric: tabular-nums; }
+.hl-tile__sub { text-decoration: none; }
+.hl-tile__sub .more__chev { color: var(--pj-accent); }
+.hl-tile__sub:hover { color: var(--pj-accent-ink); }
+
+/* —— AI 能分析哪些数据 —— */
+.hl-kbig { margin: 0; font-size: 17px; line-height: 44px; font-weight: 700; color: var(--hl-green); white-space: nowrap; }
+.hl-kbig b { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.hl-kbig small { margin: 0 3px; font-size: 19px; font-weight: 700; }
+.hl-kbig i { margin: 0 6px; font-style: normal; font-weight: 700; }
+.hl-kinds { margin: 12px 0 0; padding: 0; list-style: none; }
+.hl-kinds li { display: grid; grid-template-columns: minmax(4.6em, auto) minmax(0, 1fr) minmax(4.2em, auto); align-items: center; column-gap: 10px; padding: 8px 0; font-size: 13.5px; line-height: 18px; }
+.hl-kind__name { color: var(--ink); white-space: nowrap; }
+.hl-kind__bar { height: 6px; border-radius: 999px; }
+.hl-kind__bar > i { display: block; height: 100%; min-width: 3px; border-radius: inherit; background: var(--hl-green); }
+.hl-kinds li > b { font-weight: 600; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-pill { margin: 10px 0 0; padding: 5px 14px; border-radius: 999px; background: rgb(255 255 255 / .6); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .08); font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.hl-pill:hover { background: rgb(255 255 255 / .85); }
+.hl-entered { margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--hair); font-size: 13px; line-height: 20px; color: #3d3c38; }
+/* 卡比内容高时（和左边两张卡底边对齐），本人录入那一行贴卡底 */
+.pj-card[data-card="health-kinds"] { display: flex; flex-direction: column; }
+.pj-card[data-card="health-kinds"] > .pj-sec { display: flex; flex-direction: column; flex: 1; }
+.pj-card[data-card="health-kinds"] .pj-viz { display: flex; flex-direction: column; align-items: flex-start; flex: 1; }
+.pj-card[data-card="health-kinds"] .pj-viz > * { align-self: stretch; }
+.pj-card[data-card="health-kinds"] .pj-viz > .hl-pill { align-self: flex-start; }
+.pj-card[data-card="health-kinds"] .pj-viz > .hl-entered { margin-top: auto; }
+.pj-card[data-card="health-kinds"] .pj-viz > :nth-last-child(2) { margin-bottom: 14px; }
+
+/* —— 更多数据：两组“名称……数字” —— */
+/* 卡窄（宽屏时在左栏）两组上下排；卡宽（窄屏排成一栏时）左右排 */
+.pj-card[data-card="health-more"] { container-type: inline-size; }
+.pj-card[data-card="health-more"] .pj-viz { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.hl-grp { min-width: 0; }
+.hl-grp + .hl-grp { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--hair); }
+@container (min-width: 520px) {
+  .pj-card[data-card="health-more"] .pj-viz { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hl-grp { padding: 0 16px 0 0; }
+  .hl-grp + .hl-grp { margin-top: 0; padding: 0 0 0 16px; border-top: 0; border-left: 1px solid rgb(20 20 19 / .08); }
+}
+.hl-grp__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 6px; font-size: 12px; line-height: 18px; color: #68665f; }
+.hl-grp__head b { padding: 2px 9px; border-radius: 7px; background: rgb(0 166 80 / .1); font-size: 12.5px; font-weight: 700; color: #0a6b3a; }
+.hl-grp__head span { white-space: nowrap; }
+.hl-grp ul { margin: 0; padding: 0; list-style: none; }
+.hl-grp li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 13px; line-height: 19px; }
+.hl-grp li > span { min-width: 0; color: var(--ink); text-wrap: pretty; }
+.hl-grp li > span small { display: block; font-size: 11.5px; color: #8f8d86; }
+.hl-grp li > b { flex: none; white-space: nowrap; font-weight: 700; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* —— 最近的简报：五行，日期时间、取回方式小签、资料到哪天、（本人版）在电脑上打开 —— */
+.hl-briefs { margin: 0; padding: 0; list-style: none; }
+.hl-brief { display: grid; grid-template-columns: minmax(7.6em, auto) auto minmax(0, 1fr); align-items: center; column-gap: 18px; min-height: 30px; padding: 2px 0; font-size: 13.5px; line-height: 20px; }
+.hl-briefs.is-owner .hl-brief { grid-template-columns: minmax(7.6em, auto) auto minmax(0, 1fr) auto; }
+.hl-brief__at { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-tag { padding: 1px 10px; border-radius: 6px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; }
+.hl-tag.is-demand { background: rgb(0 166 80 / .14); color: #0a6b3a; }
+.hl-tag.is-weekly { background: rgb(96 128 226 / .15); color: #3d58b4; }
+.hl-tag.is-other { background: rgb(20 20 19 / .07); color: #5d5c56; }
+.hl-brief__to { color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hl-brief__act { justify-self: end; }
+.hl-brief__act .btn { margin: 0; }
+
+/* 窗口窄（≤1100 像素）：排成一栏，先后照宽屏从左到右、从上到下；12 个小月历排成 6×2 */
+@media (max-width: 1100px) {
+  .hl-months { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 16px; }
+  .hl-month:nth-child(6n + 1) { border-left: 0; }
+  .hl-cal { max-width: 112px; }
+  .page--project #pj-board.pj-board--health:not(.is-single) { grid-template-columns: minmax(0, 1fr); }
+  .pj-board--health:not(.is-single) > #pj-main, .pj-board--health:not(.is-single) > #pj-main:has(> [data-card="health-kinds"]) { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .pj-board--health > #pj-main > .pj-card { grid-column: auto !important; grid-row: auto !important; }
+  .pj-board--health .pj-card[data-card="health-answer"] { order: 0; }
+  .pj-board--health .pj-card[data-card="health-kinds"] { order: 1; }
+  .pj-board--health .pj-card[data-card="health-more"] { order: 2; }
+  .pj-board--health .pj-card[data-card="artifacts"] { order: 3; }
+  .pj-board--health .pj-card[data-card="changes"] { order: 4; }
+}

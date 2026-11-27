@@ -935,7 +935,8 @@
         }
       }
       const artifactsTarget = location.hash === '#artifacts';
-      if (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden))) {
+      // 项目自己画最近产物的（健康参谋：最近的简报，ownArtifacts）不再出这张通用卡
+      if (!custom?.ownArtifacts && (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden)))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
         // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
@@ -1358,7 +1359,7 @@
       };
       if (!first) draw(true);
       if (raw) { readSide(raw, reads, watch); readAdditions(reads, watch); }
-      if (raw?.artifacts && !artsWatch) {
+      if (raw?.artifacts && !artsWatch && !custom?.ownArtifacts) {
         artsWatch = watch(`projects/${enc(id)}/artifacts`, null, {
           data(d, meta) {
             if (!sameViewer(meta)) return;
