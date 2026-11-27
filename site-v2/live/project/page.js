@@ -1367,7 +1367,7 @@
       };
       if (!first) draw(true);
       if (raw) { readSide(raw, reads, watch); readAdditions(reads, watch); }
-      if (raw?.artifacts && !artsWatch && !custom?.noArtifacts) {
+      if (raw?.artifacts && !artsWatch && !custom?.noArtifacts && !custom?.ownArtifacts) {
         artsWatch = watch(`projects/${enc(id)}/artifacts`, null, {
           data(d, meta) {
             if (!sameViewer(meta)) return;
