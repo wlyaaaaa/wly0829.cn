@@ -1159,15 +1159,18 @@
     if (size?.text) tail.push(cell('有多大', esc(size.text), { kind: 'text' }));
     else {
       if (size?.docs_chars != null) tail.push(cell('文档', bigCell(size.docs_chars, '字'), { title: `文档 ${big(size.docs_chars, '字')}` }));
-      if (size?.code_lines != null) {
-        const chars = size.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
-        tail.push(cell('代码', bigCell(size.code_lines, '行'), { title: `代码 ${big(size.code_lines, '行')}${chars ? ` · ${chars}` : ''}`, sub: esc(chars || '') }));
+      // 代码：量了字数的，字数写成大数、行数用小字放在下面（本人 11-28 05:31「先写代码XX字，下面再有代码XX行」）；还没量字数的照旧只写行数，不留空格子
+      const codeChars = Number.isFinite(size?.code_chars);
+      if (codeChars || size?.code_lines != null) {
+        const least = key => lower(size, key) ? '至少 ' : '', lines = size.code_lines != null ? `${least('code_lines')}${big(size.code_lines, '行')}` : '';
+        const value = codeChars ? `${least('code_chars') ? '<small class="pj-atleast">至少</small>' : ''}${bigCell(size.code_chars, '字')}` : bigCell(size.code_lines, '行');
+        tail.push(cell('代码', value, { title: `代码 ${codeChars ? [`${least('code_chars')}${big(size.code_chars, '字')}`, lines].filter(Boolean).join('、') : lines}`, sub: codeChars ? esc(lines) : '' }));
       }
     }
     // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
     // 写实际量出来的时刻（size.at）；夜里核对的时刻（source_at）只在没有 size.at 时顶上
     const sizeAt = size && (size.at || size.source_at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
-    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null)) tail.push(cell('规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
+    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null || Number.isFinite(size.code_chars))) tail.push(cell('规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
       { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}`, sub: old ? '<span class="pj-old">旧了</span>' : '' }));
     return { head, tail };
   }
@@ -1269,8 +1272,9 @@
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
     // 提交时刻页头那行已写，这里只写这次改了什么
     const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : '';
-    const chars = size?.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
-    const sizeText = size && [size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, size.code_lines != null && `代码 ${big(size.code_lines, '行')}`].filter(Boolean).join(' · '), chars].filter(Boolean).join(' · ');
+    // 一行字里同一字号，代码先写字数、再写行数；没量字数的只写行数
+    const codeText = !size ? '' : Number.isFinite(size.code_chars) ? `代码 ${[big(size.code_chars, '字'), big(size.code_lines, '行')].filter(Boolean).join('、')}` : size.code_lines != null ? `代码 ${big(size.code_lines, '行')}` : '';
+    const sizeText = size && (size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, codeText].filter(Boolean).join(' · '));
     const sized = !size ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>`
       : `${esc(sizeText || U.collectionText())}${size.at ? `<small>${esc(U.offline?.() || isStale(size) ? staleText(size, size.at) : size.moment || `${shortDate(size.at)} 取的`)}</small>` : ''}`;
     part('facts').hidden = false;
@@ -1282,7 +1286,7 @@
     const impactNote = !window.ProjectAdditions?.personalDetail(id) && Number.isFinite(d.changes7) && Number.isFinite(d.changes7_missing_note)
       ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在<span class="pj-no-split">上面。</span></small>' : '';
     // 读数条已画出文档、代码和“规模 截止”的，这里整行不再画；读数条没有的（冻结项目借“仓库”卡的数）照画
-    const sizeInStrip = !!d.size && (d.size.text || d.size.docs_chars != null || d.size.code_lines != null);
+    const sizeInStrip = !!d.size && (d.size.text || d.size.docs_chars != null || d.size.code_lines != null || Number.isFinite(d.size.code_chars));
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');

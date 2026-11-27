@@ -24,7 +24,7 @@
     ["/live/project/interfaces/pc-panel-hub/02-thumb.webp", "/live/project/interfaces/pc-panel-hub/02.webp", "曲面屏平时的样子：没事时只在壁纸上显示手机电量和时间（11 月 26 日晚上，AI 在后台截）"]
   ],
   "localocr": [
-    ["/live/project/interfaces/localocr/01-thumb.webp", "/live/project/interfaces/localocr/01.webp", "原图：一张合成的采购单，有标题、六列表格和合计"],
+    ["/live/project/interfaces/localocr/01-thumb.webp", "/live/project/interfaces/localocr/01.webp", "原图：一张测试用的采购单，有标题、六列表格和合计"],
     ["/live/project/interfaces/localocr/02-thumb.webp", "/live/project/interfaces/localocr/02.webp", "本机认出来的结果：六列、五行和合计都对（9 月 3 日实际输出）"]
   ],
   "ai-cli-profile-manager": [

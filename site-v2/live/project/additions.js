@@ -43,13 +43,6 @@
     if (!finite(v?.desktop) || m.private || [m, v].some(source => source.hidden || viewer !== 'owner' && (source.visibility === 'owner' || source.public === 'owner'))) return '';
     return `其中桌面操作 ${lower(m, 'desktop') || lower(v, 'desktop') ? '至少 ' : ''}${number(v.desktop)} 次`;
   }
-  function codeCharacters(size, lower) {
-    const n = size?.code_chars;
-    if (!finite(n)) return '';
-    const bounded = lower(size, 'code_chars'), tens = bounded ? Math.floor(n / 1000) / 10 : n / 10000;
-    // 单位和项目总览、文档一样写“万字”（本人说的是“代码字数”；全站只这一处原来写“万字符”）
-    return `${bounded ? '至少' : '约'} ${tens.toFixed(1)} 万字`;
-  }
   const personalDetailIds = new Set([
     'daily-preferences', 'career-development', 'personal-finance', 'personal-health',
     'personal-media', 'personal-materials', 'personal-romance', 'personal-formal-documents',
@@ -170,7 +163,7 @@
     html(block.viz, card.html + (card.chart ? '<div style="overflow-x:auto"><div data-addition-chart style="min-width:0px"></div></div>' : '') + (card.after || ''));
     if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
-  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, personalDetail, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
+  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, personalDetail, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
     cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();
