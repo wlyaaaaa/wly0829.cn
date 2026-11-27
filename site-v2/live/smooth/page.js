@@ -21,7 +21,8 @@
   };
   const windowText = w => cutoff(w?.from) && cutoff(w?.to) ? `北京时间 ${U.date(w.from)} ${U.time(w.from)} 至 ${U.date(w.to)} ${U.time(w.to)}` : '';
   const join = (...parts) => parts.filter(Boolean).join(' · ');
-  const keepTerms = html => html.replace(/打游戏|最慢一帧|没响应|\d+(?:\.\d+)?[ \t]*毫秒/g, '<span class="smooth-term">$&</span>');
+  const keepTerms = html => html.replace(/“在打游戏”|在打游戏|打游戏|不知道|最慢一帧|没响应|\d+(?:\.\d+)?[ \t]*毫秒/g, '<span class="smooth-term">$&</span>');
+  const missingProgram = '没记下是哪个程序';
   const hours = total => total < 60 ? `${Math.floor(total)} 秒` :
     [total >= 3600 && `${Math.floor(total / 3600)} 小时`, `${Math.floor(total / 60) % 60} 分`].filter(Boolean).join(' ');
   const wallpaper = /^(?:wallpaper(?:32|64|ui|engine)?|webwallpaper32|ui32)(?:\.exe)?$/i;
@@ -101,7 +102,7 @@
     part('count').hidden = !detail;
     U.html(part('count'), detail && `<b>${keepTerms(U.nowrap(detail))}</b>`);
     part('note').hidden = !warnings.length;
-    U.html(part('note'), warnings.map(text => `<span>${U.esc(text)}</span>`).join(''));
+    U.html(part('note'), warnings.map(text => `<span>${keepTerms(U.esc(text))}</span>`).join(''));
   }
 
   function eventCounts(summary) {
@@ -122,7 +123,6 @@
   }
   function stutterChapter(el) {
     el.innerHTML = keepTerms('<div class="stutter-layout"><div data-x="moments"></div><div data-x="graphs"><div data-x="band"><p class="grp-split__k">卡顿发生在哪一段</p><div data-x="timeline"></div><ul class="smooth-legend"></ul></div><div data-x="daily"></div></div><footer class="stat-gap">接着的几次卡算一次 · 没打游戏时不量画面卡</footer></div>');
-    const layout = el.firstElementChild;
     const host = which => el.querySelector(`[data-x="${which}"]`);
     const listHost = host('moments'), timelineHost = host('timeline'), dailyHost = host('daily'), legends = el.querySelector('.smooth-legend');
     const tl = V.timeline(timelineHost, { rows: [{ key: 'day', label: '卡顿' }], interactiveObservedOnly: true });
@@ -136,7 +136,8 @@
     const batch = 5;
     let limit = 2 * batch;
     const moments = V.moments(listHost, { show: batch, empty: '近 24 小时没有卡顿',
-      more: () => `更早的 ${list.length - batch} 条`, onPick(key) { picked = key; mark(); } });
+      more: () => toggle.getAttribute('aria-expanded') === 'true' ? '收起明细' : `展开明细 · 共 ${list.length} 条`,
+      onPick(key) { picked = key; mark(); } });
     const toggle = listHost.querySelector('.more'), more = document.createElement('button');
     more.className = 'more smooth-more-moments'; more.type = 'button';
     listHost.querySelector('.fold > div').append(more);
@@ -148,7 +149,6 @@
       });
       more.hidden = limit >= list.length;
       if (!more.hidden) more.textContent = `再展开 ${Math.min(batch, list.length - limit)} 条`;
-      if (toggle.getAttribute('aria-expanded') === 'true' && !toggle.hidden) toggle.textContent = '收起明细';
     }
     toggle.addEventListener('click', () => {
       if (toggle.getAttribute('aria-expanded') === 'false') limit = 2 * batch;
@@ -171,7 +171,6 @@
       if (picked && !list.some(e => e.key === picked)) picked = null;
       paintMoments();
       listHost.hidden = !seen;
-      layout.toggleAttribute('data-short', list.length > 0 && list.length <= 2 && (band || hasDays));
       host('graphs').hidden = !band && !hasDays;
       host('band').hidden = !band;
       el.querySelector('footer').hidden = !seen;
@@ -203,36 +202,58 @@
     return { ...pack, rows: { day: { ...day, label: '前台程序', from: frame.from, to: frame.to, spans } } };
   }
   function frameLabelRail(plot) {
-    const rail = document.createElement('div'); rail.className = 'smooth-frame-sources'; plot.before(rail);
+    const rail = document.createElement('div'); rail.className = 'smooth-frame-sources'; plot.append(rail);
     rail.innerHTML = '<div></div><span class="smooth-frame-point" hidden></span>';
     const stack = rail.firstElementChild, point = rail.lastElementChild;
-    let sources = [], labels = [];
-    const label = ({ name, fps }) => join(name, finite(fps) && `${Math.round(fps)} 帧`);
+    let sources = [];
+    const label = ({ name, fps }, pointing = false) => join(name || (pointing ?
+      '这段时间还没记下是哪个程序画的' : missingProgram), finite(fps) && `${Math.round(fps)} 帧`);
     sync.add({ mark() {}, point(at) {
       const source = at == null ? null : sources.find(s => s.start <= at && at < s.end);
       point.hidden = !source;
-      if (source) U.html(point, U.nowrap(label(source)), false);
+      point.toggleAttribute('data-game', Boolean(source?.game));
+      if (source) U.html(point, U.nowrap(label(source, true)), false);
     } });
     function draw() {
       const width = rail.clientWidth, from = seconds(framePack.from), span = seconds(framePack.to) - from;
-      const rows = [[], []];
-      if (width && span > 0) for (const source of labels) {
-        const a = Math.round((source.start - from) / span * width), b = Math.round((source.end - from) / span * width);
-        const size = Math.min(width, Math.max(source.game ? 135 : 100, Math.min(b - a, 150)));
-        const left = Math.max(0, Math.min(width - size, Math.round((a + b - size) / 2)));
-        const row = rows.find(items => items.every(item => left >= item.left + item.size || left + size <= item.left));
-        row?.push({ left, size, source });
+      if (!(width > 0 && span > 0)) return;
+      const labels = [];
+      for (const source of sources) {
+        const previous = labels.at(-1);
+        if (previous?.name === source.name && (source.start - previous.end) * width / span < 3) {
+          previous.end = Math.max(previous.end, source.end);
+          if (Math.round(previous.fps) !== Math.round(source.fps)) previous.fps = null;
+        } else labels.push({ ...source });
       }
-      U.html(stack, rows.filter(row => row.length).map(row => {
-        let right = 0;
-        return `<div>${row.sort((a, b) => a.left - b.left).map(({ left, size, source }) => {
-          const margin = left - right;
-          right = left + size;
-          return `<span${source.game ? ' data-game' : ''} style="margin-left:${margin}px;width:${size}px">${U.nowrap(label(source))}</span>`;
-        }).join('')}</div>`;
-      }).join(''), false);
+      U.html(stack, labels.filter(s => (s.end - s.start) * width / span > 20).map(s =>
+        `<span${s.game ? ' data-game' : ''} style="left:${(s.start - from) / span * 100}%;width:${(s.end - s.start) / span * 100}%">${U.nowrap(label(s))}</span>`).join(''), false);
+      for (const item of stack.children) {
+        item.hidden = false;
+        item.hidden = item.scrollWidth > item.clientWidth;
+      }
     }
     new ResizeObserver(draw).observe(plot);
+    const svg = plot.querySelector('.chart__svg');
+    function labelGaps() {
+      const from = seconds(framePack.from), span = seconds(framePack.to) - from;
+      for (const gap of svg.querySelectorAll('.chart__gap:not(:has(text))')) {
+        const rect = gap.firstElementChild;
+        const width = Number(rect.getAttribute('width'));
+        if (width < 28) continue;
+        const x = Number(rect.getAttribute('x')) + width / 2;
+        const y = Number(rect.getAttribute('y')) + Number(rect.getAttribute('height')) / 2 + 3;
+        const at = from + (x - 58) * span / rail.clientWidth;
+        const isOff = framePack.off_spans?.some(([start, end]) => start <= at && at < end);
+        const caption = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        const font = width >= 32 ? 9 : 8;
+        for (const [key, val] of Object.entries({ x, y, 'text-anchor': 'middle', 'font-size': font, fill: '#6b6a64' })) caption.setAttribute(key, val);
+        caption.textContent = isOff ? '关机' : '没记录';
+        gap.append(caption);
+      }
+    }
+    labelGaps();
+    new MutationObserver(labelGaps).observe(svg, { childList: true });
+    document.fonts.ready.then(draw);
     return active => {
       const fps = data?.fps, from = seconds(framePack.from), to = seconds(framePack.to);
       const raw = fps?.sources?.length ? fps.sources : active ? [{ start: from, end: to }] : [];
@@ -247,27 +268,51 @@
         const process = U.sp(frameSource(s.process_name));
         const gameName = currentGame && s.process_name?.toLowerCase() === fg.process_name.toLowerCase() ?
           fg.game_name : gameNames.find(name => U.sp(name) === process);
-        const name = playedTitle({ game_name: gameName }) || process || '帧源未记录';
+        const name = playedTitle({ game_name: gameName }) || process;
         return [{ start, end, name, game: Boolean(gameName), fps: s.fps }];
       }).sort((a, b) => a.start - b.start);
-      labels = [];
-      for (const source of sources) {
-        const prev = labels.at(-1);
-        if (prev?.name === source.name && source.start - prev.end <= 60) {
-          prev.end = Math.max(prev.end, source.end);
-          if (Math.round(prev.fps) !== Math.round(source.fps)) prev.fps = null;
-        } else labels.push({ ...source });
-      }
-      labels.sort((a, b) => Number(Boolean(b.game)) - Number(Boolean(a.game)) || (b.end - b.start) - (a.end - a.start));
       point.hidden = true;
       draw();
     };
+  }
+  function foregroundPaint(plot) {
+    const layer = document.createElement('div');
+    layer.className = 'smooth-foreground-spans'; layer.setAttribute('aria-hidden', 'true'); plot.prepend(layer);
+    let day, colors;
+    function draw() {
+      const from = seconds(day?.from), to = seconds(day?.to), range = to - from;
+      if (!(range > 0 && plot.clientWidth)) { U.html(layer, '', false); return; }
+      const minimum = range * 3 / plot.clientWidth, pieces = [];
+      for (const [i, [at, state]] of day.spans.entries()) {
+        const a = Math.max(from, at), b = Math.min(to, day.spans[i + 1]?.[0] ?? to);
+        if (!(b > a) || state == null) continue;
+        const fill = b - a < minimum ? '' : colors[state];
+        const prev = pieces.at(-1);
+        if (prev?.fill === fill && prev.b === a) prev.b = b;
+        else pieces.push({ a, b, fill });
+      }
+      pieces.forEach((piece, i) => {
+        if (piece.fill || piece.b - piece.a >= minimum) return;
+        const prev = pieces[i - 1], next = pieces[i + 1];
+        if (prev?.b === piece.a && prev.fill) prev.b = piece.b;
+        else if (next?.a === piece.b && next.fill) next.a = piece.a;
+        piece.b = piece.a;
+      });
+      U.html(layer, pieces.filter(p => p.b > p.a).map(({ a, b, fill }) => {
+        const width = (b - a) / range * 100;
+        const switching = !fill ? ` data-switch${width * plot.clientWidth / 100 >= 64 ? ' data-wide' : ''}` : '';
+        return `<i${switching} style="left:${(a - from) / range * 100}%;width:${width}%;--fill:${fill}"></i>`;
+      }).join(''), false);
+    }
+    new ResizeObserver(draw).observe(plot);
+    return (row, paints) => { day = row; colors = paints; draw(); };
   }
   function foregroundChapter(el) {
     el.innerHTML = '<div class="frame-sync"><p class="grp-split__k">前台程序同步带 · 这会儿在看哪个窗口</p><div></div></div><p class="smooth-frame-notes">帧率按每两张画面的间隔算，每分钟取平均；平均帧率是实际画了几张除以秒数，两条差得多说明忽快忽慢<br>最低 1% 是最慢那 1% 画面的帧率；单帧耗时是每分钟最慢的一张画了多久；抖动是相邻两张差了多久</p>';
     const wrap = el.querySelector('.frame-sync'), host = wrap.lastElementChild, card = el.closest('.grp');
     const tl = V.timeline(host, { rows: [{ key: 'day', label: '前台程序' }] });
     const plot = host.querySelector('.vz-tl__plot'), cursor = document.createElement('i');
+    const paintForeground = foregroundPaint(plot);
     cursor.className = 'smooth-sync-cursor'; cursor.hidden = true; plot.append(cursor);
     let from, to, drawLabels;
     sync.add({ mark() {}, point(at) {
@@ -281,6 +326,9 @@
     return { set(g) {
       const measuredSeries = framePack.series?.filter(measured) || [];
       const pack = data?.foreground;
+      const { foreground: fg, history: h } = gameStatus();
+      const gameNames = [fg?.classification === 'game' && fg.game_name, h?.latest_session?.game_name, h?.previous_session?.game_name].filter(Boolean);
+      const palette = ['#a8d5f1', '#efb9dd', '#d4baf0', '#f7d0aa'];
       const hues = new Set(pack?.states?.map(s => s.hue));
       const states = pack?.states?.map((s, i) => ({ ...s,
         label: program(U.fieldText(s.display_label ?? s.label)) || s.label,
@@ -290,6 +338,8 @@
       const aligned = alignForeground({ ...pack, states }, framePack);
       from = seconds(aligned.rows?.day?.from); to = seconds(aligned.rows?.day?.to);
       if (!wrap.hidden) tl.set(aligned);
+      paintForeground(aligned.rows?.day, states?.map(({ label }, i) =>
+        gameNames.some(name => U.sp(label).endsWith(U.sp(name))) ? '#00A650' : palette[i % palette.length]) || []);
       card.classList.toggle('fps-empty', Boolean(data) && !measuredSeries.length);
       card.classList.toggle('fps-single', g.chips.length <= 1);
       el.hidden = wrap.hidden && !measuredSeries.length;
@@ -311,25 +361,55 @@
   }
   function appsChapter(el) {
     addAppPicture(el);
-    el.innerHTML = '<div class="grp-split"><section><p class="grp-split__k">最大化窗口和普通窗口的差别</p><div data-x="modes"></div><p class="stat-gap"></p></section><section><p class="grp-split__k">各程序的流畅度 · 帧算在真正画它的程序头上</p><div data-x="apps"></div><p class="stat-gap"></p></section></div>';
+    el.innerHTML = '<div class="grp-split"><section><p class="grp-split__k" data-mode-title></p><div data-x="modes"></div></section><section><p class="grp-split__k">各程序的流畅度 · 帧算在真正画它的程序头上</p><div data-x="apps"></div><p class="grp-split__k smooth-rank-note"></p></section></div>';
     const modesHost = el.querySelector('[data-x="modes"]'), appsHost = el.querySelector('[data-x="apps"]');
-    const modes = V.rank(modesHost, { show: Infinity, mark: true }), apps = V.rank(appsHost, { show: Infinity, mark: true });
+    const rank = host => V.rank(host, { show: Infinity, trailing: r =>
+      `<span class="smooth-rank-icon${r.icon ? '' : ' is-window'}" aria-hidden="true">${U.esc(r.icon || '')}</span>` });
+    const modes = rank(modesHost), apps = rank(appsHost);
     const fields = [['fps', '平均帧率', 'FPS'], ['low', '低谷帧率', 'FPS'], ['stutter_pct', '卡顿帧占比', '%']];
-    function row(r, key, label, hue, readings) {
+    function appLabel(label) {
       const named = U.sp(label), icon = /^([\p{Extended_Pictographic}\p{Regional_Indicator}]\uFE0F?)\s+/u.exec(named);
-      return S.row({ key, name: icon ? named.slice(icon[0].length) : named, mark: icon?.[1], sub: readings, value: r.seconds, text: finite(r.seconds) ? V.fmt(r.seconds, '秒') : '', hue }, r, 'seconds');
+      return { name: icon ? named.slice(icon[0].length) : named, icon: icon?.[1] === '⚙️' ? '' : icon?.[1] };
+    }
+    function row(r, key, label, hue, readings, icon) {
+      return S.row({ key, name: label, icon, sub: readings, value: r.seconds, text: finite(r.seconds) ? V.fmt(r.seconds, '秒') : '', hue }, r, 'seconds');
     }
     return { set() {
-      const shapes = data?.modes, sources = data?.fps?.apps;
+      const shapes = data?.modes, sources = data?.fps?.apps || [];
       modesHost.parentElement.hidden = !shapes?.length;
-      modes.set(shapes?.map((r, i) => row(r, `mode:${i}`, modeName(r.mode), 'violet', metrics(r, [...fields, ['severe_pct', '严重卡顿帧占比', '%']]))) ?? null);
-      modesHost.nextElementSibling.textContent = shapes?.length ? readingLine('modes', true) : '';
+      modes.set(shapes?.map((r, i) => {
+        const { name, icon } = appLabel(modeName(r.mode));
+        return row(r, `mode:${i}`, name, 'violet', metrics(r, [...fields, ['severe_pct', '严重卡顿帧占比', '%']]), icon);
+      }) ?? null);
+      el.querySelector('[data-mode-title]').textContent = join('最大化窗口和普通窗口的差别', shapes?.length && readingLine('modes', true));
       const hasFrames = framePack.series?.some(measured);
-      appsHost.parentElement.hidden = !sources?.length && !hasFrames;
-      if (sources?.length) apps.set(sources.map((r, i) => row(r, `source:${i}`, r.display_label || program(r.process_name) || '帧源未记录', 'stone', metrics(r, [...fields, ['stutter_events', '卡顿', '次']]))));
-      else if (hasFrames) apps.wait('帧源未记录');
-      appsHost.nextElementSibling.textContent = sources?.length ? join(windowText(block('apps')?.window), block('apps')?.basis,
+      const icons = new Map((data?.apps || []).flatMap(app => {
+        const { name, icon } = appLabel(app.app);
+        const matched = U.sp(program(app.display_label || name)).toLowerCase();
+        return icon && matched ? [[matched, icon]] : [];
+      }));
+      const ranked = sources.map((r, i) => {
+        const name = r.process_name ? program(r.process_name) : missingProgram;
+        const shown = appLabel(r.display_label || name);
+        const icon = shown.icon || icons.get(U.sp(name).toLowerCase()) || (wallpaper.test(r.process_name || '') ? '🖼️' : '');
+        return row(r, `source:${i}`, shown.name, 'stone', metrics(r, [...fields, ['stutter_events', '卡顿', '次']]), icon);
+      });
+      if (sources.every(r => r.process_name)) {
+        const unknown = (data?.fps?.sources || []).reduce((total, s) => {
+          const duration = seconds(s.end) - seconds(s.start);
+          return total + (!s.process_name && finite(duration) && duration > 0 ? duration : 0);
+        }, 0);
+        if (unknown > 0) ranked.push(row({ seconds: unknown }, 'source:unknown', missingProgram, 'stone', ''));
+      }
+      appsHost.parentElement.hidden = !ranked.length && !hasFrames;
+      if (ranked.length) apps.set(ranked);
+      else if (hasFrames) apps.wait(missingProgram);
+      appsHost.nextElementSibling.textContent = sources.length ? join(windowText(block('apps')?.window), block('apps')?.basis,
         data?.labels?.fps_table_low && '低谷帧率：每 30 秒算一次平均帧率，取最差的那一成') : '';
+      for (const small of el.querySelectorAll('.vz-rank__name small')) {
+        if (!small.querySelector('.smooth-metric')) U.html(small, small.textContent.split(' · ').map(text =>
+          `<span class="smooth-metric">${U.esc(text)}</span>`).join(' '), false);
+      }
     } };
   }
 
@@ -345,17 +425,19 @@
       <li>帧时抖动：相邻两张画面用时差了多少，每分钟取最大的。</li>
       <li>帧率是每分钟的平均，单帧耗时是每分钟最慢的那一张，所以 120 帧的那一分钟里也可能有一张 40 毫秒的画面，两个数不矛盾。</li></ul></dd></div>
       <div><dt>卡顿怎么量</dt><dd><ul><li data-method="game"></li><li data-method="hang"></li><li>平时（不在游戏里）很短的顿一下记不到，现在没有能直接拿来数的读数。</li></ul></dd></div>
-      <div><dt>怎么算“在打游戏”</dt><dd>游戏在前台、你在用，才算在玩；游戏挂在后台不算，动态壁纸、微信、浏览器、游戏启动器也都不算。来回切换窗口时，“在玩”会跟着断断续续，这是正常的。</dd></div>
+      <div><dt>怎么算“在打游戏”</dt><dd data-method="playing"></dd></div>
       <div><dt>多久更新</dt><dd data-method="period"></dd></div>
       <div><dt>什么时候不记</dt><dd><ul><li>关机、睡眠时不记，时间轴上写“关机”“睡眠”；死机到重启那段也算关机。</li><li>锁屏、关屏、离开电脑的时段不算卡顿。</li></ul></dd></div></dl>`);
     return { set() {
       const { game_min_ms: micro, severe_min_ms: severe, hang_threshold_seconds: hang,
         game_window_seconds: gameSample, hang_sample_seconds: hangSample, hardware_sample_seconds: hardwareSample } = method();
+      const pronoun = U.you(window.Live.viewerKind());
       const change = (name, text) => U.html(el.querySelector(`[data-method="${name}"]`), keepTerms(U.nowrap(text)), false);
       const levels = [finite(micro) && `一张画面超过 ${micro} 毫秒算卡（60 帧时一张约 17 毫秒）`,
         finite(severe) && `超过 ${severe} 毫秒算严重卡`].filter(Boolean).join('，');
-      change('game', `游戏画面卡：只在打游戏时量。${levels ? levels + '。' : ''}${finite(gameSample) ? `每 ${gameSample} 秒看一次，` : ''}挨着的几次合成一次。没打游戏时，曲线多半是动态壁纸画的，壁纸顿一下不影响你在用的程序，所以不算。`);
+      change('game', `游戏画面卡：只在打游戏时量。${levels ? levels + '。' : ''}${finite(gameSample) ? `每 ${gameSample} 秒看一次，` : ''}挨着的几次合成一次。没打游戏时，曲线多半是动态壁纸画的，壁纸顿一下不影响${pronoun}在用的程序，所以不算。`);
       change('hang', `程序卡住：Windows 发现某个程序的窗口${finite(hang) ? `约 ${hang} 秒` : ''}不响应，就标“没响应”。${finite(hangSample) ? `电脑记录工具约每 ${hangSample} 秒看一次，` : ''}连着标的算一次，时长就是标了多久。平时用电脑卡不卡，看这一项。`);
+      change('playing', `游戏在前台、${pronoun}在用，才算在玩；游戏挂在后台不算，动态壁纸、微信、浏览器、游戏启动器也都不算。来回切换窗口时，“在玩”会跟着断断续续，这是正常的。`);
       const sampling = [finite(hardwareSample) && `后台每 ${hardwareSample} 秒记一次硬件读数`,
         finite(hangSample) && `约每 ${hangSample} 秒看一次有没有程序卡住`].filter(Boolean).join('，');
       change('period', `${sampling ? sampling + '。' : ''}这页每 ${PAGE_REFRESH_MINUTES} 分钟自动取一次新数。哪一块超过 ${CLOSE_AFTER / 60} 分钟没取到新数，那一块会写“最后记录于几点”。`);
@@ -365,6 +447,17 @@
   function fpsContext() {
     const status = gameStatus(), h = status.history;
     const latest = h?.latest_session, start = seconds(latest?.start), end = seconds(latest?.end);
+    if (h?.played == null) {
+      const uncovered = data?.summary?.game_uncovered_seconds;
+      const gap = finite(uncovered) && uncovered > 0 ? `缺了 ${hours(uncovered).replace(/ 分$/, ' 分钟')}` : '不全';
+      const startDate = finite(start) && U.date(iso(start)), endDate = finite(end) && U.date(iso(end));
+      const when = finite(end) && (finite(start)
+        ? `${startDate} ${U.time(iso(start))}–${startDate === endDate ? '' : endDate + ' '}${U.time(iso(end))}`
+        : `截至 ${endDate} ${U.time(iso(end))}`);
+      const lastPlayed = latest && [`上次玩${playedTitle(latest)}`, when].filter(Boolean).join(' ');
+      const duration = finite(start) && end > start && `${Math.floor((end - start) / 60)} 分`;
+      return join(`近 24 小时的游戏记录${gap}，玩没玩游戏现在说不准`, lastPlayed, duration);
+    }
     const noGame = h?.played === false;
     const recent = h?.played === true && finite(end);
     const sources = data?.fps?.sources || [];
@@ -413,8 +506,22 @@
   const detailBoard = { ...board, blocks(d, _map, offline) {
     board.blocks(d, { stutters: [], fps: [], apps: [], method: [] }, offline);
   } };
+  function breakFrameTail(series) {
+    const spans = data?.fps?.sources || [], last = spans.at(-1), previous = spans.at(-2);
+    // 隔了半分钟以上才有的末尾样本仍显示，和前面已结束的那段线断开。
+    if (series.unit !== 'FPS' || !(seconds(last?.start) - seconds(previous?.end) >= 30)) return series;
+    const minute = Math.floor(seconds(last?.start) / 60) * 60;
+    const index = series.points.findIndex(([t, v]) => t === minute && finite(v));
+    if (index < 1 || !finite(series.points[index - 1][1])) return series;
+    return { ...series, points: series.points.toSpliced(index, 0, [minute - 1, null]) };
+  }
   LiveDetail.mount({ resource: 'computer/smooth', board: detailBoard, merge: () => framePack,
-    statusData: d => ({ level: d?.summary?.lamp_q === 'ok' ? 'ok' : 'gray' }), statusNotes: false,
+    statusData(d) {
+      const counts = Object.values(eventCounts(d?.summary)).filter(finite);
+      const observed = counts.reduce((sum, value) => sum + value, 0);
+      return { level: U.offline?.() || !counts.length ? 'gray' : observed >= 24 ? 'yellow' : 'ok' };
+    },
+    statusNotes: false,
     extraLinks: '<a class="more more--link" href="#how-measured">怎么量的 <span class="more__chev">↓</span></a>',
     render(d) {
       data = d;
@@ -422,7 +529,7 @@
       const bounds = [d?.fps, d?.frametime, d?.jitter].find(p => p?.series?.some(measured));
       if (bounds) { framePack.from = bounds.from; framePack.to = bounds.to; }
       framePack.series = framePack.series.filter(s => frameIds.has(s.id) && measured(s))
-        .map(s => ({ ...s, from: framePack.from, to: framePack.to }));
+        .map(s => ({ ...breakFrameTail(s), from: framePack.from, to: framePack.to }));
       const { game_min_ms: micro, severe_min_ms: severe, hang_threshold_seconds: hang } = method();
       const game = [finite(micro) && `游戏里一帧 ${micro} 毫秒以上算卡`, finite(severe) && `${severe} 毫秒以上算严重`].filter(Boolean).join('，');
       const thresholds = join(game, finite(hang) && `程序窗口 ${hang} 秒没反应算卡住`);
