@@ -21,7 +21,7 @@
     return `${U.date(stamp) === U.date(Date.now()) ? '' : `${U.date(stamp)} `}${U.time(stamp)}`;
   };
   const join = (...parts) => parts.filter(Boolean).join(' · ');
-  const keepTerms = html => html.replace(/“在打游戏”|“在玩”|在打游戏|打游戏|不知道|最慢一帧|没响应|微信|关机|\d+(?:\.\d+)?[ \t]*毫秒/g, '<span class="smooth-term">$&</span>');
+  const keepTerms = html => html.replace(/“在打游戏”|“在玩”|在不在玩|不在玩|卡没卡|在打游戏|打游戏|不知道|最慢一帧|没响应|微信|关机|\d+(?:\.\d+)?[ \t]*毫秒/g, '<span class="smooth-term">$&</span>');
   const missingProgram = '没记下是哪个程序';
   const hours = total => total < 60 ? `${Math.floor(total)} 秒` :
     [total >= 3600 && `${Math.floor(total / 3600)} 小时`, `${Math.floor(total / 60) % 60} 分`].filter(Boolean).join(' ');
@@ -31,6 +31,7 @@
   const modeName = label => U.sp(label).replace(/全屏\s*[/／]\s*无边框全屏|无边框全屏|全屏/g, '最大化窗口').replace(/普通窗口形态/g, '普通窗口');
   const block = name => data?.blocks?.[name] || data?.[name];
   const CLOSE_AFTER = 30 * 60, GAME_FRESH_FOR = 15;
+  const FRAME_MINUTE_SECONDS = 60;
   const PAGE_REFRESH_MINUTES = 5; // computer/smooth 外层调度为 300 秒，data.refresh_seconds 是数据源的采样批次。
   let data = null, framePack = {}, hardwareStatus = null;
 
@@ -267,6 +268,14 @@
       }
       const area = svg.querySelector('.chart__area[fill$="-current)"]');
       if (!area || area.hasAttribute('data-joined')) return;
+      const gradient = svg.querySelector('linearGradient[id$="-current"]');
+      const bounds = svg.querySelector('clipPath rect');
+      if (gradient && bounds) {
+        const top = Number(bounds.getAttribute('y'));
+        gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+        gradient.setAttribute('y1', top);
+        gradient.setAttribute('y2', top + Number(bounds.getAttribute('height')));
+      }
       // 补齐主曲线底色里狭窄的空缝，曲线本身仍按记录断开。
       const outline = area.getAttribute('d');
       const runs = [...outline.matchAll(/M([\d.]+),([\d.]+).*? ([\d.]+),([\d.]+)L[\d.]+,([\d.]+)L[\d.]+,[\d.]+Z/g)];
@@ -339,34 +348,36 @@
         const points = current?.points || [], values = points.map(([, v]) => v).filter(finite).sort((a, b) => a - b);
         const from = seconds(current?.from), span = seconds(current?.to) - from;
         const cap = values[Math.ceil(values.length * .95) - 1], floor = values[0];
-        if (!(span > 0 && finite(cap) && values.at(-1) > cap)) return;
+        if (!(span > 0 && finite(cap))) return;
         const top = 4, bottom = Number(svg.getAttribute('height')) - 4;
-        const bins = [], peaks = [], path = svgTag('path'), spark = svgTag('g');
-        let bin, peak;
+        const toX = t => Math.min(width - 3, Math.max(3, (t - from) / span * width));
+        const toY = v => bottom - (v - floor) / (cap - floor || 1) * (bottom - top) * .8;
+        const runs = [], peaks = [], path = svgTag('path'), spark = svgTag('g');
+        let run, peak;
         for (const [t, value] of points) {
-          if (!finite(value) || t < from || t > from + span) { bin = peak = null; continue; }
-          const x = Math.min(width - 2, Math.max(2, (t - from) / span * width));
-          if (!bin || x - bin.x >= 4) {
-            bin = { x, start: !bin, total: 0, count: 0 };
-            bins.push(bin);
-          }
-          bin.total += Math.min(value, cap); bin.count++;
+          if (!finite(value) || t < from || t > from + span) { run = peak = null; continue; }
+          if (!run || t - run.at(-1)[0] > FRAME_MINUTE_SECONDS * 1.5) { run = []; runs.push(run); peak = null; }
+          run.push([t, Math.min(value, cap)]);
           if (value <= cap) continue;
-          if (!peak || x - peak.end >= 8) { peak = { bin, value, end: x }; peaks.push(peak); }
-          if (value > peak.value) { peak.bin = bin; peak.value = value; }
-          peak.end = x;
+          const x = toX(t);
+          if (!peak || x - peak.last >= 8) { peak = { x, value, last: x }; peaks.push(peak); }
+          if (value > peak.value) { peak.x = x; peak.value = value; }
+          peak.last = x;
         }
-        const marked = new Set(peaks.map(p => p.bin));
-        const d = bins.map(bin => {
-          const average = bin.total / bin.count;
-          const y = marked.has(bin) || average >= cap ? top : bottom - (average - floor) / (cap - floor) * (bottom - top);
-          return `${bin.start ? 'M' : 'L'}${bin.x.toFixed(1)},${y.toFixed(1)}`;
+        const d = runs.map(run => {
+          const coords = C.buckets(run, toX, 6).map(([time, value]) => [toX(time), toY(value)]);
+          return coords.map(([x, y], i) => {
+            const previous = coords[i - 1];
+            if (!previous) return `M${x},${y}${coords.length === 1 ? 'h.01' : ''}`;
+            const [px, py] = previous, mid = (px + x) / 2;
+            return `C${mid},${py} ${mid},${y} ${x},${y}`;
+          }).join('');
         }).join('');
         spark.setAttribute('class', 'smooth-spark');
         path.setAttribute('class', 'chart__stroke'); path.setAttribute('d', d); spark.append(path);
-        for (const { x } of marked) {
+        for (const { x } of peaks) {
           const dot = svgTag('circle');
-          dot.setAttribute('cx', x); dot.setAttribute('cy', top); dot.setAttribute('r', 1.8);
+          dot.setAttribute('cx', x); dot.setAttribute('cy', top + 2.8); dot.setAttribute('r', 2.2);
           spark.append(dot);
         }
         line.append(spark);
@@ -564,11 +575,16 @@
     const grafana = data?.grafana?.href;
     const use = key => ({ sourceNotes: false, grafana, wait: data ? false : undefined,
       level: key === 'stutters' ? stutterLevel(data) : 'none' });
-    const end = cutoff(classifiedWindow()?.to), sourceAt = cutoff(data?.fps?.sources_at);
+    const end = cutoff(classifiedWindow()?.to), sourceAt = seconds(data?.fps?.sources_at);
     const stutterLine = end && (data.stutters.classified_read_error ? `这块最后统计到 ${end}` : `近 24 小时 · 截至 ${end}`);
-    const fpsLine = join(readingLine('fps', framePack.series.length > 0), sourceAt && `最后一帧于 ${sourceAt}`);
+    const frameSeries = framePack.series.filter(s => s.unit === 'FPS');
+    const latest = Math.max(...frameSeries.map(s => s.points.at(-1)?.[0] ?? -Infinity));
+    const lastReading = sourceAt >= latest && sourceAt < latest + FRAME_MINUTE_SECONDS ? `最后一帧于 ${cutoff(sourceAt)}` : finite(latest) && `帧率读到 ${cutoff(latest)}`;
+    const fpsLine = join(readingLine('fps', framePack.series.length > 0), lastReading);
     const first = data?.apps?.[0], front = first && U.sp(program(first.display_label ?? first.app));
-    const options = data ? chips.filter(c => c.lines.some(l => framePack.series?.some(s => s.id === l.id && measured(s)))) : chips;
+    const peak = Math.max(...frameSeries.map(s => C.sum(s)?.max ?? 0));
+    const options = chips.filter(c => !data || c.lines.some(l => framePack.series.some(s => s.id === l.id && measured(s))))
+      .map(c => c.key === 'fps' && peak > 0 ? { ...c, ceil: Math.ceil(peak / 20) * 20 } : c);
     return [
       { ...use('stutters'), key: 'stutters', name: '卡顿明细', pic: picture, palette: ['pink', 'violet'], build: stutterChapter,
         line: stutterLine },
@@ -582,14 +598,27 @@
   const detailBoard = { ...board, blocks(d, _map, offline) {
     board.blocks(d, { stutters: [], fps: [], apps: [], method: [] }, offline);
   } };
-  function breakFrameTail(series) {
-    const spans = data?.fps?.sources || [], last = spans.at(-1), previous = spans.at(-2);
-    // 隔了半分钟以上才有的末尾样本仍显示，和前面已结束的那段线断开。
-    if (series.unit !== 'FPS' || !(seconds(last?.start) - seconds(previous?.end) >= 30)) return series;
-    const minute = Math.floor(seconds(last?.start) / 60) * 60;
-    const index = series.points.findIndex(([t, v]) => t === minute && finite(v));
-    if (index < 1 || !finite(series.points[index - 1][1])) return series;
-    return { ...series, points: series.points.toSpliced(index, 0, [minute - 1, null]) };
+  function sparseFrameMinutes(spans) {
+    const result = new Set(), half = FRAME_MINUTE_SECONDS / 2;
+    for (const [i, span] of spans.entries()) {
+      const start = seconds(span.start), finish = seconds(span.end);
+      const minute = Math.floor(start / FRAME_MINUTE_SECONDS) * FRAME_MINUTE_SECONDS;
+      const end = minute + FRAME_MINUTE_SECONDS;
+      if (start - seconds(spans[i - 1]?.end) >= half && finish > start && finish - start < half &&
+          finish <= end && !(seconds(spans[i + 1]?.start) < end)) result.add(minute);
+    }
+    return result;
+  }
+  function plotFrameSeries(series, sparse) {
+    if (series.unit !== 'FPS') return series;
+    // 晚到的零星出帧留给指读。后面整分钟无样本时，不把它接到前一段的每分钟曲线上。
+    const points = series.points.map((point, i, all) => {
+      const [t, value] = point, previous = all[i - 1], next = all[i + 1];
+      const gap = !finite(next?.[1]) || next[0] - t > FRAME_MINUTE_SECONDS;
+      return sparse.has(t) && finite(value) && finite(previous?.[1]) && t - previous[0] <= FRAME_MINUTE_SECONDS && gap ? [t, null] : point;
+    });
+    return { ...series, points: points.slice(0, points.findLastIndex(([, value]) => finite(value)) + 1),
+      read_points: series.read_points ?? { points: series.points } };
   }
   LiveDetail.mount({ resource: 'computer/smooth', board: detailBoard, merge: () => framePack,
     statusData: d => ({ level: stutterLevel(d) }),
@@ -600,8 +629,9 @@
       framePack = LiveDetail.merge(d, ['fps', 'frametime', 'jitter']);
       const bounds = [d?.fps, d?.frametime, d?.jitter].find(p => p?.series?.some(measured));
       if (bounds) { framePack.from = bounds.from; framePack.to = bounds.to; }
+      const sparse = sparseFrameMinutes(data?.fps?.sources || []);
       framePack.series = framePack.series.filter(s => frameIds.has(s.id) && measured(s))
-        .map(s => ({ ...breakFrameTail(s), from: framePack.from, to: framePack.to }));
+        .map(s => ({ ...plotFrameSeries(s, sparse), from: framePack.from, to: framePack.to }));
       const { game_min_ms: micro, severe_min_ms: severe, hang_threshold_seconds: hang } = method();
       const game = [finite(micro) && `游戏里一帧 ${micro} 毫秒以上算卡`, finite(severe) && `${severe} 毫秒以上算严重`].filter(Boolean).join('，');
       const thresholds = join(game, finite(hang) && `程序窗口 ${hang} 秒没反应算卡住`);
