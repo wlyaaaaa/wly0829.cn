@@ -31,6 +31,11 @@
 
   function adapt(project) {
     if (project.headline !== 'latest_memory') return project;
+    const hero = document.getElementById('pj-hero');
+    if (!hero.classList.contains('mm-hero')) {
+      hero.classList.add('mm-hero');
+      hero.querySelector('.card__pic img').src = '/live/project/memory-materials-hero.webp';
+    }
     const ownSections = new Set(['materials', 'more-data']);
     const ownMetrics = new Set(['latest_memory', 'memory_rows', 'speech_samples', 'courses', 'course_lessons', 'card_files']);
     const metrics = {};
@@ -72,8 +77,11 @@
       ].filter(([time]) => time);
       timeline = `<div class="mm-gap">这之后没有记录</div><ol class="mm-timeline">
         ${points.map(([time, label, position]) => {
-          const stamp = time.replace('年', '年 ').split(' ').map(part => `<span>${esc(part)}</span>`).join(' ');
-          return `<li class="${position}"><b>${stamp}</b>${label ? `<span>${label}</span>` : ''}</li>`;
+          const stamp = time.replace('年', '年 ').split(' ').map(part => {
+            const extra = part.endsWith('年') || part.includes(':');
+            return `<span${extra ? ' class="mm-stamp-extra"' : ''}>${esc(part)}</span>`;
+          }).join(' ');
+          return `<li class="${position}"><b title="${esc(time)}">${stamp}</b>${label ? `<span>${label}</span>` : ''}</li>`;
         }).join('')}
       </ol>`;
     }

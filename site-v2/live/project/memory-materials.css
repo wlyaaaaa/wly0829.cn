@@ -1,3 +1,10 @@
+#pj-hero.mm-hero > .card__tint { display: none; }
+#pj-hero.mm-hero .card__pic {
+  right: clamp(8px, 1.35vw, 20px);
+  width: min(52%, 590px);
+  mask-image: none;
+}
+#pj-hero.mm-hero .card__pic img { object-fit: contain; object-position: right center; }
 .page--project #pj-board.pj-board--memory-materials {
   grid-template-columns: minmax(0, 1fr);
   row-gap: var(--pj-gap);
@@ -102,6 +109,8 @@
   .page--project #pj-board.pj-board--memory-materials > #pj-main { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 520px) {
+  #pj-hero.mm-hero .card__pic { width: min(48%, 165px); }
+  #pj-hero.mm-hero .card__pic img { object-position: right 36%; }
   .page--project:has(.pj-board--memory-materials) #topbar[data-fit="zoom"] {
     zoom: min(calc(var(--fit-zoom, 1) * .95), calc(100vw / 620px));
   }
@@ -113,5 +122,8 @@
   }
   .page--project .stage:has(> .pj-board--memory-materials) #pj-hero .card__body { padding-inline: 0; }
   .pj-board--memory-materials .pj-notes summary, .mm-timeline li > span { white-space: nowrap; }
+  .mm-timeline .mm-stamp-extra { display: none; }
+  .mm-timeline li { font-size: .78rem; line-height: 1.35; }
+  .mm-timeline li > span { margin-top: 4px; }
   .mm-rows > div { grid-template-columns: minmax(0, 1fr); }
 }
