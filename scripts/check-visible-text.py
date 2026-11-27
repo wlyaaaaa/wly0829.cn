@@ -257,7 +257,7 @@ async def snapshot(page, base, route, role, limit, viewer):
                        const mode=document.querySelector('#wly-preview-view')?.innerText || '';
                        const at=document.querySelector('.live-at')?.innerText || '';
                        const path=location.pathname, ready=path==='/' ? [...document.querySelectorAll('.screen-cell')].some(e=>/\d/.test(e.innerText)) : path.startsWith('/live/') ?
-                         /读到|有一份|未开放|找不到/.test(at) || /没有说是哪个|需要本人设备/.test(main) : /看公开版|回本人版/.test(mode);
+                         /读到|有一份|未开放|找不到/.test(at) || /没有说是哪个|需要本人设备/.test(main) : /^(公开版|本人版)$/.test(mode.trim());
                        if (path === '/live/chats/' && !document.querySelector('.row--chat,#chat-counts p')) return false;
                        return ready && !/正在读这一块最近的情况|正在读这一行的时间/.test(main);
                     }""", timeout=8500 if route == "/" else 6200)
@@ -284,7 +284,7 @@ async def snapshot(page, base, route, role, limit, viewer):
             _, pending = await asyncio.wait(reads, timeout=2)
             for pending_read in pending: pending_read.cancel()
         result["viewers_seen"] = sorted(viewers)
-        wrong_view = viewers - {viewer} or data["mode"] and ("看公开版" if viewer == "owner" else "回本人版") not in data["mode"]
+        wrong_view = viewers - {viewer} or data["mode"] and data["mode"].strip() != ("公开版" if viewer == "owner" else "本人版")
         if wrong_view or viewer == "owner" and route.startswith("/live/") and not (viewers or data["mode"]):
             result["coverage"] = "页面实际受众与入口不符" if wrong_view else "本页没能核对本人受众"
             for key in ("metrics", "links", "progress"):
@@ -328,7 +328,7 @@ async def verified_view(page, base, role):
     entry = "/__view/" + ("public" if public else "owner") + "?back=/live/"
     await page.goto(base + entry, wait_until="domcontentloaded", timeout=16000)
     if public:
-        await page.locator("#wly-preview-view").filter(has_text="回本人版").wait_for(timeout=14000)
+        await page.locator("#wly-preview-view").filter(has_text=re.compile(r"^\s*本人版\s*$")).wait_for(timeout=14000)
     origin = urlsplit(base)
     lan_port = await page.evaluate("""() => document.querySelector('meta[name="wly-lan-live-port"]')?.content""") if not public else None
     if not public and (not lan_port or not lan_port.isdecimal() or not 1024 <= int(lan_port) <= 65535 or int(lan_port) == origin.port):
