@@ -112,7 +112,7 @@
     }
     const c = v.counts;
     if (finite(c.need) || finite(c.ai)) {
-      const need = finite(c.need) ? `<a href="${esc(v.needHref || `/live/?project=${ID}#needs`)}">等你的事 ${esc(int(c.need))} 件</a>` : '';
+      const need = finite(c.need) ? `<a href="${esc(v.needHref || `/live/?project=${ID}#needs`)}">等${viewer === 'owner' ? '你' : '本人'}的事 ${esc(int(c.need))} 件</a>` : '';
       const ai = finite(c.ai) ? `<a href="${esc(v.aiHref || `/live/ledger/?project=${ID}`)}">AI 在办 ${esc(int(c.ai))} 件</a>` : '';
       const busy = (c.need || 0) + (c.ai || 0) > 0;
       cells.push(['有没有要处理的', busy ? 'busy' : 'passed', `${[need, ai].filter(Boolean).join(' · ')}${chev}`, mdTime(v.countsAt), true]);
