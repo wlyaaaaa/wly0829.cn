@@ -851,6 +851,7 @@
   const surveyRow = m => id === 'agents' && (/^fd03_/.test(m.id) || /^11-15 检查时/.test(String(m.label || '')));
   // 一段一张卡：同一段的数、逐项清单那几行、图都带同一个 group，摆的时候合进一张卡
   function renderBoard(animate) {
+    if (custom?.ownsBoard) { arrange(custom.board(proj, projectViewer, graphBlock, board, { arts, artsState, changeLog, changeIssue, pcActions, route }), []); U.land(); return; }
     const left = [], right = [], V = window.LiveProjectViz;
     const allMetrics = (proj?.sections || []).flatMap(s => s.metrics || []), skillUsage = id === 'agents' ? V.skillData(allMetrics) : null;
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
