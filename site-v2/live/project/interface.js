@@ -6,7 +6,7 @@ function showImage(image, url) {
   image.src = url;
 }
 
-export async function mountInterface(id, strip) {
+export async function mountInterface(id, strip, words = html => html) {
   const response = await fetch('/live/project/interface-data.json');
   if (!response.ok) throw new Error('界面图清单暂时读不到');
   const shots = (await response.json())[id];
@@ -31,7 +31,7 @@ export async function mountInterface(id, strip) {
         <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
           <img decoding="async" alt=""><span class="pj-interface-zoom" aria-hidden="true"></span>
         </button>
-        <figcaption>${esc(label)}</figcaption>
+        <figcaption>${words(esc(label))}</figcaption>
       </figure>`).join('')}
     </div>
     <dialog class="pj-interface-view" aria-label="界面大图">
