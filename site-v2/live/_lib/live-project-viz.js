@@ -29,7 +29,9 @@
       if (key === 'code_lines' && chars) return `<span><small>${name}</small><span class="pj-summary-stack"><span>${chars}</span><small class="pj-summary-lines">${value} ${unit}</small></span></span>`;
       return `<span><small>${name}</small><b>${value}</b><small>${unit}</small></span>`;
     });
-    const note = [sizeDate && `文档和代码按 ${sizeDate} 汇总`, data?.q === 'partial' && gap(data)].filter(Boolean).join(' · ');
+    const counted = finite(data?.changed_7d) && !(data.changed_7d_visibility === 'owner' && viewer === 'public');
+    const activityNote = counted && '按日历算，含今天共 7 天；这几天有提交的项目各算 1 个，合并、机器人和自动记录的不算。跟项目详情里的“影响改动”不是一种算法，两个数别拿来比。';
+    const note = [activityNote, sizeDate && `文档和代码按 ${sizeDate} 汇总`, data?.q === 'partial' && gap(data)].filter(Boolean).join(' · ');
     host.innerHTML = parts.join('') + (note ? `<small>${esc(note)}</small>` : '') + (missing.length ? `<span class="pj-summary-none">${U.offline?.() ? parts.some(Boolean) ? '' : emptyText('') : esc(U.collectionText(missing.join('、'), data))}</span>` : '');
   }
   const heat = n => n == null || n === 0 ? 0 : n <= 2 ? .35 : n <= 5 ? .65 : 1;
