@@ -14,7 +14,7 @@
     const to = sampleEnd(t);
     const interval = t.window?.from && to ? `统计区间 ${when(t.window.from)} — ${when(to)}` : to && `统计截至 ${when(to)}`;
     return [t.measurement === 'sample_estimate' && '累计读写量按记录估算', interval,
-      t.read_at && `排行读取完成 ${when(t.read_at)}`, t.q === 'stale' && '旧读数'].filter(Boolean).join(' · ');
+      t.read_at && when(t.read_at) !== when(to) && `排行读取完成 ${when(t.read_at)}`, t.q === 'stale' && '旧读数'].filter(Boolean).join(' · ');
   }
   const hidden = (x, viewer) => viewer !== 'owner' && K.locked(x);
   const capacity = (value, label, viewer, fieldLabel = label) => {

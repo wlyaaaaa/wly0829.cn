@@ -524,7 +524,7 @@
     return rowState(q?.state === 'denied' && q.window && q.window === c.quota_window ? { ...c, quota_reset_at: q.reset_at } : c, viewer);
   }
   const BOARD = {
-    working: { name: '在干', about: `按进入这一类的时刻，新的在上 · 超过 ${IDLE_LIMIT}没新记录、也没结束记录，就标状态不明、挪到停下那栏` },
+    working: { name: '在干', about: '按进入这一类的时刻，新的在上' },
     waiting: { name: '等你', about: '要你回答或选一下才能接着做' },
     stopped: { name: '停下了，没归档', about: `没归档就不算做完：接着做，或者归档。“状态不明”：${UNKNOWN_RULE}` },
     archived: { name: '做完了 · 已归档', about: '' },
@@ -570,7 +570,7 @@
     };
     const full = pinRows.length > 0 || !allRead && SOFT.some(([id]) => complete(id));
     const whoPinned = viewer === 'public' ? '本人' : '你';
-    const note = pinRows.length ? `${allRead ? whoPinned + '置顶的对话' : '已读到的置顶对话'}在这里，点一条进这场对话；下面各栏不再重复列这几场`
+    const note = pinRows.length ? '下面各栏不再重复列这几场'
       : allRead ? `现在没有置顶的对话。${whoPinned}在 Claude、Codex 或 Antigravity 置顶一场，就会出现在这里。` : retry;
     U.html(host, `<header><h2>置顶</h2>${pinRows.length ? `<small>${pinRows.length} 场</small>` : ''}<p>${note}</p></header>${full ? `<div class="chat-pins__grid">${SOFT.map(([id, name]) => rows(id, name)).join('')}</div>` : ''}`, false);
     host.hidden = false;

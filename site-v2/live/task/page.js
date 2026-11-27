@@ -118,7 +118,7 @@
     const groupLink = $('crumb-group');
     groupLink.hidden = !group;
     if (group) { groupLink.textContent = group; groupLink.href = route(list, { group: groupId }); }
-    write($('crumb-name'), marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
+    write($('crumb-name'), kind === 'schedule' ? '' : marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
   $('runs-rest').addEventListener('click', e => {
@@ -399,7 +399,7 @@
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
   function history(d, rows, kind, open, heads = true) {
-    if (!rows.length) return neverRan(d, kind) ? '<p>还没跑过，跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
+    if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
@@ -479,7 +479,7 @@
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
     const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
-    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? `还没跑过${upcoming[0] ? `，第一次在 ${stamp(upcoming[0], true)}` : ''}` : '');
+    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? '还没跑过' : '');
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     schedulePrompt(d, kind);
     // 统计格用同一批次的结果；旧包按格里使用的次数分档。

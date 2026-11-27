@@ -269,7 +269,7 @@
   function renderFrozen(items) {
     fill('frozen', items?.filter(it => it.name || it.label).map(it => {
       const status = U.status(it, { small: true }), phase = { daily: '日用', occasional: '偶用', archived: '冻结' }[it.phase] || it.phase_gap;
-      const detail = [phase && U.fieldHtml(phase, { name: '项目分档', kind: viewer }), it.reason && shortText(it.reason, { name: '冻结原因', kind: viewer }), status.note]
+      const detail = [phase && !(frozenOnly && it.phase === 'archived') && U.fieldHtml(phase, { name: '项目分档', kind: viewer }), it.reason && shortText(it.reason, { name: '冻结原因', kind: viewer }), status.note]
         .filter(Boolean).map(line => `<div class="pj-fig__sub">${line}</div>`).join('');
       // 冻结项目的详情页照样打得开（/live/project/?id=…）；后台名册没给链接时按编号接上
       const secret = secretName(it.name || it.label), href = secret ? '' : it.href || (it.id ? `/live/project/?id=${encodeURIComponent(it.id)}` : '');
