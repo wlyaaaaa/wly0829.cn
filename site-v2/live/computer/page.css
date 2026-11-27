@@ -1,5 +1,10 @@
 /* 电脑页的读数、展开和缺测：沿用站内组件，只修本页拥挤处。 */
+/* 收起时让字随顶栏淡去，底色随顶栏上移，滚过的正文不会透出来。 */
 .page--computer .topbar .topbar__glass { background-color: var(--paper); }
+.page--computer .topbar[data-hidden="true"] { opacity: 1; }
+.page--computer .topbar :is(.topbar__group, .brand) { transition: opacity .28s ease; }
+.page--computer .topbar[data-hidden="true"] :is(.topbar__group, .brand) { opacity: 0; transition: opacity .7s ease .12s; }
+.mo-vt-nav .page--computer .topbar[data-hidden="true"] :is(.topbar__group, .brand) { opacity: 1; transition: none; }
 
 .page--computer .grp__fk, .page--computer .vz-weave__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .page--computer .grp__fk { min-height: 18px; line-height: 20px; letter-spacing: 0; }
