@@ -286,7 +286,7 @@
   function closing(r, lastWords) {
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
-    let body, tone;
+    let body, tone, original = '';
     if (r.deferred) {
       // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
       // 这一轮做了什么（summary）另起一行，和原因是同一句的不再写（公网复核 11-26：暂缓原因没显示）
@@ -296,8 +296,8 @@
     } else if (r.excerptFallback) {
       const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
         .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
-      const original = r.receipt.originalText.trim() ? '<br>用的是：<span data-excerpt-original></span>' : '';
-      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original}`; tone = 'bad';
+      if (r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
+      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original ? '<br>用的是：' : ''}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
@@ -314,7 +314,47 @@
       const tag = U.visitorLabel({ visitor_labels: r.labels }, 'summary', '这一轮的说法', viewer);
       body = result ? `收到结论：${withTag(result, tag)}` : `收到结论${lastWords ? '。' : '：跑完了'}${tag}`; tone = 'ok';
     }
-    return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: later, tone, cls: 'ar-end' }) };
+    return { html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, end), body, after: original + later, tone, cls: 'ar-end' }) };
+  }
+
+  function replyInline(text, linkify = true) {
+    const tokens = /\x60([^\x60\n]+)\x60|\*\*([^*\n]+)\*\*|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>()]+)/gu;
+    let html = '', end = 0;
+    for (const token of text.matchAll(tokens)) {
+      const [match, code, bold, label, destination, bare] = token;
+      html += esc(text.slice(end, token.index));
+      if (code) html += `<code>${esc(code)}</code>`;
+      else if (bold) html += `<strong>${replyInline(bold, linkify)}</strong>`;
+      else if (!linkify) html += esc(match);
+      else {
+        const url = destination || bare.replace(/[，。！？；、,.!?;:]+$/u, '');
+        html += `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label ? replyInline(label, false) : esc(url)}</a>${bare ? esc(bare.slice(url.length)) : ''}`;
+      }
+      end = token.index + match.length;
+    }
+    return html + esc(text.slice(end));
+  }
+
+  // 原回复的字和指代照回执显示，只把 Markdown 记号排成页面元素。
+  function originalReply(text) {
+    const cells = row => row.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/u).map(cell => cell.trim().replace(/\\\|/g, '|'));
+    const tableLine = /^\s*\|.*\|\s*$/u;
+    const bullet = /^\s*(?:[-*+]|\d+[.)])\s+(.+)$/u;
+    return text.trim().replace(/\r\n/g, '\n').split(/\n[ \t]*\n+/).map(block => {
+      const lines = block.split('\n');
+      if (lines.length >= 2 && lines.every(line => tableLine.test(line)) &&
+          cells(lines[1]).every(cell => /^:?-{3,}:?$/u.test(cell))) {
+        const row = (line, tag) => `<tr>${cells(line).map(cell => `<${tag}>${replyInline(cell)}</${tag}>`).join('')}</tr>`;
+        return `<table><thead>${row(lines[0], 'th')}</thead><tbody>${lines.slice(2).map(line => row(line, 'td')).join('')}</tbody></table>`;
+      }
+      if (lines.every(line => bullet.test(line))) {
+        const start = /^\s*(\d+)/u.exec(lines[0])?.[1], tag = start ? 'ol' : 'ul';
+        const items = lines.map(line => `<li>${replyInline(bullet.exec(line)[1])}</li>`).join('');
+        return `<${tag}${start ? ` start="${start}"` : ''}>${items}</${tag}>`;
+      }
+      if (/^(?:-{3,}|\*{3,}|_{3,})$/u.test(block)) return '<hr>';
+      return `<p>${replyInline(block)}</p>`;
+    }).join('');
   }
 
   // 中间：AI 一条条说、帮手一行行，按时刻排
@@ -512,7 +552,7 @@
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.textContent = r.receipt.originalText;
+    if (original) original.innerHTML = originalReply(r.receipt.originalText);
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

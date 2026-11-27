@@ -171,6 +171,8 @@
     return out.filter(b => b.rows.length);
   }
 
+  const pathParts = text => text.split(/(?<=[\\/])/u).map(part => `<span class="op-path-segment">${part}</span>`).join('<wbr>');
+
   // —— 原文排版：标题、段落、列表、加粗、代码；本机路径的链接网页上打不开，只留字 ——
   function inline(s) {
     const codes = [];
@@ -178,16 +180,24 @@
     t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => /^https?:\/\//.test(href)
         ? `<a class="op-ext" href="${href}" target="_blank" rel="noopener">${label}</a>` : `<span class="op-ref">${label}</span>`);
-    return t.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${codes[i]}</code>`);
+    return t.replace(/\u0000(\d+)\u0000/g, (_, i) => {
+      const code = codes[i];
+      return `<code>${/^(?:[A-Za-z]:[\\/]|\\\\)/u.test(code) ? pathParts(code) : code}</code>`;
+    });
   }
   // 段末、行末最后 4 个字（后面只剩标点、前面紧挨着一小段链接或代码时连它一起）粘成一块不折行，
   // 不留一两个字加标点单独占一行（看图 06：工程卡首段末尾“的”。”单独折下去）
   const TAIL = /(?:<(a|span|strong|code)\b[^>]*>[^<]{1,8}<\/\1>)?(?:&[#\w]+;|[^<>&\s]){1,4}$/;
-  const tail = html => html.replace(TAIL, m => `<span class="op-tail">${m}</span>`);
-  function md(lines) {
+  const QUOTED_TAIL = /[“「][^<“”「」]{1,8}[”」][。！？]$/u;
+  const tail = (html, intro = false) => html.replace(intro && QUOTED_TAIL.test(html) ? QUOTED_TAIL : TAIL, m => `<span class="op-tail">${m}</span>`);
+  function md(lines, intro = false) {
     let html = '', para = [], fence = null;
     const stack = [];
-    const flush = () => { if (para.length) html += `<p>${para.map(l => tail(inline(l))).join('<br>')}</p>`; para = []; };
+    const flush = () => {
+      if (!para.length) return;
+      html += `<p${intro ? ' class="op-project-intro"' : ''}>${para.map((line, i) => tail(inline(line), intro && i === para.length - 1)).join('<br>')}</p>`;
+      intro = false; para = [];
+    };
     const close = (indent = -1) => { while (stack.length && stack.at(-1).indent > indent) html += `</li></${stack.pop().type}>`; };
     for (const line of lines) {
       if (fence) { if (/^\s*(\x60{3}|~{3})/.test(line)) { html += `<pre>${esc(fence.join('\n'))}</pre>`; fence = null; } else fence.push(line); continue; }
@@ -316,8 +326,8 @@
     if (!names.length) return '';
     return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家都有' : `${names.join('、')} 也有`}</span>`;
   }
-  function blockHtml(b, h, key) {
-    const body = md(b.rows.map(r => r.text));
+  function blockHtml(b, h, key, intro) {
+    const body = md(b.rows.map(r => r.text), intro);
     if (b.kind === 'charter') {
       return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> —— 和规则页一样</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
     }
@@ -340,13 +350,14 @@
     const one = (f, i, key) => {
       // 有开法时每份都写路径和 token（和上面“读哪几份”的第几份对得上）；后台还没给开法时照改之前的样子。
       // 访客版这一份换了说法的，本人版在抬头挂全站同一个“对外换了说法”小签
-      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${esc((on && f.path) || f.name || '没写文件名')}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
+      const file = (on && f.path) || f.name || '没写文件名';
+      const path = pathParts(esc(file));
+      const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${path}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
         on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
       if (!f.blocks.length) return `${top}<p class="tp-empty">这一份是空的。</p>`;
-      const content = f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('');
       const projectCard = f.project && mode === 'website' && baseName(f.path).toLowerCase() === 'claude.local.md';
-      return top + (projectCard ? content.replace('<p>', '<p class="op-project-intro">') : content);
+      return top + f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`, projectCard && j === 0)).join('');
     };
     return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }

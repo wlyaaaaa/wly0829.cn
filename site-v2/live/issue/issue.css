@@ -20,7 +20,7 @@
 .iss-state b { font-weight: 800; }
 .iss-src { margin: 8px 0 0; font-size: 14.5px; line-height: 24px; color: var(--muted); }
 .iss-hero time, .iss-side time { white-space: nowrap; }
-:is(.iss-hero .card__head, .iss-cell p, .iss-step .run__main p, .iss-side p, #raw dd) { text-wrap: pretty; }
+:is(.iss-hero .card__head, .iss-cell p, .iss-step .run__main p, #raw dd), .iss-side p { text-wrap: pretty; }
 
 .iss-go { color: #00A650; font-weight: 650; text-decoration: none; }
 .iss-go:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -53,6 +53,7 @@
 /* 右边三张小卡 */
 .iss-side { padding: 18px 24px 20px; }
 .iss-side > p { margin: 0; font-size: 15px; line-height: 25px; color: var(--ink-soft); overflow-wrap: anywhere; }
+.iss-repeat > p:first-of-type { text-wrap: balance; }
 /* 反复出现那张卡下面：怎么算坏（小字），误判的原记录收着、点开看 */
 .iss-side > p.iss-basis { margin: 8px 0 0; font-size: 13.5px; line-height: 22px; color: var(--muted); }
 .iss-misjudged > summary { display: flex; gap: 6px; list-style: none; }

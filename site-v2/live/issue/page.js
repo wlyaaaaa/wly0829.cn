@@ -183,7 +183,7 @@
   const faults = d => Number.isInteger(d.broken_30d) ? d : repeat;
   function repeatCard(d) {
     if (!faultOf(d)) return '';
-    const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
+    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）

@@ -101,6 +101,14 @@ summary:hover > .ar-open, summary:hover > .ar-shut { text-decoration: underline;
 .ar-msg__head b { font-size: 17px; font-weight: 800; }
 .ar-msg time, .ar-helper time { font-size: 15px; color: #8a897f; font-variant-numeric: tabular-nums; }
 .ar-msg__text { margin: 0 !important; font-size: 16.5px !important; line-height: 27px !important; color: #2b2b28; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ar-reply { margin: 8px 0 0; min-width: 0; font-size: 16px; line-height: 1.6; color: #2b2b28; overflow-wrap: anywhere; }
+.ar-reply p { margin: 0 0 10px; white-space: pre-wrap; }
+.ar-reply :is(ol, ul) { padding-inline-start: 1.5em; }
+.ar-reply table { width: 100%; border-collapse: collapse; text-align: left; }
+.ar-reply :is(th, td) { padding: 8px 10px; border: 1px solid var(--tp-hair); vertical-align: top; }
+.ar-reply :is(th, td):first-child, .ar-reply code { overflow-wrap: break-word; }
+.ar-reply th { background: #f5f5f0; }
+.ar-reply a { color: var(--tp-green-ink); text-decoration: underline; }
 .ar-msg__label { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 999px; background: rgb(20 20 19 / .06); font-size: 12.5px; line-height: 20px; color: #6c6b64; vertical-align: 1px; }
 .ar-msg__more { margin: 6px 0 0 !important; font-size: 16px !important; }
 .ar-msg__more a, .ar-say-fold > summary { font-weight: 700; color: var(--tp-green-ink); text-decoration: none; }
