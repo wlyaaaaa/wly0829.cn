@@ -271,14 +271,15 @@
   function briefsHtml(v, viewer, open) {
     const b = v.briefs, items = (Array.isArray(b?.items) ? b.items : []).filter(x => zoned(x?.captured_at));
     const rows = items.slice(0, open ? items.length : BRIEFS).map((x, i) => {
-      const [word, cls] = KIND[x.capture_kind] || ['取回', 'is-other'];
+      // 取回方式不知道的（旧简报 unknown）不挂签，留空位让后面一列对齐
+      const kind = KIND[x.capture_kind], tag = kind ? `<span class="hl-tag ${kind[1]}">${esc(kind[0])}</span>` : '<span></span>';
       const to = md(x.complete_through);
       let act = '';
       if (viewer === 'owner' && x.open) {
         const action = U.artifactAction({ open: x.open }, 'owner', h => h);
         if (action) act = U.actions({ id: `personal-health-brief-${i}-${x.captured_at}`, title: `简报 ${x.captured_at}` }, [action]);
       }
-      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span><span class="hl-tag ${cls}">${esc(word)}</span><span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span>${viewer === 'owner' ? `<span class="hl-brief__act">${act}</span>` : ''}</li>`;
+      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${tag}<span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span>${viewer === 'owner' ? `<span class="hl-brief__act">${act}</span>` : ''}</li>`;
     }).join('');
     return rows ? `<ul class="hl-briefs${viewer === 'owner' ? ' is-owner' : ''}">${rows}</ul>` : '';
   }

@@ -138,13 +138,12 @@
 
 /* —— 最近的简报：五行，日期时间、取回方式小签、资料到哪天、（本人版）在电脑上打开 —— */
 .hl-briefs { margin: 0; padding: 0; list-style: none; }
-.hl-brief { display: grid; grid-template-columns: minmax(7.6em, auto) auto minmax(0, 1fr); align-items: center; column-gap: 18px; min-height: 30px; padding: 2px 0; font-size: 13.5px; line-height: 20px; }
-.hl-briefs.is-owner .hl-brief { grid-template-columns: minmax(7.6em, auto) auto minmax(0, 1fr) auto; }
+.hl-brief { display: grid; grid-template-columns: minmax(7.6em, auto) 5.2em minmax(0, 1fr); align-items: center; column-gap: 18px; min-height: 30px; padding: 2px 0; font-size: 13.5px; line-height: 20px; }
+.hl-briefs.is-owner .hl-brief { grid-template-columns: minmax(7.6em, auto) 5.2em minmax(0, 1fr) auto; }
 .hl-brief__at { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.hl-tag { padding: 1px 10px; border-radius: 6px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; }
+.hl-tag { justify-self: start; padding: 1px 10px; border-radius: 6px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; }
 .hl-tag.is-demand { background: rgb(0 166 80 / .14); color: #0a6b3a; }
 .hl-tag.is-weekly { background: rgb(96 128 226 / .15); color: #3d58b4; }
-.hl-tag.is-other { background: rgb(20 20 19 / .07); color: #5d5c56; }
 .hl-brief__to { color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hl-brief__act { justify-self: end; }
 .hl-brief__act .btn { margin: 0; }
