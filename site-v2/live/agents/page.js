@@ -324,7 +324,7 @@
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
     // 施工账统计与本页同次生成，后端只在这项的时间戳省掉小数秒。
     const recordedAt = ws.as_of === d.at ? '' : asof(ws.as_of, typeof d.at === 'string' && d.at.replace(/\.\d+(?=Z|[+-]\d\d:\d\d$)/, ''));
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，<span class="live-unit">估多估少都算偏</span></small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
     const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;
@@ -332,12 +332,12 @@
     const bandNote = band ? `绿带按估 ${limit}及以上的单子画：比估的早 ${pct(long.early_fraction)} 到晚 ${pct(long.late_fraction)} 都算准，正好在边上也算。`
       : '估算程序定的允许范围这一轮没读到，绿带先不画，下一轮会自动再读。';
     const shortNote = limit && [short?.early_minutes, short?.late_minutes].every(known)
-      ? `<span class="ag-keep">估不到 ${esc(limit)}的单子</span>，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
+      ? `估不到 ${esc(limit)}的单子，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的<span class="ag-keep">倍数</span>，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${U.keepWords(bandNote)}${U.keepWords(shortNote)}${U.keepWords('点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。')}</p></div>
+        <div><p class="tp-sub">实际是估的几倍 <small>点是每档合起来的<span class="ag-keep">倍数</span>，准不准看右边</small></p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${bandNote}${shortNote}点是这一档所有单子（长短单都有）总用时÷总估时，落在绿带外不等于不准；右边是这一档按单张规则算准的比例。</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;

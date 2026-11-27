@@ -32,8 +32,6 @@
   }
   // 照后台 visitor_labels 在原位挂签：本人版两种（访客看不到、对外换了说法），访客版只挂“对外换了说法”（M930，全站共用的签自己分）
   const vtag = (obj, keys, what) => { const t = obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
-  const taskWords = html => html.replace(/(<[^>]+>)|认领|处理结果|处理|超时|太久没有|新的运行证据|运行证据|证据/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
-  const detailWords = html => html.replace(/(<[^>]+>)|已恢复|记下|仅本人可见|可见/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
   // 还欠着的只算在做、在等、暂时不修这三种（后台 summary.open 也这样算）；本人定了不修的不算欠着，放进“最近了结的”
   const owed = d => list(d.items).filter(it => it.state);
@@ -71,7 +69,7 @@
     return `<div class="tp-grid lg-top">
       <section class="tp-panel lg-cell"><h2>AI 手上</h2><p class="tp-big lg-hand">${big(open, 'open')}<small>件</small></p><p class="tp-small">${known(s.oldest_days) ? `最早一件记下 ${int(s.oldest_days)} 天了` : ''}</p></section>
       <section class="tp-panel lg-cell"><h2>近 7 天 · 新进 ${known(s.opened_7d ?? s.new7) ? int(s.opened_7d ?? s.new7) : '··'} · 了结 ${known(s.closed_7d) ? int(s.closed_7d) : '··'}</h2>${pair}
-        <p class="tp-legend"><span><i class="tp-swatch" style="background:#7a63e8"></i>新进</span><span><i class="tp-swatch" style="background:#00a650"></i>了结</span>${covFrom ? `<span>了结从 ${esc(when(covFrom))} 起才有<span class="live-unit">记录</span>，进出先不比</span>` : known(s.opened_7d) && known(s.closed_7d) ? `<span>${s.opened_7d > s.closed_7d ? '进的比出的多，在堆' : '出的不比进的少'}</span>` : ''}</p></section>
+        <p class="tp-legend"><span><i class="tp-swatch" style="background:#7a63e8"></i>新进</span><span><i class="tp-swatch" style="background:#00a650"></i>了结</span>${covFrom ? `<span>了结从 ${esc(when(covFrom))} 起才有记录，进出先不比</span>` : known(s.opened_7d) && known(s.closed_7d) ? `<span>${s.opened_7d > s.closed_7d ? '进的比出的多，在堆' : '出的不比进的少'}</span>` : ''}</p></section>
       <section class="tp-panel lg-cell"><h2>平均多久了结</h2><p class="tp-big">${known(avg) ? `${big(avg * unit.per, 'avg', unit.per === 1440 ? 'int' : 'dec')}<small>${unit.name}</small>` : '<span class="tp-fog">还没采上</span>'}</p>
         ${trend.filter(x => known(x.days)).length > 1 ? T.line({ series: [{ color: '#00a650', values: trend.map(x => known(x.days) ? x.days * unit.per : null) }], labels: trend.map(x => day(x.date + 'T12:00:00+08:00')), width: 300, height: 110, max: T.niceMax(Math.max(...trend.map(x => (x.days || 0) * unit.per), 1)), fmt: v => dec(v), draw: !drawn }) + `<p class="tp-small">每天往前 7 天的平均，单位${unit.name}；没有了结的日子空着。</p>` : '<p class="tp-small">只算近 7 天了结的，从 AI 接手算到了结。</p>'}</section>
       <section class="tp-panel lg-cell lg-oldest"><h2>跟得最久</h2>${oldest ? `<p class="lg-oldest__t">${link(oldest.href, F(titleOf(items.find(it => it.id === oldest.id) || oldest), '事项标题'))}</p>
@@ -177,7 +175,7 @@
       const bar = acc ? `<i class="lg-bar" style="left:${px('start')}%;width:${Math.max(.6, x(now) - px('start'))}%"></i><i class="lg-start${acc < from ? ' is-cut' : ''}" style="left:${px('start')}%"></i>` : '';
       const dots = pts.filter(p => p.k === 'check').map(({ x: l, c }) => `<i class="lg-check" style="left:${l}%" title="${esc(when(c.at))} 看过${c.text ? '：' + esc(U.fieldText(c.text, viewer)) : ''}"></i>`).join('');
       const next = nx && !full(it) ? `${nx > now ? `<i class="lg-link" style="left:${x(now)}%;width:${Math.max(0, px('next') - x(now))}%"></i>` : ''}<i class="lg-next${over ? ' is-over' : ''}${nx > to ? ' is-far' : ''}" style="left:${px('next')}%" title="下次看 ${esc(when(nextOf(it)))}"></i>${nx > to ? `<span class="lg-farlabel">${esc(day(nextOf(it)))} ›</span>` : ''}` : '';
-      return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${taskWords(F(titleOf(it), '事项标题'))}</button>${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}${tag}<p>${itemMeta(it, group, now)}</p></div>
+      return `<li class="lg-item${picked === it.id ? ' is-picked' : ''}" data-pick="${esc(it.id)}"><div class="lg-item__text"><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '事项标题')}</button>${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}${tag}<p>${itemMeta(it, group, now)}</p></div>
         <div class="lg-lane">${bar}${dots}${next}</div></li>`;
     };
     const legend = '<p class="tp-legend lg-key"><span><i class="lg-key__bar"></i>记下到现在</span><span><i class="lg-key__check"></i>看过</span><span><i class="lg-key__next"></i>下次看</span><span><i class="lg-key__over"></i>到了日子还没看</span></p>';
@@ -238,7 +236,7 @@
       <p class="tp-small lg-basis" id="lg-settled-basis">按每件最后的结局算，一件只算一次。</p>
       ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 次：${why7}</p>` : ''}
       <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
-        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${taskWords(F(titleOf(r), '事项标题'))}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
+        <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
       <div class="lg-done__foot">${next ? `<button type="button" class="lg-more" data-older${olderBusy ? ' disabled' : ''}>${olderBusy ? '正在读…' : '看更早的 ›'}</button>` : ''}<span class="tp-small">已读到 ${int(rows.length)} 件${next ? '，还有更早的' : ''}</span></div></section>`;
   }
@@ -298,8 +296,8 @@
       // 访客版：那一轮标了只给本人看、访客页头已经发布时，后台另给页头读口 source_header_href（/computer-access/live/v1/chats/{访客别名}），照 HEADLINK A 挂“看对话页头 ›”（M1078）
       const headerId = viewer === 'public' ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
       const header = headerId ? ` · ${link(T.path('/live/chat/', { id: decodeURIComponent(headerId) }), '看对话页头 ›')}` : '';
-      const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${detailWords(esc(why))}</small>` : ''}${header}`;
-      return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${detailWords(body)}${go}</li>`;
+      const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}${header}`;
+      return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
     const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
@@ -307,8 +305,8 @@
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
-      <p class="lg-detail__t">${taskWords(F(titleOf(it), '事项标题'))}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
-      ${progress && !repeatedProgress ? `<p class="tp-small">${detailWords(F(progress, '进展'))}</p>` : ''}
+      <p class="lg-detail__t">${F(titleOf(it), '事项标题')}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
+      ${progress && !repeatedProgress ? `<p class="tp-small">${F(progress, '进展')}</p>` : ''}
       <ol class="lg-steps">${lines || (it.accepted || it.first_at ? `<li><b>${esc(when(it.accepted || it.first_at))}</b>${it.repeat ? '第一次出现' : 'AI 接手'}</li>${it.repeat && it.last_at ? `<li><b>${esc(when(it.last_at))}</b>最近一次又出现</li>` : ''}` : '')}${!lines && it.settled ? `<li><b>${it.at && stamp(it.at) !== stamp(it.accepted) ? esc(when(it.at)) : '哪天定的没记下'}</b>${settledLabel(it.settled)}</li>` : ''}${it.settled ? '' : full(it) ? `<li class="is-next"><b>现在</b>${int(it.check_limit)} 次看满了，AI 停手${it.when ? `，${waitText(it.when)}` : ''}</li>`
         : next ? `<li class="is-next"><b>${esc(when(next))}</b>下次看${known(it.check_count) ? `，第 ${int(it.check_count + 1)} 次` : ''}</li>` : ''}</ol>
       ${note ? `<p class="tp-small lg-gap">${note}</p>` : ''}${related ? `<p class="tp-small lg-rel">${related}</p>` : ''}</section>`;
@@ -316,10 +314,6 @@
 
   // 老读口的 broken_30d 本来就是近 30 天；停手规则只展示读到的现行值。
   const repeatDays = d => positive(d.policy?.repeat_window_days) ? d.policy.repeat_window_days : 30;
-  const segmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
-  const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || text
-    .split(/(修不住|转给|知道|亲手)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
-    .map(word => /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join(''));
   // 每件写“近 30 天坏了几次”（后台 broken_30d，点是 broken_at 每次坏的时刻），本人 11-24 选的规矩按坏了几次数；
   // 以前写的是“又发生几次”（reopen_count，修好后又重开的次数，大半是 0，满屏红字“又发生 0 次”）。后台没给坏了几次的旧包照旧写重开几次。
   function repeats(d) {
@@ -336,7 +330,7 @@
     const said = it => broke(it) != null ? `近 ${int(days)} 天坏了 ${int(broke(it))} 次` : reopened(it) != null ? `修好后又出现 ${int(reopened(it))} 次` : '';
     const ticks = [...new Set(Array.from({ length: 7 }, (_, i) => Math.round(i * days / 6)))];
     let dotted = 0;   // 图上实际画了几个时点，脚注照这个说
-    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 ${int(days)} 天坏了不止一次的；${keepWords(esc(rule))}</small></h2></div>
+    return `<section class="tp-panel lg-repeat" id="repeat"><div class="tp-panel__head"><h2>反复出现<small>同一个东西近 ${int(days)} 天坏了不止一次的；${esc(rule)}</small></h2></div>
       <ul class="lg-replist">${rows.map(it => {
         const at = list(it.broken_at).length ? list(it.broken_at) : list(it.reopen_at).length ? list(it.reopen_at) : [it.first_at, it.last_at];
         const times = at.map(stamp).filter(t => t && t >= from && t <= now);
@@ -346,7 +340,7 @@
         for (const t of times) { const k = Math.min(days - 1, Math.floor((now - t) / DAY)); slots.set(k, [...(slots.get(k) || []), t]); }
         const dots = [...slots].map(([k, ts]) => `<i style="left:${100 - (k + .5) / days * 100}%"${ts.length > 1 ? ' data-n' : ''} title="${ts.map(t => esc(when(new Date(t).toISOString()))).join('、')} 坏了${ts.length > 1 ? ` ${ts.length} 次` : '一次'}">${ts.length > 1 ? ts.length : ''}</i>`).join('');
         const handed = it.handed_to_owner ? ` ${it.owner_href ? link(it.owner_href, `已转给${you()} ›`) : `已转给${you()}`}` : '';
-        return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${U.keepWords(F(titleOf(it), '反复出现的问题'))}</button><span class="lg-rep__n">${said(it)}${handed}</span>
+        return `<li${picked === it.id ? ' class="is-picked"' : ''}><button type="button" class="lg-title" data-pick="${esc(it.id)}">${F(titleOf(it), '反复出现的问题')}</button><span class="lg-rep__n">${said(it)}${handed}</span>
           <div class="lg-rep__axis">${ticks.map(n => `<span style="left:${n / days * 100}%"${n === 0 ? ' data-edge="start"' : n === days ? ' data-edge="end"' : ''}>${esc(day(new Date(from + n * DAY).toISOString()))}</span>`).join('')}${dots}</div></li>`;
       }).join('')}</ul>${rows.some(it => list(it.broken_at).length || list(it.reopen_at).length) ? '' : `<p class="tp-small">${dotted ? '每次坏的日子还没采上，图上只画第一次和最近一次。' : `每次坏的日子还没采上；第一次和最近一次也不在这 ${int(days)} 天里，所以图上没有点。`}</p>`}</section>`;
   }

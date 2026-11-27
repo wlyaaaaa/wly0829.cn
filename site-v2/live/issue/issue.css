@@ -53,7 +53,6 @@
 /* 右边三张小卡 */
 .iss-side { padding: 18px 24px 20px; }
 .iss-side > p { margin: 0; font-size: 15px; line-height: 25px; color: var(--ink-soft); overflow-wrap: anywhere; }
-.iss-repeat > p:first-of-type { text-wrap: balance; }
 /* 反复出现那张卡下面：怎么算坏（小字），误判的原记录收着、点开看 */
 .iss-side > p.iss-basis { margin: 8px 0 0; font-size: 13.5px; line-height: 22px; color: var(--muted); }
 .iss-misjudged > summary { display: flex; gap: 6px; list-style: none; }

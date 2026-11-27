@@ -115,7 +115,7 @@
         mine.missing > 0 && `另有 ${T.int(mine.missing)} 段没记下开始或结束的时刻，没算进来`,
       ].filter(Boolean);
       body = `<div class="tp-grid ag-hgrid-wrap${host ? ' is-one' : ''}"><div>${table(cols, cols.some(({ s }) => s.split && s.rest > 0))}</div><div>${bars(rows, h => `${title} · ${h.name}`)}${legend}</div></div>
-        ${notes.length ? `<p class="tp-small ag-hnote">${U.keepWords(esc(notes.join('；')))}。</p>` : ''}`;
+        ${notes.length ? `<p class="tp-small ag-hnote">${esc(notes.join('；'))}。</p>` : ''}`;
     }
     grow = false;
     return `<section class="tp-panel ag-hours" id="hours">${head}${body}</section>`;

@@ -180,40 +180,12 @@
     t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => /^https?:\/\//.test(href)
         ? `<a class="op-ext" href="${href}" target="_blank" rel="noopener">${label}</a>` : `<span class="op-ref">${label}</span>`);
-    return t.replace(/\u0000(\d+)\u0000/g, (_, i) => {
-      const code = codes[i];
-      return `<code>${/^(?:[A-Za-z]:[\\/]|\\\\)/u.test(code) ? pathParts(code) : code}</code>`;
-    });
+    return t.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${codes[i]}</code>`);
   }
-  // 段末、行末最后 4 个字（后面只剩标点、前面紧挨着一小段链接或代码时连它一起）粘成一块不折行，
-  // 不留一两个字加标点单独占一行（看图 06：工程卡首段末尾“的”。”单独折下去）
-  const TAIL = /(?:<(a|span|strong|code)\b[^>]*>[^<]{1,8}<\/\1>)?(?:&[#\w]+;|[^<>&\s]){1,4}$/;
-  const QUOTED_TAIL = /[“「][^<“”「」]{1,8}[”」][。！？]$/u;
-  const INTRO_WORDS = /(本人定|等(?:你|本人)的事|句末)/u;
-  function tail(html, intro = false, phrases) {
-    const suffix = html.match(intro && QUOTED_TAIL.test(html) ? QUOTED_TAIL : TAIL);
-    if (!suffix) return html;
-    let cut = suffix.index;
-    if (!suffix[0].includes('<')) {
-      let start = html.lastIndexOf('>', cut - 1) + 1;
-      for (const part of U.wordParts(html.slice(start), phrases)) {
-        const end = start + part.length;
-        if (end > cut) { cut = start; break; }
-        start = end;
-      }
-    }
-    return `${html.slice(0, cut)}<span class="op-tail">${html.slice(cut)}</span>`;
-  }
-  function md(lines, intro = false) {
+  function md(lines) {
     let html = '', para = [], fence = null;
     const stack = [];
-    const flush = () => {
-      if (!para.length) return;
-      const phrases = intro ? INTRO_WORDS : undefined;
-      const lines = para.map((line, i) => tail(inline(line), intro && i === para.length - 1, phrases)).join('<br>');
-      html += `<p${intro ? ' class="op-project-intro"' : ''}>${intro ? U.keepWords(lines, phrases) : lines}</p>`;
-      intro = false; para = [];
-    };
+    const flush = () => { if (para.length) html += `<p>${para.map(inline).join('<br>')}</p>`; para = []; };
     const close = (indent = -1) => { while (stack.length && stack.at(-1).indent > indent) html += `</li></${stack.pop().type}>`; };
     for (const line of lines) {
       if (fence) { if (/^\s*(\x60{3}|~{3})/.test(line)) { html += `<pre>${esc(fence.join('\n'))}</pre>`; fence = null; } else fence.push(line); continue; }
@@ -231,13 +203,12 @@
           if (top.type === type) html += '</li><li>';
           else { html += `</li></${stack.pop().type}><${type} class="op-list"><li>`; stack.push({ type, indent }); }
         } else { html += `<${type} class="op-list"><li>`; stack.push({ type, indent }); }
-        html += tail(inline(item[3])).replace(/<[^>]+>|网站上线收尾/g,
-          part => part.startsWith('<') ? part : `<span class="live-unit">${part}</span>`);
+        html += inline(item[3]);
         continue;
       }
-      if (stack.length && /^\s{2,}\S/.test(line)) { html += '<br>' + tail(inline(line.trim())); continue; }
+      if (stack.length && /^\s{2,}\S/.test(line)) { html += '<br>' + inline(line.trim()); continue; }
       close();
-      if (/^\s*>/.test(line)) { flush(); html += `<blockquote>${tail(inline(line.replace(/^\s*>\s?/, '')))}</blockquote>`; continue; }
+      if (/^\s*>/.test(line)) { flush(); html += `<blockquote>${inline(line.replace(/^\s*>\s?/, ''))}</blockquote>`; continue; }
       para.push(line.trim());
     }
     if (fence) html += `<pre>${esc(fence.join('\n'))}</pre>`;
@@ -343,8 +314,8 @@
     if (!names.length) return '';
     return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家都有' : `${names.join('、')} 也有`}</span>`;
   }
-  function blockHtml(b, h, key, intro) {
-    const body = md(b.rows.map(r => r.text), intro);
+  function blockHtml(b, h, key) {
+    const body = md(b.rows.map(r => r.text));
     if (b.kind === 'charter') {
       return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> —— 和规则页一样</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
     }
@@ -373,8 +344,7 @@
         on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
       if (!f.blocks.length) return `${top}<p class="tp-empty">这一份是空的。</p>`;
-      const projectCard = f.project && mode === 'website' && baseName(f.path).toLowerCase() === 'claude.local.md';
-      return top + f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`, projectCard && j === 0)).join('');
+      return top + f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('');
     };
     return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }
@@ -394,7 +364,7 @@
     const c = h.context, refill = refillText(h);
     const what = c?.triggers?.length ? `（${c.triggers.join('、')}）` : '';
     return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">${U.keepWords(`最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}`)}</p><pre>${esc(c.text)}</pre>`
+      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
       : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变

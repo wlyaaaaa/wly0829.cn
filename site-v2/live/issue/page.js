@@ -27,10 +27,6 @@
         (attribute, name, quote, value) => name.trim() === 'title=' ? name + quote + publicText(value) + quote : attribute)));
   }
   const put = (el, html) => U.html(el, publicHtml(html, viewer));
-  const segmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
-  const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || text
-    .split(/(修不住|转给|知道|亲手|新开|认领|超时时?|接下来|读不到|要不要|要(?:你|本人)[选定]|AI 约好的事)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
-    .map(word => /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join(''));
   const timed = R.timed, ms = x => Date.parse(x);
   const when = x => R.when(x, at || new Date().toISOString(), { relative: true });
   const clock = x => `<time datetime="${esc(x)}">${esc(when(x))}</time>`;
@@ -129,7 +125,7 @@
     const titleText = document.createElement('template');
     titleText.innerHTML = shownTitle;
     document.title = `${titleText.content.textContent.trim() || '账本一件'} · 实况`;
-    U.html(head, `<span class="head__lead">${keepWords(shownTitle)}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
+    U.html(head, `<span class="head__lead">${shownTitle}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
@@ -165,14 +161,14 @@
     const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', s.closed ? `已经了结：${s.label}，不再看了。` : next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
-    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${keepWords(F(v, h))}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
+    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
       const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
-      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${keepWords(stepText(r.text))}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
+      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
@@ -200,7 +196,7 @@
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
     // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
-    const rule = keepWords(esc(`反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`));
+    const rule = esc(`反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}定、亲手做或补只有${you()}知道的，才转给${you()}。`);
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
     const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，<span class="live-unit">最近一次</span> ${clock(lastAt)}` : ''}。`
@@ -228,7 +224,7 @@
     if (!sc) return '';
     const host = HOST[String(sc.host || '').toLowerCase()] || '';
     const body = sc.available && site(sc.href) ? go(sc.href, `${host ? `${esc(host)} · ` : ''}${T(sc.title) ? F(sc.title, '对话标题') : '那场对话'}`) : T(sc.unavailable_reason) ? F(sc.unavailable_reason, '来源') : '';
-    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${keepWords(body)}</p></section>` : '';
+    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${body}</p></section>` : '';
   }
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {
@@ -257,7 +253,7 @@
   }
 
   function rawCard(d) {
-    const rows = fact('原文', keepWords(F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项')))
+    const rows = fact('原文', F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项'))
       + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
     if (!rows) return '';
     return `<details class="dossier-card dossier-card--raw glass" id="raw"${$('raw')?.open ? ' open' : ''}>

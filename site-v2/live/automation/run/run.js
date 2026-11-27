@@ -345,7 +345,8 @@
       const lines = block.split('\n');
       if (lines.length >= 2 && lines.every(line => tableLine.test(line)) &&
           cells(lines[1]).every(cell => /^:?-{3,}:?$/u.test(cell))) {
-        const row = (line, tag) => `<tr>${cells(line).map(cell => `<${tag}>${replyInline(cell)}</${tag}>`).join('')}</tr>`;
+        const cellWords = html => html.replace(/<[^>]+>|暂缓/g, word => word.startsWith('<') ? word : `<span class="live-unit">${word}</span>`);
+        const row = (line, tag) => `<tr>${cells(line).map(cell => `<${tag}>${cellWords(replyInline(cell))}</${tag}>`).join('')}</tr>`;
         return `<table><thead>${row(lines[0], 'th')}</thead><tbody>${lines.slice(2).map(line => row(line, 'td')).join('')}</tbody></table>`;
       }
       if (lines.every(line => bullet.test(line))) {
@@ -551,9 +552,9 @@
     // 访客版画之前把指本人的“你”换成“本人”（paint）
     paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
-      <div class="ar-grid"><div class="ar-main">${r.excerptFallback ? U.keepWords(conversation(r)) : conversation(r)}</div>${side(r)}</div>`);
+      <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.innerHTML = U.keepWords(originalReply(r.receipt.originalText), /(暂缓)/u);
+    if (original) original.innerHTML = originalReply(r.receipt.originalText);
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

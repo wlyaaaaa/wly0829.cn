@@ -104,7 +104,6 @@
 /* 原文排版 */
 .op-md { font-size: 15.5px; line-height: 1.85; color: #2f2f2b; overflow-wrap: anywhere; }
 .op-md p { margin: 8px 0; }
-.op-md .op-project-intro { text-wrap: pretty; }
 .op-md h3 { margin: 18px 0 6px; font-family: var(--black); line-height: 1.3; color: var(--ink); text-wrap: balance; }  /* 长标题两行摊匀，不把“段）”单独折到下一行 */
 .op-md h3.op-h1 { font-size: 26px; }
 .op-md h3.op-h2 { font-size: 24px; }
@@ -114,7 +113,6 @@
 .op-md ol.op-list { list-style: decimal; }
 .op-md .op-list .op-list { list-style: circle; }
 .op-md li { margin: 3px 0; }
-.op-md .op-tail { white-space: nowrap; }  /* 段末最后几个字粘成一块，见 page.js 的 tail */
 .op-md li::marker { color: #8f8d85; }
 .op-md strong { font-weight: 800; color: var(--ink); }
 .op-md code { padding: 1px 5px; border-radius: 5px; background: rgb(20 20 19 / .06); font-family: var(--mono); font-size: .88em; }
