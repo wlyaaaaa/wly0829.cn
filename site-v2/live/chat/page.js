@@ -204,7 +204,10 @@
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
-    const { locked, name, hiddenName, title, missingReply, plan, progress, rawReply, hasReply, meta, project, app } = V.pageMeta();
+    const { locked, name, hiddenName, title, missingReply, plan, progress, rawReply, hasReply, log, meta: rawMeta, project, app } = V.pageMeta();
+    // 旧回包的最近一条记录也会取主对话更新时刻；新回包单列的数据截止有自己的来源。
+    const sameLegacyUpdate = !V.hasNewTimes() && V.validTime(chat.at) && Date.parse(V.recordEnd(log)) === Date.parse(chat.at);
+    const meta = sameLegacyUpdate ? rawMeta.filter(value => value !== `最近一条记录 ${when(chat.at)}`) : rawMeta;
     document.title = `${title} · 实况`;
     const model = who(chat, true);
     // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀。
