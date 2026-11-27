@@ -35,6 +35,8 @@
   // 条数：十万以上写“约 X 万”（一百万以上取整），十万以下写原数（原来页上的 12,021 这类照旧看得到）
   const wan = n => n >= 1e6 ? `约 ${int(n / 1e4)} 万` : n >= 1e5 ? `约 ${+(n / 1e4).toFixed(1)} 万` : int(n);
   const tip = s => typeof s === 'string' && s.trim() ? ` title="${esc(s.trim())}"` : '';
+  const keep = s => `<span class="hl-keep">${esc(s)}</span>`;
+  const prose = s => esc(s).replace(/增删|空档|\d{1,2}月\d{1,2}(?:–\d{1,2})?日(?: \d{2}:\d{2})?|\d[\d,]* (?:小时|天|条|份|种)/g, keep);
   // —— 两版同一套（本人 11-24 禁令、11-27 22:23）：访客看不到的（后台给 {value:null, visibility:'owner', hidden_what}）在原位写
   //    “〔这是什么〕仅本人可见”（共用写法），不悄悄消失；本人版同一处按后台 visitor_labels 挂共用的“访客看不到”／“对外换了说法”签 ——
   let viewing = 'public';
@@ -131,7 +133,7 @@
       const body = !four.length ? '' : same
         ? `${four.map(([, n]) => n).join('、')}都是 <b>${esc(`${r[four[0][0]]}/${r.days}`)}</b> 天`
         : four.map(([k, n]) => `${n} <b>${esc(`${r[k]}/${r.days}`)}</b> 天`).join('、');
-      if (body) out.push(`<p class="hl-recent">最近两周${esc(span)}${body}</p>`);
+      if (body) out.push(`<p class="hl-recent">最近两周${prose(span)}${body}</p>`);
     }
     const cut = md(s?.through) || md(r?.through);
     if (cut) out.push(`<span class="hl-cut">截止 ${esc(cut)}</span>`);
@@ -178,7 +180,7 @@
       const span = waitSpan(w, year, today);
       const legend = ['full', 'partial', 'none', 'uncollected', 'blank'].map(k => {
         const [cls, , word] = STATE[k], text = k === 'uncollected' && span ? word.replace('）', `：${span}）`) : word;
-        return `<li><i class="${cls}"></i>${esc(text)}</li>`;
+        return `<li><i class="${cls}"></i><span>${prose(text)}</span></li>`;
       }).join('');
       cal = `<ol class="hl-months">${months}</ol><ul class="hl-legend">${legend}</ul>`;
     }
@@ -214,9 +216,9 @@
       tiles.push(`<div class="hl-tile"${tip(v.readable.note)}><span>这批能正常读</span><b class="${ok ? 'is-ok' : 'is-bad'}"><i aria-hidden="true">${ok ? '✓' : '!'}</i>${esc(v.readable.value)}${tag(v.readable, '这批能不能正常读')}</b>${at ? `<small>${esc(at)} 核对</small>` : ''}</div>`);
     }
     // 已取到但 AI 还没用上（后台只在真有待审时给一句话，没有时是 0）：多一行，字照原来页面的说法，带它自己的时刻
-    const p = v.pending, said = hid(p) ? lock(p, p.label || '待审的资料') : typeof p?.value === 'string' && p.value.trim() ? esc(p.value.trim().replace(/\d{4}-\d\d-\d\d/g, md)) + tag(p, p.label || '待审的资料') : '';
+    const p = v.pending, said = hid(p) ? lock(p, p.label || '待审的资料') : typeof p?.value === 'string' && p.value.trim() ? prose(p.value.trim().replace(/\d{4}-\d\d-\d\d/g, md)) + tag(p, p.label || '待审的资料') : '';
     const pending = said ? `<p class="hl-pending"${tip(p.note)}>${p.label ? `<b>${esc(p.label)}</b>` : ''}<span>${said}</span>${mdTime(p.at) ? `<small>${esc(mdTime(p.at))}</small>` : ''}</p>` : '';
-    return `<p class="hl-big${aLock ? ' hl-locked' : ''}"${tip(a.note)}>${big}${aLock ? '' : tag(a, 'AI 已用上的资料日期')}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${esc(when)} 采用</p>` : ''}${pending}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
+    return `<p class="hl-big${aLock ? ' hl-locked' : ''}"${tip(a.note)}>${big}${aLock ? '' : tag(a, 'AI 已用上的资料日期')}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${keep(when)} 采用</p>` : ''}${pending}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
   }
 
   // —— AI 能分析哪些数据 ——
@@ -229,9 +231,13 @@
     const kinds = finite(inv.kinds) ? inv.kinds : items.length;
     const total = finite(inv.total) ? inv.total : null;
     out.push(`<p class="hl-kbig"><b>${esc(int(kinds))}</b><small>种</small>${total != null ? `<i>·</i>${total >= 1e4 ? `<small>约</small><b>${esc(total >= 1e6 ? int(total / 1e4) : String(+(total / 1e4).toFixed(1)))}</b><small>万条</small>` : `<b>${esc(int(total))}</b><small>条</small>`}` : ''}${tag(im, '数据种类和条数')}</p>`);
-    out.push(`<p class="hl-sub">手环原件${md(inv.through) ? ` · 截止 ${esc(md(inv.through))}` : ''} · 程序自动数，增删种类跟着变</p>`);
-    const max = items[0]?.count || 1;
-    const row = x => `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar"><i style="width:${Math.max(1.5, x.count / max * 100).toFixed(2)}%"></i></span><b>${esc(wan(x.count))}</b></li>`;
+    const through = md(inv.through);
+    out.push(`<p class="hl-sub">${prose(`手环原件${through ? ` · 截止 ${through}` : ''} · 程序自动数，增删种类跟着变。`)}${keep('横条按对数刻度')}</p>`);
+    const scaleMax = Math.log1p(Math.max(1, items[0]?.count ?? 0));
+    const row = x => {
+      const width = (Math.log1p(Math.max(0, x.count)) / scaleMax * 100).toFixed(2);
+      return `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar" aria-hidden="true"><i style="width:${width}%"></i></span><b${x.count >= 1e5 ? tip(`${int(x.count)} 条`) : ''}>${esc(wan(x.count))}</b></li>`;
+    };
     const shown = Math.max(TOP, shownKinds), rest = items.length - shown;
     out.push(`<ul class="hl-kinds">${items.slice(0, open || rest <= 0 ? items.length : shown).map(row).join('')}</ul>`);
     if (rest > 0) out.push(`<button type="button" class="hl-pill hl-more-kinds" aria-expanded="${open}">${open ? '收起' : `其余 ${esc(int(rest))} 种`} <span class="more__chev">›</span></button>`);
@@ -240,8 +246,8 @@
   }
   function enteredHtml(v) {
     const n = v.entered_records, at = v.entered_date;
-    const line = [hid(n) ? lock(n, '本人录入的测量条数') : finite(n?.value) && esc(`本人录入的测量 ${int(n.value)} 条`) + tag(n, '本人录入的测量条数'),
-      hid(at) ? lock(at, '最近一条的日期') : md(at?.value) && esc(`最近一条 ${md(at.value)}`) + tag(at, '最近一条的日期')].filter(Boolean);
+    const line = [hid(n) ? lock(n, '本人录入的测量条数') : finite(n?.value) && `本人录入的测量 ${keep(`${int(n.value)} 条`)}` + tag(n, '本人录入的测量条数'),
+      hid(at) ? lock(at, '最近一条的日期') : md(at?.value) && `最近一条 ${keep(md(at.value))}` + tag(at, '最近一条的日期')].filter(Boolean);
     return line.length ? `<p class="hl-entered"${tip([n?.note, at?.note].filter(Boolean).join('；'))}>${line.join(' · ')}</p>` : '';
   }
 
@@ -259,7 +265,7 @@
     if (!rows.length) return '';
     const { cut, each } = groupCut(rows);
     const tag = [extra, cut].filter(Boolean).join(' · ');
-    return `<div class="hl-grp"><p class="hl-grp__head"><b>${esc(name)}</b>${tag ? `<span>${esc(tag)}</span>` : ''}</p><ul>${rows.map(m => `<li${tip(m.note)}><span>${esc(m.label)}${m.sub ? `<small>${esc(m.sub)}</small>` : ''}${each && md(m.at) ? `<small>截止 ${esc(md(m.at))}</small>` : ''}</span><b>${m.html || esc(m.text)}</b></li>`).join('')}</ul></div>`;
+    return `<div class="hl-grp"><p class="hl-grp__head"><b>${esc(name)}</b>${tag ? `<span>${esc(tag)}</span>` : ''}</p><ul>${rows.map(m => `<li${tip(m.note)}><span>${prose(m.label)}${m.sub ? `<small>${prose(m.sub)}</small>` : ''}${each && md(m.at) ? `<small>截止 ${keep(md(m.at))}</small>` : ''}</span><b>${m.html || esc(m.text)}</b></li>`).join('')}</ul></div>`;
   }
   function briefGap(v) {
     const b = v.briefs, n = v.briefsCount?.value;

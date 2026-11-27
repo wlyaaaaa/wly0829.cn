@@ -1,6 +1,7 @@
 /* 健康参谋（/live/project/?id=personal-health）自己的几块，health.js 画；别的项目页用不到这些类名。
    卡片材质、圆角、留白照项目页共用的 .pj-card / .glass；强调色只有网站的正绿，月历另用浅绿、橙两色分状态。 */
 .page--project { --hl-green: #00a650; --hl-part: #b4e3a0; --hl-none: #f2a56e; --hl-faint: rgb(20 20 19 / .065); }
+.hl-keep { white-space: nowrap; }
 
 /* 卡名前一道短绿竖条（这一页的几张卡和最近改动都带，照图） */
 .hl-title::before,
@@ -51,7 +52,7 @@
 /* 图例 */
 .hl-legend { display: flex; flex-wrap: wrap; gap: 6px 26px; margin: 16px 0 0; padding: 0 0 0 8px; list-style: none; font-size: 12.5px; line-height: 18px; color: #5d5c56; }
 .hl-legend li { display: inline-flex; align-items: center; gap: 7px; }
-.hl-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--hl-faint); }
+.hl-legend i { flex: none; width: 12px; height: 12px; border-radius: 3px; background: var(--hl-faint); }
 
 /* 一排小统计：从哪天起几天、四项各几天；最近两周一句；行尾截止 */
 .hl-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 0; margin: 16px 0 0; padding: 12px 0 0; border-top: 1px solid var(--hair); }
@@ -62,7 +63,7 @@
 .hl-stat > b { display: block; margin-top: 2px; font-size: 22px; line-height: 28px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hl-stat > b small { margin-left: 4px; font-size: 13px; font-weight: 400; color: #68665f; }
 .hl-recent { flex: 1 1 320px; min-width: 0; margin: 0; padding: 0 22px; border-left: 1px solid rgb(20 20 19 / .08); font-size: 14px; line-height: 24px; font-weight: 600; color: var(--ink); text-wrap: pretty; }
-.hl-recent b { margin: 0 2px; font-size: 22px; font-weight: 700; color: var(--hl-green); font-variant-numeric: tabular-nums; vertical-align: -1px; }
+.hl-recent b { margin: 0 2px; font-size: 22px; font-weight: 700; color: var(--hl-green); font-variant-numeric: tabular-nums; vertical-align: -1px; white-space: nowrap; }
 .hl-cut { margin-left: auto; padding: 0 4px 0 12px; font-size: 12.5px; line-height: 18px; color: #5f5e58; white-space: nowrap; }
 
 /* ============ 下面三块：左（AI 答到哪天／更多数据）、中（AI 能分析哪些数据）、右（简报／最近改动），底边对齐 ============ */
@@ -118,11 +119,11 @@
 .hl-kbig b { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .hl-kbig small { margin: 0 3px; font-size: 19px; font-weight: 700; }
 .hl-kbig i { margin: 0 6px; font-style: normal; font-weight: 700; }
-.hl-kinds { margin: 12px 0 0; padding: 0; list-style: none; }
-.hl-kinds li { display: grid; grid-template-columns: minmax(4.6em, auto) minmax(0, 1fr) minmax(4.2em, auto); align-items: center; column-gap: 10px; padding: 8px 0; font-size: 13.5px; line-height: 18px; }
+.hl-kinds { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.hl-kinds li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: center; padding: 8px 0; font-size: 13.5px; line-height: 18px; }
 .hl-kind__name { color: var(--ink); white-space: nowrap; }
-.hl-kind__bar { height: 6px; border-radius: 999px; }
-.hl-kind__bar > i { display: block; height: 100%; min-width: 3px; border-radius: inherit; background: var(--hl-green); }
+.hl-kind__bar { height: 6px; border-radius: 999px; background: var(--hl-faint); }
+.hl-kind__bar > i { display: block; height: 100%; border-radius: inherit; background: var(--hl-green); }
 .hl-kinds li > b { font-weight: 600; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hl-pill { margin: 10px 0 0; padding: 5px 14px; border-radius: 999px; background: rgb(255 255 255 / .6); box-shadow: inset 0 0 0 1px rgb(20 20 19 / .08); font-size: 13.5px; font-weight: 600; color: var(--ink); }
 .hl-pill:hover { background: rgb(255 255 255 / .85); }
