@@ -541,6 +541,7 @@
       if(Array.isArray(d?.rows))appendRows(reading,d.rows);
     },
     link(s){
+      const fallback=s.fallbackNote||s.meta?.fallbackNote;
       bar?.set(s.offline?{...s,cutoffAt:null}:s);L.offline(s.offline);
       const draw=redraw||now!==s.now||cutoff!==s.cutoffAt;
       now=s.now;cutoff=s.cutoffAt;
