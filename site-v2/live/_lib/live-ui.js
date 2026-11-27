@@ -1323,7 +1323,10 @@
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
       link.classList.remove('is-back');
       link.dataset.stage = c.homePublication ? 'publication' : c.stage;
-      put(link.querySelector('b'), c.say);
+      const say = link.querySelector('b');
+      if (c.homePublication && say.textContent !== c.say) {
+        say.innerHTML = esc(c.say).replace(/访客版|补上。/g, '<span class="live-unit">$&</span>');
+      } else put(say, c.say);
       const at = link.querySelector('.live-conn__at');
       if (at.textContent !== c.at) at.innerHTML = esc(c.at).replace('没存下来', '<span>没存下来</span>');
       const why = link.querySelector('.live-conn__why');

@@ -9,7 +9,7 @@
   const wordSegmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
   const wordUnit = /[\p{L}\p{N}]/u;
   const oneHan = /^\p{Script=Han}$/u;
-  const timedUnit = /((?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|项|件|天|年|秒|份|个|台|条|次|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
+  const protectedUnit = /(验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
   const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
   function keepWords(html) {
     if (!wordSegmenter || !html) return html;
@@ -20,7 +20,7 @@
     while (walk.nextNode()) nodes.push(walk.currentNode);
     for (const node of nodes) {
       if (node.parentElement?.closest('.l1-unit,svg,button,code,pre')) continue;
-      const pieces = node.data.split(timedUnit).flatMap((part, i) => i % 2 ? [part] :
+      const pieces = node.data.split(protectedUnit).flatMap((part, i) => i % 2 ? [part] :
         Array.from(wordSegmenter.segment(part), entry => entry.segment));
       const words = [];
       for (let i = 0; i < pieces.length;) {
