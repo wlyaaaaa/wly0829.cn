@@ -256,11 +256,14 @@
     U.html($('meta'), meta.map(s => `<span>${text(s)}${project.changed?.text ? `：${U.fieldHtml(project.changed.text, { name: '最近变化', kind: recordViewer })}` : ''}</span>`).join('') + status.note); $('meta').hidden = !meta.length && !status.note;
   }
   function drawRecordTitle() {
-    const total = count(recordTotal, recordSource, 'total', ' 项');
+    // 说明书四类访客看不到原文的（M1093）：后台给访客的明细合成一条占位，total 是 1；“共 N 项”照项目详情里这一类的真条数写
+    const groupCount = knowledge && recordViewer === 'public' && section !== 'group-4'
+      ? project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section)?.count : null;
+    const total = Number.isFinite(groupCount) ? `${groupCount.toLocaleString('zh-CN')} 项` : count(recordTotal, recordSource, 'total', ' 项');
     const title = $('record-title');
     const showName = archives ? '逐份档案' : section === 'results' ? sectionName : '';
     const countLabel = uncertainEmpty(recordSource) ? '总数暂未核实'
-      : recordTotal == null ? '' : `${total.startsWith('至少 ') ? '' : '共 '}${total}`;
+      : recordTotal == null && !Number.isFinite(groupCount) ? '' : `${total.startsWith('至少 ') ? '' : '共 '}${total}`;
     // 从别处点进某一次（诊断现场、手机传回这类 &record=）：写明只看这一条，并给回到全部的入口，不写“共 1 项”冒充全部。
     const allTotal = recordAt && recordSource ? recordSource.total : null;
     if (recordAt && recordSource && (allTotal > items.length || recordSource.next)) {

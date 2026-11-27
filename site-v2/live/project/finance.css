@@ -12,6 +12,12 @@
 .page--project .fin-spend { margin-top: var(--pj-gap); }
 .fin-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; margin: 0 0 14px; }
 .fin-title { font-size: 19px; line-height: 27px; letter-spacing: .04em; font-weight: 700; color: var(--ink); }
+/* 卡名下两行笔数：左对齐，图例仍和卡名同一行 */
+.fin-head.has-counts { align-items: flex-start; }
+.fin-head__main { min-width: 0; }
+.fin-count { margin: 2px 0 0; font-size: 13.5px; line-height: 20px; color: #5d5c56; font-variant-numeric: tabular-nums; }
+.fin-head__main .fin-count:first-of-type { margin-top: 4px; }
+.fin-head.has-counts .fin-legend { padding-top: 3px; }
 .fin-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; color: #5d5c56; }
 .fin-legend li { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .fin-chip { flex: none; display: inline-block; width: 16px; height: 10px; border-radius: 3px; background: var(--c); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .45); }
