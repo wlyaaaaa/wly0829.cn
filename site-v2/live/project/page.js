@@ -1251,7 +1251,7 @@
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
-    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}${impactNote || changes ? `<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${changes}${impactNote}</dd></div>` : ''}${sized && !sizeInStrip ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
+    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}${impactNote || changes ? `<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${changes && `<span>${changes}</span>`}${impactNote}</dd></div>` : ''}${sized && !sizeInStrip ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
     part('detail').hidden = false;
     renderStrip(d);
     let cover = $('pj-cover');
