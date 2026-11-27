@@ -34,6 +34,12 @@
   // 条数：十万以上写“约 X 万”（一百万以上取整），十万以下写原数（原来页上的 12,021 这类照旧看得到）
   const wan = n => n >= 1e6 ? `约 ${int(n / 1e4)} 万` : n >= 1e5 ? `约 ${+(n / 1e4).toFixed(1)} 万` : int(n);
   const tip = s => typeof s === 'string' && s.trim() ? ` title="${esc(s.trim())}"` : '';
+  // —— 两版同一套（本人 11-24 禁令、11-27 22:23）：访客看不到的（后台给 {value:null, visibility:'owner', hidden_what}）在原位写
+  //    “〔这是什么〕仅本人可见”（共用写法），不悄悄消失；本人版同一处按后台 visitor_labels 挂共用的“访客看不到”／“对外换了说法”签 ——
+  let viewing = 'public';
+  const hid = m => !!m && viewing !== 'owner' && m.value == null && U.privateField(m);
+  const lock = (m, name) => U.fieldHtml({ ...m, hidden_what: m.hidden_what || name }, { name, kind: 'public' });
+  const tag = (m, name) => m && typeof m === 'object' ? U.visitorLabel(m, ['$', 'value'], name, viewing) : '';
 
   // —— 数据 ——
   function read(raw) {
@@ -46,6 +52,7 @@
       ...pick('adopted', 'pending', 'newest', 'captured', 'readable', 'kinds', 'history', 'steps', 'sleep', 'resting', 'recent', 'activity',
         'steps_records', 'sleep_records', 'entered_records', 'entered_date', 'window_records', 'batches', 'history_segments', 'doc_files', 'code_files', 'code_parts'),
       briefsCount: metric('briefs'),
+      M: { wear: metric('wear_calendar'), summary: metric('collection_summary'), inventory: metric('record_inventory'), briefs: metric('brief_list') },
     };
   }
   function adapt(raw) {
@@ -145,8 +152,9 @@
   }
   function wear(d, boardEl) {
     const v = d.healthView, w = v?.wear;
-    const stats = v ? statsHtml(v) : '';
-    if (!w?.start && !stats) { wide?.remove(); wide = null; drawn = ''; return; }
+    const M = v?.M || {}, wearLock = hid(M.wear), sumLock = hid(M.summary);
+    const stats = sumLock ? `<p class="hl-sub hl-locked">${lock(M.summary, '记了多少天')}</p>` : v ? statsHtml(v) : '';
+    if (!w?.start && !stats && !wearLock) { wide?.remove(); wide = null; drawn = ''; return; }
     if (!wide) {
       wide = document.createElement('section');
       wide.className = 'pj-card glass hl-wear'; wide.id = 'health-wear';
@@ -160,10 +168,10 @@
     const today = todayIso();
     const first = w?.start ? +w.start.slice(0, 4) : null, last = +today.slice(0, 4);
     if (year == null || first == null || year < first || year > last) year = last;
-    const sig = JSON.stringify([w, stats, year, today]);
+    const sig = JSON.stringify([w, stats, year, today, viewing, wearLock]);
     if (sig === drawn) return;
     drawn = sig;
-    let cal = '';
+    let cal = wearLock ? `<p class="hl-sub hl-locked">${lock(M.wear, '每天记没记')}</p>` : '';
     if (w?.start) {
       const months = Array.from({ length: 12 }, (_, i) => monthHtml(w, year, i + 1, today)).join('');
       const span = waitSpan(w, year, today);
@@ -174,7 +182,7 @@
       cal = `<ol class="hl-months">${months}</ol><ul class="hl-legend">${legend}</ul>`;
     }
     const pill = w?.start ? `<span class="hl-year"><button type="button" data-step="-1" aria-label="上一年"${year <= first ? ' disabled' : ''}>‹</button><b>${year}</b><button type="button" data-step="1" aria-label="下一年"${year >= last ? ' disabled' : ''}>›</button></span>` : '';
-    wide.innerHTML = `<div class="hl-wear__head"><b class="hl-title">手环记录齐不齐</b>${pill}</div>${cal}${stats}`;
+    wide.innerHTML = `<div class="hl-wear__head"><b class="hl-title">手环记录齐不齐</b>${tag(M.wear, '每天记没记')}${pill}</div>${cal}${stats}`;
   }
   U.onBeijingDayChange?.(() => { drawn = ''; if (wide && lastD) wear(lastD, lastBoard); });
 
@@ -186,45 +194,54 @@
 
   // —— AI 答健康问题用到哪天 ——
   function answerHtml(v) {
-    const a = v.adopted, big = md(a?.value);
+    const a = v.adopted, aLock = hid(a), big = aLock ? lock(a, 'AI 已用上的资料日期') : md(a?.value) ? esc(md(a.value)) : '';
     if (!big) return '';
     const when = mdTime(a.at);
     const tiles = [];
-    if (md(v.newest?.value)) tiles.push(`<div class="hl-tile"${tip(v.newest.note)}><span>手环最新记录</span><b>${esc(md(v.newest.value))}</b></div>`);
-    if (mdTime(v.captured?.at)) {
+    if (hid(v.newest)) tiles.push(`<div class="hl-tile"><span>手环最新记录</span><b>${lock(v.newest, '手环最新记录')}</b></div>`);
+    else if (md(v.newest?.value)) tiles.push(`<div class="hl-tile"${tip(v.newest.note)}><span>手环最新记录</span><b>${esc(md(v.newest.value))}${tag(v.newest, '手环最新记录')}</b></div>`);
+    if (hid(v.captured) || mdTime(v.captured?.at)) {
       const n = finite(v.kinds?.value) ? v.kinds.value : null;
-      const kinds = n != null ? `<a class="hl-tile__sub" href="${esc(RECORDS(v.kinds.section || 'kinds'))}">这批只带回 ${esc(int(n))} 种数据 <span class="more__chev">›</span></a>` : '';
-      tiles.push(`<div class="hl-tile"${tip(v.captured.note)}><span>上次取回</span><b>${esc(mdTime(v.captured.at))}</b>${kinds}</div>`);
+      const kinds = hid(v.kinds) ? `<small>${lock(v.kinds, '这批的数据种类数')}</small>`
+        : n != null ? `<a class="hl-tile__sub" href="${esc(RECORDS(v.kinds.section || 'kinds'))}">这批只带回 ${esc(int(n))} 种数据 <span class="more__chev">›</span></a>${tag(v.kinds, '这批的数据种类数')}` : '';
+      const when2 = hid(v.captured) ? lock(v.captured, '上次取回的时间') : esc(mdTime(v.captured.at)) + tag(v.captured, '上次取回的时间');
+      tiles.push(`<div class="hl-tile"${tip(v.captured.note)}><span>上次取回</span><b>${when2}</b>${kinds}</div>`);
     }
-    if (typeof v.readable?.value === 'string' && v.readable.value) {
+    if (hid(v.readable)) tiles.push(`<div class="hl-tile"><span>这批能正常读</span><b>${lock(v.readable, '这批能不能正常读')}</b></div>`);
+    else if (typeof v.readable?.value === 'string' && v.readable.value) {
       const ok = v.readable.value === '能', at = mdTime(v.readable.at);
-      tiles.push(`<div class="hl-tile"${tip(v.readable.note)}><span>这批能正常读</span><b class="${ok ? 'is-ok' : 'is-bad'}"><i aria-hidden="true">${ok ? '✓' : '!'}</i>${esc(v.readable.value)}</b>${at ? `<small>${esc(at)} 核对</small>` : ''}</div>`);
+      tiles.push(`<div class="hl-tile"${tip(v.readable.note)}><span>这批能正常读</span><b class="${ok ? 'is-ok' : 'is-bad'}"><i aria-hidden="true">${ok ? '✓' : '!'}</i>${esc(v.readable.value)}${tag(v.readable, '这批能不能正常读')}</b>${at ? `<small>${esc(at)} 核对</small>` : ''}</div>`);
     }
     // 已取到但 AI 还没用上（后台只在真有待审时给一句话，没有时是 0）：多一行，字照原来页面的说法，带它自己的时刻
-    const p = v.pending, said = typeof p?.value === 'string' ? p.value.trim().replace(/\d{4}-\d\d-\d\d/g, md) : '';
-    const pending = said ? `<p class="hl-pending"${tip(p.note)}>${p.label ? `<b>${esc(p.label)}</b>` : ''}<span>${esc(said)}</span>${mdTime(p.at) ? `<small>${esc(mdTime(p.at))}</small>` : ''}</p>` : '';
-    return `<p class="hl-big"${tip(a.note)}>${esc(big)}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${esc(when)} 采用</p>` : ''}${pending}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
+    const p = v.pending, said = hid(p) ? lock(p, p.label || '待审的资料') : typeof p?.value === 'string' && p.value.trim() ? esc(p.value.trim().replace(/\d{4}-\d\d-\d\d/g, md)) + tag(p, p.label || '待审的资料') : '';
+    const pending = said ? `<p class="hl-pending"${tip(p.note)}>${p.label ? `<b>${esc(p.label)}</b>` : ''}<span>${said}</span>${mdTime(p.at) ? `<small>${esc(mdTime(p.at))}</small>` : ''}</p>` : '';
+    return `<p class="hl-big${aLock ? ' hl-locked' : ''}"${tip(a.note)}>${big}${aLock ? '' : tag(a, 'AI 已用上的资料日期')}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${esc(when)} 采用</p>` : ''}${pending}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
   }
 
   // —— AI 能分析哪些数据 ——
   function kindsHtml(v, open) {
-    const inv = v.inventory, out = [];
+    const inv = v.inventory, out = [], im = v.M?.inventory;
     const items = (Array.isArray(inv?.items) ? inv.items : []).filter(x => x?.label && finite(x.count)).sort((a, b) => b.count - a.count);
+    if (hid(im)) return `<p class="hl-sub hl-locked">${lock(im, '数据种类和条数')}</p>${enteredHtml(v)}`;
     // 种类排行没给时整张卡不画，本人录入那两项放到“更多数据”
     if (!inv || !(finite(inv.kinds) || items.length)) return '';
     const kinds = finite(inv.kinds) ? inv.kinds : items.length;
     const total = finite(inv.total) ? inv.total : null;
-    out.push(`<p class="hl-kbig"><b>${esc(int(kinds))}</b><small>种</small>${total != null ? `<i>·</i>${total >= 1e4 ? `<small>约</small><b>${esc(total >= 1e6 ? int(total / 1e4) : String(+(total / 1e4).toFixed(1)))}</b><small>万条</small>` : `<b>${esc(int(total))}</b><small>条</small>`}` : ''}</p>`);
+    out.push(`<p class="hl-kbig"><b>${esc(int(kinds))}</b><small>种</small>${total != null ? `<i>·</i>${total >= 1e4 ? `<small>约</small><b>${esc(total >= 1e6 ? int(total / 1e4) : String(+(total / 1e4).toFixed(1)))}</b><small>万条</small>` : `<b>${esc(int(total))}</b><small>条</small>`}` : ''}${tag(im, '数据种类和条数')}</p>`);
     out.push(`<p class="hl-sub">手环原件${md(inv.through) ? ` · 截止 ${esc(md(inv.through))}` : ''} · 程序自动数，增删种类跟着变</p>`);
     const max = items[0]?.count || 1;
     const row = x => `<li><span class="hl-kind__name">${esc(x.label)}</span><span class="hl-kind__bar"><i style="width:${Math.max(1.5, x.count / max * 100).toFixed(2)}%"></i></span><b>${esc(wan(x.count))}</b></li>`;
     const rest = items.length - TOP;
     out.push(`<ul class="hl-kinds">${items.slice(0, open || rest <= 0 ? items.length : TOP).map(row).join('')}</ul>`);
     if (rest > 0) out.push(`<button type="button" class="hl-pill hl-more-kinds" aria-expanded="${open}">${open ? '收起' : `其余 ${esc(int(rest))} 种`} <span class="more__chev">›</span></button>`);
-    const n = v.entered_records, at = v.entered_date;
-    const line = [finite(n?.value) && `本人录入的测量 ${int(n.value)} 条`, md(at?.value) && `最近一条 ${md(at.value)}`].filter(Boolean);
-    if (line.length) out.push(`<p class="hl-entered"${tip([n?.note, at?.note].filter(Boolean).join('；'))}>${esc(line.join(' · '))}</p>`);
+    out.push(enteredHtml(v));
     return out.join('');
+  }
+  function enteredHtml(v) {
+    const n = v.entered_records, at = v.entered_date;
+    const line = [hid(n) ? lock(n, '本人录入的测量条数') : finite(n?.value) && esc(`本人录入的测量 ${int(n.value)} 条`) + tag(n, '本人录入的测量条数'),
+      hid(at) ? lock(at, '最近一条的日期') : md(at?.value) && esc(`最近一条 ${md(at.value)}`) + tag(at, '最近一条的日期')].filter(Boolean);
+    return line.length ? `<p class="hl-entered"${tip([n?.note, at?.note].filter(Boolean).join('；'))}>${line.join(' · ')}</p>` : '';
   }
 
   // —— 更多数据：采集底账、项目规模 ——
@@ -249,7 +266,8 @@
     return diff > 0 ? `比“最近的简报”多的 ${int(diff)} 份，是还没取回完的批次` : '';
   }
   function moreHtml(v) {
-    const row = (m, label, text = unitText(m), html = '') => m && text ? { at: m.at, note: m.note || m.scope, label: label || m.label, text, html } : null;
+    const row = (m, label, text = unitText(m), html = '') => !m ? null : hid(m) ? { at: m.at, label: label || m.label, text: '-', html: lock(m, label || m.label) }
+      : text ? { at: m.at, note: m.note || m.scope, label: label || m.label, text, html: (html || esc(text)) + tag(m, label || m.label) } : null;
     // 几处原话难懂，换成人话（数照留）
     const win = v.window_records, winDay = md(win?.at);
     const ledger = [
@@ -269,30 +287,30 @@
 
   // —— 最近的简报 ——
   function briefsHtml(v, viewer, open) {
+    if (hid(v.M?.briefs)) return `<p class="hl-sub hl-locked">${lock(v.M.briefs, '最近的简报')}</p>`;
     const b = v.briefs, items = (Array.isArray(b?.items) ? b.items : []).filter(x => zoned(x?.captured_at));
     const rows = items.slice(0, open ? items.length : BRIEFS).map((x, i) => {
       // 取回方式不知道的（旧简报 unknown）不挂签，留空位让后面一列对齐
-      const kind = KIND[x.capture_kind], tag = kind ? `<span class="hl-tag ${kind[1]}">${esc(kind[0])}</span>` : '<span></span>';
+      const kind = KIND[x.capture_kind], chip = kind ? `<span class="hl-tag ${kind[1]}">${esc(kind[0])}</span>` : '<span></span>';
       const to = md(x.complete_through);
-      let act = '';
-      if (viewer === 'owner' && x.open) {
-        const action = U.artifactAction({ open: x.open }, 'owner', h => h);
-        if (action) act = U.actions({ id: `personal-health-brief-${i}-${x.captured_at}`, title: `简报 ${x.captured_at}` }, [action]);
-      }
-      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${tag}<span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span>${viewer === 'owner' ? `<span class="hl-brief__act">${act}</span>` : ''}</li>`;
+      // 两版同一颗“在电脑上打开”：本人版用现有打开程序；访客回包没有 open，按钮照摆，点了由共用拦截弹“不是可信设备”的弹窗
+      const action = U.artifactAction({ open: x.open || { label: '在电脑上打开' } }, viewer, h => h);
+      const act = action ? U.actions({ id: `personal-health-brief-${i}-${x.captured_at}`, title: `简报 ${x.captured_at}` }, [action]) : '';
+      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${chip}<span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span><span class="hl-brief__act">${act}</span></li>`;
     }).join('');
-    return rows ? `<ul class="hl-briefs${viewer === 'owner' ? ' is-owner' : ''}">${rows}</ul>` : '';
+    return rows ? `<ul class="hl-briefs">${rows}</ul>` : '';
   }
   function briefsRight(v, open) {
+    if (hid(v.M?.briefs)) return '';
     const b = v.briefs, n = (Array.isArray(b?.items) ? b.items : []).length;
     const total = finite(b?.total) ? `共 ${int(b.total)} 份` : '';
     const all = n > BRIEFS ? `<button type="button" class="hl-all" aria-expanded="${open}">${open ? '收起' : '全部'} <span class="more__chev">›</span></button>` : '';
-    return total || all ? `<span class="hl-head-r">${esc(total)}${total && all ? '<i>·</i>' : ''}${all}</span>` : '';
+    return total || all ? `<span class="hl-head-r">${tag(v.M?.briefs, '最近的简报')}${esc(total)}${total && all ? '<i>·</i>' : ''}${all}</span>` : '';
   }
 
   // 原地展开：种类“其余 N 种”、简报“全部”
   const opened = { kinds: false, briefs: false };
-  let lastD = null, lastBoard = null, lastViewer = 'public';
+  let lastD = null, lastBoard = null;
   document.addEventListener('click', e => {
     const k = e.target.closest?.('.hl-more-kinds'), a = e.target.closest?.('.hl-all');
     if (!(k || a) || !lastD) return;
@@ -300,13 +318,13 @@
     const v = lastD.healthView, card = k ? 'health-kinds' : 'artifacts', b = blockOf(card);
     if (!b) return;
     if (k) U.html(b.viz, kindsHtml(v, opened.kinds), false);
-    else { head(b, '最近的简报', briefsRight(v, opened.briefs)); U.html(b.viz, briefsHtml(v, lastViewer, opened.briefs), false); }
+    else { head(b, '最近的简报', briefsRight(v, opened.briefs)); U.html(b.viz, briefsHtml(v, viewing, opened.briefs), false); }
   });
   const made = new Map();
   const blockOf = key => made.get(key) || null;
 
   function board(d, viewer, graphBlock, boardEl) {
-    lastD = d; lastBoard = boardEl; lastViewer = viewer;
+    lastD = d; lastBoard = boardEl; viewing = viewer;
     boardEl?.classList.add('pj-board--health');
     wear(d, boardEl);
     const v = d.healthView, out = [];
