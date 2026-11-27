@@ -105,7 +105,9 @@
 
 .page--computer .grp-trio[hidden], .page--computer .vz-exits[hidden] { display: none; }
 .page--computer .exit-guard { margin: 0; padding: 6px 8px; border-top: 1px solid rgb(20 20 19 / .08); color: var(--muted); font-size: 12px; line-height: 20px; }
-.page--computer .exit-guard__mode, .page--computer .exit-guard__action { white-space: nowrap; }
+.page--computer .exit-guard__mode, .page--computer .exit-guard__action, .page--computer .exit-word { white-space: nowrap; }
+.page--computer .exit-guard__detail { padding-inline: 2px; color: inherit; text-decoration: none; }
+.page--computer .exit-guard__detail:hover { color: var(--ink); }
 .page--computer .exit-guard__mode::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 6px; vertical-align: 1px; border-radius: 50%; background: var(--muted); }
 .page--computer .exit-guard__mode[data-tone="amber"] { color: #a76500; }
 .page--computer .exit-guard__mode[data-tone="amber"]::before { background: #efa719; }
