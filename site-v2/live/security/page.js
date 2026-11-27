@@ -336,31 +336,33 @@
     D.count(c);
     const hero = document.getElementById('hero');
     const count = hero.querySelector('[data-part="count"]'), groups = data?.attention_summary;
-    const report = (title, items, detail, always = false) => items.length || always
-      ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join('；') : ''}` : '';
-    const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
-    // 页顶这几行的时刻和电脑页页顶同一种写法：今天的只写钟点，别的天带日期（M1010）
-    const day = t => Number.isFinite(Date.parse(t)) ? [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ') : '';
-    if (groups) {
-      const name = g => U.fieldHtml(g.name, { name: '检测分组' });
-      const lines = [
-        report('已确认异常', groups.confirmed, g => `${name(g)}（${[g.at && U.esc(day(g.at)) + ' 读到', who(g)].filter(Boolean).join('，')}）`, true),
-        report('读数暂缺', groups.unread, g => `${name(g)}（${g.at ? '最后读到 ' + U.esc(day(g.at)) : '没读到上次记录'}）`),
-        report('需核实', groups.review, g => {
-          const screening = /impersonation/.test(g.key || '');
-          const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
-            g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${day(g.at)} 读到`,
-            g.ai_fixing === true ? 'AI 在逐个核对'
-              : screening && g.strong === 0 ? '这些线索待核对，眼下不用你处理。'
-              : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
-          return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${U.esc(fields.join('；'))}）`;
-        })
-      ].filter(Boolean);
-      count.hidden = false;
-      U.html(count, lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join(''));
-    } else count.hidden = true;
     window.LiveLight.tone(hero, data);
     queueMicrotask(() => {
+      // 取数先画明细，再更新受众。用这一次更新后的身份写称呼。
+      const report = (title, items, detail, always = false) => items.length || always
+        ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join('；') : ''}` : '';
+      const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
+      // 页顶这几行的时刻和电脑页页顶同一种写法：今天的只写钟点，别的天带日期（M1010）
+      const day = t => Number.isFinite(Date.parse(t)) ? [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ') : '';
+      if (groups) {
+        const you = U.you(document.documentElement.dataset.liveViewer);
+        const name = g => U.fieldHtml(g.name, { name: '检测分组' });
+        const lines = [
+          report('已确认异常', groups.confirmed, g => `${name(g)}（${[g.at && U.esc(day(g.at)) + ' 读到', who(g)].filter(Boolean).join('，')}）`, true),
+          report('读数暂缺', groups.unread, g => `${name(g)}（${g.at ? '最后读到 ' + U.esc(day(g.at)) : '没读到上次记录'}）`),
+          report('需核实', groups.review, g => {
+            const screening = /impersonation/.test(g.key || '');
+            const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
+              g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${day(g.at)} 读到`,
+              g.ai_fixing === true ? 'AI 在逐个核对'
+                : screening && g.strong === 0 ? `这些线索待核对，眼下不用${you}处理。`
+                : `下一步：交给 AI 逐个核对签名和安装位置，${you}不用自己查；现在还没有 AI 接手`].filter(Boolean);
+            return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${U.esc(fields.join('；'))}）`;
+          })
+        ].filter(Boolean);
+        count.hidden = false;
+        U.html(count, lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join(''));
+      } else count.hidden = true;
       const title = headline(data, summaryGroup(data), hero.querySelector('[data-part="basis"]'));
       const counted = html => html.replace(/(<span class="live-unit">[^<]+ 个<\/span>进程身份)/g, '<span class="security-count">$1</span>');
       // 大标题先说结论（有没有确认的异常、几组要核实），退出和提权次数挪到下一行。
