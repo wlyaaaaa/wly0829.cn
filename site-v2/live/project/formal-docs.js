@@ -78,11 +78,15 @@
   let list, view, snapshot, packet, first, offset = 0, pending = false, failed = false, watched = false;
   function finalRow(row) {
     const action = U.artifactAction(row, view, href => href);
+    const detail = row.solves || '';
+    const compact = /^共\s+\d+\s+页$/.test(detail) ? ' docs-final-detail--compact' : '';
     return `<li><div class="docs-final-head"><strong>${esc(row.title)}</strong><time datetime="${esc(row.at)}">${date(row.at, true)}</time></div>
-      <div class="docs-final-note">${esc(row.solves || '')}</div>
-      <div class="docs-actions">${action ? U.actions({ id: `formal-doc-${row.at}-${row.title}` }, [action]) :
-        '<button class="btn btn--sm" type="button" disabled>在电脑上打开</button>'}
-        ${U.visitorLabel(row, 'title', '定稿名称', view)}</div></li>`;
+      <div class="docs-final-detail${compact}">
+        <div class="docs-final-note">${esc(detail)}</div>
+        <div class="docs-actions">${action ? U.actions({ id: `formal-doc-${row.at}-${row.title}` }, [action]) :
+          '<button class="btn btn--sm" type="button" disabled>在电脑上打开</button>'}
+          ${U.visitorLabel(row, 'title', '定稿名称', view)}</div>
+      </div></li>`;
   }
   function drawList() {
     if (!list?.isConnected) return;
