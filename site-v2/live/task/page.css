@@ -94,7 +94,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-stats[data-outcome="failed"] .task-stat[data-stat="failure"] { background: #f9d9d6; }
 /* 出错那格读到 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色；后台给了分档仍照分档 */
 .task-stat[data-stat="failure"][data-none] { background: rgb(255 255 255 / .62); }
-/* 句末一两个字不单独掉一行（主控 11-26 看 07b：“做什么”最后“看。”单掉一行）；“这个任务”里一格两三行的照 balance 分匀 */
+/* 句末一两个字不单独掉一行。说明各行默认均匀换行，“怎么算做完”尽量用满每行。 */
 .task-detail { text-wrap: pretty; }
 .task-stat[data-stat="today"] { background: linear-gradient(114deg, #fff, #e9daf8); box-shadow: inset 0 0 0 1px #d8c3f2; }
 .task-stat[data-stat="today"] dd { font-size: 33px; }
@@ -135,7 +135,8 @@ h1 .task-provider { margin-left: .6em; }
 .task-card dl { margin: 0; }
 .task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
 .task-card dl dt { color: #505565; }
-.task-card dl dd { margin: 0; overflow-wrap: anywhere; text-wrap: balance; }
+.task-card dl dd { margin: 0; overflow-wrap: anywhere; }
+.task-card dl dd:not(.task-expected-result) { text-wrap: balance; }
 .task-fact-missing { color: var(--muted); }
 .task-card dl div:last-child { border: 0; }
 .task-card :is(p,li,td,th,summary,dl) { font-size: 14px; line-height: 1.45; }

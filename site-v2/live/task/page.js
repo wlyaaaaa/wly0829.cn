@@ -27,6 +27,10 @@
   const pageOf = d => d?.runs_page && typeof d.runs_page === 'object' && Array.isArray(d.runs) ? d.runs_page : null;
   let detailWatches = [];
   const field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
+  const keepUnit = value => `<span class="live-unit">${value}</span>`;
+  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const keepExpectedWords = html => html.includes('<') ? html : html.replace(/\p{Script=Han}+/gu, run =>
+    Array.from(segmenter.segment(run), ({ segment }) => keepUnit(segment)).join('<wbr>'));
   const text = v => U.fieldText(v, viewer);
   const time = v => typeof v === 'number' ? v : Date.parse(text(v));
   const stamp = (t, relative = false) => !Number.isFinite(t) ? '' : [
@@ -359,8 +363,8 @@
     const projectCell = marked(project, d, 'project_name', '所属项目');
     const rows = [
       ['做什么', purpose(d, kind)],
-      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(field(d.expected_result, '怎么算做完'), d, 'expected_result', '怎么算做完')
-        || '<span class="task-fact-missing">登记时没写怎么算做完</span>'],
+      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(keepExpectedWords(field(d.expected_result, '怎么算做完')), d, 'expected_result', '怎么算做完')
+        || '<span class="task-fact-missing">登记时没写怎么算做完</span>', 'task-expected-result'],
       ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
         : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field((kind === 'schedule' ? bjSchedule(d) : null) ?? d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
@@ -373,7 +377,7 @@
       typeof d.ledger_id === 'string' && ['关联账本', link(route('/live/issue/', { id: d.ledger_id }), '看这件事')],
     ].filter(row => row?.[1]);
     $('about-title').textContent = kind === 'pickup' ? '这个动作' : '这个任务';
-    U.html($('facts'), rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('') || '<p>说明未读到</p>', false);
+    U.html($('facts'), rows.map(([k, v, css]) => `<div><dt>${k}</dt><dd${css ? ` class="${css}"` : ''}>${v}</dd></div>`).join('') || '<p>说明未读到</p>', false);
   }
   const timeCell = r => `<time datetime="${new Date(runTime(r)).toISOString()}">${stamp(runTime(r))}${r.start == null ? ' 结束' : ''}</time>`;
   const endStamp = r => r.start != null && dayStart(r.start) === dayStart(r.end) ? U.time(r.end) : stamp(r.end);
@@ -488,7 +492,8 @@
     // 出错那格读到的是 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色，0 次和“全成功不上色”同一个意思（M779）
     write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => {
       const whole = !number && reason === '已读部分没有', none = key === 'failure' && (whole || number === count(0, true));
-      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
+      const display = kind === 'plan' && key === 'average' ? number.replace(/\d+ (?:小时|分钟|秒)/g, keepUnit) : number;
+      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${display || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
     }).join(''), false);
     const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
     const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
