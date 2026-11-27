@@ -1323,7 +1323,8 @@
       link.classList.remove('is-back');
       link.dataset.stage = c.homePublication ? 'publication' : c.stage;
       put(link.querySelector('b'), c.say);
-      put(link.querySelector('.live-conn__at'), c.at);
+      const at = link.querySelector('.live-conn__at');
+      if (at.textContent !== c.at) at.innerHTML = esc(c.at).replace('没存下来', '<span>没存下来</span>');
       put(link.querySelector('.live-conn__why'), c.wait);
     } else if (link && !link.classList.contains('is-back')) {
       const refreshed = ['retrying', 'publication'].includes(link.dataset.stage);

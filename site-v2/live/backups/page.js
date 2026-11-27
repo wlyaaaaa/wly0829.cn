@@ -295,7 +295,8 @@
       const pair = D.pair(drive, 'drive'), known = drive.sent != null && drive.total != null;
       const counts = [pending.count == null && offline() ? '' : `在等 ${D.transferCount(pending, 'count', 'drive')}`,
         drive.failed == null && offline() ? '' : `失败 ${drive.failed === 0 ? '0 个文件' : D.transferCount(drive, 'failed', 'drive')}`];
-      cards.push(card('Drive 已传 / 共', known ? `<b class="drive-numbers">${esc(pair)}</b>` : big(pair, false),
+      const pairText = esc(pair).replace(/文件$/, '<span class="backup-unit">文件</span>');
+      cards.push(card('Drive 已传 / 共', known ? `<b class="drive-numbers">${pairText}</b>` : `<small>${pairText}</small>`,
         `${drive.q === 'partial' ? '' : D.progress(drive.sent, drive.total)}<small>${counts.filter(Boolean).map(text => `<span class="drive-count">${esc(text)}</span>`).join(' · ')}</small>${readError ? '' : gap(drive)}`, 'backup-drive'));
     }
     if (!offline() || local.local_only != null) cards.push(card('有本地副本，未传云端', big(local.local_only == null ? U.collectionText() : (local.local_only === 0 && D.partial(local, 'local_only') ? '已读范围内 0' : D.count(local, 'local_only')) + ' 类', local.local_only != null), unknown ? '' : gap(local)));

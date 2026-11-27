@@ -115,7 +115,7 @@
 .page--live .board .row__title { word-break: normal; }
 /* 等你的事、AI 对话两张卡的标题：只在空格和标点处折行，连着的中文不从中间断开（“解锁”不拆成“解／锁”）；一段长过整行才硬断（M743） */
 .page--live .board :is(#needs, #chats) .row__title { word-break: keep-all; overflow-wrap: break-word; }
-.page--live .board .row__title .l1-unit { display: inline; white-space: nowrap; }
+.page--live .board :is(.row__title,#computer) .l1-unit { display: inline; white-space: nowrap; }
 .page--live .board .row.is-expanded > .row__text > .helpers { display: none; }
 .page--live #chats .row--chat > .row__text { display: contents; }
 .page--live #chats .row--chat .row__main { grid-column: 2; grid-row: 1; }

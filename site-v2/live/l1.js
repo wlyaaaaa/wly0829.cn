@@ -949,7 +949,9 @@
       return { ...prior };
     });
   }
-  const keepComputerWords = html => html.replace(/(?:明细|记录到)(?![^<>]*>)/g, '<span class="live-unit">$&</span>');
+  const keepComputerWords = html => html
+    .replace(/(?:明细|记录到)(?![^<>]*>)/g, '<span class="live-unit">$&</span>')
+    .replace(/(?:正在|\d{2}-\d{2} \d{2}:\d{2})(?![^<>]*>)/g, '<span class="l1-unit">$&</span>');
   function renderComputer(d, screen, phoneData) {
     const trafficBytes = bytes => U.trafficBytes(bytes);  // 按 1024 进位，和海外流量页同一个函数
     const p = parts.computer;
@@ -1037,7 +1039,7 @@
     const it = d.interrupt;
     const note = offline || !it ? '' : it.text || (it.q === 'ok' && !it.chats && !it.tasks ? '现在重启不打断什么' : '');
     p.note.hidden = !note;
-    U.html(p.note, U.fieldHtml(note, { name: '运行情况', kind: viewer }));
+    U.html(p.note, keepComputerWords(U.fieldHtml(note, { name: '运行情况', kind: viewer })));
   }
 
   function computerStability(host, note) {
