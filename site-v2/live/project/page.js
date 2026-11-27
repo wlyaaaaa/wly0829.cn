@@ -877,7 +877,9 @@
     const fixed = custom?.columns?.(seq.map(g => g.key));
     // 最近改动钉在左栏、最近产物钉在右栏：两版卡片高度不一样，不钉会一版改动在左、一版产物在左（本人定的两版前后端一套）
     const pins = seq.map(g => g.blocks.some(b => b.changes) ? 0 : g.blocks.some(b => b.artifacts) ? 1 : undefined);
-    const cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : PL.split(weights, 0, pins);
+    let cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : PL.split(weights, 0, pins);
+    // 钉完以后全落在左栏、右半边空着的（账房只有“钱现在大概多少”和“最近改动”两张），最近改动不钉，放到右栏并排
+    if (cols !== fixed && cols.every(c => c === 0)) cols = PL.split(weights, 0, pins.map(p => p === 0 ? undefined : p));
     inOrder(main, seq.filter((_, i) => cols[i] === 0).map(g => g.card.el));
     inOrder(side, seq.filter((_, i) => cols[i] === 1).map(g => g.card.el));
     seq.forEach((g, i) => g.card.col = cols[i]);
