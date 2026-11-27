@@ -112,7 +112,7 @@
     const threshold = known(host.compact_tokens) && host.compact_tokens > 0 ? host.compact_tokens : null;
     const percent = ratio > 0 && ratio <= 100 ? `设成上下文用到 ${ratio}%` : '';
     const point = threshold ? `${h.id === 'claude' ? '约 ' : ''}${kTok(threshold)}` : '';
-    return { contextWindow: host.context_window, point, percent };
+    return { contextWindow: host.context_window, point, percent, estimated: host.compact_tokens_basis === 'configured_estimate' };
   }
   const keyOf = hook => String(hook.key || '').replace(/:external$/, '');
   const fallbackName = hook => NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调';
@@ -206,7 +206,8 @@
       return `<div class="ag-acc__row${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span><div>${body}</div></div>`;
     }).join('')}</div>`;
   }
-  function ratioPlot(d, band) {
+  // 绿带上的字写明只管多长的单子：小、中、大三行都混着长单和短单，只写“允许范围”会被当成每行（尤其小单）的准线（看图 21）
+  function ratioPlot(d, band, bandLabel = '允许范围') {
     const W = 470, H = 214, pad = { l: 46, r: 16, t: 26, b: 28 }, w = W - pad.l - pad.r, h = H - pad.t - pad.b;
     const values = HOSTS.flatMap(hh => SIZES.map(([s]) => est(d, hh).size_ratios?.[s]).filter(r => r?.samples))
       .flatMap(r => [r.actual_over_estimate, r.p75]).filter(known);
@@ -214,7 +215,7 @@
     const x = v => pad.l + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * w;
     const rowY = i => pad.t + (i + .5) * h / 3;
     let out = band ? `<rect class="tp-band" x="${x(band[0])}" y="${pad.t - 6}" width="${x(band[1]) - x(band[0])}" height="${h + 6}" rx="3"/>
-      <text x="${(x(band[0]) + x(band[1])) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">允许范围</text>` : '';
+      <text x="${(x(band[0]) + x(band[1])) / 2}" y="${pad.t - 11}" text-anchor="middle" style="fill:#00813f;font-weight:700">${esc(bandLabel)}</text>` : '';
     out += `<line class="tp-bandline" x1="${x(1)}" x2="${x(1)}" y1="${pad.t - 6}" y2="${pad.t + h}"/>`;
     for (let v = .5; v <= hi + 1e-9; v += .5) out += `<text x="${x(v)}" y="${H - 8}" text-anchor="middle">${dec(v)}×</text><line class="tp-gridline" x1="${x(v)}" x2="${x(v)}" y1="${pad.t}" y2="${pad.t + h}"/>`;
     SIZES.forEach(([size, label], i) => {
@@ -287,7 +288,7 @@
     })();
     const bar = ([id, label], i) => { const r = find(rows, id);
       const note = split ? F(split.heads[i], '口径') : r.basis ? F(r.basis, '口径') : '';
-      return `<div class="ag-base${id === 'all_medium' ? ' is-ref' : ''}"><div class="tp-bar"><span>${esc(name(label))}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${id === 'all_medium' ? '#cfcdc5' : '#8f8d85'};width:${share(r) * 100}%"></span></span><span class="tp-bar__num">${int(r.hits)}/${int(r.samples)}</span></div>
+      return `<div class="ag-base${id === 'all_medium' ? ' is-ref' : ''}"><div class="tp-bar"><span>${esc(name(label)).replace(/^(.+?)(（对照）)$/, '<span class="ag-keep">$1</span>$2')}</span><span class="tp-bar__track"><span class="tp-bar__fill" style="--fill:${id === 'all_medium' ? '#cfcdc5' : '#8f8d85'};width:${share(r) * 100}%"></span></span><span class="tp-bar__num">${int(r.hits)}/${int(r.samples)}</span></div>
         ${note ? `<p class="tp-small">${note}</p>` : ''}</div>`; };
     const p = find(rows, 'program_at_start'), a = find(rows, 'ai_reported'), gap = a.hits - p.hits;
     const same = p.samples === a.samples, close = same && Math.abs(gap) <= Math.max(2, Math.round(p.samples * .03));
@@ -315,12 +316,12 @@
     const bandNote = band ? `绿带按估 ${limit}及以上的单子画：比估的早 ${pct(long.early_fraction)} 到晚 ${pct(long.late_fraction)} 都算准。`
       : '估算程序定的允许范围这一轮没读到，绿带先不画，下一轮会自动再读。';
     const shortNote = limit && [short?.early_minutes, short?.late_minutes].every(known)
-      ? `估不到 ${limit}的单子，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
+      ? `<span class="ag-keep">估不到 ${esc(limit)}的单子</span>，早 ${int(short.early_minutes)} 分钟到晚 ${int(short.late_minutes)} 分钟算准。` : '';
     const weeks = weekLabels(d).length;
     return `<section class="tp-panel" id="estimate">${head}
       <div class="tp-grid ag-est">
         <div><p class="tp-sub">准的比例</p>${accuracyColumn(d)}</div>
-        <div><p class="tp-sub">实际是估的几倍${band ? ` <small>估 ${esc(limit)}及以上的点在绿带里算准${shortNote ? '，更短的见图下' : ''}</small>` : ''}</p>${ratioPlot(d, band)}<p class="tp-small">${bandNote}${shortNote}</p></div>
+        <div><p class="tp-sub">实际是估的几倍${band ? ` <small>估 ${esc(limit)}及以上的点在绿带里算准${shortNote ? '，更短的见图下' : ''}</small>` : ''}</p>${ratioPlot(d, band, limit ? `估 ${limit}及以上的允许范围` : undefined)}<p class="tp-small">${bandNote}${shortNote}</p></div>
         <div><p class="tp-sub">按周走势${weeks ? ` <small>近 ${weeks} 周，一直按周画</small>` : ''}</p>${trend(d)}</div>
       </div>
       <div class="tp-grid ag-est2"><div>${reasons(d)}</div><div>${compare(d)}</div></div></section>`;
@@ -393,7 +394,8 @@
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
     const compact = h => {
       const { contextWindow, point, percent } = compactConfig(d, h);
-      const info = [point && percent, known(contextWindow) && `上下文一共 ${kTok(contextWindow)}`,
+      const { estimated } = compactConfig(d, h);
+      const info = [point && percent, known(contextWindow) && `上下文一共 ${kTok(contextWindow)}`, point && estimated && '按设置估算',
         !point && percent && '折合多少词元没读到'].filter(Boolean).join(' · ');
       const value = point ? `${point}就压缩` : percent && `${percent}就压缩`;
       if (!value && h.id === 'antigravity') return '无法设置<small>宿主不公开压缩线，也没有压缩当口</small>';
@@ -431,7 +433,8 @@
     if (!hooks.length) {
       const key = { compact: 'pre_compact', helper: 'subagent_start' }[station];
       const observed = key && U.fieldText(hostData(d, h).unavailable_hooks?.[key], viewer);
-      const why = observed || ABSENT[h.id]?.[station] || '这个当口没装钩子';
+      // 压缩前这一格先写“叫模型前每次都递一遍状态”（后台那句只说没有当口、内部待测，少了这层机制；看图 02），别的当口照旧后台优先
+      const why = (station === 'compact' && ABSENT[h.id]?.[station]) || observed || ABSENT[h.id]?.[station] || '这个当口没装钩子';
       return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why)}</td>`;
     }
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
@@ -457,12 +460,17 @@
     // 钩子机制和运行参数以回包的 when、what 等字段为准。
     const host = T.hostOf(hook.host);
     const compact = keyOf(hook) === 'PreCompact' && host ? compactConfig(d, host) : null;
-    // 压缩前那条：后台的 when 只写“宿主开始压缩之前”，这里照程序实际做法写全：自动压缩的线（读到词元数才写 K）、也能手动压缩、开压前最多等它 45 秒（看图 02）。
-    // 按需更新快核（M928）：45 秒是 Claude E:/Data/AppData/Claude/profiles/pro/settings.json 和 Codex E:/Data/AppData/Codex/hooks.json 里 PreCompact 的 timeout，现都是 45；
-    // 两处 PreCompact 都没写 matcher，手动和自动压缩都会跑。变了改这句。
+    // 压缩前那条：后台的 when 只写“宿主开始压缩之前”，这里照程序实际做法写全：自动压缩的线（读到词元数才写 K，窗口从回包 context_window 取）、
+    // 也能手动压缩、开压前最多等它几秒（回包 hooks[] 这一条的 timeout_seconds，没有再看 context_triggers 里同一家 PreCompact 的；都没有就照实说没读到）。
+    // 两家设置里 PreCompact 都没写 matcher，手动和自动压缩都会跑（按需更新时对 Claude settings.json、Codex hooks.json 核这一句）。
     const point = compact?.point ? `${/^\d/.test(compact.point) ? ' ' : ''}${compact.point}` : '';
-    const line = point ? `现在对话装到${point}就自动压缩` : compact?.percent ? `现在${compact.percent} 就自动压缩，折合多少词元没读到` : '自动压缩的线没读到';
-    const runsAt = compact ? `${line}；${T.you(viewer)}也可以手动压缩。不论哪种，开始压缩前先跑这条，最多等 45 秒；什么时候压缩由 ${esc(host.name)} 的设置决定，这条不管。` : F(hook.when);
+    const win = compact && known(compact.contextWindow) ? `上下文一共 ${kTok(compact.contextWindow)}` : '';
+    const line = point ? `现在对话装到${point}就自动压缩${win ? `（${[win, compact.percent.replace('设成上下文用到', '设成用到')].filter(Boolean).join('，')}）` : ''}`
+      : compact?.percent ? `现在${compact.percent} 就自动压缩，折合多少词元没读到` : '自动压缩的线没读到';
+    const trigger = list(d.context_triggers).find(r => r.host === hook.host && r.hook === 'PreCompact');
+    const wait = [hook.timeout_seconds, trigger?.timeout_seconds].find(v => known(v) && v > 0);
+    // 句尾最后一小截整块不折行，窄栏里不留一个“管。”孤零零掉到下一行（看图 02 访客版）
+    const runsAt = compact ? `${line}；${T.you(viewer)}也可以手动压缩。不论哪种，开始压缩前先跑这条，${wait ? `最多等 ${int(wait)} 秒` : '最多等它多久这次没读到'}；什么时候压缩由 ${esc(host.name)} 的设置决定，<span class="ag-keep">这条不管。</span>` : F(hook.when);
     const facts = [['什么时候跑', runsAt], ['干什么', F(hook.what)], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
       ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable)].filter(Boolean).join(' · ')]];
     const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,

@@ -346,9 +346,9 @@
   function buttons(d, v) {
     const bc = d.board_counts || {}, plain = !filter.family && !filter.status && !filter.date;
     const count = key => v.counts[key] ?? (plain && known(bc[key]) ? bc[key] : null);
-    const btn = (key, label, n) => `<button type="button" class="au-view" data-view="${key}" aria-pressed="${(filter.view || 'all') === key}">${label}${n != null ? ` <b>${int(n)}</b>` : ''}</button>`;
+    const btn = (key, label, n, unit = '') => `<button type="button" class="au-view" data-view="${key}" aria-pressed="${(filter.view || 'all') === key}">${label}${n != null ? ` <b>${int(n)}</b>${unit}` : ''}</button>`;
     const all = shownCats(d).length || null;
-    return `<nav class="au-views" aria-label="看哪些">${btn('all', '全部', all)}${btn('running', '进行中', count('running'))}${btn('problems', '出毛病的', v.problems?.length)}${btn('done', '近 72 小时跑完的', count('finished'))}${chips(d)}</nav>`;
+    return `<nav class="au-views" aria-label="看哪些">${btn('all', '全部', all, ' 类')}${btn('running', '进行中', count('running'))}${btn('problems', '出毛病的', v.problems?.length)}${btn('done', '近 72 小时跑完的', count('finished'))}${chips(d)}</nav>`;
   }
   const sec = (id, name, n, html, extra = '') => `<section class="au-sec" id="${id}"><h2 class="au-sec__head">${name}${n != null ? `<b> · ${int(n)}</b>` : ''}${extra}</h2>${html}</section>`;
   // 北京日期写成“11 月 24 日 周二”，今天的前面加“今天 · ”

@@ -71,7 +71,9 @@
     const off = m === 'off', base = [dispatchNote, g.trigger].filter(Boolean).join(' ');
     const start = off ? g.offStart || (base ? `打开后，${base}` : '') : base || g.offStart || '';
     const steps = list(g.steps);
-    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${esc(title)}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
+    // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）
+    const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
+    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${keepRange(esc(title))}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
     const prompt = c.prompt_template ? `<p>${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
@@ -86,7 +88,7 @@
         ${why ? card('为什么这样设计', `<div class="ah-why">${why}</div>`) : ''}
         ${g.failure ? card('坏了会怎样', `<p>${esc([failurePolicy(c.execution_policy || {}), g.failure].filter(Boolean).join(' '))}</p>`) : ''}
         ${g.off ? card('关了会怎样', `<p>${esc(g.off)}${/[。！？]$/.test(g.off) ? '' : '。'}</p>`) : ''}
-        ${g.cost ? card('花多少时间', `<p>${esc(`${timing(c.execution_policy)} ${g.cost}`)}</p>`) : ''}
+        ${g.cost ? card('花多少时间', `<p>${esc(g.costFull ? g.cost : `${timing(c.execution_policy)} ${g.cost}`)}</p>`) : ''}
         ${g.result ? card('结果去哪', `<p>${esc(g.result)}</p>`) : ''}
       </div><aside class="tp-panel ah-side"><a href="${esc(T.path('/live/automation/category/', { type: id }))}">这一类的页 <i>›</i></a><a href="/live/automation/">自动任务 <i>›</i></a><a href="/live/ledger/">AI 自动任务账本 <i>›</i></a></aside></div>
       <p class="ah-foot">用谁：${esc(g.who || '')}${model ? `${off ? '打开后用' : '现在是'} ${model}，换代跟着模型清单走。` : ''}</p>`);

@@ -221,3 +221,5 @@
 .ag-moved .tp-panel__head { flex-wrap: wrap; row-gap: 8px; }
 #tp-root :is(.tp-head h1, .tp-panel__head h2, .tp-small) { text-wrap: pretty; }
 #tp-root :is(.ag-headside > span, .tp-asof) { white-space: nowrap; }
+/* 句尾最后一小截整块不折行（压缩前钩子“这条不管。”、工期图注“估不到 X 的单子”） */
+.ag-keep { white-space: nowrap; }

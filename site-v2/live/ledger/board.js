@@ -6,7 +6,7 @@
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, dec, link, when, big, stamp, day } = T;
   // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
-  const asOf = d => esc(when(d?.at || d?.as_of || state?.at));
+  const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
   const SETTLED = { fixed: '修好', recovered: '已恢复', wont_fix: '定了不修', to_owner: '转给你' };
   const TONE = { fixed: 'ok', recovered: 'blue', wont_fix: 'soft', to_owner: 'owner' };

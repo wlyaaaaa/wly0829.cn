@@ -179,7 +179,7 @@
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
     // 关着的类：页头已经说了关着，“什么时候跑”写打开后几点跑（mechanisms.js 的 offWhen），不再抄一遍页头那句
-    const rows = [['做什么', esc(g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '这一类用哪个型号没读到'}`],
+    const rows = [['做什么', esc(g.purpose || g.short || '')], ['谁来做', `${[c.model, c.model_effort].filter(Boolean).map(esc).join(' · ') || '这一类用哪个型号没读到'}`],
       ['什么时候跑', (mode(c) === 'off' && g.offWhen ? esc(g.offWhen) : F(c.schedule_text, '排期说明')) || '这次没读到，下一轮会自动再读。']];
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {

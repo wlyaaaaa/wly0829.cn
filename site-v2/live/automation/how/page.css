@@ -44,3 +44,5 @@
 .tp .ah-side a i { font-style: normal; transition: transform .15s ease; }
 .tp .ah-side a:hover i { transform: translateX(3px); }
 .ah-foot { margin: 22px 0 8px; padding-top: 14px; border-top: 1px solid var(--tp-line); font-size: 15px; color: #57564f; }
+/* 步骤标题里的“15–20 句”这类区间整块不折行 */
+.ah-keep { white-space: nowrap; }
