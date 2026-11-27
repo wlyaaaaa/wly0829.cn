@@ -43,7 +43,7 @@
     const pick = (...ids) => Object.fromEntries(ids.map(id => [id, metric(id)]));
     return {
       wear: obj('wear_calendar'), summary: obj('collection_summary'), inventory: obj('record_inventory'), briefs: obj('brief_list'),
-      ...pick('adopted', 'newest', 'captured', 'readable', 'kinds', 'history', 'steps', 'sleep', 'resting', 'recent', 'activity',
+      ...pick('adopted', 'pending', 'newest', 'captured', 'readable', 'kinds', 'history', 'steps', 'sleep', 'resting', 'recent', 'activity',
         'steps_records', 'sleep_records', 'entered_records', 'entered_date', 'window_records', 'batches', 'history_segments', 'doc_files', 'code_files', 'code_parts'),
       briefsCount: metric('briefs'),
     };
@@ -200,7 +200,10 @@
       const ok = v.readable.value === '能', at = mdTime(v.readable.at);
       tiles.push(`<div class="hl-tile"${tip(v.readable.note)}><span>这批能正常读</span><b class="${ok ? 'is-ok' : 'is-bad'}"><i aria-hidden="true">${ok ? '✓' : '!'}</i>${esc(v.readable.value)}</b>${at ? `<small>${esc(at)} 核对</small>` : ''}</div>`);
     }
-    return `<p class="hl-big"${tip(a.note)}>${esc(big)}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${esc(when)} 采用</p>` : ''}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
+    // 已取到但 AI 还没用上（后台只在真有待审时给一句话，没有时是 0）：多一行，字照原来页面的说法，带它自己的时刻
+    const p = v.pending, said = typeof p?.value === 'string' ? p.value.trim().replace(/\d{4}-\d\d-\d\d/g, md) : '';
+    const pending = said ? `<p class="hl-pending"${tip(p.note)}>${p.label ? `<b>${esc(p.label)}</b>` : ''}<span>${esc(said)}</span>${mdTime(p.at) ? `<small>${esc(mdTime(p.at))}</small>` : ''}</p>` : '';
+    return `<p class="hl-big"${tip(a.note)}>${esc(big)}</p>${when ? `<p class="hl-sub">AI 已用上的资料截止 · ${esc(when)} 采用</p>` : ''}${pending}${tiles.length ? `<div class="hl-tiles">${tiles.join('')}</div>` : ''}`;
   }
 
   // —— AI 能分析哪些数据 ——
