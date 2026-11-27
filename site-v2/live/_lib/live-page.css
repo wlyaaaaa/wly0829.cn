@@ -954,8 +954,8 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
 .use-axisrow .chart--hero { margin-left: -44px; }   /* 纵轴的数让到左边那一列里，线的起点和横带对齐 */
 .use-focus-total { margin: 0 0 3px; font-size: 26px; font-weight: 650; line-height: 1.3; color: var(--ink); }
 .use-focus-total strong { color: #00A650; }
-.focus-track { position: relative; --date-width: 62px; --row-height: 42px; margin: 12px 12px 4px 0; color: var(--muted); }
-.focus-track.is-month { --row-height: 23px; }
+.focus-track { position: relative; --date-width: 54px; --row-height: 42px; margin: 12px 12px 4px 0; color: var(--muted); }
+.focus-track.is-month { --row-height: 26px; }
 .focus-track > .vz-wait { position: static; padding: 12px 0; text-align: left; }
 .focus-track__row { display: grid; grid-template-columns: var(--date-width) minmax(0, 1fr); align-items: center; font-size: 13px; }
 .focus-track__row:has(.focus-track__longest) { padding-top: 12px; }
@@ -968,11 +968,8 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
   height: 22px;
   border-radius: 999px;
   background: var(--c);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .45);
 }
-.focus-track.is-month .focus-track__pill { height: 16px; }
-.focus-track__pill[data-fit="stack"] { height: 36px; }
-.focus-track__pill[data-fit="stack-time"] { height: 28px; }
+.focus-track.is-month .focus-track__pill { box-shadow: 0 0 0 2px #fff; }
 .focus-track__open { position: absolute; inset: 0; width: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
 .focus-track__open[aria-pressed="true"], .focus-track__open:focus-visible {
   outline: 2px solid var(--ink);
@@ -991,15 +988,17 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
   line-height: 1;
   font-weight: 650;
   color: #fff;
-  text-shadow: 0 1px 2px rgb(0 0 0 / .85);
 }
-.focus-track__label .live-mark { pointer-events: auto; padding-block: 0; min-height: 0; }
-.focus-track__label[data-label^="stack"] { text-align: center; font-size: 10px; line-height: 11px; }
-.focus-track__pill[data-fit="0"] > [data-label="0"],
-.focus-track__pill[data-fit="stack"] > [data-label="stack"],
-.focus-track__pill[data-fit="1"] > [data-label="1"],
-.focus-track__pill[data-fit="stack-time"] > [data-label="stack-time"],
-.focus-track__pill[data-fit="2"] > [data-label="2"] { visibility: visible; }
+.page--live .focus-track__label .live-mark {
+  pointer-events: auto;
+  padding-block: 0;
+  min-height: 0;
+  font-size: 11px;
+  line-height: 14px;
+  vertical-align: middle;
+}
+.focus-track__pill[data-ai] .focus-track__label { color: #3A2A00; }
+.focus-track__label.is-fit { visibility: visible; }
 .focus-track__longest {
   position: absolute;
   bottom: calc(100% + 2px); left: 0;

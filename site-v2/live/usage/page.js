@@ -660,6 +660,7 @@
     return compact ? text?.replaceAll(' ', '').replace('分钟', '分') : text;
   };
   const focusColor = category => V.hues[catHue(category)] || catHue(category);
+  const focusTrackColor = category => category === 'ai' ? '#F7C858' : focusColor(category);
   const focusAppKey = name => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
   const focusChartNames = new Map([['Google Chrome', 'Chrome'], ['Claude 桌面端', 'Claude']]);
   function renderFocusSummary(el, d) {
@@ -721,14 +722,15 @@
       const fits = Array.from(chart.querySelectorAll('.focus-track__pill'), pill => {
         const labels = [...pill.querySelectorAll('.focus-track__label')];
         const width = pill.getBoundingClientRect().width;
-        const fit = labels.find(label => label.getBoundingClientRect().width <= width)?.dataset.label ?? '-1';
+        const label = labels.find(label => label.getBoundingClientRect().width <= width);
         const badge = pill.querySelector('.focus-track__longest');
         const edge = pill.nextElementSibling?.offsetLeft ?? pill.parentElement.clientWidth;
         const beside = badge && width >= badge.offsetWidth && edge - pill.offsetLeft - width >= badge.offsetWidth + 4;
-        return { pill, fit, badge, beside };
+        return { pill, label, badge, beside };
       });
-      for (const { pill, fit, badge, beside } of fits) {
-        pill.dataset.fit = fit;
+      for (const { pill, label, badge, beside } of fits) {
+        pill.querySelector('.focus-track__label.is-fit')?.classList.remove('is-fit');
+        label?.classList.add('is-fit');
         badge?.classList.toggle('is-beside', beside);
       }
       if (pinned) showTip(pinned);
@@ -749,16 +751,16 @@
         const names = f.programs.map(p => sp(p.name));
         const tags = f.programs.map(p => label(p) || (viewer === 'owner' ? label(apps.get(focusAppKey(p.name))) : ''));
         const programHtml = (name, i) => `<span class="focus-program">${esc(name)}${tags[i]}</span>`;
-        const trackNames = names.slice(0, 2).map(name => range === '72h' ? focusChartNames.get(name) ?? name : name);
+        const trackPrograms = names.slice(0, 2).map(name => focusChartNames.get(name) ?? name).map(programHtml);
         const a = sec(f.from), b = sec(f.to), time = `${hm(a)}–${hm(b)}`, duration = read(f, 'seconds', n => focusDuration(n, true));
         return { id, a, b, category, color: focusColor(category), date: md(a), time, duration,
-          programHtml: names.map(programHtml).join('、'), trackPrograms: trackNames.map(programHtml).join('、'),
+          programHtml: names.map(programHtml).join('、'), trackPrograms,
           detail: `${names.join('、')} · ${time} · ${duration}` };
       });
       count = d?.summary?.focus_count ?? rows.length;
       showList();
       const categories = new Set(rows.map(row => row.category));
-      U.html(key, [...categories].map(c => `<span><i style="--c:${focusColor(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join(''), false);
+      U.html(key, [...categories].map(c => `<span><i style="--c:${focusTrackColor(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join(''), false);
       const longest = d?.focus?.findIndex(row => row.seconds === d?.summary?.focus_longest) ?? -1;
       chart.classList.toggle('is-month', range === '30d');
       const markup = renderTrack(d, rows, longest);
@@ -776,7 +778,6 @@
   function renderTrack(d, rows, longest) {
     const from = sec(d?.focus_window?.from), to = sec(d?.focus_window?.to), day = 86400;
     if (!d?.focus || !(to > from)) return `<p class="vz-wait">${esc(missing())}</p>`;
-    const stackLabels = shownRange === '72h';
     const position = (start, end, midnight) => `left:${(start - midnight) / day * 100}%;width:${(end - start) / day * 100}%`;
     const days = new Map();
     for (let midnight = dayStart(from); midnight < to; midnight += day) {
@@ -793,16 +794,15 @@
       }
       const main = parts.reduce((best, p) => !best || p.b - p.a > best.b - best.a ? p : best, null);
       for (const p of parts) {
-        const duration = esc(row.duration), timed = `${row.time} · ${duration}`;
-        // 短时间窗的色带有竖向空间，单行放不下时先分行，再按程序、起止的顺序省略。
+        const duration = esc(row.duration), allPrograms = row.trackPrograms.join('、');
+        const programs = [...new Set([allPrograms, row.trackPrograms[0]])];
         const labels = p === main ? [
-          ['0', `${row.trackPrograms} · ${timed}`],
-          ...(stackLabels ? [['stack', `${row.trackPrograms}<br>${row.time}<br>${duration}`]] : []),
-          ['1', timed],
-          ...(stackLabels ? [['stack-time', `${row.time}<br>${duration}`]] : []),
-          ['2', duration],
+          ['full', `${allPrograms} · ${row.time} · ${duration}`],
+          ...programs.map(names => ['program-duration', `${names} · ${duration}`]),
+          ...programs.map(names => ['program', names]),
+          ['duration', duration],
         ] : [];
-        days.get(p.midnight).pills.push(`<span class="focus-track__pill" data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${row.color}">
+        days.get(p.midnight).pills.push(`<span class="focus-track__pill"${row.category === 'ai' ? ' data-ai' : ''} data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${focusTrackColor(row.category)}">
           <button type="button" class="focus-track__open" aria-pressed="false" aria-label="${esc(row.detail)}"></button>
           ${labels.map(([form, label]) => `<span class="focus-track__label" data-label="${form}">${label}</span>`).join('')}
           ${p === main && row.id === longest ? '<span class="focus-track__longest">最长</span>' : ''}</span>`);
