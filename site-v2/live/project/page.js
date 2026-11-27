@@ -832,7 +832,9 @@
     const PL = window.ProjectLayout;
     if (!PL) return;
     const gap = parseFloat(getComputedStyle(main).rowGap) || 20, heights = seq.map(g => g.card.el.offsetHeight), prev = seq.map(g => g.card.col);
-    const cols = prev.every(c => c === 0 || c === 1) && PL.keep(prev, heights, gap) ? prev : PL.split(heights, gap);
+    // 项目自己定了哪张卡放哪一栏的（说明书照本人定的图：左栏大卡＋最近改动，右栏最近改过的 5 张＋材料和依据），照它摆
+    const fixed = custom?.columns?.(seq.map(g => g.key));
+    const cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : prev.every(c => c === 0 || c === 1) && PL.keep(prev, heights, gap) ? prev : PL.split(heights, gap);
     inOrder(main, seq.filter((_, i) => cols[i] === 0).map(g => g.card.el));
     inOrder(side, seq.filter((_, i) => cols[i] === 1).map(g => g.card.el));
     seq.forEach((g, i) => g.card.col = cols[i]);

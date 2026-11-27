@@ -1,0 +1,91 @@
+/* 我的说明书（/live/project/?id=daily-preferences）自己的几块，manual.js 画；别的项目页用不到这些类名。
+   卡片材质、圆角、留白照项目页共用的 .pj-card / .glass；强调色只有网站的正绿。 */
+.page--project { --mn-green: #00a650; }
+
+/* 卡头右上“说明 ›”：和“看全部 ›”同一个位置、同一个样子；点开的口径写在卡名下面 */
+.mn-sec > .pj-part { position: static; }
+.mn-explain { position: absolute; top: 22px; right: 18px; z-index: 3; display: inline-flex; align-items: center; height: var(--pj-all-height, 30px); padding: 0 10px; border: 0; border-radius: 999px; background: transparent; font: inherit; font-size: 13.5px; letter-spacing: .04em; color: var(--ink-soft); cursor: pointer; transition: background .2s ease, color .2s ease; }
+.mn-explain .more__chev { color: var(--pj-accent); transition: rotate .2s ease; }
+.mn-explain:hover { background: rgb(255 255 255 / .65); color: var(--pj-accent-ink); }
+.mn-explain[aria-expanded="true"] .more__chev { rotate: 90deg; }
+.mn-note { margin: -4px 0 12px; padding: 10px 14px; border-radius: 12px; background: rgb(255 255 255 / .45); font-size: 12.5px; line-height: 20px; color: #68665f; }
+.mn-note[hidden] { display: none; }
+
+/* ============ 左栏：整理成主题卡的认识 ============ */
+.mn-groups { margin: 0; padding: 0; list-style: none; }
+.mn-group { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 12px; padding: 11px 0; }
+.mn-group + .mn-group { border-top: 1px solid var(--hair); }
+.mn-group__name { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; margin: 0; font-size: 15.5px; line-height: 24px; color: var(--ink); }
+.mn-group__name b { font-weight: 700; letter-spacing: .02em; }
+.mn-group__meta { margin: 1px 0 0; font-size: 13.5px; line-height: 20px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.mn-group__links { display: flex; align-items: center; gap: 2px; white-space: nowrap; }
+.mn-group__links .more { margin: 0; }
+.mn-rules { color: var(--mn-green); }
+.mn-rules .more__chev { color: var(--mn-green); }
+/* 协作约定的三条对外说法：前面一个琥珀色“对外换了说法”，右边三行 */
+.mn-conv { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; column-gap: 12px; margin: 8px 0 2px; }
+.mn-conv > .live-mark { margin: 1px 0 0; }
+.mn-conv ul { margin: 0; padding: 0; list-style: none; font-size: 13.5px; line-height: 22px; color: #3d3c38; }
+
+/* ============ 右栏：最近改过的 5 张 ============ */
+.mn-reads { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 8px; margin: 2px 0 14px; }
+.mn-read { min-width: 0; padding: 9px 12px 10px; border-radius: 12px; background: rgb(255 255 255 / .5); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .7), 0 8px 20px -18px rgb(60 40 10 / .5); }
+.mn-read > span { display: block; font-size: 12px; line-height: 17px; color: #8f8d86; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mn-read > b { display: block; margin-top: 4px; font-size: 15px; line-height: 20px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.mn-read > b small { font-size: 12.5px; font-weight: 400; color: #68665f; }
+/* 月度总更新：上次到下次的一条细进度条，今天走到哪 */
+.mn-month { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 12px; margin: 42px 0 14px; font-size: 12.5px; line-height: 18px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mn-bar { position: relative; height: 8px; border-radius: 999px; background: rgb(20 20 19 / .09); }
+.mn-bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: var(--mn-green); }
+.mn-bar > em { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px var(--mn-green); font-style: normal; }
+.mn-bar > em > span { position: absolute; bottom: 14px; left: 50%; translate: -50% 0; padding: 1px 9px; border-radius: 999px; background: rgb(0 166 80 / .12); color: #0a6b3a; font-size: 12px; font-weight: 600; line-height: 18px; }
+/* 五行：类别 · 标题 · 整理时间 ›；本人版类别做小底色、隐藏类别后挂“访客看不到” */
+.mn-rows { margin: 0; padding: 4px 0 0; list-style: none; }
+.mn-row { display: grid; grid-template-columns: minmax(0, auto) auto minmax(0, 1fr) auto auto; align-items: center; column-gap: 10px; padding: 9px 0; }
+.mn-row + .mn-row { border-top: 1px solid var(--hair); }
+.mn-row > a { display: contents; color: inherit; text-decoration: none; }
+.mn-row__cls { order: 0; min-width: 0; font-size: 14px; line-height: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mn-row > .live-mark { order: 1; margin: 0; }
+.mn-row__title { order: 2; min-width: 0; font-size: 14px; line-height: 21px; font-weight: 600; color: #3d3c38; }
+.mn-row__at { order: 3; font-size: 13px; line-height: 20px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mn-row .more__chev { order: 4; color: var(--pj-accent); }
+.mn-row > a:hover .mn-row__title, .mn-row > a:hover .mn-row__cls { color: var(--pj-accent-ink); }
+.mn-row:not(:has(> .live-mark)) .mn-row__title { grid-column: 2 / 4; }
+.mn-row.is-untitled:has(> .live-mark) .mn-row__at { grid-column: 3 / 4; }
+.mn-row.is-untitled:not(:has(> .live-mark)) .mn-row__at { grid-column: 2 / 4; }
+/* 本人版：类别一颗浅底小块 */
+.mn-viewer-owner .mn-row__cls { padding: 2px 10px; border-radius: 8px; background: rgb(255 255 255 / .55); font-size: 13px; }
+.mn-viewer-owner .mn-row__at { text-align: right; }
+/* 访客版：一行写成“类别 · 标题 · 日期”，箭头靠右 */
+.mn-viewer-public .mn-row { grid-template-columns: minmax(0, 1fr) auto; }
+.mn-viewer-public .mn-row > a { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 0; grid-column: 1 / -1; }
+.mn-viewer-public .mn-row__cls, .mn-viewer-public .mn-row__title, .mn-viewer-public .mn-row__at { font-size: 14.5px; line-height: 24px; font-weight: 700; color: var(--ink); }
+.mn-viewer-public .mn-row__title::before, .mn-viewer-public .mn-row__at::before { content: "·"; margin: 0 .55em; color: #8f8d86; font-weight: 400; }
+.mn-viewer-public .mn-row__at { font-weight: 600; color: #3d3c38; }
+.mn-viewer-public .mn-row .more__chev { margin-left: auto; }
+
+/* ============ 右栏：材料和依据 ============ */
+.mn-mat { margin: 4px 0 18px; }
+.mn-mat__k { margin: 0; font-size: 14.5px; line-height: 22px; font-weight: 600; color: var(--ink); }
+.mn-mat__v { margin: 4px 0 0; font-size: 17px; line-height: 34px; font-weight: 600; color: var(--ink); }
+.mn-mat__v b { margin: 0 2px; font-size: 28px; font-weight: 700; color: var(--mn-green); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+.mn-mat__v i { margin: 0 .5em; font-style: normal; color: #3d3c38; }
+.mn-mat__cut { margin: 2px 0 0; font-size: 13.5px; line-height: 20px; color: #8f8d86; }
+.mn-mat__go { display: inline-flex; align-items: center; gap: 4px; margin: 0 0 2px; font-size: 15px; line-height: 24px; font-weight: 700; color: var(--mn-green); text-decoration: none; }
+.mn-mat__go .more__chev { color: var(--mn-green); }
+.mn-mat__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 这一页的“最近改动”卡（全站共用的那张，只在说明书页收一点右边距，句子少折出一两个字的尾巴） */
+.pj-board--manual .pj-card[data-card="changes"] { padding-right: 16px; }
+.pj-board--manual .pj-card[data-card="changes"] .pj-tl-copy { text-wrap: pretty; }
+/* 标题、三条说法折行时句尾不单独剩一两个字 */
+.mn-row__title, .mn-conv li, .mn-mat__v { text-wrap: pretty; }
+
+/* 窗口窄（≤1100 像素）：四张卡排成一栏，先后照宽屏从左到右、从上到下（大卡、最近改过的、最近改动、材料和依据），宽的时候照图两栏不变 */
+@media (max-width: 1100px) {
+  .page--project #pj-board.pj-board--manual { grid-template-columns: minmax(0, 1fr); }
+  .pj-board--manual .pj-card[data-card="manual-groups"] { order: 0; }
+  .pj-board--manual .pj-card[data-card="manual-recent"] { order: 1; }
+  .pj-board--manual .pj-card[data-card="changes"] { order: 2; }
+  .pj-board--manual .pj-card[data-card="manual-materials"] { order: 3; }
+}

@@ -94,6 +94,17 @@
     return groups.map(g => g.early ? `${g.names.join('、')}${g.basis || `${cutoff(g.through)}，本月还没算进去`}` : `${g.names.join('、')}${cutoff(g.through)}${!g.basis ? '' : /[（(]/.test(g.basis) ? `，${g.basis}` : `（${g.basis}）`}`);   // 依据里自带括号的用逗号接，不套两层括号
   }
 
+  // —— 卡名下两行笔数（本人 11-27 14:54 照图）：近 13 个月、有记录以来；后台 purchase_counts 两组 {from, through, count, count_at_least_100}，哪组缺就不写那行 ——
+  const ym = s => { const m = ymd(s); return m ? `${m[1]}年${+m[2]}月起` : ''; };
+  function countLines(pc) {
+    const ok = g => g && finite(g.count) && finite(g.count_at_least_100);
+    const n = x => Math.round(x).toLocaleString('zh-CN');
+    const r = pc?.recent_13_months, all = pc?.since_first_purchase, lines = [];
+    if (ok(r)) lines.push(`近 13 个月 ${n(r.count)} 笔消费，其中 100 元以上 ${n(r.count_at_least_100)} 笔${cutoff(r.through) ? ` · ${cutoff(r.through)}` : ''}`);
+    if (ok(all)) lines.push(`有记录以来 ${n(all.count)} 笔消费，其中 100 元以上 ${n(all.count_at_least_100)} 笔${ym(all.from) ? `（${ym(all.from)}）` : ''}`);
+    return lines.map(t => `<p class="fin-count">${esc(t)}</p>`).join('');
+  }
+
   // —— 每月花多少、花在哪：一张通栏卡，放在两栏卡片上面 ——
   let wide = null, drawn = '', picked = null, shown = null;
   function spending(d, viewer, board) {
@@ -115,7 +126,8 @@
     if (!all.some(m => m.month === picked)) picked = months.at(-1)?.month || cur?.month;   // 默认选最近整月
     const legend = pal.names.map(name => `<li><i class="fin-chip" style="--c:${pal.color[name]}"></i>${esc(name)}</li>`).join('');
     const foot = [sp.complete_through && `整月截止 ${md(sp.complete_through)}，四处账单都齐`, cur && sourceLines(cur).length && `${monthNo(cur.month)}月：${sourceLines(cur).join('；')}`].filter(Boolean).map(esc).join(' · ');
-    wide.innerHTML = `<div class="fin-head"><b class="fin-title">每月花多少、花在哪</b>${legend ? `<ul class="fin-legend">${legend}</ul>` : ''}</div>
+    const counts = countLines(sp.purchase_counts);
+    wide.innerHTML = `<div class="fin-head${counts ? ' has-counts' : ''}"><div class="fin-head__main"><b class="fin-title">每月花多少、花在哪</b>${counts}</div>${legend ? `<ul class="fin-legend">${legend}</ul>` : ''}</div>
       <div class="fin-body">${chart(months, cur, viewer, pal)}<div class="fin-panel" aria-live="polite"></div></div>${foot ? `<p class="fin-foot">${foot}</p>` : ''}`;
     pick();
   }
@@ -224,6 +236,7 @@
   });
 
   function board(d, viewer, graphBlock, boardEl) {
+    boardEl?.classList.add('pj-board--finance');
     spending(d, viewer, boardEl);
     const b = graphBlock('finance-balance', '钱现在大概多少');
     b.group = 'finance-balance';
