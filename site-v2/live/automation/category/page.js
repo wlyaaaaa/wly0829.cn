@@ -91,7 +91,9 @@
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
     const who = r.who?.text ? esc(r.who.text) : '';
     const segs = [[repeated ? '' : note, false], [nth, true], [who, true], [ran, true]].filter(([s]) => s);
-    const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`);
+    // 说明末尾至少三个汉字一起折，避免句号前一两个字单独占一行。
+    const noteHtml = R.asOwner(note, viewer).replace(/(?:\p{Script=Han}\p{P}*){3}(?=\s*$)/u, '<span class="au-nobr">$&</span>');
+    const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${keep ? s : noteHtml}</span>`);
     // 说明删短后，执行方式和用时一起换行；整组比栏还宽时，内部仍可折开。
     if (note && !repeated && note !== originalNote && who && ran) {
       const footer = parts.splice(-2).join('&#8203;');
