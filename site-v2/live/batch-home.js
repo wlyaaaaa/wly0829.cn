@@ -196,7 +196,7 @@
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮') : '';
       // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${goWrap(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
+        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${go(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
       // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
       const problemLine = p => {
