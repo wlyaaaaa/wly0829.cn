@@ -35,8 +35,6 @@
   .ah-flow--words li::before { left: -16px; font-size: 15px; }
   .ah-flow--words .ah-flow__box { gap: 5px; padding-inline: 6px; text-wrap: balance; }
 }
-@media (max-width: 1100px) {
-}
 
 .ah-prompt { margin-top: 10px; }
 .ah-prompt summary { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 800; color: var(--tp-green-ink); cursor: pointer; list-style: none; }

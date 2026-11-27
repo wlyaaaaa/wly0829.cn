@@ -74,7 +74,7 @@
     const steps = list(g.steps);
     // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
-    const stepWords = /认清|哪一处|检查|有没有|人在修|急缓|开工|改完|原条件|跑一次|原件|结果|修理|上限|还没好|反复/g;
+    const stepWords = /认清|哪一处|检查|有没有|人在修|急缓|开工|交给 AI|副本|验过|再合|原件|结果|修理|上限|还没好|反复/g;
     const flow = `<ol class="ah-flow${repair ? ' ah-flow--words' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => {
       const caption = keepRange(esc(title)).replace(repair ? stepWords : /急缓/g, '<span class="ah-keep">$&</span>');
       const body = repair && i === 1 ? esc(text).replace(/下一轮/g, '<span class="ah-keep">$&</span>') : esc(text);
