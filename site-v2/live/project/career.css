@@ -12,7 +12,7 @@
 .pj-board--career [data-card="career-line"] #career-line > .pj-part { margin: 0; white-space: nowrap; }
 .pj-board--career [data-card="career-line"] #career-line > :not(.pj-part, .pj-viz, .pj-note:not([hidden])) { display: none; }
 .pj-board--career [data-card="career-progress"] { order: 1; }
-.pj-board--career [data-card="career-prepared"] { order: 2; }
+.pj-board--career [data-card="career-prepared"] { order: 2; align-self: start; }
 .pj-board--career :is([data-card="career-progress"], [data-card="career-prepared"]) { min-height: 330px; }
 .pj-board--career [data-card="career-goal"] { order: 3; }
 .pj-board--career [data-card="artifacts"] { order: 4; min-height: 270px; }
@@ -45,7 +45,7 @@
 .career-next { margin: 3px 0 8px; padding: 8px 12px; border-radius: 12px; background: rgb(0 166 80 / .062); }
 .career-next > b, .career-works a b { color: #007d3e; }
 .career-next :is(summary, p), .career-foot p { margin: 3px 0 0; }
-.career-next summary { display: block; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
+.career-next summary { display: flex; align-items: flex-end; gap: .35em; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 .career-next summary span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .career-next details[open] summary span { display: none; }
 .career-next details[open] summary::after { content: '收起 ‹'; }
