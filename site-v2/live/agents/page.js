@@ -24,6 +24,9 @@
   const cellsBefore = new Map(); // 钩子格上一轮的次数：变了闪一下
   const F = (v, name) => field(v, viewer, name);
   const keep = html => `<span class="ag-keep">${html}</span>`;
+  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const keepWords = html => html.includes('<') ? html : html.replace(/\p{Script=Han}+/gu, text =>
+    Array.from(segmenter.segment(text), ({ segment }) => keep(segment)).join('<wbr>'));
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
@@ -73,15 +76,13 @@
   function scoreCard(d, h) {
     const c = checks(d, h), x = hostData(d, h), health = list(d.health?.providers).find(p => p.id === h.id) || {};
     const issues = list(health.issues);
-    const owner = health.status === 'owner', ignored = health.status === 'ignored';
-    const tone = c.fail.length || issues.length ? (owner ? 'owner' : 'repair') : c.unknown ? 'off' : 'ok';
-    const failed = issues.length || c.fail.length;
-    const word = owner ? `要${T.you(viewer)}看` : failed ? `差 ${failed} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
-    const ringColor = tone === 'ok' ? T.TONE.ok : tone === 'off' ? T.TONE.off : T.TONE.repair;
+    const owner = health.status === 'owner', ignored = health.status === 'ignored', failed = issues.length || c.fail.length;
+    const tone = failed ? (owner ? 'owner' : 'repair') : c.unknown ? 'off' : 'ok';
+    const word = owner ? `要${T.you(viewer)}看` : failed ? keep(`差 ${failed} 处`) : c.unknown ? `${keep(`${c.unknown} 项`)}没读到` : '全对上';
     const statusText = html => (h.id === 'codex' && !html.includes('<') ? html.replace(/\bPlugin\w+:[\w-]+@[\w-]+|钩子说明|钩子，?|说明|它是干什么的/g,
       word => word.startsWith('Plugin') ? `<span class="ag-truncate" title="${word}">${word}</span>` : `<span class="ag-status-word">${word}</span>`) : html).replace(/(^Codex |」)装着/, '$1' + keep('装着'));
     const fixer = i => F(i.handler_text, '谁在修') || (i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '');
-    const fixText = i => [fixer(i), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ') || (owner ? '' : '还没人接手');
+    const fixText = i => [fixer(i), known(i.round) && keep(`第 ${int(i.round)} 轮`)].filter(Boolean).join(' · ') || (owner ? '' : '还没人接手');
     const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
     const issueText = i => {
       const text = F(i.text);
@@ -98,14 +99,12 @@
       <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${hooks ? ` · <wbr>${keep(`登记钩子 ${int(hooks.length)} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.unknown || c.fail.length ? `设置 ${c.total} 项里 ${c.pass} 项照规矩` : `设置 ${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
-        ${T.ring(c.pass, c.total, { color: ringColor })}</div>
+        ${T.ring(c.pass, c.total, { color: T.TONE[tone] || T.TONE.repair })}</div>
       ${list1 ? `<ul class="ag-diff">${list1}</ul>` : `<p class="ag-ok">${h.id === 'antigravity' ? '这家没有自带记忆。' : ''}${c.unknown ? '有设置还没读到。' : '没有读到需要处理的差异。'}</p>`}</article>`;
   }
   // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
-  function statusSection(d) {
-    return `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2></div>
-      <div class="tp-grid ag-scores">${HOSTS.map(h => scoreCard(d, h)).join('')}</div></section>`;
-  }
+  const statusSection = d => `<section class="tp-panel" id="status"><div class="tp-panel__head"><h2>三家现在管得对不对</h2></div>
+    <div class="tp-grid ag-scores">${HOSTS.map(h => scoreCard(d, h)).join('')}</div></section>`;
 
   // —— 二、工期准不准 ——
   const stats = (d, h) => d.work_stats?.hosts?.[h.id] || {};
@@ -338,7 +337,6 @@
       <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}${rulesLink}</p></section>`;
   }
 
-  // —— 五、钩子 ——
   // 拦、错只有新格式的记录里有；旧日志只记了次数和耗时。后台给 blocked_samples（记了拦没拦的有几次），比次数少就照实写只算了其中几次，不当全部
   const outcomeShort = t => known(t?.blocked_samples) && known(t?.runs) && t.blocked_samples < t.runs;
   function hookCell(hooks, station, h, hv, p) {
@@ -365,9 +363,9 @@
     const summary = preCompact && typeof hook.summary === 'string'
       ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
     return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span class="ag-truncate" title="${esc(U.fieldText(hook.name, viewer))}">${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
-      <p class="tp-small">${F(summary, '钩子说明') || '说明还没读到'}</p>
+      <p class="tp-small">${keepWords(F(summary, '钩子说明') || '说明还没读到')}</p>
       ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)}` : '自动压缩线还没读到'}</p>` : ''}
-      ${hook.reason ? `<p class="ag-hook__num">${F(hook.reason)}</p>` : ''}
+      ${hook.reason ? `<p class="ag-hook__num">${keepWords(F(hook.reason))}</p>` : ''}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
   function hookGroups(d, hooks) {

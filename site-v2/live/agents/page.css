@@ -23,8 +23,10 @@
 .ag-score > header a.ag-rulever:hover { text-decoration-color: #fff; }
 .ag-score > header .ag-rule-mismatch { color: #34260b; background: #ffe5aa; border-radius: 3px; padding: 0 3px; white-space: nowrap; }
 .ag-rule-part { white-space: nowrap; }
-.ag-score__main { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 16px 6px 18px; }
-.ag-score__word { margin: 0 0 4px; font-family: var(--black); font-size: clamp(22px, 2.8vw, 40px); line-height: 1.1; text-wrap: balance; }
+.ag-score__main { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px 6px 18px; }
+.ag-score__main > div { flex: 1 1 min-content; }
+.ag-score__main .tp-ring { flex: none; }
+.ag-score__word { margin: 0 0 4px; font-family: var(--black); font-size: clamp(22px, 3.2vw - 6px, 40px); line-height: 1.1; text-wrap: balance; }
 .ag-score__word[data-tone="ok"] { color: var(--tp-green-ink); }
 .ag-score__word[data-tone="repair"], .ag-score__word[data-tone="owner"] { color: var(--tp-amber); }
 .ag-score__word[data-tone="off"] { color: var(--tp-gray); font-size: min(30px, 2.8vw); }
