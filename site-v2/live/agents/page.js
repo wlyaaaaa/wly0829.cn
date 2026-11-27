@@ -10,71 +10,8 @@
   const STATION_OF = { SessionStart: 'start', Rules: 'start', PostCompactRewake: 'start', UserPromptSubmit: 'message', PreInvocation: 'message',
     PreToolUse: 'pre-tool', PermissionRequest: 'pre-tool', AutoReview: 'pre-tool', PostToolUse: 'post-tool', PreCompact: 'compact',
     SubagentStart: 'helper', SubagentStop: 'helper', Stop: 'stop', Notify: 'stop', Keepalive: 'idle', StopFailure: 'error' };
-  const NAMES = { Rules: '核对规则版本', SessionStart: '开场给项目指路', PostCompactRewake: '压缩后接着办', PostCompact: '压缩完成后',
-    PreInvocation: '叫模型前补状态', PostInvocation: '模型回完后', UserPromptSubmit: '收到消息时补状态', PreToolUse: '动工具前检查',
-    PermissionRequest: '要批准时推手机', AutoReview: '宿主自带审批', PostToolUse: '工具用完补提醒', PreCompact: '压缩前留接续线索',
-    SubagentStart: '帮手开场', SubagentStop: '帮手收尾', Stop: '收工检查', Notify: '收工推手机', Keepalive: '空等时叫醒',
-    StopFailure: '出错停下', FailureRetry: '繁忙自动重试', Interrupt: '按停后清审批提醒', PluginStop: '插件的收工回调', PluginInterrupt: '插件的中断回调',
-    PluginSubagentStop: '插件的帮手回调', SessionCostStart: '花费面板 · 开场', SessionCostAttach: '花费面板 · 挂到对话',
-    SessionCostTurn: '花费面板 · 每轮开始', SessionCostChange: '花费面板 · 更新', SessionCostRender: '花费面板 · 画出来' };
-  // 某家宿主没有这个当口时写原因和用什么兜（定稿卡-钩子清单 三家差异表）
-  const ABSENT = {
-    codex: {
-      idle: '宿主没有空等当口。派出去的单做完，后台等候能拿到结果，也可以回来看任务记录。你在汇报页交了答复，由汇报页的收件程序叫醒原对话，再由“收到消息时补状态”递上正文。',
-      error: '宿主没有出错当口。出错停下由实况程序看对话记录发现，再推手机。',
-    },
-    antigravity: {
-      message: '宿主没有“收到消息”当口。“叫模型前补状态”每次叫模型前核一遍，有变化才递时间、资料状态、你的新消息和没答的题。',
-      compact: '宿主没有压缩当口。“叫模型前补状态”发现新的压缩摘要时，查摘要里还有没有《他要什么》的位置，缺了才补；它自己会自动压缩，什么时候压查不到准数；见过一次，是在上下文约 51 万词元（510K）时压的。',
-      helper: '宿主没有派帮手当口。派非图片的帮手时，“动工具前检查”自动在任务说明末尾补上北京时间、资料状态、派单人型号和工程位置。',
-      idle: '宿主没有空等当口。派出去的单：挂了后台等候，做完就会叫醒原对话；没挂时，结果留在任务里。你在汇报页交了答复，由后台的汇报页收件程序叫醒原对话，再由“叫模型前补状态”递上正文。',
-      error: '宿主没有出错当口。实况会看对话是不是出错停下，确认停住、过一会儿还没恢复，就会尝试推手机。',
-    },
-  };
-  const RULES = new Map([
-    ['agents.claude-adapter.md', ['Claude 适配', 'claude-adapter']], ['agents.codex-adapter.md', ['Codex 适配', 'codex-adapter']],
-    ['agents.antigravity-adapter.md', ['Antigravity 适配', 'antigravity-adapter']], ['agents.capabilities-runtime.md', ['能力与运行方式', 'capabilities-runtime']],
-    ['agents.authorization.md', ['用户授权', 'authorization']], ['agents.protected-actions.md', ['重大动作与本人验证', 'protected-actions']],
-    ['agents.privacy-data.md', ['个人资料与数据处理', 'privacy-data']], ['agents.context-sources.md', ['事实来源与任务上下文', 'context-sources']],
-    ['agents.engineering-delivery.md', ['工程与交付', 'engineering-delivery']], ['agents.execution-coordination.md', ['分工与并行施工', 'execution-coordination']],
-  ]);
-  // 每条钩子“为什么要它”：用人话说这条防的是什么。照钩子说明表（E:\.agents\config\hook-catalog.json）和三家适配专题写，后台给了 hook.why 就用后台的。
-  const SAME = {
-    helper: '派出去的帮手是从零开始的，不知道现在几点、自己是什么型号和档位、个人资料能不能用；这条在它开场时告诉它，免得它把时间写错或越过资料锁。',
-    compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
-    stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
-  };
-  // Codex 回包给词元，Claude 给百分比，按 (1000K−20K)×百分比算。M928 核对近 7 天自动压缩的 compactMetadata.preTokens。
-  const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
-  const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
-  const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
-    : h.id === 'codex' && known(hostData(d, h).compact_tokens) ? hostData(d, h).compact_tokens : null;
+  const HOOK_GROUPS = [['in_use', '在用'], ['disabled', '停用'], ['unconfirmed', '未确认生效']];
   const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
-  const WHY = {
-    C01: 'AI 每次开对话都是一张白纸，不知道这是哪个项目、《他要什么》放在哪；这条在打开、恢复和压缩后递上路径，免得它凭印象找、找错项目动手。',
-    C02: '规矩会改版，开着的对话读到的可能还是旧版；这条开场时核一下入口是不是当前版，不是就指出新版在哪，免得照旧规矩办事。',
-    C04: '有些动作照规矩不该这样做（用错浏览器、派活走错路、反复读同一张图这类）；这条在动手前拦下，当场改对，不用事后返工。',
-    C06: SAME.compact,
-    C09: SAME.stop,
-    C10: 'AI 收工后后台还有活在跑、却没人等结果，结果就没人收；这条等主对话空着够久还没人管，就叫醒原对话一次去收，每件只叫一次。',
-    C11: SAME.helper,
-    C12: '记下帮手干完没有，“空等时叫醒”靠它判断后台还有没有活，免得白叫醒或该叫的没叫。',
-    C13: '让 Claude 桌面版里的花费面板跟着对话一起出来，不用自己去找就看得到这次花了多少。',
-    C14: '窗口晚一步才挂到对话上时补挂花费面板，免得这次对话看不到花费。',
-    C15: '前面没挂上的，每轮开始再补挂一次，保证花费面板在。',
-    C16: '花费有变化时让面板下次画的时候刷新，免得一直显示旧数。',
-    C17: '真正把花费画到面板上；没有它面板是空的。',
-    C18: '对话出错停下了，你不在跟前就不知道它停了；这条把停下的原因交给实况推手机。',
-    X01: 'Codex 开对话时不知道规矩是不是当前版、这是哪个项目；这条开场时核一下规矩入口，再递上工程和《他要什么》的位置，免得照旧规矩办事或在别的项目里动手。',
-    X03: SAME.helper,
-    X06: SAME.compact,
-    X08: 'Codex 停下来等批准时，你不在电脑前它就一直卡着；这条把要你批准的事推到手机。',
-    X09: SAME.stop,
-    X15: '你按停以后，还在等的审批提醒就过时了；这条把它撤掉，免得停了还收到要你批准的推送。',
-    A01: 'Antigravity 开对话时核一下规矩入口是不是当前版；桌面上的主对话再提醒它标一下这次能不能给外人看，免得照旧规矩办事，或把私事写在外人看得到的地方。',
-    A06: SAME.stop,
-  };
-  const whyOf = hook => F(hook.why, '为什么要它') || esc(WHY[hook.id] || '');
   const REASONS = [['larger_orders', '单子比想的大'], ['rework', '返工'], ['missed_follow_up', '漏想的后续活'], ['long_tests', '长测试'], ['scope_added', '中途加需求']];
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
@@ -112,9 +49,11 @@
     `<button type="button" class="ag-chip${only === h.id ? ' is-on' : only ? ' is-off' : ''}" data-pick="${h.id}" aria-pressed="${only === h.id}" style="--host:${h.color}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}
     ${hint ? `<span class="ag-mhint">${only ? `整页只看 ${HOSTS.find(h => h.id === only).name}，按它自己的数画 · 再点一次或点“全部”回到三家` : '点一家，整页只看它'}</span>` : ''}</p>`;
   const hostData = (d, h) => d.hosts?.[h.name] || {};
-  const keyOf = hook => String(hook.key || '').replace(/:external$/, '');
-  const nameOf = hook => F(hook.title, '钩子名称') || esc(NAMES[keyOf(hook)] || keyOf(hook) || '额外配置的回调');
-  const stationOf = hook => STATION_OF[keyOf(hook)] || 'other';
+  const inventory = d => Array.isArray(d.hook_inventory) ? d.hook_inventory : null;
+  const hostHooks = (d, h) => inventory(d)?.filter(hook => hook.host === h.name);
+  const stationOf = hook => STATION_OF[hook.key?.split(':')[0]] || 'other';
+  const compactLimit = x => Number.isFinite(x?.compact_tokens) && x.compact_tokens > 0
+    ? `${x.compact_tokens_basis === 'configured_estimate' ? '约 ' : ''}${kTok(x.compact_tokens)}` : '';
   const firstTime = id => { const fresh = !drawn.has(id); drawn.add(id); return fresh; };
 
   function checks(d, h) {
@@ -128,11 +67,6 @@
     }
     const eager = typeof x.approval === 'string' && /EAGER/.test(x.approval);
     add(x.waits_for_owner === false || eager ? true : x.waits_for_owner === true ? false : null, '动手前不停下等批准', '动手前会停下等批准，和规矩不一样');
-    for (const hook of list(d.hooks).filter(row => row.host === h.name)) {
-      const name = NAMES[keyOf(hook)] || keyOf(hook);
-      if (hook.id) add(Boolean(hook.installed), `钩子「${name}」装着`, `钩子「${name}」定稿要装，还没装上`, { href: `#hooks-${stationOf(hook)}` });
-      else if (hook.installed) add(false, '', `钩子「${name}」装着，说明表里没写`, { href: `#hooks-${stationOf(hook)}` });
-    }
     const pass = rows.filter(r => r.ok === true).length, fail = rows.filter(r => r.ok === false), unknown = rows.filter(r => r.ok == null).length; // 历史错误只在钩子表里计数
     return { rows, pass, fail, unknown, total: rows.length };
   }
@@ -141,7 +75,8 @@
     const issues = list(health.issues);
     const owner = health.status === 'owner', ignored = health.status === 'ignored';
     const tone = c.fail.length || issues.length ? (owner ? 'owner' : 'repair') : c.unknown ? 'off' : 'ok';
-    const word = owner ? `要${T.you(viewer)}看` : c.fail.length ? `差 ${c.fail.length} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
+    const failed = issues.length || c.fail.length;
+    const word = owner ? `要${T.you(viewer)}看` : failed ? `差 ${failed} 处` : c.unknown ? `${c.unknown} 项没读到` : '全对上';
     const ringColor = tone === 'ok' ? T.TONE.ok : tone === 'off' ? T.TONE.off : T.TONE.repair;
     const statusWord = word => '<span class="ag-status-word">' + word + '</span>';
     const statusText = html => (h.id === 'codex' && !html.includes('<') ? html.replace(/\bPlugin\w+:[\w-]+@[\w-]+|钩子说明|钩子，?|说明|它是干什么的/g,
@@ -159,13 +94,13 @@
     const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
     const fix = owner || !(c.fail.length || issues.length) ? ''
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
-    const stats = d.hook_stats?.totals?.[h.id] || {};
+    const hooks = hostHooks(d, h);
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${known(stats.installed) ? ` · <wbr>${rulePart(`钩子装着 ${stats.installed} 条 · `)}<wbr>${rulePart(`定稿 ${stats.expected} 条`)}` : ''}</small></header>
+      <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${hooks ? ` · <wbr>${keep(`登记钩子 ${int(hooks.length)} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
-        <p class="tp-small">${c.fail.length ? `${c.total} 项里 ${c.pass} 项照规矩` : `${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
+        <p class="tp-small">${c.unknown || c.fail.length ? `设置 ${c.total} 项里 ${c.pass} 项照规矩` : `设置 ${c.total} 项都照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
-      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : `<p class="ag-ok">${h.id === 'antigravity' ? '规矩、审批和钩子都和定稿一样；它没有自带记忆，<span class="ag-keep">这项不查</span>' : '规矩、记忆、审批和钩子都和定稿一样。'}</p>`}</article>`;
+      ${list1 ? `<ul class="ag-diff">${list1}</ul>` : `<p class="ag-ok">${h.id === 'antigravity' ? '这家没有自带记忆。' : ''}${c.unknown ? '有设置还没读到。' : '没有读到需要处理的差异。'}</p>`}</article>`;
   }
   // 首卡不另写“截至”：它就是这一轮的 d.at，顶栏“读到”或大标题区已经写过（页头同一时刻只说一次，本人 11-24 16:13 看图点头，M746）
   function statusSection(d) {
@@ -379,10 +314,11 @@
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')).replace(/验证有效期/g, keep) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
-    // 压缩线一律写成 K 词元；Claude 的数怎么从百分比算出来见上面 compactAt
-    const compact = h => h.id === 'claude' ? (compactAt(d, h) ? `约 ${kTok(compactAt(d, h))}就压缩<small>上下文 ${kTok(CLAUDE_WINDOW)}，${keep('设成')}用到${pctOf(d, h) === 50 ? '一半' : ` ${pctOf(d, h)}%`}，<span class="ag-keep">先留 ${kTok(CLAUDE_REPLY)}给回复</span></small>` : '没读到')
-      : h.id === 'codex' ? (compactAt(d, h) ? `${kTok(compactAt(d, h))}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}` : '没读到')
-      : '查不到准数（见过一次约 510K）';
+    const compact = h => {
+      const limit = compactLimit(x(h));
+      return limit ? `${limit}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}`
+        : F(x(h).compact) || '没读到';
+    };
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
     const rows = [
@@ -409,15 +345,11 @@
   const hookView = d => { const hs = d.hook_stats || {}, p = hookNow(d); return hs.periods ? hs.periods[p] || null : p === '7d' ? hs : null; };
   // 拦、错只有新格式的记录里有；旧日志只记了次数和耗时。后台给 blocked_samples（记了拦没拦的有几次），比次数少就照实写只算了其中几次，不当全部
   const outcomeShort = t => known(t?.blocked_samples) && known(t?.runs) && t.blocked_samples < t.runs;
-  function hookCell(d, station, h, hv, p) {
-    const cell = hv.cells?.[station]?.[h.id] || {}, hooks = list(d.hooks).filter(r => r.host === h.name && stationOf(r) === station);
-    const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => hv.cells?.[s]?.[hh.id]?.runs).filter(known)));
-    if (!hooks.length) {
-      const why = ABSENT[h.id]?.[station] || (station === 'compact' && h.id === 'antigravity' && U.fieldText(hostData(d, h).unavailable_hooks?.pre_compact, viewer)) || '这个当口没装钩子';
-      const status = station === 'error' && ABSENT[h.id]?.error
-        ? `<small class="ag-errorstatus">${F(hostData(d, h).error_stop?.status) || '没读到'}</small>` : '';
-      return `<td class="ag-heat ag-heat--none${dim(h.id)}">${esc(why).replace(/模型/g, keep)}${status}</td>`;
-    }
+  function hookCell(hooks, station, h, hv, p) {
+    const cell = hv?.cells?.[station]?.[h.id] || {};
+    const count = hooks.filter(r => r.host === h.name && stationOf(r) === station).length;
+    if (!count) return `<td class="ag-heat ag-heat--none${dim(h.id)}">这个当口没有登记</td>`;
+    const max = Math.max(1, ...HOSTS.flatMap(hh => STATIONS.map(([s]) => hv?.cells?.[s]?.[hh.id]?.runs).filter(known)));
     const heat = known(cell.runs) && cell.runs > 0 ? Math.log10(cell.runs + 1) / Math.log10(max + 1) : 0;
     const key = `${station}/${h.id}`, flashKey = `${p}/${key}`, before = cellsBefore.get(flashKey);   // 切时间段不闪，同一段次数变了才闪
     const flash = before != null && before !== cell.runs ? ' tp-flash' : '';
@@ -426,69 +358,59 @@
     const badges = [known(cell.blocked) && cell.blocked > 0 && `<span class="ag-badge" data-tone="repair">拦 ${int(cell.blocked)}</span>`,
       known(cell.errors) && cell.errors > 0 && `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>`].filter(Boolean).join('');
     return `<td class="ag-heat${flash}${dim(h.id)}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
-      <span>${keep(`${hooks.length} 条 ·`)} ${runs}${known(cell.median_ms) ? ` ${keep(`· ${ms(cell.median_ms)}`)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
+      <span>${keep(`${count} 条 ·`)} ${runs}${known(cell.median_ms) ? ` ${keep(`· ${ms(cell.median_ms)}`)}` : ''}</span>${badges}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
   }
-  function ruleLink(rule) {
-    const base = typeof rule === 'string' ? rule.split('/').at(-1) : '';
-    const [label, slug] = RULES.get(base) || [];
-    return slug ? link(`/rules/topic-${slug}.html`, esc(label) + ' ›') : rule ? F(rule) : '';
-  }
-  function hookDetail(d, hook, p) {
-    // 每条钩子的数也跟着时间段：后台给了 metrics_by_period.<段> 就读那一段（null 是这段没跑过）；旧后台只有近 7 天的 metrics
-    const byPeriod = hook.metrics_by_period && typeof hook.metrics_by_period === 'object';
-    const got = byPeriod ? hook.metrics_by_period[p] : hook.metrics, m = got || {};
-    const sample = list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    // 钩子六问照后台转出的现役 hook-catalog.json。变了改目录，网页不另抄参数。
-    const what = F(hook.what, '干什么').split(/\r?\n/).filter(line => line.trim());
-    const whatList = what.length ? `<ul class="ag-hook__what">${what.map(line => `<li>${line}</li>`).join('')}</ul>` : '';
-    const facts = [['什么时候跑', F(hook.when)], ['干什么', whatList], ['往 AI 眼前塞多少字', F(hook.char_count)], ['会不会拦、让 AI 多跑一轮', F(hook.blocking)],
-      ['坏了会怎样', F(hook.failure)], ['归哪条规矩、怎么关', [ruleLink(hook.rule), F(hook.disable).replace(/上一代/g, keep)].filter(Boolean).join(' · ')]];
-    const numbers = got ? [known(m.runs) && `跑 ${int(m.runs)} 次`, known(m.median_ms) && `中位 ${ms(m.median_ms)}`, known(m.max_ms) && `最慢 ${ms(m.max_ms)}`,
-      known(m.blocked) ? `拦 ${int(m.blocked)} 次` : !known(m.errors) && '拦和错还没采上', known(m.errors) && `出错 ${int(m.errors)} 次`,
-      outcomeShort(m) && `拦、错只算记了的 ${int(m.blocked_samples)} 次`,
-      known(m.continued) && `让 AI 多跑 ${int(m.continued)} 轮`].filter(Boolean).join(' · ')
-      : (state => state && (p === '7d' || !state.includes('近 7 天')) ? state : `${p === 'all' ? '一直' : timeLabel(p)}没有运行记录`)(F(hook.metrics_state));
-    const tag = hook.id ? (hook.installed ? (hook.enabled === false ? '<span class="tp-tag" data-tone="soft">装着，平时不跑</span>' : '<span class="tp-tag" data-tone="ok">装着</span>')
-      : '<span class="tp-tag" data-tone="repair">定稿要装，还没装上</span>') : '<span class="tp-tag" data-tone="repair">装着，说明表里没写</span>';
-    const why = whyOf(hook);
-    return `<article class="ag-hook" data-host="${String(hook.host || '').toLowerCase()}"><h3>${nameOf(hook)} ${tag}</h3>
-      ${why ? `<p class="ag-why"><b>为什么要它</b>${why}</p>` : ''}
-      <dl>${facts.filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      <p class="ag-hook__num">${timeLabel(p)} · ${numbers}</p>
+  function hookCard(d, hook, withSample = false) {
+    const id = HOSTS.find(h => h.name === hook.host)?.id;
+    const sample = withSample && list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
+    const preCompact = hook.key === 'PreCompact';
+    const limit = preCompact && compactLimit(d.hosts?.[hook.host]);
+    // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
+    const summary = preCompact && typeof hook.summary === 'string'
+      ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
+    return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span>${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
+      <p class="tp-small">${F(summary, '钩子说明') || '说明还没读到'}</p>
+      ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)}` : '自动压缩线还没读到'}</p>` : ''}
+      ${hook.reason ? `<p class="ag-hook__num">${F(hook.reason)}</p>` : ''}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
+  function hookGroups(d, hooks) {
+    return HOOK_GROUPS.map(([id, label]) => {
+      const rows = hooks.filter(hook => hook.group === id);
+      const count = d.hook_coverage?.groups?.[id] ?? rows.length;
+      return `<section aria-labelledby="hook-group-${id}"><h3 id="hook-group-${id}" class="tp-sub">${label} · ${int(count)} 条</h3>
+        <div class="ag-hooks">${rows.map(hook => hookCard(d, hook)).join('')}</div></section>`;
+    }).join('');
+  }
   function hooksSection(d) {
-    const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
-    const recordedAt = asof(hv?.at || hs.at, d.at);
-    // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
+    const hooks = inventory(d), hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
+    // 按需更新快核：据规则仓 docs/operations/context-hooks.md 和三家现行设置核改后生效时机。
     const rolloutNote = ['改了钩子以后：', 'Claude 开着的对话', '也会自己换上新的；', 'Codex 要新开的线程', '才用新的，', '已经开着的线程', '一般还用旧的；', 'Antigravity 要完整退出', '再打开才用新的。'].map(keep).join('');
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。${rolloutNote}</p>${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div>`;
-    if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。${rolloutNote}</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
+    if (!hooks) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">钩子清单还没读到。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
     const head = HOSTS.map(h => {
       const t = totals[h.id] || {};
-      const parts = [`${int(t.hooks)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
+      const parts = [`登记 ${int(hostHooks(d, h).length)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
         known(t.blocked) ? `拦 ${int(t.blocked)} 次` : '', known(t.errors) ? `出错 ${int(t.errors)} 次` : '',
         outcomeShort(t) && `<small>拦、错只算记了的 ${keep(`${int(t.blocked_samples)} 次`)}</small>`].filter(Boolean);
       return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span>${parts.join(' · ')}</p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
-      if (id === 'error') {
-        const rows = HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('');
-        return `<tr id="hooks-error"><th scope="row">${label}<small>推手机</small></th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机，${keep('不算哪一家的钩子。')}<span class="ag-errorhosts">${rows}</span></td></tr>`;
-      }
+      const alerts = id === 'error' ? HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('') : '';
       const open = expanded?.startsWith(id + '/') ? expanded.split('/')[1] : '';
       const host = HOSTS.find(h => h.id === open);
-      const detail = host ? list(d.hooks).filter(r => r.host === host.name && stationOf(r) === id).map(hook => hookDetail(d, hook, p)).join('') : '';
-      return `<tr id="hooks-${id}"><th scope="row">${label}</th>${HOSTS.map(h => hookCell(d, id, h, hv, p)).join('')}</tr>
-        <tr id="hook-detail-${id}" class="ag-detailrow"${host ? '' : ' hidden'}><td colspan="4">${host ? `<p class="tp-sub">${label} · <span class="tp-hostname" data-host="${host.id}">${host.name}</span> <small>每条答六问；数是${p === 'all' ? '全部记录' : timeLabel(p)}</small></p><div class="ag-hooks">${detail}</div>` : ''}</td></tr>`;
+      const detail = host ? hostHooks(d, host).filter(r => stationOf(r) === id).map(hook => hookCard(d, hook, true)).join('') : '';
+      return `<tr id="hooks-${id}"><th scope="row">${label}</th>${HOSTS.map(h => hookCell(hooks, id, h, hv, p)).join('')}</tr>
+        <tr id="hook-detail-${id}" class="ag-detailrow"${host ? '' : ' hidden'}><td colspan="4">${host ? `<p class="tp-sub">${label} · <span class="tp-hostname" data-host="${host.id}">${host.name}</span></p><div class="ag-hooks">${detail}</div>` : ''}</td></tr>
+        ${alerts ? `<tr><th scope="row">推手机</th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机。<span class="ag-errorhosts">${alerts}</span></td></tr>` : ''}`;
     }).join('');
     return `<section class="tp-panel" id="hooks">${top}
       <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${short
         ? '<p class="tp-small">旧日志只记了次数和耗时，没记拦没拦、错没错；拦和错只按记了的那部分算，更早的那部分没采上，不算 0。</p>' : ''}
       <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
-      <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
+      <p class="tp-small ag-foot">格子越深跑得越多；点开可看这个当口的钩子和最近一次塞给 AI 的原样。</p>${hookGroups(d, hooks)}</section>`;
   }
 
   // 快讯只列开工和完工，缺 feed 时用本周开工数。
