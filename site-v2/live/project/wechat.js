@@ -60,7 +60,7 @@
     moreRows.sort((a, b) => (MORE_FIRST.includes(a.id) ? MORE_FIRST.indexOf(a.id) : 99) - (MORE_FIRST.includes(b.id) ? MORE_FIRST.indexOf(b.id) : 99));
     const details = all.filter(m => m?.shape === 'table' && m.section && m.id !== 'measurements');
     details.sort((a, b) => (DETAIL_FIRST.includes(a.id) ? DETAIL_FIRST.indexOf(a.id) : 99) - (DETAIL_FIRST.includes(b.id) ? DETAIL_FIRST.indexOf(b.id) : 99));
-    return { metric, sec, moreRows, details, counts: raw.counts || {}, needHref: raw.need_href, aiHref: raw.ai_href, size: raw.size };
+    return { metric, sec, moreRows, details, counts: raw.counts || {}, countsAt: raw.counts_at, needHref: raw.need_href, aiHref: raw.ai_href, size: raw.size };
   }
   function adapt(raw) {
     const sections = Array.isArray(raw.sections) ? raw.sections : [];
@@ -106,7 +106,7 @@
     const check = m('night_check'), cv = check?.value || {};
     if (check && cv.status) {
       const main = cv.status === 'passed' ? '通过' : cv.status === 'failed' ? '没通过' : '还没查过';
-      cells.push(['夜里自检', cv.status, main, ['查本机环境', mdTime(check.at)].filter(Boolean).join(' · ')]);
+      cells.push(['夜里自检', cv.status, main, ['查本机环境', mdTime(check.at), cv.cadence_text].filter(Boolean).join(' · ')]);
     }
     const env = m('environment'), ev = env?.value && typeof env.value === 'object' ? env.value : null;
     if (ev && (ev.status || ev.text)) {
@@ -120,7 +120,7 @@
       const need = finite(c.need) ? `<a href="${esc(v.needHref || `/live/?project=${ID}#needs`)}">等${viewer === 'owner' ? '你' : '本人'}的事 ${esc(int(c.need))} 件</a>` : '';
       const ai = finite(c.ai) ? `<a href="${esc(v.aiHref || `/live/ledger/?project=${ID}`)}">AI 在办 ${esc(int(c.ai))} 件</a>` : '';
       const busy = (c.need || 0) + (c.ai || 0) > 0;
-      cells.push(['有没有要处理的', busy ? 'busy' : 'passed', `${[need, ai].filter(Boolean).join(' · ')}${chev}`, '', true]);
+      cells.push(['有没有要处理的', busy ? 'busy' : 'passed', `${[need, ai].filter(Boolean).join(' · ')}${chev}`, mdTime(v.countsAt), true]);
     }
     return cells;
   }
@@ -128,8 +128,8 @@
     const cells = nowCells(v, viewer);
     if (!cells.length) return '';
     const env = v.metric('environment');
-    const notes = notesOf([v.metric('night_read')?.note, v.metric('night_check')?.note, env && `本机依赖检查：${[env.note, env.scope].filter(Boolean).join('；')}`]);
-    return `<section class="pj-card glass wc-card wc-now"><div class="wc-head"><b>现在怎么样</b>${explainBtn(notes)}</div>${noteBox(notes)}
+    const notes = notesOf([v.sec('night-status')?.about, v.sec('night-status')?.note, v.metric('night_read')?.note, v.metric('night_check')?.note, env && `本机依赖检查：${[env.note, env.scope].filter(Boolean).join('；')}`]);
+    return `<section class="pj-card glass wc-card wc-now"><div class="wc-head"><b>${esc(v.sec('night-status')?.label || '现在怎么样')}</b>${explainBtn(notes)}</div>${noteBox(notes)}
       <div class="wc-now__grid" style="--n:${cells.length}">${cells.map(([k, state, main, sub, html]) => `<div class="wc-now__cell"><p class="wc-now__k">${esc(k)}</p>
         <p class="wc-now__v is-${state}">${dot(state)}<span>${html ? main : esc(main)}</span></p>${sub ? `<p class="wc-now__sub">${esc(sub)}</p>` : ''}</div>`).join('')}</div></section>`;
   }
@@ -193,7 +193,7 @@
     const count = finite(msgs?.value?.messages) ? msgs.value.messages : null, files = finite(archives?.value) ? archives.value : finite(msgs?.value?.archives) ? msgs.value.archives : null;
     const lv = local?.value || {}, all = finite(lv.total) ? lv.total : null;
     const left = all != null ? `<div class="wc-sum__side"><p class="wc-sum__k">本机微信一共留着</p><p class="wc-sum__v"><b>${esc(int(all))}</b> 条</p>
-      <p class="wc-sum__sub">${esc([finite(lv.primary) && `主号 ${int(lv.primary)}`, finite(lv.secondary) && `副号 ${int(lv.secondary)}`, mdTime(local.at) && `截止 ${mdTime(local.at)}`, lv.cadence_text].filter(Boolean).join(' · '))}</p></div>` : '';
+      <p class="wc-sum__sub">${esc([finite(lv.primary) && `主号 ${int(lv.primary)}`, finite(lv.secondary) && `副号 ${int(lv.secondary)}`, mdTime(local.at) && `截止 ${mdTime(local.at)}`, lv.cadence_text && `${lv.cadence_text} 数一次`].filter(Boolean).join(' · '))}</p></div>` : '';
     const last = receipt?.value || receipt?.at;
     const right = count != null || files != null ? `<div class="wc-sum__side"><p class="wc-sum__k">${all != null ? '其中' : ''}本人点名、AI 存成档案的</p>
       <p class="wc-sum__v">${[files != null && `<b>${esc(int(files))}</b> 份`, count != null && `<b>${esc(int(count))}</b> 条`].filter(Boolean).join('<i> · </i>')}</p>${mdTime(last) ? `<p class="wc-sum__sub">最近一次存档 ${esc(mdTime(last))}</p>` : ''}</div>` : '';
