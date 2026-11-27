@@ -13,7 +13,10 @@
 <link rel="stylesheet" href="/live/_lib/live-dossier.css">
 <link rel="stylesheet" href="/motion/motion.css">
 <script src="/motion/motion.js"></script>
-<style>.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
+<style>
+/* 窄窗访客顶栏按绿灯宽度缩放。站名字宽收拢的过程中也让绿灯盒维持这个宽度，右边按钮才不会被临时推出框。 */
+html[data-live-viewer="public"] .page--backup #topbar[data-fit="zoom"] .brand { box-sizing: border-box; width: 36px; }
+.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
 /* 档案卡里：右边窄栏的表按栏宽排，长路径在格子里单行截断（点开看全文） */
 .page--backup .dossier__side .fe-l3b-table { table-layout: fixed; }
 .page--backup .dossier__side .backup-path { max-width: 100%; }

@@ -1115,18 +1115,26 @@
     });
   }
   function renderDevices(d) {
-    const list = d.devices?.length ? d.devices : homeDevices || [];
+    const list = (d.devices?.length ? d.devices : homeDevices || []).map(U.laptopConnection);
     const hasHardware = x => x.configuration?.length || [].concat(x.hw || []).some(Boolean);
     let hardware = '';
     part('devs').classList.toggle('has-hardware', list.some(hasHardware));
     U.html(part('devs'), list.filter(x => !offline() || ['online', 'offline'].includes(x.state) || hasHardware(x) || laptopUnavailable(x)).map((x) => {
       // 页面连不上时台式机不写“在线”（那是断开前的旧状态，和顶上“连不上电脑”打架），用现成的“连不上”（M741）。
-      const state = laptopUnavailable(x) || offSinceText(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
-      const inner = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>${U.fieldHtml(state, { name: '设备状态', place: 'label' })}`;
+      const isLaptop = x.id === 'secondary_laptop';
+      const reported = (isLaptop ? DEV_STATE[x.state] : x.text || DEV_STATE[x.state]) || '';
+      const disconnected = !isLaptop && offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online');
+      const unavailable = laptopUnavailable(x);
+      const state = unavailable || offSinceText(x) || (disconnected ? '连不上' : reported);
+      const badge = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>`;
+      const reading = U.fieldHtml(state, { name: '设备状态', place: 'label' });
+      const inner = badge + reading;
       const pc = x.pc || PC[x.id];
       const detail = { phone: '/live/phone/', secondary_laptop: '/live/laptop/' }[x.id];
       const connect = pc ? `<a class="dev-pill" href="/mcp/?pc=${esc(pc)}" data-needs-pc>${detail ? '远程连接 ›' : inner}</a>` : '';
-      const pill = detail ? `<a class="dev-pill" href="${esc(route(detail))}">${inner} ›</a>${connect}` : connect || `<span class="dev-pill">${inner}</span>`;
+      const readingLink = `${reading} ›`;
+      const detailReading = unavailable ? `<span class="dev-laptop-unavailable">${readingLink.replace(/读不到|\d\d-\d\d \d\d:\d\d 起 ›/g, '<span>$&</span>')}</span>` : readingLink;
+      const pill = detail ? `<a class="dev-pill" href="${esc(route(detail))}">${badge}${detailReading}</a>${connect}` : connect || `<span class="dev-pill">${inner}</span>`;
       const notes = [x.name, x.text].map(value => U.fieldHtml(value, { name: '设备信息' })).filter(html => html.includes('live-mark')).join(' ');
       if (x.id === 'main' && x.configuration?.length) {
         const rows = x.configuration;

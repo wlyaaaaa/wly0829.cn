@@ -112,7 +112,7 @@ test('conversation wait labels require an explicit visible waiting state', () =>
   assert.equal(progress('asking', {...question, visibility: 'owner'}, 'public'), 'asking');
 });
 
-test('offline owner copy uses the displayed generation and Beijing date', async () => {
+test('offline in-page data uses the displayed generation and Beijing date', async () => {
   for (const [now, at, expected] of [['2026-11-15T22:16:00Z', '2026-11-15T22:14:00Z', '06:14'], ['2026-11-15T16:01:00Z', '2026-11-15T14:40:00Z', '11-15 22:40']]) {
     let packet = {v: 1, seq: 2, rev: 'new', at, now, data: {screen: {}}, viewer: {kind: 'owner', device: 'ok'}, link: {state: 'online', basis: 'response'}};
     let broken = false;
@@ -137,7 +137,7 @@ test('offline owner copy uses the displayed generation and Beijing date', async 
   }
 });
 
-test('offline screen retains proven readings, and a rejected device drops its owner copy', async () => {
+test('offline screen holds readings only in its current page and drops them after device rejection', async () => {
   const at = '2026-11-19T00:00:00Z', viewer = {kind: 'owner', device: 'ok'};
   const stored = new Map([['wly-cockpit-device', 'a'.repeat(43)]]);
   const localStorage = {get length() {return stored.size;}, key: i => [...stored.keys()][i], getItem: key => stored.get(key),
@@ -173,7 +173,7 @@ test('offline screen retains proven readings, and a rejected device drops its ow
   await reopened.window.Live.get('screen'); lapse();
   const edge = await reopened.window.Live.get('screen');
   assert.equal(edge.viewer.kind, 'owner');
-  assert.equal(edge.data.cells.find(c => c.id === 'computer').cpu_c, 52);
+  assert.equal(edge.data, null);
   reply = () => Response.json({at, seq: 3, rev: 'public', viewer: {kind: 'public', device: 'invalid'}, data: {cells: []}},
     {headers: {'X-Wly-Preview-View': 'owner'}});
   const rejected = await read();
@@ -205,17 +205,20 @@ test('owner originals stay in the current page, and opening the client removes o
     return window.Live;
   }
   const initial = open();
-  const kept = ['home', 'items/closed', 'projects/changes'];
-  for (const resource of kept) await initial.get(resource);
-  const key = [...stored.keys()].find(k => k.endsWith(':owner:home')).replace(/home$/, '');
+  const summaries = ['home', 'items/closed', 'projects/changes'];
+  for (const resource of summaries) await initial.get(resource);
+  assert.equal([...stored.keys()].some(k => k.includes(':owner:')), false);
+  const key = 'wly-live-v2:net:none:owner:';
   const originals = ['chats/sample', 'items/sample', 'reports/sample', 'projects/sample/records'];
+  for (const resource of summaries) stored.set(key + resource, JSON.stringify(packet('old summary')));
   for (const resource of originals) stored.set(key + resource + '?view=sample', JSON.stringify(packet('old original text')));
 
   online = false;
   const live = open();
   for (const resource of originals) assert.equal((await live.get(resource, 'view=sample')).data, null);
   assert.ok(originals.every(resource => !stored.has(key + resource + '?view=sample')));
-  assert.ok(kept.every(resource => stored.has(key + resource)));
+  assert.ok(summaries.every(resource => !stored.has(key + resource)));
+  for (const resource of summaries) assert.equal((await live.get(resource)).data, null);
 
   online = true;
   title = 'current original text';
@@ -229,10 +232,10 @@ test('owner originals stay in the current page, and opening the client removes o
   title = 'illustrative fixture only';
   await open('?fixture=sample').get('chats/sample');
   online = false;
-  assert.equal((await open('?fixture=sample').get('chats/sample')).data.title, title);
+  assert.equal((await open('?fixture=sample').get('chats/sample')).data, null);
 });
 
-test('a visitor offline copy exposes only metadata and a public pause clears the view', async () => {
+test('offline subpages can use packaged metadata, while the live home and a public pause use no saved body', async () => {
   const at = new Date().toISOString(), viewer = {kind: 'public', device: 'none'};
   const packet = {seq: 1, rev: 'one', at, data: {text: 'old'}, viewer};
   const normal = 'wly-live-v2:net:none:public:', forced = 'wly-live-v2:net:public:none:public:';
@@ -244,7 +247,7 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   let paused = false, offline = false, hostOff = false, fallbackRead, packagedPolicy = 'policy-9';
   const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
   const requested = [];
-  const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
+  const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/backups/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
     setTimeout(fn, ms) { if (ms === 15000) fallbackRead = fn; if (ms === 10000) waits.push(fn); return 0; },
     setInterval: () => 0, document: {addEventListener() {}}, localStorage,
     fetch: async url => {
@@ -255,11 +258,11 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
       if (url === 'https://assets.example.test/' + packagedPolicy + '.json') {
         const saved = {...packet, data: {text: packagedPolicy}};
         return Response.json({at, publication: {policy: packagedPolicy, audience}, metadata_only: true,
-          resources: {projects: saved, tasks: saved}});
+          resources: {projects: saved, 'tasks?scope=scheduled': saved}});
       }
       if (paused) return Response.json({error: 'live_public_paused'}, {status: 503});
       if (!offline) return Response.json({...packet, data: {text: 'safe'}});
-      const off = hostOff ? {'X-Live-Connection': 'host-off'} : {};
+      const off = hostOff ? {'X-Live-Connection': 'host-off', 'X-Live-Offline-Since': at} : {};
       if (url.endsWith('/projects')) {
         return Response.json({...packet, data: {text: 'stale-edge-body'}},
           {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', ...off}});
@@ -269,20 +272,20 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
     }};
   vm.runInNewContext(source, sandbox);
   const client = sandbox.window.Live, shown = [];
-  client.watch('home', null, {data: data => shown.push(data?.text)});
-  assert.equal((await client.get('home')).data.text, 'safe');
+  client.watch('backups', null, {data: data => shown.push(data?.text)});
+  assert.equal((await client.get('backups')).data.text, 'safe');
   assert.deepEqual(shown, ['safe']);
-  assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/home');
+  assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/backups');
   assert.equal([...stored.keys()].filter(key => key.startsWith(normal) || key.startsWith(forced)).length, 0);
   offline = true;
-  // 本页主数据（home）等满 10 秒还没有新的：已经画出来的访客数据留着，标上是几点的数，不算连不上（M587、M588）
-  await client.get('home'); lapse();
-  const slow = await client.get('home');
+  // 本页主数据等满 10 秒还没有新的：本页已读正文保留，写采时，暂不判连不上。
+  await client.get('backups'); lapse();
+  const slow = await client.get('backups');
   assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
   // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；
-  // 没确认关机时，浏览器里没有上次数据的块照 r80 退到随站那份（只用元数据），有数的块留着手里那份
+  // 没确认关机时，子页没读到正文的块可取随站包；只有时刻仍不画正文。
   sandbox.navigator = {onLine: false};
-  await client.get('home');
+  await client.get('backups');
   assert.equal((await client.get('projects')).data, null);
   await fallbackRead();
   assert.equal((await client.get('projects')).meta.at, null);
@@ -294,18 +297,26 @@ test('a visitor offline copy exposes only metadata and a public pause clears the
   assert.equal(packaged.meta.rev, 'metadata-' + audience);
   assert.ok(requested.includes('https://assets.example.test/policy-9.json'));
   assert.ok(requested.includes('https://assets.example.test/policy-11.json'));
-  const edge = await client.get('home');
+  const edge = await client.get('backups');
   assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
   assert.match(edge.text, / · 下面是 .+ 的数据。$/);
   assert.equal(edge.conn.stage, 'lost'); assert.ok(edge.conn.at.includes(client.stamp(edge.shownAt).slice(-5)));
-  // 确认关机后，手里那份比备用包新就留着，写明是这台浏览器存的
+  // 确认关机后保留本次打开时读到的子页内容，并报关机起点。
   delete sandbox.navigator; hostOff = true;
-  const off = await client.get('home');
-  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.equal(off.conn.from, 'browser');
+  const off = await client.get('backups');
+  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.equal(off.conn.from, 'memory');
+  assert.equal(off.link.offSince, at);
   assert.deepEqual(shown, ['safe']);
+  const reopened = {...sandbox, window: {}, location: new URL('https://wly0829.cn/live/')};
+  const packagedReads = requested.filter(url => url.includes('assets.example.test')).length;
+  vm.runInNewContext(source, reopened);
+  const cold = await reopened.window.Live.get('home');
+  assert.equal(cold.conn.emptyHome, true); assert.equal(cold.data, null);
+  assert.equal((await reopened.window.Live.get('tasks', {scope: 'scheduled'})).data, null);
+  assert.equal(requested.filter(url => url.includes('assets.example.test')).length, packagedReads);
   paused = true;
-  assert.equal((await client.get('home')).publicPaused, true);
-  assert.deepEqual([stored.get(owner), stored.get(token)], ['owner', 'example']);
+  assert.equal((await client.get('backups')).publicPaused, true);
+  assert.deepEqual([stored.get(owner), stored.get(token)], [undefined, 'example']);
 });
 
 test('authority clears a withdrawn detail and never fills it from a saved public body', async () => {
@@ -373,7 +384,7 @@ test('an offline public preview cannot paint previous task names or conversation
   }
   assert.deepEqual(outputs, []);
   assert.equal(old.some(key => stored.has(key)), false);
-  assert.deepEqual([stored.get(owner), stored.get(fixture), stored.get(paired)], ['owner task', 'illustrative data', 'synthetic device registration']);
+  assert.deepEqual([stored.get(owner), stored.get(fixture), stored.get(paired)], [undefined, undefined, 'synthetic device registration']);
   online = true;
   assert.equal((await client.get('tasks', scheduled)).data.name, 'reviewed task');
   assert.deepEqual(outputs, ['reviewed task']);
@@ -447,7 +458,7 @@ test('home waits for current public data and honors a pause during navigation', 
   replies.get('/__live/home?project=second')(response(200, packet('public', 'second', 2)));
   assert.equal((await second).publicPaused, true);
   assert.deepEqual(trace, requests);
-  assert.equal([...stored.keys()].filter(key => key.includes(':owner:home?project=first')).length, 1);
+  assert.equal([...stored.keys()].filter(key => key.includes(':owner:home?project=first')).length, 0);
   assert.equal([...stored.keys()].filter(key => key.includes(':public:home?')).length, 0);
 });
 

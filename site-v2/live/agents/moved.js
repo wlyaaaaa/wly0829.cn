@@ -75,7 +75,7 @@
   function seg(key, start) {
     return `<div class="tp-seg" role="group" aria-label="看哪一段">${PERIODS.map(([id, label]) => `<button type="button" data-mperiod="${key}:${id}" aria-pressed="${period[key] === id}">${esc(id === 'all' && start ? `${label} · ${sinceWord(start)}` : label)}</button>`).join('')}</div>`;
   }
-  const head = (key, title, start, stamp) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${stamp ? `<span class="tp-asof">${esc(stamp)}</span>` : ''}</div></div>`;
+  const head = (key, title, start, cutoff) => `<div class="tp-panel__head"><h2>${title}</h2><div class="ag-mhead">${seg(key, start)}${cutoff ? `<span class="tp-asof">${esc(cutoff)}</span>` : ''}</div></div>`;
   const tone = id => only === id ? ' is-on' : only ? ' is-off' : '';
   function famRows(key, keys, v, unit, { lower = {}, last = {}, starts = {}, start = null } = {}) {
     return `<ul class="ag-fams">${keys.map(h => {
@@ -131,14 +131,15 @@
   }
   const bigNum = (key, value, f, lower) => `<b${f ? ` style="color:${fam(f).color}"` : ''}>${lower ? '<small>至少</small>' : ''}${T.big(value, `${key}-${period[key]}-${f || 'all'}`)}</b>`;
 
-  function talkSection(t) {
+  // —— 一、你跟三家说了多少 ——
+  function talkSection(t, summaryAt) {
     const key = 'talk', p = period[key], w = t.win[p], f = only, days = inWindow(t.days, w.start);
     const value = f ? w.v[f] : sum(w.v, HOSTS), lower = f ? w.lower[f] || !known(w.v[f]) : partial(w.v, HOSTS, w.lower);
     const todayN = f ? t.today.v[f] : sum(t.today.v, HOSTS), todayKnown = f ? known(t.today.v[f]) : HOSTS.some(h => known(t.today.v[h.id]));
     const lastAt = f ? t.last[f] : Object.values(t.last).filter(Boolean).sort().at(-1);
     const to = f ? `跟 ${fam(f).name} ` : '';
     const todayText = !todayKnown ? '' : todayN > 0 ? `今天到 ${T.clock(t.at)} ${to}说了 ${int(todayN)} 句` : `今天到 ${T.clock(t.at)} 还没${to}说${lastAt ? ` · ${lastText(lastAt)}` : ''}`;
-    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, t.at && asof(t.at))}
+    return `<section class="tp-panel ag-moved" id="talk">${head(key, `${you()}跟三家说了多少`, t.win.all.start, asof(t.at, summaryAt))}
       <div class="tp-grid ag-mgrid"><div class="ag-mleft">
         <p class="ag-mbig">${esc(lead(p, f ? w.starts[f] || w.start : w.start))}${you()}${esc(to)}<span class="ag-mbig__tail">说了 ${bigNum(key, value || 0, f, lower)} 句</span></p>
         ${famRows(key, HOSTS, w.v, '句', { lower: w.lower, last: t.last, starts: t.starts, start: p === 'all' ? w.start : null })}
@@ -146,7 +147,8 @@
         <div>${days.length ? stackCols(key, days, HOSTS, '句') : '<p class="tp-empty">这段时间没有按天的记录。</p>'}${chips()}</div></div>
       <p class="tp-small ag-mnote">按原话存档里${you()}发给每家的消息算，一条算一句，北京时间零点分天。${days.length && w.start && days[0].date > w.start ? `按天的柱子从 ${esc(md(days[0].date))} 起，更早的只算在合计里。` : ''}${t.gaps.length ? `${esc(t.gaps.join('、'))} 有几个月的档案缺了或读不了，这几家写的是至少。` : ''}</p></section>`;
   }
-  function skillSection(s) {
+  // —— 二、三家常用的技能 ——
+  function skillSection(s, summaryAt) {
     const key = 'skills', p = period[key], w = s.win[p], f = only;
     const every = f ? (w.own[f] || []) : [...w.rows.values()].sort((a, b) => sum(b.v, HOSTS) - sum(a.v, HOSTS)).map(r => r.name);
     const hs = f ? HOSTS.filter(h => h.id === f) : HOSTS, names = [...new Set([...every, ...(s.catalog || [])])];
@@ -165,7 +167,7 @@
     const notes = [line, lag, ...later, w.onlyTop.length ? `${w.onlyTop.join('、')} 只给了用得最多的 5 个，别的技能这一家那一段没画` : '',
       s.missing.length ? `${s.missing.map(h => h.name).join('、')} 的技能还没采到` : '', hs.some(h => s.lower[h.id]) ? `${hs.filter(h => s.lower[h.id]).map(h => h.name).join('、')} 只记得到能确认的，写的是至少` : '',
       known(s.invalid) && s.invalid > 0 ? `技能记录里有 ${int(s.invalid)} 行坏了，没算进来` : ''].filter(Boolean);
-    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, s.at && `截至 ${T.when(s.at)}`)}
+    return `<section class="tp-panel ag-moved" id="skills-used">${head(key, '三家常用的技能', s.win.all.start, asof(s.at, summaryAt))}
       ${chips()}
       ${rows.length ? bars(rows, hs, s, w) : '<p class="tp-empty">这段时间没有记录。</p>'}${never}${more}
       <div class="ag-mfoot"><p class="tp-small">${notes.length ? `${esc(notes.join('；'))}。` : ''}</p>${T.link(s.href, '全部技能 ›')}</div></section>`;
@@ -173,7 +175,7 @@
   window.AgentsMoved = {
     html(d, kind, opts = {}) {
       viewer = kind; only = opts.only || null; chips = opts.chips || (() => ''); if (opts.asof) asof = opts.asof;
-      return [d.message_stats && talkSection(talkModel(d.message_stats)), d.skill_stats && skillSection(skillModel(d.skill_stats))].filter(Boolean).join('');
+      return [d.message_stats && talkSection(talkModel(d.message_stats), d.at), d.skill_stats && skillSection(skillModel(d.skill_stats), d.at)].filter(Boolean).join('');
     },
     click(target) {
       const p = target.closest('[data-mperiod]'), more = target.closest('[data-skills-more]');

@@ -352,9 +352,12 @@
   const blockAt = d => Object.hasOwn(d || {}, 'source_at') ? d.source_at : d?.at;
   // 是不是今天按眼下的时刻比，不拿数据包自己的时刻比：首屏先画和数据到了以后再画，写法一样；不是今天的一定带日期。
   const recordStamp = (value, precision) => timed(value) ? join([day(value) !== day(!lastState?.offline && lastState?.now || Date.now()) && U.date(value), U.time(value, precision)]).replace(' · ', ' ') || U.date(value) : '';
+  const chatHistoryReady = d => Number.isInteger(d?.board?.columns?.archived?.total) ||
+    [d, d?.last_counts].some(sample => sample?.done72 != null && timed(sample.window?.to));
+  const cardWarming = (id, data) => data?.q === 'warming' && !(id === 'chats' && chatHistoryReady(data));
   function hasCardData(id, d) {
-    if (!d || d.q === 'warming') return false;
-    if (id === 'chats') return d.board?.columns || d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
+    if (!d || cardWarming(id, d)) return false;
+    if (id === 'chats') return chatHistoryReady(d) || d.board?.columns || d.unconnected_source_count === null || Number.isInteger(d.unconnected_source_count) && d.unconnected_source_count > 0 || [d.running, d.waiting, d.done72, d.last_counts?.running, d.last_counts?.done72, d.running_sample?.n].some(v => v != null) || [...d.active || [], ...d.recent || [], ...d.fallback || []].length > 0;
     if (id === 'backups') return (d.summary?.sets ?? d.sets) != null || (d.items || []).length > 0 || d.restore?.some(set => set.points?.length || set.failed_points?.length);
     if (id === 'needs') return d.counts != null || (d.items || []).length > 0;
     if (['agents', 'automation', 'ledger'].includes(id)) return true;
@@ -498,7 +501,7 @@
   const tags = (list) => list.filter(Boolean).map(([t, cls]) => `<span class="tag${cls ? ' ' + cls : ''}">${t}</span>`).join('');
   const join = (list) => list.filter(Boolean).map(sp).join(' · ');
   const title = (it, text, resource) => { const own = resource === 'chats' ? 'AI 对话' : '事项', field = { visibility: it.visibility, public: it.public, rewrite: it.rewrite, hidden_what: it.hidden_what, ...(text && typeof text === 'object' ? text : { text }) }, hidden = viewer === 'public' && (field.visibility === 'owner' || field.public === 'owner' || field.hidden), words = U.fieldHtml(field, { name: own, place: 'title', kind: viewer }) || (lastState?.offline ? '' : U.collectionText()), note = hidden || (field.rewrite === 'pending' || field.hidden) && !field.text && !field.value ? U.fieldHtml(field, { name: field.hidden_what || (resource === 'chats' ? '这场对话的内容' : '这件事'), kind: viewer }) : ''; return (hidden ? `<span class="row__title">${words}</span>` : `<a class="row__title home-detail-link" href="${esc(route(`/live/${resource === 'chats' ? 'chat' : 'item'}/?id=${encodeURIComponent(it.id)}`))}">${words}</a>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
-  let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner';
+  let home = null, at = null, source = null, seen = null, lastState = null, viewer = 'owner', laptopState;
   let aiMessages = null;   // 首页的 AI 留言（ai-messages 读口），画在页顶那张卡里
   const newMarks = new Map();
   const fresh = (scope, born, readAt = at, readSource = source) => {
@@ -591,11 +594,13 @@
     // M684：后台在 visitor_labels 里标了这件事（'$'、text、title）的，照它挂两种签之一；没标的照旧。
     const reworded = it.visibility === 'rewritten' || it.public === 'rewrite';
     const marks = viewer !== 'owner' && !reworded && U.visitorFieldKind(it, ['$', 'text', 'title']) !== 'rewritten' ? '' : `<span class="head__rewrite">${U.visitorHiddenMark(it, '这件事', viewer, { keys: ['$', 'text', 'title'], rewrittenWhat: '这件事的说法' }) || (viewer === 'owner' || reworded ? U.visibilityNote(it, viewer) : '')}</span>`;
+    const heading = title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items');
+    const headingWords = viewer === 'owner' ? heading.replace(/副号(?![^<>]*>)/g, '<span class="l1-unit">副号</span>') : heading;
     return {
       key: it.id,
       cls: 'row',
       html: `${lamp({ ...it, level: it.light })}<div class="row__text">
-          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${title(it, homeAddressed(U.capText(it.text, Infinity, true)), 'items')}${fresh}${marks}</p>
+          <p class="row__main"><span class="row__kind">${addressed(KIND[it.kind])}</span>${headingWords}${fresh}${marks}</p>
           ${sub ? `<p class="row__sub">${sub}</p>` : ''}${detail}
         </div><div class="row__acts">${U.goActions(it, loud && !actions.some(a => a.label === '问情况') ? [{ kind: 'copy', label: '问情况', intent: 'ask' }, ...actions] : actions)}</div>`,
     };
@@ -807,12 +812,11 @@
 
   const oldReading = d => d?.stale || ['stale', 'old'].includes(d?.q) || ['stale', 'old'].includes(d?.state) || d?.read_error || /最近一次记录于/.test(sp(d?.stale_text || d?.text));
   // 在干、等回答按新样本自己的时刻（source_at）写，和根首页一样；完整统计（近 72 小时那一窗）的时刻不拿来顶（M606）
-  const chatCountsAt = d => Object.hasOwn(d, 'source_at') ? d.source_at : d.window?.to || blockAt(d);
   function chatSnapshot(d) {
-    const observed = chatCountsAt(d);
+    const observed = blockAt(d);
     const old = lastState?.offline || oldReading(d) || timed(observed) && new Date(lastState?.now || Date.now()) - Date.parse(observed) >= 120000;
     const counts = d.last_counts && d.running == null && d.waiting == null && d.done72 == null ? d.last_counts : d;
-    return { counts, observed: counts === d ? observed : counts.at || counts.window?.to, old: old || counts !== d };
+    return { counts, observed: counts === d ? observed : counts.at, old: old || counts !== d };
   }
   function chatCardHead({ summary, recorded, marker, url, stamps }) {
     const arrow = url ? ' <span class="head__tail chat-head-arrow" aria-hidden="true">›</span>' : '';
@@ -827,14 +831,18 @@
     const p = parts.chats, { counts, observed, old } = chatSnapshot(d);
     // 在干数用后台的新样本 running_sample {n, at, q}（和根首页同一个读数、同一个时刻）；旧包没有才退回原字段（M606）
     const sample = d.running_sample && typeof d.running_sample === 'object' ? d.running_sample : null;
-    const running = sample ? { n: Number.isInteger(sample.n) ? sample.n : null, at: sample.at } : { n: counts.running, at: observed };
-    const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(sample.at) && new Date(lastState?.now || Date.now()) - Date.parse(sample.at) >= 120000 : old;
-    // 在干、等回答、近 72 小时做完各有各的时刻：一样就共用开头的“几点记录”，不一样各自贴上，不拿旧时刻顶新读数
-    const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(counts.window?.to ?? counts.at);
-    const has = { running: running.n != null, waiting: counts.waiting != null, done: counts.done72 != null };
-    const stamps = [...new Set([has.running && runningAt, has.waiting && waitingAt, has.done && doneAt].filter(Boolean))], split = stamps.length > 1;
-    const recorded = split ? (has.running ? runningAt : waitingAt) : stamps[0] || recordStamp(observed) || (old && sp(d.stale_text || d.text).match(/最近一次记录于\s*((?:\d{2}-\d{2}\s+)?\d\d:\d\d)/)?.[1]);
-    const runningText = sample ? `${sample.q === 'partial' ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
+    const running = sample ? { n: Number.isInteger(sample.n) && !['unknown', 'warming'].includes(sample.q) ? sample.n : null, at: sample.source_at ?? sample.at } : { n: counts.q === 'warming' ? null : counts.running, at: observed };
+    const runningOld = sample ? lastState?.offline || sample.q === 'stale' || timed(running.at) && new Date(lastState?.now || Date.now()) - Date.parse(running.at) >= 120000 : old;
+    const history = counts.done72 != null && timed(counts.window?.to) ? counts :
+      d.last_counts?.done72 != null && timed(d.last_counts.window?.to) ? d.last_counts : counts;
+    // 只有每个实际显示的数字都同一时间，开头才共用“几点记录”。
+    const runningAt = recordStamp(running.at), waitingAt = recordStamp(observed), doneAt = recordStamp(history.window?.to);
+    const has = { running: running.n != null, waiting: counts.q !== 'warming' && counts.waiting != null, done: history.done72 != null };
+    const times = [has.running && running.at, has.waiting && observed, has.done && history.window?.to].filter(at => at !== false);
+    const stamps = [...new Set(times.map(at => recordStamp(at)).filter(Boolean))];
+    const recorded = timed(times[0]) && times.every(at => Date.parse(at) === Date.parse(times[0])) ? recordStamp(times[0]) : '';
+    const runningPartial = sample?.q === 'partial' || sample?.q === 'stale' && sample.gap === '只显示有记录的部分';
+    const runningText = sample ? `${runningPartial ? '至少 ' : ''}${running.n}` : quantity(counts, 'running');
     const { peopleIn, totalOf, listedOf, earlierCount, bySortAt } = U.chatFields;
     const olderRows = (key, n, at) => {
       const earlier = earlierCount(d.active, key, n);
@@ -843,24 +851,25 @@
       return at && waitingAt && at !== waitingAt ? `${label}名单是 ${waitingAt} 的 ${peopleIn(d.active.filter(c => c.state === key))} 场`
         : `${label}另有 ${earlier} 场是上次读到的，这次没核对到`;
     };
-    const concurrent = has.running && `${runningText} 个${runningOld && !(split ? runningAt : recorded) ? '当时' : ''}在干`;
+    const concurrent = has.running && `${runningText} 个${runningOld && !runningAt ? '当时' : ''}在干`;
     const waiting = has.waiting && addressed(`${quantity(counts, 'waiting')} 个等你回答`);
-    const done = has.done && `近 72 小时做完 ${quantity(counts, 'done72')} 个`;
-    const own = (piece, at, label) => !piece || !split || !at || at === recorded ? piece : label(piece, at);
+    const done = has.done && `近 72 小时做完 ${quantity(history.q === 'warming' ? { ...history, q: 'stale' } : history, 'done72')} 个`;
+    const own = (piece, at, label) => !piece || !at || recorded ? piece : label(piece, at);
     const pieces = [own(concurrent, runningAt, (t, at) => `${t}（${at} 记录）`), own(waiting, waitingAt, (t, at) => `${t}（${at} 记录）`), own(done, doneAt, (t, at) => `截至 ${at} 的${t}`)];
-    const missing = [running.n == null && '在干数', counts.done72 == null && '近 72 小时做完数'].filter(Boolean);
+    const missing = [running.n == null && '在干数', !has.done && '近 72 小时做完数'].filter(Boolean);
     const marker = typeof d.text === 'object' && d.text;
-    // M915：后台给了 board（和 AI 对话页同一份）时，卡头的数就是那页四栏的数、时刻是那页的“截至”；在干、等你两栏的对话列在上面、停下没归档的跟在后面，各按进这一类的时刻从新到旧，做完的是已归档的
+    // M915 的四栏数照 AI 对话页。归档总数与旧 done72 不同，现役 board 也没有归档截止，不能借旧窗口给它标日期。
     const board = d.board?.columns && typeof d.board.columns === 'object' ? d.board : null;
     const colTotal = key => totalOf(board?.columns[key]), colItems = key => Array.isArray(board?.columns[key]?.items) ? board.columns[key].items : [];
     const countNote = key => {
       const listed = listedOf(board?.columns[key]), n = colTotal(key);
       return listed > (n ?? 0) ? `${key === 'working' ? '在干' : addressed('等你')}清单列出 ${listed} 场` : '';
     };
-    const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
+    const boardSeen = board && colTotal('working') != null && recordStamp(blockAt(d));
+    const boardSummary = board && join([`在干 ${colTotal('working') ?? '没读到'}${board.quota_exhausted > 0 ? `（其中额度用完 ${board.quota_exhausted}）` : ''}${boardSeen ? `（${boardSeen} 记录）` : ''}`, addressed(`等你 ${colTotal('waiting') ?? '没读到'}`),
       `停下没归档 ${colTotal('stopped') ?? '没读到'}`, `近 72 小时做完 ${colTotal('archived') ?? '没读到'}`]);
     const summary = boardSummary || join(pieces);
-    const heading = chatCardHead({ summary, recorded: board ? recordStamp(board.as_of) : recorded, marker, url: href('chats'), stamps: !board && split && stamps });
+    const heading = chatCardHead({ summary, recorded: board ? '' : recorded, marker, url: href('chats'), stamps: board ? boardSeen && [boardSeen] : stamps });
     const note = join(board ? ['working', 'waiting'].map(countNote) : [olderRows('running', running.n, runningAt),
       olderRows('waiting', counts.waiting, recordStamp(counts === d ? observed : counts.at))]);
     // 标题伸到插画上，窄窗的说明按画窗宽度让开。
@@ -872,7 +881,7 @@
     U.html(p.background, background?.n > 0 ? `<a class="b6-go" href="${esc(route(background.href))}">后台另有 ${background.n} 个在跑 ›</a>` : '');
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
-    const runningNow = sample ? running.n : d.running;
+    const runningNow = sample ? running.n : d.q === 'warming' ? null : d.running;
     const rows = board && ['working', 'waiting', 'stopped', 'archived'].some(key => Array.isArray(board.columns[key]?.items));
     // 停下没归档的（出错、叫停、回完了没归档、状态不明）照改前一样列在卡上，排在在干、等你后面；几行露在外面照旧由卡高定，其余进“还有 N 个”
     const active = rows ? [...bySortAt([...colItems('working'), ...colItems('waiting')]), ...bySortAt(colItems('stopped'))] : (d.active || []).filter(c => c.state !== 'done');
@@ -917,6 +926,24 @@
     const legacy = typeof data?.text === 'string' && data.text.match(/(?:CPU\s*)?(-?\d+(?:\.\d+)?)\s*(?:℃|°C)/)?.[1];
     return legacy ? { value: Number(legacy) } : null;
   }
+  const computerSampleAt = row => row?.source_at ?? row?.at;
+  function oldComputerSample(row) {
+    const age = Date.parse(window.Live.clock()) - Date.parse(computerSampleAt(row));
+    return lastState?.offline || oldReading(row) || row?.state === 'unavailable' || age < 0 || row?.stale_after > 0 && age > row.stale_after * 1000;
+  }
+  const freshTemperature = row => Number.isFinite(row?.value) && timed(computerSampleAt(row)) && row.stale_after > 0 && row.q === 'ok' && !oldComputerSample(row);
+  let temperatureCurrent;
+  const fastHardwareIds = ['cpu', 'cpu-temp', 'memory', 'memory-total', 'memory-available'];
+  function preserveComputerSamples(current, previous) {
+    if (!current.metrics || !previous?.metrics) return;
+    current.metrics = current.metrics.map(row => {
+      if (!fastHardwareIds.includes(row.id)) return row;
+      const prior = previous.metrics.find(sample => sample.id === row.id), priorAt = computerSampleAt(prior);
+      if (!Number.isFinite(prior?.value) || !timed(priorAt) || Number.isFinite(row.value) && Date.parse(priorAt) <= Date.parse(computerSampleAt(row))) return row;
+      return { ...prior };
+    });
+  }
+  const keepComputerWords = html => html.replace(/(?:明细|记录到)(?![^<>]*>)/g, '<span class="live-unit">$&</span>');
   function renderComputer(d, screen, phoneData) {
     const trafficBytes = bytes => U.trafficBytes(bytes);  // 按 1024 进位，和海外流量页同一个函数
     const p = parts.computer;
@@ -925,10 +952,10 @@
     const val = (x, f) => (x && x.value != null ? f(x) : null);
     const fmtTemp = n => `${Math.round(n)}℃`;
     const pair = (use, temperature) => join([val(use, x => quantity(x, 'value', n => `${Math.round(n)}%`)), temperature]) || null;
-    const sampleTime = (node, fallback) => {
-      const stamp = node?.source_at ?? node?.at ?? fallback;
+    const sampleTime = node => {
+      const stamp = computerSampleAt(node);
       if (!timed(stamp)) return null;
-      const old = !!(offline || oldReading(node) || node?.stale_after > 0 && Date.now() - Date.parse(stamp) > node.stale_after * 1000);
+      const old = !!oldComputerSample(node);
       return { key: JSON.stringify([stamp, node?.timestamp_basis, old]), text: `${old ? '上次' : '记录到'} ${recordStamp(stamp)}` };
     };
     const cpuSample = m.cpu?.value != null ? sampleTime(m.cpu) : null;
@@ -938,19 +965,20 @@
     const sharedNote = sharedMemory.length ? `CPU 占用、${sharedMemory.length === 2 ? '内存' : sharedMemory[0][1]} ${cpuSample.text}` : '';
     const withReadings = (text, ...sources) => {
       if (!text) return text;
-      const notes = sources.map(([label, node, fallback]) => [label, shared.has(node) ? null : sampleTime(node, fallback)]).filter(([, sample]) => sample);
+      const notes = sources.map(([label, node]) => [label, shared.has(node) ? null : sampleTime(node)]).filter(([, sample]) => sample);
       if (!notes.length) return text;
       const same = notes.length === sources.length && notes.every(([, sample]) => sample.key === notes[0][1].key);
       const detail = same ? notes[0][1].text : join(notes.map(([label, sample]) => `${label} ${sample.text}`));
-      return text + `<small>${esc(detail)}</small>`;
+      return text + `<small>${keepComputerWords(esc(detail))}</small>`;
     };
     const uptime = screen?.uptime ?? m.uptime?.value;
     const summary = typeof d.text === 'string' ? d.text : '';
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    U.html(p.head, U.itemTextUnits(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') })));
-    const devices = [...(d.devices || [])];
+    U.html(p.head, U.itemTextUnits(keepComputerWords(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }))));
+    const devices = (d.devices || []).map(U.laptopConnection);
+    laptopState = devices.find(x => x.id === 'secondary_laptop')?.state;
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
     if (phone && !devices.some(x => x.id === 'phone')) devices.push({ id: 'phone' });
     const diskGrowth = x => x.growth == null ? '' : x.growth === 0 ? '本周已用无变化'
@@ -972,7 +1000,7 @@
     const memorySpec = U.memorySpec?.(d?.hardware?.memory ?? d?.memory?.spec, d?.hardware?.source_at);   // 频率、时序、同步：回包里有才写（M654）
     const rows = [
       // CPU、显卡、内存三行和下面几行一样整行能点：名字后带“ ›”，读数整块是链接，到电脑页“CPU 和显卡”“内存”那一组（M708）
-      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu, screen?.cpu_at]), m.cpu, '/live/computer/#grp-cpu'],
+      ['CPU', withReadings(pair(m.cpu, temperature), ['占用', m.cpu], ['温度', cpu]), m.cpu, '/live/computer/#grp-cpu'],
       ['显卡', withReadings(join([val(m.gpu, x => (text => Number(x?.value) < 90 ? `<span class="kv-good">${text}</span>` : text)(quantity(x, 'value', n => `${Math.round(n)}%`))), val(m['gpu-temp'], x => quantity(x, 'value', fmtTemp))]) || null, ['占用', m.gpu], ['温度', m['gpu-temp']]), null, '/live/computer/#grp-cpu'],
       ['内存', (text => text && memorySpec ? `${text}<small>${memorySpec.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ')}</small>` : text)(withReadings(used != null || total != null ? `用了 ${U.nowrap(quantity(m.memory, 'value', U.gb))} · ${U.nowrap(`共 ${quantity(m['memory-total'], 'value', U.gb)}`)}` : null,
         ['已用', m.memory], ['总容量', m['memory-total']])), null, '/live/computer/#grp-memory'],
@@ -986,12 +1014,16 @@
         const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
           ? `\u00a0· ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
-        // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和前一台包在一起，一行放不下时后一台整个折下去，“·”留在上一行末尾（r83 返修第三轮复看：原来跟后一台包在一起，第二行以“· 手机上次经蓝牙连接”开头）
+        // 状态内部的“·”跟前面的字，设备之间的“·”跟后一台，避免挤出一行只有箭头和分隔点。
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? `\u00a0· 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
         const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
-        if (x.id === 'secondary' || x.id === 'secondary_laptop') return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${esc(name + status)} ›</a>`;
+        if (x.id === 'secondary' || x.id === 'secondary_laptop') {
+          const line = esc(`${name}${status} ›`).replace(/读不到|((?:\d{2}-\d{2} )?\d{2}:\d{2})( 起 ›)$/g,
+            (word, stamp, end) => stamp ? `<span class="kv-device-time"><span class="l1-unit">${stamp}</span>${end}</span>` : `<span class="l1-unit">${word}</span>`);
+          return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${line}</a>`;
+        }
         return `<span>${esc(name + status)}</span>`;
-      }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
+      }).map((html, i) => i ? `<span>·\u00a0${html}</span>` : html).join(''), null, '', '/live/computer/'],
     ];
     const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : U.itemTextUnits(value);
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
@@ -1096,7 +1128,8 @@
     const own = /\/backup\//.test(link || '') ? '资料' : /\/issue\//.test(link || '') ? 'AI 事项' : /\/project\//.test(link || '') ? '项目变化' : '自动任务';
     const fields = (Array.isArray(it.name) ? it.name : [it.name || it.text || it]).map(v => ({ visibility: it.visibility, public: it.public, rewrite: it.rewrite, ...(v && typeof v === 'object' ? v : { text: v }) }));
     const names = fields.map((field, i) => U.fieldHtml(field, { name: fields.length > 1 ? i ? '变化' : '项目' : own, place: 'label', kind: viewer })).join(' · '), hidden = viewer === 'public' && fields.some(f => f.visibility === 'owner' || f.public === 'owner' || f.hidden);
-    const label = hidden ? `<span class="row__title">${names}</span>` : link ? `<a class="home-detail-link" href="${esc(route(link))}">${names} ›</a>` : names;
+    const linkedNames = own === '资料' ? names.replace(/(AI 恢复上下文|&[\w#]+;|.)?$/u, '<span class="l1-unit">$1 ›</span>') : `${names} ›`;
+    const label = hidden ? `<span class="row__title">${names}</span>` : link ? `<a class="home-detail-link" href="${esc(route(link))}">${linkedNames}</a>` : names;
     const notes = fields.map(field => U.fieldHtml({ ...field, value: null, text: null, label: null }, { name: own, kind: viewer })).filter(Boolean);
     const note = [...new Set(notes)].join(' '), subHtml = (Array.isArray(sub) ? sub : [sub]).filter(Boolean).map(v => U.fieldHtml(v, { name: '说明', kind: viewer })).join(' · ');
     return { key: it.id, cls: 'row row--flat', html: `${lamp(status)}<div class="row__text"><p class="row__main">${label}${note ? ` <span class="head__rewrite">${note}</span>` : ''}${mark}</p>${subHtml ? `<p class="row__sub">${subHtml}</p>` : ''}</div><div class="row__acts">${U.actions(it, ask && !it.actions?.length ? [{ kind: 'copy', label: '问情况', intent: 'ask' }] : it.actions)}</div>` };
@@ -1179,6 +1212,7 @@
       p.head.querySelector(':scope > .lamp')?.remove();
       if (lamp) p.head.insertAdjacentHTML('afterbegin', lamp);
       Light.tone(cards[id], tone);
+      cards[id].dataset.hasReadings = counts.length ? 'yes' : '';
       p.status.hidden = !summary;
       U.html(p.status, U.nowrap(summary), false);
       // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
@@ -1259,10 +1293,10 @@
   function renderCards(d) {
     for (const id of HOME_IDS) if (id !== 'needs' && cards[id].classList.contains('card--empty') && hasCardData(id, d[id])) for (const el of Object.values(parts[id])) el.hidden = false;
     renderHomeNeeds(d);
-    for (const [id, render] of [['chats', renderChats], ['computer', renderComputer], ['phone', renderPhone]]) if (d[id]?.q !== 'warming') render(d[id], d.screen, d.phone);
+    for (const [id, render] of [['chats', renderChats], ['computer', renderComputer], ['phone', renderPhone]]) if (!cardWarming(id, d[id])) render(d[id], d.screen, d.phone);
     renderRest(d);
     paintBatchCards(d);
-    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = d[id]?.q === 'warming'; cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) U.html(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); U.html(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
+    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = cardWarming(id, d[id]); cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) U.html(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); U.html(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
   }
   function renderHomeNeeds(d) {
     const needs = d.needs, focus = noticeFocus(d, viewer), card = cards.needs;
@@ -1278,8 +1312,7 @@
   }
   function cutoffAt(id, data) {
     if (id === 'chats') {
-      const { counts, observed } = chatSnapshot(data || {});
-      if (counts !== data || observed || oldReading(data)) return observed;
+      return chatSnapshot(data || {}).observed;
     }
     if (id === 'phone' && data?.state === 'offline' && !Object.hasOwn(data, 'source_at')) return data.received?.last_at || data.at;
     if (!data || Object.hasOwn(data, 'source_at') || Object.hasOwn(data, 'at') || oldReading(data)) return blockAt(data);
@@ -1296,30 +1329,45 @@
     const named = new Set((d.gray_items || []).map(g => U.fieldText(g?.name, viewer)));
     const ownGap = d.read_error || d.refresh_error || [...(d.gray_items || []).map(g => g?.reason), ...Object.entries(d.missing || {}).filter(([key]) => !named.has(key)).map(([, r]) => r?.reason_code ?? r?.reason ?? r)]
       .some(r => !/还在读|warming/.test(sp(U.fieldText(r, viewer))));
-    if (reading && !ownGap && d.done72 != null) return '';
+    if (reading && !ownGap && chatHistoryReady(d)) return '';
     const lead = [(gap || !reading) && `${tried ? tried + ' ' : '这次'}没读全`, reading && '正在重读'].filter(Boolean).join('，');
     return esc([lead, shown && (shown === tried ? '上面是读到的部分' : `先显示 ${shown} 的统计`)].filter(Boolean).join('，'));
   }
+  const stutterGroup = data => data?.groups?.find(g => g.key === 'stutter');
+  const stutterUnread = data => data?.attention_summary?.unread?.find(g => g.key === 'stutter');
+  const noStutterFrames = (row, unread) => [row?.missing?.['卡顿采样'], unread?.missing?.['卡顿采样'], unread?.reason]
+    .some(value => sp(U.fieldText(value, viewer)).trim() === '最近一段在用时没有采到合格帧');
+  const stutterThrough = (row, unread) => [row?.observed_at, row?.at, unread?.observed_at,
+    !Object.hasOwn(unread || {}, 'recorded_at') && unread?.at].find(timed);
   function stutterGapNote(data) {
-    const row = data.groups?.find(g => g.key === 'stutter');
-    const unread = data.attention_summary?.unread?.find(g => g.key === 'stutter');
-    const reading = { ...row, ...unread };
-    const gaps = [unread?.missing, row?.missing].find(m => m && Object.keys(m).some(k => /[\u3400-\u9fff]/.test(k)));
-    const reasons = gaps ? Object.hasOwn(gaps, '卡顿采样') ? [gaps['卡顿采样']] : Object.values(gaps) : [];
-    const reason = reasons.filter(v => U.fieldText(v, viewer).trim()).map(v => U.fieldHtml(v, { name: '卡顿缺数原因', kind: viewer })).join('、');
-    const hasFrame = Object.hasOwn(reading, 'recorded_at'), last = recordStamp(reading.recorded_at);
-    const until = recordStamp(reading.observed_at ?? row?.at ?? (!hasFrame && reading.at));
-    const why = reading.read_error === true ? '这次读取失败' : reason && (reading.lamp_q === 'ok' ? `历史记录不全，${reason}` : `${reason}，只有部分记录`);
-    // 原因里已经说了“没有采到合格帧”，后面不再跟一句“没读到合格帧记录”（同一件事说两遍，r83 返修第三轮）
-    const times = [hasFrame && (last ? `最后读到 ${last}` : !/合格帧/.test(String(reason)) && '没读到合格帧记录'), until && `数据截止 ${until}`].filter(Boolean).join('，');
-    return [why, esc(times)].filter(Boolean).join('；');
+    const row = stutterGroup(data), unread = stutterUnread(data);
+    const last = [row?.recorded_at, unread?.recorded_at].find(timed), until = stutterThrough(row, unread);
+    const unit = text => `<span class="live-unit">${esc(text)}</span>`;
+    if (row?.read_error || unread?.read_error) {
+      if (last) return until ? `${unit('卡顿这次没读到')} · ${unit(`上次有效帧 ${U.time(last)}，`)}${unit(`数据到 ${U.time(until)}`)}` : '';
+    } else if (noStutterFrames(row, unread)) {
+      const reason = '<span class="l1-unit stutter-frame-note">卡顿判不了：这段前台程序没出合格的帧</span>';
+      return until ? `${reason} · ${unit(`数据到 ${U.time(until)}`)}` : '';
+    } else if (last || until) return '';
+    return '<span title="这次没读到卡顿记录，手上也没有上次的。" class="live-unit">读数暂缺 · 卡顿</span>';
   }
   function paintStatus(id, data) {
     const p = parts[id], end = cutoffAt(id, data), stamp = recordStamp(end, data?.at_precision);
     const staleText = U.fieldHtml(data?.stale_text, { name: '数据截止时刻', kind: viewer });
     const endNote = stamp ? `数据截至 ${stamp}` : '';
-    const timeNote = id === 'needs' && timed(end) && U.time(end, data?.at_precision);
-    const matchesCutoff = text => endNote && (U.sameCutoffNote(endNote, text) || timeNote && U.sameCutoffNote(`数据截至 ${timeNote}`, text));
+    // 两张卡的灰项由后台从同次名册读数派生，只有同一采样才合并灰项与卡底说明。
+    const cardReading = id === 'needs' || id === 'backups';
+    const sameSample = cardReading && timed(end) && end === data?.at && !(id === 'needs' &&
+      data.items?.some(row => row.light === 'gray' && blockAt(row) !== end));
+    const shortEnd = cardReading && timed(end) && `数据截至 ${U.time(end, data.at_precision)}`;
+    const cardCutoff = text => shortEnd && (U.sameCutoffNote(shortEnd, text) || U.sameCutoffNote(endNote, text));
+    const sameNote = (a, b) => (!cardReading || sameSample) && (U.sameCutoffNote(a, b) || cardCutoff(a) && cardCutoff(b));
+    const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
+    const describedReading = `最后读到 ${describedAt}`;
+    // 备份名册的原采时和卡底截至可以落在同一分钟。昨日前的独立截至保留日期，告警和灰项的同源时刻仍只报一次。
+    const datedBackupCutoff = id === 'backups' && !sameSample && timed(data?.at) && timed(end) &&
+      day(data.at) === day(end) && stamp !== U.time(end, data.at_precision) && cardCutoff(describedReading);
+    const matchesCutoff = text => endNote && (U.sameCutoffNote(endNote, text) || sameSample && cardCutoff(text));
     const chatSummary = id === 'chats' && p.head.querySelector('.chat-head-summary');
     const chatReading = chatSummary && chatSummary.querySelector('[data-recorded]')?.dataset.recorded;
     // 卡头分时写的（在干、等回答、做完数各自几点）：截止时刻卡头里有就不重复；读不全的说明不再说“先显示几点的统计”
@@ -1327,24 +1375,32 @@
     const existing = endNote && (chatReading === stamp || chatStamps.includes(stamp) || [p.head, p.note].some(el => el && !el.hidden &&
       [...el.querySelectorAll('.head__cutoff'), el].some(node => node.textContent.split(' · ').some(matchesCutoff))));
     const difference = Date.parse(home?.at ?? at) - Date.parse(end);
-    const cutoff = endNote && !existing && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
+    const cutoff = endNote && !existing && (datedBackupCutoff || !cardCutoff(describedReading)) && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
     // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
-    // 电脑、手机卡上“读数暂缺”已经点过名的组（卡顿、程序身份筛查……），“读不准”里不再写一遍；它的原因并到“读数暂缺”那一项后面（一项只说一次，不把要紧数往下压）
-    const temperatureShown = id === 'computer' && computerTemperature(data)?.value != null;
-    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureShown && name === 'CPU 温度')))] : [];
+    const temperature = id === 'computer' && computerTemperature(data);
+    const temperatureFresh = freshTemperature(temperature);
+    if (id === 'computer') temperatureCurrent = temperatureFresh;
+    // 旧值可以显示，但只有温度本身有有效的新读数才收起它的缺读说明。
+    const lacking = ['computer', 'phone'].includes(id) && Array.isArray(data?.missing_readings) ? [...new Set(data.missing_readings.map(g => sp(U.fieldText(g?.name ?? g, viewer)).trim()).filter(name => name && !(temperatureFresh && name === 'CPU 温度')))] : [];
+    const stutterMissing = id === 'computer' && lacking.includes('卡顿');
+    const stutterNote = stutterMissing ? stutterGapNote(data) : '';
+    if (stutterMissing) lacking.splice(lacking.indexOf('卡顿'), 1);
     const plain = text => sp(String(text).replace(/<[^>]*>/g, '')).trim();
     const savedReading = text => plain(text).match(/^(最近一次记录于\s+(?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)(?:[，,](?:此后没有新读数))?[。.]?$/)?.[1] || '';
     const oldDetails = new Set();
-    const describedAt = U.fieldText(data?.why, viewer).match(/^最后读到\s+((?:(?:\d{4}-)?\d\d-\d\d\s+)?\d\d:\d\d)\s*时/)?.[1];
     const lackWhy = new Map();
     for (const g of gray || []) {
       const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
+      if (name === 'CPU 温度' && temperatureFresh) continue;
+      if (stutterMissing && name.startsWith('卡顿')) continue;
       const recorded = savedReading(reason), lack = lacking.find(label => name === label || name.startsWith(label));
       if (recorded) oldDetails.add(recorded);
-      const why = id === 'computer' && recorded ? recorded.replace(/^最近一次记录于/, '上次读到') : reason;
+      const latest = name === 'CPU 温度' && recordStamp(computerSampleAt(temperature));
+      const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
-      const detail = describedAt && U.sameCutoffNote(recorded, `最后读到 ${describedAt}`) ? '' : why;
+      const repeatsReading = sameNote(recorded, describedReading) || datedBackupCutoff && U.sameCutoffNote(recorded, describedReading);
+      const detail = describedAt && repeatsReading ? '' : why;
       grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
     }
     const grayNames = names => {
@@ -1368,9 +1424,8 @@
       state.note = state.note.split(' · ').map(part => /^\d+ 项要处理$/.test(sp(part).trim()) ? text : part).join(' · ');
     }
     // M666：缺读数两版都写出缺的组名：“读数暂缺 2 组 · 卡顿、程序身份筛查”（字段 data.computer / data.phone 的 missing_readings）
-    const stutterNote = id === 'computer' && lacking.includes('卡顿') && stutterGapNote(data);
     // 相邻几组原因一样时并成一句，写在最后一组后面（“CPU 温度、磁盘余量、网络丢包（最近一次记录于 10:26，此后没有新读数）”），不每组各写一遍（r83 返修第三轮）
-    const lackReasons = lacking.map(name => name === '卡顿' && stutterNote ? stutterNote : lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
+    const lackReasons = lacking.map(name => lackWhy.get(name) && U.fieldText(lackWhy.get(name), viewer).trim() ? U.fieldHtml(lackWhy.get(name), { name: '缺数原因', kind: viewer }) : '');
     const lackNote = lacking.length ? `读数暂缺 ${lacking.length} 组 · ${lacking.map((name, i) => esc(name) + (lackReasons[i] && lackReasons[i] !== lackReasons[i + 1] ? `（${lackReasons[i]}）` : '')).join('、')}` : '';
     // 卡头另写的“最近一次记录于 10:26”这类话，“读数暂缺”某组的原因里已经写过，就不再单独写一遍（一项只说一次）
     const lackSaid = lackReasons.map(r => sp(String(r).replace(/<[^>]*>/g, ''))), saidInLack = text => { const t = sp(String(text).replace(/<[^>]*>/g, '')).trim(); return !!t && lackSaid.some(r => r.includes(t)); };
@@ -1380,15 +1435,19 @@
       if (id === 'phone' && lastState?.offline) p.head.firstElementChild.dataset.tone = 'gray';
     }
     const chatGap = id === 'chats' && (state.tone === 'gray' || gray) && chatGapNote(data, chatStamps.length ? '' : chatReading);
-    const alreadyDated = text => [...oldDetails].some(reason => U.sameCutoffNote(reason, plain(text)));
+    const alreadyDated = text => [...oldDetails].some(reason => sameNote(reason, text));
+    const redundantCutoff = text => {
+      const value = plain(text);
+      return alreadyDated(value) || (existing || cutoff) && matchesCutoff(value) || cutoff && cardCutoff(value);
+    };
     const note = typeof chatGap === 'string' ? [chatGap, ...(state.note || '').split(' · ').filter(text => /项要处理$|^AI 在修/.test(sp(text)))].filter(Boolean).join(' · ')
-      : [lackNote, ...(state.note || staleText).split(' · ').filter(text => !alreadyDated(text) && (!(existing || cutoff) || !matchesCutoff(plain(text))) && !(lackNote && (/^缺：/.test(text) || saidInLack(text)))), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
-    p.status.dataset.missingGroups = lackNote ? 'yes' : '';
+      : [lackNote, stutterNote, ...(state.note || staleText).split(' · ').filter(text => !redundantCutoff(text) && !((lackNote || stutterMissing) && /^缺：/.test(text)) && !saidInLack(text)), grayNote, alreadyDated(cutoff) ? '' : cutoff].filter(Boolean).join(' · ');
+    p.status.dataset.missingGroups = lackNote || stutterNote ? 'yes' : '';
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
     const statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
-    p.status.hidden = !note; U.html(p.status, statusHtml);
+    p.status.hidden = !note; U.html(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
   const headline = (it, withLabel = true) => {
@@ -1722,6 +1781,14 @@
       // 真垫底里的计数仍在，没存下来的行列表不一定随包；保留已有行，只补空数组。
       d = { ...d };
       for (const id of HOME_IDS) d[id] = { ...U.withoutSnapshotCutoff(d[id], meta.at), items: Array.isArray(d[id]?.items) ? d[id].items : [] };
+      // 快首页若只返回卡顿缺读占位，保留同一受众上一次的有效帧和覆盖截止。
+      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
+        const next = stutterGroup(d.computer), unread = stutterUnread(d.computer), previous = stutterGroup(home?.computer);
+        if (timed(previous?.recorded_at) && stutterThrough(previous) && !stutterThrough(next, unread) &&
+            !timed(next?.recorded_at) && !timed(unread?.recorded_at) && !noStutterFrames(next, unread)) {
+          d.computer.groups = [...(d.computer.groups || []).filter(g => g.key !== 'stutter'), { ...previous, read_error: true }];
+        }
+      }
       const waiting = d.needs.waiting || [], ages = new Map(waiting.map(it => [it.id, it.age_days]));
       d.needs.items = d.needs.items.length ? d.needs.items.map(it => ages.has(it.id) ? { ...it, age_days: ages.get(it.id) ?? it.age_days } : it) : waiting;
       for (const key of ['active', 'recent', 'fallback']) d.chats[key] = Array.isArray(d.chats[key]) ? d.chats[key] : [];
@@ -1732,6 +1799,7 @@
         const counts = Object.fromEntries(Object.keys(KIND).map(k => [k, needs.filter(it => it.kind === k).length]));
         d = { ...d, needs: { ...d.needs, items: needs, counts, waiting_oldest_days: null, closed7: scoped(closed.data?.items).length }, ledger: { ...d.ledger, items: ledger, open: ledger.length, text: `AI 手上 ${ledger.length} 件` } };
       }
+      if ((meta.viewer?.kind || 'owner') === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
       if (d.focus) restoreY = null, pinned = false;
       const render = () => {
       document.body.classList.remove('live-unreadable');
@@ -1777,22 +1845,30 @@
     link(state) {
       // 第一次画的时候没有“正在看的那一行”，不锚视口；锚了会跟着页顶横条长出来往下滚，把横条和页眉标题挤走
       const changed = !!lastState?.offline !== !!state.offline, firstLink = !lastState, oldNow = lastState?.now;
+      const compact = !!state.conn?.emptyHome, wasCompact = !!lastState?.conn?.emptyHome;
       lastState = state;
-      document.body.classList.toggle('live-empty-home', !!state.conn?.emptyHome);
+      document.body.classList.toggle('live-empty-home', compact);
+      document.body.classList.toggle('live-home-summary', !!state.conn?.homeSummary);
       bar?.set(state);
       Light.offline(state.offline);
-      if (changed && home) {
+      if (!compact && (changed || wasCompact) && home) {
+        document.body.classList.remove('live-unreadable');
         const render = () => { balanceHome(); renderCards(home); };
         if (!settling() && !firstLink) U.anchor(render); else render();
+      }
+      const laptop = home?.computer?.devices?.find(x => x.id === 'secondary_laptop');
+      if (!changed && laptop && home.computer.q !== 'warming' && U.laptopConnection(laptop).state !== laptopState) {
+        const render = () => renderComputer(home.computer, home.screen, home.phone);
+        if (firstLink || settling()) render(); else U.anchor(render);
       }
       renderNotices(state);
       if (home && !changed && !state.offline && timed(state.now) && Math.floor(Date.parse(oldNow) / 60000) !== Math.floor(Date.parse(state.now) / 60000)) {
         const render = () => {
-          if (home.chats.q !== 'warming') { renderChats(home.chats); paintStatus('chats', home.chats); }
+          if (!cardWarming('chats', home.chats)) { renderChats(home.chats); paintStatus('chats', home.chats); }
         };
         if (firstLink || settling()) render(); else U.anchor(render);
       }
-      if (!home && (state.offline || ['none', 'gone'].includes(state.phase))) {
+      if (compact || !home && (state.offline || ['none', 'gone'].includes(state.phase))) {
         unreadable();
       }
       const fallbackNote = state.fallbackNote || state.meta?.fallbackNote;
@@ -1812,26 +1888,29 @@
   subscribe();
   // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
   window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });
-  // 硬件小包：页面看得见时约每 5 秒取一次，只换电脑卡里的 CPU 占用、内存和 CPU 温度，不重取整包（M519）
-  // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
+  // 只并硬件小包自己的五项。过期的真值可续作历史，缺值不盖最后一次成功读数。
   window.Live.watch('computer/hardware', null, { link(state) {
     const computer = home?.computer;
     if (!computer || computer.q === 'warming' || lastState?.offline || state.meta?.viewer?.kind !== viewer) return;
-    if (!window.Live.mergeHardware(computer.metrics, state.data?.metrics)) return;
-    // “读不准：CPU 温度（最近一次记录于 …）”跟着页面上的温度走：读数是新的就不再说读不准，旧了只把时刻换成这次读到的（M602）
-    const temp = computer.metrics?.find(m => m.id === 'cpu-temp');
-    let grayChanged = false;
-    if (temp?.value != null && timed(temp.at) && Array.isArray(computer.gray_items)) {
-      const old = temp.stale_after > 0 && Date.now() - Date.parse(temp.at) > temp.stale_after * 1000;
-      const next = computer.gray_items.flatMap(g => {
-        const reason = typeof g?.reason === 'string' ? g.reason : '';
-        if (sp(U.fieldText(g?.name, viewer)) !== 'CPU 温度' || !/最近一次记录于 /.test(reason)) return [g];
-        grayChanged = true;
-        return old ? [{ ...g, reason: reason.replace(/最近一次记录于 [^，,]+/, `最近一次记录于 ${recordStamp(temp.at)}`) }] : [];
-      });
-      if (grayChanged) Object.assign(computer, { gray_items: next, gray_count: next.length });
+    const metrics = [200, 304].includes(state.meta.status) ? state.data?.metrics : null, now = Date.parse(window.Live.clock());
+    let changed = false;
+    for (const sample of metrics || []) {
+      if (!fastHardwareIds.includes(sample.id)) continue;
+      const row = computer.metrics?.find(m => m.id === sample.id);
+      if (!row) continue;
+      if (sample.state === 'unavailable' && row.value != null && !row.read_error) {
+        Object.assign(row, { q: 'stale', state: 'unavailable', read_error: true });
+        changed = true;
+      }
+      const stamp = Date.parse(computerSampleAt(sample));
+      if (sample.read_error || !Number.isFinite(sample.value) || !Number.isFinite(stamp) || stamp > now || !['ok', 'stale'].includes(sample.q)) continue;
+      if (!window.Live.mergeHardware([row], [{ ...sample, at: computerSampleAt(sample) }])) continue;
+      Object.assign(row, { source: sample.source, timestamp_basis: sample.timestamp_basis });
+      if (oldComputerSample(sample)) Object.assign(row, { q: 'stale', state: 'stale' });
+      changed = true;
     }
-    const render = () => { renderComputer(computer, home.screen, home.phone); if (grayChanged) paintStatus('computer', computer); };
+    if (!changed && temperatureCurrent === freshTemperature(computerTemperature(computer))) return;
+    const render = () => { renderComputer(computer, home.screen, home.phone); paintStatus('computer', computer); };
     if (settling()) render(); else U.anchor(render);
   } });
 

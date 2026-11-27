@@ -165,6 +165,7 @@ body {
 /* 小项：缩到大项的字下面，不编号，线也从这里起 */
 .rules-toc .toc-level-2 { margin-left: 2.5em; }
 .rules-toc .toc-level-2 a { grid-template-columns: 1fr; padding: 9px 0; }
+.rules-toc .toc-phrase { white-space: nowrap; }
 
 /* 悬停只加一条细下划线、颜色不变，不和“当前项”（深色、加粗）混 */
 .rules-toc a:hover .toc-label {
