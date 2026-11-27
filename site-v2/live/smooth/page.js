@@ -21,7 +21,7 @@
   };
   const windowText = w => cutoff(w?.from) && cutoff(w?.to) ? `北京时间 ${U.date(w.from)} ${U.time(w.from)} 至 ${U.date(w.to)} ${U.time(w.to)}` : '';
   const join = (...parts) => parts.filter(Boolean).join(' · ');
-  const keepTerms = html => html.replace(/打游戏|最慢一帧|没响应/g, '<span class="smooth-term">$&</span>');
+  const keepTerms = html => html.replace(/打游戏|最慢一帧|没响应|\d+(?:\.\d+)?[ \t]*毫秒/g, '<span class="smooth-term">$&</span>');
   const hours = total => total < 60 ? `${Math.floor(total)} 秒` :
     [total >= 3600 && `${Math.floor(total / 3600)} 小时`, `${Math.floor(total / 60) % 60} 分`].filter(Boolean).join(' ');
   const wallpaper = /^(?:wallpaper(?:32|64|ui|engine)?|webwallpaper32|ui32)(?:\.exe)?$/i;
