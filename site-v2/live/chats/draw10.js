@@ -70,8 +70,51 @@
   const stepCodes = { completed: 'done', in_progress: 'running', inProgress: 'running' };
   const stepState = p => { const s = p?.status ?? p?.state; return Object.hasOwn(stepCodes, s) ? stepCodes[s] : s; };
   const stepWord = s => s === 'pending' ? '没开始' : Object.hasOwn(states, s) ? states[s] : '状态不明';
+  // M915：后台给了 status_kind（设计第 3 节那 14 类加“做完了”）时，一场对话、一个帮手只认这一套标签。
+  // col 是放哪一栏，tone 是标签颜色（薄荷绿 AI 在动、黄要你做、橙停等外部、粉出错、灰紫被叫停或中断、蓝灰停着待定、淡紫做完、灰读不到），
+  // verb 是行首时刻后面那两个字（设计第 4 节排序表），label 是后台没给 status_label 时的默认说法。
+  const KINDS = {
+    running: { col: 'working', tone: 'mint', label: '在干', verb: '起在干' },   // 和卡头“在干”同一个说法（R20，r83 返修第二轮）
+    reconnecting: { col: 'working', tone: 'cyan', label: '在重连', verb: '起在重连' },
+    queued: { col: 'working', tone: 'slate', label: '排队', verb: '起排队' },
+    quota_exhausted: { col: 'working', tone: 'orange', label: '额度用完', verb: '起额度用完' },
+    login_failed: { col: 'working', tone: 'yellow', label: '登录失效 · 等你重登', verb: '起登录失效' },
+    waiting_owner: { col: 'waiting', tone: 'yellow', label: '等你回答', verb: '问你' },
+    quota_overdue: { col: 'waiting', tone: 'yellow', label: '过了预计恢复点 · 说一句“继续”', verb: '过了恢复点' },
+    failed: { col: 'stopped', tone: 'pink', label: '出错停下', verb: '停下' },
+    user_stopped: { col: 'stopped', tone: 'violet', label: '你叫停的', verb: '停下' },
+    ai_stopped: { col: 'stopped', tone: 'violet', label: 'AI 叫停的', verb: '停下' },
+    program_stopped: { col: 'stopped', tone: 'violet', label: '程序停下的', verb: '停下' },
+    interrupted: { col: 'stopped', tone: 'violet', label: '被中断 · 没记下是谁', verb: '停下' },
+    replied: { col: 'stopped', tone: 'slate', label: '回完了 · 没归档', verb: '停下' },
+    unknown: { col: 'stopped', tone: 'gray', label: '状态不明', verb: '最后记录' },
+    archived: { col: 'archived', tone: 'lilac', label: '做完了', verb: '归档' },
+  };
+  // 额度窗口：后台给 five_hour | weekly | null（M915 后台 00:04 定）
+  const QUOTA_WINDOWS = { five_hour: '5 小时额度', weekly: '本周额度' };
+  const quotaWindow = w => Object.hasOwn(QUOTA_WINDOWS, w) ? QUOTA_WINDOWS[w] : '';
+  // 带日期的钟点：今天的只写钟点，别的天前面加“11-24”
+  const dayClock = at => Number.isFinite(Date.parse(at)) ? [U.date(at) !== U.date(Date.now()) && U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
+  const quotaRecovery = at => { const when = dayClock(at); return when ? `预计 ${when} 恢复` : '恢复时间未确认'; };
+  // 访客版把“你”换成“本人”（同全站“等本人回答”的说法）
+  const ownerWords = (text, kind) => kind === 'public' && typeof text === 'string' ? text.replace(/等你/g, '等本人').replace(/问你/g, '问本人').replace(/^你叫停/, '本人叫停') : text;
+  const withdrawal = (state, name = '这块') => !state?.publicPaused && state?.meta?.withdrawn && state.meta.status === 503
+    ? `${name}正在更新访客版，稍后自动补上。` : '';
+  const statusKind = d => typeof d?.status_kind === 'string' && Object.hasOwn(KINDS, d.status_kind) ? d.status_kind : '';
+  const sortVerb = d => statusKind(d) === 'archived' && d.sort_at_source === 'last_activity' ? '最后动静' : (KINDS[statusKind(d)] || KINDS.unknown).verb;
+  // 帮手名单：新回包在 helpers.items，旧回包是数组或 helpers.active
+  const helperList = d => Array.isArray(d?.helpers) ? d.helpers : Array.isArray(d?.helpers?.items) ? d.helpers.items : d?.helpers?.active || [];
+  function statusLabel(d, kind) {
+    const given = d?.status_label != null ? U.fieldText(d.status_label, kind).trim() : '', k = statusKind(d);
+    if (k === 'quota_exhausted' && (Object.hasOwn(d, 'quota_reset_at') || !given))
+      return `${quotaWindow(d.quota_window) || '额度'}用完了，${quotaRecovery(d.quota_reset_at)}`;
+    const label = KINDS[k]?.label || '';
+    return given && given !== label ? given : ownerWords(label, kind);
+  }
   function rowState(d, kind) {
-    if (d.state === 'waiting' && d.wait_kind === 'final') return '等本人回答';
+    const label = statusLabel(d, kind);
+    if (label) return label;
+    if (d.state === 'waiting' && d.wait_kind === 'final') return ownerWords('等你回答', kind);
     return U.chatWaitLabel(d, kind) || stepWord(d.state);
   }
   const quota = (d, kind) => d.state === 'failed' && /^(?:(?:5 小时|周)额度|额度)用完(?:$| · )/.test(U.fieldText(d.text, kind));
@@ -90,16 +133,30 @@
     const label = current >= 0 ? `第 ${current + 1}／${total} 步` : '';
     return { plan, total, current, label, count: total > 0 ? completed === total ? `已完成 ${total} 步` : `共 ${total} 步` : '' };
   }
-  const helperTotal = d => d.helper_counts?.total ?? (Array.isArray(d.helpers) ? d.helpers.reduce((n, h) => n + (h.private_count || 1), 0) : d.helpers?.total);
-  const workingHelpers = d => d.helper_counts?.by_state?.running ?? (Array.isArray(d.helpers) ? d.helpers.filter(h => h.state === 'running').length : d.helpers?.running);
+  const helperTotal = d => d.helper_counts?.total ?? (Array.isArray(d.helpers) || Array.isArray(d.helpers?.items) ? helperList(d).reduce((n, h) => n + (h.private_count || 1), 0) : d.helpers?.total);
+  const workingHelpers = d => d.helper_counts?.by_state?.running ?? (Array.isArray(d.helpers) || Array.isArray(d.helpers?.items) ? helperList(d).filter(h => h.state === 'running' || h.status_kind === 'running').length : d.helpers?.running);
   function helperActivity(h, now) {
+    // M915：帮手带了 status_kind（不在做）时，写“这一类从几点起”，不再按旧 state 写“出错于”（额度用完的帮手不是出错）
+    const k = KINDS[statusKind(h)];
+    if (statusKind(h) === 'archived' && Number.isFinite(Date.parse(h.delivered_at))) return `${dayClock(h.delivered_at)} 交回`;
+    if (k && statusKind(h) !== 'running' && Number.isFinite(Date.parse(h.sort_at ?? h.at))) return `${dayClock(h.sort_at ?? h.at)} ${sortVerb(h)}`;
     if (!Number.isFinite(Date.parse(h.at))) return '';
     const at = [U.date(h.at), U.time(h.at)].filter(Boolean).join(' ');
     if (h.state === 'running') return U.offline?.() ? `断开前最后有动静 ${at}` : now ? `${U.ago(h.at, now)}有动静` : `最后有动静 ${at}`;
     const verb = h.state === 'done' ? '完成于' : h.state === 'stopped' ? '停止于' : h.state === 'failed' ? '出错于' : '最后记录于';
     return `${verb} ${at}`;
   }
-  U.chatFields = { field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity };
+  const peopleIn = (rows = []) => (rows || []).reduce((n, c) => n + (c.private_count || 1), 0);
+  const totalOf = col => Number.isInteger(col?.total) ? col.total : null;
+  const listedOf = col => Array.isArray(col?.items) ? peopleIn(col.items) : null;
+  const earlierCount = (rows, state, total) => Number.isInteger(total) ? Math.max(0, peopleIn(rows?.filter(c => c.state === state)) - total) : 0;
+  const bySortAt = rows => {
+    const stamp = row => { const t = Date.parse(row.sort_at); return Number.isFinite(t) ? t : -Infinity; };
+    return [...rows].sort((a, b) => stamp(b) - stamp(a));
+  };
+  const isRunning = row => (statusKind(row) || row.state) === 'running';
+  U.chatFields = { peopleIn, totalOf, listedOf, earlierCount, bySortAt, isRunning, field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
+    KINDS, statusKind, statusLabel, quotaWindow, quotaRecovery, dayClock, ownerWords, withdrawal, sortVerb, helperList };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {
     const { trigger, pre_tokens: tokens, pre_context_ratio: ratio } = event || {};
@@ -190,7 +247,7 @@
     if (count === null) return '<p class="row__sub">没有记录</p>';
     if (!Number.isInteger(count) || count <= 0) return '';
     const text = '还有 ' + count + ' 个没接上';
-    const list = viewer === 'owner' && Array.isArray(data.unconnected_sources) && data.unconnected_sources;
+    const list = Array.isArray(data.unconnected_sources) && data.unconnected_sources;
     if (!list?.length) return '<p class="row__sub">' + text + '</p>';
     const rows = list.map(item => '<li>' + [item.tool, item.path, item.reason].filter(Boolean).map(esc).join(' · ') + '</li>').join('');
     return '<details class="row__sub"><summary class="more">' + text + '</summary><ul>' + rows + '</ul></details>';
@@ -221,7 +278,7 @@
   function helperDetailHtml(helper, viewer, parent) {
     if (contentLocked(helper, viewer) || contentLocked(parent, viewer)) return '';
     // 出错了的帮手先写出错原因（后台从执行记录取的 failure_reason）；本人版的 owner_detail 已是“出错原因：…”加原文，就只摆它，不重复
-    const detail = viewer === 'owner' ? helper.owner_detail ?? null : null, cause = typeof detail === 'string' && /^出错原因[：:]/.test(detail);
+    const detail = helper.owner_detail ?? null, cause = typeof detail === 'string' && /^出错原因[：:]/.test(detail);
     const failure = cause ? detail.replace(/^出错原因[：:]\s*/, '') : helper.state === 'failed' ? helper.failure_reason ?? null : null;
     // 摘要：Claude 帮手的英文半句或“第 N/M 步”换成后台给的中文进展（localized.summary）；没有中文的照原文，并写清缺因
     const local = helper.localized?.summary, gaps = helper.field_gaps || {};
@@ -231,7 +288,7 @@
     if (missing.length) content.push(`<span style="color:var(--route-muted, #848b87)">${missing.map(esc).join('；')}</span>`);
     return content.length ? `<details class="row__sub"><summary class="more">帮手详情</summary>${content.map(html => `<p style="white-space:pre-wrap;overflow-wrap:anywhere">${html}</p>`).join('')}</details>` : '';
   }
-  function mount({ row, readViewer }) {
+  function mount({ row, readViewer, isPinned }) {
     const hero = document.querySelector('#hero .card__body'), notice = document.createElement('p'); notice.className = 'row__sub'; notice.dataset.official = ''; notice.hidden = true; hero.append(notice);
     const doneTitle = '近 30 天 · 做完的对话';
     const done = Object.assign(document.createElement('section'), { id: 'chat-done30', className: 'card chat-stats', hidden: true });
@@ -239,14 +296,33 @@
     document.querySelector('.chat-lower').after(done);
     const disclosure = done.querySelector('details'), summary = disclosure.querySelector('summary');
     const range = disclosure.querySelector('[data-since]'), list = disclosure.querySelector('ul');
-    const doneRead = U.reading(done.querySelector('[data-error]'), { name: doneTitle, ghost: '' });
+    // 读不到时只写“这块暂时读不到”“这块没存下来”，不在小标题底下把“近 30 天 · 做完的对话”再写一遍（主控 11-26 06:15 看 r83 时记）
+    const error = done.querySelector('[data-error]'), doneRead = U.reading(error, { ghost: '' });
     function doneUnavailable(state) {
+      const message = withdrawal(state, doneTitle);
+      if (message) {
+        done.hidden = false;
+        disclosure.hidden = true;
+        doneRead.done(false);
+        U.html(error, `<p class="row__sub">${esc(message)}</p>`);
+        return;
+      }
+      if (error.firstElementChild?.matches('.row__sub')) U.html(error, '');
       if (['none', 'gone'].includes(state.phase) || state.meta?.status >= 400) {
         done.hidden = false;
+        // 没存下来时卡里只留雾里那行标题和一句话，可展开的小标题先收起，不把“近 30 天 · 做完的对话”写两遍（r83 返修）
+        disclosure.hidden = state.phase === 'gone';
         doneRead.set({ ...state, phase: state.phase === 'gone' ? 'gone' : 'none' });
-      } else if (Array.isArray(state.data?.items)) doneRead.done(false);
+      } else if (Array.isArray(state.data?.items)) { disclosure.hidden = false; doneRead.done(false); }
     }
-    let baseStatus, recentStatus;
+    let baseStatus, recentStatus, history;
+    const drawHistory = (kind = history?.kind) => {
+      if (!history || history.kind !== kind) return;
+      const { items, at, total } = history, visible = items.filter(c => !isPinned(c)), moved = items.length - visible.length;
+      summary.textContent = `${doneTitle}${total == null ? '' : ` · ${total} 个`}${moved ? `（其中 ${moved} 场见置顶）` : ''}`;
+      const rows = visible.length ? visible.map(c => row(c, at, true)) : [{ key: 'empty', cls: 'row__sub', html: moved ? '这些对话已列在置顶区' : '这段时间没有完成的对话' }];
+      U.list(list, rows, { animate: disclosure.open });
+    };
     const drawNotice = () => {
       const message = official({ official_status: baseStatus ?? recentStatus });
       notice.hidden = !message;
@@ -259,6 +335,7 @@
       done.hidden = !Array.isArray(items);
       summary.textContent = `${doneTitle}${done.hidden || d.total == null ? '' : ` · ${d.total} 个`}`;
       if (done.hidden) {
+        history = null;
         U.html(range, '');
         U.list(list, [], { animate: false });
         return;
@@ -269,9 +346,10 @@
       const dates = [from && to && `记录覆盖 ${stamp(from)} 至 ${stamp(to)}`, since && `采集开始 ${stamp(since)}`, d.at && `历史更新 ${stamp(d.at)}`];
       const gap = d.gap ? U.fieldHtml(d.gap, { name: '对话记录范围', kind: meta.viewer.kind }) : '';
       U.html(range, [...dates.filter(Boolean).map(esc), gap].filter(Boolean).join(' · '));
-      const rows = items.length ? items.map(c => row(c, d.at || meta.at, true)) : [{ key: 'empty', cls: 'row__sub', html: '这段时间没有完成的对话' }];
-      U.list(list, rows, { animate: disclosure.open });
+      history = { items, at: d.at || meta.at, total: d.total, kind: meta.viewer?.kind };
+      drawHistory();
     }, link: doneUnavailable });
+    return drawHistory;
   }
   U.draw10 = { badge, detail, compactionDisclosure, official, mount, modelName, bareModel, modelHue, modelRows, modelHtml, sourceHtml, helperDetailHtml };
 })();

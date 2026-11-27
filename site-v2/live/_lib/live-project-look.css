@@ -59,6 +59,12 @@
 .pj-summary > span { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
 .pj-summary b { font-size: 23px; font-weight: 600; }
 .pj-summary small, .pj-recent { font-size: 12px; color: var(--muted); }
+/* 代码字数是主数，行数小字放在它下面（M846）；整块按第一行和“代码”两个字对齐 */
+.pj-summary-stack { display: inline-flex; flex-direction: column; }
+.pj-summary-stack > span { display: flex; align-items: baseline; gap: 6px; }
+.pj-summary-lines { line-height: 16px; }
+/* “合计只含有记录的项目”照旧单独一行在下面（代码那格变窄后不往第一行挤） */
+.pj-summary > small { flex-basis: 100%; }
 .pj-recent { display: block; line-height: 22px; }
 #active .pj-thumb { grid-row: 1 / span 4; }
 #activity { margin-bottom: 32px; }
@@ -91,6 +97,8 @@
 .pj-heat-name:has(.has-note) { flex-wrap: wrap; row-gap: 1px; }
 .pj-heat-name:has(.has-note) .pj-heat-label { flex-basis: 100%; }
 .pj-heat-private.has-note { padding: 0; background: none; }
+/* 本人版名字后的“访客看不到”小签：和名字同一行、收小，行高不超过格子 */
+.page--live .pj-heat-name > .live-mark:is(.live-mark--rewritten, .live-mark--reworded) { flex: none; margin-left: 0; padding: 0 6px; font-size: 12px; line-height: 16px; }
 .pj-heat-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 12px; color: var(--muted); }
 .pj-heat-legend > span { display: inline-flex; align-items: center; gap: 5px; }
 .pj-heat-legend .pj-heat-cell { display: inline-block; width: 12px; height: 12px; cursor: default; }

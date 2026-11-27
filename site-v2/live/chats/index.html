@@ -15,6 +15,8 @@
 .page--chats #recent-list > :is(.chat-ended-label, .row--empty) { grid-column: 1 / -1; }
 .page--chats #recent-list > .lb-item { align-content: start; }
 .page--chats #active > .part { margin: 0 0 12px 2px; }
+.page--chats #active > .live-fallback-note { margin: 8px 0 0 80px; }   /* 在干那块的旧数说明和卡里的字对齐，不贴到卡外左边（r83 返修） */
+.page--chats .chat-lower:has(> #active[hidden]):not(:has(#recent:not([hidden]))) { display: none; }   /* 在干那栏收起、下面也没东西时不留一段空白（r83 返修第二轮） */
 .chat-board .lb-card__head { min-height: 80px; padding-block: 10px; }
 .chat-board .lb-card--items .lb-rows { gap: 7px; }
 .chat-board .lb-card--items .lb-rows > .lb-item { padding-block: 8px; }
@@ -60,6 +62,18 @@
 .page--chats .chat-think--fits > .chat-think__toggle { display: none; }
 .page--chats .lb-item .helpers { margin-top: 8px; }
 .page--chats .lb-card__note { margin: 0 22px 14px; }
+/* 页头卡、三家额度那一排、统计卡、最下面“近 30 天”那张跟中间四栏一样宽（四栏有意跟自动任务页一样宽，不动；主控 11-26 06:15 记的老毛病）；只改宽度，卡里的排法不动 */
+.page--chats :is(#hero, #chat-quota, #chat-pins, .chat-stats) { --wide: min(1856px, calc(100vw - 64px)); margin-inline: calc((var(--col) - var(--wide)) / 2); }
+/* 加绿（本人 11-26 00:14 点头 GREENIMG1126 选 A，照 G-AI对话-v6）：只加颜色，版式和字不动。
+   “今天”“近 7 天”“在干”“等你”前一根绿竖条；今天、近 7 天的对话数和帮手数绿；在干、等你两栏里“问情况”“打开对话”“看完整对话”绿字绿边白底（照本人给的那颗），
+   历时、帮手数、第几步的数字绿。“停下了，没归档”（状态不明在这一栏）和“做完了 · 已归档”不加绿；对话标题前只留空心圈；进度条照旧 */
+.page--chats .chat-counts h2 { display: flex; align-items: center; gap: 9px; }
+.page--chats .chat-counts h2::before, .page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .lb-card__title::before { content: ""; flex: none; align-self: center; width: 5px; height: 18px; border-radius: 3px; background: #00A650; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .lb-card__title::before { height: 22px; margin-right: -2px; }
+.page--chats .chat-counts > div > p:first-of-type > strong { color: #00A650; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) :is(.row__acts .btn, .chat-detail-link) { border-color: #00A650; background: #fff; color: #00A650; font-weight: 600; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) :is(.row__acts .btn, .chat-detail-link):is(:hover, :focus-visible) { border-color: #008a43; background: rgb(0 166 80 / .07); color: #008a43; }
+.page--chats .lb-card:is([data-key="running"], [data-key="waiting"]) .chat-green { color: #00A650; font-weight: 600; }
 </style>
 <link rel="stylesheet" href="/live/chats/draw10.css">
 </head>
@@ -74,8 +88,9 @@
 <div class="card__body"><p class="card__head" id="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">AI 对话</span></p><p class="hero__note row__sub" id="chat-note">正在读</p>
 <p class="hero__note row__sub" id="chat-background" hidden></p>
 <div id="chat-sources"></div>
-<div class="hero__links"><a class="more more--link" href="#active">看各列对话 ›</a><a class="more more--link" href="#recent">72 小时内已结束的 ›</a></div></div></div>
+<div class="hero__links"><a class="more more--link" href="#active">看各列对话 ›</a><a id="recent-link" class="more more--link" href="#recent">近 72 小时回看 ›</a></div></div></div>
 </article>
+<section id="chat-pins" class="glass chat-pins" aria-label="置顶" hidden></section>
 <section class="card chat-stats" aria-label="对话统计"><div class="card__glass glass"><div class="card__body">
 <div id="chat-counts" class="chat-counts"></div>
 <div class="chat-plots"><div><p class="part">近 7 天 · 同时有几个 AI 在干活（含帮手）</p><div id="chat-concurrent"></div><div id="chat-current-reading" class="row__sub" hidden></div><p class="chat-end-date" id="chat-end-date"></p></div><div><p class="part">每天开了几个对话</p><div id="chat-days"></div></div></div>

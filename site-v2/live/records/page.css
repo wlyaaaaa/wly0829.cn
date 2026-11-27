@@ -85,3 +85,18 @@
 #record-body .record-toc__t b { display: block; font-size: 14.5px; line-height: 21px; font-weight: 600; color: #141413; }
 #record-body .record-toc__t small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12.5px; line-height: 19px; color: #6b6a64; }
 #record-body .book-row { scroll-margin-top: 96px; }
+/* M1000：说明书一类访客看不到时（访客版），那一片铺一整块拼布被面，中间那条绿针脚布标签上写两行：几条、哪一类，为什么看不到（本人 11-26 12:28 选“整块拼布被面”）。
+   画是生图（11-26 GPT 照定稿样子和页头那张拼布画，标签留空），字用网页写，条数照实；只在这一片出现时才下这张图。
+   图 1983×793，绿针脚在图里横 21.7%–77.7%、竖 35.8%–61.4%，字框照这个比例放，图跟着整页一起缩放。 */
+#record-section > #record-note:has(> .record-veil__tag) {
+  position: relative; margin: 18px 0 0; aspect-ratio: 1983 / 793; border-radius: 22px;
+  background: #f3e4c6 url("/live/img/book-quilt-v1.webp") center / 100% 100% no-repeat;
+  box-shadow: 0 22px 44px -30px rgb(120 86 40 / .45);
+}
+.record-veil__tag {
+  position: absolute; inset: 35.8% 22.3% 38.6% 21.7%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  color: #3b2a1b; text-align: center;
+}
+.record-veil__tag > b { font-size: 30px; line-height: 40px; font-weight: 800; letter-spacing: .02em; }
+.record-veil__tag > span { font-size: 21px; line-height: 30px; font-weight: 500; color: #4a3a2a; letter-spacing: .04em; }

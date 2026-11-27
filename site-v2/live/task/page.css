@@ -36,6 +36,7 @@ html:has(.page--task[data-variant="schedule"]) { --task-bg: #dff1f7; --task-tint
 }
 .page--task[data-variant="schedule"] .task-hero { --task-tint: #cfebf5; }
 .task-hero h1 { margin: 0 0 7px; font: 800 38px/1.18 var(--sans); overflow-wrap: anywhere; }
+.task-hero .task-phrase { white-space: nowrap; }
 .task-hero p { margin: 4px 0; color: #4d515d; font-size: 15px; line-height: 1.48; overflow-wrap: anywhere; }
 .task-hero #task-status { color: var(--ink); font-weight: 600; font-size: 16px; }
 .task-status__note { display: block; margin-top: 2px; color: #5b6070; font-size: 13px; font-weight: 400; }
@@ -67,7 +68,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-result[data-state="failed"] { color: #a83948; }
 .task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
 /* 部分完成的那一轮和那一天：沿用计划任务列表“要留意”的黄点和字色（M381、M676） */
-.task-mark[data-state="warn"] { background: #e9b714; border-color: transparent; }
+.task-mark:is([data-state="warn"], [data-state="observed-failed"]) { background: #e9b714; border-color: transparent; }
 .task-dot[data-state="warn"] { background: #e9b714; border-color: transparent; }
 .task-result[data-state="warn"] { color: #9a6514; }
 /* 统计格和下面卡片拉开一点，“最近几次”“这个任务”的标题不和统计格挤成一块 */
@@ -77,6 +78,9 @@ h1 .task-provider { margin-left: .6em; }
 .task-stat dd { margin: 0; font-size: 27px; font-weight: 750; line-height: 1.18; font-variant-numeric: tabular-nums; }
 .task-stat dd[data-unknown] { font-size: 25px; font-weight: 650; color: #545969; }
 .task-stat dd[data-why] { font-size: 19px; }
+/* “已读部分没有出错”合成一句、一行写完，格名已在句子里，不另起一行（主控 11-26 看 07a、07b） */
+.task-stat[data-whole] dt { display: none; }
+.task-stat[data-whole] dd { white-space: nowrap; }
 /* 第一张卡多一行小字时，四张卡都留出同样的底边，大数字仍然对齐 */
 .task-stats:has(.task-stat__note) .task-stat { position: relative; padding-bottom: 24px; }
 .task-stat__note { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; font-size: 12px; color: #6b7080; }
@@ -85,13 +89,18 @@ h1 .task-provider { margin-left: .6em; }
 .task-stat[data-stat="failure"] { background: #fae8eb; }
 /* “出错”那格跟着后台分档（M779）：大部分成功黄、部分成功橙、全出错红，全成功不上色 */
 .task-stats[data-outcome="ok"] .task-stat[data-stat="failure"] { background: rgb(255 255 255 / .62); }
-.task-stats[data-outcome="mostly"] .task-stat[data-stat="failure"] { background: #fbedbb; }
+.task-stats:is([data-outcome="mostly"], [data-outcome="warn"]) .task-stat[data-stat="failure"] { background: #fbedbb; }
 .task-stats[data-outcome="partial"] .task-stat[data-stat="failure"] { background: #fcdcc4; }
 .task-stats[data-outcome="failed"] .task-stat[data-stat="failure"] { background: #f9d9d6; }
+/* 出错那格读到 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色；后台给了分档仍照分档 */
+.task-stat[data-stat="failure"][data-none] { background: rgb(255 255 255 / .62); }
+/* 句末一两个字不单独掉一行（主控 11-26 看 07b：“做什么”最后“看。”单掉一行）；“这个任务”里一格两三行的照 balance 分匀 */
+.task-detail { text-wrap: pretty; }
 .task-stat[data-stat="today"] { background: linear-gradient(114deg, #fff, #e9daf8); box-shadow: inset 0 0 0 1px #d8c3f2; }
 .task-stat[data-stat="today"] dd { font-size: 33px; }
 .task-columns { display: grid; align-items: start; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: 18px; }
-.task-stats[hidden] + .task-columns { margin-top: 13px; }
+/* 四格不出时（比如还没跑过）下面一块不贴着大图：四格和“上次为什么出错”之间夹着一个 section，“+”选不到，按实际跟在后面的那块补间距 */
+.task-stats[hidden] + .task-columns, .task-stats[hidden] + .task-failure:not([hidden]), .task-stats[hidden] + .task-failure[hidden] + .task-columns { margin-top: 13px; }
 .task-aside { display: grid; gap: 12px; }
 .task-card { padding: 11px 22px 15px; background: rgb(255 255 255 / .58); min-width: 0; }
 .task-card header { display: flex; gap: 11px; align-items: center; margin-bottom: 8px; }
@@ -113,6 +122,12 @@ h1 .task-provider { margin-left: .6em; }
 .task-row--labels { margin-left: 24px; min-height: 0; color: #545b67; font-size: 13px; }
 /* 计划任务：结果一栏放得下“没记到结束”“结果码没登记” */
 .page--task[data-variant="plan"] .task-row { grid-template-columns: 128px 112px 150px minmax(0, 1fr) auto; }
+@media (max-width: 1199px) {
+  .page--task[data-variant="plan"] .task-row { grid-template-columns: 84px 62px 66px minmax(4em, 1fr) auto; gap: 6px; }
+  .page--task[data-variant="plan"] .task-row > :is(time, .task-row__duration) { white-space: normal; }
+  .page--task[data-variant="plan"] .task-row > .task-row__duration { word-break: keep-all; }
+  .page--task[data-variant="plan"] .task-row > span:nth-child(4) { overflow-wrap: break-word; }
+}
 /* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
 #more-runs { position: relative; }
 #more-runs[open] { padding-bottom: 30px; }
@@ -120,7 +135,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-card dl { margin: 0; }
 .task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
 .task-card dl dt { color: #505565; }
-.task-card dl dd { margin: 0; overflow-wrap: anywhere; }
+.task-card dl dd { margin: 0; overflow-wrap: anywhere; text-wrap: balance; }
 .task-card dl div:last-child { border: 0; }
 .task-card :is(p,li,td,th,summary,dl) { font-size: 14px; line-height: 1.45; }
 .task-card .task-reading { margin: 7px 0 0; color: #545b67; font-size: 13px; }

@@ -56,10 +56,14 @@
     return U.date(at) === U.date(Date.now()) ? '今天' : `${U.date(at)} `;
   }
   function headText(d) {
-    if (d?.state === 'offline') return `手机连不上${d.offline?.since ? ` · ${U.time(d.offline.since)} 起` : ''}`;
+    // 和实况首页手机卡同一套说法（主持 11-26 定）：调试连接和 Tailscale 都找不到手机才叫离线，只有调试连接断叫“电脑连不上手机”
+    const at = value => Number.isFinite(Date.parse(value)) ? `${U.date(value) !== U.date(Date.now()) ? `${U.date(value)} ` : ''}${U.time(value)}` : '';
+    if (d?.presence?.state === 'offline') return at(d.offline_since) ? `手机 ${at(d.offline_since)} 起离线` : '手机离线';
+    if (d?.state === 'offline') return `电脑连不上手机${at(d.offline?.since) ? ` · ${at(d.offline.since)} 起` : ''}`;
     const primary = val('screen_on') == null && (d?.metrics || []).find(m => typeof val(m.id) === 'number');
     if (primary) return `${marked(primary.label) ? ({unlocks:'解锁',battery:'电量',battery_temp:'电池温度',screen_on:'亮屏',storage_free:'存储剩',storage_used:'存储已用',memory_used:'内存已用'})[primary.id] || '手机' : sp(primary.label || '')} ${reading(primary.id)}`.trim();
-    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : '手机暂时读不到';
+    // 一样读数都没有、连接证据也不够时，整句写“手机连接状态暂时读不到”（主持 11-26 定）
+    if (!d || d.state === 'unknown') return pcOffline() ? '手机' : d?.presence?.state === 'unknown' ? '手机连接状态暂时读不到' : '手机暂时读不到';
     return `${readingDay('screen_on')}亮屏 ${reading('screen_on')}`;
   }
   // 采到了、今天没用（亮屏和解锁都是 0、不是读不全、带统计到哪一刻）写成一句；还没采到是 null 加 gap，不走这句（统筹 11-17 04:55）
@@ -69,7 +73,7 @@
       ? `今天还没用过（统计到 ${U.time(until)}）` : '';
   }
   // 本人版给完整版，不挂“仅你可见”；对外换了说法的照旧提一句。
-  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(viewer === 'owner' && item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
+  const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
   const listName = a => marked(a.name) || viewer !== 'owner' && a.name == null && a.visibility === 'owner' ? '' : a.name == null && a.visibility === 'owner' ? note(a)
     : `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${note(a) ? ` <span class="phone-mark">${note(a)}</span>` : ''}`;
   const paragraph = text => `<p class="use-note">${fh(text && typeof text === 'object' ? text : humanText(text))}</p>`;
@@ -107,8 +111,25 @@
     const spans = row?.spans || [], to = seconds(row?.to), last = spans.findLastIndex(([, v]) => v != null);
     return last < 0 ? NaN : Math.min(spans[last + 1]?.[0] ?? to, to);
   }
-  // 最后一次记到之后、不到 35 分钟的那一段只是等下一轮，不算缺口（本人 11-24：“数据缺口的前提是真拿不到，而不是等下一轮”）
-  const waitingGap = g => { const start = seconds(g?.from), at = seconds(phone?.at), now = Number.isFinite(at) ? at : Date.now() / 1000; return Number.isFinite(start) && now >= start && now - start <= PENDING_SECONDS; };
+  const roundOnTime = () => {
+    const round = phone?.collect?.collector, age = seconds(phone?.at) - seconds(round?.at);
+    return round?.state === 'online' && !round.read_error && age >= 0 && age <= PENDING_SECONDS;
+  };
+  function roundText(round) {
+    if (pcOffline() || round?.read_error) return round?.text;
+    if (roundOnTime()) return `手机约 30 分钟采一次，上次 ${U.time(round.at)} 采的，下一轮还没到`;
+    const age = seconds(phone?.at) - seconds(round?.at);
+    return round?.state === 'offline' && age > PENDING_SECONDS
+      ? `手机已经 ${Math.ceil(age / 60)} 分钟没采了，超过 35 分钟算晚` : round?.text;
+  }
+  // 只有这次收到的使用记录末尾仍可在等下一轮；历史空档和已经确认的缺口保留原判。
+  const waitingGap = g => g?.kind === 'data_gap' && !g.recovered && roundOnTime()
+    && seconds(g.from) === seconds(phone?.usage_at) && seconds(phone?.at) - seconds(g.from) <= PENDING_SECONDS;
+  function collectionMeta(row) {
+    if (!row || pcOffline() || !roundOnTime() || row.q !== 'stale' || row.state === 'stale' || row.read_error || row.error
+      || seconds(row.source_at ?? row.at) !== seconds(phone.collect.collector.at)) return row;
+    return { ...row, q: row.lamp_q ?? row.state, stale: false, stale_text: null, gap: U.isReadingCutoff(row.gap) ? null : row.gap };
+  }
   // round：采集图最近一轮执行的时刻。某条（如定位）自己最后一条记录早，但最近一轮已经跑过，那之后的末尾一样是等下一轮
   function markSpans(row, gap, pending, since, omitted, round = NaN) {
     const own = recordedTo(row), spans = row.spans || [], from = seconds(row.from), to = seconds(row.to), cutoff = Number.isFinite(round) && !(own >= round) ? round : own;
@@ -588,7 +609,8 @@
       if (step?.hidden || viewer !== 'owner' && (step?.visibility === 'owner' || step?.public === 'owner')) return detail(label, step);
       const state = step?.status ?? step?.state, text = ({ online: '在采集', ok: label === '电脑汇总' ? '汇总成功' : '导入成功', success: '导入成功', succeeded: '导入成功', failed: '失败', error: '失败', offline: '没在采集' })[state];
       const times = [['记录于', step?.at], ['最近尝试', step?.attempted_at], ['采用的收件', step?.received], ['最近成功', step?.last_ok_at], ['下次汇总', step?.next_at]].filter(([, value]) => value);
-      return `<div><dt>${fh(label, '采集步骤', 'label')}</dt><dd>${U.status(step, { small: true }).lamp}${fh(step?.text ?? text ?? unread(), label)}${step?.error ? `<small class="phone-reading-note">${fh(step.error, `${label}原因`)}</small>` : ''}${times.map(([name, value]) => `<small class="phone-reading-note">${fh(name, '时间说明')} ${stampHtml(value)}</small>`).join('')}</dd></div>`;
+      const shown = label === '手机采集器' ? roundText(step) : step?.text;
+      return `<div><dt>${fh(label, '采集步骤', 'label')}</dt><dd>${U.status(step, { small: true }).lamp}${fh(shown ?? text ?? unread(), label)}${step?.error ? `<small class="phone-reading-note">${fh(step.error, `${label}原因`)}</small>` : ''}${times.map(([name, value]) => `<small class="phone-reading-note">${fh(name, '时间说明')} ${stampHtml(value)}</small>`).join('')}</dd></div>`;
     }).join('');
   }
   function details(key) {
@@ -639,8 +661,11 @@
     // 更新看近 7 天；新装、卸载很少，看近 90 天（本人 11-24 00:39）。近 90 天的覆盖不全写清从哪天起有，旧后台没有 changes90 按“未读到”（M642）。
     const changeRows = rows => shortList([...rows].sort((a, b) => Date.parse(b.at) - Date.parse(a.at)), a => `<p class="use-note">${stampHtml(a.at)} · ${listName(a)}</p>`, '条');
     const updated = Array.isArray(d?.changes7) ? d.changes7.filter(a => a.kind === 'updated') : null;
-    const c90 = d?.changes90, items90 = Array.isArray(c90?.items) && c90.q !== 'unknown' ? c90.items : null, partial90 = !!items90 && c90.q === 'partial';
-    const from90 = partial90 && Number.isFinite(Date.parse(c90.coverage?.from)) ? U.date(c90.coverage.from) : '';
+    // 只有近 90 天的起点真的早于最早一条记录，才写哪几天没记录；记录全了、或者后台没给起点判断不了，就不写（本人 11-25 16:30，M911）
+    const c90 = d?.changes90, items90 = Array.isArray(c90?.items) && c90.q !== 'unknown' ? c90.items : null;
+    const start90 = Date.parse(c90?.window?.from), first90 = Date.parse(c90?.coverage?.from);
+    const partial90 = !!items90 && Number.isFinite(start90) && Number.isFinite(first90) && first90 - start90 >= 86400000;
+    const from90 = partial90 ? U.date(c90.coverage.from) : '';
     const recent = (kind, word) => {
       if (!items90) return paragraph(`近 90 天的${word}记录未读到`);
       const rows = items90.filter(a => a.kind === kind);
@@ -648,7 +673,7 @@
     };
     const section = (title, body) => `<section><h3 class="use-two__k">${title}</h3>${body}</section>`;
     const changes = section('更新 · 近 7 天', updated == null ? paragraph(null) : updated.length ? changeRows(updated) : paragraph('近 7 天没有更新'))
-      + `<div class="phone-changes__side">${partial90 ? paragraph(`近 90 天记录不全${from90 ? `，从 ${from90} 起才有` : ''}`) : ''}${section('新装 · 近 90 天', recent('added', '新装'))}${section('卸载 · 近 90 天', recent('removed', '卸载'))}</div>`;
+      + `<div class="phone-changes__side">${partial90 ? paragraph(`装卸记录从 ${from90} 起才有，近 90 天里 ${U.date(c90.window.from)} 到 ${from90} 没有记录`) : ''}${section('新装 · 近 90 天', recent('added', '新装'))}${section('卸载 · 近 90 天', recent('removed', '卸载'))}</div>`;
     return `<h3 class="use-two__k">应用装卸和更新</h3>${markNote('应用变化名称', [...(d?.changes7 || []), ...(items90 || [])].map(a => a.name ?? a))}<div class="phone-changes">${changes}</div>
       <dl class="phone-details">${[['model', '型号'], ['android', 'Android'], ['build', '系统版本']]
         .map(([k, label]) => detail(label, s?.[k])).join('')}${detail('开机多久', s?.uptime_s && typeof s.uptime_s === 'object' ? s.uptime_s : V.dur(s?.uptime_s))}
@@ -689,7 +714,7 @@
     const r = phone?.received;
     if (key === 'usage') return shownRanges.usage === '7d' ? '' : compareText(phone?.usage?.compare_text) || '';
     if (key === 'network') return val('net_kind') == null && pcOffline() ? '' : `${pcOffline() ? '上网走' : '现在走'} ${val('net_kind') === 'wifi' ? 'WiFi' : netText()}`;
-    if (key === 'collect') return (r?.gap?.text && !waitingGap(r.gap) || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered && !waitingGap(g))) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
+    if (key === 'collect') return (r?.gap?.text || phone?.collect?.gaps?.some(g => g.kind === 'data_gap' && !g.recovered && !waitingGap(g))) ? '有数据缺口，见最近的空档' : (r?.complete30 == null ? pcOffline() ? '' : U.collectionText("近 30 天") : r.complete30 ? '近 30 天数据收全了' : phone?.collect?.since ? `线路从 ${U.date(phone.collect.since)} 起才有记录` : '近 30 天数据有缺');
     if (key === 'battery') return val('charging') == null ? pcOffline() ? '' : U.collectionText("充电状态 · ") : val('charging') ? '在充电' : '没充电';
     if (key === 'storage') return [!pcOffline() || val('storage_free') != null ? `还剩 ${reading('storage_free')}` : '', !pcOffline() || val('storage_total') != null ? `共 ${reading('storage_total')}` : ''].filter(Boolean).join(' · ');
     return phone?.apps?.text || '';
@@ -718,6 +743,10 @@
     if (!disconnected && (['online', 'warming'].includes(d?.state) ||
       d?.state === 'partial' && (d.link?.since || d.lamp_q === 'ok' && d.last_online === d.at))) return '';
     const time = phoneReadingTime(d?.last_online);
+    // last_online 是电脑上次用调试连接连上手机的时刻：手机整台离线时照旧叫“上次确认在线”，并写明是两条路都找不到；
+    // 只有调试连接断时手机可能还在线，改叫“电脑最后连上手机”，不让人以为手机不在线（主持 11-26 定）
+    if (d?.presence?.state === 'offline') return ['电脑的调试连接和 Tailscale 都找不到手机', time && `上次确认在线 ${shortDate(d.last_online)} ${time}`].filter(Boolean).join(' · ');
+    if (d?.state === 'offline') return time ? `电脑最后连上手机 ${shortDate(d.last_online)} ${time}` : '';
     return time ? `上次确认在线 ${shortDate(d.last_online)} ${time}` : '';
   }
   function showReceivedTimes(card, text) {
@@ -784,7 +813,10 @@
         };
       }
       if (done && phone?.state === 'unknown' && !pcOffline()) return { key, name, pic: groupPics[key], palette: palettes[i], ...given, line: `${name}暂时读不到`, empty: true, figures: [] };
-      const g = phone?.groups?.find(g => g.key === key), raw = phone?.blocks?.[key], block = raw && { ...raw, reason: sp(raw.reason), summary: sp(g?.reason) }, b = V.blockState(block, pcOffline());
+      const raw = phone?.blocks?.[key], group = given;
+      const g = key === 'collect' ? collectionMeta(group) : group;
+      const sourceBlock = key === 'collect' ? collectionMeta(raw) : raw;
+      const block = sourceBlock && { ...sourceBlock, reason: sp(sourceBlock.reason), summary: sp(g?.reason) }, b = V.blockState(block, pcOffline());
       const missingNames = g?.partial?.length ? { ...missingReadingNames(phone?.metrics, g.missing_readings), ...g.missingNames } : g?.missingNames;
       const compact = key === 'battery' || key === 'storage', status = compact && g ? U.status(g, { missingNames }).note || '' : '';
       const inStatus = value => { const html = value && status && U.fieldHtml(value, { name: '状态说明' }); return html && status.includes(html); };
@@ -812,7 +844,7 @@
       const statusShowsReason = U.status(g).tone !== 'none';
       const lineText = phone?.state === 'unknown' ? unread() : [display, !statusShowsReason && g?.why && humanText(g.why)].filter(text => text && (key !== 'collect' || text !== names[key])).join(' · ');
       const unique = distinctNotes(lineText, statusShowsReason && sp(g?.why), statusShowsReason && sp(g?.stale_text));
-      const blockText = unique(b?.text);
+      const blockText = unique(sourceBlock !== raw && b?.reason ? b.reason : b?.text);
       const gaps = partial.map(o => o.gap).filter(text => text && !inStatus(text)).map(text => unique(humanText(text))).filter(Boolean);
       return { ...g, key, name, pic: groupPics[key], palette: palettes[i], missingNames, reason: compact && typeof reason === 'string' && reason && !marked(reason) ? [...new Set([lineText, humanText(reason)].filter(Boolean))].join(' · ') : reason,
         line: lineText, wait: !done || b?.wait || !chartDone.has(key),
@@ -860,7 +892,10 @@
       : !idleToday() && !usageHasCutoff ? U.staleText({ ...metric('screen_on'), summary: phone?.why || phone?.groups?.find(g => g.key === 'usage')?.reason }) : '';
     if (old && [phone?.why, ...(phone?.groups || []).filter(g => ['red', 'yellow'].includes(g.level)).map(g => g.reason)].some(text => sp(text).includes(sp(old)))) old = '';
     const usageGap = val('screen_on') == null ? metric('screen_on')?.gap || phone?.blocks?.usage?.reason || phone?.reason : '';
-    const noteText = [phoneStatusNote(phone), U.fieldHtml(old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
+    // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：大字照旧放真采到的读数，
+    // “手机连接状态暂时读不到”放在小字最前面，不让上次读数的说明把它挤掉（主持 11-26 01:56 定）
+    const unclear = phone?.state !== 'offline' && phone?.presence?.state === 'unknown' && !heading.includes('连接状态');
+    const noteText = [phoneStatusNote(phone), unclear && '手机连接状态暂时读不到', U.fieldHtml(old || usageGap || (headingGap ? heading : ''), { name: '手机状态', place: 'body', kind: viewer }), nameMark('手机读数', phone?.metrics?.flatMap(m => [m.label, m.value]))].filter(Boolean).join(' · ');
     const lastOnline = lastOnlineNote(phone, pcOffline());
     const notes = [noteText, esc(lastOnline)].filter(Boolean).join('<br>');
     part('note').hidden = !notes; U.html(part('note'), notes);
@@ -908,12 +943,14 @@
   };
   groupHash();
   window.addEventListener('hashchange', groupHash);
-  window.Live.watch('projects/phone-collector', null, { data(d, meta) {
+  // 手机读数（phone）先订，当本页主数据：连不上时页顶写的“下面是几点的数据”、确认关机后重开这页留不留着上次那份，都说手机这一份；
+  // 项目文档那份（流量近 30 天用）排到下一拍再订（D6，同 M960 自动任务页的改法）
+  queueMicrotask(() => window.Live.watch('projects/phone-collector', null, { data(d, meta) {
     trafficProject = { data: d, viewer: meta.viewer?.kind };
     if (!d?.sections?.some(s => s.metrics?.some(m => m.id === 'traffic_days30' && m.expandable))) { trafficDaysWatch?.stop(); trafficDaysWatch = null; trafficDays = null; }
     if (!trafficDaysWatch && d?.sections?.some(s => s.metrics?.some(m => m.id === 'traffic_days30' && m.expandable))) trafficDaysWatch = window.Live.watch('projects/phone-collector/records', { section: 'traffic_days30' }, { data(rows, meta) { trafficDays = { data: rows, viewer: meta.viewer?.kind }; if (phone) refresh(); } });
     if (phone) refresh();
-  } });
+  } }));
   window.Live.watch('phone', null, { phase(s) { if (s.data == null) read.set(s); },
     data(d, meta) { phone = U.withoutSnapshotCutoff(d, meta.at); viewer = meta.viewer?.kind || 'public'; done = true; render(); read.done(); lightUp(); },
     link(s) {

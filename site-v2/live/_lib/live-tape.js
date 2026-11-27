@@ -45,7 +45,6 @@
   // 后台给的字一律过这里：访客版藏起来的写清“〈哪一样〉仅本人可见”
   const field = (value, viewer, name = '') => value == null || value === '' ? '' : U.fieldHtml(value, { name, kind: viewer });
   const plain = (value, viewer) => U.fieldText(value, viewer);
-  const you = viewer => viewer === 'owner' ? '你' : '本人';
   const hostOf = id => HOSTS.find(h => h.id === String(id || '').toLowerCase() || h.name === id);
 
   // —— 大数跳：进页从 0 跳到当前值，之后读数变了从旧值跳到新值 ——
@@ -98,7 +97,11 @@
         known = new Set(keys);
         // 两遍拼起来，滚到一半无缝接回开头；内容不够一屏时多拼几遍
         // 没有快讯时照样滚（动效一直开着），只把字写清：读不到这一页时不说成“没有新消息”
-        track.innerHTML = html || `<span class="tp-ticker__item">${off ? '这一页的读数没读到，快讯先空着' : '这会儿没有新消息'}</span>`;
+        track.innerHTML = html || `<span class="tp-ticker__item">${off ? '这一页这次没读到，下一轮会自动再读' : '最近没有新动静，有新的会马上出现在这里'}</span>`;
+        // 内容不到一屏宽（只有“没消息、读不到”那一句，或快讯很短）：每一份后面空出一整屏宽再接下一份，
+        // 屏上同一时间只露一遍，不再一排重复好几遍（M1008）；照样一直滚。内容够一屏的（多条快讯）照旧
+        const win = bar.querySelector('.tp-ticker__window').clientWidth;
+        if (track.scrollWidth < win) track.innerHTML = `<span style="display:inline-flex;align-items:center;height:100%;padding-right:${win}px">${track.innerHTML}</span>`;
         const one = track.scrollWidth, need = Math.max(2, Math.ceil((bar.clientWidth * 2) / Math.max(1, one)));
         const unit = track.innerHTML;
         track.innerHTML = unit.repeat(need % 2 ? need + 1 : need);
@@ -201,9 +204,11 @@
     return { root, tick };
   }
   const viewerOf = state => state?.meta?.viewer?.kind === 'owner' || state?.viewer?.kind === 'owner' ? 'owner' : 'public';
-  const stateNote = (state, label) => state?.offline ? `<p class="tp-note" data-tone="off">${esc(state.text || '电脑连不上')}。</p>`
-    : state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
-  const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? `电脑连不上，${label}没存下来。`
+  // 连不上时不在标题下再写一遍：页顶那张卡（全站同一个，live-ui）已经写了几点起连不上、下面是几点的数据，
+  // 这里再写就是同一句话两处（D6；同本人 R11 实况首页断线和灰提醒合成一条）。暂停公开照旧写。
+  const stateNote = (state, label) => state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
+  // 整页没存下来时直接说哪一块没存下来：“自动任务没存下来，连上后补上。”（这一页没有别的标题；首页有卡名的卡照旧写“这块没存下来，连上后补上。”）
+  const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? `${label}没存下来，连上后补上。`
     : ['none', 'gone', 'error'].includes(state?.phase) || state?.meta?.status >= 400 ? `${label}暂时没读到。` : `正在读${label}…`)}</p>`;
   // 保留展开、收起状态后整块重画
   function paint(root, html) {
@@ -226,10 +231,11 @@
     const target = id && document.getElementById(id);
     if (!target) return false;
     if (target.matches('details')) target.open = true;
-    requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+    // 下一帧再按 id 找一次：进页时读数一来常常连画两遍，先找到的那个已经被换掉了
+    requestAnimationFrame(() => (document.getElementById(id) || target).scrollIntoView({ block: 'start' }));
     return true;
   };
 
-  window.LiveTape = { HOSTS, TONE, list, known, stamp, clock, day, dayKey, when, int, dec, pct, hours, duration, ms, path, link, fog, field, plain, you,
+  window.LiveTape = { HOSTS, TONE, list, known, stamp, clock, day, dayKey, when, int, dec, pct, hours, duration, ms, path, link, fog, field, plain, you: U.you,
     hostOf, count, big, ticker, ring, line, columns, posneg, niceMax, boot, viewerOf, stateNote, placeholder, paint, keep, reveal, esc };
 })();

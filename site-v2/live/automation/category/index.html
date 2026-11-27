@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>一类自动任务 · 实况</title>
+<link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/connect-auth/glass.css"><link rel="stylesheet" href="/trust-modal/trust-modal.css">
+<link rel="stylesheet" href="/live/_lib/live.css"><link rel="stylesheet" href="/live/_lib/live-page.css"><link rel="stylesheet" href="/live/_lib/live-tape.css"><link rel="stylesheet" href="/live/automation/board.css"><link rel="stylesheet" href="/live/automation/category/page.css"><link rel="stylesheet" href="/motion/motion.css"><script src="/motion/motion.js"></script>
+</head><body class="page page--live page--l3 page--tape page--automation-kind">
+<header class="topbar" id="topbar" data-state="full" data-hidden="false" data-style="float"></header>
+<main class="stage"><div class="field" aria-hidden="true"></div>
+<div id="tp-ticker"></div>
+<div id="tp-root" class="tp"><p class="tp-placeholder" role="status">正在读这一类自动任务…</p></div>
+<dialog id="au-pause" class="au-dialog" aria-labelledby="au-pause-title"><form><h2 id="au-pause-title">暂停到几点</h2>
+<p class="au-when"><span>北京时间</span><select name="day" aria-label="哪天"></select><select name="hour" aria-label="几点"></select><select name="minute" aria-label="几分"></select></p><p class="tp-small">已经在跑的这一轮会先收尾。</p>
+<div class="au-dialog__buttons"><button type="button" data-cancel>取消</button><button type="submit">保存</button></div><p class="tp-small" role="status" data-result></p></form></dialog>
+</main>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-tape.js"></script><script src="/live/automation/mechanisms.js"></script><script src="/live/automation/runs.js"></script><script src="/live/automation/category/page.js"></script>
+</body></html>

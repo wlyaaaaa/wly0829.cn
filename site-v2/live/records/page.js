@@ -17,6 +17,10 @@
   const artifactRecordFields = { freeze_records: 'at', phone_batch: 'last_received_at', inventory_report: 'at', governance: null };
   const recordAt = id === 'pcconfig' && Object.hasOwn(artifactRecordFields, section) && params.get('record');
   const archives = section === 'archives', knowledge = id === 'daily-preferences' && /^group-[0-5]$/.test(section);
+  // 只在最外面挂一个（LOOKS1126 ②）：本人版说明书这一类（资料速查除外）类名旁已挂“这一类的认识原文访客看不到”，
+  // 下面各条正文、详细内容再标“访客看不到”的不再重复挂；“对外换了说法”照旧挂。类名本身被标了的，类名旁挂的是那个签，各条照旧挂
+  const quietRows = () => knowledge && recordViewer === 'owner' && section !== 'group-4'
+    && !U.visitorFieldKind(project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section), ['$', 'label']);
   const enc = encodeURIComponent;
   // 只有 403 表示不给公开；404/503 表示这块暂时取不到，不推断为私人内容。
   const locked = s => s.meta?.status === 403 && s.meta?.viewer?.kind === 'public';
@@ -88,13 +92,14 @@
       ['unknown_opens', '时长未知的次数'], ['median_seconds', '时长中位数（秒）'], ['last_report_at', '最后回传时刻'],
     ],
   };
-  const ownerBusinessFields = {
+  // 后台多给的几列（原件书架未走完的位置、手机每天的计步和应用清单）：两版同一套，回包里有这一列就画，没有就不摆（本人禁令 11-24 14:16）
+  const extraBusinessFields = {
     'personal-materials/refresh_partial': [
       ['label', '位置'], ['directory', '目录'], ['reason', '未走完的原因'], ['complete_at', '上次完整刷新'], ['attempted_at', '最后一次尝试'],
     ],
     'phone-collector/daily': [...dailyCounts, ['steps_recorded', '计步读数'], ['packages_changed', '应用清单变化']],
   };
-  ownerBusinessFields['phone-collector/daily_exact'] = ownerBusinessFields['phone-collector/daily'];
+  extraBusinessFields['phone-collector/daily_exact'] = extraBusinessFields['phone-collector/daily'];
   const skills = ['skill_rows', 'skill_rows_owner'].includes(section);
   const book = window.LiveBook.create($('record-body'), bookSetup());
   const headRead = U.reading(body, { ghost: U.ghost.card(2), name: '项目逐项明细' });
@@ -127,6 +132,11 @@
     if (r.detail) parts[3] = typeset(r.detail, undefined, s => `<p class="knowledge-prose">${s}</p>`, parts[3]);
     // 正文里有“〔…省略〕”的：源头导出时就省掉了，后台给缺因（body_gap），紧跟正文写一句为什么
     if (typeof r.body_gap === 'string' && r.body_gap) parts[1] += `<p class="knowledge-prose" style="color:var(--muted, #8f8d86)">${esc(r.body_gap)}</p>`;
+    // 后台在这一条的正文、详细内容上标了 visitor_labels 的，紧跟那一段挂签（本人版两种都挂，访客版只挂“对外换了说法”）
+    const quiet = key => quietRows() && U.visitorFieldKind(r, key) === 'hidden';
+    const textTag = r.text && !quiet('text') ? U.visitorLabel(r, 'text', '这一条的正文', recordViewer) : '', detailTag = r.detail && !quiet('detail') ? U.visitorLabel(r, 'detail', '这一条的详细内容', recordViewer) : '';
+    if (textTag) parts[1] += `<p class="knowledge-prose">${textTag}</p>`;
+    if (detailTag) parts[3] = parts[3].replace(/^(<div class="knowledge-md">[\s\S]*?<\/div>|<p class="knowledge-prose">[\s\S]*?<\/p>)/, `$1<p class="knowledge-prose">${detailTag}</p>`);
     return parts;
   }
   // 说明书正文里给 AI 回查用的出处注脚：（明示 31）（52fbe706）（OR-444）（〔编号或数额省略〕、…）（某目录 下同前缀文件：…）这类，
@@ -273,7 +283,11 @@
     sectionName = d.sections?.flatMap((s) => s.metrics || []).find((m) => m.section === section)?.label ?? d.sections?.find((s) => s.id === section)?.label ?? label[section] ?? '逐项明细';
     // 页头第二行：这份明细记的是什么（接口给的分节名），后面跟“共 N 项”
     const sub = $('sub-name'), subText = ['results', 'archives'].includes(section) ? '' : sp(titleText(sectionName, ''));
-    if (sub) { U.html(sub, U.fieldHtml(subText, { name: '分节名', place: 'title' })); sub.hidden = !subText; }
+    // 本人版：说明书这一类访客看不到原文（资料速查除外，后台只给访客一句说明或每条标题），类名后挂“访客看不到”
+    const metric = knowledge && recordViewer === 'owner' ? d.sections?.flatMap(s => s.metrics || []).find(m => m.section === section) : null;
+    const subTag = !knowledge || recordViewer !== 'owner' ? '' : U.visitorLabel(metric, ['$', 'label'], '这一类', recordViewer)
+      || (section !== 'group-4' ? U.visitorHiddenTag(`这一类的认识原文，只看到${metric?.count > 2 ? '一句说明' : '每条的标题'}`, '', recordViewer) : '');
+    if (sub) { U.html(sub, U.fieldHtml(subText, { name: '分节名', place: 'title' }) + (subText && subTag ? ` ${subTag}` : '')); sub.hidden = !subText; }
     drawRecordTitle();
     if (knowledge && recordSource) drawRecordNote(recordSource);
     document.title = [titleText(d.name, '项目') || '项目', titleText(sectionName, ''), '实况'].filter(Boolean).map(sp).join(' · ');
@@ -305,10 +319,12 @@
     next = recordAt && (field || d.at !== recordAt) ? null : d.next;
     recordTotal = recordAt && (field || d.at !== recordAt) ? items.length : d.total; recordSource = d; drawRecordTitle(); drawHeader();
     const privateRow = r => r?.visibility === 'owner' || r?.public === 'owner' || r?.hidden_block || r?.hidden;
-    const publicSkills = skillUsageSection && recordViewer === 'public';
-    const visibleItems = publicSkills ? items.filter(row => !privateRow(row) && !row?.private_count) : items;
-    // 每条都是私事时也留各行（时间、状态照常，只藏字），不收整张表。
-    groupPrivate = recordViewer === 'public' && (knowledge || privateRow(d));
+    // 两版同一套：技能用量、说明书各组都照回包画；后台把整块标成只给本人的才收起（每条都是私事时也留各行，时间、状态照常，只藏字）。
+    // M1000：说明书一类整块不给访客时，后台只给一行“这里是 N 条……所以不予展示”；不当成一项画进表，页头照定稿卡第 3 种写法写清几条、哪一类
+    const knowledgeBlock = knowledge && recordViewer === 'public' && items.length === 1 && !recordKey({ ...items[0], text: null }) && !items[0].title && /^这里是.*所以不予展示/.test(sp(U.fieldText(items[0].text, recordViewer)));
+    if (knowledgeBlock) recordTotal = knowledgeCount(items[0]) ?? null;
+    if (knowledgeBlock) drawRecordTitle();
+    groupPrivate = recordViewer === 'public' && (privateRow(d) || knowledgeBlock);
     $('record-body').hidden = groupPrivate;
     if (groupPrivate) {
       book.set([]);
@@ -318,9 +334,9 @@
       return;
     }
     const siteTodo = section.startsWith('site_todo_');
-    const sorted = U.order(visibleItems, attention, `records:${section}`, siteTodo ? siteTodoKey : recordKey);
+    const sorted = U.order(items, attention, `records:${section}`, siteTodo ? siteTodoKey : recordKey);
     const ordered = knowledge ? sorted : U.mergePrivateRows(sorted, { value: r => r.name || r.label || r.text || r, kind: recordViewer });
-    const hiddenOnly = !publicSkills && !ordered.length && d.hidden > 0;
+    const hiddenOnly = !ordered.length && d.hidden > 0;
     // 后端本来就不给的字段，那一列不摆；给了但没数的格子照旧写原因或“还在采集”
     const has = (...keys) => items.some(r => r && typeof r === 'object' && keys.some(k => k in r && r[k] !== ''));
     const keep = knowledge ? [true, true, true] : skills ? [true, has('count'), has('last')] : [true, has(...STATE_KEYS, 'text', 'detail'), has(...TIME_KEYS)];
@@ -345,20 +361,20 @@
       columns, caption, hasNext: next != null,
       empty: uncertain ? text(emptyNote) : extra?.empty || (hiddenOnly ? hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录') || marker({ visibility: 'owner' }, recordViewer, '这些记录') : text(emptyNote)),
     });
-    drawRecordNote(d, [extra?.note, !publicSkills && !hiddenOnly && d.hidden && (hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录'))]);
+    drawRecordNote(d, [extra?.note, !hiddenOnly && d.hidden && (hidden || U.hiddenMore?.(d.hidden, '项', d.hidden_what || '记录'))]);
     drawToc(ordered);
     recordRead.done();
     U.land();
     if (!append) fillAll();
   }
-  // 说明书（认识）本人版一次取全：目录要列全这一组，点哪一项都能直接跳到全文（M421）。
+  // 说明书（认识）一次取全（两版同一套）：目录要列全这一组，点哪一项都能直接跳到全文（M421）。
   // 某一批没读到（慢、超时、服务还在准备、一时连不上）不就此停下：隔 2、4、8、15 秒，之后每 30 秒再取，直到列齐；
   // 没读到的这段时间，目录头和账簿底下写清还差几项、正在重取，不悄悄少列（M548）。新的第一批到了就从头再取。
   let fillRun = 0, fillOn = 0, fillMiss = 0, tocRows = [];
   function fillAll() {
     const run = ++fillRun;
     fillMiss = 0;
-    if (!knowledge || recordViewer !== 'owner' || next == null) return;
+    if (!knowledge || next == null) return;
     fillOn = run;
     (async () => {
       while (run === fillRun && next != null) {
@@ -376,11 +392,11 @@
   }
   const restCount = () => Math.max(0, (Number.isFinite(recordTotal) ? recordTotal : 0) - items.filter(r => r && !r.private_count).length);
   const missingRest = () => `${restCount() ? `还差 ${restCount()} 项` : '后面还有'}刚才没读到，正在重取`;
-  // 我的说明书一组（本人版）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
+  // 我的说明书一组（两版同一套）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
   function drawToc(ordered) {
     tocRows = ordered;
     let box = book.el.top.querySelector('.record-toc');
-    if (!knowledge || recordViewer !== 'owner' || ordered.length < 2) { box?.remove(); return; }
+    if (!knowledge || ordered.length < 2) { box?.remove(); return; }
     if (!box) {
       box = document.createElement('nav'); box.className = 'record-toc'; box.setAttribute('aria-label', '这一组的目录'); book.el.top.append(box);
       box.addEventListener('click', e => {
@@ -404,10 +420,18 @@
     const total = Math.max(Number.isFinite(recordTotal) ? recordTotal : 0, rows.length);
     U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>其余 ${total - rows.length} 项${fillMiss ? '刚才没读到，正在重取' : '正在读'}</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
   }
+  // 说明书一类有几条：先读项目回包里这一类的条数，没有再读后台那一句里的数
+  function knowledgeCount(row) {
+    const metric = project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section);
+    if (Number.isFinite(metric?.count)) return metric.count;
+    const n = /(\d[\d,]*)\s*条/.exec(sp(U.fieldText(row?.text, recordViewer)))?.[1];
+    return n ? Number(n.replace(/,/g, '')) : null;
+  }
   function drawRecordNote(d, extra = []) {
     if (groupPrivate && recordViewer === 'public') {
-      const name = U.fieldText(sectionName) || '这一组';
-      U.html($('record-note'), esc(`${name}的${knowledge ? '认识' : ''}原文仅本人可见。`));
+      const name = U.fieldText(sectionName) || '这一组', n = knowledge ? knowledgeCount(d.items?.[0]) : null;
+      // M1000：说明书一类访客看不到时，那一片铺一整块拼布被面，两行字写在中间那条绿针脚布标签上（样子在 page.css 的 .record-veil__tag）
+      U.html($('record-note'), knowledge ? `<span class="record-veil__tag"><b>${esc(`这里是${n == null ? '' : ` ${n.toLocaleString('zh-CN')} 条`}关于${name}的认识`)}</b><span>本人版能看到全部，所以不予展示</span></span>` : esc(`${name}的原文仅本人可见。`));
       return;
     }
     U.html($('record-note'), [d.note && text(d.note), ...extra].filter(Boolean).join(' · '));
@@ -436,7 +460,7 @@
     ];
     const rows = ordered.map((r, i) => {
       const row = bookRow(r, data, i), n = A.recorded;
-      if (row.wide || row.locked) return row;
+      if (row.wide) return row;
       const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
         [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没有记录')];
       // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
@@ -470,7 +494,7 @@
 
   function businessTable(d, ordered) {
     const key = `${id}/${section}`;
-    const spec = (recordViewer === 'owner' ? ownerBusinessFields[key] : null) || businessFields[key];
+    const spec = extraBusinessFields[key] || businessFields[key];
     if (!spec || !ordered.length) return null;
     const [name, ...rest] = spec;
     const fields = rest.filter(([key]) => ordered.some(r => r[key] != null || r[`${key}_gap`]));
@@ -481,12 +505,10 @@
       const cells = fields.map(([key, label, kind]) => {
         if (row.locked) return '';
         let value = r[key] ?? r[`${key}_gap`];
-        if (key === 'through' && recordViewer === 'public') {
-          const day = /^\d{4}-\d\d-\d\d/.exec(U.fieldText(value, 'public'));
-          if (day) value = day[0];
-        }
         if (typeof value === 'string' && (key.endsWith('_at') || key === 'through' || kind === 'time')) value = format(value);
-        return U.fieldHtml(value, { name: label, kind: recordViewer });
+        // 本人版：后台在这一行的 visitor_labels 里标了这一列的（如原件书架的目录访客拿不到），格子里挂签
+        const tag = U.visitorLabel(r, key, `这一行的${label}`, recordViewer);
+        return U.fieldHtml(value, { name: label, kind: recordViewer }) + (tag ? ` ${tag}` : '');
       });
       return { ...row, cells: [row.cells[0], ...cells] };
     });
@@ -504,14 +526,15 @@
     const candidate = [r.title, r.name, r.label, businessName, r.component_id, r.id].find(value => plain(value) && !/^(?:没有记录|未记录|未知)$/.test(plain(value)));
     const captured = section === 'freeze_records' && r.at ? `诊断现场 · ${U.date(r.at)} ${U.time(r.at)}` : '';
     const name = candidate || plain(r.text).split(/[。！？\n]/, 1)[0].slice(0, 48) || captured || `第 ${i + 1} 条 · 名称还没读到`;
-    const mark = marker(r, recordViewer, '这项记录的内容'), small = mark ? `<small>${mark}</small>` : '';
+    // M767：本人版里后台在这一行标了 visitor_labels（技能用量明细是 label、名册是 name）的，名字下挂签；访客版只挂其中的“对外换了说法”（M930），没标的不挂
+    const mark = marker(r, recordViewer, '这项记录的内容') || U.visitorLabel(r, ['$', 'label', 'name', 'title'], skills ? '这个技能名' : '这一项的名称', recordViewer), small = mark ? `<small>${mark}</small>` : '';
     const label = `<span>${text(name)}</span>`;
     const gap = (k, fallback) => r[k] == null && r[`${k}_gap`] ? text(r[`${k}_gap`]) : fallback();
     const owns = keys => keys.some(k => k in r);
     const prose = [r.text, r.detail].filter((value, index, all) => plain(value) && plain(value) !== plain(name) && all.findIndex(v => plain(v) === plain(value)) === index);
     const knowledgeParts = knowledge ? knowledgeCells(r) : null;
     const proseLength = (knowledge ? [r.text, r.detail, ...(r.statements || []).map(s => s.text)] : prose).reduce((length, value) => length + plain(value).length, 0);
-    const long = recordViewer !== 'owner' && proseLength > 128;   // 本人版给全文，不截成“…”
+    const long = false;   // 两版同一套（本人禁令 11-24 14:16）：两版都给全文，不截成“…”
     const summary = prose.length ? long ? `<p>${esc(plain(prose[0]).slice(0, 90))}…</p>` : prose.map(value => `<p>${text(value)}</p>`).join('') : '';
     const detail = long ? (knowledge ? knowledgeParts[3] : prose.map(value => `<p>${text(value)}</p>`).join('')) : '';
     const cells = knowledge ? [knowledgeParts[0], [knowledgeParts[1], !long && knowledgeParts[3], knowledgeParts[4]].filter(Boolean).join(''), knowledgeParts[2]] : skills ? [
@@ -543,7 +566,7 @@
       bar: skills ? num(r.count) : null,
     };
   }
-  // 点开一行看到的：接口给的那句说明；技能还把 Claude、Codex 各自的次数和最近一次摆出来（只摆接口给了的字段）
+  // 点开一行看到的：接口给的那句说明，以及各家已有的技能次数和最近一次
   function detailOf(r) {
     // 接口那句只是“名字：近 30 天（有）N 次（记录）”、和次数那一列同一个数时不再重复写；空格、冒号写法不同也算同一句
     const squash = s => U.sp(String(s)).replace(/\s+/g, '').replace(/：/g, ':');
@@ -552,9 +575,11 @@
         .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
     const say = !duplicate && r.text && (r.name || r.label) && text(r.text) !== marker(r, recordViewer) ? `<p>${text(r.text)}</p>` : '';
     if (!skills) return say;
-    const n = v => `${Number(v).toLocaleString('zh-CN')} 次`;
-    const hosts = [['claude', 'Claude'], ['codex', 'Codex']].map(([k, label]) => {
-      const parts = [k in r && `近 30 天 ${r[k] == null ? U.collectionText() : n(r[k])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
+    const hosts = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']].map(([k, label]) => {
+      const lowerBound = k === 'antigravity';
+      const d30 = lowerBound ? 'antigravity_d30' : k;
+      const n = v => `${lowerBound ? '至少 ' : ''}${Number(v).toLocaleString('zh-CN')} 次`;
+      const parts = [d30 in r && `近 30 天 ${r[d30] == null ? U.collectionText() : n(r[d30])}`, `${k}_d7` in r && `近 7 天 ${r[`${k}_d7`] == null ? U.collectionText() : n(r[`${k}_d7`])}`,
         `${k}_total` in r && `累计 ${r[`${k}_total`] == null ? U.collectionText() : n(r[`${k}_total`])}`, `${k}_last` in r && `最近 ${r[`${k}_last`] == null ? U.collectionText() : stamp(r[`${k}_last`])}`].filter(Boolean);
       return parts.length ? `<span class="book-detail__host"><b>${label}</b><span class="book-detail__metrics">${parts.map(s => `<span class="book-detail__metric">${text(s)}</span>`).join('')}</span></span>` : '';
     }).join('');
@@ -605,7 +630,7 @@
       sorts: [{ id: 'given', label: '原来的顺序' }, by('at-desc', '按整理时间（新的在前）', 'at', -1), by('name', '按名称', 'name', 1)],
     };
     // 按字段摆的明细表（手机采集每天、夜检进度这类，每列一个字段）和技能用量表一样摆一整页：左右两页时一列只剩百来像素，日期、项目名被拆在词中间；一次摆出的行数和原来两页一样（40 行）
-    const fieldTable = !!(businessFields[`${id}/${section}`] || ownerBusinessFields[`${id}/${section}`]);
+    const fieldTable = !!(businessFields[`${id}/${section}`] || extraBusinessFields[`${id}/${section}`]);
     return {
       name: '名称', more: loadNext, spread: !skillUsageSection && !fieldTable, singleUntil: 8, ...(fieldTable ? { page: 40 } : {}),
       columns: [{ id: 'name', label: '这一项' }, { id: 'state', label: '情况' }, { id: 'at', label: '时刻' }],

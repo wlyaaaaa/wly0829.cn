@@ -22,10 +22,20 @@
   const rank = document.createElement('ul');
   rank.className = 'vz-rank__list';
   $('ssd-rank').classList.add('vz-rank', 'vz-rank--pill');
-  const rankMore = document.createElement('details');
-  rankMore.hidden = true;
-  rankMore.innerHTML = '<summary class="live-disclosure"><span class="disclosure-closed"></span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span></summary><ul class="vz-rank__list"></ul>';
+  // 排行先露 4 个，底下“再看 20 个”每点一次多摆 20 个，摆到底按钮就没了（L1；本人 11-26 02:12：默认展开一部分，多了点一次再展开一部分，一直能展开到底）。
+  // 回包一次给全表（这次 208 行），不用再向后台分批取。
+  const RANK_FIRST = 4, RANK_STEP = 20;
+  let rankShown = RANK_FIRST, rankRows = [], rankEmpty = [];
+  const rankMore = document.createElement('button');
+  rankMore.type = 'button'; rankMore.className = 'more'; rankMore.hidden = true;
   $('ssd-rank').append(rank, rankMore);
+  function drawRank() {
+    const left = rankRows.length - rankShown;
+    U.list(rank, rankRows.length ? rankRows.slice(0, rankShown) : rankEmpty);
+    rankMore.hidden = left <= 0;
+    U.html(rankMore, left > RANK_STEP ? `再看 ${RANK_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`);
+  }
+  rankMore.addEventListener('click', () => { rankShown += RANK_STEP; drawRank(); });
   const ssdRead = U.reading($('ssd-panel'), { ghost: U.ghost.rows(3), name: '谁在大量写 SSD', slow: false });
   U.fold($('ssd-more'), $('ssd-box'));
   const ssdMoreLabel = () => U.html($('ssd-more'), $('ssd-more').getAttribute('aria-expanded') === 'true' ? '收起原表 ‹' : '展开原表 ›');
@@ -58,18 +68,14 @@
     const written = '累计写入 (GB)';
     const amounts = rows.map(row => fieldValue(row[written], columnLabel(written), n => n)).map(n => Number.isFinite(n) ? n : 0);
     const max = Math.max(1, ...amounts);
-    const ranked = (viewer === 'owner' ? rows : rows.slice(0, 5)).map((row, i) => {
+    const ranked = rows.map((row, i) => {   // 两版同一套（本人禁令 11-24 14:16）：两版排行一样长
       const name = field(row['进程'], '进程名称') || (U.offline?.() ? '程序' : U.collectionText()), shown = value(row, written);
       const color = window.LiveViz.hues[['teal', 'violet', 'pink', 'blue'][i % 4]];
       return { key: `${name}:${i}`, cls: 'vz-rank__row', html: `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${color};--v:${Math.max(amounts[i] / max, 0)}"></i></span><span class="vz-rank__name"><span class="vz-rank__label">${esc(name)}</span></span><span class="vz-rank__v">${esc(shown)}</span>` };
     });
-    const limit = viewer === 'owner' ? 4 : 5;
-    const rest = ranked.slice(limit);
-    rankMore.hidden = !rest.length;
-    if (rankMore.hidden) rankMore.open = false;
-    rankMore.querySelector('.disclosure-closed').textContent = `再看 ${rest.length} 个`;
-    U.list(rankMore.querySelector('ul'), rest, { animate: false });
-    U.list(rank, rows.length ? ranked.slice(0, limit) : tableLocked || hidden ? [] : [{ key: 'empty', cls: 'vz-rank__row vz-rank__row--empty', html: `<span class="vz-rank__none">${esc(U.offline?.() ? missed : 'SSD 写入没有记录')}</span>` }]);
+    rankRows = rows.length ? ranked : [];
+    rankEmpty = rows.length || tableLocked || hidden ? [] : [{ key: 'empty', cls: 'vz-rank__row vz-rank__row--empty', html: `<span class="vz-rank__none">${esc(U.offline?.() ? missed : 'SSD 写入没有记录')}</span>` }];
+    drawRank();
     U.html($('ssd-period'), tableLocked ? '' : esc(field(table?.window?.label, '统计期间').split(/[，,]/)[0]));
     U.html($('ssd-count'), tableLocked ? '' : sampleCount(table, rows.length + hidden, ranked.length));
     const notes = [sampleNote(table),

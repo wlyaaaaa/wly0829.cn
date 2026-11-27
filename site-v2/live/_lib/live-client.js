@@ -1,4 +1,4 @@
-// 浏览器取数：页面只订阅当前资源；副本始终隔开设备、受众和筛选。
+// 实况取数只在打开的页面里留一份，按设备、受众和筛选分开。
 (() => {
   'use strict';
   // 正式站（wly0829.cn 和 www）连正式接口；本机、局域网预览和扫描走自己的 /__live/ 代理
@@ -23,22 +23,18 @@
       headers: lan ? {} : opened.headers(token),
       credentials: lan || site ? 'omit' : 'same-origin' };
   }
-  // v2：上线时换前缀，各设备上 v1 存下的旧副本（上线前几天的数）一次作废，并顺手删掉
+  // 受众与设备标记照旧；此前保存的正文开页即清。
   const prefix = 'wly-live-v2:' + (fixture === null ? 'net' : 'fixture:' + fixture) + ':' + (publicView ? 'public:' : '');
-  const visitorNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:/;
-  // 访客也留一份备份总表（backups）：读不到时退回上次读到的那份、标上几点的，不整页变空（M449）。其余访客数据照旧不留。
-  const visitorBackupCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):public:backups$/;
-  const ownerNetCopy = /^wly-live-v2:net:(?:public:)?(?:none|[a-f0-9]+):owner:([^?]+)/;
-  // 与后台 owner_original_resource 一致：这些详情只在当前页面保留原文。
-  const ownerOriginalResource = resource => /^(?:chats|items|reports|projects)\//.test(resource) &&
-    !['items/closed', 'projects/changes'].includes(resource);
+  const oldBrowserCopy = /^wly-live-v2:(?:net|fixture:.*?):(?:public:)?(?:none|[a-f0-9]+):(?:owner|public):/;
   const visitorPolicy = 'policy-11'; // 与后端导出和云端接口的访客规则代号一致。
+  const liveHome = /^\/live(?:\/(?:index\.html)?)?$/.test(location.pathname);
+  // 随站备用数据只给实况子页。实况首页的独立读口也只认现读和本页内存。
+  const backupPages = !liveHome && /^\/live\//.test(location.pathname);
   const validAudience = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
   try {
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const key = localStorage.key(i);
-      const resource = ownerNetCopy.exec(key)?.[1];
-      if (key?.startsWith('wly-live-v1:') || visitorNetCopy.test(key) && !visitorBackupCopy.test(key) || ownerOriginalResource(resource)) localStorage.removeItem(key);
+      if (key?.startsWith('wly-live-v1:') || oldBrowserCopy.test(key)) localStorage.removeItem(key);
     }
   } catch { /* 浏览器可能禁用存储。 */ }
   // 演示：?fixture&slow=3000 让示意数晚 3 秒到（看加载中）；slow=12000 看“这块要多读一会儿”。真数不认这个开关。
@@ -206,8 +202,15 @@
   const connectionEntries = () => currentEntries().filter(e => !e.stopped);
   const publicPauseText = '实况暂时不公开';
   let publicPaused = false, publicationVersion = 0, pausedEntry;
-  let connectionSequence = 0;
-  const observedConnection = (e, link) => { e.receivedAt = ++connectionSequence; e.link = e.validatedLink = link; };
+  let connectionSequence = 0, confirmedHostOff = null, offReadSequence = 0;
+  function observedConnection(e, link, liveRead = false) {
+    if (hostOffline(link)) {
+      confirmedHostOff = link = { ...link, state: 'offline', offSince: stampOf(link.offSince) || confirmedHostOff?.offSince || null };
+      offReadSequence = readSequence;
+    } else if (confirmedHostOff && liveRead && isMain(e) && link.state === 'online' && e.readId > offReadSequence) confirmedHostOff = null;
+    e.receivedAt = ++connectionSequence;
+    e.link = e.validatedLink = link;
+  }
   // 等电脑当轮的新数据最多 10 秒（本人 11-23 09:04）：10 秒内拿到就照常显示、不挂提示；公网回的是云端存的那份（X-Live-Source: oss）不算拿到。
   // 10 秒到了本页主数据（页面第一个订的那份，实况首页是 home）还没有新的，就挂“连不上 · 下面是几点的数据”；浏览器自己断网立刻挂。
   // 辅助读口（ai-messages、tasks 这类）10 秒拿不到新的，只在它那一块写明下面是几点的旧数，不把整页报成连不上。一读到新的就收。
@@ -229,6 +232,16 @@
   // 翻页取的一批（带 cursor）只管它自己那一处：读不到不算整页连不上，也不当本页主数据（M553）
   const paged = e => new URLSearchParams(e.query).has('cursor');
   const isMain = e => !paged(e) && (!mainResource || e.resource === mainResource);
+  // 页面点开才取的那几批（展开的明细、翻页、项目变化）没读到时，等本页主数据下一次读到新的（这一读是在那批失败之后发出的），
+  // 或者这一批自己原有的重读先读到了，就交回页面用同一批次再取一次（M982）。不另起计时、不另订：跟着原有的读数走；一直读不到就一直等。
+  let mainBack = [];
+  function mainConfirmed(e) {
+    if (!mainBack.length) return;
+    const sent = e.requestedAt || 0, ok = w => w.entry === e || isMain(e) && w.at < sent;
+    const ready = mainBack.filter(ok);
+    mainBack = mainBack.filter(w => !ok(w));
+    ready.forEach(w => w.resolve());
+  }
   const freshArrived = e => { clearTimeout(e.freshWait); e.freshWait = 0; };
   const awaitFresh = e => { if (!e.freshWait && !paged(e)) e.freshWait = later(() => { e.freshWait = 0; staleAfterWait(e); }, FRESH_WAIT_MS); };
   // 读到过数以后又读不到：偶发一两次只标“这次刷新慢了”；本页主数据连续三次读不到，而且这期间别的读口也没读到新的，
@@ -236,43 +249,74 @@
   const lostTouch = e => e.missCount >= 3 && !connectionEntries().some(other => other !== e && other.freshAt >= e.missSince);
   function staleAfterWait(e) {
     if (publicPaused || e.stopped || e.token !== device()) return;
-    if (isMain(e) && (e.data === null || e.source === 'copy' || e.source === 'fallback' || lostTouch(e))) {
+    if (isMain(e) && (e.data === null || e.source === 'fallback' || lostTouch(e))) {
       observedConnection(e, { state: 'offline', basis: e.missStatus ? 'response' : 'browser', reason: e.missReason || 'unreachable' });
       // 一算连不上就马上取备用包的时刻，不再等失败后 15 秒那一下（M608）。
       const f = e.failure;
-      if (f?.fallback && e.source !== 'fallback' && offline()) {
+      if (f?.fallback && !onBackup(e) && offline()) {
         clearTimeout(f.fallback); f.fallback = null;
         useFallback(e, f).then(() => { if (e.failure === f) { settle(e); emit(e); } });
       }
     } else if (isMain(e)) {
-      // 主数据 10 秒没到、这一页已经读到并画出来了（不是浏览器存的副本）：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
+      // 主数据 10 秒没到、这一页已经读到并画出来了：不算连不上、不清（本人版访客版一样），标上是几点的数，重读照常（M587、M588）。
       // 连不上只认浏览器断网、心跳停了、电脑关机这几种明确信号，或上面那条连续三次读不到；后台明确撤回照旧立刻清。
+      // 页顶那张卡写“正在刷新 · 这次没读到新的，正在重试”，读到新的就收（本人 11-24 20:34“首先要说明正在刷新”）。
+      e.lagging = true;
       if (Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的数，这次刷新慢了，正在重读。`;
     } else {
       if (!e.error) e.error = '暂时读不到';
-      if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`;
+      if (e.data !== null && Number.isFinite(Date.parse(e.at))) e.fallbackNote = staleNote(e);
     }
     settle(e);
     emit(e);
   }
-  // 整页在不在线由主口说了算：主口答过就只看主口，辅助口读到了只管它自己那一块（M587、M588）。
+  // 外探明确关机时整页立刻知道；除此之外，主口答过就只看主口（M587、M588）。
   const latestConnection = () => {
-    const answered = connectionEntries().filter(e => e.receivedAt != null), main = answered.filter(isMain);
+    if (confirmedHostOff) return confirmedHostOff;
+    const answered = connectionEntries().filter(e => e.receivedAt != null && !hostOffline(e.validatedLink)), main = answered.filter(isMain);
     return (main.length ? main : answered).sort((a, b) => b.receivedAt - a.receivedAt)[0]?.validatedLink;
   };
   const offline = () => !publicPaused && latestConnection()?.state === 'offline';
   // 只有确认关机（副屏那格回 on: false）才算没开机；心跳停了只说明电脑从那时起没回应，可能还开着。
   const hostOffline = link => link?.reason === 'host-off';
+  const stampOf = value => Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
   const heartbeatStopped = link => link?.basis === 'heartbeat' && link.heartbeat === 'stopped';
+  // 确认关机来自副屏 on:false 或明确的 host-off；探测报错和心跳停不算。确认后等新发出的正式读口恢复。
+  // 没确认关机时页顶写“自几点起连不上”（M918）：只有这个窗口亲眼见过从读得到变成读不到才写，几点取最后一次读到之后第一次读不到的那会儿；
+  // 首访、新开标签页一开就断的，没见过读得到，不写（不然像是电脑从他打开页面那会儿才断）。
+  // 同一个标签页里换到别的实况页、断开一直没好（2 分钟内还记着断开）就接着用这个时刻；读到在线就清。
+  const LOST_AT = 'wly-live-lost-at';
+  let lostAt = (() => { try { const v = JSON.parse(sessionStorage.getItem(LOST_AT)); return Number.isFinite(Date.parse(v?.at)) && Date.now() - v.seen < 120000 ? v.at : null; } catch { return null; } })();
+  function noteLost() {
+    if (publicPaused) return;
+    try {
+      if (offline()) {
+        // 本页主数据这一页里读到过（freshAt），这一串读不到从 missSince 开始
+        const seen = !lostAt && connectionEntries().filter(e => isMain(e) && e.freshAt && e.missSince > e.freshAt).sort((a, b) => b.freshAt - a.freshAt)[0];
+        if (seen) lostAt = new Date(seen.missSince + clockOffset).toISOString();
+        if (lostAt) sessionStorage.setItem(LOST_AT, JSON.stringify({ at: lostAt, seen: Date.now() }));
+      }
+      else if (latestConnection()?.state === 'online' && lostAt) { lostAt = null; sessionStorage.removeItem(LOST_AT); }
+    } catch { /* 存不下就只记在这一页 */ }
+  }
+  // 正在用随站那份的正文（只有时刻的旧包不算）。
+  const onBackup = e => e.source === 'fallback' && e.data !== null;
+  function linkReason(link) {
+    const seen = link?.basis === 'heartbeat' && (link.seen || link.since);
+    return hostOffline(link) || heartbeatStopped(link) ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
+      : link?.reason === 'service' ? '实况服务暂不可用'
+      : link?.reason === 'owner-read' ? '暂时读不到本人实况'
+      : link?.basis === 'browser' ? (globalThis.navigator?.onLine === false ? '当前设备未连接网络' : '连不上实况服务') : '连不上电脑';
+  }
   const latestStamp = stamps => stamps.filter(at => Number.isFinite(Date.parse(at))).sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) || null;
   const dataAt = e => e.data === null ? null : e.resource === 'screen' && offline()
     ? latestStamp((e.lastCells || []).filter(cell => cell.id !== 'computer' || !hostOffline(latestConnection())).map(cell => cell.source_at)) : e.at;
   const shownUpTo = () => latestStamp(connectionEntries().map(dataAt));
-  let connectionOffline = false, pageAt = null;
+  let connectionOffline = false, pageAt = null, pageOffSince = null;
   const returning = (() => { try { return performance.getEntriesByType('navigation')[0]?.type === 'back_forward'; } catch { return false; } })();
   const fromLive = document.referrer?.startsWith(location.origin + '/live/');
-  const returningHome = /^\/live\/(?:index\.html)?$/.test(location.pathname) && (returning || !!fromLive);
-  let timer, fallback, clockOffset = 0, viewerToken = '', viewerKind = 'public', rejectedToken = '';
+  const returningHome = liveHome && (returning || !!fromLive);
+  let timer, fallback, releaseMade = null, clockOffset = 0, viewerToken = '', viewerKind = 'public', rejectedToken = '';
   const clock = () => new Date(Date.now() + clockOffset).toISOString();
   const time = (() => {
     const formatter = new Intl.DateTimeFormat('zh-CN', {
@@ -284,13 +328,21 @@
     timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit'
   });
   const stamp = at => dateFormat.format(new Date(at)).slice(5) + ' ' + time(at);
+  // 随站那份是最近一次更新网站时一起发上去的（本人 11-25 17:00：说的是最近一次更新网站，不是第一次上线），包里有生成时刻就写上
+  const releaseName = () => `最近一次更新网站${Number.isFinite(Date.parse(releaseMade)) ? `（${stamp(releaseMade)}）` : ''}时带的那份`;
   const shortStamp = at => dateFormat.format(new Date(at)) === dateFormat.format(new Date(clock())) ? time(at) : stamp(at);
+  // 这一份从几点起读不到（换成后台钟）；只有这个窗口里先读到过、之后才读不到的才算（M982，同 M918 首访不写“自几点起”）
+  const failingStamp = e => e.failSince && e.freshAt && e.freshAt < e.failSince ? new Date(e.failSince + clockOffset).toISOString() : null;
+  const staleNote = e => { const since = failingStamp(e); return since ? `自 ${shortStamp(since)} 起读不到新的，这是 ${shortStamp(e.at)} 的旧数。` : `这是 ${shortStamp(e.at)} 的旧数，现在读不到新的。`; };
+  function markOld(e) {
+    if (!e.fallbackNote && e.data !== null && e.source !== 'fallback' && stampOf(e.at)) e.fallbackNote = staleNote(e);
+  }
   const itemDetail = e => e.resource.startsWith('items/') && e.resource !== 'items/closed';
-  function storage(key, value) {
+  function storedViewer(identity, value) {
+    const key = prefix + 'viewer:' + identity;
     try {
-      if (value === undefined) return JSON.parse(localStorage.getItem(prefix + key) || 'null');
-      if (value === null) localStorage.removeItem(prefix + key);
-      else localStorage.setItem(prefix + key, JSON.stringify(value));
+      if (value === undefined) return JSON.parse(localStorage.getItem(key) || 'null');
+      localStorage.setItem(key, JSON.stringify(value));
     } catch { /* 浏览器禁止存储时，本次读取仍可用。 */ }
     return null;
   }
@@ -300,35 +352,38 @@
       return /^[A-Za-z0-9_-]{43}$/.test(token || '') ? token : '';
     } catch { return ''; }
   }
-  // 配对先于任何资源建档，避免第一读和副本沿用新设备的访客身份。
+  // 配对先于任何资源建档，避免第一读沿用新设备的访客身份。
   async function pair() {
     const match = /^#pair=([A-Za-z0-9_-]{43})$/.exec(location.hash);
+    const invalid = '配对链接无效或已过期，请让 AI 重新发一个';
+    // 网络断了、等超时、电脑回的话看不懂：电脑那头办没办成不知道，照实说还没确认（M981）
+    const unsure = '配对结果还没确认，这条链接可能还能用，稍后再点一次';
+    try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+    if (!match) return invalid;
+    let response, body;
     try {
-      history.replaceState(null, '', location.pathname + location.search);
-      if (match) {
-        const response = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: match[1] }),
-          signal: AbortSignal.timeout(12000) });
-        const body = await response.json().catch(() => null);
-        if (response.ok && body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
-          localStorage.setItem('wly-cockpit-device', body.token);
-          if (device() === body.token) return '这台设备已设为本人设备，私人事项会直接显示';
-        }
-        // 兑换时个人资料没解锁、无限制授权也没开（403），或读不到授权状态（503）：电脑没用掉这条链接，照实说
-        const refused = {
-          cockpit_pair_authorization_required: '要先在电脑上解锁个人资料或开着无限制授权，才能把这台加成可信设备；这条链接还能用',
-          cockpit_pair_authorization_unavailable: '暂时读不到授权状态，这条链接还能用，稍后再点',
-        }[!response.ok && body?.error];
-        if (refused) return refused;
-      }
-    } catch { /* 格式、接口和本地存储失败，都用同一句提示。 */ }
-    return '配对链接无效或已过期，请让 AI 重新发一个';
+      response = await fetch(PAIR_URL, { method: 'POST', credentials: 'omit', cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: match[1] }),
+        signal: AbortSignal.timeout(12000) });
+      body = await response.json().catch(() => null);
+    } catch { return unsure; }
+    if (response.ok && body?.status === 'pass' && /^[A-Za-z0-9_-]{43}$/.test(body.token || '')) {
+      try { localStorage.setItem('wly-cockpit-device', body.token); } catch {}
+      if (device() === body.token) return '这台设备已设为本人设备，私人事项会直接显示';
+      // 电脑已经同意、链接也用掉了，是这个浏览器存不下（无痕窗口、禁了网站存储这类）
+      return '电脑同意了，但这个浏览器存不下配对（可能是无痕窗口或禁了网站存储），换个正常窗口再让 AI 发一个链接';
+    }
+    // 兑换时个人资料没解锁、无限制授权也没开（403），或读不到授权状态（503）：电脑没用掉这条链接，照实说
+    const refused = {
+      cockpit_pair_authorization_required: '要先在电脑上解锁个人资料或开着无限制授权，才能把这台加成可信设备；这条链接还能用',
+      cockpit_pair_authorization_unavailable: '暂时读不到授权状态，这条链接还能用，稍后再点',
+      cockpit_pair_invalid: invalid,
+    }[!response.ok && body?.error];
+    return refused || unsure;
   }
   const paired = location.hash?.startsWith('#pair=') ? pair() : null;
   let pairing = paired;
   paired?.then(() => { pairing = null; });
-  const cacheKey = (e, kind) => e.identity + ':' + kind + ':' + e.path;
-  const canKeepBrowserCopy = e => fixture !== null || e.viewer.kind === 'owner' && !ownerOriginalResource(e.resource) || e.resource === 'backups' && !e.query;
   const visitMetrics = new Set('visitors pageviews daily top_pages devices cohorts dwell speed crawlers'.split(' '));
   const oldVisits = (m, section) => m?.external_visits !== true && (visitMetrics.has(m?.id) || (section === 'more-data' && m?.visibility === 'owner' && m.mode === 'static'));
   function siteVisitScope(e, data) {
@@ -347,25 +402,6 @@
     return data;
   }
   const overview = e => e.resource === 'home' && !new URLSearchParams(e.query).has('view');
-  // 只在返回本窗口刚读过的同一份总览时先画副本。未配对的家网本人版也要先有本窗口的成功读数。
-  function recentHomeRead(e, remember = false) {
-    if (!overview(e) || !/^\/live\/(?:index\.html)?$/.test(location.pathname)) return false;
-    try {
-      const key = prefix + 'overview:' + cacheKey(e, e.viewer.kind);
-      if (remember) {
-        if (e.viewer.kind !== 'owner' || e.token || e.previewOwner) sessionStorage.setItem(key, String(Date.now()));
-        return;
-      }
-      const readAt = Number(sessionStorage.getItem(key));
-      return readAt > 0 && Date.now() - readAt <= 30 * 60000;
-    } catch { return false; }
-  }
-  function browserCopy(e, homeReturn = false) {
-    if (!canKeepBrowserCopy(e)) return null;
-    if (!homeReturn && fixture === null && !site && !e.token && e.viewer.kind === 'owner') return null;
-    const copy = storage(cacheKey(e, e.viewer.kind));
-    return copy?.viewer?.kind === e.viewer.kind && copy.data != null && Number.isFinite(Date.parse(copy.at)) ? { ...copy, data: siteVisitScope(e, copy.data) } : null;
-  }
   function entry(resource, query) {
     const params = new URLSearchParams(query || {});
     if (query && typeof query === 'object' && !(query instanceof URLSearchParams)) {
@@ -374,26 +410,18 @@
     params.sort();
     const path = resource.replace(/^\/+/, '') + (params.size ? '?' + params : '');
     const token = device();
-    // 用完整钥匙的128位指纹区分设备，缓存键不再复制钥匙。
+    // 用完整钥匙的128位指纹区分设备，受众标记不用复制钥匙。
     const identity = token ? [...token].reduce((hash, char) => BigInt.asUintN(128,
       (hash ^ BigInt(char.charCodeAt(0))) * 0x1000000000000000000013bn),
     0x6c62272e07bb014262b821756295c58dn).toString(16) : 'none';
     const id = identity + ':' + path;
     if (entries.has(id)) return entries.get(id);
-    const viewer = storage('viewer:' + identity) || { kind: 'public', device: token ? 'unavailable' : 'none' };
+    const viewer = storedViewer(identity) || { kind: 'public', device: token ? 'unavailable' : 'none' };
     const e = { path, resource: resource.replace(/^\/+/, ''), query: params.toString(), token, identity, viewer,
       data: null, at: null, seq: -1, rev: null, now: null, etag: null, instance: null, status: 0,
       source: fixture === null ? 'net' : 'fixture', link: { state: 'unknown', basis: 'browser' },
       validatedLink: { state: 'unknown', basis: 'browser' }, warming: false,
       error: '', listeners: new Set(), pending: null };
-    // 示意数平时每次现读（看得到加载中）；退回上一页时和真数一样先用存下的那份立刻画好（返回时页面往卡片里缩，底下不能是空的）
-    const homeReturn = returningHome && recentHomeRead(e);
-    const copy = !publicPaused && (homeReturn || (fixture === null ? viewer.kind === 'public' : returning)) ? browserCopy(e, homeReturn) : null;
-    if (copy && (homeReturn || fixture !== null || Date.now() - Date.parse(copy.at) <= 30 * 60000)) {
-      Object.assign(e, copy, { source: fixture === null ? 'copy' : 'fixture',
-        link: { state: 'unknown', basis: 'browser' } });
-      if (homeReturn) window.LiveView?.owner(e.viewer);
-    }
     entries.set(id, e);
     return e;
   }
@@ -443,28 +471,83 @@
     const at = dataAt(e), resourceAt = !publicPaused && Number.isFinite(Date.parse(at)) ? at : null;
     const upTo = disconnected ? resourceAt || shownUpTo() : null;
     const off = !publicPaused && hostOffline(link), silent = !publicPaused && !off && heartbeatStopped(link);
-    const seen = link.basis === 'heartbeat' && (link.seen || link.since);
-    const reason = disconnected ? off || silent ? (Number.isFinite(Date.parse(seen)) ? `电脑自 ${shortStamp(seen)} 起连不上` : '电脑不在线')
-      : link.reason === 'service' ? '实况服务暂不可用'
-      : link.reason === 'owner-read' ? '暂时读不到本人实况'
-      : link.basis === 'browser' ? (globalThis.navigator?.onLine === false ? '当前设备未连接网络' : '连不上实况服务') : '连不上电脑' : '';
-    const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页没有可显示的上次数据。'}`;
+    const reason = disconnected ? linkReason(link) : '';
+    const line = at => `${reason} · ${at ? `下面是 ${shortStamp(at)} 的数据。` : '这页的数据没存下来。'}`;
     if (disconnected) text = line(upTo);
     if (publicPaused) text = publicPauseText;
     if (!text && e.data === null) text = e.warming ? '正在准备' : '没有记录';
     const stage = phase(e);
-    // 本块没有最后一份数据时明确说明，不承诺页面会自行补齐。
-    const say = publicPaused ? publicPauseText : stage === 'gone' ? '这一块没有可显示的上次数据。' : '';
+    // 本块没有最后一份数据时说明没存下来；全站同一句，和各页自己写的“这块没存下来，连上后补上。”一致（r83 返修：一页只用一种说法）
+    const say = publicPaused ? publicPauseText : stage === 'gone' ? '这块没存下来，连上后补上。' : '';
     const now = publicPaused ? null : disconnected ? resourceAt || upTo : e.now;
     const viewer = publicPaused ? { kind: 'public', device: 'none' } : e.viewer;
     const pairNotice = !publicPaused && e.previewOwner && viewer.kind === 'public' && viewer.device === 'invalid'
       ? '这台设备的配对已失效，正在显示公开版。重新配对后可查看本人实况。' : '';
-    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead,
-      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn }, link, viewer, now,
-      shownAt: resourceAt, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
+    // 两个时刻分开给（M982）：failingSince 是这一份从几点起读不到（这个窗口里读到过它、之后才读不到才有；没见过读得到的不给），
+    // shownAt／meta.at 是手上最后一份是几点的
+    const failingSince = !publicPaused && failingStamp(e);
+    return { meta: { at: publicPaused ? null : e.at, seq: e.seq, rev: e.rev, viewer, dataRead: e.dataRead, failingSince,
+      source: e.source, status: publicPaused ? 503 : e.status, withdrawn: !!e.withdrawn,
+      publicationRevoked: !publicPaused && e.status === 503 && !!e.publicationRevoked }, link, viewer, now,
+      shownAt: resourceAt, failingSince, cutoffAt: upTo, publicPaused, offline: disconnected, warming: !publicPaused && e.warming,
       text, reason, hostOff: off, silent, pageAt: disconnected ? shownUpTo() : null,
       pageAtText: disconnected && shownUpTo() ? shortStamp(shownUpTo()) : '',
-      pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say };
+      pageText: disconnected ? line(shownUpTo()) : pairNotice, pairNotice, phase: stage, say, conn: connInfo() };
+  }
+  // 实况页页顶那张状态卡和页眉按钮怎么说（本人 11-24 20:34，选的 B，图 S1 五种）。根首页不看这一段。
+  //   retrying 刚读不到：先说正在刷新；lost 一直读不到但没确认关机：写正在重试，页上留着手里那份；
+  //   off 确认关机：写关机时间，子页说明下方是本页上次读到的数还是随站那份。
+  function connInfo() {
+    if (publicPaused) return { stage: 'paused' };
+    // 下面是几点的数，说本页主数据那一份；主数据没存下来、只有别的块有数时，不拿别的块的时刻说整页（不然横幅说“下面是几点的数据”，卡上却写没存下来）
+    const main = connectionEntries().find(e => isMain(e) && e.listeners.size) || connectionEntries().find(isMain);
+    // 只在本页主数据没有时用：先说主要内容没存下来，再说哪些块还有，免得横幅说“有上次的数据”、下面主块却写没存下来（r83 返修）
+    // 不算页里的块：实况首页那几份（home，含每页顶上都读的页眉 home?view=header）、硬件小包（只并进别的块已有的读数行）；
+    // 只有它们有上次的数、页里各块全没存下来时，照全空说（r83 返修第二轮）
+    const bodyUpTo = latestStamp(connectionEntries().filter(e => isMain(e) || e.resource !== 'home' && e.resource !== 'computer/hardware').map(dataAt));
+    const rest = bodyUpTo ? ' · 主要内容没存下来，只有部分块有上次的数据' : ' · 这页的数据没存下来';
+    const home = main && overview(main);
+    const showing = (whole, part = whole) => ` · ${home ? '有记录的卡片显示' + part : '下面是' + whole}`;
+    const mainAt = main && dataAt(main), atLine = mainAt ? showing(` ${shortStamp(mainAt)} 的数据`, ` ${shortStamp(mainAt)} 读到的内容`) : rest;
+    // 第二句写从几点起没读到新的（D6：本人 11-26 00:24 每页照实写“暂时读不到 · 几点起”；这个窗口先读到过才有，见 failingStamp）
+    const since = main && failingStamp(main);
+    const link = latestConnection();
+    const compactHome = home && liveHome && main.data === null;
+    const reachableWithoutData = main?.status === 503 && main.lagging && !main.missCount && main.validatedLink?.state === 'online';
+    if (compactHome && !hostOffline(link) && (reachableWithoutData || offline())) {
+      return { stage: reachableWithoutData ? 'retrying' : 'lost', emptyHome: true, homeSummary: true,
+        say: reachableWithoutData ? '实况服务暂时读不到，电脑开着，正在重试' : '连不上电脑，正在重试',
+        at: reachableWithoutData ? '' : ' · 电脑没确认关机', wait: '' };
+    }
+    if (!offline()) return connectionEntries().some(e => e.lagging && isMain(e))
+      ? { stage: 'retrying', say: '正在刷新', at: mainAt ? atLine : '', shownAt: mainAt, wait: since ? `自 ${shortStamp(since)} 起没读到新的，正在重试`
+          : home && !mainAt ? '除计划任务单独读取外，首页各卡暂时读不到，正在重试' : '这次没读到新的，正在重试' } : { stage: 'online', shownAt: mainAt };
+    const release = !!main && onBackup(main);
+    const releaseLine = release ? showing(`${releaseName()}（数据到 ${stamp(mainAt)}）`) : '';
+    const releaseMeta = main?.backupMeta && `${releaseName()}只记了时刻、没存内容`;
+    if (!hostOffline(link)) {
+      // 心跳停了那句本来就带“自几点起”（后台给的时刻），不再加一遍
+      const since = lostAt && !heartbeatStopped(link) ? `自 ${shortStamp(lostAt)} 起` : '';
+      // 怎么才算连不上（M928）：本页主数据连续 3 次读不到（头两次隔 2、4 秒重读；接口回得快时约 10 秒，超时的每次要等 15 秒）、别的读口也没读到新的才报；之后每 10 秒重读一次
+      const rule = '本页连续 3 次读不到才算连不上，之后每 10 秒重读一次；';
+      return { stage: 'lost', say: `${since}${linkReason(link)}，正在重试`, at: releaseLine || atLine, shownAt: release ? null : mainAt,
+        wait: globalThis.navigator?.onLine === false ? '这台设备没联网，联网后马上重读'
+          : `${rule}电脑没确认关机${releaseMeta ? `，${releaseMeta}` : ''}；连上后自动显示最新的` };
+    }
+    // 关机时刻读边缘回包头 X-Live-Offline-Since（M918）；说法照本人 11-25 23:19 选的图（OFFLINE1125 A）写“电脑 HH:MM 起离线”。
+    // 没给时刻（比如副屏那格说没开机）照旧只写“电脑关机了”
+    const offlineAt = stampOf(link?.offSince);
+    const say = offlineAt ? `电脑 ${shortStamp(offlineAt)} 起离线` : '电脑关机了';
+    if (home && liveHome) {
+      return { stage: 'off', emptyHome: true, say: '电脑关机了，开机后自动出来', at: '',
+        wait: offlineAt ? `${shortStamp(offlineAt)} 起离线` : '' };
+    }
+    if (mainAt) {
+      return { stage: 'off', say, from: release ? 'release' : 'memory',
+        at: releaseLine || showing(`本页上次读到的数（${shortStamp(mainAt)}）`), shownAt: release ? null : mainAt,
+        wait: release && main.viewer.kind === 'owner' ? '这是访客能看的那份；开机连上后自动换成本人版最新的' : '开机连上后自动换成最新的' };
+    }
+    return { stage: 'off', say, from: null, at: rest, wait: `${releaseMeta ? `${releaseMeta}；` : ''}开机连上后自动显示` };
   }
   function present(e) {
     const disconnected = offline(), detail = itemDetail(e);
@@ -480,9 +563,13 @@
       meta: { ...state.meta, fallbackNote: note } };
   }
   function emit(e, onlyPhase = false) {
+    noteLost();
     const state = present(e);
     if (connectionOffline && !state.offline && !publicPaused) reconnected();
-    const changed = connectionOffline !== state.offline || state.offline && pageAt !== shownUpTo(); connectionOffline = state.offline; pageAt = shownUpTo();
+    const offSince = state.hostOff ? state.link.offSince || true : null;
+    const cutoff = shownUpTo();
+    const changed = connectionOffline !== state.offline || state.offline && pageAt !== cutoff || pageOffSince !== offSince;
+    connectionOffline = state.offline; pageAt = cutoff; pageOffSince = offSince;
     document.documentElement?.classList?.toggle('live-offline', offline());
     window.LiveLight?.offline(offline());
     window.LiveUI?.connection?.(state);
@@ -503,14 +590,6 @@
     }
     return state;
   }
-  function save(e) {
-    if (e.data === null) return;   // 示意数也存一份（键里带 fixture，和真数分开），只在退回来时用
-    rememberScreen(e);
-    if (!canKeepBrowserCopy(e)) return;
-    storage(cacheKey(e, e.viewer.kind), { data: e.data, at: e.at, seq: e.seq, rev: e.rev, stale_after: e.stale_after, refresh_seconds: e.refresh_seconds,
-      viewer: e.viewer, now: e.now, etag: e.etag, validatedLink: e.validatedLink, lastCells: e.lastCells });
-    if (e.status === 200 || e.status === 304) recentHomeRead(e, true);
-  }
   function rememberScreen(e, cells = e.data?.cells, at = e.at) {
     if (e.resource !== 'screen') return;
     const previous = new Map((e.lastCells || []).map(cell => [cell.id, cell]));
@@ -522,9 +601,8 @@
     }
     e.lastCells = [...previous.values()];
   }
-  function forgetData(e, forgetCopy = false) {
-    if (forgetCopy) storage(cacheKey(e, e.viewer.kind), null);
-    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '' });
+  function forgetData(e) {
+    Object.assign(e, { data: null, at: null, seq: -1, rev: null, etag: null, dataRead: null, lastCells: null, fallbackNote: '', backupMeta: null });
   }
   function audience(e, viewer) {
     if (!viewer) return;
@@ -533,48 +611,65 @@
     if (viewer.kind === 'owner' && rejectedToken === e.token) rejectedToken = '';
     window.LiveView?.owner(viewer);
     viewerToken = e.token; viewerKind = viewer.kind;
-    storage('viewer:' + e.identity, viewer);
+    storedViewer(e.identity, viewer);
     if (viewer.kind !== e.viewer.kind) forgetData(e);
     e.viewer = viewer;
     if (viewer.device === 'invalid') {
       // 明确失效后，同设备其它资源也不能继续展示本人内容。
       for (const other of entries.values()) {
         if (other.identity !== e.identity) continue;
-        storage(cacheKey(other, 'owner'), null);
         if (other !== e && other.viewer.kind === 'owner') {
           other.viewer = viewer;
-          forgetData(other, itemDetail(other)); clearFailure(other);
+          forgetData(other); clearFailure(other);
           if (itemDetail(other)) other.status = 403;
           emit(other);
         }
       }
     }
   }
-  function failed(e, status, body, via) {
+  function failed(e, status, body, via, offSince) {
     e.status = status; e.warming = false;
+    e.publicationRevoked = status === 503 && body?.error === 'live_publication_revoked';
+    // 从几点起读不到：这一串失败里第一次的时刻，读到新的就清（M982）；撤回、无权照旧不记
+    if (!e.failSince && ![403, 410].includes(status) && !(status === 404 && body?.error === 'live_missing')) e.failSince = Date.now();
     if (status === 403 || status === 410 || status === 404 && body?.error === 'live_missing') {
       e.withdrawn = true;
-      forgetData(e, true);
+      forgetData(e);
       e.source = fixture === null ? 'net' : 'fixture';
     }
     if (status === 403) {
       audience(e, { kind: 'public', device: 'invalid' });
     }
-    e.error = status === 403 ? '这部分只对本人开放' : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
-    if (paged(e)) return;
-    const reachable = status >= 400 && status < 500 || /^live_((source|variant|detail)_unavailable|publication_revoked)$/.test(body?.error || '');
+    e.error = status === 403 ? '这部分只对本人开放' : e.publicationRevoked ? '这块正在更新访客版，稍后自动补上。'
+      : [404, 410, 503].includes(status) ? '暂时读不到' : body?.text || '';
+    markOld(e);
+    // 明确关机连翻页读口也可证实，普通翻页失败仍只管自己这一块。
+    const off = via === 'host-off' || hostOffline(body?.link);
+    if (paged(e) && !off) return;
+    // 智能体页、开场页那两个读口算不出时回 503 带 agent_hooks_source_unavailable／agents_startup_unavailable：实况服务答了话，电脑是通的，
+    // 只是这一块这会儿没算出来（后台重启后要算十来分钟）；不能等 10 秒就把整页报成“电脑连不上”（M909），照常重读
+    const reachable = status >= 400 && status < 500 || /^(live_((source|variant|detail)_unavailable|publication_revoked)|agent_hooks_source_unavailable|agents_startup_unavailable)$/.test(body?.error || '');
     const reason = via || (body?.error === 'owner_read_failed' ? 'owner-read' :
       body?.error === 'preview_upstream_not_listening' || [500, 503].includes(status) && !body?.error?.startsWith('snapshot_') ? 'service' : 'unreachable');
-    if (!body?.link && !reachable && !(e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped')) {
+    // 后台在、只是这一份暂时给不出（重启后首轮发布没齐、来源这次读失败，回 503 live_*_unavailable）：手上有数的照留着，
+    // 但照实写“自几点起读不到新的、这是几点的数”，本页主数据这样时页顶写“正在刷新”，重读照常、读到就收（D6，本人 11-26 00:24）
+    const pending = status === 503 && /^live_(source|variant|detail)_unavailable$/.test(body?.error || '');
+    if (reachable) e.lagging = pending && isMain(e);
+    if (pending && liveHome && overview(e)) settle(e);
+    if (!body?.link && !reachable && !off && !confirmedHostOff && !heartbeatStopped(e.validatedLink)) {
       e.missReason = reason; e.missStatus = status;
       if (!e.missCount) e.missSince = Date.now();
       e.missCount = (e.missCount || 0) + 1;
-      if (globalThis.navigator?.onLine !== false) { awaitFresh(e); return; }
+      if (globalThis.navigator?.onLine !== false) {
+        if (isMain(e)) e.lagging = true;
+        awaitFresh(e); return;
+      }
       freshArrived(e); // 浏览器断网时立刻挂；10 秒的等待从重新联网后那一读算起
     } else { freshArrived(e); e.missCount = 0; }
-    observedConnection(e, body?.link || (reachable
+    observedConnection(e, off ? { ...body?.link, state: 'offline', basis: body?.link?.basis || 'response', reason: 'host-off', offSince: offSince || body?.link?.offSince }
+      : body?.link || (reachable
       ? { state: 'online', basis: 'response', since: e.link?.since || clock() }
-      : e.validatedLink?.basis === 'heartbeat' && e.validatedLink?.heartbeat === 'stopped' ? e.validatedLink
+      : heartbeatStopped(e.validatedLink) ? e.validatedLink
       : { state: 'offline', basis: status ? 'response' : 'browser', reason }));
   }
   function clearFailure(e) {
@@ -610,16 +705,10 @@
     viewerKind = 'public';
     stopPolling();
     fallback = null;
-    // 访客已读过的浏览器副本也清掉，免得回到其它页时先画出旧数。
-    try {
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
-        if (visitorNetCopy.test(key)) localStorage.removeItem(key);
-      }
-    } catch { /* 浏览器可能禁用存储。 */ }
+    confirmedHostOff = null;
     const all = currentEntries();
     for (const item of all) {
-      forgetData(item, true);
+      forgetData(item);
       clearFailure(item);
       end(item);
       Object.assign(item, { status: 503, warming: false, error: '', answered: true, now: null, receivedAt: null, source: 'net',
@@ -629,31 +718,20 @@
     for (const item of all) if (item.listeners.size) emit(item);
     return present(e);
   }
+  // 一样资源回“公开判定更新中”（live_publication_revoked）：只空这一块、写明为什么，
+  // 别的块照常显示、照常读，不清整页（M970；主控按工程卡“访客口径”定：只放宽不收紧，藏太多才是毛病）。
   function revokePublication(e, body) {
-    publicationVersion++;
     fallback = null;
-    const affected = currentEntries().filter(item => item === e || item.viewer.kind === 'public');
-    for (const item of affected) {
-      forgetData(item, true);
-      clearFailure(item);
-      item.withdrawn = true;
-      item.source = 'net';
-      failed(item, 503, body);
-      settle(item);
-    }
-    for (const item of affected) if (item !== e && item.listeners.size) emit(item);
-  }
-  function restoreBrowserCopy(e) {
-    if (e.data === null && !itemDetail(e)) {
-      const copy = browserCopy(e);
-      if (copy) Object.assign(e, copy, { source: 'copy', etag: null, now: e.now || copy.now, validatedLink: e.validatedLink });
-    }
-    rememberScreen(e);
+    forgetData(e);
+    clearFailure(e);
+    e.withdrawn = true;
+    e.source = 'net';
+    failed(e, 503, body);
+    settle(e);
   }
   async function retryFailure(e, retryCopy, notListening = false) {
     if (publicPaused || paged(e)) return;
-    restoreBrowserCopy(e);
-    const f = e.failure ||= { tries: 0, fallback: later(async () => {
+    const f = e.failure ||= { tries: 0, fallback: backupPages && later(async () => {
       f.fallback = null;
       await useFallback(e, f);
       if (e.failure === f) { settle(e); emit(e); }
@@ -665,31 +743,15 @@
     const delay = f.tries < delays.length ? delays[f.tries] : 10000;
     f.tries++;
     f.retry = later(() => { if (!document.hidden && e.token === device() && e.failure === f) read(e); }, delay);
-    if ((retryCopy || offline()) && e.source !== 'fallback') { await useFallback(e, f); if (e.failure === f) settle(e); }
+    if ((retryCopy || offline()) && e.data === null) { await useFallback(e, f); if (e.failure === f) settle(e); }
   }
-  function fallbackMetadata(e, at, proof, packet = null) {
-    // 手上已有数（这一页读到的，或浏览器存的上次副本）就接着显示、带它自己的时刻，本人版访客版一样；
-    // 备用包只有生成时刻，不拿它把有的数清成横杠，也不删上次副本（M608）。
-    if (e.withdrawn || e.data !== null || typeof at !== 'string' ||
-        !Number.isFinite(Date.parse(at)) || proof?.policy !== visitorPolicy || !validAudience(proof.audience)) return;
-    forgetData(e);
-    // 随站备用包里带了计划任务名册（tasks?scope=scheduled，后台只准这一份带正文，别的仍只有时刻）：访客版没读到过时就画它，写明是几点的数（M473）
-    const own = e.viewer.kind === 'public' && e.path === 'tasks?scope=scheduled' && packet?.viewer?.kind === 'public' && packet.data && typeof packet.data === 'object'
-      && Object.keys(packet.data).length && Number.isFinite(Date.parse(packet.at)) ? packet : null;
-    if (own) {
-      Object.assign(e, { data: siteVisitScope(e, own.data), at: new Date(own.at).toISOString(), rev: 'fallback-' + proof.audience + ':' + own.seq,
-        source: 'fallback', fallbackNote: `这是公开备用包里北京时间 ${stamp(own.at)} 的数，现在读不到新的。` });
-      return;
-    }
-    Object.assign(e, { at: new Date(at).toISOString(), rev: 'metadata-' + proof.audience, source: 'fallback',
-      fallbackNote: `公开备用包生成于北京时间 ${stamp(at)}，详情暂时读不到。` });
-  }
-  async function usePackagedCopy(e) {
-    if (fixture !== null || publicPaused || !offline() || e.withdrawn || e.link.reason === 'owner-read' || e.source === 'fallback') return;
-    const failure = e.failure;
+  // 子页冷开连不上才退到随站那份；同页有上次读数就保留，不拿备用包替换。
+  async function useFallback(e, failure) {
+    if (!backupPages || fixture !== null || publicPaused || !offline() || e.data !== null ||
+        e.withdrawn || itemDetail(e) || e.link.reason === 'owner-read') return;
     if (!fallback) {
       // 发布时只换同版成品登记中的数据地址，页面脚本不随备用包换版。
-      const options = { cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout(15000) };
+      const options = { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(15000) };
       const json = r => r.ok ? r.json() : null;
       const request = fetch('/release-identity.json', options).then(json).then(identity => {
         const copy = identity?.live_fallback;
@@ -698,8 +760,9 @@
         return fetch(address, options).then(json);
       }).catch(() => null).then(file => {
         const proof = file?.publication;
-        if (file?.metadata_only === true && proof?.policy === visitorPolicy && validAudience(proof.audience)) {
-          return { at: file.at, proof, resources: file.resources && typeof file.resources === 'object' ? file.resources : {} };
+        if (typeof file?.metadata_only === 'boolean' && proof?.policy === visitorPolicy && validAudience(proof.audience)) {
+          return { at: file.at, seq: file.seq, proof, content: file.metadata_only === false,
+            resources: file.resources && typeof file.resources === 'object' ? file.resources : {} };
         }
         if (fallback === request) fallback = null;
         return null;
@@ -707,16 +770,19 @@
       fallback = request;
     }
     const file = await fallback;
-    if (publicPaused || !failure || e.failure !== failure) return;
-    fallbackMetadata(e, file?.at, file?.proof, file?.resources?.[e.path] || null);
-  }
-  async function useFallback(e, failure) {
-    if (!offline()) return;
-    await usePackagedCopy(e);
-    if (fixture !== null || publicPaused || e.failure !== failure || e.token !== device() || itemDetail(e)) return;
-    if (e.source !== 'fallback' && Number.isFinite(Date.parse(e.at))) {
-      const sameDay = dateFormat.format(Date.parse(e.at)) === dateFormat.format(Date.now());
-      e.fallbackNote = `这是 ${sameDay ? time(e.at) : stamp(e.at)} 的旧数，现在读不到新的。`;
+    if (!file || publicPaused || e.failure !== failure || e.token !== device() || e.withdrawn || e.data !== null || !offline()) return;
+    releaseMade = file.at;
+    // 按资源键取同一代的访客块。旧包仅在计划任务默认名册真的带了正文时保留该兼容。
+    const block = file.resources[e.path], at = block && Number.isInteger(file.seq) && block.seq === file.seq ? stampOf(block.at) : null;
+    const policyAllows = file.content || e.viewer.kind === 'public' && e.path === 'tasks?scope=scheduled';
+    if (policyAllows && at && block.viewer?.kind === 'public' && block.data &&
+        typeof block.data === 'object' && !Array.isArray(block.data) && Object.keys(block.data).length) {
+      Object.assign(e, { data: siteVisitScope(e, block.data), at, etag: null,
+        rev: `fallback-release-${file.proof.audience}:${block.seq}`, source: 'fallback', backupMeta: null,
+        fallbackNote: `${e.viewer.kind === 'owner' ? '访客备用数据 · ' : ''}最近一次更新网站时带的那份 · 北京时间 ${stamp(block.at)}` });
+    } else {
+      const metadataAt = at || stampOf(file.at);
+      if (metadataAt) Object.assign(e, { at: metadataAt, rev: 'metadata-' + file.proof.audience, source: 'fallback', backupMeta: { at: metadataAt }, fallbackNote: '' });
     }
   }
   function read(e, isInitial = false, card, retryCopy = false, replace = false) {
@@ -779,12 +845,9 @@
       const responseNow = !oss && Number.isFinite(Date.parse(body?.now)) ? body.now : response.headers.get('Date');
       if (Number.isFinite(Date.parse(responseNow))) { e.now = new Date(responseNow).toISOString(); clockOffset = Date.parse(responseNow) - Date.now(); }
       const via = response.headers.get('X-Live-Connection');
+      const offSince = via === 'host-off' ? response.headers.get('X-Live-Offline-Since') : null;
       if (oss) {
-        failed(e, 503, null, via || 'unreachable');
-        restoreBrowserCopy(e);
-        if (fixture === null && body?.error === 'snapshot_metadata_only' && offline()) fallbackMetadata(e, body.at, {
-          policy: response.headers.get('X-Live-Fallback-Policy'), audience: response.headers.get('X-Live-Fallback-Audience')
-        });
+        failed(e, 503, null, via || 'unreachable', offSince);
         await retryFailure(e, retryCopy);
         if (obsolete()) return discarded();
         if (e.data !== null || offline()) settle(e);
@@ -792,21 +855,29 @@
       }
       e.status = response.status; e.error = '';
       if (response.status === 304) {
-        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.missCount = 0; e.fallbackNote = '';
-        observedConnection(e, e.validatedLink?.basis === 'heartbeat' ? e.validatedLink : { state: 'online', basis: 'response' });
+        clearFailure(e); freshArrived(e); e.freshAt = Date.now(); e.failSince = 0; e.missCount = 0; e.fallbackNote = ''; e.lagging = false; e.backupMeta = null;
+        observedConnection(e, via === 'host-off' ? { state: 'offline', basis: 'response', reason: via, offSince }
+          : e.validatedLink?.basis === 'heartbeat' && !hostOffline(e.validatedLink) ? e.validatedLink : { state: 'online', basis: 'response' }, e.data !== null);
         e.source = fixture === null ? 'net' : 'fixture';
       } else if (response.ok) {
-        freshArrived(e); e.freshAt = Date.now(); e.missCount = 0;
+        freshArrived(e); e.missCount = 0; e.backupMeta = null;
+        e.warming = response.status === 202 || body?.q === 'warming';
+        const waitingOnData = e.warming && body?.data == null;
+        if (waitingOnData) e.failSince ||= Date.now();
+        else { e.freshAt = Date.now(); e.failSince = 0; }
+        e.lagging = waitingOnData && e.data !== null && isMain(e);
         if (!loadedRelease && fixture === null && isMain(e)) loadedRelease = releaseId();
         const wasFallback = e.source === 'fallback';
+        let renewed = false;
         // 公网回来的是弱标签 W/"live-…"；弱标签也要认出后台实例，否则后台重载后旧标签页停在旧数上
         const instance = /^(?:W\/)?"live-([a-f0-9]{16})-/.exec(response.headers.get('ETag'))?.[1];
         const viewer = body?.viewer;
         audience(e, viewer);
         const link = body?.link || { state: 'online', basis: 'response' };
-        const hostOff = e.resource === 'screen' && body?.data?.cells?.some(cell => cell.id === 'computer' && cell.on === false);
-        observedConnection(e, hostOff ? { ...link, state: 'offline', reason: 'host-off' } : heartbeatStopped(link) ? { ...link, state: 'offline' } : link);
-        e.warming = response.status === 202 || body?.q === 'warming';
+        const hostOff = via === 'host-off' || hostOffline(link) ||
+          (e.resource === 'screen' && body?.data?.cells?.some(cell => cell.id === 'computer' && cell.on === false));
+        observedConnection(e, hostOff ? { ...link, state: 'offline', reason: 'host-off', offSince: offSince || link.offSince }
+          : heartbeatStopped(link) ? { ...link, state: 'offline' } : link, response.status === 200 && body?.data != null);
         if (fixture === null && itemDetail(e) && e.link.state === 'offline' && e.viewer.device !== 'invalid') {
           await retryFailure(e, retryCopy);
           if (obsolete()) return discarded();
@@ -815,25 +886,27 @@
         }
         clearFailure(e);
         if (itemDetail(e) && e.viewer.device === 'invalid') {
-          forgetData(e, true);
+          forgetData(e);
           e.status = 403; e.error = '这部分只对本人开放';
-        } else if (e.source === 'copy' && e.data !== null && e.warming && body?.data == null) {
-          settle(e);
-          return emit(e);
-        } else if (body?.data != null && (e.path !== ACCESS || response.status === 200) && (wasFallback || e.source === 'copy' ||
+        } else if (body?.data != null && (e.path !== ACCESS || response.status === 200) && (wasFallback ||
                    (instance && instance !== e.instance) || body.seq >= e.seq)) {
-          e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at;
+          e.data = siteVisitScope(e, body.data); e.seq = body.seq; e.rev = body.rev; e.at = body.at; renewed = true;
           if (e.path === ACCESS) e.dataRead = id;
-          e.withdrawn = false;
+          e.withdrawn = e.publicationRevoked = false;
           e.instance = instance;
           e.stale_after = body.stale_after; e.refresh_seconds = body.refresh_seconds;
         }
-        e.fallbackNote = '';
-        e.source = fixture === null ? 'net' : 'fixture';
-        if (e.path !== ACCESS || e.dataRead === id) e.etag = e.status === 403 ? null : response.headers.get('ETag');
-        save(e);
+        // 新的还没带正文（比如正在准备）：继续标出手上这份的采时，备用内容的来源也继续保留。
+        const keepBackup = wasFallback && !renewed && e.data !== null;
+        if (!keepBackup) {
+          e.fallbackNote = '';
+          e.source = fixture === null ? 'net' : 'fixture';
+          if (waitingOnData) markOld(e);
+          else if (e.path !== ACCESS || e.dataRead === id) e.etag = e.status === 403 ? null : response.headers.get('ETag');
+          if (renewed) rememberScreen(e);
+        }
       } else {
-        failed(e, response.status, body, via);
+        failed(e, response.status, body, via, offSince);
         if (![403, 404, 410].includes(response.status)) {
           const notListening = !site && fixture === null && e.resource === 'home' &&
             /^\/live(?:\/(?:index\.html)?)?$/.test(location.pathname) &&
@@ -844,7 +917,9 @@
         clearFailure(e);
       }
       settle(e);
-      return emit(e);
+      const shown = emit(e);
+      if (response.status === 304 || response.ok) mainConfirmed(e);
+      return shown;
     })().finally(() => { if (e.pending === request) e.pending = null; });
     return e.pending = request;
   }
@@ -886,6 +961,10 @@
     };
   }
   const refreshPath = (path, fresh = false) => refresh(false, fresh, path);
+  function reconnectMain() {
+    const main = connectionEntries().find(e => isMain(e) && e.listeners.size);
+    return main ? refreshPath(main.path, true) : refresh(false, true);
+  }
   function watch(resource, query, callbacks) {
     if (pairing) {
       let subscription, stopped = false;
@@ -924,18 +1003,25 @@
     if (publicPaused) return Promise.resolve(present(e));
     e.stopped = false;
     if (e.pending) opened.card(card);
-    // 返回时，点开才读的明细也先照存下的画；现读在后台补，不挡住回来的第一帧。
+    // 返回同一份页面时，已经在这份页面内存里的明细可先画；新建页面没有这份内存。
     if (returning && e.data !== null && (fixture !== null || e.viewer.kind === 'owner')) { read(e, true, card); return Promise.resolve(present(e)); }
-    if (!paged(e)) return read(e, true, card, fallbackOnFailure);
+    // 没读到、又不是撤回或无权的：带上 again，本页主数据确认接通后它会完成，页面拿同一批次再取一次（M982）。
+    // 手上留着上一次的数、这一次没读到（比如项目换代后重读改动记录失败）也算没读到，不然要等下一次换代才重读
+    const settled = state => {
+      const fresh = state.data != null && state.meta?.status >= 200 && state.meta.status < 400;
+      if (fresh || publicPaused || e.withdrawn || e.listeners.size || [400, 403, 404, 410].includes(state.meta?.status)) return state;
+      return { ...state, again: new Promise(resolve => mainBack.push({ at: Date.now(), entry: e, resolve })) };
+    };
+    if (!paged(e)) return read(e, true, card, fallbackOnFailure).then(settled);
     // 这一批没读到（连不上或服务出错）：隔 2 秒、5 秒自己再取，还不行才交回页面在那一处写“这一批没读到”（M553）
     return (async () => {
       let state = await read(e, true, card);
       for (const wait of [2000, 5000]) {
-        if (state.data != null || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
+        if (state.data != null || state.meta?.publicationRevoked || state.meta?.status >= 400 && state.meta.status < 500 || e.stopped) break;
         await new Promise(resolve => later(resolve, wait));
         state = await read(e, true, card);
       }
-      return state;
+      return settled(state);
     })();
   }
   function afterReady(ready, callbacks) {
@@ -981,6 +1067,8 @@
     if (!token || token !== viewerToken) return { ok: false, text: site ? '请先连接电脑，再打开这项内容' : '本机预览不能打开电脑上的文件，请从正式实况打开' };
     if (!itemId || !target) return { ok: false, text: '没有可打开的目标，请重读后再试' };
     const antigravity = target === 'conversation' && /^antigravity:/i.test(itemId);
+    const itemPage = /^\/live\/(?:items?\/)?$/.test(location.pathname);
+    const unconfirmed = { ok: false, text: '电脑还没确认打开结果，请先在电脑上核对' };
     try {
       const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/open' : '/__computer/cockpit/open';
       const response = await fetch(url, { method: 'POST', cache: 'no-store', credentials: 'omit',
@@ -997,13 +1085,15 @@
       }
       const antigravityError = typeof body?.error === 'string' && body.error.startsWith('antigravity_');
       const fixed = response.status === 503 && target === 'conversation' && antigravityError && antigravityOpenMessages[body.error];
+      if (itemPage && (body?.completion_unknown === true || response.ok && body?.status !== 'pass' ||
+          response.status >= 500 && !fixed && body?.status !== 'error')) return unconfirmed;
       const text = fixed ? fixed.find(message => message === body.message?.replaceAll?.('主驾驶', '台式机')) || fixed[0]
         : !antigravity && !antigravityError && ![404, 503].includes(response.status) && typeof body?.message === 'string' && /[一-鿿]/.test(body.message) ? body.message : '';
       return { ok: response.ok, text: text || (response.ok ? '已在电脑上打开'
         : response.status === 403 ? '设备已失效，没打开，请重新连接电脑'
         : response.status === 404 ? '目标已不存在，没打开，请重读后再试'
         : response.status === 429 ? '点得太快了，没打开，稍后再试' : '电脑没打开，稍后再试') };
-    } catch { return { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
+    } catch { return itemPage ? unconfirmed : { ok: false, text: '连不上电脑，没打开，稍后再试' }; }
   }
   async function automationSetting(data) {
     await pairing;
@@ -1027,6 +1117,13 @@
     } catch { return { status: 'unknown' }; }
   }
   const ownerWrites = new Map();
+  // 提交编号也记在本机（30 分钟）：点完马上刷新、离开再回来，回到页面按同一次操作接着查；回过的结果一并记下，多选时先回来的几件不用再问（M945）
+  const KEPT_WRITES = 'wly-live-owner-writes', KEEP_WRITES_MS = 1800000;
+  function keptWrites() {
+    try { const all = JSON.parse(localStorage.getItem(KEPT_WRITES) || '{}'), now = Date.now(); for (const [key, v] of Object.entries(all)) if (!(now - v?.at < KEEP_WRITES_MS)) delete all[key]; return all; }
+    catch { return {}; }
+  }
+  function keepWrite(key, value) { try { const all = keptWrites(); all[key] = value; localStorage.setItem(KEPT_WRITES, JSON.stringify(all)); } catch { /* 存不下就只靠本页 */ } }
   async function sendOwnerAction(token, data) {
     const url = site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions' : '/__computer/cockpit/actions';
     try {
@@ -1042,6 +1139,35 @@
       if (response.status < 500 && result?.status) return result;
     } catch { /* 原请求可能已经写入，须按同一提交编号核对。 */ }
     return null;
+  }
+  // 只读查回执（后台 21be7a5c 起，主持 11-26 01:31）：按原提交编号查这台设备的那一笔，只查不写。
+  // 查到回那张回执；同设备没有这笔回 { status: 'missing' }；没设备（403）、编号无效（400）、查询本身失败回 null，按还没确认算
+  async function lookUpOwnerAction(token, idempotencyKey) {
+    const url = (site ? 'https://mcp.wly0829.cn/computer-access/api/cockpit/actions/receipt' : '/__computer/cockpit/actions/receipt') + '?idempotency_key=' + encodeURIComponent(idempotencyKey);
+    try {
+      const response = await fetch(url, { method: 'GET', cache: 'no-store', credentials: site ? 'omit' : 'same-origin',
+        headers: site ? { 'X-Cockpit-Device': token } : opened.headers(token), signal: AbortSignal.timeout(30000) });
+      const result = await response.json().catch(() => null);
+      if (response.status === 404 && result?.error === 'cockpit_action_missing') return { status: 'missing', error: 'cockpit_action_missing' };
+      if (response.ok && result?.status) return result;
+    } catch { /* 查不了就算还没确认 */ }
+    return null;
+  }
+  // 回到页面接着查：按原提交编号只读查回这一笔，不发写请求。没有这笔先隔 5 秒再查一次（刚刷新时原请求可能还在路上）再下结论；
+  // 后台已收下、还在写的，照办理回查的节奏接着查（前一分钟每 3 秒，之后每 15 秒，最多两分半）；查到结果记下，下回不再查
+  const writeHasResult = result => result && !['waiting_undo', 'missing', 'unknown'].includes(result.status);
+  async function checkKeptWrite(token, kept, accepted = null, onAccepted) {
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms)), id = kept.data.idempotency_key;
+    let result = accepted || await lookUpOwnerAction(token, id);
+    if (result?.status === 'missing' && device() === token) { await wait(5000); result = await lookUpOwnerAction(token, id); }
+    if (result?.status === 'waiting_undo') onAccepted?.();
+    const started = Date.now();
+    while (result?.status === 'waiting_undo' && device() === token && Date.now() - started < 150000) {
+      await wait(Date.now() - started < 60000 ? 3000 : 15000);
+      const read = await lookUpOwnerAction(token, id);
+      if (read && read.status !== 'missing') result = read;
+    }
+    return result || { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
   }
   // 浏览器自己断网时马上重读一次，立刻挂“连不上”（联网时的重读在上面 online 那一行）。
   globalThis.addEventListener?.('offline', () => { if (!publicPaused) refresh(false); });
@@ -1060,8 +1186,8 @@
     }
     return changed;
   }
-  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome,
-    get, refreshPath, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
+  window.Live = { reload: reloadPage, watch, refresh, open, paired, offline, readRequest, automationSetting, upTo: shownUpTo, stamp, returningHome, clock,
+    get, refreshPath, reconnectMain, readSequence: () => readSequence, afterReady, markOpened: opened.card, mergeHardware,
     copy(item, intent = 'ask') {
       if (intent === 'stop' && /^task-/.test(item.id)) {
         const name = String(item.name || item.title || '自动任务').replace(/\s+/g, ' ').slice(0, 90);
@@ -1088,50 +1214,57 @@
       return (site || Boolean(lanBase)) && fixture === null && !publicView && !offline() &&
         viewerKind === 'owner' && !!token && token === viewerToken;
     },
-    async applyOwnerItems(items, action, followReceipt = false) {
-      const saved = [];
+    async applyOwnerItems(items, action, followReceipt = false, resume = false, onAccepted) {
+      const saved = [], receipts = {};
       let pending = 0, unconfirmed = 0, message = '没有确认保存，请重读这件事。', error = '';
       for (const item of items) {
-        const result = await window.Live.ownerAction(item, action, followReceipt);
+        const result = await window.Live.ownerAction(item, action, followReceipt, resume, onAccepted);
+        receipts[item.id] = result;   // 后台回执原样带回（下去的时刻、几点再提醒），页面照它写
         if (result.status === 'applied') saved.push(item.id);
         else if (result.status === 'waiting_undo') pending++;
         else if (result.status === 'unknown') { unconfirmed++; message = result.message; }
         else if (result.error === 'cockpit_owner_required') { message = '不是可信设备'; error = result.error; }
         else { if (result.message) message = result.message; error = result.error || ''; }
       }
-      return { saved, pending, unconfirmed, message, error };
+      return { saved, pending, unconfirmed, message, error, receipts };
     },
-    async ownerAction(item, action, followReceipt = false) {
+    async ownerAction(item, action, followReceipt = false, resume = false, onAccepted) {
       if (!window.Live.canOwnerAct()) return { status: 'error', error: 'cockpit_owner_required', message: '不是可信设备' };
       const token = device();
       const key = JSON.stringify([token, item.id, item.item_version, action]);
       let write = ownerWrites.get(key);
+      // 刷新、返回或继续等同一次操作，只查原编号。即使该请求仍留在本页也不重发。
+      if (resume) {
+        const kept = keptWrites()[key] || write;
+        if (!kept?.data) return { status: 'unknown', message: '暂时没读到办理结果，稍后刷新可以看最新状态。' };
+        if (kept.result) return kept.result;
+        const result = await checkKeptWrite(token, kept, null, onAccepted);
+        if (writeHasResult(result)) { ownerWrites.delete(key); keepWrite(key, { data: kept.data, at: kept.at, result }); }
+        return result;
+      }
+      if (!write) {
+        const kept = keptWrites()[key];
+        // 本人在页面上再点一次同一件：接着用刷新、离开前那一次的编号，后台按编号认出是同一笔，不会写两次
+        if (kept?.data && !kept.result) ownerWrites.set(key, write = { data: kept.data, at: kept.at, request: null });
+      }
       if (!write) {
         const data = { item_id: item.id, item_version: item.item_version, action, direct: true,
           idempotency_key: Array.from(crypto.getRandomValues(new Uint8Array(16)), n => n.toString(16).padStart(2, '0')).join('') };
         if (action === 'snooze') data.until = 'tomorrow_10';
-        write = { data, request: null };
+        write = { data, at: Date.now(), request: null };
         ownerWrites.set(key, write);
+        keepWrite(key, { data, at: write.at });
       }
       write.request ||= (async () => {
         let result = await sendOwnerAction(token, write.data);
-        // 后端按原请求编号先查回执，事项已经变动也仍能确认原操作；没回或还在写，就拿同一编号接着查。
-        if (followReceipt) {
-          const started = Date.now();
-          let lastReply = started;
-          // 读数卡住时页面会显示连不上，这里照样拿同一编号去查；最多查两分半钟。
-          while ((!result || result.status === 'waiting_undo') && device() === token && Date.now() - lastReply < 90000 && Date.now() - started < 150000) {
-            await new Promise(resolve => setTimeout(resolve, Date.now() - started < 60000 ? 3000 : 15000));
-            if (device() !== token) break;
-            result = await sendOwnerAction(token, write.data);
-            if (result) lastReply = Date.now();
-          }
-          if (result?.status === 'waiting_undo' || result?.error === 'cockpit_owner_required') result = null;
+        // 留在当前页等，也和刷新后一样只读查同一张回执。
+        if (followReceipt && (!result || result.status === 'waiting_undo')) {
+          result = await checkKeptWrite(token, write, result, onAccepted);
         } else if (!result && device() === token && window.Live.canOwnerAct()) {
           result = await sendOwnerAction(token, write.data);
         }
         write.request = null;
-        if (result && result.status !== 'waiting_undo') ownerWrites.delete(key);
+        if (writeHasResult(result)) { ownerWrites.delete(key); keepWrite(key, { data: write.data, at: write.at, result }); }
         return result || { status: 'unknown', message: followReceipt
           ? '暂时没读到办理结果，稍后刷新可以看最新状态。' : '还没确认结果，再点一次可继续核对。' };
       })();

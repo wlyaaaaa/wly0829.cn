@@ -43,6 +43,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --word-check-only <dist>
 ## 发布前浏览器检查
 
 发布前用浏览器核直达路由、自定义 404、键盘导航、电脑和手机无横向溢出、控制台无错。驾驶舱等分本人版和公开版的页面，用本人默认 Chrome 的新标签页核本人版，检查首屏、下一屏和实时数据，用完关闭本任务标签页；无头浏览器只检查公开版。授权与状态页同时核与驾驶舱的联动，不代本人提交授权、解锁或锁屏。本人只用截图报界面毛病时，修的人看原图，先从前端查；本人点明是数据问题，沿该读数查接口和来源。
+构建会打印站内页面死链的出处文件和原链接，并把清单写到本地 `.build-receipt.json` 的 `page_link_warnings`。发现退役或改址遗留的链接时，按 [撤页或改址](update.md#十三本轮清单怎么跑) 处理。页面死链仅提示，资源、按钮和公开底线按原检查处理。
 目录路由的 canonical、Open Graph 和 sitemap 地址核对为实际返回 200 的尾斜杠网址。
 新版普通公开页由组装器写入 canonical 和 Open Graph 正式地址（目录页保留尾斜杠、内容页保留 `.html`）；404 保持 noindex 且不加 canonical，站点所有权验证文件照常发布但不进 sitemap。
 `npm run test:built` 对已有 `dist/` 跑现役成品检查。授权页按当轮真实接口和发布范围核对。
@@ -115,7 +116,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 
 ## EdgeOne live 函数单独发布
 
-实况先读电脑。EdgeOne 读不到时会从 OSS 取 `policy-11` 公开备用包的生成时刻和受众证明，响应为 `no-store`。浏览器也可通过同版 `release-identity.json` 读随站 `live/_fallback.json` 的元数据，公网用 OSS 地址、家网预览用本地路径。备用包只说明生成时刻，离线提示按页面实际读到的数据展示。
+实况先读电脑。EdgeOne 读不到时会从 OSS 取 `policy-11` 云端备用包：`metadata_only: true` 的旧包只回这一块的时刻（`snapshot_metadata_only`），`metadata_only: false` 的带正文包把这一块当访客回包回给浏览器（`snapshot_content`，带 `X-Live-Fallback-At`），都是 503、`no-store`。浏览器只在确认关机后才用备用数据：先用云端那份，云端没有这一块的正文再通过同版 `release-identity.json` 读随站 `live/_fallback.json`（公网用 OSS 地址、家网预览用本地路径），手里那份更新就留着手里的；没确认关机只重试、留着手里那份。随站包现在用只有时刻的那种（上面的导出命令不加 `--with-content`）；等后台发出关机信号、带正文导出也提速到组装程序限时以内，再在导出命令里加 `--with-content` 让随站包带正文。随站包只绑它那一版发布，不要求和云端包的受众代相同。
 
 `live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。
 

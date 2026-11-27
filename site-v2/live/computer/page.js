@@ -14,6 +14,8 @@
   const params = new URLSearchParams(location.search);
   const offline = () => !!U.offline?.();
   const missing = () => offline() ? '这块没存下来，连上后补上。' : U.collectionText();
+  const publicationRevoked = meta => meta?.status === 503 && meta.withdrawn;
+  const publicationNote = name => `${U.fieldText(name) || '这块'}正在更新访客版，稍后自动补上。`;
   const daysText = n => n < 1 ? '不到 1 天' : n < 365 ? `${Math.round(n)} 天` : `${Math.round(n / 365)} 年`;
   const fullText = n => n == null ? '' : `${n < 1 ? '' : '约 '}${daysText(n)}满`;
   // “约 N 天满”按后台给的日均增速算；写明按多快算的，免得和存储页的一周涨幅对不上还看不出为什么。
@@ -27,12 +29,12 @@
   const part = (name) => hero.querySelector(`[data-part="${name}"]`) || document.querySelector(`[data-part="${name}"]`);
   const notices = $('notices');
   Light.add(hero);
-  function showUnread(card, name, failed) {
+  function showUnread(card, name, failed, message = `${name}暂时读不到`) {
     if (!card) return;
     card.classList.toggle('is-unread', failed);
     let say = card.querySelector('[data-unread]');
     if (failed && !say) { say = document.createElement('p'); say.dataset.unread = ''; say.className = 'computer-chart-end'; card.querySelector('.card__body').append(say); }
-    if (say) { say.hidden = !failed; say.textContent = failed ? `${name}暂时读不到` : ''; }
+    if (say) { say.hidden = !failed; say.textContent = failed ? message : ''; }
   }
   function stabilityDetails(d) {
     const kinds = { bugcheck: '蓝屏', unexpected_power_loss: '非正常关机', whea_corrected: '硬件纠错', whea_fatal: '致命硬件错误', disk_error: '磁盘错误', clean_restart: '正常重启或关机' };
@@ -68,16 +70,18 @@
         return { set() {
         const href = computer?.stability?.href;
         if (stabilityWatch) return;
-        if (!href) { el.textContent = missing(); return; }
+        // 电脑连不上又没存下来：卡顶那行已经写了“这块没存下来”，下面不再写第二遍（r83 返修）
+        if (!href) { el.textContent = offline() && !computer?.stability ? '' : missing(); return; }
         const read = U.reading(el, { ghost: U.ghost.rows(3), name: '台式机稳不稳' });
         // 先占位再订阅：浏览器里存过这份数时 Live.watch 会当场回调 data，data 里又 renderStability → set()，不占位会重复订阅、无限递归
         stabilityWatch = true;
         stabilityWatch = window.Live.watch(href.replace(/^.*\/live\/v1\//, '').replace(/^\/__live\//, ''), null, {
-          data(d) { stabilityDetail = d; U.html(el, stabilityDetails(d)); read.done(); renderStability(); }, phase(st) { if (st.data == null) read.set(st); },
+          data(d) { stabilityDetail = d; U.html(el, stabilityDetails(d)); read.done(); renderStability(); }, phase(st) { if (st.data == null) { if (st.offline) { read.done(false); el.textContent = computer?.stability ? missing() : ''; } else read.set(st); } },
           link(st) { if (st.data == null && st.phase === 'none') { el.textContent = missing(); read.done(); } U.blockNote(el, st); },
         }); } };
       } }]);
-    showUnread(stabilityBoard.cards()[0], '台式机稳不稳', !offline() && stateDone && !s && !stabilityDetail);
+    showUnread(stabilityBoard.cards()[0], '台式机稳不稳', !offline() && stateDone && !s && !stabilityDetail,
+      mainRevoked ? publicationNote('台式机稳不稳') : undefined);
   }
   for (const a of document.querySelectorAll('.stage a[href^="/live/"]')) a.href = route(a.getAttribute('href'));
 
@@ -128,6 +132,7 @@
       hero: (lv) => (['yellow', 'red'].includes(lv) && series('disk-free')?.points?.some(p => p[1] != null) ? 'free' : 'rw'),
       line: (s) => { const r = sumOf(s, 'disk-read'), l = sumOf(s, 'disk-latency'); return r ? `${r.avg < 20 * 2 ** 20 ? '读写很少' : '读写不少'}，最忙是 ${clock(r.maxAt)}，读到 ${Chart.value(r.max, 'B/s')}${l ? `，响应最慢 ${Chart.value(l.max, 'ms')}` : ''}` : ''; } },
     { key: 'network', group: '网络', name: '网络', pic: '/live/img/grp-network.webp', palette: ['teal', 'pink'],
+      hasOther: () => !!computer?.traffic?.program_table?.separate || exitRows(exits?.items || computer?.exits, exits?.state).some(r => !['还没读到', '没有记录'].includes(r.status)),
       figures: [{ key: 'down', label: '下载', line: 'download' }, { key: 'up', label: '上传', line: 'upload' }, { key: 'ping', label: '延迟', line: 'net-ping' }],
       chips: [
         { key: 'rate', label: '全网速率', lines: [L('download', '下载'), L('upload', '上传')] },
@@ -174,7 +179,8 @@
 
   // ================= 组的级别和原因由后端给 =================
   // 不从读数自行推导告警。
-  let computer = null, charts = null, at = null, lastState = null, stateDone = false, netViewer = 'public';
+  let computer = null, charts = null, at = null, lastState = null, stateDone = false, netViewer = 'public', hardware = null;
+  let mainComputer = null, mainRevoked = false;
   let span = '24h', chartsWatch, chartsLayoutReady = false;
   const rangeButtons = document.querySelectorAll('#weave-card [data-range]');
   const rangeTitles = document.querySelectorAll('#weave-title [data-weave-title]');
@@ -182,16 +188,35 @@
   const chartGroups = new Map(), chartDone = new Set(), chartStates = new Map();
   // 读数 id：示意数约定的名字，和开发实例现在给的名字（cpu-usage_percent 这种）都认
   const METRIC_ALIAS = { cpu: 'cpu-usage_percent', 'cpu-temp': 'cpu-temperature_celsius', memory: 'memory-used_bytes', 'memory-total': 'memory-total_bytes', 'net-down': 'download_bytes_per_second' };
+  const LIGHT_READINGS = { cpu: 'cpu-temp', disk: 'disk-free', network: 'net-loss' };
   const stale = m => m?.q === 'stale' || m?.state === 'stale' || m?.stale === true;
   const restricted = m => m?.hidden || m?.hidden_block || m?.visibility === 'owner' || m?.public === 'owner' || m?.visibility === 'pending' || m?.rewrite === 'pending';
-  // 这页读到过、后来连不上：已经显示的即时读数照样留着、标“上次实测”几点，不按“没存下来”收走；冷开用的上次副本照旧（M741）。
-  const liveRead = () => offline() && lastState?.meta?.source === 'net';
+  const sampledAt = m => iso(m?.sampled_at ?? m?.source_at ?? m?.at);
+  const expired = m => Number.isFinite(m?.stale_after) && m.stale_after > 0 && Date.now() - Date.parse(sampledAt(m)) > m.stale_after * 1000;
+  const fresh = m => Number.isFinite(m?.value) && !!sampledAt(m) && m.q === 'ok' && !stale(m) && !m.read_error && !expired(m);
   const metric = (id) => {
     const m = computer?.metrics?.find(m => m.id === id || m.id === METRIC_ALIAS[id]);
     const b = V.blockState(m, gfOff);
-    const keep = stale(m) || !!m && (m.read_error === true || liveRead()) && Number.isFinite(m.value) && !!iso(m.at);
-    return m && { ...m, at: m.sampled_at ?? m.at, value: restricted(m) && (netViewer !== 'owner' || m.visibility === 'pending') ? m : (b?.empty || b?.wait) && !keep ? null : m.value };
+    const at = sampledAt(m), old = stale(m) || expired(m);
+    const keep = Number.isFinite(m?.value) && !!at && (old || m.read_error || offline());
+    return m && { ...m, at, stale: old, value: restricted(m) && (netViewer !== 'owner' || m.visibility === 'pending') ? m : (b?.empty || b?.wait) && !keep ? null : m.value };
   };
+  function applyHardware(d) {
+    if (!d?.metrics || hardware?.meta?.viewer?.kind !== netViewer || offline()) return d;
+    const readings = hardware.data?.metrics?.filter(fresh) || [];
+    const metrics = d.metrics.map(row => {
+      const reading = readings.find(m => m.id === row.id);
+      if (!reading) return row;
+      const next = { ...row, source_at: sampledAt(row) }, at = sampledAt(reading);
+      if (!window.Live.mergeHardware([next], [{ ...reading, at }])) return row;
+      return { ...next, sampled_at: at, timestamp_basis: reading.timestamp_basis };
+    });
+    return metrics.some((m, i) => m !== d.metrics[i]) ? { ...d, metrics } : d;
+  }
+  function readingRecovered(key, group) {
+    const m = LIGHT_READINGS[key] && metric(LIGHT_READINGS[key]);
+    return !offline() && fresh(m) && Date.parse(m.at) >= (Date.parse(group?.at) || 0);
+  }
   const series = (id) => charts?.series?.find((s) => s.id === id) || null;
   const sumOf = (s, id) => Chart.sum((s || charts)?.series?.find((x) => x.id === id));
   const clock = (t) => (t == null ? '' : U.time(new Date(t * 1000).toISOString()));
@@ -224,7 +249,7 @@
     if (key === 'machine') rows.unshift(['CPU', hostText('cpu-model', metric('cpu-model'))], ['显卡', hostText('gpu-model', metric('gpu-model'))], ['显存总量', capacity('gpu-memory-total')]);
     // 屏幕和首屏台式机格读同一份配置；笔记本的系统写在首屏笔记本格，自动恢复写在“台式机稳不稳”卡。
     if (key === 'machine' && configuredScreens().length) rows = rows.map(row => row[0] === '屏幕' ? [row[0], configuredScreens().map(r => `${r.label} ${screenBrief(r)}`).join('；')] : row);
-    if (offline()) rows = rows.filter(([, text]) => text && text !== '还没读到' && text !== missing());
+    if (offline()) rows = rows.filter(([, text]) => text && text !== '还没读到' && text !== '没有记录' && text !== missing());
     const updateLamp = U.status(metric('os-update'), { small: true }).lamp;
     return rows.length ? `<ul class="rows">${rows.map(([label, text, warn]) => `<li class="row row--flat"${warn ? ' style="--gut:25px"' : ''}>${warn ? updateLamp : ''}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(label, { name: '电脑信息', place: 'label' })}</span><span class="row__meta">${hostReadingHtml(label, text)}</span></p></div></li>`).join('')}</ul>` : offline() ? '' : `<p class="row__sub">${missing()}</p>`;
   }
@@ -369,6 +394,7 @@
   }
   function judge(key) {
     const given = computer?.groups?.find((g) => (g.key ?? g.id) === key);
+    if (given?.level === 'gray' && readingRecovered(key, given)) return null;
     return key === 'network' ? networkLoss(given) : given || null;
   }
   // 丢包按后台给的一位小数写（13.3%），首屏读数签、网络卡和告警写同一个数。
@@ -452,6 +478,57 @@
   const appBlock = () => computer?.blocks?.apps_now;
   const appGap = key => appBlock()?.rankings?.[key]?.missing_reason === 'read_failed' ? '这类进程明细读取失败' : '这类没读到进程明细';
   const sampleNote = at => iso(at) ? `${stale(appBlock()) || offline() ? '上次实测' : '采样'} ${U.time(at)}` : '';
+  // 三个榜各先露 3 个（/computer 回包的 apps_now）。后台给了同一次采样的整份榜（computer/processes?group=cpu|gpu|memory，L1）时，
+  // 每个榜底下“再看 10 个”每点一次多摆 10 个，一直能看到底；下一批在点之前先取好，点下去马上接上。换了一次采样就从头重取，已展开的照样展开。
+  // 后台没有这个读口（现役）或第一批就取不到时，照旧只列 3 个，不出按钮。续读的行只有程序名和读数（任务归属只跟着前 3 个）。
+  const APP_FIRST = 3, APP_STEP = 10;
+  const appMore = Object.fromEntries(APPS.map(([k]) => [k, { at: null, rows: null, prev: null, next: null, total: null, shown: APP_FIRST, busy: false, failed: null, gen: 0 }]));
+  let appRedraw = null;
+  function appSample(k, at) {
+    const m = appMore[k];
+    if (at === m.at) return;
+    m.gen += 1; m.at = at; m.prev = m.rows || m.prev; m.rows = null; m.next = null; m.total = null; m.failed = null;
+    if (at) appFill(k);
+  }
+  async function appFill(k) {
+    const m = appMore[k];
+    while (m.at && !m.busy && !m.failed && (m.rows == null || m.rows.length < m.shown + APP_STEP && m.next)) {
+      const gen = m.gen, first = m.rows == null;
+      m.busy = true;
+      let s = null;
+      try {
+        s = await window.Live.get('computer/processes', first ? { group: k, limit: String(Math.min(200, m.shown + APP_STEP)) }
+          : { group: k, limit: String(APP_STEP), cursor: m.next });
+      } catch { s = null; }
+      m.busy = false;
+      if (gen !== m.gen) continue;
+      const d = s?.data;
+      if (!Array.isArray(d?.items)) { m.failed = first ? 'first' : 'page'; break; }
+      m.rows = first ? d.items.map(a => ({ ...a, at: d.source_at })) : [...m.rows, ...d.items.map(a => ({ ...a, at: d.source_at }))];
+      m.next = d.items.length && d.next !== m.next ? d.next : null;
+      m.total = Number.isFinite(d.total) ? d.total : m.rows.length;
+      if (first) m.prev = null;
+    }
+    appRedraw?.();
+  }
+  // 续读的行照前 3 个的写法：访客看不到的名字照样写“仅本人可见”，程序名换成易认的名字
+  function sampleRows(k) {
+    const m = appMore[k], rows = m.rows || m.prev;
+    if (!(m.shown > APP_FIRST && rows)) return null;
+    return rows.slice(0, m.shown).map((a, i) => {
+      const hidden = restricted(a) && netViewer !== 'owner' || a.visibility === 'pending' || a.name && typeof a.name === 'object';
+      const name = hidden ? (typeof a.name === 'object' && a.name ? a.name : { visibility: a.visibility ?? 'owner', hidden_what: a.hidden_what, hidden_block: a.hidden_block }) : (U.programName?.(a.name) ?? a.name);
+      return { key: `${k}-s${i}`, name, value: hidden ? null : a.value, unit: hidden ? null : a.unit, at: hidden ? null : a.at, sub: '' };
+    });
+  }
+  function appMoreButton(k) {
+    const m = appMore[k], total = m.rows ? m.total : null, left = total == null ? 0 : total - m.shown;
+    const waiting = m.rows && m.rows.length < Math.min(total, m.shown) && !m.failed;
+    const hidden = !(m.failed === 'page' || left > 0 || waiting);
+    const text = m.failed === 'page' ? '这一批没读到，点一下再取 <span class="more__chev">›</span>' : waiting ? '正在取…'
+      : left > APP_STEP ? `再看 ${APP_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`;
+    return { hidden, waiting, text };
+  }
   function programRows(k) {
     const rows = new Map();
     for (const [i, a] of (computer?.apps_now?.[k] || []).entries()) {
@@ -479,20 +556,35 @@
     };
   }
   function appsChapter(el) {
-    el.innerHTML = `<div class="grp-trio">${APPS.map(([k, name]) => `<div><span class="grp-trio__k">${name} <small data-sample="${k}"></small></span><div data-x="${k}"></div></div>`).join('')}</div>
+    el.innerHTML = `<div class="grp-trio">${APPS.map(([k, name]) => `<div><span class="grp-trio__k">${name} <small data-sample="${k}"></small></span><div data-x="${k}"></div><button class="more" type="button" data-app-more="${k}" style="margin-top:8px" hidden></button></div>`).join('')}</div>
       <p style="margin:14px 0 0"><a class="more more--link" href="${esc(route('/live/apps/'))}">谁在占 <span class="more__chev">›</span></a></p>`;
     const end = document.createElement('p'); end.className = 'computer-chart-end'; el.prepend(end);
     const ranks = Object.fromEntries(APPS.map(([k]) => [k, V.rank(el.querySelector(`[data-x="${k}"]`), { show: Infinity, mark: true, missing: () => appGap(k), keepNameOnlyRows: true })]));
+    el.addEventListener('click', e => {
+      const btn = e.target.closest('[data-app-more]');
+      if (!btn || btn.disabled) return;
+      const m = appMore[btn.dataset.appMore];
+      // 第一次往下展开前记下卡片这时的高度：画照这个高度留在顶上，不跟着卡片拉长放大（L1）
+      const card = el.closest('.grp');
+      if (card && !card.classList.contains('grp--long')) { card.style.setProperty('--pic-h', `${card.offsetHeight}px`); card.classList.add('grp--long'); }
+      if (m.failed === 'page') m.failed = null; else m.shown += APP_STEP;
+      draw(); appFill(btn.dataset.appMore);
+    });
     const draw = () => {
       const entries = APPS.map(([k]) => [k, programRows(k)]), empty = !entries.some(([, rows]) => rows.length);
       el.querySelector('.grp-trio').hidden = empty; end.hidden = !empty || !computer; end.textContent = offline() ? missing() : '这次没读到进程明细';
-      if (!empty) for (const [k, rows] of entries) {
+      if (!empty) for (const [k, preview] of entries) {
+        if (!offline()) appSample(k, preview[0]?.at || null);
+        const rows = sampleRows(k) || preview;
         const at = rows[0]?.at;
         const shared = rows.length > 1 && at && rows.every(row => Date.parse(row.at) === Date.parse(at)) ? sampleNote(at) : '';
         el.querySelector(`[data-sample="${k}"]`).textContent = shared ? ` · ${shared}` : '';
         ranks[k].set(rows.length ? shared ? rows.map(a => ({ ...a, sub: a.gap })) : rows : null);
+        const btn = el.querySelector(`[data-app-more="${k}"]`), state = appMoreButton(k);
+        btn.hidden = state.hidden || offline(); btn.disabled = state.waiting; U.html(btn, state.text);
       }
     };
+    appRedraw = draw;
     draw();
     return { set: draw };
   }
@@ -523,14 +615,20 @@
     const names = { bilibili: '哔哩哔哩', claude: 'Claude', openai: 'OpenAI' };
     return [...new Set([...Object.keys(names), ...(items || []).map(x => x.id)])].map((id) => {
       const x = items?.find((r) => r.id === id) || {}, probing = state === 'probing' && id !== 'claude';
-      const status = x.ok === true ? (id === 'claude' ? `线路通${x.fixed_ip === false ? '，出口不是固定 IP' : ''}` : '通') : x.ok === false ? `不通${x.since ? ` · 从 ${U.time(x.since)} 起` : ''}` : U.collectionText();
-      const note = x.ms && typeof x.ms === 'object' ? x.ms : id === 'claude' && x.ok == null ? '' : [x.ms != null && (x.ms >= 1000 ? `${Number((x.ms / 1000).toFixed(x.ms < 10000 ? 2 : 1))} 秒` : `${Math.round(x.ms)} ms`), x.at && `${U.time(x.at)} 核验`, probing && '正在测…', id === 'claude' && x.fixed_ip === true && '出口是固定 IP ✓'].filter(Boolean).join(' · ');
-      return { id, name: names[id] || [x.label, x.name, x.title, x.text].find(v => sp(v) && !/^(?:没有记录|这一项)$/.test(sp(v))) || id, lamp: U.status(x, { small: true }).lamp, status, note };
+      // 与后台 network_exits.rows 一样，分别看该测点的原时刻，旧主包可能仍保存 ok=true。
+      const age = (Date.now() - Date.parse(x.at)) / 1000;
+      const stale = U.isStale(x) || Number.isFinite(age) && (age < 0 || age > (id === 'claude' ? 75 : 180));
+      const cutoff = stale && U.staleText({ at: x.at, stale: true });
+      const status = stale ? x.gap || cutoff || U.collectionText()
+        : x.ok === true ? (id === 'claude' ? `线路通${x.fixed_ip === false ? '，出口不是固定 IP' : ''}` : '通') : x.ok === false ? `不通${x.since ? ` · 从 ${U.time(x.since)} 起` : ''}` : U.collectionText();
+      const note = stale ? [id === 'claude' && x.gap && cutoff, probing && '正在测…'].filter(Boolean).join(' · ')
+        : x.ms && typeof x.ms === 'object' ? x.ms : id === 'claude' && x.ok == null ? '' : [x.ms != null && (x.ms >= 1000 ? `${Number((x.ms / 1000).toFixed(x.ms < 10000 ? 2 : 1))} 秒` : `${Math.round(x.ms)} ms`), x.at && `${U.time(x.at)} 核验`, probing && '正在测…', id === 'claude' && x.fixed_ip === true && '出口是固定 IP ✓'].filter(Boolean).join(' · ');
+      return { id, name: names[id] || [x.label, x.name, x.title, x.text].find(v => sp(v) && !/^(?:没有记录|这一项)$/.test(sp(v))) || id, lamp: U.status(stale ? { level: 'gray' } : x, { small: true }).lamp, status, note };
     });
   }
   function exitsChapter(el) {
     el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><p class="grp-split__k">连得上吗</p><div data-exits></div><div data-draw10-network></div></section>';
-    drawExits = () => { U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || r.status !== '还没读到'); el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`); };
+    drawExits = () => { U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || ''); const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || !['还没读到', '没有记录'].includes(r.status)); /* 块已经说没存下来，下面不再列一串“没有记录”（r83 返修第二轮） */ el.querySelector('.vz-exits').hidden = offline() && !rows.length; U.html(el.querySelector('[data-host-readings]'), hostRows('network')); U.html(el.querySelector('[data-exits]'), rows.map((r) => `<div class="exit-row" style="grid-template-columns:12px 100px 14em minmax(0,1fr)" data-exit="${esc(r.id)}">${r.lamp || '<span></span>'}<b>${U.fieldHtml(r.name, { name: '线路', place: 'label' })}</b><span>${U.fieldHtml(r.status, { name: '线路状态' })}</span><small>${U.fieldHtml(r.note, { name: '线路说明' })}</small></div>`).join('') || `<p class="row__sub">${missing()}</p>`); };
     finishExitAnchor(el.querySelector("#exits"));
     return { set: drawExits };
   }
@@ -675,7 +773,8 @@
       if (hasReadings && card.level === 'gray') scopeGroupStatus(card);
       const why = card.why !== card.text && card.why !== card.stale_text ? card.why : '';
       const empty = b?.empty && !hasReadings;
-      return { ...card, cutoffIds: { '': ids, [g.name]: ids }, wait, readHeight: card.readHeight || (wait ? chartReadingHeights[g.key] || 210 : undefined), empty, line: empty && !ended ? b.text : '',
+      const publication = !offline() && publicationRevoked(chartStates.get(g.group)?.meta) ? publicationNote(g.name) : '';
+      return { ...card, cutoffIds: { '': ids, [g.name]: ids }, wait, readHeight: card.readHeight || (wait ? chartReadingHeights[g.key] || 210 : undefined), empty, line: publication || (empty && !ended ? b.text : ''),
         blocks: b && !ended ? [{ key: g.name, ...b, text: chartNote === why || chartNote === card.reason ? '' : chartNote }] : [] };
     });
     const st = stutterGroup(), j = judge('stutter');
@@ -737,10 +836,12 @@
     for (const g of list) {
       const def = activeGroups().find(x => x.key === g.key), alert = ['yellow', 'red'].includes(g.level) && g.reason;
       const hardware = g.key === 'machine' && ['cpu-model', 'gpu-model', 'os', 'displays'].some(id => metric(id)?.value != null);
-      const has = alert || (def ? groupHasReadings(g.key) || hardware : g.key === 'stutter' ? computer?.stutters != null : computer != null);
-      const ready = def ? chartDone.has(def.group) || stateDone && !computer : !!computer || stateDone;
+      const has = alert || (def ? groupHasReadings(g.key) || hardware || (g.key === 'network' && exits?.items?.length)
+        : g.key === 'stutter' ? computer?.stutters != null : computer != null);
+      const ready = def ? chartDone.has(def.group) || stateDone && !computer && !mainRevoked : !!computer || stateDone;
+      const revoked = def ? publicationRevoked(chartStates.get(def.group)?.meta) : mainRevoked;
       const card = $('board').querySelector(`.grp[data-key="${CSS.escape(g.key)}"]`);
-      showUnread(card, g.name, !offline() && ready && !has);
+      showUnread(card, g.name, !offline() && ready && !has, revoked ? publicationNote(g.name) : undefined);
       if (g.key === 'network' && card) renderSeparateTraffic(card);
     }
     hero.classList.toggle('is-unread', !offline() && stateDone && !computer);
@@ -822,8 +923,10 @@
       const chapter = card.querySelector('.grp__chapter');
       let note = chapter.querySelector('.computer-chart-end');
       if (!note) { note = document.createElement('p'); note.className = 'computer-chart-end'; note.dataset.keep = ''; chapter.prepend(note); }
-      const reason = ended ? offline() ? state?.say || missing() : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
-      note.hidden = !known.length && (!ended || offline() && card.querySelector('.grp__said')?.textContent.includes('这块没存下来'));
+      const publication = !offline() && publicationRevoked(state?.meta) ? publicationNote(g.name) : '';
+      const reason = publication ? (card.querySelector('.grp__said')?.textContent.includes(publication) ? '' : publication)
+        : ended ? offline() ? (known.length || g.hasOther?.() ? '曲线没存下来，连上后补上。' : state?.say || missing()) : pack?.gap || `${g.name}曲线暂时读不到` : known.length ? '曲线还在读' : '';
+      note.hidden = !known.length && (!reason || offline() && card.querySelector('.grp__said')?.textContent.includes('这块没存下来'));
       U.html(note, [...known, U.fieldHtml(reason, { name: g.name })].filter(Boolean).join('　'));
     }
     const ready = weaveReady();
@@ -882,21 +985,16 @@
     const unreadNote = g => { if (g.key === 'stutter') return stutterNote(g); const stamp = at(g); return stamp ? '最后读到 ' + esc(stamp) : '没读到上次记录'; };
     const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
     const label = g => U.fieldHtml(g.name, { name: '检测分组' });
-    const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => [label(g), at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，'));
-    const instantIds = { cpu: 'cpu-temp', disk: 'disk-free', network: 'net-loss' };
-    const unread = groups.unread.flatMap(g => {
-      const id = instantIds[g.key];
-      const measured = id && snapshot(id);
-      if (measured?.at) {
-        const m = metric(id);
-        // The packet can replace readings without recomputing its earlier attention summary.
-        // 3 分钟内刚读到的也不算暂缺（M021：一两分钟前刚读到的被写成暂缺）。
-        const t = Date.parse(measured.at), since = Date.parse(g.at) || 0;
-        if (!offline() && (t > since && m.q === 'ok' && !stale(m) && !m.read_error || t >= since && Date.now() - t <= 180000)) return [];
-        g = { ...g, at: measured.at };
-      }
-      return [`${label(g)}（${unreadNote(g)}）`];
-    });
+    // 已确认的那组写出是什么（用回包里同一句说明，如“防护状态：有防火墙配置未启用”），读到时刻和谁在处理放括号里；和安全页页顶同一种写法（M1010）
+    const said = g => { const why = g.reason ?? g.why, text = why == null ? '' : U.fieldText(why).trim(); return text && text !== U.fieldText(g.name).trim() ? '：' + U.fieldHtml(why, { name: '异常说明' }) : ''; };
+    const confirmed = groups.confirmed.map(g => g.key === 'network' ? networkLoss(g) : g).map(g => `${label(g)}${said(g)}（${[at(g) && esc(at(g)) + ' 读到', who(g)].filter(Boolean).join('，')}）`);
+    const unread = g => {
+      if (readingRecovered(g.key, g)) return [];
+      const m = LIGHT_READINGS[g.key] && metric(LIGHT_READINGS[g.key]);
+      const reason = m?.read_error ? esc(U.collectionText('', { ...m, source_at: m.at })) : unreadNote(m?.at ? { ...g, at: m.at } : g);
+      return [`${label(g)}（${reason}）`];
+    };
+    const you = U.you(netViewer);
     const review = groups.review.map(g => {
       const href = route('/live/security/') + '#grp-impersonation';
       // 说清是什么、要做什么：程序身份筛查找出的是没签名或路径不常见的程序，要确认不是冒充的。
@@ -904,8 +1002,8 @@
       const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
         g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, at(g) && `${at(g)} 读到`,
         g.ai_fixing === true ? 'AI 在逐个核对'
-          : screening && g.strong === 0 ? '这些线索待核对，眼下不用你处理。'
-          : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
+          : screening && g.strong === 0 ? `这些线索待核对，眼下不用${you}处理。`
+          : `下一步：交给 AI 逐个核对签名和安装位置，${you}不用自己查；现在还没有 AI 接手`].filter(Boolean);
       return `<a href="${esc(href)}">${label(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${esc(fields.join('；'))}）`;
     });
     // M666：后台给了缺组 missing_readings 就照它写（两版都写出缺的组名），能对上分组的带上次读到的时刻。
@@ -915,10 +1013,15 @@
     const stutterRow = (computer?.groups || []).find(x => x.key === 'stutter');
     const rowFallback = name => name === names.stutter && stutterRow ? { key: 'stutter', name, ...(Object.hasOwn(stutterRow, 'recorded_at') ? { recorded_at: stutterRow.recorded_at } : {}),
       observed_at: stutterRow.at, missing: stutterRow.missing, read_error: stutterRow.read_error } : null;
-    const lacking = givenMissing?.length ? givenMissing.map(name => { const g = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name) || rowFallback(name); return `${esc(name)}${g ? `（${unreadNote(g)}）` : ''}`; }) : unread;
+    const lacking = givenMissing?.length ? givenMissing.flatMap(name => {
+      const key = Object.keys(names).find(key => names[key] === name);
+      const row = groups.unread.find(x => sp(U.fieldText(x.name)).trim() === name) || rowFallback(name)
+        || computer?.groups?.find(g => (g.key ?? g.id) === key);
+      return row ? unread({ ...row, key: row.key ?? key, name }) : [esc(name)];
+    }) : groups.unread.flatMap(unread);
     const known = computer?.attention_count != null || computer?.attention_groups != null || computer?.attention_summary || !!givenMissing?.length;
     const lines = [`<b>已确认异常 ${confirmed.length} 组</b>${confirmed.length ? ' · ' + confirmed.join('；') : ''}`,
-      lacking.length && `<b>读数暂缺 ${lacking.length} 组</b> · ${lacking.join('、')}`,
+      lacking.length && `有 ${lacking.length} 项这次没读到（${lacking.join('、')}），电脑好不好先按读到的判断`,
       review.length && `<b>需核实 ${review.length} 组</b> · ${review.join('、')}`].filter(Boolean);
     part('count').hidden = !known;
     U.html(part('count'), known ? lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join('') : '');
@@ -980,15 +1083,18 @@
       const go = t.key === 'gpu' ? 'cpu' : t.key;
       const empty = offline() ? '' : `${NAME[t.key]} ${pendingTags.includes(t.key) ? '正在读…' : U.collectionText()}`;
       const body = U.fieldHtml(text || empty, { name: NAME[t.key] }), marker = body.includes('live-mark');
-      return `<i class="mach__pt" style="left:${pt[0]}%;top:${pt[1]}%"></i><${marker ? 'span' : 'a'} class="mach__tag${text ? '' : ' is-none'}"${offline() && !text ? ' hidden' : ''}${marker ? '' : ` href="#grp-${go}" data-goto="${go}"`} style="left:${Math.min(94, Math.max(12, at[0]))}%;top:${at[1]}%">${U.status(reading, { small: true }).lamp}${body}</${marker ? 'span' : 'a'}>`;
+      const shown = ['gpu', 'power'].includes(t.key) && !marker && typeof text === 'string' && text.includes('上次实测')
+        ? `<span>${body.replaceAll('上次实测', '<span class="mach__tag-note">上次实测</span>')}</span>` : body;
+      return `<i class="mach__pt" style="left:${pt[0]}%;top:${pt[1]}%"></i><${marker ? 'span' : 'a'} class="mach__tag${text ? '' : ' is-none'}"${offline() && !text ? ' hidden' : ''}${marker ? '' : ` href="#grp-${go}" data-goto="${go}"`} style="left:${Math.min(94, Math.max(12, at[0]))}%;top:${at[1]}%">${U.status(reading, { small: true }).lamp}${shown}</${marker ? 'span' : 'a'}>`;
     }).join(''));
-    // 标签变长（比如连不上时多了“上次”）会往左伸进左栏、压住那边的字：左沿最多到左栏正文右沿外 16px，
-    // 再往左就把标签往右挪，右边不出卡片（留 12px）。在线时现有的标签都够不着这条线，位置不变（M741）。
-    const body = hero.querySelector('.card__body'), edge = body.getBoundingClientRect().right - parseFloat(getComputedStyle(body).paddingRight) + 16;
-    const right = hero.querySelector('.card__glass').getBoundingClientRect().right - 12;
+    // 窄窗把长浮签折在插画里。宽窗沿用浮签的单行排版和原来的避让边界。
+    const narrow = matchMedia('(max-width: 1100px)').matches, body = hero.querySelector('.card__body');
+    const left = narrow ? frame.left + 12 : body.getBoundingClientRect().right - parseFloat(getComputedStyle(body).paddingRight) + 16;
+    const right = (narrow ? frame.right : hero.querySelector('.card__glass').getBoundingClientRect().right) - 12;
     for (const tag of part('tags').querySelectorAll('.mach__tag:not([hidden])')) {
-      const r = tag.getBoundingClientRect(), shift = Math.min(edge - r.left, right - r.right);
-      if (r.width && shift > 0) tag.style.left = `calc(${tag.style.left} + ${shift.toFixed(1)}px)`;
+      const r = tag.getBoundingClientRect();
+      const shift = narrow ? Math.max(left - r.left, Math.min(0, right - r.right)) : Math.max(0, Math.min(left - r.left, right - r.right));
+      if (r.width && shift) tag.style.left = `calc(${tag.style.left} + ${shift.toFixed(1)}px)`;
     }
   }
 
@@ -1045,18 +1151,26 @@
     });
   }
   function renderDevices(d) {
-    const list = d.devices?.length ? d.devices : homeDevices || [];
+    const list = (d.devices?.length ? d.devices : homeDevices || []).map(U.laptopConnection);
     const hasHardware = x => x.configuration?.length || [].concat(x.hw || []).some(Boolean);
     let hardware = '';
     part('devs').classList.toggle('has-hardware', list.some(hasHardware));
     U.html(part('devs'), list.filter(x => !offline() || ['online', 'offline'].includes(x.state) || hasHardware(x) || laptopUnavailable(x)).map((x) => {
       // 页面连不上时台式机不写“在线”（那是断开前的旧状态，和顶上“连不上电脑”打架），用现成的“连不上”（M741）。
-      const state = laptopUnavailable(x) || (offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online') ? '连不上' : x.text || DEV_STATE[x.state] || '');
-      const inner = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>${U.fieldHtml(state, { name: '设备状态', place: 'label' })}`;
+      const isLaptop = x.id === 'secondary_laptop';
+      const reported = (isLaptop ? DEV_STATE[x.state] : x.text || DEV_STATE[x.state]) || '';
+      const disconnected = !isLaptop && offline() && (/^(电脑不在线|不在线)$/.test(x.text || '') || x.id === 'main' && !x.text && x.state === 'online');
+      const unavailable = laptopUnavailable(x);
+      const state = unavailable || offSinceText(x) || (disconnected ? '连不上' : reported);
+      const badge = `${U.status(x, { small: true }).lamp}<b>${U.fieldHtml(DEV_NAME[x.id] || x.label || x.name || x.title || x.text || x.id, { name: DEV_NAME[x.id] || '设备', place: 'label' })}</b>`;
+      const reading = U.fieldHtml(state, { name: '设备状态', place: 'label' });
+      const inner = badge + reading;
       const pc = x.pc || PC[x.id];
       const detail = { phone: '/live/phone/', secondary_laptop: '/live/laptop/' }[x.id];
       const connect = pc ? `<a class="dev-pill" href="/mcp/?pc=${esc(pc)}" data-needs-pc>${detail ? '远程连接 ›' : inner}</a>` : '';
-      const pill = detail ? `<a class="dev-pill" href="${esc(route(detail))}">${inner} ›</a>${connect}` : connect || `<span class="dev-pill">${inner}</span>`;
+      const readingLink = `${reading} ›`;
+      const detailReading = unavailable ? `<span class="dev-laptop-unavailable">${readingLink.replace(/读不到|\d\d-\d\d \d\d:\d\d 起 ›/g, '<span>$&</span>')}</span>` : readingLink;
+      const pill = detail ? `<a class="dev-pill" href="${esc(route(detail))}">${badge}${detailReading}</a>${connect}` : connect || `<span class="dev-pill">${inner}</span>`;
       const notes = [x.name, x.text].map(value => U.fieldHtml(value, { name: '设备信息' })).filter(html => html.includes('live-mark')).join(' ');
       if (x.id === 'main' && x.configuration?.length) {
         const rows = x.configuration;
@@ -1078,7 +1192,9 @@
       // 笔记本的系统写在笔记本格里（原来夹在“机器自己”卡里）。
       const os = x.id === 'secondary_laptop' && x.os != null ? `<p class="row__sub">${U.fieldHtml(typeof x.os === 'object' ? x.os : `系统 ${sp(x.os)}`, { name: '笔记本系统' })}</p>` : '';
       hw = U.mergePrivateRows(hw, { kind: netViewer });
-      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
+      // 后台给了 presence、两条路的证据都不够（unknown），调试连接也不是确实断了：格里大字照旧，这句放进小字（主持 11-26 01:56 定）
+      const linkNote = x.id === 'phone' && x.presence?.state === 'unknown' && x.state !== 'offline' ? '<p class="row__sub">手机连接状态暂时读不到</p>' : '';
+      return `<div class="dev-spec">${pill}${notes ? `<p class="row__sub">${notes}</p>` : ''}${linkNote}${hw.length ? `<p class="row__sub row__hw"${x.hw_at ? ` title="${esc(`${U.date(x.hw_at)} ${U.time(x.hw_at)} 的硬件信息`)}"` : ''}>${hw.map(s => s.private_count ? `<span class="computer-hw-item">${U.privateSummary(s.private_count, { unit: '项' })}</span>` : `<span class="computer-hw-item" title="${U.fieldHtml(s, { name: '硬件信息', place: 'label' })}">${unitHtml(s)}</span>`).join('')}</p>` : ''}${os}${battery}</div>`;
     }).join('') + remoteEntries(d.remote));
     U.html(hardwarePane, hardware, false);
     if (!hardware) hardwarePane.hidden = true;
@@ -1088,6 +1204,25 @@
     if (x.id !== 'secondary_laptop' || x.availability !== 'unavailable') return '';
     const since = readingStamp(x.unavailable_since);
     return '笔记本状态暂时读不到' + (since ? ` · 自 ${since} 起` : '');
+  }
+  // 几点起离线（本人 11-25 23:19 选 A：台式机、笔记本那一行写“HH:MM 起离线”）：
+  // 台式机看页面确认离线时边缘给的关机时刻（X-Live-Offline-Since）；笔记本看后台 offline_since（这次持续离线的第一次观察，M918）
+  // 手机那一行和实况首页、手机页同一套（主持 11-26 定）：调试连接和 Tailscale 都找不到才叫离线（presence 同级的 offline_since），
+  // 只有电脑到手机的调试连接断写“电脑连不上 · HH:MM 起”（offline.since），手机这时可能还在线
+  function offSinceText(x) {
+    const link = lastState?.link;
+    // 带不带日期拿现在的北京日期比（和页顶“电脑 HH:MM 起离线”一致）；不拿这份数的时刻当今天，电脑离线跨了零点时那份数还是昨天的
+    const stamp = since => `${U.date(since) !== U.date(Date.now()) ? `${U.date(since)} ` : ''}${U.time(since)}`;
+    // 只断调试连接：这格已印着“手机”，写“电脑连不上”，看得出是电脑这头连不上它、手机可能还在线（主持 11-26 定）；
+    // 没有起点、后台也没给别的说法时同样写“电脑连不上”，不写成像手机自己毛病的“连不上”
+    if (x.id === 'phone' && x.presence?.state !== 'offline' && x.state === 'offline') {
+      const since = Number.isFinite(Date.parse(x.offline?.since)) ? ` · ${stamp(x.offline.since)} 起` : '';
+      if (since || !x.text) return `电脑连不上${since}`;
+    }
+    const since = x.id === 'main' && offline() && link?.reason === 'host-off' ? link.offSince
+      : x.id === 'secondary_laptop' && x.state === 'offline' ? x.offline_since
+      : x.id === 'phone' && x.presence?.state === 'offline' ? x.offline_since : null;
+    return Number.isFinite(Date.parse(since)) ? `${stamp(since)} 起离线` : '';
   }
   function unitHtml(text, name = '硬件信息') { const body = U.fieldHtml(text, { name }); return body.includes('live-mark') ? body : body.replace(/\d+(?:[.,]\d+)*\s*(?:[GMKT]B|ms|GHz|MHz|Hz|℃|次|个|%)/g, '<span class="computer-unit">$&</span>'); }
   function remoteEntries(items) {
@@ -1136,9 +1271,12 @@
     const taskLinks = jobs.filter(x => !x.open?.conversation && x.live !== true).map(interruptItem).join('');
     const links = chatLink + taskLinks;
     const gap = it?.gap ? `<small class="row__sub">${U.fieldHtml(it.gap, { name: '重启前可参考的信息' })}</small>` : '';
-    const note = U.status({ ...d, attention_count: null, gray_count: null }, { showZeroFixing: false }).note;
-    part('note').hidden = !(said || note || links);
-    U.html(part('note'), note + (said ? `<span>${U.fieldHtml(said, { name: '重启影响' })}</span>` : '') + gap + links);
+    const why = typeof d.why === 'string' && (d.missing_readings?.length || d.attention_summary?.unread?.length)
+      ? d.why.replace(/^判断状态的读数不完整[，,。]?/, '') : d.why;
+    const note = U.status({ ...d, why, attention_count: null, gray_count: null }, { showZeroFixing: false }).note;
+    const hardwareNote = computer && !offline() && publicationRevoked(hardware?.meta) ? `<span>${esc(publicationNote('电脑读数'))}</span>` : '';
+    part('note').hidden = !(said || note || links || hardwareNote);
+    U.html(part('note'), note + (said ? `<span>${U.fieldHtml(said, { name: '重启影响' })}</span>` : '') + gap + links + hardwareNote);
     renderGrafana();
     renderDevices(d);
     renderTags();
@@ -1172,14 +1310,16 @@
   const responsiveness = window.ComputerResponsiveness?.mount($('responsiveness'));
   window.Live.watch('computer', null, {
     phase(state) {
-      if (state.data != null) return;
+      if (state.data != null || mainRevoked) return;
       heroRead.set(state);
       if (!stateDone && (state.phase === 'none' || state.phase === 'gone')) { stateDone = true; refresh(); }
     },
     data: (raw, meta) => keepWeavePosition(() => {
       netViewer = meta.viewer?.kind || 'public';
       const previousGroups = activeGroups().map(g => g.group).join('\n');
-      computer = raw;
+      mainComputer = raw;
+      mainRevoked = !offline() && publicationRevoked(meta);
+      computer = applyHardware(raw);
       watchStream(raw);
       responsiveness?.(raw?.responsiveness, netViewer);
       window.DisplayRecovery?.watch(raw?.display_recovery?.href, () => { if (stabilityEl && stabilityDetail) U.html(stabilityEl, stabilityDetails(stabilityDetail)); });
@@ -1187,7 +1327,7 @@
       if (raw && !raw.devices?.length && !devicesWatch) devicesWatch = window.Live.watch('home', null, {
         data(d) { homeDevices = d?.computer?.devices || []; renderDevices(computer || {}); },
       });
-      const d = raw || {};
+      const d = computer || {};
       grafana = d.grafana || null;
       at = meta.at;
       renderHero(d);
@@ -1200,20 +1340,27 @@
       gfState();
       if (raw) {
         Light.tone(hero, tone(raw));
-        if (first) { heroRead.done(); showAnchor(); }
+        heroRead.done();
+        if (first) showAnchor();
         first = false;
       }
       requestAnimationFrame(lightUp);
     }),
     link: state => keepWeavePosition(() => {
       lastState = state;
+      const wasRevoked = mainRevoked;
+      mainRevoked = !state.offline && !state.publicPaused && publicationRevoked(state.meta);
       gfState();
       if (computer) { refresh(); renderHero(computer); renderStability(); drawExits(); }
       bar?.set(state);
       Light.offline(state.offline);
       renderNotices(state);
-      if (state.data == null && state.phase === 'none') { heroRead.set(state); U.html(part('head'), U.head(state.text || U.collectionText())); requestAnimationFrame(lightUp); }
-      if (state.data == null && !stateDone && (state.phase === 'none' || state.phase === 'gone')) { stateDone = true; refresh(); }
+      if (state.data == null && state.phase === 'none') {
+        if (mainRevoked) heroRead.done(false); else heroRead.set(state);
+        U.html(part('head'), U.head(mainRevoked ? publicationNote('电脑读数') : state.text || U.collectionText()));
+        requestAnimationFrame(lightUp);
+      }
+      if (state.data == null && (!stateDone || mainRevoked !== wasRevoked) && (state.phase === 'none' || state.phase === 'gone')) { stateDone = true; refresh(); }
       if (state.phase === 'gone') requestAnimationFrame(lightUp);
       U.blockNote(hero.querySelector('.card__body'), state);
     }),
@@ -1222,8 +1369,16 @@
   // 小包不带 rev，data 只来第一次；每读完一次都会来的是 link。
   window.Live.watch('computer/hardware', null, {
     link: state => {
-      if (!computer || offline() || state.meta?.viewer?.kind !== netViewer) return;
-      if (window.Live.mergeHardware(computer.metrics, state.data?.metrics)) keepWeavePosition(() => { refresh(); renderHero(computer); });
+      const wasRevoked = publicationRevoked(hardware?.meta);
+      hardware = state;
+      const revoked = publicationRevoked(state.meta);
+      const next = revoked ? mainComputer : applyHardware(computer);
+      if (next !== computer || revoked !== wasRevoked) keepWeavePosition(() => {
+        computer = next;
+        if (revoked && charts) paintCharts(false);
+        refresh();
+        if (computer) renderHero(computer);
+      });
     },
   });
 
@@ -1314,6 +1469,15 @@
     weaveMarks();
   }
 
+  function revokeChart(group, state) {
+    if (publicationRevoked(chartStates.get(group)?.meta)) return;
+    chartGroups.delete(group);
+    chartDone.add(group);
+    chartStates.set(group, state);
+    paintCharts(false);
+    refresh();
+    renderTags();
+  }
   function watchCharts(rangeChange = false) {
     if (rangeChange) {
       weaveCard.style.minHeight = `${weaveCard.offsetHeight}px`;
@@ -1353,14 +1517,17 @@
       },
       phase: state => keepWeavePosition(() => {
         if (state.data != null) return;
+        if (!state.publicPaused && publicationRevoked(state.meta)) { revokeChart(g.group, state); return; }
         if (!['none', 'gone'].includes(chartStates.get(g.group)?.phase) || ['none', 'gone'].includes(state.phase)) chartStates.set(g.group, state);
         board.groupPhase(g.key, state);
         if (state.phase === 'none' || state.phase === 'gone') {
           chartDone.add(g.group); paintWeave(charts); refresh(); renderTags();
         } else if (!chartDone.has(g.group)) weaveRead?.set(state);
       }),
-      data: d => keepWeavePosition(() => {
-        if (!d) return;
+      data: (d, meta) => keepWeavePosition(() => {
+        // 带点数的读口撤回后会改读原查询，收到空数据时先清这组再等下一次读数。
+        if (!d) { if (publicationRevoked(meta)) revokeChart(g.group, { phase: 'none', meta }); return; }
+        chartStates.delete(g.group);
         chartDone.add(g.group); chartGroups.set(g.group, d);
         paintCharts(rangeChange);
         refresh();
@@ -1382,7 +1549,7 @@
   }
   watchCharts();
   let exitsGeneration = 0;
-  const probeExits = () => { const generation = ++exitsGeneration; return readExits(async (query) => { let r = await window.Live.get('computer/exits', query); if (r?.meta?.source === 'copy') r = await window.Live.get('computer/exits', query); return r; }, (d) => { exits = d; drawExits(); }, () => generation === exitsGeneration); };
+  const probeExits = () => { const generation = ++exitsGeneration; return readExits(async (query) => { let r = await window.Live.get('computer/exits', query); if (r?.meta?.source === 'copy') r = await window.Live.get('computer/exits', query); return r; }, (d) => { exits = d; if (!computer) refresh(); drawExits(); }, () => generation === exitsGeneration); };
   probeExits(); document.querySelector('.live-at')?.addEventListener('click', probeExits);
   function finishExitAnchor(target) {
     if (exitJump !== 'waiting' || !target) return;

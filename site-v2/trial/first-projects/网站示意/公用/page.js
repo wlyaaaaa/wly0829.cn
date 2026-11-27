@@ -38,13 +38,14 @@ function parseItem(text) {
   return {type,step,children,name:named?.[1],main:named ? named[2] : main};
 }
 const panes = new Map(), shots = new Map(), paginations = new Map();
-const detailCount = item => item.detail.filter(text=>parseItem(text).type !== 'heading').length;
+// 细节条数＝右栏编了号的那几条：小标题不算，“出处”“源码”放在栏底另列、也不算（和右栏的 01、02… 对得上）
+const detailCount = item => item.detail.map(parseItem).filter(entry=>entry.type !== 'heading' && !['出处','源码'].includes(entry.name)).length;
 function fitPictures() {
   pictures.style.setProperty('--picture-scale',Math.min(1,document.documentElement.clientWidth / pictures.offsetWidth));
 }
 const notes = pictures.querySelector(':scope > .owner-note, :scope > .owner-notes');
 const firstPicture = pictures.querySelector('[data-initial-cover]');
-let active, opener, originalRect;
+let active, opener, originalRect, openedId;
 data.forEach((item,index) => {
   const figure = (!index && firstPicture) || document.createElement('section'); figure.className = 'picture';figure.id = item.id;
   figure.classList.toggle('buttons-below',!!item.buttonsBelow);
@@ -115,7 +116,10 @@ function buildPane(item) {
   const index = data.indexOf(item), pagination = document.createElement('nav');pagination.className = 'pagination';pagination.ariaLabel = '翻张';pagination.dataset.picture = item.id;pagination.style.setProperty('--order',order++);
   for (const delta of [-1,1]) {
     const next = data[index+delta];if (!next) {pagination.append(document.createElement('span'));continue;}
-    const button = document.createElement('button');button.type = 'button';button.textContent = delta < 0 ? `‹ 上一张 ${next.title}` : `下一张 ${next.title} ›`;
+    const button = document.createElement('button');button.type = 'button';
+    // 下一张：标题最后两个字和“›”连在一起折行，不让“›”带一个字单独掉到下一行
+    if (delta < 0) button.textContent = `‹ 上一张 ${next.title}`;
+    else { const chars = [...next.title], tail = document.createElement('span');tail.style.whiteSpace = 'nowrap';tail.textContent = `${chars.slice(-2).join('')} ›`;button.append(`下一张 ${chars.slice(0,-2).join('')}`,tail); }
     button.addEventListener('click',()=>openDetails(next));pagination.append(button);
   }paginations.set(item.id,pagination);return pane;
 }
@@ -157,6 +161,7 @@ function openDetails(item,button) {
     return;
   }
   const wasOpen = dialog.open && state === 'open';
+  if (!wasOpen) openedId = item.id;
   fillDetails(item);
   document.body.classList.add('reading');document.body.dataset.detailState = 'open';document.body.dataset.activePicture = item.id;
   if (!dialog.open) dialog.showModal();
@@ -177,6 +182,8 @@ function closeDetails() {
   document.body.dataset.detailState = 'closing';dialog.classList.remove('open');
   shot.style.setProperty('--shot-x',`${originalRect.left}px`);shot.style.setProperty('--shot-y',`${originalRect.top-document.querySelector('.site-header').offsetHeight}px`);shot.style.setProperty('--shot-scale',originalRect.width/active.width);
   dialog.close();document.body.classList.remove('reading');document.body.dataset.detailState = 'closed';delete document.body.dataset.activePicture;
+  // 没有动效时也停在收起前正在看的那张（M723）：翻过张的，页面挪到那张；没翻过的不挪，停在原处
+  if (active.id !== openedId) document.getElementById(active.id)?.scrollIntoView({block:'start',behavior:'instant'});
   opener.setAttribute('aria-expanded','false');opener.focus({preventScroll:true});
 }
 closeButton.addEventListener('click',closeDetails);

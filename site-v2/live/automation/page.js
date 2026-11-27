@@ -52,10 +52,12 @@ window.LegacyAutomation = function (bar) {
   const scheduledAgain = t => t.enabled !== false && !['paused', 'disabled'].includes(t.state)
     && t.scheduled_again !== false && (future(t) || t.scheduled_again === true && raw(t.schedule) !== '单次运行');
   const next = t => future(t) ? time(nextAt(t), true) : '下次时间未读到';
+  // 平台名：三家都认（Antigravity 的定时 11-25 起也进这一组，M921）
+  const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
   const provider = t => {
     const id = raw(t.scheduler);
-    return id === 'codex' || id === 'claude'
-      ? `<span class="automation-provider" data-provider="${id}">${id === 'codex' ? 'Codex' : 'Claude'}</span>` : '平台未读到';
+    return Object.hasOwn(PROVIDERS, id)
+      ? `<span class="automation-provider" data-provider="${id}">${PROVIDERS[id]}</span>` : '平台未读到';
   };
   function row(t, pickup) {
     const title = field(t.display_name ?? t.name, '任务名', 'title') || '任务名未读到';
@@ -72,7 +74,8 @@ window.LegacyAutomation = function (bar) {
     const cells = pickup ? [field(trigger, '触发条件') || '触发条件未读到', todayText, recent]
       : [provider(t), field(t.schedule, '调度') || '调度未读到', next(t)];
     const href = route('/live/task/', { id: t.id });
-    const actions = viewer === 'owner' ? U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : '';
+    // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
+    const actions = U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
     const state = pickup ? last?.result : { running: 'running', failed: 'failed', warn: 'warn' }[t.state] || t.last?.result;
     return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${title}</a></div>${cells.map(value => `<p class="lb-cell">${value}</p>`).join('')}<div class="row__acts">${actions}</div>` };
   }

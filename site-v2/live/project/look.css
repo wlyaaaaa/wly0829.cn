@@ -89,6 +89,8 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-hero-fold:not(.is-open) .trust-note { visibility: hidden; }
 .pj-hero-fold .pj-facts { margin: 10px 0 2px; }
 .pj-hero-fold .pj-facts .kv__row { grid-template-columns: 0 108px minmax(0, 1fr); }
+.pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
+.pj-no-split { display: inline-block; white-space: nowrap; }
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
@@ -100,6 +102,16 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
   margin-top: 16px;
   padding: 14px 10px;
   border-radius: var(--pj-card-radius);
+}
+/* 刷新说明只在逗号后折行，首格按最长一段留宽度，第二格保持原宽。 */
+@media (min-width: 900px) and (max-width: 1279px) {
+  .pj-strip:has(> .pj-cell:first-child .pj-cadence--refresh) {
+    grid-template-columns: minmax(min-content, 1fr) minmax(calc(100% / var(--pj-cells, 6)), 1fr)
+      repeat(calc(var(--pj-cells, 6) - 2), minmax(0, 1fr));
+  }
+}
+@media (max-width: 899px) {
+  .pj-strip > .pj-cell:first-child:has(.pj-cadence--refresh) { grid-column: span 2; }
 }
 .pj-cell {
   position: relative;
@@ -121,7 +133,8 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-cell__v small { margin-left: 4px; font-size: 13px; font-weight: 400; color: var(--muted); }
 .pj-cell__v .pj-atleast { margin: 0 4px 0 0; }
 .pj-cell__v.is-text, .pj-cell__v.is-text .pj-text { font-size: 17px; font-weight: 600; }
-.pj-cell__v.is-text { white-space: normal; overflow-wrap: anywhere; }
+.pj-cell__v.is-text, .pj-cell__v.is-wrap { white-space: normal; overflow-wrap: anywhere; }
+.pj-cell__v.is-wrap { text-wrap: balance; }
 /* 读数是一整句话的那一格：占两格宽，照正文字号，不当大号粗体 */
 .pj-cell--wide { grid-column: span 2; }
 .pj-cell--wide .pj-cell__v.is-text { margin-top: 4px; font-size: 15px; font-weight: 500; line-height: 23px; }
@@ -198,7 +211,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-fig__v { margin: 2px 0 0; line-height: 30px; }
 .pj-card .pj-fig__v b { font-size: 24px; font-weight: 700; }
 .pj-card .pj-fig__k, .pj-card .pj-fig__link { font-size: 13.5px; line-height: 20px; color: #5d5c56; }
-.pj-card .pj-fig__sub { display: block; margin-top: 1px; font-size: 12px; line-height: 17px; color: #a8a69e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pj-card .pj-fig__sub { display: block; margin-top: 1px; font-size: 12px; line-height: 17px; color: #a8a69e; white-space: normal; overflow-wrap: anywhere; }
 .pj-card #skills .pj-fig__sub { white-space: normal; overflow: visible; }
 .pj-card .pj-fig--wide .pj-fig__v { line-height: 24px; margin-bottom: 2px; }
 .pj-card .pj-fig--wide .pj-fig__v .pj-text, .pj-card .pj-kv__row--wide .pj-kv__v { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; white-space: normal; }
@@ -208,7 +221,10 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-empty { border-bottom: 0; padding: 6px 0; }
 .pj-card .pj-kv { column-gap: 28px; }
 .pj-card .pj-kv__row { padding: 8px 0; }
-.pj-card .pj-kv__sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 读数下面那句解释照全写，格子窄就折行，不截成“…”（M881） */
+.pj-card .pj-kv__sub { white-space: normal; overflow-wrap: break-word; }
+/* “这件事最后一次发生”那一句（M769）：单独一行，格子窄时折行写全，不截成“…” */
+.pj-card .pj-moment { white-space: normal; overflow: visible; text-overflow: clip; }
 .pj-card .list { border-bottom: 0; }
 .pj-card .list > .row:first-child { border-top: 0; }
 .pj-card .rows:not(:has(.lamp)) { --gut: 0px; }
@@ -224,6 +240,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-foot .more { translate: -10px 0; }
 .pj-card .pj-sec--rows:not(.pj-sec--flat) .pj-foot { padding-left: 0; }
 .pj-card .pj-sec > [data-p="page"] { margin: 6px 0 0; translate: -10px 0; }
+/* 分组底下一批一批露的“展开（还有 N 条）／收起”（R147） */
+.pj-card .pj-list-group > .pj-step { margin: 4px 0 0; translate: -10px 0; }
+.pj-card .pj-step[data-open] .more__chev, .pj-card .pj-foot > .more[aria-expanded="true"] .more__chev, .pj-rh-step[data-open] .more__chev { rotate: 90deg; }
 
 /* 卡底：收起来的“说明”（口径、截止时刻、重复的小字合在这里）＋整张卡一样的截止时刻 */
 .pj-card > .pj-sec > .pj-tail { display: none; }
@@ -245,7 +264,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-sec--array > .pj-foot { grid-column: 2; grid-row: 1; margin: -4px -10px 0 0; flex-wrap: nowrap; }
 .pj-card .pj-sec--array > .pj-foot .more { translate: none; height: 28px; }
 .pj-card .pj-sec--array > .pj-foot .more--link .more__chev { color: var(--pj-accent); }
-.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.pj-card .pj-sec--array > .pj-reading { margin: 2px 0 0; font-size: 13.5px; line-height: 21px; color: #4a4944; overflow-wrap: break-word; }
 .pj-card .pj-sec--array > .pj-note { margin-top: 2px; white-space: normal; overflow-wrap: anywhere; }
 .pj-card .pj-sec--array > .fold > div > .list { margin-top: 6px; }
 .pj-card > .pj-sec:first-of-type.pj-sec--array { padding-top: 0; }
@@ -300,6 +319,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .more.pj-led, .pj-card details.pj-led > summary { display: none; }
 .pj-card .pj-foot:not(:has(> :not([hidden]):not(.pj-led))) { display: none; }
 .pj-rh-events p { margin: 6px 0 0; font-size: 13px; line-height: 21px; color: #5d5c56; }
+.pj-rh-list > .pj-rh-step { margin: 6px 0 0; translate: -10px 0; }
 
 #artifacts { container-type: inline-size; }
 @container (width < 260px) {
@@ -320,9 +340,12 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
+.pj-viz > .pj-rank-step, [data-visit-rank] > .pj-rank-step { margin: 2px 0 0; translate: -10px 0; }
+.pj-rank-step[data-open] .more__chev { rotate: 90deg; }
 #site-visitors .pj-note { overflow-wrap: anywhere; }
 .page--project .pj-card :is(.knowledge-prose small, .pj-viz > .pj-note) { color: #68665f; }
 .pj-cadence { margin-inline-start: 0.5em; color: #68665f; font-size: 12px; font-weight: 400; white-space: nowrap; }
+.pj-cadence--wrap { white-space: normal; word-break: keep-all; overflow-wrap: normal; }
 /* 卡里的排行长条（技能使用、被打开最多的页……）做成整行的胶囊：浅底槽＋按比例铺开的颜色，名字压在胶囊里（照样子图） */
 .page--project .pj-card .vz-rank--pill .vz-rank__row { padding: 7px 14px; margin: 5px 0; }
 .page--project .pj-card .vz-rank--pill .vz-rank__bar { inset: 0; height: auto; border-radius: 999px; overflow: hidden; background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 1px rgb(30 30 30 / .05); }

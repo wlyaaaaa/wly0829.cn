@@ -19,16 +19,69 @@
 .route-say__text > .trust-note.live-mark--owner:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .route-cols { align-items: start; }
 .route-mid > .route-crew { flex: none; }
+#helpers .route-row__name { text-wrap: pretty; }
 .route-cols:has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .route-mid[hidden] { display: none; }
-.route-log .route-foot:empty { display: none; }
+#log-more:not(:empty) { margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--route-line); }
+#log-more .route-more:not(.route-more--quiet) { height: 32px; padding: 0; background: none; box-shadow: none; color: var(--route-accent-deep); font-weight: 700; }
+#log-more .route-more:not(.route-more--quiet) .route-ico { color: inherit; }
+#log [data-clip] { display: block; -webkit-line-clamp: unset; }
+#log [data-clip]:not(.is-open) { max-height: 4lh; overflow: hidden; }
+#log .route-round { margin-top: 10px; padding: 12px; border: 1px solid var(--route-rule); border-radius: 14px; background: rgb(255 255 255 / .58); }
+.route-round__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 14px; padding-bottom: 7px; border-bottom: 1px solid var(--route-rule); font-size: 15px; }
+.route-round__head time { color: var(--route-muted); font-size: 13px; white-space: nowrap; }
+.route-round__line { display: grid; grid-template-columns: 3em minmax(0, 1fr); align-items: start; gap: 8px; margin-top: 8px; font-size: 14px; line-height: 22px; }
+.route-round__line > b { text-align: center; border-radius: 999px; background: var(--route-chip-bg); color: var(--route-muted); white-space: nowrap; }
+.route-round__line:nth-child(3) > b { background: #e4effc; color: #245890; }
+.route-round__line:nth-child(4) > b { background: var(--route-accent-soft); color: var(--route-accent-deep); }
+.route-round__text, .route-round__helper { white-space: pre-line; overflow-wrap: anywhere; }
+.route-round__helper { margin-top: 4px; color: var(--route-muted); }
+.route-round .is-failed { color: #b52929; }
+.route-round__helpers summary { display: inline-block; }
+.route-round__helpers:not([open]) summary span:last-child, .route-round__helpers[open] summary span:first-child { display: none; }
 #plan-box { scroll-margin-top: 70px; }
+/* “现在”那张卡收掉跟页头重复的字以后一个字不剩时整张不出（page.js drawNow），剩下的栏照原来的比例排开 */
+.route-cols:has(> .route-now[hidden]) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+.route-cols:has(> .route-now[hidden]):has(> .route-mid[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .route-body.route-body--locked .route-cols { grid-template-columns: minmax(0, 1fr); }
+/* 窄电脑窗口让各卡顺次占满一行。手机仍用 1440 的页面视口。 */
+@media (max-width: 1100px) {
+  #rec .route-cols { grid-template-columns: minmax(0, 1fr); }
+  .route-now { min-height: 126px; padding-bottom: 26px; }
+  .route-now #words, .route-now__text { padding-right: 100px; }
+  .route-now__art { position: absolute; right: 14px; bottom: 8px; width: 112px; height: 94px; min-height: 0; margin: 0; background-position: center; }
+}
+@media (max-width: 1080px) {
+  .route-round__line:last-child .route-round__text { text-wrap: balance; }
+}
 #plan .route-stop__text { -webkit-line-clamp: unset; }
 .route-say__text, .route-fact, .route-think__text { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* 思考摘要“原句 · 译文”每段一块（page.js thoughtSegments）：放得下整段挪到下一行，比一行还长的在块里照常折 */
+.route-think__seg { display: inline-block; max-width: 100%; }
 /* 对话来自某一轮自动任务时，头卡里写“来源：替你看新消息 · 11-23 22:30 那一轮 ›”，样子跟等你的事一样 */
 .item-source a { color:#00A650; font-weight:600; text-decoration:none; }
 .item-source a:hover { text-decoration:underline; }
+/* H1（本人 HEADS1125：“标题有个框比没有好看”）：标题收进一张页头卡，用全站页头卡的玻璃（.card__glass.glass，同 AI 对话页页头卡）；
+   返回留在卡外，插画收进卡右边、往左淡进玻璃；卡里的字和下面四张卡不动 */
+.route-head--card { min-height: 0; margin-bottom: 18px; }
+.route-head--card > .card__glass { min-height: 0; padding: 28px 40px 26px; }
+.route-head--card .route-head__art { top: 0; right: 0; bottom: 0; height: auto; width: min(980px, 60%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 16%, #000 42%); mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / .35) 16%, #000 42%); }
+.route-head--card .card__body { padding-top: 0; }
+/* 设计第 9 节：状态标签后面接“从几点起”和原因（标签那颗照原来的样子） */
+.route-head .card__head > .head__tail:has(+ .head__since) { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 999px; background: var(--route-accent-soft); color: var(--route-accent-deep); font-size: 15px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+.route-head .card__head > .head__since { font-size: 15px; line-height: 30px; letter-spacing: .02em; color: var(--route-muted); }
+/* LINK1125：型号那项点了去智能体页这一家、“开场读的规矩”点了去开场页这一家；样子同“压缩过 N 次 ›”，字色不变 */
+.route-head .route-head__go { color: inherit; font-weight: inherit; text-decoration: none; }
+.route-head .route-head__go:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* “· 开场读的规矩 ›”接在“压缩过 N 次 ›”同一行；展开压缩记录时它留在摘要那一行右边 */
+.route-head [data-compaction]:has(> [data-opening]) { display: flex; align-items: baseline; column-gap: 6px; }
+.route-head [data-compaction] > details { min-width: 0; }
+/* 展开压缩时刻时，时刻那行放到下面一行、不把摘要撑宽，“开场读的规矩”留在“压缩过 N 次”旁边 */
+.route-head [data-compaction]:has(> [data-opening]) { position: relative; }
+.route-head [data-compaction]:has(> [data-opening]):has(> details[open]) { padding-bottom: 30px; }
+.route-head [data-compaction]:has(> [data-opening]) > details[open] > p { position: absolute; left: 0; bottom: 2px; margin: 0; white-space: nowrap; }
+.route-head [data-compaction] > [data-opening] { flex: none; white-space: nowrap; }
 </style>
 <script src="/motion/motion.js"></script>
 <script src="/live/_lib/live-motion.js"></script>
@@ -39,8 +92,9 @@
   <div class="field" aria-hidden="true"></div>
   <a class="back" href="/live/chats/" data-back data-mo-rise>AI 对话</a>
   <ul class="notices" id="notices" aria-live="polite"></ul>
-  <article class="card route-head" id="hero" data-tone="off" data-pic="right" data-mo-rise>
+  <article class="card route-head route-head--card" id="hero" data-tone="off" data-pic="right" data-mo-rise>
     <div class="card__glow" aria-hidden="true"></div>
+    <div class="card__glass glass">
     <span class="route-art route-head__art" aria-hidden="true"></span>
     <div class="card__body">
       <p class="card__head" data-part="head"></p>
@@ -51,6 +105,7 @@
         <div class="route-say"><span class="route-say__icon" aria-hidden="true"></span><p class="route-say__text" data-part="say" data-clip="say" hidden></p><button type="button" class="route-clip__more" data-clip-for="say" hidden>展开</button></div>
         <div class="route-head__acts" data-part="acts" hidden></div>
       </div>
+    </div>
     </div>
   </article>
   <div class="route-body" id="rec">
@@ -97,6 +152,6 @@
 <script src="/header/topbar.js"></script>
 <script src="/live/_lib/live-light.js"></script>
 <script src="/live/_lib/live-route.js"></script>
-<script src="/live/_lib/live-runs.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/helper-purpose.js"></script><script src="/live/chat/page.js"></script>
+<script src="/live/_lib/live-runs.js"></script><script src="/live/chats/draw10.js"></script><script src="/live/chats/helper-purpose.js"></script><script src="/live/_lib/live-chat-view.js"></script><script src="/live/chat/page.js"></script>
 </body>
 </html>

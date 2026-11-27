@@ -11,8 +11,19 @@ function rows(title) {
     .map(line => line.split("|").slice(1, -1).map(value => value.trim()));
 }
 
+// 名册里标 hidden 的项目不给访客看，静态站不发布（网站项目 ID 不同名的照实况封面对照表认）。
+async function hiddenProjects() {
+  const roster = JSON.parse(await readFile(process.env.WLY_WEBSITE_PROJECTS || "E:/PCConfig/registries/website-projects.json", "utf8")).entries
+    .filter(entry => entry.website?.visibility === "hidden");
+  const keys = new Set(roster.map(entry => entry.repo.split("/").pop().toLowerCase()));
+  const names = new Set(roster.map(entry => entry.website.display_name));
+  const links = JSON.parse(await read("site-v2/live/project/cover-links.json"));
+  return new Set(rows("项目表").filter(row => keys.has(row[0].toLowerCase()) || keys.has((links[row[0]] || "").toLowerCase()) || names.has(row[1])).map(row => row[0]));
+}
+
 test("new project and skill cards preserve current identities, order and counts", async () => {
-  const projects = rows("项目表").filter(row => ["做完", "要做"].includes(row[2]));
+  const hidden = await hiddenProjects();
+  const projects = rows("项目表").filter(row => ["做完", "要做"].includes(row[2]) && !hidden.has(row[0]));
   const projectIds = new Set(projects.map(row => row[0]));
   const skills = rows("技能表").filter(row => ["做完", "要做"].includes(row[4]) && projectIds.has(row[2]));
   for (const [route, prefix, selected, order] of [

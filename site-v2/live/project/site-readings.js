@@ -68,8 +68,40 @@
       ? stamp(value) : typeof value === 'number' ? number(value) : String(value);
   }
 
+  // 排行先露 5 行，“展开（还有 N 条）”一次多露 5 行；已读到的露完了还有下一页，就接着读（load 给下一页），到底再“收起”（R147）
+  const RANK_STEP = 5;
+  function pagedRank(host, { rows, total, load, rank }) {
+    const state = host._paged ??= { shown: RANK_STEP };
+    Object.assign(state, { rows: rows || [], total, load, rank });
+    if (!host.querySelector(':scope > .pj-rank-list')) {
+      host.innerHTML = '<div class="pj-rank-list"></div><p class="pj-note pj-rank-note" hidden></p><button class="more pj-rank-step" type="button" hidden></button>';
+      host.lastElementChild.addEventListener('click', () => stepRank(host));
+    }
+    drawRank(host);
+  }
+  function drawRank(host) {
+    const state = host._paged, all = state.rows, n = Math.min(all.length, Math.max(RANK_STEP, state.shown)), btn = host.querySelector(':scope > .pj-rank-step');
+    window.LiveViz.rank(host.querySelector(':scope > .pj-rank-list'), { show: Infinity, ...state.rank }).set(all.slice(0, n));
+    const left = (Number.isFinite(state.total) ? Math.max(state.total, all.length) : all.length) - n, end = left <= 0 && !state.load;
+    btn.hidden = end && n <= RANK_STEP;
+    btn.toggleAttribute('data-open', end);
+    btn.innerHTML = `${left > 0 ? `展开（还有 ${number(left)} 条）` : end ? '收起' : '接着读'} <span class="more__chev">›</span>`;
+  }
+  async function stepRank(host) {
+    const state = host._paged, btn = host.querySelector(':scope > .pj-rank-step'), note = host.querySelector(':scope > .pj-rank-note');
+    if (btn.hasAttribute('data-open')) { state.shown = RANK_STEP; drawRank(host); if (host.getBoundingClientRect().top < 0) host.scrollIntoView({ block: 'start', behavior: 'instant' }); return; }
+    if (state.shown < state.rows.length) { state.shown += RANK_STEP; drawRank(host); return; }
+    if (!state.load || btn.disabled) return;
+    btn.disabled = true; btn.textContent = '正在读…';
+    const got = await state.load().catch(() => null);
+    btn.disabled = false;
+    note.hidden = !!got; note.textContent = got ? '' : '下一页暂时读不到，已读到的留在这里。';
+    if (got) Object.assign(state, { shown: Math.min(state.shown, state.rows.length) + RANK_STEP, rows: [...state.rows, ...got.rows], load: got.load });
+    drawRank(host);
+  }
+
   function visitors(host, section, viewer, stamp) {
-    const details = viewer === 'owner' ? section.owner_details : null;
+    const details = section.owner_details ?? null;   // 两版同一套（本人禁令 11-24 14:16）：后台给了就照画
     const signature = JSON.stringify([section.metrics, details, viewer]);
     if (host.dataset.readings === signature) return;
     host.dataset.readings = signature;
@@ -99,10 +131,10 @@
         const rows = (m.value[key] || []).map((r, i) => ({
           key: i, name: r[name], value: r.opens, text: count(r, 'opens', '次'), hue: '#00A650',
         }));
-        window.LiveViz.rank(target, { empty: missing, unit: '次' }).set(rows);
+        pagedRank(target, { rows, rank: { empty: missing, unit: '次' } });
       }
     }
   }
 
-  window.ProjectSiteReadings = { introRow, todoRows, visitors };
+  window.ProjectSiteReadings = { introRow, todoRows, visitors, pagedRank };
 })();

@@ -910,13 +910,13 @@
       const c = color(r.hue, i), m = markOf(r);
       const name = field(r.name, opts.name || opts.title || '程序', 'title');
       const marker = name !== esc(sp(r.name)) ? field(r.name, opts.name || '程序', 'body', true) : '';
-      // visitor_tag：页面给的本人版小签（U.visitorLabel 生成），名字自己带了签就不再挂第二个
-      const note = marker.includes('live-mark') ? marker : r.visitor_tag || '';
+      // visitor_tag：页面给的本人版小签（U.visitorLabel 生成），挂在副行；name_tag 挂在名字那一行（标的是名字本身时用），名字自己带了签就都不再挂
+      const own = marker.includes('live-mark'), note = own ? marker : r.visitor_tag || '', nameTag = own ? '' : r.name_tag || '';
       const sub = r.sub;
       return {
         key: r.key,
         cls: `vz-rank__row${i === 0 && opts.top !== false && rowsLen > 1 ? ' is-top' : ''}`,
-        html: `${opts.bar === false ? '' : `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${c};--v:${max ? Math.max((r.value || 0) / max, 0).toFixed(4) : 0}"></i></span>`}${m ? `<span class="vz-mark" style="--c:${c}" aria-hidden="true">${esc(String(m).toUpperCase())}</span>` : ''}<span class="vz-rank__name" title="${esc(sp(r.name))}">${r.time ? `<span class="vz-rank__t">${esc(r.time)}</span>` : ''}<span class="vz-rank__label">${name}</span>${sub || note ? `<small>${[sub ? field(sub) : '', note].filter(Boolean).join(' · ')}</small>` : ''}</span><span class="vz-rank__v">${missingHtml(r.text ?? fmt(r.value, r.unit ?? opts.unit) ?? window.LiveUI.collectionText(r.name, r))}</span>${opts.trailing?.(r) || ''}`,
+        html: `${opts.bar === false ? '' : `<span class="vz-rank__bar" aria-hidden="true"><i style="--c:${c};--v:${max ? Math.max((r.value || 0) / max, 0).toFixed(4) : 0}"></i></span>`}${m ? `<span class="vz-mark" style="--c:${c}" aria-hidden="true">${esc(String(m).toUpperCase())}</span>` : ''}<span class="vz-rank__name" title="${esc(sp(r.name))}">${r.time ? `<span class="vz-rank__t">${esc(r.time)}</span>` : ''}${nameTag ? `<span class="vz-rank__line"><span class="vz-rank__label">${name}</span>${nameTag}</span>` : `<span class="vz-rank__label">${name}</span>`}${sub || note ? `<small>${[sub ? field(sub) : '', note].filter(Boolean).join(' · ')}</small>` : ''}</span><span class="vz-rank__v">${missingHtml(r.text ?? fmt(r.value, r.unit ?? opts.unit) ?? window.LiveUI.collectionText(r.name, r))}</span>${opts.trailing?.(r) || ''}`,
       };
     };
     const markup = (r) => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`;
@@ -1458,17 +1458,20 @@
     function paint(it) {
       if (it.g.private_count) { it.card.classList.add('grp--private'); html(it.card.querySelector('.grp__said'), window.LiveUI.privateSummary(it.g.private_count)); return; }
       const g = it.g, warn = !opts.quiet && (g.level === 'red' || g.level === 'yellow');
-      const got = g.figures?.some((f) => !!figValue(f, g)) || g.chips?.some((c) => c.value != null || ids(c).some((id) => payload?.series?.find((s) => s.id === id)?.points?.some((p) => p[1] != null))) || g.blocks?.some((b) => !b.empty && !b.wait);
+      // hasOther：页面说这组卡里另有上次的读数（比如网络卡的海外流量、连得上吗），曲线没存下来时只说曲线（r83 返修第二轮）
+      const got = (typeof g.hasOther === 'function' ? g.hasOther() : !!g.hasOther) || g.figures?.some((f) => !!figValue(f, g)) || g.chips?.some((c) => c.value != null || ids(c).some((id) => payload?.series?.find((s) => s.id === id)?.points?.some((p) => p[1] != null))) || g.blocks?.some((b) => !b.empty && !b.wait);
       const missing = isOffline() && (g.empty || !got && (g.wait || !g.build));
       if (pend(g) && !it.reads.length) { it.lineRead = fog(it, it.card.querySelector('.grp__line'), PEND_NOTE); if (it.built) fog(it, it.card.querySelector('.grp__chapter'), CHAPTER_GHOST); }
       if (payload && g.wait) for (const r of it.reads) r.set({ phase: 'wait' });
       it.card.dataset.level = g.level || 'ok';
       it.card.style.setProperty('--grp-a', color((g.palette || [])[0] || 'teal'));
       it.card.style.setProperty('--grp-b', color((g.palette || [])[1] || (g.palette || [])[0] || 'violet'));
-      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
+      // 电脑连不上时组灯一律灰（和各卡小灯一样），不拿上次的判断亮绿（r83 返修第二轮）
+      html(it.card.querySelector('.grp__lamp'), window.LiveUI.status(isOffline() && g.level && g.level !== 'none' ? { level: 'gray' } : g, { small: true, missingNames: g.missingNames ?? undefined }).lamp, false);
       const name = field(g.name, BLOCK_NAME[g.key] || '这一组', 'title');
       html(it.card.querySelector('.grp__name'), name);
-      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? gone : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
+      // 曲线没存下来、但这组上面已经有上次的读数时，只说曲线没存下来，不说整块没有（r83 返修）
+      const line = missing ? emptyText(window.LiveUI.collectionText()) : gone && !payload ? (got ? '曲线没存下来，连上后补上。' : gone) : pend(g) ? (warn ? g.reason || '' : '') : (g.level === 'ok' ? '' : g.reason) || g.line || (g.level === 'none' && !opts.quiet && !isOffline() ? window.LiveUI.collectionText() : '');
       it.card.classList.toggle('is-gone', missing || (!!gone && !payload) || !!g.empty);
       figures(it);
       const shown = g.cutoffIds && !g.empty && !pend(g)

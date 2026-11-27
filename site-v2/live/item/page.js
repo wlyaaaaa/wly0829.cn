@@ -4,7 +4,7 @@
 (() => {
   'use strict';
   const marker = (v, kind, name = '内容') => v && (v.hidden || v.visibility || v.public || v.rewrite) ? window.LiveUI.fieldHtml({ text: kind === 'owner' ? '' : undefined, hidden: kind !== 'owner' && (v.hidden || v.visibility === 'owner' || v.public === 'owner'), visibility: v.visibility, public: v.public, rewrite: v.rewrite, hidden_what: v.hidden_what }, { name, kind }) : '';
-  const U = window.LiveUI, L = window.LiveLight, { esc, sp } = U, $ = id => document.getElementById(id);
+  const U = window.LiveUI, L = window.LiveLight, { esc, sp, addressed } = U, $ = id => document.getElementById(id);
   const p = new URLSearchParams(location.search), id = p.get('id'), issue = document.body.dataset.record === 'issue';
   const hero = $('hero'), part = name => document.querySelector(`[data-part="${name}"]`);
   const D = window.LiveDossier, dossier = !!(D && part('lead'));
@@ -12,15 +12,17 @@
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const when = at => at ? `${U.date(at)} ${U.time(at)}` : U.offline?.() ? '' : U.collectionText();
   const pending = d => d?.rewrite === 'pending' && !d.text && !d.value;
-  const text = d => sp(d?.text && typeof d.text === 'object' ? { ...d, ...d.text } : d) || (U.offline?.() ? '' : U.collectionText());
+  const text = d => (d && U.fieldText(U.itemTitleField(d), viewer).trim()) || (U.offline?.() ? '' : U.collectionText());
   // 只照接口明确的本人标记隐藏；改写状态和操作权限不改变已提供的正文。
   const say = (value, what = '事项内容') => U.fieldHtml(value == null ? U.offline?.() ? '' : U.collectionText() : value, { name: what, kind: viewer });
+  const itemUnits = html => issue ? html : U.itemTextUnits(html);
   const fact = (name, value, extraClass = '') => `<div class="rec-fact${extraClass}"><dt>${name}</dt><dd class="rec-prose">${value}</dd></div>`;
   const optionActions = (d, q) => U.actions({ id: `${d.id}:question:${q.id}`, text: text(d) }, q.options.map(o => { const label = sp(o); return { kind: 'copy', label, text: U.choiceText(d, text(d), q, o) }; }));
-  const OUT = { fixed: '修好', not_fixed: '没修好', wont_fix: '定了不修', deferred: '暂时不修', to_owner: '转给你' };
+  const OUT = { fixed: '修好', not_fixed: '没修好', wont_fix: '定了不修', deferred: '暂时不修' };
+  const outcomeLabel = key => key === 'to_owner' ? addressed('转给你', viewer) : OUT[key];
   const STATE = { working: '在做', waiting: '在等', deferred: '放一放', wont_fix: '不改' };
   const EVENT = { Add: '登记', Reopen: '重新打开', Review: '核对', Close: '关闭' };
-  const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '本人已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
+  const CLOSED = { done: '你办完了', declined: '你说不办了', expired: '展示期已到', ai_closed: 'AI 关的', acknowledged: '你已知', merged: '并进了别的条', unknown: '当时只记了关闭' };
   const KIND = { choose: '要你选', do: '要你做', later: '你放着', know: '要你知道' };
   let viewer = 'public', record = null, at = null, historyRows = [], next = null, coverage = null, first = true, searching = false, revision = 0;
   const pages = new Map();
@@ -32,7 +34,10 @@
   const runPage = url => url.pathname.startsWith('/live/automation/') && (url.searchParams.has('run') || /\/run\/$/.test(url.pathname));
   try { const url = new URL(document.referrer); if (url.origin === location.origin && (['/live/', '/live/items/', '/live/ledger/', '/live/project/', '/live/automation/'].includes(url.pathname) || runPage(url))) from = url; } catch {}
   back.href = from ? from.pathname + from.search + from.hash : route(issue ? '/live/ledger/' : '/live/items/');
-  back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 账本' : '等你的事';
+  back.textContent = from ? runPage(from) ? '这一轮' : ({ '/live/': '实况', '/live/items/': '等你的事', '/live/ledger/': 'AI 自动任务账本', '/live/project/': '项目', '/live/automation/': '自动任务' })[from.pathname] : issue ? 'AI 自动任务账本' : '等你的事';
+  const itemsBack = new URL(back.href).pathname === '/live/items/';
+  const nameBack = kind => { if (itemsBack) back.textContent = addressed('等你的事', kind); };
+  nameBack('public');
   back.addEventListener('click', U.restoreBack);
   const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '这件事' });
   const detailsRead = U.reading($('rec'), { ghost: U.ghost.rows(4), slow: false });
@@ -65,17 +70,18 @@
 
   function render() {
     hero.classList.remove('is-unavailable');
-    const d = record, privateItem = viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner');
+    const d = record, privateItem = issue && viewer === 'public' && (d.visibility === 'owner' || d.public === 'owner');
     const latest = issue && historyRows.find(e => e.id === d.id);
     const attempted = !privateItem && d.kind === 'ledger' && d.event === 'attempt' && latest?.event === 'attempt' && d.at && latest.at === d.at
       && d.outcome == null && d.state == null && !d.closed_at && !d.outcome_text;
-    const label = issue ? OUT[d.outcome] || STATE[d.state] || (attempted ? '已尝试处理，结果未记录' : '')
+    const confirmed = !issue && viewer === 'owner' ? U.confirmedItemState(d) : '';
+    const label = issue ? outcomeLabel(d.outcome) || STATE[d.state] || (attempted ? '已尝试处理，结果未记录' : '')
       : d.closed ? CLOSED[d.closed.kind] || '已了结'
-      : d.verifying ? '待 AI 核实' : Date.parse(d.snoozed_until) > Date.now() ? '晚点再提醒' : KIND[d.kind];
-    const kindLabel = !issue && viewer === 'public' ? label?.replaceAll('你', '本人') : label;
-    $('questions').querySelector('.rec-part').textContent = viewer === 'public' ? '要本人选的' : '要你选的';
+      : confirmed || (d.verifying ? '待 AI 核实' : Date.parse(d.snoozed_until) > Date.now() ? '晚点再提醒' : KIND[d.kind]);
+    const kindLabel = !issue && label ? addressed(label, viewer) : label;
+    $('questions').querySelector('.rec-part').textContent = addressed('要你选的', viewer);
     const status = U.status({ ...d, level: issue ? d.header_level ?? d.level : d.header_level });
-    const original = U.fieldText(d.text || d, viewer);
+    const original = U.fieldText(issue ? d.text || d : U.itemTitleField(d), viewer);
     const shortTitle = issue && !privateItem && U.fieldText(d.plain_title, viewer).trim();
     const completeTitle = shortTitle && U.fieldText(d.title, viewer).trim();
     const title = privateItem ? '事项' : completeTitle && (!original || original === shortTitle) ? completeTitle : original;
@@ -91,17 +97,17 @@
     document.title = `${cut.rest ? sp(cut.title) : hasDistinctShort ? title : text(d)} · 实况`;
     const head = part('head');
     // M688：本人版标题旁挂签，按后台给在这件事上的 visitor_labels（标题键 text，'$' 是整件）；没有差异键的普通原文不挂
-    const visitorMark = !issue && viewer === 'owner' ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
-    U.html(head, (dossier ? '' : status.lamp) + U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false }) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
+    const visitorMark = !issue ? U.visitorLabel(d, ['$', 'text'], '这件事的说法', viewer) : '';
+    U.html(head, (dossier ? '' : status.lamp) + itemUnits(U.head(cut.title, { name: issue ? '账本事项' : '事项', lamp: false })) + (visitorMark ? `<span class="head__rewrite">${visitorMark}</span>` : ''));
     issueReadings?.breakHeading(head.querySelector('.head__lead'));
     if (dossier) {
       part('head').classList.toggle('is-long', [...cut.title].length > 40);
       part('lamp').hidden = !status.lamp; U.html(part('lamp'), status.lamp);
-      part('lead').hidden = privateItem || !lead.head; U.html(part('lead'), lead.head ? `<p>${say(lead.head)}</p>` : '');
+      part('lead').hidden = privateItem || !lead.head; U.html(part('lead'), lead.head ? `<p>${itemUnits(say(lead.head))}</p>` : '');
       part('state').hidden = !kindLabel; U.html(part('state'), U.fieldHtml(kindLabel || ''));
       // 状态卡的小图：了结了画勾；只有“办完了”“修好”是绿勾，其余了结是灰勾，不另判别的。
       const card = part('state').closest('.dossier-card');
-      card.dataset.state = d.closed || issue && OUT[d.outcome] ? 'closed' : 'open';
+      card.dataset.state = d.closed || issue && outcomeLabel(d.outcome) ? 'closed' : 'open';
       card.toggleAttribute('data-good', d.closed?.kind === 'done' || issue && d.outcome === 'fixed');
     }
     const born = d.episode_at || d.born || (issue && d.accepted);
@@ -115,7 +121,7 @@
     const check = d.origin?.last_check;
     const oldStamp = [d.stale_text, d.why].map(v => U.fieldText(v, viewer)).join(' ').match(/最近一次记录于\s*((?:\d\d-\d\d\s+)?\d\d:\d\d)/u)?.[1];
     let readout = d.status_subject ? d.why || d.stale_text : oldStamp && `事项状态上次记录于 ${oldStamp}`;
-    if (viewer === 'owner' && typeof readout === 'string') readout = readout.replace(/，此后没有新读数[。]?$/u, '');
+    if (typeof readout === 'string') readout = readout.replace(/，此后没有新读数[。]?$/u, '');
     const missing = [...new Set(d.partial || [])].map(key => d.missing_names?.[key] || (/[一-鿿]/u.test(key) ? key : d.missing?.[key])).filter(Boolean);
     const checkResult = check?.text || { authenticated: '已登录', expired: '登录已过期', timeout: '检查超时', unknown: '未核实' }[check?.status];
     const checkText = [check?.checked_at && esc(when(check.checked_at)), checkResult && say(checkResult, '核验结果')].filter(Boolean).join(' · ');
@@ -132,17 +138,17 @@
     const bodyValues = [explanation?.visibility || explanation?.rewrite ? explanation : explanation?.text ?? explanation, lead.rest, d.detail_text], bodyShown = [cut.title, lead.head, ...historyRows.map(e => e.text)];
     const bodyFields = !issue && newBody(bodyValues, bodyShown);
     // M688：展开说明里真写出了 detail_text（排在最后一段）的，后台标了 detail_text 就在说明后挂签；和标题的签各在各处，一处只挂一个
-    const detailTag = !issue && viewer === 'owner' && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
+    const detailTag = !issue && d.detail_text && bodyFields.length > newBody(bodyValues.slice(0, 2), bodyShown).length ? U.visitorLabel(d, 'detail_text', '这件事的说明', viewer) : '';
     const issueSay = value => issueReadings ? issueReadings.conclusion(say(value)) : say(value);
     const sayHead = issue ? (summary ? (reason.rest ? `<details class="dossier-text"><summary>${issueSay(reason.head)}</summary><p>${issueSay(reason.rest)}</p></details>` : issueSay(summary)) : '')
-      : bodyFields.map(value => say(value).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
+      : bodyFields.map(value => itemUnits(say(value)).replace(/\n/g, '<br>')).join('<br>') + (detailTag ? ` ${detailTag}` : '');
     if (body) {
       body.hidden = !sayHead && !(notes && !note);
       U.html(body, (issue && summary && !d.outcome_text ? `<small>${description ? '问题说明' : '当前进展'}</small>` : '') + sayHead + (note ? '' : notes));
     }
     if (note) { note.hidden = !notes || privateItem; U.html(note, notes); }
     // 不单独放“复制给 AI”，问情况就是复制给 AI（M458）；登记带的去处排第一（M491）
-    let acts = (d.actions || []).filter(a => a.intent !== 'done' && (!d.closed || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
+    let acts = (d.actions || []).filter(a => a.intent !== 'done' && (!(d.closed || confirmed) || !['later', 'ack', 'decline', 'close_report'].includes(a.intent))).map(a => a.intent === 'ask' ? { ...a, label: '问情况' } : a);
     if (d.open && !acts.some(a => a.kind === 'open')) acts.push({ ...(typeof d.open === 'string' ? (/^(https?:|\/)/.test(d.open) ? { href: d.open } : { target: d.open }) : d.open), kind: 'open', label: d.open.label || '打开对话' });
     acts = [...acts.filter(a => a.kind === 'open' && /^https:\/\//i.test(a.href || '')), ...acts.filter(a => !(a.kind === 'open' && /^https:\/\//i.test(a.href || '')))];
     part('acts').hidden = !acts.length; U.html(part('acts'), U.goActions(d, acts));
@@ -150,22 +156,25 @@
     L.tone(hero, status.tone);
     const field = value => say(value);
     const closedSay = d.closed && (d.closed.kind === 'unknown' || d.closed.text === '本人关掉了这份汇报' ? d.closed.text || CLOSED.unknown : CLOSED[d.closed.kind] || CLOSED.unknown);
+    const closedNote = d.closed?.text == null ? '' : say(d.closed.text).trim();
+    const monthly = !issue && Number.isInteger(d.monthly_day) && d.monthly_day >= 1 && d.monthly_day <= 31 ? `每月 ${d.monthly_day} 日` : '';
     const facts = issue ? [
       // 档案卡里结局就是状态卡的大字，了结说明在“结论”卡（能展开），这里不再重复。
-      !dossier && d.outcome && fact('结局', say(OUT[d.outcome])),
+      !dossier && d.outcome && fact('结局', say(outcomeLabel(d.outcome))),
       !dossier && d.outcome_text && fact('了结说明', say(d.outcome_text)),
       d.closed_at && fact('了结时刻', when(d.closed_at)),
       d.at && d.at !== d.closed_at && fact(d.event ? '记录时间' : '检查时间', when(d.at)),
       d.reopen_count != null && fact('重开次数', say(d.reopen_count)),
       d.first_at && d.last_at && fact('记录范围', `${esc(when(d.first_at))} 至 ${esc(when(d.last_at))}`),
-      d.previous && fact('上回', `${say(d.previous.text || OUT[d.previous.outcome])}<small>${when(d.previous.at)}</small>`),
+      d.previous && fact('上回', `${say(d.previous.text || outcomeLabel(d.previous.outcome))}<small>${when(d.previous.at)}</small>`),
       ...(!privateItem && issueReadings?.detail(!d.outcome_text && progress ? { ...d, progress_summary: null, owner_detail: null } : d, viewer, (name, value) => fact(name, value, ' issue-reading')) || []),
     ] : [
       d.due && fact('什么时候要', when(d.due)),
-      d.act_from && fact('从什么时候办', when(d.act_from)),
+      // M947：每月循环的提醒（后台给整数 monthly_day）这一行写“每月 6 日”，不另加行
+      (monthly || d.act_from) && fact('从什么时候办', monthly || when(d.act_from)),
       d.mobile && d.mobile !== 'unknown' && fact('在哪办', field(d.mobile && typeof d.mobile === 'object' ? d.mobile : ({ phone: '手机上', computer: '电脑上', in_person: '当面办' })[d.mobile])),
-      d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay)),
-      d.closed && fact('了结说明', say(d.closed.text)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
+      d.closed && !(dossier && closedSay === label) && fact('结局', say(closedSay === d.closed.text ? closedSay : addressed(closedSay, viewer))),
+      closedNote && fact('了结说明', U.itemTextUnits(closedNote)), d.closed?.at && fact('了结时刻', when(d.closed.at)),
     ];
     $('about').hidden = !facts.some(Boolean) || privateItem; U.html($('facts'), facts.filter(Boolean).join(''));
     const qs = Array.isArray(d.questions) ? d.questions : [];
@@ -173,7 +182,7 @@
     // 档案卡：一题一行，题目在左、选项按钮靠右
     const askHtml = q => { const html = `<p>${say(q.text && typeof q.text === 'object' ? q.text : q, '问题内容')}</p>${Array.isArray(q.options) ? `<div class="rec-acts">${optionActions(d, q)}</div>` : ''}`; return dossier ? `<div class="dossier-ask">${html}</div>` : html; };
     // 本人版给全：问题、经过都不收。
-    const firstAsk = viewer === 'owner' ? Infinity : FIRST_QUESTIONS, firstRun = viewer === 'owner' ? Infinity : FIRST;
+    const firstAsk = Infinity, firstRun = Infinity;   // 两版同一套（本人禁令 11-24 14:16）：两版问题、经过都不收
     const askShown = askMore ? qs.slice(0, firstAsk) : qs, askRest = askMore ? qs.slice(firstAsk) : [];
     U.html($('question-text'), askShown.map(askHtml).join(''));
     if (askMore) { U.html($('question-rest'), askRest.map(askHtml).join('')); askMore.hidden = !askRest.length; askLabel(); }
@@ -201,6 +210,18 @@
     }
     const eventBody = e => !e.text || [e.label, d.text, issue ? summary : d.closed?.text].includes(e.text) ? '' : e.text;
     const runLink = s => { const text = `${esc(s.name)}${s.who ? `（${esc(s.who)}）` : ''}`; return s.href ? `<a class="run-link" href="${esc(route(s.href))}">${text} ›</a>` : text; };
+    // 账本一件：经过里每一步，后台给了做这一步的那场对话或那一轮（source_href）就挂“Codex 那场对话 ›”“自动修理那一轮 ›”；
+    // 没有地址（对话已删、那一轮没留记录、访客看不到）照原样写字，后台写的原因（source_unavailable_reason）放在这一步的悬停说明里
+    const source = e => {
+      if (!issue || typeof e.source_href !== 'string' || !e.source_href.startsWith('/live/')) return null;
+      const href = window.LiveRuns?.runPage(e.source_href) || e.source_href, url = new URL(href, location.origin);
+      const host = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' }[(url.searchParams.get('id') || '').split(':')[0].toLowerCase()];
+      const name = url.pathname === '/live/chat/' ? `${host ? `${host} ` : ''}那场对话` : url.pathname.startsWith('/live/automation/') ? `${window.LiveRuns?.categoryName(url.searchParams.get('type'), viewer) || ''}那一轮` : '来源';
+      return `<small class="issue-event-actor"><a class="run-link" href="${esc(route(href))}">${esc(name)} ›</a></small>`;
+    };
+    const sourceWhy = e => issue ? U.fieldText(e.source_unavailable_reason ?? '', viewer).trim() : '';
+    // 有了“Codex 那场对话 ›”，原来那行“由谁处理：codex:一串编号”就是同一件事，不再写；写的是人名、型号这类的照旧写
+    const rawActor = e => /^(claude|codex|antigravity):[\w-]{8,}$/i.test(U.fieldText(e.actor ?? '', viewer).trim());
     const eventReadings = new Map();
     const sameEvent = new Set();
     const usefulHistory = historyRows.filter(e => {
@@ -212,30 +233,35 @@
       if (fields?.actor || fields?.extra) { eventReadings.set(e, fields); return true; }
       return e.label || e.event || eventBody(e) || e.outcome || e.at && e.text;
     });
-    $('history-box').hidden = !usefulHistory.length && !next;
+    $('history-box').hidden = !d.archiveWithoutHistory && !usefulHistory.length && !next;
     // 一条经过的正文：档案卡先摆第一句，其余的点这一句展开看。
-    const runOut = t => { const s = dossier && viewer !== 'owner' && typeof t === 'string' ? D.sentence(t) : null; return s?.rest ? `<details class="run__out run__full"><summary>${say(s.head, '这条经过')}</summary><p class="rec-prose">${say(s.rest, '这条经过')}</p></details>` : `<p class="run__out rec-prose">${say(t, '这条经过')}</p>`; };
+    const runOut = t => `<p class="run__out rec-prose">${say(t, '这条经过')}</p>`;   // 两版同一套（本人禁令 11-24 14:16）：两版经过都给全文
     const events = U.mergePrivateRows(usefulHistory, { value: e => e.text || e, kind: viewer }).map((e, i) => {
       if (e.private_count) return { key: e.key, cls: 'run', html: U.privateSummary(e.private_count) };
       const { actor = '', extra = '' } = eventReadings.get(e) || {};
       const body = eventBody(e);
+      const historyLabel = e.label || outcomeLabel(e.outcome) || EVENT[e.event] || '进展';
       // 这一步是哪个 AI、哪一轮：“自动修理第 2 轮（GPT-6.2 Sol xhigh）›”，点了到那一轮（后台在这一步或 automation_runs 里写明了才有）
       const own = e.automation_run && window.LiveRuns?.sources({ automation_runs: [e.automation_run] }, viewer)[0];
       const runAt = own ? `<small class="issue-event-actor">${runLink(own)}</small>` : '';
-      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"><b>${e.run ? runLink(e.run) : say(e.label || OUT[e.outcome] || EVENT[e.event] || '进展')}</b>${actor}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
+      // 这一步已经挂了“哪一轮 ›”或本身就是那一轮的，不再挂来源
+      const src = own || e.run ? '' : source(e) || '', why = src ? '' : sourceWhy(e);
+      const who = src && rawActor(e) ? '' : actor;
+      return { key: e.event_id || `${e.id || ''}:${e.at || ''}:${i}`, cls: `run${i === 0 ? ' is-now' : ''}`, html: `${U.status(e, { small: true }).lamp}<p class="run__main"><span class="run__when">${e.at ? esc(when(e.at)) : U.offline?.() ? '' : U.collectionText("时刻")}</span><span class="run__what"${why ? ` title="${esc(why)}"` : ''}><b>${e.run ? runLink(e.run) : say(historyLabel)}</b>${who}${src}${runAt}</span></p>${body ? runOut(body) : ''}${extra}` };
     });
-    U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText("经过")}</p>` }], { animate: !first });
+    const noHistory = d.archiveWithoutHistory ? `<p class="run__none item-read-note">${ARCHIVE_MISSING}</p>`
+      : `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText('经过')}</p>`;
+    U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: noHistory }], { animate: !first });
     U.list($('events-rest'), events.slice(firstRun), { animate: !first });
     if (dossier) foldedRuns = Math.max(0, events.length - firstRun);
     more.hidden = events.length <= firstRun; $('history-box').classList.toggle('has-more', events.length > firstRun); moreLabel();
     $('earlier').hidden = !issue || !next; U.html($('earlier'), '继续读更早的经过 ›');
     $('coverage').textContent = coverage?.from && Date.parse(coverage.from) !== Date.parse(d.accepted) ? `记录从 ${when(coverage.from)} 起` : '';
     $('rec').hidden = privateItem; if (body) body.hidden ||= privateItem; heroRead.done(); detailsRead.done(); first = false;
-    if (dossier && viewer !== 'owner') D.clamp(part('lead'), $('lead-more'));
     requestAnimationFrame(() => L.lightUp([hero, ...$('events').children, $('rec'), $('notices')]));
   }
   function clearRecord() {
-    revision++; closedRound = undefined; closedAsk++;
+    revision++; closedAsk++;
     record = at = next = coverage = foldedRuns = null;
     searching = $('earlier').disabled = false;
     historyRows = []; pages.clear();
@@ -250,12 +276,19 @@
     }
     U.list($('events'), [], { animate: false }); U.list($('events-rest'), [], { animate: false });
   }
-  function empty(message, denied = false) {
+  function empty(message, denied = false, title = '') {
     hero.classList.toggle('is-unavailable', !U.offline?.() && /暂时读不到$/.test(message));
+    const noteClass = title ? 'rec-none item-read-note' : 'rec-none';
     // 档案卡的“现在怎样”在下面那栏里，整栏收起时这句话改写在页头正文的位置（part lead）。
-    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="rec-none">${esc(issue ? '这块没存下来，连上后补上。' : message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
+    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="${noteClass}">${esc(issue ? '这块没存下来，连上后补上。' : message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
     U.html(part('head'), denied ? marker({ visibility: 'owner' }, viewer, issue ? '这条账本的内容' : '这件事的内容') : U.head(message, { lamp: !issue }));
     for (const k of ['meta', 'say', 'acts', 'lead', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; }
+    if (title) {
+      U.html(part('head'), U.head(title, { lamp: false }));
+      const box = part('lead') || part('say');
+      U.html(box, `<span class="${noteClass}">${esc(message)}</span>`);
+      box.hidden = false;
+    }
     $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); L.lightUp([hero]);
   }
   function collect(detail, exhausted = false) {
@@ -269,7 +302,8 @@
     const rows = past.map(e => ({ ...e, text: e.outcome_text || e.text }));
     if (record?.previous && !rows.some(e => e.at === record.previous.at && e.outcome === record.previous.outcome)) rows.push(record.previous);
     if (record?.wait) rows.push({ ...record.wait, id: record.id, state: 'waiting', label: '在等' });
-    if (record?.accepted && !rows.some(e => e.at === record.accepted && (e.event === 'Add' || /^(开始|登记)/u.test(e.label)))) rows.push({ at: record.accepted, label: '开始' });
+    // “开始”这一步是记下这件事的那场对话或那一轮做的：后台给了记下的人的地址（registered_by_href）就照样挂上
+    if (record?.accepted && !rows.some(e => e.at === record.accepted && (e.event === 'Add' || /^(开始|登记)/u.test(e.label)))) rows.push({ at: record.accepted, label: '开始', source_href: record.registered_by_href, source_unavailable_reason: record.registered_by_unavailable_reason });
     // 账本一件事的经过：哪几轮自动任务动过它（后台 automation_runs 写明的），各占一步，写清哪个 AI、哪一轮，点了到那一轮
     if (issue && window.LiveRuns) for (const run of Array.isArray(record?.automation_runs) ? record.automation_runs : []) {
       const s = window.LiveRuns.sources({ automation_runs: [run] }, viewer)[0];
@@ -280,28 +314,72 @@
     if (!detail && current && latest?.at && Date.parse(latest.at) >= Date.parse(current.accepted)) record = { ...record, state: latest.state || record.state, ...(latest.outcome ? { outcome: latest.outcome, outcome_text: latest.text } : {}) };
     if (record) render();
   }
-  // M567：从关闭清单点进来时网址带 closed=那次了结的时刻。这件事后来又重新打开（或又了结了一次）时，编号不变，
-  // 接口给的是现在这一轮；这时到关闭清单里找回那一轮，照它摆结局、了结说明和了结时刻，经过只留那一轮的，
-  // 按钮不给（按了会落到现在这一轮上），另给一条“看现在这件”。清单里找不到就照现在这一轮摆。
+  // 退出链接指向指定时刻。当前详情是另一轮时，只从退出读口拿那一轮。
   const closedAt = Date.parse(p.get('closed') || '');
-  let closedRound, closedAsk = 0, latestDetail = null;
-  const pastRound = (row, d) => {
-    const from = Date.parse(row.episode_at || row.born || '');
-    const history = (Array.isArray(d.history) ? d.history : []).filter(e => { const t = Date.parse(e.occurred_at || e.at || ''); return Number.isFinite(t) && t <= closedAt + 1000 && !(t < from - 1000); });
-    return { ...row, now: null, actions: [], detail_text: d.detail_text, history, reopened: true };
-  };
+  const ARCHIVE_MISSING = '那次了结时的经过暂时没读到，读到后自动补上。';
+  let archiveWatch, closedAsk = 0, latestDetail = null;
+  const eventAt = e => e.occurred_at || e.at;
+  const afterClose = stamp => Date.parse(stamp) > closedAt;
+  function show(r) {
+    historyRows = r.archiveWithoutHistory ? [] : itemHistory(r);
+    const newer = Number.isFinite(closedAt) && (
+      [r.changed, r.recorded_at, r.episode_at, r.born].some(afterClose) ||
+      (Array.isArray(r.history) && r.history.some(e => afterClose(eventAt(e))))
+    );
+    // 最新详情的各段正文没有历史版本。选中的了结早于这份内容时，只展示有时刻依据的记录。
+    const born = r.episode_at || r.born;
+    record = newer ? { id: r.id, owner_source_id: r.owner_source_id, text: '这件事', closed: r.closed, reopened: r.reopened,
+      // 问情况按原编号生成提示词，不带较新回包里的动作正文。
+      actions: r.actions?.some(a => a.kind === 'copy' && a.intent === 'ask') ? [{ kind: 'copy', intent: 'ask' }] : [],
+      born: Date.parse(born) <= closedAt ? born : null, archiveWithoutHistory: r.archiveWithoutHistory } : r;
+    render();
+  }
+  const stopArchive = () => { archiveWatch?.stop(); archiveWatch = null; closedAsk++; };
+  const archiveMissing = () => { clearRecord(); empty(ARCHIVE_MISSING, false, '这件事'); };
+  $('item-action-receipts')?.addEventListener('item-write', ({ detail }) => {
+    if (latestDetail && detail.saved?.includes(id)) showItem(latestDetail);
+  });
   function showItem(d) {
     latestDetail = d;
-    const show = r => { record = r; historyRows = itemHistory(r); render(); };
-    if (issue || !Number.isFinite(closedAt) || Date.parse(d.closed?.at) === closedAt) { show(d); return; }
-    if (closedRound !== undefined) { show(closedRound ? pastRound(closedRound, d) : d); return; }
-    const ask = ++closedAsk, kind = viewer;
-    window.Live.get('items/closed', null).catch(() => null).then(r => {
-      if (ask !== closedAsk || kind !== viewer) return;
-      const d = latestDetail, ok = Array.isArray(r?.data?.items) && (!r.meta?.viewer?.kind || r.meta.viewer.kind === viewer);
-      if (ok) closedRound = r.data.items.find(row => row.id === d.id && Date.parse(row.closed?.at) === closedAt) || null;
-      show(closedRound ? pastRound(closedRound, d) : d);
+    if (!Number.isFinite(closedAt)) {
+      if (viewer === 'owner') {
+        const saved = U.savedWrite(d), kind = { ack: 'acknowledged', decline: 'declined' }[saved?.intent];
+        if (kind) { show({ ...d, closed: { kind, at: saved.created_at } }); return; }
+      }
+      show(d);
+      return;
+    }
+    if (d && Date.parse(d.closed?.at) === closedAt) { stopArchive(); show(d); return; }
+    if (archiveWatch) { if (record?.reopened && !d) { record = { ...record, reopened: false }; render(); } return; }
+    archiveMissing();
+    archiveWatch = window.Live.watch('items/closed', null, {
+      async data(firstPage, meta) {
+        const kind = meta.viewer?.kind || 'public';
+        if (!Array.isArray(firstPage?.items) || latestDetail && kind !== viewer) return;
+        if (kind !== viewer) { archiveMissing(); viewer = kind; nameBack(viewer); }
+        const ask = ++closedAsk;
+        const row = await findClosedRound(firstPage, () => ask !== closedAsk || kind !== viewer);
+        if (ask !== closedAsk || kind !== viewer) return;
+        if (!row) { archiveMissing(); return; }
+        show({ ...row, actions: [], now: null, reopened: !!latestDetail && latestDetail.detail !== false,
+          archiveWithoutHistory: !Array.isArray(row.history) });
+      },
+      link(s) {
+        if (!s.data && (s.meta.publicationRevoked || ['none', 'gone'].includes(s.phase))) archiveMissing();
+      },
     });
+  }
+  async function findClosedRound(page, stale) {
+    for (let index = 0; index < 20; index++) {
+      const hit = page.items.find(row => row.id === id && Date.parse(row.closed?.at) === closedAt);
+      if (hit) return hit;
+      const oldest = Math.min(...page.items.map(row => Date.parse(row.closed?.at)).filter(Number.isFinite));
+      if (page.next == null || oldest < closedAt - 1000) return null;
+      const next = await window.Live.get('items/closed', { cursor: page.next }).catch(() => null);
+      if (stale() || !Array.isArray(next?.data?.items) || next.meta?.viewer?.kind !== viewer) return null;
+      page = next.data;
+    }
+    return null;
   }
   // 后台“登记事项”“核对事项”（Add / Review）这类纯流水对这件事没有信息，经过里不列；这件事从哪天开始照留，起点写“开始”（同问题账本的起点），不写“登记事项”；
   // 没有别的经过时也照列这一条。重新打开、关闭和真有内容的经过照列，换了一轮的“本轮开始”照补（M691）
@@ -309,16 +387,17 @@
   const ledgerOnly = e => { const t = String((e.text && typeof e.text === 'object' ? e.text.text : e.text) ?? '').trim(); return !e.outcome && (LEDGER_ONLY.test(t) || !t && ['Add', 'Review'].includes(e.event)); };
   function itemHistory(d) {
     const born = d.episode_at || d.born, closed = d.closed;
+    const inRound = at => !Number.isFinite(closedAt) || Date.parse(at) <= closedAt;
     const sameAt = (a, b) => a === b || Date.parse(a) === Date.parse(b);
-    const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: e.occurred_at || e.at,
+    const rows = (Array.isArray(d.history) ? d.history : []).map(e => ({ ...e, at: eventAt(e),
       label: e.label || EVENT[e.event] || (/^(登记事项|重新打开事项|核对事项|关闭事项)$/u.test(e.text) ? e.text : '') }))
-      .filter(e => !ledgerOnly(e));
+      .filter(e => !ledgerOnly(e) && inRound(e.at));
     const start = e => [e.label, e.text].some(t => /^(开始|本轮开始|登记|生成待办|重新打开|事项已加入等你的清单)/u.test(t));
-    if (born && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: d.episode_at && (rows.length || closed) ? '本轮开始' : '开始' });
+    if (born && inRound(born) && !rows.some(e => start(e) && Math.abs(Date.parse(e.at) - Date.parse(born)) < 1000)) rows.push({ at: born, label: d.episode_at && (rows.length || closed) ? '本轮开始' : '开始' });
     if (closed && !rows.some(e => sameAt(e.at, closed.at) && (e.kind && e.kind === closed.kind || e.event === 'Close' || /关闭|办完|了结|不办/u.test(e.label) || e.text && e.text === closed.text))) {
-      rows.push({ at: closed.at, text: closed.text, label: CLOSED[closed.kind] || '已了结' });
+      rows.push({ at: closed.at, text: closed.text, label: addressed(CLOSED[closed.kind] || '已了结', viewer) });
     }
-    return rows.sort((a, b) => Date.parse(b.at || 0) - Date.parse(a.at || 0));
+    return rows.sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
   }
   async function earlier() {
     if (searching || !next) return;
@@ -345,12 +424,20 @@
   const detailResource = `${issue ? 'ledger' : 'items'}/${encodeURIComponent(id)}`;
   let detailWatch, legacy = issue && p.has('fixture');
   const watch = ledger => window.Live.watch(ledger ? ledgerResource : detailResource, ledger ? ledgerQuery : null, {
-    phase(s) { if (!record) { heroRead.set(s); detailsRead.set(s); } },
+    phase(s) {
+      if (record || !issue && (s.meta.publicationRevoked || archiveWatch)) return;
+      heroRead.set(s); detailsRead.set(s);
+    },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
-      if (kind !== viewer) clearRecord();
+      if (kind !== viewer) { stopArchive(); clearRecord(); }
       viewer = kind;
-      if (!d) { clearRecord(); return; }
+      nameBack(viewer);
+      if (!d) {
+        if (!issue && Number.isFinite(closedAt)) showItem(null);
+        else clearRecord();
+        return;
+      }
       if (d?.q === 'warming') { record = d; empty('正在准备'); return; }
       at = meta.at;
       if (!issue) { showItem(d); return; }
@@ -372,10 +459,15 @@
       U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
       if (s.meta?.status === 403) {
         viewer = s.viewer?.kind || 'public';
-        if (record) clearRecord();
+        stopArchive(); if (record) clearRecord();
         empty(s.text || '没有权限读取这件事', true);
         return;
       }
+      if (!issue && !s.data && Number.isFinite(closedAt) && (s.meta.publicationRevoked || ['none', 'gone'].includes(s.phase))) {
+        showItem(null); return;
+      }
+      const revoked = !issue && U.publicationNote('这件事', s.meta);
+      if (revoked) { clearRecord(); empty(revoked, false, '这件事'); return; }
       if (record || searching && s.phase !== 'gone') { if (record && s.offline) render(); return; }
       heroRead.set(s); detailsRead.set(s);
       if (s.phase === 'gone') empty(s.say || '这块没存下来，连上后补上。');

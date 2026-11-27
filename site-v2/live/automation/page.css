@@ -58,8 +58,6 @@
 .automation-groups .lb-card__head { min-height: 82px; }
 .automation-groups .lb-card__sub { display: block; }
 .automation-groups .lb-card__sub:empty { display: none; }
-.automation-groups[data-audience="public"] .lb { --lb-row-cols: 10px var(--lb-grid); }
-.automation-groups[data-audience="public"] .row__acts { display: none; }
 .automation-groups .lb-card[data-art="upkeep"] { --lb-art: url("/live/img/tasks-grp-ai.webp"); }
 .automation-groups .lb-card[data-art="ai-schedule"] { --lb-art: url("/live/img/tasks-grp-ai-schedule.webp"); }
 .automation-groups .lb-cell { overflow-wrap: anywhere; }

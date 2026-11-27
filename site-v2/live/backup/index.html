@@ -13,7 +13,10 @@
 <link rel="stylesheet" href="/live/_lib/live-dossier.css">
 <link rel="stylesheet" href="/motion/motion.css">
 <script src="/motion/motion.js"></script>
-<style>.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
+<style>
+/* 窄窗访客顶栏按绿灯宽度缩放。站名字宽收拢的过程中也让绿灯盒维持这个宽度，右边按钮才不会被临时推出框。 */
+html[data-live-viewer="public"] .page--backup #topbar[data-fit="zoom"] .brand { box-sizing: border-box; width: 36px; }
+.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
 /* 档案卡里：右边窄栏的表按栏宽排，长路径在格子里单行截断（点开看全文） */
 .page--backup .dossier__side .fe-l3b-table { table-layout: fixed; }
 .page--backup .dossier__side .backup-path { max-width: 100%; }
@@ -22,18 +25,42 @@
 .page--backup :is(#points-result, #coverage) { margin: 0 0 8px; color: var(--ink); }
 .page--backup .dossier__side :is(.fe-l3b-note, .fe-l3b-point-note) { overflow-wrap: anywhere; }
 .page--backup #files-target-label:not([hidden]) + #files-more { margin-left: 8px; }
-.page--backup #files-privacy { margin: 8px 0 0; }
+.page--backup .backup-phrase { white-space: nowrap; }
 .page--backup .backup-time { white-space: nowrap; }
 .page--backup .backup-evidence-label { white-space: nowrap; }
+.page--backup .backup-copy-state[data-state="failed"] { color: #a8362c; }
+.page--backup .backup-copy-state[data-state="mostly"] { color: #8a6800; }
+.page--backup .backup-copy-state[data-state="partial"] { color: #b14e0a; }
 .page--backup .backup-locator { overflow-wrap: break-word; }
+/* 本机包路径随本地文件夹列换行，保持其余副本原有列宽。 */
+.page--backup .backup-package-path { display: block; contain: inline-size; overflow-wrap: anywhere; }
+.page--backup .backup-package-path .backup-locator { overflow-wrap: inherit; }
 .page--backup .backup-locations { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
 .page--backup #copies td:has(.backup-time) small { white-space: nowrap; }
 .page--backup #copy-overview { margin-top: 12px; }
 .page--backup #copy-overview p { margin: 6px 0 0; }
+.page--backup .backup-history ul { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 6px 0 0; }
+.page--backup .backup-history li { padding: 4px 9px; border: 1px solid var(--hair); border-radius: 12px; background: #f4f5f3; color: var(--muted); font-size: 13px; line-height: 1.35; text-align: center; white-space: nowrap; }
+.page--backup .backup-history li time { display: block; }
+.page--backup .backup-history li[data-state="complete"] { background: #eaf7ef; color: #17633d; }
+.page--backup .backup-history li[data-state="failed"] { background: #fdf0ee; color: #a8362c; }
+.page--backup .backup-history .fe-l3b-note { margin: 6px 0 0; }
 /* 选中的那一份（点了“这份 ›”或带着它进来）：绿框一直亮着，下面多一行这一份在哪、哪一天 */
 .page--backup .dossier .run.is-picked::after { background: #effaf3; box-shadow: inset 0 0 0 2px #00A650, 0 6px 18px rgb(0 166 80 / .14); }
 .page--backup .run.is-picked .fe-l3b-point > span { color: #00A650; font-weight: 600; }
 .page--backup .dossier .run > .fe-l3b-point-pick { grid-column: 2; position: relative; z-index: 1; margin: -6px 0 0; padding: 0 18px 12px; color: var(--ink); font-size: 13px; line-height: 20px; }
+/* 窗口不到 1280 宽（M927）：“副本各在哪里”“云端这一轮”两张表的第二列（本地文件夹、位置）连同表头挪到这一行下面单独占一整行，路径不再挤在窄列里一行几个字；1280 以上照旧 */
+@media (max-width: 1279px) {
+  .page--backup :is(#copies, #cloud) .fe-l3b-table, .page--backup :is(#copies, #cloud) .fe-l3b-table :is(thead, tbody, caption) { display: block; }
+  .page--backup :is(#copies, #cloud) .fe-l3b-table tr { display: grid; grid-template-columns: 5em minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; border-bottom: 1px solid var(--hair); }
+  .page--backup :is(#copies, #cloud) .fe-l3b-table :is(th, td) { border-bottom: 0; padding-right: 0; }
+  .page--backup :is(#copies, #cloud) .fe-l3b-table :is(th, td):nth-child(2) { grid-column: 2 / -1; grid-row: 2; padding-top: 0; }
+  .page--backup :is(#copies, #cloud) .backup-path { max-width: 100%; }
+}
+/* 窗口不到 1100 宽：左右两栏改成上下排，表格用满整行宽 */
+@media (max-width: 1099px) {
+  .page--backup .dossier__grid { grid-template-columns: minmax(0, 1fr); }
+}
 </style>
 </head>
 <body class="page page--live page--l3 page--backup" data-record="backup">
@@ -73,7 +100,7 @@
     <aside class="dossier__side">
       <section class="dossier-card dossier-card--restore glass" id="points-section" data-mo-rise>
         <span class="dossier-card__tint" aria-hidden="true"></span>
-        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="restore" aria-hidden="true"></span><span class="rec-part">能退回哪一天</span></h2>
+        <h2 class="dossier-card__title"><span class="dossier-icon" data-icon="clock" aria-hidden="true"></span><span class="rec-part">能退回哪一天</span></h2>
         <p class="fe-l3b-note" id="points-result" hidden></p>
         <ol class="runs" id="points"></ol>
       </section>
@@ -84,7 +111,6 @@
         <label class="backup-target" id="files-target-label" hidden>去处 <select id="files-target" data-needs-pc><option value="drive">Drive</option><option value="photos">照片云</option></select></label>
         <button class="more fe-l3b-more" type="button" id="files-more" aria-controls="files-fold">看逐项明细 ›</button>
         <span class="fog__note" id="files-status" role="status"></span>
-        <p class="fe-l3b-note" id="files-privacy" hidden></p>
         <div class="fold" id="files-fold"><div id="files"></div></div>
       </section>
       <section class="dossier-card glass" id="media-section" data-mo-rise hidden>

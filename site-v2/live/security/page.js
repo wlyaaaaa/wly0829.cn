@@ -16,7 +16,9 @@
     const kinds = { elevated_start_events: '按匹配启动行数算', nonzero_exit_events_joined_registry: detail ? '按已列程序的非零退出事件计数' : '按匹配的非零退出事件计数', nonzero_exit_events: '按统计面板记录的非零退出事件计数',
       svchost_registry_rows_with_service_name: '按已列服务的登记条数算', nonpositive_signature_or_core_name_outside_windows: '按已列组件的登记条数算',
       activity_samples_with_flagged_remote_ports: '按活动测量次数算', unsigned_activity_during_sensitive_focus_above_resource_threshold: '按活动测量次数算' };
-    return U.sp(count?.label) || kinds[basis.kind] || ({ distinct_process_keys: '按去重后的进程身份算', registry_rows: '按现存登记条数算（含历史）', events: basis.source === 'stat_panel' ? '按统计面板记录的事件计数' : '按事件条数算', matching_rows_per_program_in_returned_groups: '按已列程序的匹配行数算' })[count?.aggregation] || '';
+    // 后台给的说法是半句（“明细已列出的匹配行数”），说成整句：每行右边那个数是什么（L1）
+    const label = U.sp(count?.label).replace(/^明细已列出的匹配(.+)$/, '每行右边的数是这个程序匹配到的$1');
+    return label || kinds[basis.kind] || ({ distinct_process_keys: '按去重后的进程身份算', registry_rows: '按现存登记条数算（含历史）', events: basis.source === 'stat_panel' ? '按统计面板记录的事件计数' : '按事件条数算', matching_rows_per_program_in_returned_groups: '按已列程序的匹配行数算' })[count?.aggregation] || '';
   }
   const countUnit = (basis, unit) => ({ distinct_process_keys: '个进程身份', registry_rows: '条' })[basis?.aggregation] || unit;
   const figure = (key, label, unit = '次') => S.figure({ key, label, value: data?.summary?.[key], unit: countUnit(data?.summary?.count_basis?.[key], unit) }, data?.summary, key);
@@ -65,28 +67,97 @@
     const shown = parents.slice(0, 6);
     return [traits.join('、'), shown.length && `启动它的程序：${shown.join('、')}${parents.length > shown.length ? ` 等 ${parents.length} 个` : ''}`].filter(Boolean).join(' · ');
   }
-  // 签名与路径待核线索：一行一个程序，程序名在上，它的原因在下一行小字。
-  function clueRows(c) {
-    const rows = c.rows.map((r, i) => {
-      const source = c.source[i], raw = U.sp(source.category).replace(/\s*[（(]\s*[)）]/g, '');
-      const why = raw.includes('；') ? categoryNote(raw) : raw;
-      const when = source.window && windowText(source.window, true);
-      return `<li><span class="vz-audit__t">${U.esc(r.time)}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}${why ? `<small class="stat-gap security-clue-why">${U.esc(why)}</small>` : ''}</span><span class="vz-audit__c">${r.count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`;
-    });
-    return rows.slice(0, 10).join('') + (rows.length > 10 ? `<li class="security-audit-group"><details><summary class="more">展开（还有 ${rows.length - 10} 条）</summary><ul class="vz-audit__rows">${rows.slice(10).join('')}</ul></details></li>` : '');
+  // 明细先露一部分（签名线索 10 个，别的每个小类 5 个），底下“再看 20 个”每点一次多摆 20 个，一直能看到底，到底按钮就没了（L1；本人 11-26 02:12）。按钮数的是一行行的程序，用“个”，不和次数、登记条数混。
+  // 签名线索、短命进程、后台外联三类后台可能只给了前一部分（truncated）：后台有分批读口（computer/security?audit=…，L1）时，先把这一类按批取好，
+  // 点“再看”照整份往下摆，下一批在点之前先取好；后台没有这个读口（现役）时摆完手里的为止，照旧写“仅显示已返回的程序”。
+  const AUDIT_STEP = 20, PAGED_AUDITS = ['impersonation', 'short_lived', 'silent'];
+  const auditShown = new Map(), auditLists = new Map(), auditPages = {};
+  let auditRefresh = [];
+  const auditCategory = source => { const raw = U.sp(source.category).replace(/\s*[（(]\s*[)）]/g, ''); return raw.includes('；') ? categoryNote(raw) : raw; };
+  // 一行：时间、程序名（签名线索和分批读来的多类混排时，原因写在下一行小字），次数（排行前 3 上面的小标签里有，行里也照写，不空着）
+  // 线索说明按“、”“，”“：”“ · ”分成几段，折行时整段换到下一行，不从“未知”“7 个”“git-remote-https.exe”这种词中间折开（L1）
+  const clueSegs = (t, breaks = /(、|，|：| · )/g) => U.esc(t).replace(breaks, '$1\u0001').split('\u0001').filter(Boolean).map(s => `<span class="security-seg">${s}</span>`).join('');
+  function auditLine(c, source, count, why) {
+    const when = source.window && windowText(source.window, c.unit === '条');
+    return `<li><span class="vz-audit__t">${U.esc(stamp(source.time))}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}${why ? `<small class="stat-gap security-clue-why">${clueSegs(why)}</small>` : ''}</span><span class="vz-audit__c">${count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`;
+  }
+  function auditListHtml(id) {
+    const list = auditLists.get(id);
+    if (!list) return '';
+    const page = list.paged && auditPages[list.paged], shown = auditShown.get(id) ?? list.first;
+    const total = page?.rows ? page.total : list.lines.length, left = total - shown;
+    const waiting = page?.rows && page.rows.length < Math.min(total, shown) && !page.failed;
+    const button = page?.failed === 'page' ? '这一批没读到，点一下再取 <span class="more__chev">›</span>' : waiting ? '正在取…'
+      : left > AUDIT_STEP ? `再看 ${AUDIT_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : left > 0 ? `再看剩下 ${left} 个 <span class="more__chev">›</span>` : '';
+    return `<ul class="vz-audit__rows">${list.lines.slice(0, shown).join('')}</ul>${button ? `<button class="more" type="button" data-audit-more="${U.esc(id)}"${waiting ? ' disabled' : ''}>${button}</button>` : ''}`;
+  }
+  function auditGroup(id, note, lines, first, paged = null) {
+    auditLists.set(id, { lines, first, paged });
+    return `<li class="security-audit-group" data-audit-id="${U.esc(id)}">${note ? `<p class="vz-note">${U.esc(note)}</p>` : ''}<div data-audit-list>${auditListHtml(id)}</div></li>`;
+  }
+  // 分批读口：第一批连同下一批一起取（够点一次），以后每点一次先把再下一批取好；换了一批读数（source_at 变了）就从头取
+  async function auditFill(key) {
+    const page = auditPages[key], id = `${key}|*`;
+    while (page && !page.busy && !page.failed && (page.rows == null || page.rows.length < (auditShown.get(id) ?? page.first) + AUDIT_STEP && page.next)) {
+      const gen = page.gen, first = page.rows == null;
+      page.busy = true;
+      let s = null;
+      try {
+        s = await window.Live.get('computer/security', first ? { audit: key, limit: String(Math.min(200, (auditShown.get(id) ?? page.first) + AUDIT_STEP)) }
+          : { audit: key, limit: String(AUDIT_STEP), cursor: page.next });
+      } catch { s = null; }
+      page.busy = false;
+      if (gen !== page.gen) continue;
+      const d = s?.data;
+      if (!Array.isArray(d?.rows)) { page.failed = first ? 'first' : 'page'; break; }
+      page.rows = first ? d.rows : [...page.rows, ...d.rows];
+      page.next = d.rows.length && d.next !== page.next ? d.next : null;
+      page.total = Number.isFinite(d.total) ? d.total : page.rows.length;
+      if (first) { auditRefresh.forEach(f => f()); return auditFill(key); }
+    }
+    const host = document.querySelector(`[data-audit-id="${CSS.escape(id)}"] [data-audit-list]`);
+    if (host && auditLists.has(id)) { pagedLines(key); host.innerHTML = auditListHtml(id); }
+  }
+  // 分批读来的整份换掉手里的那份（同一批读数里排在前面的也照整份重排）；只有一种原因时原因照旧写在上面，多种混排时写在每行下面
+  function pagedLines(key) {
+    const page = auditPages[key], list = auditLists.get(`${key}|*`);
+    if (!page?.rows || !list?.c) return;
+    const c = list.c;
+    const cats = new Set(page.rows.map(auditCategory));
+    list.lines = page.rows.map(r => auditLine(c, r, r.count, key === 'impersonation' || cats.size > 1 ? auditCategory(r) : ''));
+    list.note = cats.size === 1 && key !== 'impersonation' ? [...cats][0] : '';
   }
   function auditRows(c) {
-    if (c.key === 'impersonation') return clueRows(c);
+    const lines = c.rows.map((r, i) => auditLine(c, c.source[i], r.count, c.key === 'impersonation' ? auditCategory(c.source[i]) : ''));
+    if (c.paged) {
+      const id = `${c.key}|*`, cats = new Set(c.source.map(auditCategory)), first = c.key === 'impersonation' ? 10 : 5;
+      const mixed = cats.size > 1 || c.key === 'impersonation';
+      const own = c.rows.map((r, i) => auditLine(c, c.source[i], r.count, mixed ? auditCategory(c.source[i]) : ''));
+      auditLists.set(id, { lines: own, first, paged: c.key, c, note: mixed ? '' : [...cats][0] || '' });
+      pagedLines(c.key);
+      const list = auditLists.get(id);
+      return `<li class="security-audit-group" data-audit-id="${U.esc(id)}">${list.note ? `<p class="vz-note">${U.esc(list.note)}</p>` : ''}<div data-audit-list>${auditListHtml(id)}</div></li>`;
+    }
+    if (c.key === 'impersonation') return auditGroup(`${c.key}|*`, '', lines, 10);
     const groups = new Map();
     c.rows.forEach((r, i) => {
-      const source = c.source[i], raw = U.sp(source.category).replace(/\s*[（(]\s*[)）]/g, '');
-      const category = raw.includes('；') ? categoryNote(raw) : raw;
+      const category = auditCategory(c.source[i]);
       if (!groups.has(category)) groups.set(category, []);
-      const when = source.window && windowText(source.window, c.unit === '条');
-      groups.get(category).push(`<li><span class="vz-audit__t">${U.esc(r.time)}</span><span>${U.esc(U.sp(source.name))}${when && when !== c.period ? `<small class="stat-gap">${U.esc(when)}</small>` : ''}</span><span class="vz-audit__c">${r.count == null ? '' : `${U.esc(S.text(source, 'count'))} ${c.unit}`}</span></li>`);
+      groups.get(category).push(lines[i]);
     });
-    return [...groups].map(([category, rows]) => `<li class="security-audit-group">${category ? `<p class="vz-note">${U.esc(category)}</p>` : ''}<ul class="vz-audit__rows">${rows.slice(0, 5).join('')}</ul>${rows.length > 5 ? `<details><summary class="more">展开（还有 ${rows.length - 5} 条）</summary><ul class="vz-audit__rows">${rows.slice(5).join('')}</ul></details>` : ''}</li>`).join('');
+    return [...groups].map(([category, rows]) => auditGroup(`${c.key}|${category}`, category, rows, 5)).join('');
   }
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-audit-more]');
+    if (!btn || btn.disabled) return;
+    const id = btn.dataset.auditMore, list = auditLists.get(id);
+    if (!list) return;
+    const page = list.paged && auditPages[list.paged];
+    if (page?.failed === 'page') page.failed = null; else auditShown.set(id, (auditShown.get(id) ?? list.first) + AUDIT_STEP);
+    const host = btn.closest('[data-audit-list]');
+    host.innerHTML = auditListHtml(id);
+    if (page) auditFill(list.paged);
+  });
   function auditPeriod(key, rows, registry) {
     const total = data?.audit_totals?.[key], block = data?.blocks?.[`audits.${key}`];
     const stale = block?.state === 'stale' || block?.q === 'stale' || block?.stale === true;
@@ -114,8 +185,8 @@
       el.innerHTML = '<p class="vz-note" data-common-period hidden></p><div data-audit></div><p class="vz-note" data-missing></p>';
       const view = V.audit(el.querySelector('[data-audit]'), { rows: auditRows });
       const heading = el.firstElementChild;
-      return { set: () => {
-        const missing = [], ready = [], common = list === audits ? commonAuditPeriod() : '';
+      const set = () => {
+        const missing = [], ready = [], common = list === audits ? commonAuditPeriod() : '', fetch = [];
         for (const [key, title] of list) {
           const name = key === 'impersonation' && data?.summary?.impersonation === 0 ? '其他组件或路径异常（不计入高危仿冒）' : title;
           let rows = data?.audits?.[key];
@@ -128,20 +199,31 @@
           const count = stats?.returned_count ?? rows.reduce((n, r) => n + (r.count ?? 0), 0);
           const scope = key === 'crashes' ? '已列程序合计' : registry ? '已列' : '';
           // 签名线索的条数写明是在哪段统计范围里数的（照后台给的范围）。
+          // 后台只给了前一部分、又有分批读口的三类：先取好整份，取到了就不再写“仅显示已返回的…”
+          const paged = PAGED_AUDITS.includes(key) && !!stats?.truncated;
+          if (paged) {
+            const page = auditPages[key] ||= { at: undefined, rows: null, next: null, total: null, busy: false, failed: null, gen: 0, first: key === 'impersonation' ? 10 : 5 };
+            const snap = data?.blocks?.[`audits.${key}`]?.at ?? stats?.at ?? data?.at ?? null;
+            if (page.at !== snap) { page.gen += 1; page.at = snap; page.rows = null; page.next = null; page.total = null; page.failed = null; if (!U.offline?.()) fetch.push(key); }
+          }
           const detail = [countBasis(basis, true), key === 'impersonation' && when && `统计范围：${when}`, key === 'crashes' && stats?.events != null && `整个时段 ${stats.events} 次事件`,
-            stats?.truncated && `仅显示已返回的${registry ? '登记' : '程序'}`].filter(Boolean).join('；');
+            // 后台只给了前一部分（又没有分批读口、或读口还没取到）：照实写列了前几个、一共几个（看图的人说“仅显示已返回的”是技术话）
+            stats?.truncated && !(paged && auditPages[key]?.rows) && (rows.length ? `只列出了前 ${rows.length} ${registry ? '条登记' : '个程序'}${Number.isFinite(stats.total) && stats.total > rows.length ? `，共 ${stats.total} ${registry ? '条' : '个'}` : ''}` : `仅显示已返回的${registry ? '登记' : '程序'}`)].filter(Boolean).join('；');
           const top = [...rows].sort((a, b) => b.count - a.count);
           const gap = [...new Set(rows.filter(r => r.count == null || S.has(r)).map(r => r.gap || (r.count == null && !U.offline?.() ? U.collectionText('有程序计数') : '')).filter(Boolean))].join('；');
           const badges = top.slice(0, 3);
-          ready.push({ ...status, key, name, when: when === common ? '' : when, period: when, unit, scope, detail, count, gap, lower: stats?.at_least === true || rows.some(r => r.count == null || S.partial(r, 'count')), source: rows,
+          ready.push({ ...status, key, paged, name, when: when === common ? '' : when, period: when, unit, scope, detail, count, gap, lower: stats?.at_least === true || rows.some(r => r.count == null || S.partial(r, 'count')), source: rows,
             top: badges.filter(r => r.count != null || !U.offline?.()).map(r => ({ ...r, text: S.text(r, 'count') })),
-            rows: rows.map(r => ({ name: U.sp(r.name), count: badges.includes(r) && key !== 'impersonation' ? null : r.count, time: stamp(r.time) })) });
+            rows: rows.map(r => ({ name: U.sp(r.name), count: r.count, time: stamp(r.time) })) });
         }
         heading.hidden = !common;
         heading.textContent = common ? `统计时段 ${common}` : '';
         view.set(ready.length ? ready : null);
         el.lastElementChild.textContent = ready.length && missing.length && !U.offline?.() ? `${U.collectionText()}：${missing.join('、')}` : '';
-      } };
+        fetch.forEach(auditFill);
+      };
+      auditRefresh.push(set);
+      return { set };
     };
   }
   function protection(el, compact = false) {
@@ -220,7 +302,13 @@
       const keep = status.textContent.split(' · ').map(s => s.trim()).filter(s => /项要处理$|^AI 在修|AI 已接手/.test(s));
       U.html(status, [reading, ...keep].map(U.esc).join(' · '));
       // 卡头另写着的读数时刻（“最近一次记录于 …”“上次读到 … · 每小时读一次”）和这一句重了，只留这一句
-      for (const part of card.querySelectorAll('.grp__said, .grp__cutoff')) if (/^(?:最近一次记录于|上次读到|数据截[止至]|截至)\s*\d/.test(part.textContent.trim())) U.html(part, '');
+      for (const part of card.querySelectorAll('.grp__said, .grp__cutoff')) {
+        const note = part.textContent.trim();
+        if (/^(?:最近一次记录于|上次读到|数据截[止至]|截至)\s*\d/.test(note)) U.html(part, '');
+        else if (/^这次没读到，最近一次记录于\s+[\d:-]+(?: \d{2}:\d{2})?$/.test(note)) {
+          U.html(part, reading.includes('没读到') ? '' : '这次没读到');
+        }
+      }
       queueMicrotask(() => V.cardLineTitle(status.parentElement));
       return;
     }
@@ -248,29 +336,35 @@
     D.count(c);
     const hero = document.getElementById('hero');
     const count = hero.querySelector('[data-part="count"]'), groups = data?.attention_summary;
-    const report = (title, items, detail, always = false) => items.length || always
-      ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join('；') : ''}` : '';
-    const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
-    if (groups) {
-      const name = g => U.fieldHtml(g.name, { name: '检测分组' });
-      const lines = [
-        report('已确认异常', groups.confirmed, g => `${name(g)}（${[g.at && U.esc(stamp(g.at)) + ' 读到', who(g)].filter(Boolean).join('，')}）`, true),
-        report('读数暂缺', groups.unread, g => `${name(g)}（${g.at ? '最后读到 ' + U.esc(stamp(g.at)) : '没读到上次记录'}）`),
-        report('需核实', groups.review, g => {
-          const screening = /impersonation/.test(g.key || '');
-          const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
-            g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${stamp(g.at)} 读到`,
-            g.ai_fixing === true ? 'AI 在逐个核对'
-              : screening && g.strong === 0 ? '这些线索待核对，眼下不用你处理。'
-              : '下一步：交给 AI 逐个核对签名和安装位置，你不用自己查；现在还没有 AI 接手'].filter(Boolean);
-          return `<a href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>（${U.esc(fields.join('；'))}）`;
-        })
-      ].filter(Boolean);
-      count.hidden = false;
-      U.html(count, lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join(''));
-    } else count.hidden = true;
     window.LiveLight.tone(hero, data);
     queueMicrotask(() => {
+      // 取数先画明细，再更新受众。用这一次更新后的身份写称呼。
+      const report = (title, items, detail, always = false, separator = '；') => items.length || always
+        ? `<b>${title} ${items.length} 组</b>${items.length ? ' · ' + items.map(detail).join(separator) : ''}` : '';
+      const who = g => g.ai_fixing === true ? 'AI 已接手' : '还没有 AI 接手';
+      // 页顶这几行的时刻和电脑页页顶同一种写法：今天的只写钟点，别的天带日期（M1010）
+      const day = t => Number.isFinite(Date.parse(t)) ? [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ') : '';
+      if (groups) {
+        const you = U.you(document.documentElement.dataset.liveViewer);
+        const name = g => U.fieldHtml(g.name, { name: '检测分组' });
+        const lines = [
+          report('已确认异常', groups.confirmed, g => `${name(g)}（${[g.at && U.esc(day(g.at)) + ' 读到', who(g)].filter(Boolean).join('，')}）`, true),
+          report('读数暂缺', groups.unread, g => `${name(g)}（${g.at ? '最后读到 ' + U.esc(day(g.at)) : '没读到上次记录'}）`),
+          report('需核实', groups.review, (g, i, items) => {
+            const screening = /impersonation/.test(g.key || '');
+            const fields = [Number.isInteger(g.programs) && (screening ? `${g.programs} 个程序没签名或路径不常见，要确认不是冒充的` : `${g.programs} 个程序名`),
+              g.strong > 0 && `其中 ${g.strong} 个要尽快确认`, g.at && `${day(g.at)} 读到`,
+              g.ai_fixing === true ? 'AI 在逐个核对'
+                : screening && g.strong === 0 ? `这些线索待核对，眼下不用${you}处理。`
+                : `下一步：交给 AI 逐个核对签名和安装位置，${you}不用自己查；现在还没有 AI 接手`].filter(Boolean);
+            const end = i + 1 < items.length ? '）；' : '）';
+            const details = clueSegs(`（${fields.join('；')}${end}`, /([，；])/g);
+            return `<a class="security-seg" href="#grp-impersonation" data-goto="impersonation">${name(g)}${screening ? ' · 看是哪几个 ›' : ''}</a>${details}`;
+          }, false, '')
+        ].filter(Boolean);
+        count.hidden = false;
+        U.html(count, lines.map(line => `<span style="flex-basis:100%">${line}</span>`).join(''));
+      } else count.hidden = true;
       const title = headline(data, summaryGroup(data), hero.querySelector('[data-part="basis"]'));
       const counted = html => html.replace(/(<span class="live-unit">[^<]+ 个<\/span>进程身份)/g, '<span class="security-count">$1</span>');
       // 大标题先说结论（有没有确认的异常、几组要核实），退出和提权次数挪到下一行。
@@ -279,6 +373,7 @@
       if (verdict && !figures) { figures = document.createElement('p'); figures.className = 'hero__count'; figures.dataset.part = 'figures'; head.after(figures); }
       if (figures) { figures.hidden = !verdict; U.html(figures, verdict ? `<span>${counted(U.nowrap(title))}</span>` : ''); }
       const words = verdict ? U.head(verdict, { lamp: false }).replaceAll('，', '，<br>')
+        .replace('程序待筛查）', '<span class="security-count">$&</span>')
         : counted(U.head(title, { lamp: false })).replace(/(，)(?=提权)/, '$1<br>');
       U.html(head, U.status(data).lamp + words);
     });
