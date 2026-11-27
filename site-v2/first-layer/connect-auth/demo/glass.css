@@ -981,6 +981,22 @@ html:has(> body.page--connect), body.page--connect { overflow-x: clip; }
 .cell__inline { margin: 6px 0 0; font-size: 14px; }
 .cell__inline a { margin-left: 8px; }
 
+/* Windows 锁屏（本人 11-28 01:21，M1153）：点“锁屏”，这颗原地滑开成“确认锁屏”（左边滑出“确认”、变黑底），旁边照旧是“解锁”，始终两颗；
+   底下一道绿细线 4 秒走完，不点就滑回“锁屏”。按钮重画时 auth.js 给 --slide-t（负的已过时间），动画接着播、不从头再滑 */
+.page--auth .btn--slide .btn__more { display: inline-block; overflow: hidden; max-width: 2.2em; vertical-align: top; }
+/* 窄窗（900 宽左右）时“确认锁屏”比“锁屏”宽，这一格的两颗照样排一行，“解锁”不跳到下一行 */
+.page--auth .cell[data-key="win"] .cell__acts { flex-wrap: nowrap; }
+@media (max-width: 1080px) { .page--auth .cell[data-key="win"] .cell__acts { gap: 6px; } .page--auth .cell[data-key="win"] .btn--slide.is-armed { padding-inline: 13px; } }
+.page--auth .btn--slide.is-armed { animation: auth-slide-ink .42s var(--ease) var(--slide-t, 0ms); }
+.page--auth .btn--slide.is-armed .btn__more { animation: auth-slide-more .42s var(--ease) var(--slide-t, 0ms); }
+.page--auth .btn--slide.is-disarming { animation: auth-slide-ink .42s var(--ease) var(--slide-t, 0ms) reverse; }
+.page--auth .btn--slide.is-disarming .btn__more { animation: auth-slide-more .42s var(--ease) var(--slide-t, 0ms) reverse forwards; }
+.page--auth .btn--slide.is-armed::before { content: ""; position: absolute; left: 17px; right: 17px; bottom: 4px; height: 2px; border-radius: 1px; background: #00a650; transform-origin: 0 50%; animation: auth-slide-fade .42s var(--ease) var(--slide-t, 0ms) both, auth-slide-count var(--confirm, 4s) linear var(--slide-t, 0ms) both; }
+@keyframes auth-slide-ink { from { background: rgb(255 255 255 / .62); color: var(--ink); } to { background: var(--ink); color: #fff; } }
+@keyframes auth-slide-more { from { max-width: 0; opacity: 0; transform: translateX(-8px); } to { max-width: 2.2em; opacity: 1; transform: none; } }
+@keyframes auth-slide-count { to { transform: scaleX(0); } }
+@keyframes auth-slide-fade { from { opacity: 0; } }
+
 /* —— 授权与状态（本人 11-24）：补充到上限、超出可用的预设置灰、取消请求，和 B 版动效分镜 —— */
 .page--auth .chip--fill { flex: none; margin-left: 5px; }
 .deal:is(.is-lock, .is-retry) .chip--fill { display: none; }

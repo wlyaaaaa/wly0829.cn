@@ -427,6 +427,34 @@
     } catch (error) { receipt(reductionFailureResult(error, request_id, action)); }
     finally { busy = false; waiting([], false); refreshAccess(); render(); if (pending) recovery.start(); }
   }
+  // Windows 锁屏（本人 11-28 01:21，M1153）：配对过的设备点“锁屏”，这颗原地滑开成“确认锁屏”，旁边照旧是“解锁”，始终两颗按钮；
+  // 4 秒不点滑回“锁屏”，点“确认锁屏”才去锁（不用输码；没配对的设备照旧开码格输码）。按钮每次重画都是新的一颗，
+  // 用 --slide-t（负的已过时间）让滑开、滑回和倒计时细线接着播，不从头再滑一遍。只管这一颗，结束授权那颗照旧另起一行确认。
+  const LOCK_SLIDE = 420, LOCK_CONFIRM = 4000;
+  let lockArmed = null, lockBack = 0, lockTimer = 0;
+  function slideLock(b) {
+    const armed = inlineAction?.key === 'win' && inlineAction.kind === 'close' ? inlineAction : null;
+    if (lockArmed && !armed && Date.now() - lockArmed.at < LOCK_CONFIRM + LOCK_SLIDE) lockBack = Date.now();   // 刚才还开着才滑回；断线很久后按钮再出来不补滑
+    lockArmed = armed;
+    const since = Date.now() - (armed ? armed.at : lockBack);
+    b.classList.add('btn--slide');
+    b.style.setProperty('--slide-t', `${-since}ms`); b.style.setProperty('--confirm', `${LOCK_CONFIRM}ms`);
+    if (armed || since < LOCK_SLIDE) {
+      // 字包成一段：“确认”和“锁屏”在按钮里是同一行字（读屏、可见文字扫描都读成“确认锁屏”）；滑回播完就把“确认”拿掉
+      const text = document.createElement('span'), more = document.createElement('span');
+      more.className = 'btn__more'; more.textContent = '确认'; text.append(more, b.textContent); b.replaceChildren(text);
+      if (!armed) { more.setAttribute('aria-hidden', 'true'); more.addEventListener('animationend', () => { more.remove(); b.classList.remove('is-disarming'); }, { once: true }); }
+      b.classList.add(armed ? 'is-armed' : 'is-disarming');
+    }
+    b.onclick = () => {
+      if (armed) { lockArmed = null; inlineAction = null; lock('win'); return; }
+      if (windowsHints.close()) { setOpen(null); windowsHint = 'close'; render(); cells.win.querySelector('[data-kind="close"]')?.focus(); return; }
+      setOpen(null);
+      const now = inlineAction = { key: 'win', kind: 'close', label: '锁屏', at: Date.now() };
+      clearTimeout(lockTimer); lockTimer = setTimeout(() => { if (inlineAction === now) { inlineAction = null; render(); } }, LOCK_CONFIRM);
+      render(); cells.win.querySelector('[data-kind="close"]')?.focus();
+    };
+  }
   cancelButton.onclick = async () => {
     if (local) return entry();
     if (attempt) { try { receipt(await attempt.cancel()); } catch { message('取消还没确认，页面会自己再核对。'); } finally { refreshAccess(); } }
@@ -600,11 +628,12 @@
             cells[key].querySelector('[data-kind="open"]')?.focus();
           } else lock(key);
         };
+        if (key === 'win' && kind === 'close' && inline && !local) slideLock(b);
         acts.append(b);
       }
       // 这一块的请求发出去、还没出结果时，“取消请求”跟在锁定／结束后面
       if (key !== 'win' && !disconnected && pending && !pending.action && pending.key === key && grantResultNeedsQuery(pending)) acts.append(cancelButton);
-      if (inlineAction?.key === key && !disconnected && !pending && actions.some(([, kind]) => kind === inlineAction.kind)) {
+      if (inlineAction?.key === key && (local || key !== 'win') && !disconnected && !pending && actions.some(([, kind]) => kind === inlineAction.kind)) {
         const panel = document.createElement('p'); panel.className = 'cell__inline';
         if (local && inlineAction.kind === 'open') {
           const go = document.createElement('button'); go.type = 'button'; go.className = 'btn';
