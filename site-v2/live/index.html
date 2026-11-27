@@ -182,6 +182,7 @@
 .page--live #computer [data-part="why"] { margin-left: 25px; }
 .page--live #computer .kv__row:last-child dd { gap: 4px 10px; }
 .page--live #computer .kv__row:last-child .kv__link::after { content: none; }
+.page--live #computer .kv-device-time { white-space: nowrap; }
 .page--live #computer .kv__link > small { margin-top: 4px; text-wrap: pretty; }
 .page--live #phone .card__head + [hidden] + .kv { margin-top: 12px; }
 .page--live #phone .card__note:has(> .lamp) { padding-left: 18px; }
@@ -236,6 +237,9 @@
 .page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
 .page--live #computer .card__note { white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
+@media (max-width: 1024px) {
+ .page--live #computer .stutter-frame-note { color: var(--ink); background: rgb(255 255 255 / .88); box-shadow: 0 0 7px 3px rgb(255 255 255 / .65); border-radius: 4px; }
+}
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
 .page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }

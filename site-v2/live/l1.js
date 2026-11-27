@@ -988,15 +988,16 @@
         const offSince = x.state === 'offline' && x.id === 'secondary_laptop' && Number.isFinite(Date.parse(x.offline_since))
           ? `\u00a0· ${U.date(x.offline_since) !== U.date(Date.now()) ? `${U.date(x.offline_since)} ` : ''}${U.time(x.offline_since)} 起` : '';
         // 后台标了笔记本这会儿读不到（availability=unavailable）：和电脑页同一句“状态暂时读不到 · 自 … 起”，不写成从没读到过（M892）
-        // 这一行里的“·”前面用不断行空格粘住前面的字，折行时“·”不单独落到下一行开头；几台设备之间的“·”和前一台包在一起，一行放不下时后一台整个折下去，“·”留在上一行末尾（r83 返修第三轮复看：原来跟后一台包在一起，第二行以“· 手机上次经蓝牙连接”开头）
+        // 状态内部的“·”跟前面的字，设备之间的“·”跟后一台，避免挤出一行只有箭头和分隔点。
         const since = x.availability === 'unavailable' && timed(x.unavailable_since) ? `\u00a0· 自 ${U.date(x.unavailable_since)} ${U.time(x.unavailable_since)} 起` : '';
         const status = x.state === 'online' ? x.id === 'remote' ? '连得上' : '在线' : x.state === 'offline' ? '连不上' + offSince : x.availability === 'unavailable' ? `状态暂时读不到${since}` : U.collectionText('状态');
         if (x.id === 'secondary' || x.id === 'secondary_laptop') {
-          const line = esc(name + status).replace(/读不到|\d{2}-\d{2} \d{2}:\d{2}/g, '<span class="l1-unit">$&</span>');
-          return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${line} ›</a>`;
+          const line = esc(`${name}${status} ›`).replace(/读不到|((?:\d{2}-\d{2} )?\d{2}:\d{2})( 起 ›)$/g,
+            (word, stamp, end) => stamp ? `<span class="kv-device-time"><span class="l1-unit">${stamp}</span>${end}</span>` : `<span class="l1-unit">${word}</span>`);
+          return `<a class="kv__link" href="${esc(route('/live/laptop/'))}">${line}</a>`;
         }
         return `<span>${esc(name + status)}</span>`;
-      }).map((html, i, all) => i < all.length - 1 ? `<span>${html}\u00a0·</span>` : html).join(''), null, '', '/live/computer/'],
+      }).map((html, i) => i ? `<span>·\u00a0${html}</span>` : html).join(''), null, '', '/live/computer/'],
     ];
     const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : value;
     U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
@@ -1319,7 +1320,8 @@
     if (row?.read_error || unread?.read_error) {
       if (last) return until ? `${unit('卡顿这次没读到')} · ${unit(`上次有效帧 ${U.time(last)}，`)}${unit(`数据到 ${U.time(until)}`)}` : '';
     } else if (noStutterFrames(row, unread)) {
-      return until ? `${unit('卡顿判不了：这段前台程序没出合格的帧')} · ${unit(`数据到 ${U.time(until)}`)}` : '';
+      const reason = '<span class="l1-unit stutter-frame-note">卡顿判不了：这段前台程序没出合格的帧</span>';
+      return until ? `${reason} · ${unit(`数据到 ${U.time(until)}`)}` : '';
     } else if (last || until) return '';
     return '<span title="这次没读到卡顿记录，手上也没有上次的。" class="live-unit">读数暂缺 · 卡顿</span>';
   }
