@@ -4,8 +4,8 @@
 }
 .page--project:has(#frozen-archive) #pj-board { grid-template-columns: minmax(0, 1fr); }
 .page--project:has(#frozen-archive) #pj-board > .l2-col:not(:has(#frozen-archive)) { display: none; }
-.pj-line .pj-archive-details { order: 2; margin: 0; }
-.pj-line .pj-archive-note { color: var(--muted); }
+.pj-line .pj-archive-details { order: 2; margin: 0 0 0 7px; }
+.pj-line .pj-archive-note { color: var(--muted); text-wrap: balance; }
 
 .pj-card[data-card="frozen-archive"] {
   padding: 23px clamp(24px, 3vw, 36px) 25px;

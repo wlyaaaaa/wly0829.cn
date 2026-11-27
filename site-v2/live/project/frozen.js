@@ -5,9 +5,14 @@
   const unread = '暂时读不到';
   const frozen = d => d.mode === 'frozen_static';
   const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 });
-  // 快照以北京时间返回，保留年份与时分，省去“多久以前”。
-  const day = at => typeof at === 'string' && /^\d{4}-\d\d-\d\dT/.test(at) ? at.slice(0, 10) : '';
-  const clock = at => day(at) && at.slice(0, 16).replace('T', ' ');
+  // 快照已用北京时间，三个位置共用同一个年月日写法。
+  const yearInBeijing = new Intl.DateTimeFormat('en', { timeZone: 'Asia/Shanghai', year: 'numeric' });
+  function archiveDate(at, withTime = false) {
+    const match = /^(\d{4})-(\d\d)-(\d\d)(?:T(\d\d:\d\d)|$)/.exec(at || '');
+    if (!match) return '';
+    const [, year, month, day, time] = match;
+    return `${year === yearInBeijing.format(Date.now()) ? '' : year + '年'}${+month}月${+day}日${withTime && time ? ' ' + time : ''}`;
+  }
   const value = (n, unit) => Number.isFinite(n)
     ? `<span title="${number.format(n)} ${unit}">${number.format(n < 1e4 ? n : n / 1e4)}<small>${n < 1e4 ? '' : '万'}${unit}</small></span>`
     : `<span class="pj-archive-unread">${unread}</span>`;
@@ -28,20 +33,22 @@
 
   function archiveCard(d, viewer, graphBlock) {
     const archive = d.frozen_archive || {};
-    const last = day(archive.last_commit_at), first = day(archive.first_commit_at);
+    const last = archiveDate(archive.last_commit_at), first = archiveDate(archive.first_commit_at);
     const hero = document.querySelector('#pj-hero [data-part="about"]');
     const intro = archive.description && U.fieldHtml(archive.description, { name: '项目介绍', kind: viewer });
+    const note = U.fieldHtml(d.note || '项目已冻结，保留已有资料，不再更新运行数据。', { name: '项目状态', kind: viewer })
+      .replace(/项目已冻结，保留已有资料，|不再更新运行数据。/g, clause => `<span class="live-unit">${clause}</span><wbr>`);
     hero.hidden = false;
-    U.html(hero, `<span class="pj-when">最后一次提交：${esc(clock(archive.last_commit_at) || unread)}</span>
+    U.html(hero, `<span class="pj-when">最后一次提交：${esc(archiveDate(archive.last_commit_at, true) || unread)}</span>
       <a class="more more--link pj-archive-details" href="#frozen-archive">详情 <span class="more__chev">›</span></a>
       ${intro ? `<span class="pj-about">${intro}</span>` : ''}
-      <span class="pj-about pj-archive-note">${U.fieldHtml(d.note || '项目已冻结，保留已有资料，不再更新运行数据。', { name: '项目状态', kind: viewer })}</span>`, false);
+      <span class="pj-about pj-archive-note">${note}</span>`, false);
 
     const block = graphBlock('frozen-archive', '');
     block.head.hidden = true;
     block.el.tabIndex = -1;
-    const cutoff = last ? `截止 ${last.replace('-', '年').replace('-', '月')}日 最后一次提交` : `最后一次提交${unread}`;
-    const lines = Number.isFinite(archive.code_lines) ? `代码 ${number.format(archive.code_lines)} 行` : `代码行数${unread}`;
+    const cutoff = last ? `截止 ${last} 最后一次提交` : `最后一次提交${unread}`;
+    const lines = Number.isFinite(archive.code_lines) ? `${number.format(archive.code_lines)} 行` : `行数${unread}`;
     const grid = [
       cell('第一次提交', first || `<span class="pj-archive-unread">${unread}</span>`),
       cell('提交次数', value(archive.commit_count, '次')),

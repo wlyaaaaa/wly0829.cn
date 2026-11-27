@@ -6,7 +6,14 @@
 <style>
 #active { min-height: 182px; }
 #pj-summary { display: grid; gap: 5px; }
-.pj-summary__size { color: var(--muted); font-size: 14px; line-height: 20px; }
+.pj-summary__sizes { justify-self: start; border-collapse: collapse; margin-top: 4px; text-align: left; font-size: 14px; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.pj-summary__sizes :is(th, td) { padding: 4px clamp(12px, 2vw, 30px) 4px 0; text-align: left; vertical-align: top; }
+.pj-summary__sizes thead th, .pj-summary__sizes small, .pj-summary__cutoff { color: var(--muted); font-size: 12px; font-weight: 400; }
+.pj-summary__sizes tbody th { color: var(--ink-soft); font-weight: 600; }
+.pj-summary__sizes tbody tr + tr > * { border-top: 1px solid rgb(20 20 19 / .09); }
+.pj-summary__sizes b { display: block; color: var(--ink); font-size: 17px; }
+.pj-summary__sizes small { display: block; margin-top: 2px; }
+.pj-summary__sizes .pj-summary__cutoff { padding-right: 0; vertical-align: middle; }
 /* 开场的字先各自走到位再显，收拢时先淡出再移动，保留逐字顺序及绿灯动效。 */
 #topbar .brand__word .ch {
   transition-duration: .30s, .14s, .30s;
@@ -147,10 +154,8 @@
 #changes :is(#changes-list, #changes-rest) { display: block; columns: 2; column-gap: 24px; }
 #changes :is(#changes-list, #changes-rest) > .pj-list-group { margin: 0 0 24px; break-inside: avoid; }
 #changes .pj-changes-actions .more { margin: 0; translate: none; }
-/* 冻结入口在偶用那组下面，紧挨左边“展开（还有 N 条）／在用项目名册截至 …”的右边（本人 11-24 20:34，图5 红框那处），左边对齐第二列卡片：
-   “冻结 N 个 ›”，下面一行小灰字“冻结项目名册截至 …”；和那组最后的“展开（还有 N 条）”从同一行起，page.js 的 alignFrozen 量好往上提。
-   点开的冻结名册照旧排在下面一整行。只看冻结的时候不提。 */
-#frozen-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: max-content; max-width: 100%; margin-left: calc((100% - 48px) / 3 + 24px); }
+/* 冻结入口接在在用名册下面，和分组的展开按钮共用左边线。 */
+#frozen-head { display: flex; flex-direction: column; align-items: flex-start; width: max-content; max-width: 100%; }
 #frozen-head > .more { height: auto; margin: 0; }
 #frozen-head > .row__sub { margin: 2px 0 0; }
 #frozen-rest { padding-top: 24px; }
