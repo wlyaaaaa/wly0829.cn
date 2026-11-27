@@ -1162,8 +1162,9 @@
     const from = a.days?.[0], to = a.days?.at?.(-1);
     const svg = `<svg class="pj-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" preserveAspectRatio="none">${line}</svg>`;
     const title = `近 30 天提交 ${unknown ? '至少 ' : ''}${num(total)} 次${from && to ? `（${shortDate(from)}～${shortDate(to)}）` : ''}`;
-    // 小折线放在数字下面，占满这一格的宽（一行九格时数字旁边放不下）
-    return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title }).replace(/<\/div>$/, `${svg}</div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
+    // 小折线放得下就在数字右边，格子太窄才折到数字下面（look.css 的 .pj-cell--spark）
+    return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title })
+      .replace(/(<span class="pj-cell__v[^"]*">[\s\S]*<\/span>)<\/div>$/, `<span class="pj-cell__row">$1${svg}</span></div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
   }
   // 一排最多 10 格、每格至少 106 像素（同 look.css）；一排放不下时按排数均分，不让最后一格单独占一排、右边空一大片
   function fitStrip() {
@@ -1177,6 +1178,11 @@
     const track = parseFloat(getComputedStyle(strip).gridTemplateColumns), box = last.getBoundingClientRect();
     const rest = track > 0 ? Math.round((strip.getBoundingClientRect().right - parseFloat(css.paddingRight) - box.right) / track) : 0;
     if (rest > 0 && last.offsetTop > cells[0].offsetTop) last.style.gridColumnEnd = `span ${Math.round(box.width / track) + rest}`;
+    // 同一排有格的名字折成两行：这一排的名字都按最高的留高，数字落在同一条水平线上
+    const names = [...cells].map(c => c.querySelector(':scope > .pj-cell__k')), tallest = new Map();
+    names.forEach(k => k && (k.style.minHeight = ''));
+    names.forEach((k, i) => k && tallest.set(cells[i].offsetTop, Math.max(tallest.get(cells[i].offsetTop) || 0, k.offsetHeight)));
+    names.forEach((k, i) => { const h = k && tallest.get(cells[i].offsetTop); if (h > k.offsetHeight) k.style.minHeight = `${h}px`; });
   }
   function renderStrip(d) {
     const strip = part('links'), { head, tail } = heroCells(d), html = (custom?.strip?.(d, projectViewer) || '') + head.join('') + links(d) + tail.join('');
@@ -1338,7 +1344,7 @@
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏
-  document.fonts?.ready?.then(() => balance());
+  document.fonts?.ready?.then(() => { fitStrip(); balance(); });
   let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(() => { fitStrip(); balance(); }, 200); });
 
   if (!id) {

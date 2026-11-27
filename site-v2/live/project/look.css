@@ -149,7 +149,10 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-spark { flex: none; width: 76px; height: 26px; overflow: visible; }
 .pj-spark polyline { fill: none; stroke: var(--pj-spark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .pj-spark circle { fill: var(--pj-spark); }
-.pj-cell--spark .pj-spark { display: block; width: 100%; max-width: 150px; height: 20px; margin-top: 3px; }
+/* “近 30 天提交”：小折线放得下就在数字右边，格子太窄才折到数字下面 */
+.pj-cell--spark .pj-cell__row { flex-wrap: wrap; row-gap: 0; }
+.pj-cell--spark .pj-cell__v { flex: none; }
+.pj-cell--spark .pj-spark { display: block; flex: 1 1 48px; min-width: 48px; max-width: 120px; height: 22px; }
 .pj-spark .pj-spark__area { fill: color-mix(in srgb, var(--pj-spark) 14%, transparent); stroke: none; }
 a.pj-cell { transition: background .2s ease; }
 a.pj-cell:hover { background: rgb(255 255 255 / .55); }
