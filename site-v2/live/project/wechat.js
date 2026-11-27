@@ -1,4 +1,4 @@
-// 微信收发室（/live/project/?id=wechatdirect）自己的几块；page.js 在四处接进来：adapt 改这一页的数据、strip 加关键数字的格、board 加卡、columns 定卡放哪一栏，
+// 微信收发室（/live/project/?id=wechatdirect）自己的几块；page.js 在三处接进来：adapt 改这一页的数据、board 加卡、columns 定卡放哪一栏，
 // 另有 artifactsHref：关键数字“最近产物 ›”落到这页自己的档案表，不再画通用的“最近产物”卡。
 // 本人 11-27 选的乙第 3 版（不要“最近一次成功读、发”两格）：最上面“现在怎么样”四格；三张小卡（存档最新到、存档文件还打得开吗、图片语音留住多少）；
 // 通栏“AI 存过档的聊天”（本机微信一共多少条和存档的几份并排、一根细条写占比、档案表露 5 行）；测速卡和更多数据并排；最下面最近改动（page.js 画）和去哪看细节。
@@ -13,7 +13,7 @@
     'wav', 'archive_bytes', 'ai_bytes', 'unrechecked', 'checked_media', 'check_errors', 'gap_reasons', 'identity_versions', 'archive_records',
     'identity_coverage', 'measurements', 'environment', 'code_chars', 'docs_units', 'docs_files', 'code_files', 'owner_archives', 'unknown_senders',
     'local_messages', 'night_read', 'night_check']);
-  const ELSEWHERE = new Set(['missing', 'receipt_date', 'checked_media', 'check_errors', 'measurements', 'local_messages', 'night_read', 'night_check', 'environment']);
+  const ELSEWHERE = new Set(['missing', 'checked_media', 'check_errors', 'measurements', 'local_messages', 'night_read', 'night_check', 'environment']);
   const MORE_FIRST = ['wav', 'archive_bytes', 'ai_bytes', 'unknown_senders', 'identity_coverage', 'code_files'];
   const DETAIL_FIRST = ['owner_archives', 'archive_records', 'gap_reasons', 'identity_versions', 'environment'];
   const SPEED = [['text', '文字'], ['image', '图片'], ['quote', '引用'], ['voice', '语音']];
@@ -60,7 +60,7 @@
     moreRows.sort((a, b) => (MORE_FIRST.includes(a.id) ? MORE_FIRST.indexOf(a.id) : 99) - (MORE_FIRST.includes(b.id) ? MORE_FIRST.indexOf(b.id) : 99));
     const details = all.filter(m => m?.shape === 'table' && m.section && m.id !== 'measurements');
     details.sort((a, b) => (DETAIL_FIRST.includes(a.id) ? DETAIL_FIRST.indexOf(a.id) : 99) - (DETAIL_FIRST.includes(b.id) ? DETAIL_FIRST.indexOf(b.id) : 99));
-    return { metric, sec, moreRows, details, counts: raw.counts || {}, countsAt: raw.counts_at, needHref: raw.need_href, aiHref: raw.ai_href, size: raw.size };
+    return { metric, sec, moreRows, details, counts: raw.counts || {}, countsAt: raw.counts_at, needHref: raw.need_href, aiHref: raw.ai_href };
   }
   function adapt(raw) {
     const sections = Array.isArray(raw.sections) ? raw.sections : [];
@@ -73,17 +73,10 @@
     };
   }
 
-  // —— 关键数字最后一格：规模（文档、代码）旧了的时候写截止和“旧了” ——
-  function strip(d) {
-    const s = d.wechatView?.size;
-    if (!s || !(s.stale === true || s.q === 'stale') || !mdTime(s.at)) return '';
-    return `<div class="pj-cell wc-size" title="文档、代码的规模截止 ${esc(mdTime(s.at))}"><span class="pj-cell__k">规模</span><span class="pj-cell__v"><span class="wc-old">旧了</span></span><small class="pj-cell__sub">截止 ${esc(mdTime(s.at))}</small></div>`;
-  }
-
   // —— 卡里的“说明 ›”：点开写口径，再点收起 ——
   const notesOf = list => [...new Set(list.filter(x => typeof x === 'string' && x.trim()).map(x => x.trim()))];
   const explainBtn = notes => notes.length ? `<button type="button" class="wc-explain" aria-expanded="false">说明 ${chev}</button>` : '';
-  const noteBox = notes => notes.length ? `<div class="wc-note" hidden>${notes.map(esc).join('<br>')}</div>` : '';
+  const noteBox = (notes, tags = {}) => notes.length ? `<div class="wc-note" hidden>${notes.map(n => esc(n) + (tags[n] || '')).join('<br>')}</div>` : '';
   document.addEventListener('click', e => {
     const btn = e.target.closest?.('.wc-explain');
     const note = btn?.closest('.wc-card')?.querySelector('.wc-note');
@@ -117,7 +110,7 @@
     }
     const c = v.counts;
     if (finite(c.need) || finite(c.ai)) {
-      const need = finite(c.need) ? `<a href="${esc(v.needHref || `/live/?project=${ID}#needs`)}">等${viewer === 'owner' ? '你' : '本人'}的事 ${esc(int(c.need))} 件</a>` : '';
+      const need = finite(c.need) ? `<a href="${esc(v.needHref || `/live/?project=${ID}#needs`)}">等你的事 ${esc(int(c.need))} 件</a>` : '';
       const ai = finite(c.ai) ? `<a href="${esc(v.aiHref || `/live/ledger/?project=${ID}`)}">AI 在办 ${esc(int(c.ai))} 件</a>` : '';
       const busy = (c.need || 0) + (c.ai || 0) > 0;
       cells.push(['有没有要处理的', busy ? 'busy' : 'passed', `${[need, ai].filter(Boolean).join(' · ')}${chev}`, mdTime(v.countsAt), true]);
@@ -196,7 +189,8 @@
     const lv = local?.value || {}, all = finite(lv.total) ? lv.total : null;
     const left = all != null ? `<div class="wc-sum__side"><p class="wc-sum__k">本机微信一共留着</p><p class="wc-sum__v"><b>${esc(int(all))}</b> 条</p>
       <p class="wc-sum__sub">${esc([finite(lv.primary) && `主号 ${int(lv.primary)}`, finite(lv.secondary) && `副号 ${int(lv.secondary)}`, mdTime(local.at) && `截止 ${mdTime(local.at)}`, lv.cadence_text && `${lv.cadence_text} 数一次`].filter(Boolean).join(' · '))}</p></div>` : '';
-    const last = receipt?.value || receipt?.at;
+    // 最近一次存档：用两版都带钟点的存档完成时刻（访客那份回执时刻只到日，回执时刻放在“更多数据”里、两版挂“换了说法”）
+    const last = archives?.at || msgs?.at || receipt?.value || receipt?.at;
     const right = count != null || files != null ? `<div class="wc-sum__side"><p class="wc-sum__k">${all != null ? '其中' : ''}本人点名、AI 存成档案的</p>
       <p class="wc-sum__v">${[files != null && `<b>${esc(int(files))}</b> 份`, count != null && `<b>${esc(int(count))}</b> 条`].filter(Boolean).join('<i> · </i>')}</p>${mdTime(last) ? `<p class="wc-sum__sub">最近一次存档 ${esc(mdTime(last))}</p>` : ''}</div>` : '';
     let bar = '';
@@ -217,11 +211,12 @@
     const table = rows ? `<div class="wc-table"><div class="wc-tr wc-tr--head"><span>档案</span><span>存下的消息</span><span>最新到</span><span>图片语音留住</span><span>检查</span><span>完成于</span><span>打开</span></div>${rows}</div>` : '';
     if (!left && !right && !table) return '';
     const total = finite(lists.total) ? lists.total : lists.rows?.length;
-    const notes = notesOf([v.sec('archives')?.note, archives?.scope, msgs?.note && `存档条数：${msgs.note}`, local?.note && `本机一共：${local.note}`, receipt?.note && `最近一次存档：${receipt.note}`, m(lists.section || 'owner_archives')?.note]);
+    const notes = notesOf([v.sec('archives')?.note, archives?.scope, msgs?.note && `存档条数：${msgs.note}`, local?.note && `本机一共：${local.note}`, m(lists.section || 'owner_archives')?.note]);
+    const sectionMetric = m(lists.section || 'owner_archives'), tags = sectionMetric?.note ? { [sectionMetric.note]: U.visitorLabel(sectionMetric, 'note', '这一句说明', viewer) } : {};
     const all5 = total ? `<a class="more wc-all" href="${esc(records(lists.section || 'owner_archives'))}">全部 ${esc(int(total))} 份 ${chev}</a>` : '';
     return `<section class="pj-card glass wc-card wc-arch" id="wc-archives"><div class="wc-head"><b>AI 存过档的聊天</b></div>
       <p class="wc-lead">只算本人点名、AI 存成档案的这几份，不是本机微信的全部聊天。</p>
-      ${left || right ? `<div class="wc-sum${left && right ? '' : ' is-one'}">${left}${right}${bar}</div>` : ''}${table}${noteBox(notes)}
+      ${left || right ? `<div class="wc-sum${left && right ? '' : ' is-one'}">${left}${right}${bar}</div>` : ''}${table}${noteBox(notes, tags)}
       <div class="wc-foot">${all5}${explainBtn(notes)}<span class="wc-cut">${esc(mdTime(lists.at) ? `截止 ${mdTime(lists.at)}` : '')}</span></div></section>`;
   }
 
@@ -248,13 +243,13 @@
 
   // —— 更多数据：先露 6 项，其余点“展开” ——
   let moreOpen = false;
-  function moreHtml(v) {
+  function moreHtml(v, viewer) {
     const rows = v.moreRows.map(x => [x, amount(x)]).filter(([, h]) => h);
     if (!rows.length) return '';
     const shown = moreOpen ? rows : rows.slice(0, 6), rest = rows.length - 6;
     const notes = notesOf([v.sec('more-data')?.note, ...rows.map(([x]) => x.note && `${x.label}：${x.note}`)]);
     return `<section class="pj-card glass wc-card wc-more"><div class="wc-head"><b>更多数据</b></div>
-      <dl class="wc-kv">${shown.map(([x, h]) => `<div><dt>${esc(x.label)}</dt><dd>${h}</dd></div>`).join('')}</dl>${noteBox(notes)}
+      <dl class="wc-kv">${shown.map(([x, h]) => `<div><dt>${esc(x.label)}</dt><dd>${h}${U.visitorLabel(x, ['$', 'text', 'value'], '这个读数', viewer)}</dd></div>`).join('')}</dl>${noteBox(notes)}
       <div class="wc-foot">${explainBtn(notes)}${rest > 0 ? `<button type="button" class="more wc-more__btn" aria-expanded="${moreOpen}">${moreOpen ? '收起' : `展开（还有 ${rest} 项）`} ${chev}</button>` : ''}</div></section>`;
   }
 
@@ -269,7 +264,7 @@
     }
     if (wide.nextElementSibling !== boardEl || wide.parentNode !== boardEl.parentNode) boardEl.before(wide);
     const open = [...wide.querySelectorAll('.wc-note:not([hidden])')].map(n => n.closest('.wc-card')?.className);
-    const pair = [speedHtml(v), moreHtml(v)].filter(Boolean);
+    const pair = [speedHtml(v), moreHtml(v, viewer)].filter(Boolean);
     wide.innerHTML = [nowHtml(v, viewer), smallCards(v), archivesHtml(v, viewer), pair.length ? `<div class="wc-row wc-row--2${pair.length < 2 ? ' is-one' : ''}">${pair.join('')}</div>` : ''].join('');
     // 重画后，原来点开的说明照旧开着
     for (const card of wide.querySelectorAll('.wc-card')) if (open.includes(card.className)) { const n = card.querySelector('.wc-note'), b = card.querySelector('.wc-explain'); if (n && b) { n.hidden = false; b.setAttribute('aria-expanded', 'true'); } }
@@ -292,5 +287,5 @@
   const COLUMNS = { changes: 0, 'wc-details': 1 };
   const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.('(max-width: 899px)').matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
 
-  window.ProjectPages = Object.assign(window.ProjectPages || {}, { [ID]: { adapt, strip, board, columns, artifactsHref: '#wc-archives' } });
+  window.ProjectPages = Object.assign(window.ProjectPages || {}, { [ID]: { adapt, board, columns, artifactsHref: '#wc-archives' } });
 })();
