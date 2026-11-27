@@ -351,14 +351,13 @@
   // 分批展开（R147）：先露 SHOW 那几条，点“展开（还有 N 条）”一次多露一批，露到底变“收起”；一批多少按排版定
   const BATCH = { figs: 8, kv: 10, rows: 10 };
   // reveal：这一块每组已多露了几条（组名 → 条数），重画时照着露；more(key)：这一组读完了、后面还能接着读（更早的改动、更多产物），这时不写“收起”，由那颗按钮接着读
-  // label(left, open)：项目自己定的展开按钮写法（手机日记本的最近改动写“全部 N 条”），没给照“展开（还有 N 条）”
-  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null, label = null) {
+  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null) {
     const groups = new Map();
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
     return [...groups].map(([key, items]) => {
       const extra = Math.max(0, items.length - preview), open = Math.min(extra, reveal.get(key) || 0), left = extra - open;
-      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
     });
   }
@@ -370,7 +369,7 @@
   }
   function drawGroups(b) {
     if (!b.groupSrc?.length) return;
-    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore, b.stepLabel), { animate: false });
+    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore), { animate: false });
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
@@ -461,7 +460,7 @@
     if (b.kind === 'rows') {
       b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
       b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
-      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore, b.stepLabel);
+      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore);
     }
     const show = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
     const shown = rows.length ? rows.slice(0, show) : unread.length || (hidden && !hiddenText) ? [] : [{ key: 'none', cls: b.kind === 'rows' ? 'row row--flat row--empty' : 'pj-empty', html: `${b.kind === 'rows' ? '<span></span>' : ''}<p class="row__sub">${U.fieldHtml(metricText(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(empty || '') ? '这块没存下来，连上后补上。' : hiddenText || empty))}</p>` }];
@@ -666,8 +665,7 @@
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
     const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
-    // 展开按钮已写“全部 N 条”的（项目自己定的，见 custom.changes），不再另写一行条数
-    const count = loaded && !custom?.changes?.step ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
+    const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '正在读改动记录…');
@@ -969,11 +967,9 @@
         // 一批 10 条往下露；已读到的露完了才出“更早的改动”接着读
         b.step = BATCH.rows; b.hasNext = !!changeLog?.next;
         b.loaded = changeLog?.loaded === mine.length ? changeLog.loaded : mine.length;
-        // 项目自己定先露几条、展开按钮怎么写的（手机日记本：3 条、“全部 N 条”），照它
-        const preview = custom?.changes?.shown ?? changeLog?.shown;
+        const preview = changeLog?.shown;
         b.preview = Math.min(b.loaded, Number.isInteger(preview) && preview >= 0 ? preview : SHOW.rows);
-        b.stepLabel = custom?.changes?.step ? (left, open) => custom.changes.step(left, open, changeLog?.total ?? b.loaded) : null;
-        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '', explain: custom?.changes?.note ? [esc(custom.changes.note)] : [] }, animate);
+        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '' }, animate);
         const changed = !mine.length && proj.changed?.at ? proj.changed : null;
         const hasText = changed?.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(changed.text, projectViewer));
         b.reading.hidden = !changed;
@@ -1371,7 +1367,7 @@
       };
       if (!first) draw(true);
       if (raw) { readSide(raw, reads, watch); readAdditions(reads, watch); }
-      if (raw?.artifacts && !artsWatch && !custom?.noArtifacts && !custom?.ownArtifacts) {
+      if (raw?.artifacts && !artsWatch && !custom?.noArtifacts) {
         artsWatch = watch(`projects/${enc(id)}/artifacts`, null, {
           data(d, meta) {
             if (!sameViewer(meta)) return;
