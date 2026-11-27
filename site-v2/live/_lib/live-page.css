@@ -970,6 +970,7 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
   background: var(--c);
 }
 .focus-track.is-month .focus-track__pill { box-shadow: 0 0 0 2px #fff; }
+.focus-track__pill.is-omitted { visibility: hidden; }
 .focus-track__open { position: absolute; inset: 0; width: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
 .focus-track__open[aria-pressed="true"], .focus-track__open:focus-visible {
   outline: 2px solid var(--ink);

@@ -659,8 +659,7 @@
     const text = minutes >= 6000 && rest ? `${Math.floor(minutes / 60)} 小时 ${rest} 分钟` : dur(seconds);
     return compact ? text?.replaceAll(' ', '').replace('分钟', '分') : text;
   };
-  const focusColor = category => V.hues[catHue(category)] || catHue(category);
-  const focusTrackColor = category => category === 'ai' ? '#F7C858' : focusColor(category);
+  const focusColor = category => category === 'ai' ? '#F7C858' : V.hues[catHue(category)] || catHue(category);
   const focusAppKey = name => sp(name).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
   const focusChartNames = new Map([['Google Chrome', 'Chrome'], ['Claude 桌面端', 'Claude']]);
   function renderFocusSummary(el, d) {
@@ -719,21 +718,26 @@
     document.addEventListener('click', event => { if (!pillOf(event)) select(null); });
     chart.addEventListener('keydown', event => { if (event.key === 'Escape') select(null); });
     function fitLabels() {
+      const month = chart.classList.contains('is-month');
       const fits = Array.from(chart.querySelectorAll('.focus-track__pill'), pill => {
         const labels = [...pill.querySelectorAll('.focus-track__label')];
         const width = pill.getBoundingClientRect().width;
+        // 月图略过 4px 以下没有标签的跨日尾片，主色块仍可看整段提示。
+        const omit = month && labels.length === 0 && width < 4;
         const label = labels.find(label => label.getBoundingClientRect().width <= width);
         const badge = pill.querySelector('.focus-track__longest');
         const edge = pill.nextElementSibling?.offsetLeft ?? pill.parentElement.clientWidth;
         const beside = badge && width >= badge.offsetWidth && edge - pill.offsetLeft - width >= badge.offsetWidth + 4;
-        return { pill, label, badge, beside };
+        return { pill, label, badge, beside, omit };
       });
-      for (const { pill, label, badge, beside } of fits) {
+      for (const { pill, label, badge, beside, omit } of fits) {
+        pill.classList.toggle('is-omitted', omit);
         pill.querySelector('.focus-track__label.is-fit')?.classList.remove('is-fit');
         label?.classList.add('is-fit');
         badge?.classList.toggle('is-beside', beside);
       }
-      if (pinned) showTip(pinned);
+      if (pinned?.classList.contains('is-omitted')) select(null);
+      else if (pinned) showTip(pinned);
     }
     new ResizeObserver(fitLabels).observe(chart);
     document.fonts.ready.then(fitLabels);
@@ -760,7 +764,7 @@
       count = d?.summary?.focus_count ?? rows.length;
       showList();
       const categories = new Set(rows.map(row => row.category));
-      U.html(key, [...categories].map(c => `<span><i style="--c:${focusTrackColor(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join(''), false);
+      U.html(key, [...categories].map(c => `<span><i style="--c:${focusColor(c)}"></i>${U.fieldHtml(CAT[c] || c, { name: '应用分类', place: 'label' })}</span>`).join(''), false);
       const longest = d?.focus?.findIndex(row => row.seconds === d?.summary?.focus_longest) ?? -1;
       chart.classList.toggle('is-month', range === '30d');
       const markup = renderTrack(d, rows, longest);
@@ -802,7 +806,7 @@
           ...programs.map(names => ['program', names]),
           ['duration', duration],
         ] : [];
-        days.get(p.midnight).pills.push(`<span class="focus-track__pill"${row.category === 'ai' ? ' data-ai' : ''} data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${focusTrackColor(row.category)}">
+        days.get(p.midnight).pills.push(`<span class="focus-track__pill"${row.category === 'ai' ? ' data-ai' : ''} data-segment="${row.id}" data-part="${p.a}" style="${position(p.a, p.b, p.midnight)};--c:${row.color}">
           <button type="button" class="focus-track__open" aria-pressed="false" aria-label="${esc(row.detail)}"></button>
           ${labels.map(([form, label]) => `<span class="focus-track__label" data-label="${form}">${label}</span>`).join('')}
           ${p === main && row.id === longest ? '<span class="focus-track__longest">最长</span>' : ''}</span>`);
