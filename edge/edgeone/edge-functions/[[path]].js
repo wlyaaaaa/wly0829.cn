@@ -128,6 +128,8 @@ export default async function onRequest({request, env = {}}) {
   } catch { if (old) return new Response('Upstream unavailable', {status: 504, headers}); }
   finally { clearTimeout(timer); }
   headers.set('X-Live-Connection', connection);
+  // The root screen uses only the direct computer response.
+  if (url.pathname === prefix + 'screen') return fail('snapshot_unavailable', '暂时连不上电脑');
   try {
     const query = new URLSearchParams(url.searchParams);
     query.delete('refresh');
