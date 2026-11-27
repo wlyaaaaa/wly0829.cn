@@ -21,7 +21,8 @@
   let shown = FIRST, more = [], cursor, paging = false, pageFailed = false;
   const F = (v, name) => T.field(v, viewer, name);
   const said = v => R.asOwner(v, viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/u, '')
-    .replace(/^原因[：:]\s*/u, '').replace(/^这(?:一轮|次)(?=没验完$)/u, '');
+    .replace(/^原因[：:]\s*/u, '');
+  const resultWords = v => said(v).replace(/^这(?:一轮|次)\s*/u, '').replace(/[！？；!?]$/u, '');
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
@@ -69,8 +70,15 @@
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
     const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
-    const labelPrefix = `${t.text} · `;
-    const note = detail.startsWith(labelPrefix) ? detail.slice(labelPrefix.length) : detail;
+    let note = detail;
+    for (const prefix of [`${t.text} · `, `${title} · `]) {
+      if (note.startsWith(prefix)) note = note.slice(prefix.length);
+    }
+    // 只去掉末尾单独一段的重复结局，保留中间的任务说明。
+    const ending = /(?:^|(?<=[。！？；])\s*|\s+·\s+)([^。！？；·]+[。！？；]?)$/u.exec(note);
+    if (ending && resultWords(ending[1]) && resultWords(ending[1]) === resultWords(title)) {
+      note = note.slice(0, ending.index);
+    }
     const words = said(note);
     const repeated = words && [t.text, title].map(said).some(earlier => {
       const at = earlier.indexOf(words);
