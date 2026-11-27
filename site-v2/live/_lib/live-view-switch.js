@@ -9,12 +9,19 @@
   'use strict';
   const key = 'wly-live-view', site = /(^|\.)wly0829\.cn$/i.test(location.hostname);
   let publicView = sessionStorage.getItem(key) === 'public', owner = false, invalid = false, known = false, button, label;
-  // 切换是整页重载：点下去先转半圈再重载，点的时刻记在 sessionStorage。实况各页等这一版的第一份结果到了（认清是不是本人）
-  // 才把按钮画出来，和“几点读到”同时出现，免得先画在右边、等“几点读到”有了字再往左跳；画出来时接着转（角度从点下去那一刻算，不跳），
-  // 至少再转半圈、停在整圈。一直等不到结果的，8 秒后照样画出来停下。规则页没有实况数据，新页面一出来就画。
+  // 切换是整页重载：点下去先转半圈再重载，点的时刻和按钮离右边多远记在 sessionStorage。实况各页等这一版的第一份结果到了（认清是不是本人）、
+  // 右边“几点读到”有了字、按钮要放的地方和点下去时一样，才把按钮画出来，从点下到切完按钮左右不挪（右边几颗的宽度随字变，按钮跟着挪就是跳）；
+  // 画出来时接着转（角度从点下去那一刻算，不跳），至少再转半圈、停在整圈。一直对不上的，8 秒后照样画出来停下。规则页没有实况数据，新页面一出来就画。
   const RESUME = 'wly-live-view-switch-at', TURN = 900;
-  let spinning = (() => { try { const at = Number(sessionStorage.getItem(RESUME)); sessionStorage.removeItem(RESUME); return at && Date.now() - at < 20000 ? at : 0; } catch { return 0; } })();
-  let stopping = 0, waited = false;
+  const resume = (() => { try { const v = JSON.parse(sessionStorage.getItem(RESUME)); sessionStorage.removeItem(RESUME); return v && Date.now() - v.at < 20000 ? v : null; } catch { return null; } })();
+  let spinning = resume?.at || 0, stopping = 0, waited = false, watcher;
+  const right = el => el.parentElement.getBoundingClientRect().right - el.getBoundingClientRect().right;   // 离所在那组右边多远
+  // 按钮还没放进去时，它会放在这组第一颗看得见的左边、隔一个间距
+  function inPlace(group) {
+    if (!Number.isFinite(resume?.right)) return true;
+    const first = [...group.children].find(el => el.getClientRects().length);
+    return !!first && Math.abs(right(first) + first.offsetWidth + (parseFloat(getComputedStyle(group).columnGap) || 0) - resume.right) < 2;
+  }
   const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2.25" stroke-linecap="round">'
     + '<g stroke="currentColor" fill="currentColor"><path d="M4.95 14.57A7.5 7.5 0 0 1 16.4 5.9" fill="none"/><path d="M18.5 7.4 14.3 7.7 17.5 3.4Z" stroke-width=".8" stroke-linejoin="round"/></g>'
     + '<g stroke="#00a650" fill="#00a650" transform="rotate(180 12 12)"><path d="M4.95 14.57A7.5 7.5 0 0 1 16.4 5.9" fill="none"/><path d="M18.5 7.4 14.3 7.7 17.5 3.4Z" stroke-width=".8" stroke-linejoin="round"/></g></svg>';
@@ -34,9 +41,14 @@
   const paired = () => { try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || ''); } catch { return false; } };
   function render() {
     if (!publicView && !owner && !invalid && !known) return;
-    if (spinning && !known && !waited && window.Live) return;
     const group = document.querySelector('#topbar .topbar__group--right');
     if (!group) return;
+    if (!button && spinning && !waited && window.Live && (!known || !inPlace(group))) {
+      // 右边几颗换字、字体到了都会挪位置：盯着这一组，有变化再对一次
+      if (!watcher) { watcher = new MutationObserver(render); watcher.observe(group, { childList: true, subtree: true, characterData: true }); document.fonts?.ready.then(render); }
+      return;
+    }
+    watcher?.disconnect();
     if (!button) {
       button = document.createElement('button'); button.id = 'wly-preview-view'; button.type = 'button';
       button.className = 'pill live-view-pill';
@@ -46,6 +58,7 @@
       if (spinning) {
         button.classList.add('is-switching'); button.setAttribute('aria-busy', 'true');
         button.style.setProperty('--wly-view-at', `${-((Date.now() - spinning) % TURN)}ms`);
+        if (known || waited) settle();   // 画出来了才开始算“再转半圈停”，不在按钮还没出来时就停掉
       }
       button.onclick = () => {
         if (spinning) return;
@@ -53,7 +66,7 @@
         if (!publicView && !owner) return void window.TrustModal?.show();
         sessionStorage.setItem(key, publicView ? 'owner' : 'public');
         spinning = Date.now();
-        try { sessionStorage.setItem(RESUME, String(spinning)); } catch { /* 记不下：新页面照常显示，只少接着转那一段 */ }
+        try { sessionStorage.setItem(RESUME, JSON.stringify({ at: spinning, right: right(button) })); } catch { /* 记不下：新页面照常显示，只少接着转那一段 */ }
         button.style.setProperty('--wly-view-at', '0ms'); button.classList.add('is-switching'); button.setAttribute('aria-busy', 'true');
         setTimeout(() => location.reload(), TURN / 2);
       };
@@ -74,7 +87,7 @@
       known = true;
       if (viewer?.device === 'invalid') { invalid = true; owner = false; }
       if (viewer?.kind === 'owner') { invalid = false; owner = true; }
-      render(); settle();
+      render(); if (button) settle();
     }
   };
   const start = () => {
