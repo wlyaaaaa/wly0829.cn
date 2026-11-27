@@ -4,6 +4,23 @@
   font: 400 calc(var(--text) * 1.12)/1.7 var(--serif);
   color: var(--muted);
 }
+/* 页顶一句“这是 X 月 X 日定稿的版本，之后的变化看实况”：放在题目块外面（正文核对只看题目块和正文），
+   往上收进题目区 84px 的下边距，看上去紧跟在副标题下面；它自己再留 84px 给下面的三列。 */
+.principles-frozen {
+  margin: -66px 0 84px;
+  padding: 0 12vw;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--muted);
+}
+.principles-frozen a {
+  color: #00A650;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .35em;
+}
 .principles-page .rules-toc, .principles-page .rules-meta {
   max-height: calc(100dvh - var(--stick) - 24px);
   overflow-y: auto;
