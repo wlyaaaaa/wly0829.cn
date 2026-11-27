@@ -217,7 +217,7 @@
   // 图例上不写一排“0 分钟”（像测过是零），写“没有这类记录”和来源说明；有记录的照常写时长，0 就是测过的 0。
   const STATE_NOTE_KEYS = { 'screen-off': 'display_off', sleep: 'sleep', off: 'off' };
   // 关机离线怎么算（本人 11-23 17:20：电脑卡死期间属于关机，不属于缺测）；哪段算关机由后台按这条算好给，页面照画（M593）
-  const OFF_NOTE = '开机或重启（◆）前面那段空白，从最后一次采到算起；卡死后重启也算';
+  const OFF_NOTE = '◆ 是开机或重启的时刻，前面那段空白算关机，从最后一次采到算起（卡死后重启也算）';
   function stateNotes(d) {
     const notes = d?.summary?.state_notes, out = new Map();
     if (!notes || typeof notes !== 'object') return out;
@@ -314,8 +314,7 @@
           }
           note.textContent = [sourceReading(d?.day?.recorded_to, d?.blocks?.day),
             missed.total >= 60 && `缺测是电脑没关机、却没采到使用状态的时段（开机后还没采到的那一小会儿也算），不算在用也不算离开（共 ${dur(missed.total)}，${missed.longest <= 120 ? '都是一两分钟以内的零碎空档' : `最长一段 ${dur(missed.longest)}`}）`,
-            d?.day?.restart_points?.length ? '◆ 是开机或重启的时刻，它前面那段空白算关机（卡死后重启也算），从最后一次采到算起' :
-              d?.day && d.day.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
+            d?.day?.restart_points === null ? '暂时读不到系统关机记录' : ''].filter(Boolean).join(' · ');
           note.hidden = !note.textContent;
           if (S.partial(d?.day, 'spans')) el.querySelectorAll('.vz-legend__vals > span').forEach(n => { if (!n.textContent.includes('至少') && !unnoted.has(n.closest('[data-state]')?.dataset.state)) n.append(' · 至少'); });
         } };
