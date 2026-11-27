@@ -130,12 +130,17 @@
     const text = [extra, reason, esc(old)].filter(Boolean).join(' · ');
     return text ? `<p class="row__sub chat-reason">${text}</p>` : '';
   }
-  function chatTitle(c) {
+  function chatTitle(c, keepArrow = false) {
     const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
     const displayName = typeof name.text === 'string' ? { ...name, value: plain(name.text), text: plain(name.text) } : name;
     const titleHtml = contentLocked(c, viewer) ? '仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
     const href = c.detail ? detailHref(c.id) : '';
-    const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
+    const arrow = '<span class="more__chev" aria-hidden="true">›</span>';
+    // 等待栏较窄，末字（也可能是转义后的字符）和箭头一起换行。
+    const linkedTitle = keepArrow && titleHtml.trim()
+      ? titleHtml.replace(/(?:&[\w#]+;|\S\p{M}*)\s*$/u, tail => `<span class="live-unit">${tail} ${arrow}</span>`)
+      : `${titleHtml} ${arrow}`;
+    const title = href ? `<a class="row__title" href="${href}">${linkedTitle}</a>`
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
     return { name, marked, title, href };
   }
@@ -153,7 +158,7 @@
     // 这一行不在一段中间折（R14-05 同类：“2 小时前在动”的“2”和“小时”也会拆开）：“·”隔开的每一段包进现有的 .live-unit，放不下时整段挪到下一行，只在“·”处折；
     // 在干、等你那格和停下、做完那行同一份；实况首页同一个办法
     const timingHtml = timing.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ');
-    const { name, marked, title, href } = chatTitle(c);
+    const { name, marked, title, href } = chatTitle(c, column === 'waiting');
     // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
     const titleMark = locked || U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = !column && c.state === 'waiting' && stateText(c);
@@ -820,8 +825,10 @@
       if ($('chat-quota')) { U.html($('chat-quota'), ''); $('chat-quota').hidden = true; }
       for (const host of [board.el, stoppedCard?.el, doneCard.el].filter(Boolean)) {
         host.querySelectorAll('ul.rows').forEach(ul => U.list(ul, [], { animate: false }));
-        host.querySelectorAll('.lb-card__sub, .lb-card__count').forEach(el => U.html(el, '', false));
+        // 栏头和件数由同一次 U.html 管；清栏也更新标题的整段内容。
+        host.querySelectorAll('.lb-card__sub, .lb-card__title').forEach(el => U.html(el, '', false));
       }
+      U.html(doneCard.title, recentTitle, false);
       if (stoppedCard) stoppedCard.el.hidden = true;
       document.body.classList.remove('chats-board');
       U.html($('recent-note'), '');
