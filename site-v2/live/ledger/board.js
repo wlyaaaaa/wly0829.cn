@@ -210,7 +210,7 @@
     }
     return groups;
   }
-  // 后台给的口径说明 {text, from}：近 7 天修好几件和自动任务页的“修好”、自动修理的成坏数的不是一回事，照写后台那句；
+  // 后台给的口径说明 {text, from}：近 7 天修好几次和自动任务页的“修好”、自动修理的成坏数的不是一回事，照写后台那句；
   // text 里没写哪天起的才补“几号起”
   function basis(b) {
     const text = b ? U.fieldText(b.text, viewer).trim() : '';
@@ -225,9 +225,10 @@
     const counts = Object.fromEntries(Object.keys(SETTLED).map(k => [k, rows.filter(r => r.settled === k).length]));
     const next = older.length ? olderNext : d.next;
     return `<section class="tp-panel lg-done" id="history"><div class="tp-panel__head"><h2>最近了结的</h2></div>
-      <div class="tp-seg" role="group" aria-label="按结果看"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(SETTLED).map(k =>
+      <div class="tp-seg" role="group" aria-label="按结果看" aria-describedby="lg-settled-basis"><button type="button" data-filter="" aria-pressed="${!filter}">全部 ${int(rows.length)}</button>${Object.keys(SETTLED).map(k =>
         `<button type="button" data-filter="${k}" aria-pressed="${filter === k}">${settledLabel(k)} ${int(counts[k])}</button>`).join('')}</div>
-      ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 件：${why7}</p>` : ''}
+      <p class="tp-small lg-basis" id="lg-settled-basis">按每件最后的结局算，一件只算一次。</p>
+      ${why7 && known(fixed7) ? `<p class="tp-small lg-basis">近 7 天修好 ${int(fixed7)} 次：${why7}</p>` : ''}
       <ul class="lg-settled">${groupRows(shown).map(({ rows: [r, ...rest] }) => `<li class="${[r, ...rest].some(x => x.id === picked) ? 'is-picked' : ''}"><span class="tp-tag" data-tone="${TONE[r.settled]}">${settledLabel(r.settled)}</span>
         <span><button type="button" class="lg-title" data-pick="${esc(r.id)}">${F(titleOf(r), '事项标题')}</button>${vtag(r, ['$', 'title', 'plain_title'], '这件事的说法')}${rest.length ? `<span class="lg-x">同样的 ${int(rest.length + 1)} 件</span>` : ''}</span>${r.settled === 'to_owner' && r.owner_href ? link(r.owner_href, `已放进等${you()}的事 ›`) : ''}<time>${esc(rest.length ? span(rest.at(-1).at, r.at) : when(r.at))}</time></li>`).join('')
         || `<li class="tp-empty">${filter ? '已读到的记录里没有这一类。' : '已读到的记录里还没有了结的。'}</li>`}</ul>
