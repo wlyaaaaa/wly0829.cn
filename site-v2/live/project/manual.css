@@ -81,11 +81,11 @@
 /* 标题、三条说法折行时句尾不单独剩一两个字 */
 .mn-row__title, .mn-conv li, .mn-mat__v { text-wrap: pretty; }
 
-/* 窗口窄（≤1100 像素）：四张卡排成一栏（大卡、最近改过的、材料和依据、最近改动），宽的时候照图两栏不变 */
+/* 窗口窄（≤1100 像素）：四张卡排成一栏，先后照宽屏从左到右、从上到下（大卡、最近改过的、最近改动、材料和依据），宽的时候照图两栏不变 */
 @media (max-width: 1100px) {
   .page--project #pj-board.pj-board--manual { grid-template-columns: minmax(0, 1fr); }
   .pj-board--manual .pj-card[data-card="manual-groups"] { order: 0; }
   .pj-board--manual .pj-card[data-card="manual-recent"] { order: 1; }
-  .pj-board--manual .pj-card[data-card="manual-materials"] { order: 2; }
-  .pj-board--manual .pj-card[data-card="changes"] { order: 3; }
+  .pj-board--manual .pj-card[data-card="changes"] { order: 2; }
+  .pj-board--manual .pj-card[data-card="manual-materials"] { order: 3; }
 }
