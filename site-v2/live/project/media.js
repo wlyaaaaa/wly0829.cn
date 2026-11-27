@@ -93,7 +93,7 @@
     const row = ([name, n], i) => {
       const privateRow = name === 'private_category', unit = privateRow && privateCount.unit;
       const label = esc(privateRow ? privateCount.display_label : name);
-      const tag = privateRow && privateCount.rewrite === 'rewritten' ? U.visitorRewrittenTag('这一类的名称', '', viewer).replace('对外换了说法</', '换了说法</') : '';
+      const tag = privateRow ? U.visitorLabel({ visitor_labels: { $: privateCount.rewrite } }, '$', '这一类的名称', viewer) : '';
       return `<li><span><i style="--segment:${inks[i % inks.length]}"></i>${label}</span><b>${num(n)}${unit ? ` ${esc(unit)}` : ''}</b>${tag}${name === '旧标签' && old ? `<small>（${old}）</small>` : ''}</li>`;
     };
     const counts = ranked.slice(0, 7).map(([, n], i) => [n, inks[i]]);

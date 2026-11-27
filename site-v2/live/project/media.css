@@ -7,7 +7,7 @@ body.page--project:has(.pj-board--media) {
   .page--project:has(.pj-board--media) { --col: min(calc(100vw - 72px), 1400px); }
   .page--project:has(.pj-board--media) #stage { width: min(calc(100% - 72px), 1400px); }
   .page--project:has(.pj-board--media) #pj-hero .card__glass { min-height: 146px; padding: 23px 37px 21px; }
-  #media-content .media-categories { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); font-size: clamp(16px, 1.25vw, 18px); margin-top: 16px; }
+  #media-content .media-categories { grid-template-columns: minmax(0, .84fr) minmax(0, 1.16fr); font-size: clamp(16px, 1.25vw, 18px); margin-top: 16px; }
   #media-content .media-categories > .media-cat-list { grid-auto-rows: minmax(36px, auto); row-gap: 8px; }
 }
 .page--project #pj-board.pj-board--media {
@@ -131,5 +131,6 @@ body.page--project:has(.pj-board--media) {
   .media-type-sub { padding-left: 0; font-size: 10px; }
   .media-categories { grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px 6px; }
   .media-categories .media-cat-list { display: contents; }
+  .media-recent-list li { display: grid; grid-template-columns: 6px minmax(0, 1fr) auto; }
   .pj-board--media [data-card="media-content"] { min-block-size: 312px; }
 }
