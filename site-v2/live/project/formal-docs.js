@@ -53,7 +53,7 @@
       <div><dt>合计</dt><dd>${qty(m('signed_pages'), '页')}</dd></div>
       <div><dt>近 30 天</dt><dd>${qty(m('signed_30d'), '版')}</dd></div>
       <div><dt>最近一次</dt><dd class="docs-date">${date(m('signed_latest')) || '—'}</dd></div></dl>`;
-    const body = Number.isFinite(m('signed_versions')) ? totals + table + '<p class="docs-unavailable">四类有交叉，不能相加</p>' : missing;
+    const body = Number.isFinite(m('signed_versions')) ? totals + table + '<p class="docs-unavailable">上方定稿与表内三类统计有重叠，不能相加</p>' : missing;
     return body + (noFreshRead && body !== missing ? missing : '') + foot(note(section, viewer), cutoff(at, stale || !!noFreshRead));
   }
 
@@ -80,12 +80,15 @@
     const action = U.artifactAction(row, view, href => href);
     const detail = row.solves || '';
     const compact = /^共\s+\d+\s+页$/.test(detail) ? ' docs-final-detail--compact' : '';
+    const openNote = U.fieldText(row.open_note, view).trim();
+    const bodyTag = view === 'owner' ? U.visitorLabel(row, 'open', '这份文书的正文', view)
+      || (openNote ? U.visitorHiddenTag('这份文书的正文', `访客版在打开入口旁显示“${openNote}”。`, view) : '') : '';
     return `<li><div class="docs-final-head"><strong>${esc(row.title)}</strong><time datetime="${esc(row.at)}">${date(row.at, true)}</time></div>
       <div class="docs-final-detail${compact}">
         <div class="docs-final-note">${esc(detail)}</div>
         <div class="docs-actions">${action ? U.actions({ id: `formal-doc-${row.at}-${row.title}` }, [action]) :
           '<button class="btn btn--sm" type="button" disabled>在电脑上打开</button>'}
-          ${U.visitorLabel(row, 'title', '定稿名称', view)}</div>
+          ${bodyTag}${U.visitorLabel(row, 'title', '定稿名称', view)}</div>
       </div></li>`;
   }
   function drawList() {
