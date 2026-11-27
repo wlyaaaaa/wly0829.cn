@@ -17,6 +17,7 @@
   const cutoff = at => finite(Date.parse(at)) ? `${U.date(at) === U.date(Date.now()) ? '' : `${U.date(at)} `}${U.time(at)}` : '';
   const windowText = w => cutoff(w?.from) && cutoff(w?.to) ? `北京时间 ${U.date(w.from)} ${U.time(w.from)} 至 ${U.date(w.to)} ${U.time(w.to)}` : '';
   const join = (...parts) => parts.filter(Boolean).join(' · ');
+  const keepGame = html => html.replaceAll('打游戏', '<span class="smooth-term">打游戏</span>');
   const hours = total => [total >= 3600 && `${Math.floor(total / 3600)} 小时`, `${Math.floor(total / 60) % 60} 分`].filter(Boolean).join(' ');
   const wallpaper = /^(?:wallpaper(?:32|64|ui|engine)?|webwallpaper32|ui32)(?:\.exe)?$/i;
   const frameSource = name => wallpaper.test(name || '') ? '动态壁纸' : U.programName(name);
@@ -69,7 +70,7 @@
     let detail = [played, game, stopped].filter(Boolean).join('，');
     if (!playing && unknown) detail = join(stopped, '认不出是游戏的程序，不量游戏画面卡');
     else if (!playing && noGame) detail = join(stopped, `${fg ? '没打游戏' : '近 24 小时没打游戏'}，不量游戏画面卡`);
-    else if (h && !complete) detail = join(!fg ? stopped : detail, '游戏画面卡可能少算');
+    else if (h && !complete) detail = join(played && fg ? detail : stopped, '游戏画面卡可能少算');
     const pronoun = U.you(window.Live.viewerKind());
     const warnings = [];
     if (!fg && (data.game_status || hardwareStatus) && !U.offline?.()) warnings.push(`电脑记录工具这会儿没报上前台是哪个程序，所以不知道${pronoun}现在在不在玩`);
@@ -79,9 +80,10 @@
     const footer = join(end && `数据截至 ${end}`, `每 ${PAGE_REFRESH_MINUTES} 分钟自动更新`);
     const head = finite(total) ? `近 24 小时卡了 ${total} 次` : '卡顿和帧率';
     const lamp = part('head').querySelector('.lamp')?.outerHTML || '';
-    U.html(part('head'), lamp + U.head(join(head, scope), { lamp: false }) + (footer ? `<span class="head__cutoff">${U.esc(footer)}</span>` : ''));
+    const heading = keepGame(U.head(join(head, scope), { lamp: false }));
+    U.html(part('head'), `${lamp}<span class="smooth-headline">${heading}</span><span class="head__cutoff">${U.esc(footer)}</span>`);
     part('count').hidden = !detail;
-    U.html(part('count'), detail && `<b>${U.esc(detail)}</b>`);
+    U.html(part('count'), detail && `<b>${keepGame(U.nowrap(detail))}</b>`);
     part('note').hidden = !warnings.length;
     U.html(part('note'), warnings.map(text => `<span>${U.esc(text)}</span>`).join(''));
   }
@@ -100,7 +102,7 @@
     return join(grade, finite(e.max_frame_ms) && `最慢一帧 ${Math.round(e.max_frame_ms)} 毫秒`);
   }
   function stutterChapter(el) {
-    el.innerHTML = '<div class="stutter-layout"><div data-x="moments"></div><div data-x="graphs"><p class="grp-split__k">卡顿发生在哪一段</p><div data-x="timeline"></div><ul class="smooth-legend"></ul><div data-x="daily"></div></div><footer class="stat-gap">接着的几次卡算一次 · 没打游戏时不量画面卡</footer></div>';
+    el.innerHTML = keepGame('<div class="stutter-layout"><div data-x="moments"></div><div data-x="graphs"><p class="grp-split__k">卡顿发生在哪一段</p><div data-x="timeline"></div><ul class="smooth-legend"></ul><div data-x="daily"></div></div><footer class="stat-gap">接着的几次卡算一次 · 没打游戏时不量画面卡</footer></div>');
     const host = which => el.querySelector(`[data-x="${which}"]`);
     const listHost = host('moments'), timelineHost = host('timeline'), dailyHost = host('daily'), legends = el.querySelector('.smooth-legend');
     const tl = V.timeline(timelineHost, { rows: [{ key: 'day', label: '卡顿' }], interactiveObservedOnly: true });
@@ -111,7 +113,25 @@
       const hit = list.find(e => `${e.kind}:${e.start}` === picked);
       sync.mark(hit?.start ?? null, hit ? eventTitle(hit) : '');
     }
-    const moments = V.moments(listHost, { empty: '近 24 小时没有卡顿', onPick(key) { picked = key; mark(); } });
+    const batch = 5;
+    let limit = 2 * batch;
+    const moments = V.moments(listHost, { show: batch, empty: '近 24 小时没有卡顿',
+      more: () => `更早的 ${list.length - batch} 条`, onPick(key) { picked = key; mark(); } });
+    const toggle = listHost.querySelector('.more'), more = document.createElement('button');
+    more.className = 'more smooth-more-moments'; more.type = 'button';
+    listHost.querySelector('.fold > div').append(more);
+    function paintMoments() {
+      moments.set(list.slice(0, limit).map(e => ({ key: `${e.kind}:${e.start}`, day: U.date(iso(e.start)),
+        time: U.time(iso(e.start)), title: eventTitle(e), hue: eventKinds.find(k => k.id === e.kind).hue })));
+      more.hidden = limit >= list.length;
+      if (!more.hidden) more.textContent = `再展开 ${Math.min(batch, list.length - limit)} 条`;
+      if (toggle.getAttribute('aria-expanded') === 'true' && !toggle.hidden) toggle.textContent = '收起明细';
+    }
+    toggle.addEventListener('click', () => {
+      if (toggle.getAttribute('aria-expanded') === 'false') limit = 2 * batch;
+      paintMoments();
+    });
+    more.addEventListener('click', () => { limit += batch; paintMoments(); });
     const daily = V.bars(dailyHost, { title: '近 7 天每天卡了几次', unit: '次', stack: true, series: eventKinds });
     return { set() {
       const st = data?.stutters, bounds = st?.window || data?.summary?.window;
@@ -121,7 +141,7 @@
       list = seen ? st.events.filter(e => eventKinds.some(k => k.id === e.kind) && finite(e.start) && finite(e.end) && e.end > e.start)
         .sort((a, b) => b.start - a.start) : [];
       if (picked && !list.some(e => `${e.kind}:${e.start}` === picked)) picked = null;
-      moments.set(list.map(e => ({ key: `${e.kind}:${e.start}`, day: U.date(iso(e.start)), time: U.time(iso(e.start)), title: eventTitle(e), hue: eventKinds.find(k => k.id === e.kind).hue })));
+      paintMoments();
       listHost.hidden = !seen;
       host('graphs').hidden = !seen && !hasDays;
       el.querySelector('footer').hidden = !seen;
@@ -154,31 +174,36 @@
     const spans = dayEnd < to ? [...day.spans.filter(([t]) => t < dayEnd), [dayEnd, null]] : day.spans;
     return { ...pack, rows: { day: { ...day, label: '前台程序', from: frame.from, to: frame.to, spans } } };
   }
-  function frameRanges(series) {
-    const groups = [];
-    const points = series?.points || [];
-    for (let i = 0; i < points.length; i++) {
-      const [start, value] = points[i];
-      if (!finite(value)) continue;
-      const end = Math.min(start + 60, points[i + 1]?.[0] ?? start + 60);
-      const prior = groups.at(-1);
-      if (prior?.end === start) prior.end = end;
-      else groups.push({ start, end });
+  function frameLabelRail(plot) {
+    const rail = document.createElement('div'); rail.className = 'smooth-frame-sources'; plot.before(rail);
+    let labels = [];
+    function draw() {
+      const width = rail.clientWidth;
+      const rows = [];
+      for (const { start, end, name, game } of labels) {
+        if (!width) break;
+        const a = Math.round(start * width), b = Math.round(end * width);
+        const size = Math.min(width, Math.max(game ? 135 : 100, Math.min(b - a, 150)));
+        const left = Math.max(0, Math.min(width - size, Math.round((a + b - size) / 2)));
+        let row = rows.find(row => row.right <= left);
+        if (!row) { row = { right: 0, items: [] }; rows.push(row); }
+        row.items.push(`<span${game ? ' data-game' : ''} style="margin-left:${left - row.right}px;width:${size}px">${U.nowrap(name)}</span>`);
+        row.right = left + size;
+      }
+      U.html(rail, rows.map(row => `<div>${row.items.join('')}</div>`).join(''), false);
     }
-    return groups;
-  }
-  function frameLabels(plot, active) {
-    if (!plot) return;
-    const from = seconds(framePack.from), to = seconds(framePack.to), span = to - from;
-    const names = data?.fps?.sources?.length ? data.fps.sources : frameRanges(active);
-    let el = plot.querySelector('.smooth-frame-sources');
-    if (!el) { el = document.createElement('div'); el.className = 'smooth-frame-sources'; plot.append(el); }
-    U.html(el, span > 0 ? names.map(s => {
-      const start = Math.max(from, s.start), end = Math.min(to, s.end);
-      if (!(end > start)) return '';
-      const label = join(s.game_name ? `《${U.sp(s.game_name)}》` : U.sp(frameSource(s.process_name)) || '帧源未记录', finite(s.fps) && `${Math.round(s.fps)} 帧`);
-      return `<span${s.game_name ? ' data-game' : ''} style="left:${(start - from) / span * 100}%;width:${(end - start) / span * 100}%">${U.esc(label)}</span>`;
-    }).join('') : '');
+    new ResizeObserver(draw).observe(plot);
+    return active => {
+      const from = seconds(framePack.from), to = seconds(framePack.to), span = to - from;
+      const names = data?.fps?.sources?.length ? data.fps.sources : active ? [{ start: from, end: to }] : [];
+      labels = span > 0 ? names.flatMap(s => {
+        const start = Math.max(from, s.start), end = Math.min(to, s.end);
+        if (!(end > start)) return [];
+        const name = join(playedTitle(s) || U.sp(frameSource(s.process_name)) || '帧源未记录', finite(s.fps) && `${Math.round(s.fps)} 帧`);
+        return [{ start: (start - from) / span, end: (end - from) / span, name, game: Boolean(s.game_name) }];
+      }).sort((a, b) => a.start - b.start) : [];
+      draw();
+    };
   }
   function foregroundChapter(el) {
     el.innerHTML = '<div class="frame-sync"><p class="grp-split__k">前台程序同步带 · 这会儿在看哪个窗口</p><div></div></div><p class="smooth-frame-notes">帧率按每两张画面的间隔算，每分钟取平均；平均帧率是实际画了几张除以秒数，两条差得多说明忽快忽慢<br>最低 1% 是最慢那 1% 画面的帧率；单帧耗时是每分钟最慢的一张画了多久；抖动是相邻两张差了多久</p>';
@@ -186,7 +211,7 @@
     const tl = V.timeline(host, { rows: [{ key: 'day', label: '前台程序' }] });
     const plot = host.querySelector('.vz-tl__plot'), cursor = document.createElement('i');
     cursor.className = 'smooth-sync-cursor'; cursor.hidden = true; plot.append(cursor);
-    let from, to;
+    let from, to, drawLabels;
     sync.add({ mark() {}, point(at) {
       cursor.hidden = at == null || !(to > from && at >= from && at <= to);
       if (!cursor.hidden) cursor.style.left = `${(at - from) / (to - from) * 100}%`;
@@ -212,7 +237,9 @@
       el.hidden = wrap.hidden && !measuredSeries.length;
       const chart = card.querySelector('.grp__hero');
       const active = measuredSeries.find(s => s.id === chart.querySelector('[data-line]')?.dataset.line) || measuredSeries[0];
-      frameLabels(chart.querySelector('.chart__plot'), active);
+      const mainPlot = chart.querySelector('.chart__plot');
+      if (mainPlot) { drawLabels ??= frameLabelRail(mainPlot); drawLabels(active); }
+      renderFpsContext(card.querySelector('.grp__say'));
     } };
   }
 
@@ -251,7 +278,7 @@
   function methodChapter(el) {
     addAppPicture(el);
     el.closest('.grp').id = 'how-measured';
-    el.innerHTML = `<dl class="smooth-method">
+    el.innerHTML = keepGame(`<dl class="smooth-method">
       <div><dt>帧率怎么量</dt><dd><p>显卡统计工具 RTSS 读每一张画面隔了多久；RTSS 读不到时，换 PresentMon 从 Windows 的显示记录里读。有画面在出帧就记，不管是游戏还是动态壁纸画的，大图里标着每一段是哪个程序画的。有曲线不等于在打游戏。</p><ul>
       <li>帧率：按每两张画面隔多久算出的速度，每分钟取平均。</li>
       <li>平均帧率：一段时间里实际画了几张，除以秒数。画面忽快忽慢时它会比帧率低，两条差得越多越不稳。</li>
@@ -262,10 +289,10 @@
       <div><dt>卡顿怎么量</dt><dd><ul><li data-method="game"></li><li data-method="hang"></li><li>平时（不在游戏里）很短的顿一下记不到，现在没有能直接拿来数的读数。</li></ul></dd></div>
       <div><dt>怎么算“在打游戏”</dt><dd>游戏在前台、你在用，才算在玩；游戏挂在后台不算，动态壁纸、微信、浏览器、游戏启动器也都不算。来回切换窗口时，“在玩”会跟着断断续续，这是正常的。</dd></div>
       <div><dt>多久更新</dt><dd data-method="period"></dd></div>
-      <div><dt>什么时候不记</dt><dd><ul><li>关机、睡眠时不记，时间轴上写“关机”“睡眠”；死机到重启那段也算关机。</li><li>锁屏、关屏、离开电脑的时段不算卡顿。</li></ul></dd></div></dl>`;
+      <div><dt>什么时候不记</dt><dd><ul><li>关机、睡眠时不记，时间轴上写“关机”“睡眠”；死机到重启那段也算关机。</li><li>锁屏、关屏、离开电脑的时段不算卡顿。</li></ul></dd></div></dl>`);
     return { set() {
       const { micro, severe, hang, gameSample, hangSample } = thresholds();
-      const change = (name, text) => { el.querySelector(`[data-method="${name}"]`).textContent = text; };
+      const change = (name, text) => U.html(el.querySelector(`[data-method="${name}"]`), keepGame(U.nowrap(text)), false);
       change('game', `游戏画面卡：只在打游戏时量。一张画面超过 ${micro} 毫秒算卡（60 帧时一张约 17 毫秒），超过 ${severe} 毫秒算严重卡。每 ${gameSample} 秒看一次，挨着的几次合成一次。没打游戏时，曲线多半是动态壁纸画的，壁纸顿一下不影响你在用的程序，所以不算。`);
       change('hang', `程序卡住：Windows 发现某个程序的窗口约 ${hang} 秒不响应，就标“没响应”；电脑记录工具约每 ${hangSample} 秒看一次，连着标的算一次，时长就是标了多久。平时用电脑卡不卡，看这一项。`);
       change('period', `后台每秒记一次硬件读数，约每 ${hangSample} 秒看一次有没有程序卡住；这页每 ${PAGE_REFRESH_MINUTES} 分钟自动取一次新数。哪一块超过 ${CLOSE_AFTER / 60} 分钟没取到新数，那一块会写“最后记录于几点”。`);
@@ -273,11 +300,19 @@
   }
 
   function fpsContext() {
-    const h = history(), status = gameStatus();
-    if (h?.played === true) return gameHistory(h);
+    const status = gameStatus(), h = status.history, session = data?.fps?.session;
+    if (session?.game_name && seconds(session.to) > seconds(session.from) &&
+        [session.avg_fps, session.low_fps, session.game_events].every(finite)) {
+      const score = `这局${playedTitle(session)} ${U.time(iso(seconds(session.from)))}–${U.time(iso(seconds(session.to)))}：平均 ${Math.round(session.avg_fps)} FPS，最低 1% ${Math.round(session.low_fps)} FPS，卡了 ${session.game_events} 次`;
+      return join(score, session.other_source && `其余时段的曲线是${frameSource(session.other_source)}画的，不算打游戏`);
+    }
+    if (h?.played === true) return '';
     const source = status.frame?.process_name;
     const noGame = h?.complete === true && h.played === false;
     return join(noGame && '近 24 小时没打游戏', source && `现在出帧的是 ${frameSource(source)}`);
+  }
+  function renderFpsContext(el) {
+    if (el) U.html(el, keepGame(U.nowrap(fpsContext())), false);
   }
   function groups() {
     const grafana = data?.grafana?.href;
@@ -292,7 +327,7 @@
       { ...use('stutters'), key: 'stutters', name: '卡顿明细', pic: picture, palette: ['pink', 'violet'], build: stutterChapter,
         line: join(stutterLine, data && !complete && '游戏画面卡和程序卡住还没有分开记录') },
       { ...use('fps'), key: 'fps', name: '帧率与手感', pic: picture, palette: ['teal', 'pink'], chips: options, hero: 'fps', build: foregroundChapter,
-        line: fpsLine, say: () => fpsContext() || ' ' },
+        line: fpsLine, say: () => ' ' },
       { ...use('apps'), key: 'apps', name: '各程序与窗口形态', palette: ['violet', 'pink'], build: appsChapter,
         line: join(front && `前台最久的是 ${front}`, readingLine('apps', Boolean(first))) },
       { ...use(), key: 'method', name: '这页怎么量的', palette: ['violet', 'pink'], build: methodChapter, wait: false },
@@ -319,7 +354,6 @@
   window.Live.watch('computer/hardware', null, { data(d) {
     hardwareStatus = d?.game_status || null;
     renderHero();
-    const context = document.querySelector('[data-key="fps"] .grp__say');
-    if (context) context.textContent = fpsContext();
+    renderFpsContext(document.querySelector('[data-key="fps"] .grp__say'));
   } });
 })();
