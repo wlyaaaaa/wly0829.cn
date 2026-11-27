@@ -667,8 +667,9 @@
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
     const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
-    // 三个数一样时只写一次（“共 3 条”），不一样的才分开写
-    const said = new Set(), count = loaded ? [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n) && !said.has(n) && said.add(n)).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
+    // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写
+    const counts = [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n));
+    const count = loaded ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '正在读改动记录…');
@@ -1137,7 +1138,8 @@
       }
     }
     // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
-    const sizeAt = size && (size.source_at || size.at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
+    // 写实际量出来的时刻（size.at）；夜里核对的时刻（source_at）只在没有 size.at 时顶上
+    const sizeAt = size && (size.at || size.source_at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
     if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null)) tail.push(cell('规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
       { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}`, sub: old ? '<span class="pj-old">旧了</span>' : '' }));
     return { head, tail };

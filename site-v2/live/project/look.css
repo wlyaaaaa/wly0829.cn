@@ -161,6 +161,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-cell .more__chev { margin-left: 3px; color: var(--pj-accent); }
 .pj-strip > .pj-strip-note { order: 1; grid-column: 1 / -1; padding: 6px 20px 0; font-size: 12px; color: #9c9a92; }
 
+/* 卡里的短字（读数名、小字说明、小标题）窄了折行时不让最后一行只剩一两个字（只调折法，不动不折行的那些） */
+.page--project #pj-board :is(.pj-kv__k, small, b, .row__title) { text-wrap-style: pretty; }
+
 /* ============ 两栏卡片 ============ */
 .page--project #pj-board.pj-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--pj-gap); margin-top: var(--pj-gap); align-items: start; }
 .page--project #pj-board.pj-board.is-single { grid-template-columns: minmax(0, 1fr); }
