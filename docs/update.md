@@ -185,7 +185,7 @@
 
 在公网的正式实况页面以本人身份读第 3–6 条。需要核接口时用页面同一数据源 `/computer-access/live/v1/`，配对和本人可见范围沿用当前入口。
 
-1. 做更新的 AI 每轮直接读 PCConfig 现役的 `E:/PCConfig/registries/live_refresh_policy.json`，按 `fields` 指向 `on_demand` 的字段、`manual_fields` 和 `backup_top_table.on_demand` 回原来源核数及时间。有变化就改原登记或原回执，备份大小取原测量时间，副本内容日期和确认时间各取原记录。台式机手填配置读 PCConfig 的 `registries/machine.json` 中 `hardware.configuration`，型号和核实时间读同组的型号字段和 `hardware.observed_at`。副机读 `registries/remote_computer_mcp.secondary_laptop.json` 的 `hardware` 和 `hardware.observed_at`，手机型号回退读 `docs/design/phone-switch-arrival.md` 的机型和原核实记录。正式发布成功后回读实况的值和来源时刻，缺证据或回读仍旧的写进本轮记录。
+1. 做更新的 AI 每轮直接读 PCConfig 现役的 `E:/PCConfig/registries/live_refresh_policy.json`，按 `fields` 指向 `on_demand` 的字段、`manual_fields` 和 `backup_top_table.on_demand` 回原来源核数及时间。有变化就改原登记或原回执，备份大小取原测量时间，副本内容日期和确认时间各取原记录。台式机手填配置读 PCConfig 的 `registries/machine.json` 中 `hardware.configuration`，型号和核实时间读同组的型号字段和 `hardware.observed_at`。副机读 `registries/remote_computer_mcp.secondary_laptop.json` 的 `hardware` 和 `hardware.observed_at`，手机型号回退读 `docs/design/phone-switch-arrival.md` 的机型和原核实记录。正式发布成功后回读实况的值和来源时刻，缺证据或回读仍旧的写进本轮记录。页面代码里只能手写的事实字，按[手写字清单](live-handwritten.md)逐行对“对照哪里”，变了就改页面代码。
 2. 同一份登记的 `blocks` 中，按 `projects/agents/weekly-new` 的 `on_demand` 项更新 `site-v2/live/project/weekly-new.json` 的百工谱“本周新会”和实际周区间。按 `projects/timeaudit/before-after` 的 `on_demand` 项，在电脑心电图有新一批完整日对比时，从 `projects/timeaudit/records?section=days` 的原读数更新同目录 `before-after.json`，保留实际截止日。两份由正常构建带入实况。
 3. 实况「手机 → 应用」和「电脑 → 使用时间」看“其他”。对应接口 `phone/apps`、`computer/usage`。能按实际用途确定的分类交数据来源登记处，其余留在“其他”。
 4. 用当轮源码的打开记录名单读本周本人打开数和每日缺项，供删改判断。核足七天样本再认定“整周没有记录”。只在本轮留下结论。
@@ -195,7 +195,7 @@
 
 第 1 条同时核对“软件与环境”的“日用软件”。做本轮按需更新的 AI 按页面实际选中的 10 项，到厂商的发布入口逐一核对已装版本和同产品、同发布渠道的最新版，硬件驱动还要对上机型。在这块显示能确认的比对结果和“核对于几月几日”。其余软件从本轮比对结果省去，旁边简述原因。实际用到的出处和核对时刻随本轮记录保留。
 
-实况页上的标识照[内容契约](design/panel-content-contract.md#实况页上的标识)里本人 2026-11-27 的禁令办：没人维护、没人更新的不显示。按这个先后处理：能从源头取的改成程序生成（本人 2026-11-26 23:33：“维护成本比施工成本重要的多”）；只能手写的留在按需更新清单上，由第 1 条每轮核实更新；清单外的手写标识撤掉，但撤之前必须由主持（大工程里是主控）用一句话请本人拍板，不带细节（本人 2026-11-27 15:13：“如果你要撤，必须给我拍板（细节不需要，细节别烦我”）；改成程序生成不算撤，照做。规则页上手写的标识也照这个先后。
+实况页上的标识照[内容契约](design/panel-content-contract.md#实况页上的标识)里本人 2026-11-27 的禁令办：没人维护、没人更新的不显示。按这个先后处理：能从源头取的改成程序生成（本人 2026-11-26 23:33：“维护成本比施工成本重要的多”）；只能手写的列进[手写字清单](live-handwritten.md)，由第 1 条每轮核实更新；清单外的手写标识撤掉，但撤之前必须由主持（大工程里是主控）用一句话请本人拍板，不带细节（本人 2026-11-27 15:13：“如果你要撤，必须给我拍板（细节不需要，细节别烦我”）；改成程序生成不算撤，照做。规则页上手写的标识也照这个先后。
 
 每轮另把上次正式发布以来代码或数据来源变了的实况页挑出来（`site-v2/live/` 下这页的代码或它读的 PCConfig 接口有改动就算），照本人的眼光整页看一遍：有没有写错、误导、看不懂的，当轮改掉。只看变了的页，不扫全站，也不另开每周检查（2026-11-27 本人把“实况每周对一遍”交主控定，主控定为不开，改成这一步）。
 
