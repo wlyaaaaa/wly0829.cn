@@ -7,7 +7,6 @@
 .ag-dim { opacity: .3; transition: opacity .2s ease; }
 .ag-chip--all { --host: #57564f; }
 
-/* 一、三家比分 */
 .ag-scores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ag-score { border: 1px solid var(--tp-line); border-radius: 12px; overflow: hidden; background: #fff; }
 .ag-score > header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 2px 10px; padding: 7px 16px; background: var(--host); color: #fff; }
@@ -16,6 +15,8 @@
 .ag-score > header a.ag-rulever { color: inherit; text-decoration: underline; text-decoration-color: rgb(255 255 255 / .6); text-underline-offset: 3px; white-space: nowrap; }
 @media (max-width: 1024px) {
   .ag-ok { text-wrap: balance; }
+  .ag-score[data-host="codex"] .ag-diff li > span:last-child { min-width: 0; overflow-wrap: anywhere; text-wrap: pretty; }
+  .ag-status-word { display: inline-block; white-space: nowrap; }
   .ag-heat button:has(.ag-badge + .ag-badge) { column-gap: 3px; padding-inline: 8px; }
   #estimate .ag-est { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ag-est > :nth-child(2) { grid-area: 2 / 1 / auto / -1; border: 0; padding-left: 0; }
@@ -36,7 +37,6 @@
 .ag-diff a:hover { border-color: currentColor; }
 .ag-diff small { display: block; font-size: 12.5px; color: var(--muted); }
 .ag-ok { margin: 4px 0 0; padding: 0 16px 16px 18px; font-size: 13.5px; color: #57564f; }
-.ag-diff small a { color: inherit; text-decoration: none; border-bottom: 1px solid rgb(20 20 19 / .2); }
 /* “差 N 处”下面写谁在修、第几轮，点到那一轮或那件事 */
 .ag-fix { margin: 0 0 4px; font-size: 14.5px; font-weight: 700; line-height: 22px; color: var(--tp-amber); }
 .ag-fix a { color: inherit; text-decoration: none; }
