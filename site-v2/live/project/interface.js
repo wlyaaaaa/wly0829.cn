@@ -25,7 +25,7 @@ export async function mountInterface(id, strip) {
   section.setAttribute('aria-labelledby', 'pj-interface-title');
   section.innerHTML = `
     <h2 id="pj-interface-title">界面</h2>
-    <p>这个软件真实的样子，点图看大图</p>
+    <p>点图看大图</p>
     <div class="pj-interface-grid">${shots.map(([, , label]) => `
       <figure>
         <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
