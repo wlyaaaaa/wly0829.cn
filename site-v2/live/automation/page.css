@@ -266,6 +266,8 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-covers b, .aw-off b { color: var(--ink); }
 .aw-off { flex: 1; max-width: 470px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
 .aw-type-settings { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.aw-offwhy { max-width: 660px; margin: 2px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
+.aw-offwhy b { color: #00a650; }
 .aw-settingbar, .aw-buttons { display: flex; flex-wrap: nowrap; align-items: center; gap: 10px; }
 .aw-settingbar .more, .aw-dialog .more, .aw-buttons .more, .aw-control { margin: 0; }
 /* 型号和档位跟模型清单走，只显示不能改 */

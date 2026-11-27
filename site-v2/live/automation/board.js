@@ -562,7 +562,10 @@
     let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
     else if (pr && (pr.headline || pr.title || pr.text)) {
-      tone = 'warn'; main = `出毛病：${F(pr.headline || pr.title || pr.text, '哪里坏了')}`;
+      const headline = F(pr.headline || pr.title || pr.text, '哪里坏了');
+      const name = F(c.title, '类别'), prefix = `${name} · `;
+      const problem = name && headline.startsWith(prefix) ? headline.slice(prefix.length) : headline;
+      tone = 'warn'; main = `出毛病：${problem || headline}`;
       sub = [pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理'), known(pr.round) && pr.round > 0 ? `第 ${int(pr.round)} 轮` : ''].filter(Boolean).join('，') || sub;
     } else if (c.running || st.kind === 'running' || live) {
       tone = 'run';
