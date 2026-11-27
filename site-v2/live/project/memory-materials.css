@@ -1,0 +1,117 @@
+.page--project #pj-board.pj-board--memory-materials {
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--pj-gap);
+}
+.page--project #pj-board.pj-board--memory-materials > #pj-main {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+.pj-board--memory-materials #pj-main > .pj-card { grid-column: 1 / -1; }
+.pj-board--memory-materials #pj-main > :is([data-card="memory-date"], [data-card="memory-materials"]) {
+  grid-column: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 18rem;
+}
+.pj-board--memory-materials :is(#memory-date, #memory-materials) > .pj-part {
+  padding-right: 0;
+  margin-bottom: 12px;
+}
+.pj-board--memory-materials :is(#memory-date, #memory-materials) > .pj-part > b {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pj-board--memory-materials .pj-part svg {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  fill: none;
+  stroke: var(--pj-accent, #00a650);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pj-board--memory-materials #pj-main .pj-card__tail { margin-top: auto; }
+.pj-board--memory-materials .pj-cut { white-space: normal; overflow-wrap: anywhere; }
+.mm-reading { display: flex; flex-wrap: wrap; gap: 3px 12px; align-items: baseline; margin: 0 0 4px; }
+.mm-reading strong {
+  color: #008944;
+  font-size: clamp(1.7rem, 3.05vw, 2.8rem);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.mm-reading strong small { font-size: .62em; }
+.mm-reading > span, .mm-elapsed, .mm-gap { color: var(--muted); }
+.mm-elapsed { margin: 0; }
+.mm-gap { text-align: center; margin: 20px 0 9px; }
+.mm-timeline {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+.mm-timeline li { position: relative; text-align: center; padding: 16px 3px 0; font-size: .86rem; }
+.mm-timeline li + li::before {
+  content: "";
+  position: absolute;
+  left: -50%;
+  right: 50%;
+  top: 5px;
+  border-top: 1px dashed var(--muted);
+}
+.mm-timeline li::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 11px;
+  background: var(--muted);
+  transform: translateX(-50%);
+}
+.mm-timeline :is(.start, .end)::after {
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--pj-accent, #00a650);
+  background: #fff;
+}
+.mm-timeline .start::after { background: var(--pj-accent, #00a650); }
+.mm-timeline b, .mm-timeline li > span { display: block; }
+.mm-timeline b { font-variant-numeric: tabular-nums; }
+.mm-timeline b span { display: inline-block; white-space: nowrap; }
+.mm-timeline li > span { color: var(--muted); }
+.mm-rows { margin: 8px 0 14px; }
+.mm-rows > div {
+  display: grid;
+  grid-template-columns: minmax(9em, .8fr) minmax(0, 1fr);
+  gap: 4px 12px;
+  padding: 5px 0;
+  border-top: 1px solid var(--hair);
+}
+.mm-rows > div:last-child { border-bottom: 1px solid var(--hair); }
+.mm-rows dd { margin: 0; }
+.mm-unit { display: inline-block; white-space: nowrap; }
+.mm-rows small { color: var(--muted); }
+@media (max-width: 1100px) {
+  .page--project #pj-board.pj-board--memory-materials > #pj-main { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .page--project:has(.pj-board--memory-materials) #topbar[data-fit="zoom"] {
+    zoom: min(calc(var(--fit-zoom, 1) * .95), calc(100vw / 620px));
+  }
+  .page--project .stage:has(> .pj-board--memory-materials) { width: calc(100% - 24px); }
+  .stage:has(> .pj-board--memory-materials) #pj-hero.card[data-pic] { --win: min(62%, 260px); }
+  .page--project .stage:has(> .pj-board--memory-materials) #pj-hero .card__glass {
+    min-height: 0;
+    padding: 22px 18px;
+  }
+  .page--project .stage:has(> .pj-board--memory-materials) #pj-hero .card__body { padding-inline: 0; }
+  .pj-board--memory-materials .pj-notes summary, .mm-timeline li > span { white-space: nowrap; }
+  .mm-rows > div { grid-template-columns: minmax(0, 1fr); }
+}
