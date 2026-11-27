@@ -46,6 +46,8 @@
   }
   const records = section => `/live/records/?project=${ID}&section=${encodeURIComponent(section)}`;
   const chev = '<span class="more__chev">›</span>';
+  // 档案名只在右括号后换行（“【6期】”和后面那段各自不断开）；特别长、没有标点的一段才按字换行
+  const nameHtml = text => String(text).split(/(?<=[】）)\]])/).map(c => [...c].length <= 12 ? `<span class="wc-nw">${esc(c)}</span>` : esc(c)).join('<wbr>');
   const tagName = () => U.visitorHiddenTag('这份档案的名称', '名称是真实的聊天对象；条数、日期、留住多少和检查结果访客照样看得到', 'owner');
 
   // —— 数据：读数照原来的 ID 在 sections 里找；后台新给的三项（local_messages、night_read、night_check）同样按 ID 找 ——
@@ -202,7 +204,7 @@
       const media = finite(r.media) ? r.media : null, saved = finite(r.saved) ? r.saved : null, p = media ? Math.min(1, (saved || 0) / media) : 0;
       const state = typeof r.state_text === 'string' ? r.state_text : '';
       const ok = /通过/.test(state) && !/未通过|没通过/.test(state);
-      return `<div class="wc-tr"><span class="wc-td wc-td--name"><b>${esc(U.fieldText(r.text ?? r.name ?? `档案 ${i + 1}`, viewer))}</b>${tagName()}</span>
+      return `<div class="wc-tr"><span class="wc-td wc-td--name"><b>${nameHtml(U.fieldText(r.text ?? r.name ?? `档案 ${i + 1}`, viewer))}</b>${tagName()}</span>
         <span class="wc-td wc-td--num">${finite(r.messages) ? `${esc(int(r.messages))} 条` : ''}</span><span class="wc-td">${esc(r.latest || '')}</span>
         <span class="wc-td wc-td--media">${media ? `<span class="wc-mbar"><i style="width:${(p * 100).toFixed(1)}%"></i></span><span class="wc-mnum">${esc(saved != null ? int(saved) : '')}/${esc(int(media))}</span>` : ''}</span>
         <span class="wc-td">${state ? `<span class="wc-check${ok ? ' is-ok' : ''}">${ok ? dot('passed') : ''}${esc(ok ? '通过' : state)}</span>` : ''}</span>

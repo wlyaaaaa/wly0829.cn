@@ -80,7 +80,8 @@
 .wc-tr--head { padding-bottom: 8px; font-size: 13px; font-weight: 600; color: #3d3c38; }
 .wc-td { min-width: 0; }
 .wc-td--name { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 0; }
-.wc-td--name b { font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }   /* 只在标点、空格处换行，不把“模型”这类短词拆成两行 */
+.wc-td--name b { font-weight: 700; word-break: keep-all; overflow-wrap: anywhere; }
+.wc-nw { white-space: nowrap; }   /* 只在标点、空格处换行，不把“模型”这类短词拆成两行 */
 .wc-td--name .live-mark { font-size: 12px; line-height: 17px; }
 .wc-td--media { display: grid; grid-template-columns: minmax(40px, 1fr) auto; align-items: center; column-gap: 10px; }
 .wc-mbar { height: 8px; border-radius: 999px; background: rgb(240 123 99 / .14); overflow: hidden; }
@@ -128,7 +129,9 @@
   .wc-row--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wc-row--3 > :nth-child(3) { grid-column: 1 / -1; }
   .wc-row--2 { grid-template-columns: minmax(0, 1fr); }
-  .wc-tr { grid-template-columns: minmax(170px, 2fr) minmax(64px, .7fr) minmax(80px, .8fr) minmax(80px, 1.1fr) minmax(60px, .65fr) minmax(76px, .75fr) minmax(96px, auto); column-gap: 10px; }
+  .wc-tr { grid-template-columns: minmax(118px, 1.5fr) minmax(64px, .75fr) minmax(78px, .8fr) minmax(96px, 1.2fr) minmax(58px, .6fr) minmax(76px, .75fr) minmax(96px, auto); column-gap: 8px; }
+  .wc-tr--head > span, .wc-td:not(.wc-td--name) { white-space: nowrap; }   /* 表头、日期、钟点不断成两行；名称在标点处换行 */
+  .wc-td--media { grid-template-columns: minmax(24px, 1fr) auto; column-gap: 8px; }
 }
 @media (max-width: 899px) {
   .page--project #pj-board.pj-board.pj-board--wechat { grid-template-columns: minmax(0, 1fr); }
