@@ -433,11 +433,9 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) {
-      // 后台准备逾时或回复 503，正文和快讯一起结束读数提示（M909）。
-      const stuck = state?.warming && state.phase === 'slow' || !state?.offline && state?.meta?.status === 503;
-      const reading = !stuck && !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase) && !(state?.meta?.status >= 400);
-      T.paint(page.root, stuck ? '<p class="tp-placeholder" role="status">智能体暂时没读到：后台还在准备这一页的数，准备好了这里会自己换上。</p>' : T.placeholder(state, '智能体'));
-      page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
+      const reading = !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase);
+      T.paint(page.root, T.placeholder(state, '智能体'));
+      page.tick.set(reading ? [{ text: '加载中' }] : [], { off: true });
       return;
     }
     const headerAt = state.conn ? state.conn.shownAt : !state.offline && state.shownAt;

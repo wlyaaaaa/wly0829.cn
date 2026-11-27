@@ -330,7 +330,7 @@
     const NS = 'http://www.w3.org/2000/svg', LEFT = 58, TOP = 10, DAY = 86400, lanes = [['phone', '手机'], ['computer', '电脑']];
     const id = `pd${Math.random().toString(36).slice(2, 8)}`;
     host.classList.add('phone-days');
-    host.innerHTML = '<div class="phone-days__plot"><svg aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div><p class="vz-wait">正在读</p><span class="vz-tip phone-days__tip" hidden></span></div><div class="phone-days__x"></div><ul class="vz-legend"></ul><p class="use-note phone-days__note" hidden></p>';
+    host.innerHTML = '<div class="phone-days__plot"><svg aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div><p class="vz-wait">加载中</p><span class="vz-tip phone-days__tip" hidden></span></div><div class="phone-days__x"></div><ul class="vz-legend"></ul><p class="use-note phone-days__note" hidden></p>';
     const plot = host.querySelector('.phone-days__plot'), svg = plot.querySelector('svg'), axis = plot.querySelector('.chart__axis'), wait = plot.querySelector('.vz-wait'), tip = plot.querySelector('.vz-tip');
     const xs = host.querySelector('.phone-days__x'), legend = host.querySelector('.vz-legend'), note = host.querySelector('.phone-days__note');
     let data = null, W = 0, hover = null, pinned = null, hovered = null, muted = null;
@@ -857,7 +857,7 @@
       for (const node of card.querySelectorAll('.grp__said')) node.classList.toggle('row__sub', /这块还没算好/.test(node.textContent));
       tidyGroupStatus(card, card.dataset.key);
       if (card.dataset.key === 'usage' && !card.querySelector('.grp__extra:not([hidden])') && !card.querySelector('.grp__line').textContent.trim()) {
-        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? `${shownRanges.usage === '7d' ? '近 7 天' : '今天'}的使用记录暂时读不到` : '正在读使用记录');
+        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? `${shownRanges.usage === '7d' ? '近 7 天' : '今天'}的使用记录暂时读不到` : '加载中');
       }
       lineTip(card);
       for (const fig of card.querySelectorAll('.grp__fig')) { fig.toggleAttribute('data-lower', isPartial(metric(fig.dataset.key), 'value')); fig.toggleAttribute('data-accumulating', metric(fig.dataset.key)?.value === null && !!metric(fig.dataset.key)?.accumulating); }
@@ -955,7 +955,7 @@
     data(d, meta) { phone = U.withoutSnapshotCutoff(d, meta.at); viewer = meta.viewer?.kind || 'public'; done = true; render(); read.done(); lightUp(); },
     link(s) {
       bar?.set(s); Light.offline(s.offline);
-      U.list($('notices'), s.offline ? [{ key: 'link', cls: 'notice glass', html: fh(s.text, '电脑连接状态') }] : []);
+
       if (linkOff !== !!s.offline) { linkOff = !!s.offline; if (phone) render(); }
       if (s.data == null && ['none', 'gone'].includes(s.phase)) {
         done = true; phone = { state: 'unknown' }; render(); read.done(); lightUp();

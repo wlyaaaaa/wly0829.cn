@@ -661,7 +661,7 @@
     const count = loaded ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
-    const status = changeIssue || (!changeLog && '正在读改动记录…');
+    const status = changeIssue || (!changeLog && '加载中');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
     U.html(b.note, [esc(count), esc(available), cutoff && esc(`上次改动记录截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
@@ -945,7 +945,7 @@
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
@@ -1130,7 +1130,7 @@
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
   function commitsCell(cell) {
     const a = activity;
-    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '正在读提交记录…' : '提交记录暂时读不到。'}</small>` : '';
+    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '加载中' : '提交记录暂时读不到。'}</small>` : '';
     if (!a) return unavailable();
     if (!a.commits.length) return '';
     const vals = a.commits.map(n => (typeof n === 'number' && Number.isFinite(n) ? n : null));
@@ -1237,12 +1237,6 @@
     part('detail').hidden = true;
   }
 
-  // —— 出事时的横条：连不上 ——
-  function renderNotices(state) {
-    U.list(notices, state.offline
-      ? [{ key: 'link', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(state.text)}</span>` }] : []);
-  }
-
   // —— 页眉〔问情况〕：一句就够，不堆废话 ——
   function ask() {
     if (!proj) return '';
@@ -1323,7 +1317,7 @@
   let opening = [], revealTimer;
   const loading = setTimeout(() => {
     if (first && emptyHero.hidden && !document.documentElement.classList.contains('live-public-paused')) {
-      renderEmptyHero('正在读项目数据');
+      renderEmptyHero('加载中');
     }
   }, 400);  // 数据慢时 0.4 秒内先写“正在读项目数据”，不让整页空着（原来要等 2.5 秒）
   window.Live.watch(`projects/${enc(id)}`, null, window.Live.afterReady(lookReady, {
@@ -1408,7 +1402,6 @@
       bar?.set(state);
       if (disconnected !== state.offline) { disconnected = state.offline; if (proj && !first) { renderHero(proj); renderBoard(false); } }
       Light.offline(state.offline);
-      renderNotices(state);
       if (!proj && ['none', 'gone'].includes(state.phase)) {
         clearTimeout(loading);
         const locked = state.meta?.status === 403 && state.meta?.viewer?.kind === 'public';

@@ -666,7 +666,7 @@
       phase(s) { if (s.data == null) { if (['none', 'gone'].includes(s.phase)) { headRead.done(false); summaryRead.done(false); } else { headRead.set(s); summaryRead.set(s); } } },
       link(s) {
         bar?.set(s); L.offline(s.offline);
-        U.list($('notices'), s.offline ? [{ key: 'link', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${text(s.text)}</span>` }] : []);
+
         if (s.data == null && ['none', 'gone'].includes(s.phase)) {
           $('rec').hidden = true;
           U.html($('head'), locked(s) ? missingHtml(s, '项目') : U.head(missingText(s, '项目')));

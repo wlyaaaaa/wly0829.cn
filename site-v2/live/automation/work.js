@@ -309,7 +309,8 @@
     root.hidden = false;
     if (!data?.enabled) {
       delete root._html;
-      root.innerHTML = `<p class="glass aw-load">${state?.meta?.status === 404 ? '这件活或这一类没有读到' : field(state?.text || '正在读自动任务…')}</p>`;
+      const reading = !state || ['idle', 'wait', 'slow'].includes(state.phase);
+      root.innerHTML = `<p class="glass aw-load">${reading ? '加载中' : state.meta?.status === 404 ? '这件活或这一类没有读到' : field(state.text)}</p>`;
       return;
     }
     audience = state.meta?.viewer?.kind || data.audience || 'public';

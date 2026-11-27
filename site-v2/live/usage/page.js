@@ -338,7 +338,7 @@
             ? `${start} 至 ${end}。${first && first !== start ? `最早有记录的是 ${first}，此前没有记录。` : ''}`
             : '旧读数只含部分日期。');
           const yearState = usage?.deferred?.year && usage.blocks?.year?.state;
-          const unread = yearState === 'computing' ? '正在读…' : yearState === 'unavailable' ? '暂时读不到' : usage?.year ? '没有使用记录' : missing();
+          const unread = yearState === 'computing' ? '加载中' : yearState === 'unavailable' ? '暂时读不到' : usage?.year ? '没有使用记录' : missing();
           U.html(el.querySelector('[data-x="total"]'), k.total != null ? `<b>${k.lower ? '至少 ' : ''}${Math.round(k.total / 3600)}</b> <small>小时</small>` : `<span class="vz-none">${unread}</span>`);
           U.html(el.querySelector('[data-x="best"]'), k.best ? `最长的一天 ${k.lower ? '至少 ' : ''}${U.fieldHtml(dur(k.best.value))} · ${U.fieldHtml(k.best.day)}` : '');
         } };
@@ -694,11 +694,6 @@
     }, { day: ['summary', 'day'], where: ['categories', 'apps', 'titles'], focus: ['summary', 'focus', 'recent', 'apps'] });
   }
 
-  function renderNotices(state) {
-    U.list(notices, state.offline
-      ? [{ key: 'link', cls: 'notice glass', html: `${U.status(state).lamp}<span>${U.fieldHtml(state.text, { name: '连接状态' })}</span>` }] : []);
-  }
-
   function ask() {
     if (!usage) return '';
     const s = usage.summary || {};
@@ -748,7 +743,6 @@
       }
       bar?.set(state);
       Light.offline(state.offline);
-      renderNotices(state);
       if (usage) renderLinks(usage);
       if (!usage && empty) {
         const text = state.phase === 'gone' || state.meta.status >= 400 ? `${rangeLabel(usageRange)}的使用时间暂时读不到` : state.text || U.collectionText('使用时间');

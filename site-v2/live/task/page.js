@@ -539,7 +539,7 @@
         offline = !!state.offline;
         document.body.classList.toggle('task-offline', offline);
         if (valid(time(state.now))) now = time(state.now);
-        U.list($('notices'), offline ? [{ key: 'offline', cls: 'notice glass', html: field(state.text, '连接情况') }] : [], { animate: false });
+
         if (state.meta?.status === 403 || protectedField(task)) empty('这项任务仅本人可见', true);
         else if (task?.q === 'warming') empty('正在准备任务记录');
         else if (task && (changed || before !== offline)) { render(task); reading.done(); }

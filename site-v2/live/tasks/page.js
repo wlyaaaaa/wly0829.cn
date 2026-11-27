@@ -261,7 +261,7 @@
     if (s.next.disabled) return false;
     const text = s.loadedRows != null || s.failed ? s.next : s.more.querySelector('.lb-more__shut'), label = text.textContent;
     s.next.disabled = true;
-    text.textContent = '正在读…';
+    text.textContent = '加载中';
     let loaded = false, revoked = false;
     try {
       const r = await window.Live.get('tasks', { scope, project, q: query || null, group: id, cursor: append ? s.cursor : null });
@@ -477,7 +477,7 @@
     const dayChanged = s.now && U.date(s.now) !== U.date(now);
     now = s.now || now; if (dayChanged && page) render(page);
     bar?.set(s); L.offline(s.offline);
-    U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
+
     if (s.meta?.publicationRevoked) {
       waiting(updating, true);
       $('coverage').hidden = true;
@@ -487,7 +487,7 @@
       if (projectList !== null) pickProjects();
     } else if (!page && !s.data) {
       $('coverage').hidden = true;
-      waiting(s.warming ? '正在读' : s.text || U.collectionText());
+      waiting(s.warming ? '加载中' : s.text || U.collectionText());
     }
     let note = s.fallbackNote || s.meta?.fallbackNote || '';
     const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
@@ -499,7 +499,7 @@
   function load() {
     generation++; watch?.stop();
     for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.step = GROUP_STEP; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
-    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('正在读'); taskHead();
+    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('加载中'); taskHead();
     watch = window.Live.watch('tasks', { scope, project, q: query || null }, {
       phase(s) { if (!page && !s.meta?.publicationRevoked) { groupsRead.set(s); changesRead.set(s); } },
       data(d, meta) {
@@ -537,16 +537,16 @@
   $('q').value = query; let timer; $('search').addEventListener('submit', e => { e.preventDefault(); clearTimeout(timer); query = $('q').value.trim(); const u = new URL(location.href); query ? u.searchParams.set('q', query) : u.searchParams.delete('q'); history.replaceState(null, '', u); load(); }); $('q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('search').requestSubmit(), 300); });
   nextPage.addEventListener('click', async (event) => {
     const button = event.currentTarget, ticket = generation, label = button.textContent;
-    button.disabled = true; button.textContent = '正在读…';
+    button.disabled = true; button.textContent = '加载中';
     try {
       const r = await window.Live.get('tasks', { scope, project, q: query || null, cursor });
       if (ticket !== generation) return;
       if (r.data && r.meta?.at === batchAt && r.meta?.viewer?.kind === viewer) U.anchor(() => render(r.data, true));
       else if (r.meta?.publicationRevoked) showRevokedPage();
-      else U.html($('coverage'), U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer }));
+      else U.html($('coverage'), U.fieldHtml(r.warming ? '加载中' : r.text || U.collectionText(), { name: '读取情况', place: 'body', kind: viewer }));
     } finally {
       button.disabled = false;
-      if (button.textContent === '正在读…') button.textContent = label;
+      if (button.textContent === '加载中') button.textContent = label;
     }
   });
   function showRevokedPage() {

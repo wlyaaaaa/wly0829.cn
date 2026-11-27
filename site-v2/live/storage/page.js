@@ -253,8 +253,7 @@
   }
   function link(state) {
     bar?.set({ ...state, shownAt: readAt, cutoffAt: null }); Light.offline(state.offline);
-    const copy = state.meta?.source === 'fallback' ? '已切到静态副本 · ' : '';
-    U.list($('notices'), state.offline ? [{ key: 'storage', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${copy}${esc(sp(state.text))}</span>` }] : []);
+
   }
   function categoryRows(list, row, hidden) {
     // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）

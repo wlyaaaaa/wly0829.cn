@@ -39,7 +39,7 @@
   const lockIds = {}, lockedAt = {};
   let state = null, meta = {}, online = false, disconnected = false, openKey = null, busy = false, attempt = null, pending = null, winMessage = '', inlineAction = null;
   let actionSequence = 0, readAfter = 0, serverClock;
-  let reading = true;   // 第一份授权状态回来之前：三块都写“正在读…”，不摆按钮，不写像出错的“状态未知”
+  let reading = true;
   let cooldownUntil = 0, cooldownRead = null;
   let notice = null, shown = null;   // 这一页最近一张成功／失败浮窗；刚办成、新读数还没跟上时先照回执显示的那几项
   // Windows 解锁：自己的冷却、卡片上那行“待确认”；锁屏和解锁共用 Windows 那一块输码框，winUnlock 记开着的是解锁
@@ -53,16 +53,15 @@
   const BJ = 8 * 3600e3;
   const dayOf = ms => Math.floor((ms + BJ) / 86400e3);
   const pad = n => String(n).padStart(2, '0');
-  function untilText(ms) {
-    const d = new Date(ms + BJ), diff = dayOf(ms) - dayOf(clock() * 1000);
+  function untilText(ms, now = clock()) {
+    const d = new Date(ms + BJ), diff = dayOf(ms) - dayOf(now * 1000);
     const day = diff <= 0 ? '今天' : diff === 1 ? '明天' : '周' + '日一二三四五六'[d.getUTCDay()];
     return `到${day} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
   }
-  function observation(key, value) {
+  function observation(value) {
     const own = Number.isFinite(value?.observed_at_unix) && value.observed_at_unix > 0 ? value.observed_at_unix * 1000 : null;
-    const at = own ?? (key !== 'win' && value?.state && value.state !== 'unknown' && Date.parse(state?.at));
     const freshRead = own && online && meta.source === 'net' && Math.abs(clock() - own / 1000) <= 120;
-    const text = Number.isFinite(at) ? window.Live.stamp(at) : '';
+    const text = own ? window.Live.stamp(own) : '';
     const note = document.createElement('span');
     const reading = document.createElement('span');
     note.className = text && !freshRead ? 'cell__observation is-old' : 'cell__observation';
@@ -71,7 +70,7 @@
       prefix.textContent = '最后读到';
       note.append(prefix, ' ');
     }
-    reading.textContent = freshRead ? text.slice(-5) + ' 读到' : text || '没读到是几点的';
+    reading.textContent = freshRead ? text.slice(-5) + ' 读到' : text || '时间未知';
     note.append(reading);
     return note;
   }
@@ -521,28 +520,29 @@
     for (const k of ['pd', 'ur', 'win']) { cells[k].classList.toggle('is-open', key === k); deals[k].root.classList.toggle('is-active', key === k); }
     if (key) { const b = cells[key].querySelector(`[data-kind="${unlock ? 'unlock' : locking ? 'close' : 'open'}"]`); if (b) wrap.style.setProperty('--nx', (b.getBoundingClientRect().left + b.offsetWidth / 2 - wrap.getBoundingClientRect().left) + 'px'); }
   }
-  const offlineNote = document.createElement('p'); offlineNote.className = 'auth-offline'; document.querySelector('.cells').after(offlineNote);
+  const offlineNote = document.querySelector('.auth-offline');
   function render() {
     const missingStatus = '授权状态暂时读不到，刷新后再试。';
+    const now = disconnected ? Date.parse(meta.at) / 1000 : clock();
     if (unlocking() && !busy && !canOfferWindowsUnlock()) setOpen(null);
     offlineNote.hidden = !disconnected;
     cancelButton.disabled = busy && !attempt;
     for (const [key, cell] of Object.entries(cells)) {
-      const grant = state?.[fields[key]], active = key === 'win' ? grant?.state === 'unlocked' : remainingMinutes(grant, clock()) > 0;
+      const grant = state?.[fields[key]], active = key === 'win' ? grant?.state === 'unlocked' : remainingMinutes(grant, now) > 0;
       const privateState = grant?.state === 'private';
-      cell.classList.toggle('is-on', !disconnected && active);
-      cell.classList.toggle('is-private', !disconnected && privateState);
+      cell.classList.toggle('is-on', active);
+      cell.classList.toggle('is-private', privateState);
       cell.classList.toggle('has-receipt', !disconnected && !!lockedAt[key]);
       const stateLine = cell.querySelector('.cell__state');
       const loading = reading && !disconnected && !state;
-      stateLine.textContent = disconnected ? '连不上' : loading ? '正在读…' : !state ? missingStatus
-        : privateState ? '' : key === 'win' ? ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
-        : active ? untilText(grant.expires_at_unix * 1000) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
+      stateLine.textContent = loading ? '加载中' : !state ? disconnected ? '状态未知' : missingStatus
+        : privateState ? disconnected ? '可信设备可见' : '' : key === 'win' ? ({ locked: '已锁屏', unlocked: '没锁', no_session: '没有登录' }[grant?.state] || '还没读到')
+        : active ? untilText(grant.expires_at_unix * 1000, now) : !grant || grant.state === 'unknown' ? '状态未知' : key === 'pd' ? '锁着' : '关着';
       if (privateState && !disconnected) {
         const note = document.createElement('button'); note.type = 'button'; note.className = 'trust-note'; note.dataset.trustView = '';
         note.textContent = '可信设备可见'; stateLine.append(note);
       }
-      if (state && !privateState) stateLine.append(' · ', observation(key, grant));
+      if (state || disconnected) stateLine.append(' · ', observation(grant));
       let result = cell.querySelector('.cell__receipt');
       if (!result) { result = document.createElement('p'); result.className = 'cell__receipt'; result.setAttribute('aria-live', 'polite'); stateLine.after(result); }
       if (key === 'win' && windowsHint && !windowsHints[windowsHint]()) windowsHint = '';
@@ -552,14 +552,14 @@
       else if (!result.hidden) { const title = document.createElement('strong'); title.textContent = key === 'pd' ? '已锁上' : '已结束'; result.append(title); }
       const acts = cell.querySelector('.cell__acts'); acts.replaceChildren();
       cell.querySelector('.cell__inline')?.remove();
-      const actions = disconnected || loading || key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? [['锁屏', 'close'], ['解锁', 'unlock']]
+      const actions = loading || !disconnected && key === 'win' && ['windows', 'windows-unlock'].includes(pending?.action) ? [] : key === 'win' ? [['锁屏', 'close'], ['解锁', 'unlock']]
         : [[active ? '延长' : key === 'pd' ? '解锁' : '开启', 'open'], ...(active || privateState ? [[key === 'pd' ? '锁定' : '结束', 'close']] : [])];
       for (const [label, kind] of actions) {
         const b = document.createElement('button'); b.className = 'btn'; b.textContent = label; b.dataset.kind = kind;
         // 禁用时写明原因（悬停可见，扫描也认 data-disabled-reason）。锁定、结束随时能点，不等“状态是最新的”（本人 11-24）；
         // Windows 解锁也随时能点：读数旧了、读不准照样开码格，由电脑那头按真状态办
         const anytime = (kind === 'close' || kind === 'unlock') && !local;
-        const why = !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
+        const why = disconnected ? offlineNote.lastElementChild.textContent : !state ? missingStatus : !anytime && !state.entry ? '办理入口还没读到' : local ? '' : busy ? '正在办上一步'
           : pending ? '还有一步在等确认' : !anytime && !privateState && (!fresh(key) || kind !== 'unlock' && !state.state_version) ? '状态不是最新的，刷新后再试' : '';
         b.disabled = !!why; if (why) { b.dataset.disabledReason = why; b.title = why; }
         // 配对设备点锁定个人资料也开码格（要输码），只有结束授权、锁屏还是“再点一下确认”
@@ -626,7 +626,6 @@
     meta = s.meta;
     window.CockpitViewer = s.viewer;
     disconnected = s.offline;
-    // 回了话（读到、读不到、连不上）就不再算“正在读”；还在等第一次回话的照旧写“正在读…”
     if (!['idle', 'wait', 'slow'].includes(s.phase)) reading = false;
     online = !disconnected && s.link?.state === 'online';
     document.body.classList.toggle('live-off', disconnected);
@@ -634,13 +633,14 @@
       serverClock = { at: s.now, received: performance.now() };
     }
     if (disconnected) {
-      const at = s.shownAt || s.cutoffAt;
-      offlineNote.textContent = '电脑开机后自己恢复' + (at ? ` · 北京时间 ${window.Live.stamp(at)} 最后读到` : '');
+      offlineNote.dataset.stage = s.conn.stage;
+      offlineNote.firstElementChild.textContent = s.conn.say;
+      offlineNote.lastElementChild.textContent = s.hostOff ? '电脑开机后才能用下面的按钮' : '连上电脑后才能用下面的按钮';
       setOpen(null);
     }
     render();
   }
-  window.Live.watch('access', {}, { data(value) { state = keepShown(value); if (pending?.action !== 'windows') winMessage = ''; }, link: renderLink });
+  window.Live.watch('access', {}, { data(value, m) { state = m.source === 'fallback' ? value : keepShown(value); if (pending?.action !== 'windows') winMessage = ''; }, link: renderLink });
   // 进场那一下绿点逐个亮起；之后状态变了灯立刻跟着变
   document.body.classList.add('auth-entering'); setTimeout(() => document.body.classList.remove('auth-entering'), 2600);
   render(); document.body.classList.add('is-ready');

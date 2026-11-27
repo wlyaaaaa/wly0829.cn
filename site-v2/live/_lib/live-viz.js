@@ -68,7 +68,7 @@
     const last = U.olderNote?.(at, b)?.replace(/^数据截止 /, '上次记录 ') || (U.isCutoffNote(b.stale_text) ? b.stale_text : '');
     const text = offline ? empty ? '这块没存下来，连上后补上。' : last
       : stale ? [last || (sampled && `上次记录 ${sampled}`), U.isCutoffNote(b.reason) && last ? '' : b.reason].map(sp).filter(Boolean).join(' · ')
-      : b.state === 'computing' && !partial ? '正在读…' : empty ? U.collectionText('', b)
+      : b.state === 'computing' && !partial ? '加载中' : empty ? U.collectionText('', b)
       : sampled && !['warming', 'unknown', 'computing'].includes(b.state || b.q) ? `截至 ${sampled}` : '';
     return { ...b, state: b.state || b.q || 'stale', empty, wait: !stale && !offline && !empty && !partial && b.state === 'computing', text };
   }
@@ -292,7 +292,7 @@
       r.axis = r.el.querySelector('.vz-tl__axis');
       r.sky = r.el.querySelector('.vz-tl__sky');
       r.since = r.el.querySelector('.vz-tl__since');
-      waitBox(r.plot, '正在读');
+      waitBox(r.plot, '加载中');
     }
     let states = [], focus = null, W = 0, pinned = null, hovered = null, muted = null;
     // 关机段：有单独“关机”状态的图（手机页使用记录，那里 off 是锁屏）认 shutdown，别的图沿用 off
@@ -647,7 +647,7 @@
     host.innerHTML = `<div class="vz-heat__wrap"><div class="vz-heat__grid"></div></div><div class="vz-heat__key"><span>少</span>${(isWarm ? [.38, .53, .68, .84, 1] : [.2, .4, .6, .8, 1]).map((a) => `<i style="background:${fill(a)}"></i>`).join('')}<span>多</span></div>`;
     const grid = host.querySelector('.vz-heat__grid');
     const tip = tipper(host);
-    waitBox(grid, '正在读');
+    waitBox(grid, '加载中');
     let days = [];
     grid.addEventListener('pointerover', (e) => {
       const cell = e.target.closest('.vz-heat__cell');
@@ -698,7 +698,7 @@
     host.innerHTML = `<div class="chart__head"><span class="chart__name">${esc(opts.title || '')}</span><span class="chart__vals"></span></div>
       <div class="vz-bars__plot"><svg class="vz-bars__svg" aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div></div><div class="vz-bars__x"></div>`;
     const vals = host.querySelector('.chart__vals'), plot = host.querySelector('.vz-bars__plot'), svg = plot.firstElementChild, xs = host.querySelector('.vz-bars__x'), axisEl = host.querySelector('.chart__axis');
-    waitBox(plot, '正在读');
+    waitBox(plot, '加载中');
     let data = null, hover = null, W = 0, H = 0;
 
     function readout(i) {
@@ -810,7 +810,7 @@
     host.innerHTML = `<div class="vz-share__ring"><svg viewBox="0 0 ${SIZE} ${SIZE}" aria-hidden="true"><defs></defs><g class="vz-share__halo"></g><g class="vz-share__arcs"></g></svg><p class="vz-share__mid"></p></div><ul class="vz-share__list"></ul>`;
     const defs = host.querySelector('defs');
     const ring = host.querySelector('.vz-share__ring'), halo = host.querySelector('.vz-share__halo'), arcs = host.querySelector('.vz-share__arcs'), mid = host.querySelector('.vz-share__mid'), list = host.querySelector('.vz-share__list');
-    waitBox(ring, '正在读');
+    waitBox(ring, '加载中');
     let items = [], total = 0, focus = null;
     const centerValue = () => Number.isFinite(opts.centerValue) && opts.centerValue >= 0 ? opts.centerValue : null;
     const arc = (a0, a1) => {
@@ -1022,7 +1022,7 @@
   // ================= 数字块：名字在上，数在下（大字），一句小字，一条细条 =================
   function figures(host) {
     host.classList.add('vz-figs');
-    html(host, `<p class="vz-wait">${emptyText('正在读')}</p>`);
+    html(host, `<p class="vz-wait">${emptyText('加载中')}</p>`);
     return {
       set(list) {
         if (isOffline() && list) list = list.filter((f) => f.value != null || f.text && !/还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|保留上次读数/.test(f.text));
@@ -1240,7 +1240,7 @@
     // 读前（LiveUI.reading，雾里显影）：还没拿到第一份数、也还没读完时，整组在雾里——那句话写“正在读…”、大数字糊着、走势小线和章里都在雾里；
     // “还没读到”只在读完确实没有（phase none）或这一组自己的数读完了还是空时才写。组给了 wait（true/false）就按组自己的读数走，不跟曲线那一读
     const pend = (g) => !isOffline() && (g.wait ?? (!payload && lastPhase !== 'none' && lastPhase !== 'gone'));
-    const PEND_NOTE = '<span class="fog__note grp__pend">正在读…<span class="fog__more">这块要多读一会儿</span></span>';
+    const PEND_NOTE = '<span class="fog__note grp__pend">加载中</span>';
     const CHAPTER_GHOST = '<div class="grp__ghost"><span class="fog__chart"><i class="fog__band"></i></span></div>';
     const fog = (it, el, ghost, first = false) => {
       if (!pend(it.g) || !window.LiveUI?.reading) return null;
@@ -1450,7 +1450,7 @@
       }
       if (f.text != null && (!isOffline() || !/还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|保留上次读数/.test(f.text))) return lowerBoundHtml(f, readingHtml(f.text));
       if (f.value != null) return lowerBoundHtml(f, fmtHtml(f.value, f.unit));
-      if (g && pend(g)) return '<span class="fog__text grp__fog" aria-label="正在读">正在读</span>';   // 读前：糊开的示意字，不写“还没读到”
+      if (g && pend(g)) return '<span class="fog__text grp__fog" aria-label="加载中">加载中</span>';   // 读前：糊开的示意字，不写“还没读到”
       const p = id && latestPoint(payload, id);
       return p ? lowerBoundHtml(f, fmtHtml(p.value, f.unit ?? p.unit)) : isOffline() ? '' : missingReading({ ...payload, ...payload?.series?.find(s => s.id === id), ...f });
     }

@@ -307,7 +307,7 @@
         try {
         const withdrawal = U.chatFields.withdrawal(state, '这场对话');
         bar?.set(withdrawal && !state.offline ? { ...state, text: U.chatFields.withdrawal(state) } : state); L.offline(state.offline);
-        U.list($('notices'), state.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(state.text)}</span>` }] : []);
+
         if (withdrawal) {
           chat = null; missing(withdrawal);
           heroRead.done(false); heroRead.set({ ...state, phase: 'unavailable', say: esc(withdrawal) });

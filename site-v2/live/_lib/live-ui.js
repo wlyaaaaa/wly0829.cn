@@ -1258,9 +1258,8 @@
 
   // 页顶那张卡（本人 11-23 选的 B，01:01 定了和页顶提醒合成一张）：和下面大卡同宽、同一个样子（玻璃、右边一整幅画），一件事一行，
   // 什么事都没有时整张不出现；出现时从 0 撑开、收起时合拢，下面的卡跟着滑，不跳。
-  // 连接那一行：琥珀小灯一直慢慢呼吸、循环箭头一直慢慢转；画在样式表里，卡出现才下载。
-  // 写什么照本人 11-24 20:34 选的 B（图 S1 五种）：刚读不到先写“正在刷新”，一直读不到没确认关机写“……，正在重试”，
-  // 确认关机灯变灰、写“电脑几点关机了”和下面是哪一份；字由 live-client 的 conn 给，全站同一个部件。
+  // 连接灯一直慢慢呼吸。画在样式表里，卡出现才下载。
+  // 加载、连不上、关机的字由 live-client 给。关机灯变灰，重试照常在后台进行。
   // 连上后灯变绿、写“已连上”，右边的画照样在，约 2 秒后收走这一行；卡里没别的事就整张收起。
   // 页面原来的提醒列表（#notices）整个搬进这张卡，各条照旧由各页自己画、按钮和跳转不变；配对失效的说明也放成一行。
   const CONN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M19.47 11.35A7.5 7.5 0 1 1 15.17 5.2"/><path d="M19.16 7.06 16.07 .66 12.27 8.82Z" fill="currentColor" stroke-width=".8"/></svg>';
@@ -1280,7 +1279,7 @@
     card = document.createElement('section'); card.className = 'live-conn glass'; card.setAttribute('role', 'status'); card.hidden = true;
     card.innerHTML = '<span class="live-conn__tint" aria-hidden="true"></span><span class="live-conn__pic" aria-hidden="true"></span><div class="live-conn__rows"></div>';
     const notices = stage.querySelector(':scope > #notices');
-    const after = stage.querySelector(':scope > [data-live-view-row], :scope > .back');
+    const after = stage.querySelector(':scope > .live-siblings') || stage.querySelector(':scope > [data-live-view-row], :scope > .back, :scope > nav:has(.back)');
     if (notices) notices.before(card); else if (after) after.after(card); else stage.prepend(card);
     if (notices) {
       card.append(notices);
@@ -1313,11 +1312,11 @@
     let link = rows.querySelector('.live-conn__row[data-key="link"]');
     const c = state.conn || { stage: 'online' };
     if (c.stage !== connNow) { connNow = c.stage; for (const hook of pillHooks) hook(c); }
-    if (c.homePublication || ['retrying', 'lost', 'off'].includes(c.stage)) {
+    if (c.homePublication || ['loading', 'retrying', 'lost', 'off'].includes(c.stage)) {
       clearTimeout(connBack); connBack = 0;
       if (!link) {
         link = row('link');
-        link.innerHTML = `<span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span><span class="live-conn__wait"><span class="live-conn__spin" aria-hidden="true">${CONN_ICON}</span><span class="live-conn__why"></span></span>`;
+        link.innerHTML = '<span class="live-conn__lamp" aria-hidden="true"></span><span class="live-conn__say"><b></b><span class="live-conn__at"></span></span>';
         rows.prepend(link);
       }
       for (const el of [card, link]) { el.classList.remove('is-closing'); el.style.height = ''; }
@@ -1327,12 +1326,9 @@
       if (c.homePublication && say.textContent !== c.say) {
         say.innerHTML = esc(c.say).replace(/访客版|补上。/g, '<span class="live-unit">$&</span>');
       } else put(say, c.say);
-      const at = link.querySelector('.live-conn__at');
-      if (at.textContent !== c.at) at.innerHTML = esc(c.at).replace('没存下来', '<span>没存下来</span>');
-      const why = link.querySelector('.live-conn__why');
-      if (why.textContent !== (c.wait || '')) {
-        why.innerHTML = esc(c.wait).replace('重读一次', '重读<span style="white-space:nowrap">一次</span>');
-      }
+      put(link.querySelector('.live-conn__at'), '');
+    } else if (link?.dataset.stage === 'loading') {
+      link.remove();
     } else if (link && !link.classList.contains('is-back')) {
       const refreshed = ['retrying', 'publication'].includes(link.dataset.stage);
       link.classList.add('is-back');
@@ -1340,7 +1336,6 @@
       const upTo = c.shownAt;
       put(link.querySelector('b'), refreshed ? '已刷新' : '已连上');
       put(link.querySelector('.live-conn__at'), upTo ? ` · 数据已更新到 ${time(upTo)}` : '');
-      put(link.querySelector('.live-conn__why'), '');   // 断线时那句（“先留着这份一直重试”之类）连上了就不留在“已连上”下面
       connBack = setTimeout(() => { connBack = 0; if (link.isConnected && link.classList.contains('is-back')) close(link); }, 2000);
     }
     const pair = state.publicPaused ? '' : state.pairNotice || '';
@@ -1394,7 +1389,7 @@
       at.setAttribute('aria-label', text || at.title);
       html(at, paused ? esc(text) : `<span class="live-refresh-icon" aria-hidden="true">${CONN_ICON}</span><span class="live-refresh-text">${esc(text)}</span>`);
     };
-    const waiting = setTimeout(() => { if (!label) { label = '正在读'; if (!busy) show(label); } }, 2500);
+    const waiting = setTimeout(() => { if (!label) { label = '加载中'; if (!busy) show(label); } }, 2500);
     // 点一下就等于浏览器刷新（本人 M513：页面上的刷新没用、浏览器刷新就好）：整页重新载入，拿到最新版网页和最新数据。
     // 动画照 r62：药丸先收成圆（--live-at-slide）再重新载入；新页面一出来就是收好、接着转的样子，这一轮数据读完、
     // 转到整圈（--live-at-turn）再从正中展开。点的时刻和当时的字记在 sessionStorage，转圈和等多久都从点下去那一刻算。
@@ -1471,10 +1466,10 @@
         const stamp = state.shownAt, atText = stamp ? `${time(stamp)} 读到` : '';
         const retry = state.meta?.source !== 'fixture' && stage === 'retrying';
         const revoked = !disconnected && state.meta?.publicationRevoked;
-        const homeSummary = (revoked && state.conn?.homePublication) || (stage === 'off' && state.conn?.emptyHome);
+        const homeSummary = revoked && state.conn?.homePublication;
         if (stamp || disconnected || retry || revoked || state.phase === 'none') { clearTimeout(waiting); readDone(); }
         label = homeSummary ? '' : revoked ? '这块正在更新访客版，稍后自动补上。'
-          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry ? '正在重试'
+          : state.meta?.source === 'fixture' ? `示意数${atText ? ` · ${atText}` : ''}` : disconnected ? '连不上' : retry || stage === 'loading' ? '加载中'
           : atText || (state.phase === 'none' ? (state.meta?.status >= 400 && state.text || collectionText()) : label);
         at.classList.toggle('is-retrying', retry);
         if (!busy) show(label);
@@ -1767,14 +1762,12 @@
   // 没到的字像隔着起雾的玻璃看过去（糊开的示意字，读不出写的什么）；背景沿用本页随机分配的光色，第一行一颗珍珠白小灯轻轻呼吸。
   // 加载中不比正常的卡多动任何一样东西。数到了：雾里的字换成真字、由糊变清（900 毫秒，先用 160 毫秒显出来），灯换成后端状态色，背景光保持（live-light.js）。
   // 示意字只说“正在读”，糊开后读不出，也不编数。
-  const SLOW_TEXT = '这块要多读一会儿';
   const pearl = (small) => `<span class="lamp lamp--pearl${small ? ' lamp--sm' : ''}" aria-hidden="true"></span>`;
   const blur = (text, cls = '') => `<span class="fog__text${cls ? ` ${cls}` : ''}">${esc(text)}</span>`;
   const FOG_LINES = ['正在读这一块最近的情况', '正在读这一块的数，读到了就在这里显出来', '正在读这一块现在怎样'];
   const ghost = {
     // 一张卡：第一行灯 + 一行大字，下面几行小字
-    // 第一行大字糊着，旁边一句清楚的小灰字“正在读…”：看得出是在读，不像被打了码
-    card: (lines = 2) => `<p class="card__head fog__head">${pearl()}${blur('正在读这一块', 'head__lead')}<span class="fog__note">正在读…<span class="fog__more">${SLOW_TEXT}</span></span></p>` +
+    card: (lines = 2) => `<p class="card__head fog__head">${pearl()}${blur('正在读这一块', 'head__lead')}<span class="fog__note">加载中</span></p>` +
       FOG_LINES.slice(0, lines).map((t) => `<p class="fog__line">${blur(t)}</p>`).join(''),
     // 一串行：每行前面一颗不呼吸的珍珠小点
     rows: (n = 4) => Array.from({ length: n }, (_, i) =>
@@ -1817,10 +1810,8 @@
           `<p class="fog__say">${/(?:^|[?&])id(?:=|&|$)/.test(typeof location === 'object' ? location.search : '') ? '电脑连不上，这一条现在看不了' : '这块没存下来，连上后补上。'}</p>`;
         fog.removeAttribute('aria-hidden');
       } else if (!was || was === 'gone' || was === 'unavailable') {
-        // 读得慢：卡的示意里那句“正在读…”后面接着说；别的示意另起一行，同色同字号
-        const own = inner.includes('fog__more');
-        fog.innerHTML = (slow ? inner : inner.replace(/<span class="fog__more">[^<]*<\/span>/, '')) +
-          (slow && !own ? `<${inline ? 'span' : 'p'} class="fog__slow">${SLOW_TEXT}</${inline ? 'span' : 'p'}>` : '');
+        const tag = inline ? 'span' : 'p';
+        fog.innerHTML = inner + (slow && !inner.includes('fog__note') ? `<${tag} class="fog__slow">加载中</${tag}>` : '');
         fog.setAttribute('aria-hidden', 'true');
       }
       el.dataset.read = next;

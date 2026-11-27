@@ -346,7 +346,7 @@
         const window = period >= 86400 ? '这一天' : period >= 3600 ? '这一小时' : period === 300 ? '这 5 分钟' : '这一分钟';
         return { value: null, text: `${label} ${window}没采到`.trim() };
       }
-      return { value: null, text: s?.gap || metric(NOW[id] || id)?.gap || (!s && offline() ? missing() : s?.reason || (s || chartDone.size ? '没有记录' : '正在读…')) };
+      return { value: null, text: s?.gap || metric(NOW[id] || id)?.gap || (!s && offline() ? missing() : s?.reason || (s || chartDone.size ? '没有记录' : '加载中')) };
     }
     const stamp = iso(source?.at ?? (long ? s?.last_measured_at : null)) || iso(last?.lastAt);
     const basis = s?.latest_instant_at && iso(source?.at) === s.latest_instant_at ? '即时实测' : source && source === temperature ? '分钟均值' : bucket(s);
@@ -1081,7 +1081,7 @@
       const pt = point(t.pt), at = point(t.at);
       const text = tagText(t.key), reading = metric(({ cpu: 'cpu', gpu: 'gpu', memory: 'memory', disk: 'disk-free', power: 'power-total', network: 'net-down' })[t.key]);
       const go = t.key === 'gpu' ? 'cpu' : t.key;
-      const empty = offline() ? '' : `${NAME[t.key]} ${pendingTags.includes(t.key) ? '正在读…' : U.collectionText()}`;
+      const empty = offline() ? '' : `${NAME[t.key]} ${pendingTags.includes(t.key) ? '加载中' : U.collectionText()}`;
       const body = U.fieldHtml(text || empty, { name: NAME[t.key] }), marker = body.includes('live-mark');
       const shown = ['gpu', 'power'].includes(t.key) && !marker && typeof text === 'string' && text.includes('上次实测')
         ? `<span>${body.replaceAll('上次实测', '<span class="mach__tag-note">上次实测</span>')}</span>` : body;
@@ -1283,11 +1283,6 @@
   }
   const tone = (d) => U.status(d).tone;
 
-  function renderNotices(state) {
-    U.list(notices, state.offline
-      ? [{ key: 'link', cls: 'notice glass', html: `${U.status(state).lamp}<span>${U.fieldHtml(state.text, { name: '连接状态' })}</span>` }] : []);
-  }
-
   // ================= 页眉〔问情况〕：页头那句 + 要留意的 + 几样读数 =================
   function ask() {
     if (!computer) return '';
@@ -1354,7 +1349,6 @@
       if (computer) { refresh(); renderHero(computer); renderStability(); drawExits(); }
       bar?.set(state);
       Light.offline(state.offline);
-      renderNotices(state);
       if (state.data == null && state.phase === 'none') {
         if (mainRevoked) heroRead.done(false); else heroRead.set(state);
         U.html(part('head'), U.head(mainRevoked ? publicationNote('电脑读数') : state.text || U.collectionText()));

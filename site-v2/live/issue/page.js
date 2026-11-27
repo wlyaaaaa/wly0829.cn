@@ -320,7 +320,7 @@
     link(s) {
       try {
         bar?.set(s); L.offline(s.offline);
-        U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
+
         if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
