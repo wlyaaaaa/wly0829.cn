@@ -1,6 +1,4 @@
-// 实况 · 智能体：三家 AI（Claude、Codex、Antigravity）被管得对不对、估工期准不准、干了多少活，再是三家怎么被管（设置和钩子）。
-// 本人 11-23 01:19 定的内容（工期“准”按估算程序给的允许范围算、按时另列；干活量和工期放一起；钩子每格写几条、跑几次、多慢、拦几次、错几次）。
-// 访客看到的和本人一样，只过全站禁词过滤；数据读 /computer-access/live/v1/agents（候选后台 pcconfig.live-agents.v1）。
+// 实况智能体页。两版共用 /computer-access/live/v1/agents，工期按允许范围算准。
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI, { esc } = U;
@@ -46,11 +44,7 @@
     compact: '压缩不删对话，可压缩以后 AI 只看得到摘要；这条在压缩前把这次任务放在哪、做到哪写进摘要，让它接得上。翻译官管“你要什么”，这条管“这次做到哪”。',
     stop: 'AI 收工时容易留尾巴：资料锁拦过的事没办、后台的活没人盯、回复写成了英文；这条收工前查一遍，有就让它再补一轮。正常收工就记进实况、按条件推手机。',
   };
-  // 设置表“对话装多满会压缩”写成 K 词元（本人 11-25 17:39 要知道“这个钩子是多少 K 生效”）。Codex 回包直接给词元数；Claude 回包只给百分比，
-  // 宿主先留 20K 给回复、再按这个比例取 1000K 的窗口：(1000K−20K)×50%≈490K。钩子卡里的数由规则仓给，见下面 hookDetail 里的快核。
-  // Claude 上下文窗口 1,000K 和先留给回复的 20K（设置表小字直接显示，也用来算约 490K）。按需更新快核（M928）核法：Claude 对话记录
-  // E:/Data/AppData/Claude/profiles/pro/projects/**/*.jsonl 里每次自动压缩的 compactMetadata.preTokens，近 7 天中位数应≈(窗口−留量)×回包百分比，
-  // 现 1,000K 窗口、先留 20K（11-26 核：220 次，中位 491K，十分位 490,000；窗口也可对钩子程序 claude_root_runtime_module.py 里登记的型号窗口）；变了改这句
+  // Codex 回包给词元，Claude 给百分比，按 (1000K−20K)×百分比算。M928 核对近 7 天自动压缩的 compactMetadata.preTokens。
   const CLAUDE_WINDOW = 1000000, CLAUDE_REPLY = 20000;
   const pctOf = (d, h) => { const p = Number(hostData(d, h).compact_percent); return p > 0 && p <= 100 ? p : null; };
   const compactAt = (d, h) => h.id === 'claude' ? (pctOf(d, h) ? (CLAUDE_WINDOW - CLAUDE_REPLY) * pctOf(d, h) / 100 : null)
@@ -84,11 +78,9 @@
   const REASONS = [['larger_orders', '单子比想的大'], ['rework', '返工'], ['missed_follow_up', '漏想的后续活'], ['long_tests', '长测试'], ['scope_added', '中途加需求']];
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
-  // 工期、工作量、钩子各有一排“全部｜近 7 天｜近 30 天”，各切各的，打开默认全部（本人 16:35 照图点头；R77“各卡片的时间范围要能改”）
-  // hookPeriod 是 null 时：后台给了分段就看“全部”；旧后台只有近 7 天，先看近 7 天，别的两档写“后台还没送来”
+  // 三块各自选时段。旧后台的钩子只给近 7 天时默认该段。
   let state, viewer = 'public', expanded = null, period = 'all', estPeriod = 'all', hookPeriod = null;
-  // 看哪一家：null 是“全部”（三家都看）。本人 11-24 13:00：“三个可点默认全部”“智能体页永远是打开默认全部，只要不点”——
-  // 只放在内存里，不写网址、不写本地存储，刷新、重开都回到全部。页顶、各块图例、三家那几行点哪一处都改这同一个，整页一起跟着变。
+  // 家别筛选全页共用，刷新回到全部。
   let only = null;
   const modelsOpen = new Set();  // 哪几家的型号清单展开了全部
   const drawn = new Set();       // 图只在第一次出现时描线、长柱
@@ -264,9 +256,7 @@
         <span class="tp-bar__track"><span class="ag-stack" style="width:${sum / max * 100}%">${r.parts.filter(p => p.n).map(p => `<span class="tp-bar__fill" style="--fill:${p.h.color};flex:${p.n}">${p.n}</span>`).join('')}</span></span>
         <span class="tp-bar__num">${int(sum)}</span></div>`; }).join('')}</div>`;
   }
-  // 三种估法各对上几件。本人 11-23：先别写“谁更准”；原来的“程序 29%”其实是“全按中等大小算”的对照，不是开工时程序真推荐的。
-  // 读后台 work_stats.estimate_baselines：{ scope, samples, rows:[{id, hits, samples, basis}], hosts:{<家>:{rows}} }，
-  // id 是 all_medium（全按中等大小算的对照）、program_at_start（开工时程序推荐的）、ai_reported（实际报给本人的）。没出数时写“在核”，不下结论。
+  // 估时比较区分开工推荐、实际报告和全按中等的对照。缺数时写在核。
   const BASES = [['program_at_start', '开工时程序推荐的'], ['ai_reported', `实际报给${'{you}'}的`], ['all_medium', '全按中等大小算（对照）']];
   function compare(d) {
     const b = estPeriod === 'all' ? d.work_stats?.estimate_baselines : d.work_stats?.periods?.[estPeriod]?.estimate_baselines;
@@ -338,9 +328,7 @@
     return 'Gemini ' + m[2].split('-').map(s => /^\d/.test(s) ? s : s[0].toUpperCase() + s.slice(1)).join(' ');
   };
   const summaryModel = row => /^gpt-6-luna$/.test(row.model) && row.effort === 'low';
-  // 时间那排“全部｜近 7 天｜近 30 天”（本人 16:35 选 B：只改时间那排、不加“全部”卡）。开工、总工时、派出去、型号都读 periods.<段>.hosts.<家>.work；
-  // 总工时照旧是登记的完工用时（R56 对这张卡只说改时间选项），和右边按周的柱子同一种算法；按实际干活时间算的是上面“三家干了多少”和首页智能体卡。
-  // 后台还没给这一段（旧后台每家只有五个数）就是 null，每格写“后台还没送来”
+  // 各时段读取对应 work。工时沿用登记的完工用时，缺数写未送来。
   const workFor = (d, h) => inPeriod(d, period, h)?.work || null;
   function workCard(d, h) {
     const w = workFor(d, h), lost = missing(d, h);
@@ -503,8 +491,7 @@
       <p class="tp-small ag-foot">格子越深跑得越多；点开一格看这家在这个当口的每条钩子、六问和最近一次塞给 AI 的原样。</p></section>`;
   }
 
-  // —— 快讯：只滚三家开工、完工（本人 16:35 照图点头）。“××检查拦下 1 次”这类不上快讯：拦下次数里多少是真违规拿不准，本人 03:00 定了不放；
-  // 钩子表每格的“拦 N 次”照旧。后台出 feed 就从里面挑开工、完工；没出先拿这页已有的“这周开工几件”拼 ——
+  // 快讯只列开工和完工，缺 feed 时用本周开工数。
   const WORK_KINDS = new Set(['work_start', 'work_finish']);
   const WORK_UNAVAILABLE = new Map([
     ['本次读不到工期账本。', '三家开工、完工的记录这次没读到，下一轮会自动再读'],
@@ -521,9 +508,7 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) {
-      // 后台一直回“正在准备”（202）时读数层会一直重问、阶段停在“读得慢”：过了 10 秒照全站读不到的说法写，不一直写“正在读”（M909）。
-      // 还在读的头 10 秒，快讯和正文一样说“正在读”，不先说没读到；读不到了两处一起说没读到
-      // 后台这一块算失败回 503（服务通着，下一轮重算）也照这句写，不写成“电脑连不上”（M909，live-client 把它算作服务答了话）
+      // 后台准备逾时或回复 503，正文和快讯一起结束读数提示（M909）。
       const stuck = state?.warming && state.phase === 'slow' || !state?.offline && state?.meta?.status === 503;
       const reading = !stuck && !state?.offline && ['idle', 'wait', 'slow'].includes(state?.phase) && !(state?.meta?.status >= 400);
       T.paint(page.root, stuck ? '<p class="tp-placeholder" role="status">智能体暂时没读到：后台还在准备这一页的数，准备好了这里会自己换上。</p>' : T.placeholder(state, '智能体'));
@@ -548,30 +533,44 @@
       }
     } else if (!landed && location.hash) landed = T.reveal(location.hash.slice(1));
   }
-  let landed = false;
+  const hookId = location.hash.slice(1);
+  let landed = hookId === 'hooks' || STATIONS.some(([id]) => hookId === `hooks-${id}`), pinHooks;
   const page = T.boot({ resource: 'agents', ask: () => '请看实况智能体页：三家规则、钩子和设置有没有对上，工期估得准不准。先用大白话说，别动手。',
-    onState(next) { state = next; draw(); } });
+    onState(next) { state = next; draw(); pinHooks?.(); } });
+  if (landed && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward') {
+    const input = new AbortController();
+    let timer;
+    const stop = () => { input.abort(); observer.disconnect(); clearTimeout(timer); pinHooks = undefined; };
+    const align = () => {
+      const target = !input.signal.aborted && document.getElementById(hookId);
+      if (!target) return;
+      target.scrollIntoView({ block: 'start', behavior: 'instant' });
+      timer ??= setTimeout(stop, 10000);
+    };
+    const observer = new ResizeObserver(align);
+    observer.observe(page.root);
+    pinHooks = () => requestAnimationFrame(align);
+    addEventListener('pagereveal', e => e.viewTransition?.finished.then(align, align), { once: true, signal: input.signal });
+    for (const type of ['wheel', 'touchstart', 'pointerdown', 'keydown', 'hashchange', 'pagehide'])
+      addEventListener(type, stop, { capture: true, passive: true, signal: input.signal });
+  }
   page.root.addEventListener('click', e => {
-    // 看哪一家：data-only 直接选（页顶和“全部”），data-pick 是图例、三家那几行、柱段——点一家只看它，再点一次回到全部
     const set = e.target.closest('[data-only]'), pick = e.target.closest('[data-pick]');
     if (set || pick) {
       const next = set ? (set.dataset.only === 'all' ? null : set.dataset.only) : only === pick.dataset.pick ? null : pick.dataset.pick;
       if (next === only) return;
       const el = set || pick, sec = el.closest('section[id]');
-      // 点了哪个按钮，重画后这个按钮停在原处；柱段这类不是按钮的，停住这一块的标题
       const anchor = !sec ? `.tp-head [data-only="${next || 'all'}"]` : el.closest('.ag-mlegend') ? `#${sec.id} .ag-mlegend [data-${set ? 'only' : 'pick'}="${set ? set.dataset.only : pick.dataset.pick}"]` : `#${sec.id} .tp-panel__head`;
       only = next;
       if (only && expanded && expanded.split('/')[1] !== only) expanded = null;   // 别家展开着的钩子格收起来
       T.keep(page.root, anchor, draw);
       return;
     }
-    // 搬来的两块（你跟三家说了多少、三家常用的技能）：切换时段、技能展开收起
     const moved = window.AgentsMoved?.click(e.target);
     if (moved) { T.keep(page.root, moved, draw); return; }
     const cell = e.target.closest('[data-cell]'), seg = e.target.closest('[data-tseg]'), more = e.target.closest('[data-models]');
     if (cell) { expanded = expanded === cell.dataset.cell ? null : cell.dataset.cell; T.keep(page.root, `[data-cell="${cell.dataset.cell}"]`, draw); }
     if (more) { const id = more.dataset.models; modelsOpen.has(id) ? modelsOpen.delete(id) : modelsOpen.add(id); T.keep(page.root, `[data-models="${id}"]`, draw); }
-    // 工期、工作量、钩子三排时间各切各的，只换这一块的数；点的那个按钮重画后停在原处
     if (seg) {
       const [key, id] = seg.dataset.tseg.split(':');
       if (key === 'est') estPeriod = id; else if (key === 'work') period = id; else hookPeriod = id;

@@ -124,6 +124,7 @@
 .ag-hooktotal .tp-hostname { display: inline-block; width: 118px; padding-left: 10px; border-left: 4px solid var(--host); }
 .ag-hooktotal [data-num] { font-family: var(--black); }
 .ag-hooktable { table-layout: fixed; }
+.ag-hooktable tr[id] { scroll-margin-top: calc(var(--bar-bottom) + 16px); }
 .ag-hooktable tbody th { width: 130px; }
 .ag-heat { padding: 0 !important; background: color-mix(in srgb, var(--host) calc(var(--heat, 0) * 100%), #fff); border-left: 2px solid #fff; }
 .ag-heat button { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: 8px 12px; border: 0; background: none; font: inherit; font-size: 13.5px; text-align: left; color: var(--ink); cursor: pointer; transition: background .15s ease; }
