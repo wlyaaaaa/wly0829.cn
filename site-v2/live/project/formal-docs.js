@@ -81,8 +81,9 @@
     const detail = row.solves || '';
     const compact = /^共\s+\d+\s+页$/.test(detail) ? ' docs-final-detail--compact' : '';
     const openNote = U.fieldText(row.open_note, view).trim();
-    const bodyTag = view === 'owner' ? U.visitorLabel(row, 'open', '这份文书的正文', view)
-      || (openNote ? U.visitorHiddenTag('这份文书的正文', `访客版在打开入口旁显示“${openNote}”。`, view) : '') : '';
+    const bodyTag = view === 'owner' ? (openNote
+      ? U.visitorHiddenTag('这份文书的正文', openNote, view)
+      : U.visitorLabel(row, 'open', '这份文书的正文', view)) : '';
     return `<li><div class="docs-final-head"><strong>${esc(row.title)}</strong><time datetime="${esc(row.at)}">${date(row.at, true)}</time></div>
       <div class="docs-final-detail${compact}">
         <div class="docs-final-note">${esc(detail)}</div>
