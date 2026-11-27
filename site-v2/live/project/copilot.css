@@ -60,5 +60,7 @@
 }
 @media (max-width: 1100px) {
   .pj-copilot #pj-board.pj-board--copilot { grid-template-columns: minmax(0, 1fr); }
-  .pj-copilot .pj-strip:has(.copilot-capability) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pj-copilot .pj-strip:has(> :nth-child(6 of .pj-cell):nth-last-child(1 of .pj-cell)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
