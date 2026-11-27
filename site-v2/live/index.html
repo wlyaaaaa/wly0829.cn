@@ -214,6 +214,8 @@
 .page--live #needs .row__main { grid-column: 2; grid-row: 1; }
 .page--live #needs .row__text > .row__sub { display: block; white-space: normal; margin-top: 4px; }
 .page--live #needs .needs-summary { margin: 12px 0 0 var(--gut); }
+.page--live #needs [data-part="status"]:not([hidden]) + .rows:has(> .notice-target:first-child) { margin-top: 5px; }
+.page--live #notices .l1-unit { white-space: nowrap; }
 /* 等你的事卡三行依次排标题、按钮和小字，按钮窄时照常折行。 */
 .page--live #needs [data-part="main"] > .row { grid-template-columns: minmax(0, 1fr); row-gap: 6px; align-items: start; position: relative; padding-left: var(--gut); }
 .page--live #needs [data-part="main"] > .row:has(> .lamp) { padding-left: max(var(--gut), 25px); }

@@ -9,17 +9,17 @@
   const wordSegmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
   const wordUnit = /[\p{L}\p{N}]/u;
   const oneHan = /^\p{Script=Han}$/u;
-  const timedUnit = /((?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:分钟|小时|个月|项|件|天|年|秒|份|个|台|条|次))/g;
+  const timedUnit = /((?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|项|件|天|年|秒|份|个|台|条|次|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
   const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
   function keepWords(html) {
     if (!wordSegmenter || !html) return html;
     const template = document.createElement('template');
     template.innerHTML = html;
-    for (const unit of template.content.querySelectorAll('.live-unit')) unit.classList.replace('live-unit', 'l1-unit');
+    for (const unit of template.content.querySelectorAll('.live-unit')) unit.classList.add('l1-unit');
     const walk = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT), nodes = [];
     while (walk.nextNode()) nodes.push(walk.currentNode);
     for (const node of nodes) {
-      if (node.parentElement?.closest('.l1-unit,svg')) continue;
+      if (node.parentElement?.closest('.l1-unit,svg,button,code,pre')) continue;
       const pieces = node.data.split(timedUnit).flatMap((part, i) => i % 2 ? [part] :
         Array.from(wordSegmenter.segment(part), entry => entry.segment));
       const words = [];
@@ -46,6 +46,7 @@
     }
     return template.innerHTML;
   }
+  const paintHTML = (el, html, fade) => U.html(el, keepWords(html), fade);
   let viewer = 'public';
   const viewerKind = state => (state.viewer?.kind ?? state.meta?.viewer?.kind) === 'owner' ? 'owner' : 'public';
   const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
@@ -341,8 +342,12 @@
   for (const id of IDS) {
     const body = cards[id].querySelector('.card__body');
     if (SHELL[id]) {
-      body.innerHTML = SHELL[id];
+      body.innerHTML = keepWords(SHELL[id]);
       body.querySelector('[data-part="head"]').insertAdjacentHTML('afterend', '<p class="row__sub" data-part="gap" hidden></p><p class="row__sub" data-part="status" hidden></p>');
+    }
+    if (!SHELL[id]) {
+      const head = body.querySelector('[data-part=head]');
+      paintHTML(head, head.innerHTML, false);
     }
     parts[id] = Object.fromEntries([...body.querySelectorAll('[data-part]')].map((el) => [el.dataset.part, el]));
   }
@@ -364,7 +369,7 @@
   parts.needs.main.addEventListener('toggle', balanceHome, true);
   function compactMore(id, n, unit, attention = false) {
     const more = parts[id].more; more.hidden = !(n > 0); more.href = href(id) + (attention ? `${href(id).includes('?') ? '&' : '?'}attention=1` : '');
-    U.html(more, `还有 ${n} ${unit} ›`);
+    paintHTML(more, `还有 ${n} ${unit} ›`);
   }
   function emptyCard(id, d) {
     const card = cards[id], p = parts[id], warming = d?.q === 'warming';
@@ -373,9 +378,9 @@
     const caption = id === 'needs' && d ? `${name} · 没有记录` : d?.text || `${name}暂时读不到`;
     // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
     const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
-    U.html(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
+    paintHTML(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
       : gone ? U.head(name) + `<br><span class="row__sub">${esc(text)}</span>` : cardHead(text, name));
-    for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (!el.querySelector?.('[data-part]')) U.html(el, ''); el.hidden = true; }
+    for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (!el.querySelector?.('[data-part]')) paintHTML(el, ''); el.hidden = true; }
     paintStatus(id, d);
   }
 
@@ -508,7 +513,7 @@
     // AI 百工谱这格的读数是现役规则版本号（E 加数字）：点了去规则页，绿字带箭头（本人 11-24 13:00）
     const rule = it.id === 'agents' && h?.id === 'release' && typeof value === 'string' && /^E\d+$/.test(String(h.value ?? h.text ?? ''));
     const reading = rule ? '' : value && typeof value === 'string' ? esc(sp(value)) : U.fieldHtml(value, { name: '项目读数', kind: viewer });
-    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : reading.includes('分钟') ? keepWords(reading) : reading}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
+    return `<li class="project-cell" data-key="${esc(it.id)}"${style}><a class="home-detail-link" href="${esc(route(it.href || `/live/project/?id=${encodeURIComponent(it.id)}`))}">${projectIcon(it)}${newProjectLabel(it)}<span class="project-name">${U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })}</span><span aria-hidden="true">›</span></a>${nameTag ? `<small class="project-mark">${nameTag}</small>` : ''}<small class="project-reading">${rule ? `<a class="b6-go" href="/rules/">${esc(sp(value))} ›</a>` : reading}</small>${cutoff || moment ? `<small class="project-cutoff">${U.nowrap(moment || `数据截至 ${cutoff}`)}</small>` : ''}${nameNote ? `<small>${nameNote}</small>` : ''}${changed ? `<small class="project-changed">${U.nowrap(`最近改动：${[U.date(changed), U.time(changed)].filter(Boolean).join(' ')}`)}${recent}</small>` : ''}${it.phase == null && it.phase_gap ? `<small>${U.fieldHtml(it.phase_gap, { name: '项目分档', kind: viewer })}</small>` : ''}</li>`;
   }
   function renderProjectGroups(data) {
     projectExtraLinks(data);
@@ -516,9 +521,9 @@
     const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more')?.open ? ' open' : '';
     const person = '<svg class="project-group__icon" viewBox="0 0 24 24" width="1.3em" height="1.3em" fill="none" stroke="#e8913a" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-4 3.9-6.5 7.5-6.5s6.7 2.5 7.5 6.5"/></svg>';
     const groups = projectGroups(data.items), labels = { daily: ['日用', '🖥️'], personal: ['个人', person], occasional: ['偶用', '🌐'], unknown: ['分档还没读到', ''] };
-    U.html(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
+    paintHTML(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
     const count = Number.isFinite(data.frozen) ? quantity(data, 'frozen') : null;
-    U.html(parts.projects.frozen, `${count == null ? '看冻结项目' : `冻结 ${count} 个`} ›`);
+    paintHTML(parts.projects.frozen, `${count == null ? '看冻结项目' : `冻结 ${count} 个`} ›`);
     parts.projects.frozen.href = route('/live/projects/?state=frozen');
   }
   function projectExtraLinks(data) {
@@ -526,13 +531,13 @@
     unpushed.hidden = !data?.unpushed?.items?.some(it => it.commits > 0 || it.files > 0);
     if (!unpushed.hidden) {
       unpushed.href = route('/live/projects/#unpushed');
-      U.html(unpushed, '本地还有没推的改动 ›');
+      paintHTML(unpushed, '本地还有没推的改动 ›');
     }
     const recent = data?.recent_artifacts;
     artifacts.hidden = !recent?.href;
     if (!artifacts.hidden) {
       artifacts.href = route(recent.href);
-      U.html(artifacts, `成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
+      paintHTML(artifacts, `成品${recent.count_7d != null ? ` · 近 7 天 ${esc(recent.count_7d)} 件` : ''} ›`);
     }
   }
 
@@ -604,7 +609,7 @@
     restoreTimer = setTimeout(() => requestAnimationFrame(restoreHome), 650);
   });
   // 返回时先把列表放到完整高度，再恢复位置；逐行长高会把目标位置夹住。
-  const paintList = (ul, rows, options) => U.list(ul, rows, { animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
+  const paintList = (ul, rows, options) => U.list(ul, rows, { format: keepWords, animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
   const elapsed = value => lastState?.offline ? U.time(value) : U.ago(value, at);
 
   // —— 等你的事 ——
@@ -663,7 +668,7 @@
     const extra = !focus?.closed && ['choose', 'do'].includes(focus?.item?.kind) && !scoped.some(it => it.id === focus.id) ? focus.item : null;
     const by = k => scoped.filter(it => it.kind === k);
     const { count, exact, text } = waitingCount(counts, extra ? [...scoped, extra] : scoped);
-    U.html(p.head, U.head(addressed(text), { href: href('needs') }).replace(/(<span class="live-unit">(?:至少 )?)(\d+)/, '$1<span class="needs-num">$2</span>') + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
+    paintHTML(p.head, U.head(addressed(text), { href: href('needs') }).replace(/(<span class="live-unit">(?:至少 )?)(\d+)/, '$1<span class="needs-num">$2</span>') + (allNotUrgent(d) ? '<span class="head__rewrite">都不急</span>' : ''));
     const newest = (a, b) => Date.parse(b.episode_at || b.born) - Date.parse(a.episode_at || a.born);
     // 刚在本页点过、已经办成的，后台读数跟上前先不显示
     const all = [...by('choose').sort(newest), ...by('do').sort(newest)];
@@ -681,9 +686,9 @@
     paintList(p.main, rows, { animate: false });
     needsTotal = (project ? all.length : count - hidden - (extra ? 1 : 0)) + Number(!!focusedRow && targetIndex < 0);
     fitCard('needs');
-    U.html(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
+    paintHTML(p.summary, [['know', '要你知道'], ['later', '你放着']].map(([k, label]) => `${addressed(label)} ${quantity(counts, k)} 件`).join(' · ') + (count === 0 ? '' : oldestWait(d, all, end)));
     p.closed.hidden = p.foot.hidden = !(project && !all.length);
-    if (!p.closed.hidden) { U.html(p.closed, `近 7 天下去的 ${quantity(d, 'closed7')} 条`); p.closed.onclick = () => { location.href = href('needs') + '#closed'; }; }
+    if (!p.closed.hidden) { paintHTML(p.closed, `近 7 天下去的 ${quantity(d, 'closed7')} 条`); p.closed.onclick = () => { location.href = href('needs') + '#closed'; }; }
   }
   function waitingCount(counts, items) {
     let count = 0, exact = true;
@@ -851,7 +856,7 @@
     const list = positive && Array.isArray(d.unconnected_sources) ? d.unconnected_sources : [];
     const rows = list.map(item => '<li>' + [item.tool, item.path, item.reason].filter(Boolean).map(esc).join(' · ') + '</li>').join('');
     host.hidden = !label;
-    U.html(host, rows ? '<details class="row__sub"><summary class="more">' + label + '</summary><ul>' + rows + '</ul></details>' : label ? '<p class="row__sub">' + label + '</p>' : '', false);
+    paintHTML(host, rows ? '<details class="row__sub"><summary class="more">' + label + '</summary><ul>' + rows + '</ul></details>' : label ? '<p class="row__sub">' + label + '</p>' : '', false);
   }
 
   const oldReading = d => d?.stale || ['stale', 'old'].includes(d?.q) || ['stale', 'old'].includes(d?.state) || d?.read_error || /最近一次记录于/.test(sp(d?.stale_text || d?.text));
@@ -920,11 +925,11 @@
       olderRows('waiting', counts.waiting, recordStamp(counts === d ? observed : counts.at))]);
     // 标题伸到插画上，窄窗的说明按画窗宽度让开。
     const countLine = note ? `<span class="row__sub chat-count-note" style="flex:1 1 100%;margin-inline-end:clamp(0px,calc(1100px - 100vw),max(0px,calc(var(--win) - 30px)));white-space:normal;overflow-wrap:anywhere">${esc(note)}</span>` : '';
-    U.html(p.head, heading + countLine + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
+    paintHTML(p.head, heading + countLine + (!board && missing.length && !marker ? `<br><span class="row__sub">${esc(U.collectionText(missing.join('、')))}</span>` : ''));
     // 这张卡不列后台的对话（本人定的）；后台自动任务这会儿在跑的另起一行，点了到自动任务页
     const background = !lastState?.offline && window.LiveBatchHome.backgroundRunning(home?.automation);
     p.background.hidden = !(background?.n > 0);
-    U.html(p.background, background?.n > 0 ? `<a class="b6-go" href="${esc(route(background.href))}">后台另有 ${background.n} 个在跑 ›</a>` : '');
+    paintHTML(p.background, background?.n > 0 ? `<a class="b6-go" href="${esc(route(background.href))}">后台另有 ${background.n} 个在跑 ›</a>` : '');
     if (p.sources) renderChatSources(p.sources, d);
     const rank = c => c.state === 'waiting' ? 0 : c.state === 'failed' ? 1 : ['running', 'queued', 'reconnecting'].includes(c.state) ? 2 : c.source === 'manual' ? 3 : 4;
     const runningNow = sample ? running.n : d.q === 'warming' ? null : d.running;
@@ -946,7 +951,7 @@
     chatTotal = board ? (working ? Math.max((colTotal('working') || 0) + (colTotal('waiting') || 0) + (Array.isArray(board.columns.stopped?.items) ? colTotal('stopped') || 0 : 0), all.length) : all.length)
       : working ? Math.max(sample ? (runningNow || 0) + (d.waiting || 0) : d.total ?? (d.running || 0) + (d.waiting || 0), all.length) : all.length;
     fitCard('chats');
-    U.html(p['done-label'], recent.length ? '已完成' : '');
+    paintHTML(p['done-label'], recent.length ? '已完成' : '');
     balanceHome();
   }
 
@@ -1014,7 +1019,7 @@
       node?.value != null && sampleTime(node)?.key === cpuSample.key) : [];
     const shared = new Set(sharedMemory.length ? [m.cpu, ...sharedMemory.map(([node]) => node)] : []);
     const sharedNote = sharedMemory.length ? `CPU 占用、${sharedMemory.length === 2 ? '内存' : sharedMemory[0][1]} ${cpuSample.text}` : '';
-    const timeNote = text => text ? `<small>${keepWords(esc(text))}</small>` : '';
+    const timeNote = text => text ? `<small>${esc(text)}</small>` : '';
     const withReadings = (text, ...sources) => {
       if (!text) return text;
       const notes = sources.map(([label, node]) => [label, shared.has(node) ? null : sampleTime(node)]).filter(([, sample]) => sample);
@@ -1028,7 +1033,7 @@
     const boot = Number.isFinite(uptime) ? `开机 ${U.minutes(Math.floor(uptime / 60))}` : summary.match(/(?:开机|主机开了)\s*\d+\s*小时(?:\s*[1-9]\d*\s*分钟)?/)?.[0].replace(/^主机开了/, '台式机开了');
     const cpu = computerTemperature(d), temperature = val(cpu, x => quantity(x, 'value', fmtTemp));
     const bootTime = (screen?.uptime != null ? sampleTime({ at: screen.computer_at, stale_after: screen.stale_after }) : sampleTime(m.uptime))?.text;
-    U.html(p.head, U.itemTextUnits(keepComputerWords(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }))));
+    paintHTML(p.head, U.itemTextUnits(keepComputerWords(cardHead([boot && boot + (bootTime ? `（${bootTime}）` : ''), temperature && `CPU ${temperature}`, sharedNote, typeof d.text === 'object' && d.text], '电脑', { href: href('computer') }))));
     const devices = (d.devices || []).map(U.laptopConnection);
     laptopState = devices.find(x => x.id === 'secondary_laptop')?.state;
     const phone = phoneData || devices.some(x => x.id === 'phone') ? phoneConnection(phoneData, devices.find(x => x.id === 'phone')) : null;
@@ -1078,17 +1083,17 @@
       }).map((html, i) => i ? `<span>·\u00a0${html}</span>` : html).join(''), null, '', '/live/computer/'],
     ];
     const kvValue = (label, value) => value == null ? `<span class="row__sub">${esc(U.collectionText(label))}</span>` : /没有记录|还在采集|开始记/.test(value) && !value.includes('<') ? `<span class="row__sub">${value}</span>` : U.itemTextUnits(value);
-    U.html(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
+    paintHTML(p.kv, rows.filter(([, v]) => !offline || v != null).map(([k, v, hot, link, labelLink]) => `<div class="kv__row">${lamp(hot)}<dt>${labelLink ? `<a href="${esc(route(labelLink))}">${k} ›</a>` : link ? `<span class="kv__label${k.length > 9 ? ' kv__label--wide' : ''}">${esc(k)} ›</span>` : esc(k)}</dt><dd>${link ? `<a class="kv__link" href="${esc(route(link))}" aria-label="${k}，查看详情">${kvValue(k, v)}</a>` : kvValue(k, v)}</dd></div>`).join(''));
     computerStability(p.why, d.stability_note);
     const it = d.interrupt;
     const note = offline || !it ? '' : it.text || (it.q === 'ok' && !it.chats && !it.tasks ? '现在重启不打断什么' : '');
     p.note.hidden = !note;
-    U.html(p.note, keepComputerWords(U.fieldHtml(note, { name: '运行情况', kind: viewer })));
+    paintHTML(p.note, keepComputerWords(U.fieldHtml(note, { name: '运行情况', kind: viewer })));
   }
 
   function computerStability(host, note) {
     const text = typeof note === 'string' ? note.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, at => `${U.date(at)} ${U.time(at)}`) : note;
-    host.hidden = !text; U.html(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
+    host.hidden = !text; paintHTML(host, U.fieldHtml(text, { name: '严重异常', kind: viewer }));
   }
   // 手机离线怎么说（主持 11-26 照 C2 建议定，手机页同一套）：电脑的调试连接和 Tailscale 都找不到手机 →“手机离线 · HH:MM 起”，
   // 时刻是和 presence 同级的 offline_since；只有电脑到手机的调试连接断 →“电脑连不上手机 · HH:MM 起”，时刻是 offline.since
@@ -1138,7 +1143,7 @@
     }))].filter(Boolean).map(text => `<span class="phone-reading-time">${esc(text)}</span>`).join(' · ');
     const usageCutoff = !unknown && readingTimes(['screen_on', 'unlocks']);
     const head = cardHead(phoneHead, '手机', { href: href('phone') }).replace(/(<span class="head__tail">[\s\S]*<span class="head__tail">›<\/span>)/, '<span class="phone-head-tail">$1</span>');
-    U.html(p.head, head + (usageCutoff ? `<br><span class="row__sub phone-head-cutoffs">${usageCutoff}</span>` : '') + (screenGap ? `<br><span class="row__sub">${U.fieldHtml(screenGap, { name: '亮屏情况', kind: viewer })}</span>` : ''));
+    paintHTML(p.head, head + (usageCutoff ? `<br><span class="row__sub phone-head-cutoffs">${usageCutoff}</span>` : '') + (screenGap ? `<br><span class="row__sub">${U.fieldHtml(screenGap, { name: '亮屏情况', kind: viewer })}</span>` : ''));
     cards.phone.dataset.phoneState = d?.state || 'unknown';
     const charging = value('charging'), temp = value('battery_temp');
     const battery = join([value('battery') == null ? U.collectionText('电量', m.battery) : quantity(m.battery, 'value', n => `${n}%`), charging == null ? '' : charging ? '在充电' : '没充电', temp == null ? '' : quantity(m.battery_temp, 'value', n => `${n}℃`)]);
@@ -1161,7 +1166,7 @@
       ...(memory ? [['内存', esc(memory), ['memory_used', 'memory_total'], m.memory_used]] : []),
       ...(offline ? [[screenLabel, esc(join([duration, unlocks])), ['screen_on', 'unlocks']]] : []),
     ];
-    U.html(p.kv, unknown ? '' : rows.map(([label, html, ids, status]) => {
+    paintHTML(p.kv, unknown ? '' : rows.map(([label, html, ids, status]) => {
       const warn = ['amber', 'red'].includes(U.status(status).tone), cutoff = readingTimes(ids);
       // 每行和电脑卡能点的行一个样子：名字后带“ ›”，读数整块是链接、整行能点，到手机页对应那一组；“问情况”按钮放在链接外面（M708）
       const group = { 电量: 'battery', 上网: 'network', 存储: 'storage', 内存: 'storage' }[label] || (ids.includes('screen_on') ? 'usage' : '');
@@ -1173,7 +1178,7 @@
     const arrival = receivedAt ? lastState?.offline ? `上次收到 ${recordStamp(receivedAt)}` : `${U.ago(receivedAt, lastState?.now || at)}收到` : '还没收到数据';
     const note = reason || (!offline && !unknown ? join([connection || U.collectionText('连接线路'), arrival, received?.complete30 === true ? '近 30 天收全了' : received?.complete30 === false ? '' : U.collectionText('近 30 天', received)]) : '');
     p.note.hidden = !note;
-    U.html(p.note, `${reason && !offline ? lamp(received?.gap) : ''}<span class="card__note-text">${reason && !offline && connection ? esc(connection) + ' · ' : ''}${U.fieldHtml(typeof note === 'string' ? note.replace(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, (_, m, d) => `${m.padStart(2, '0')}-${d.padStart(2, '0')}`) : note, { name: '手机情况', kind: viewer })}</span>${reason ? U.actions({ id: 'phone', text: reason }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}`);
+    paintHTML(p.note, `${reason && !offline ? lamp(received?.gap) : ''}<span class="card__note-text">${reason && !offline && connection ? esc(connection) + ' · ' : ''}${U.fieldHtml(typeof note === 'string' ? note.replace(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/g, (_, m, d) => `${m.padStart(2, '0')}-${d.padStart(2, '0')}`) : note, { name: '手机情况', kind: viewer })}</span>${reason ? U.actions({ id: 'phone', text: reason }, [{ kind: 'copy', label: '问情况', intent: 'ask' }]) : ''}`);
   }
 
   function shortRow(it, sub, link, status = it, mark = '', ask = false) {
@@ -1270,9 +1275,9 @@
       if (withdrawn) p.status.dataset.withdrawnText = summary;
       else p.status.removeAttribute('data-withdrawn-text');
       const text = U.nowrap(summary);
-      U.html(p.status, withdrawn ? `<span>${text}</span>` : text, false);
+      paintHTML(p.status, withdrawn ? `<span>${text}</span>` : text, false);
       // 保留计划任务旧读数的说明；连不上又什么都没显示（上面写“这块没存下来”）时，不再挂“这是几点的旧数”（r83 返修第三轮）
-      U.blockNote(cards[id].querySelector('.card__body'), state.offline && !counts.length && !rows.length ? null : state);
+      U.blockNote(cards[id].querySelector('.card__body'), state.offline && !counts.length && !rows.length ? null : state, keepWords);
       paintList(p.main, rows, { animate: false });
       fitCard(id);
     };
@@ -1296,7 +1301,7 @@
         const counts = isLower(d.projects, 'active') || !text ? projectCount(d.projects) : text;
         text = Number.isInteger(d.projects.total) ? [`共 ${d.projects.total} 个项目`, counts] : counts;
       }
-      U.html(parts[id].head, cardHead(id === 'projects' && typeof text === 'string' ? text.replace(/\s*·\s*\d+\s*个冻结/, '') : text, { backups: '备份', projects: '项目' }[id], { lamp: id === 'backups', href: href(id) + (hot ? `${href(id).includes('?') ? '&' : '?'}attention=${id === 'backups' ? 'gap' : '1'}` : '') }).replace(/(?:至少 )?\d+\s*类(?:齐了|有缺|未传云端|没上云|只有一份|还没读到)(?: ·)?/g, '<span class="l1-unit">$&</span>'));
+      paintHTML(parts[id].head, cardHead(id === 'projects' && typeof text === 'string' ? text.replace(/\s*·\s*\d+\s*个冻结/, '') : text, { backups: '备份', projects: '项目' }[id], { lamp: id === 'backups', href: href(id) + (hot ? `${href(id).includes('?') ? '&' : '?'}attention=${id === 'backups' ? 'gap' : '1'}` : '') }).replace(/(?:至少 )?\d+\s*类(?:齐了|有缺|未传云端|没上云|只有一份|还没读到)(?: ·)?/g, '<span class="l1-unit">$&</span>'));
     }
     const protection = { gap: '有缺', waiting: '在等', local_copy_no_cloud: '有本地副本但没上云', single: '只有本机一份', unknown: U.collectionText('副本情况') };
     const problem = it => ['gap', 'local_copy_no_cloud', 'single'].includes(it.protection);
@@ -1331,18 +1336,18 @@
     parts.backups.summary.hidden = backupRows.length + restoreRows.length >= previewRange.backups[0];
     const more = parts.backups.more;
     more.hidden = false; more.href = href('backups');
-    U.html(more, `查看全部${backupCounts.sets == null ? '资料' : isLower(backupCounts, 'sets') ? `资料（已登记至少 ${esc(backupCounts.sets)} 类）` : ` ${esc(backupCounts.sets)} 类`} ›`);
+    paintHTML(more, `查看全部${backupCounts.sets == null ? '资料' : isLower(backupCounts, 'sets') ? `资料（已登记至少 ${esc(backupCounts.sets)} 类）` : ` ${esc(backupCounts.sets)} 类`} ›`);
     const drive = summary?.drive ?? backups.drive, stamp = value => timed(value) ? `${U.date(value)} ${U.time(value)}` : U.collectionText('日期');
     // waiting 与 stable 是互不重叠的两批；后端 11-17 05:58 确认“在等”取两者之和，failed 另算。
     const waiting = drive?.waiting != null && drive?.stable != null ? { value: drive.waiting + drive.stable, q: isLower(drive, 'waiting') || isLower(drive, 'stable') ? 'partial' : 'ok' } : null;
-    U.html(parts.backups.summary, [['G 盘', stamp((summary ?? backups).g_latest_at)], ['H 盘', stamp((summary ?? backups).h_latest_at)], ['Drive', drive?.sent == null || drive?.total == null ? U.collectionText("已传/总数") : `${quantity(drive, 'sent')} / ${quantity(drive, 'total')} 个文件`], ['在等', waiting ? `${quantity(waiting, 'value')} 个文件` : U.collectionText()], ['失败', drive?.failed == null ? U.collectionText() : `${quantity(drive, 'failed')} 个文件`]].filter(([, value]) => value !== '至少 0' && (!lastState?.offline || !value.includes(U.collectionText()))).map(([label, value]) => `<span class="l1-unit">${esc(`${label} ${value}`)}</span>`).join(' · '));
+    paintHTML(parts.backups.summary, [['G 盘', stamp((summary ?? backups).g_latest_at)], ['H 盘', stamp((summary ?? backups).h_latest_at)], ['Drive', drive?.sent == null || drive?.total == null ? U.collectionText("已传/总数") : `${quantity(drive, 'sent')} / ${quantity(drive, 'total')} 个文件`], ['在等', waiting ? `${quantity(waiting, 'value')} 个文件` : U.collectionText()], ['失败', drive?.failed == null ? U.collectionText() : `${quantity(drive, 'failed')} 个文件`]].filter(([, value]) => value !== '至少 0' && (!lastState?.offline || !value.includes(U.collectionText()))).map(([label, value]) => `<span class="l1-unit">${esc(`${label} ${value}`)}</span>`).join(' · '));
     const changes = (d.projects.changes || []).slice(0, defaultCounts.projectChanges).map(c => shortRow({ ...c, name: changeName(c) }, [changeTime(c.at)], `/live/project/?id=${encodeURIComponent(c.project)}`, '', fresh('project-changes', c.at) + projectTag(c.project)));
     if (!changes.length && ['unknown', 'partial', 'stale'].includes(d.projects.changes_q)) changes.push({ key: 'unread', cls: 'row row--flat', html: '<p class="row__text row__sub">暂时读不到项目变化</p>' });
     paintList(parts.projects.changes, changes);
     const changesStatus = parts.projects['changes-status'], cutoff = d.projects.changes_at;
     const lastRead = d.projects.changes_q === 'stale' && timed(cutoff) ? [U.date(cutoff), U.time(cutoff)].join(' ') : '';
     changesStatus.hidden = !lastRead;
-    U.html(changesStatus, lastRead ? `项目变化上次读到 ${esc(lastRead)}` : '');
+    paintHTML(changesStatus, lastRead ? `项目变化上次读到 ${esc(lastRead)}` : '');
     checkProjectChanges();
     renderProjectGroups(d.projects);
   }
@@ -1352,7 +1357,7 @@
     for (const [id, render] of [['chats', renderChats], ['computer', renderComputer], ['phone', renderPhone]]) if (!cardWarming(id, d[id])) render(d[id], d.screen, d.phone);
     renderRest(d);
     paintBatchCards(d);
-    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = cardWarming(id, d[id]); cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) U.html(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); U.html(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
+    for (const id of HOME_IDS) { if (id === 'needs') continue; const warming = cardWarming(id, d[id]); cards[id].classList.toggle('card--warming', warming); if (warming && !parts[id].batch) paintHTML(parts[id].head, U.head('正在准备', { href: href(id) })); const gaps = [...new Set(statContainers(d[id]).filter(x => x.q === 'partial' && x.gap && !(id === 'computer' && (x === d[id].traffic || x === d[id].storage_growth_top))).map(x => x.gap))]; const shown = (parts[id].head?.textContent || '') + (parts[id].note?.textContent || ''); const unique = gaps.filter(g => !shown.includes(sp(g))); parts[id].gap.hidden = warming || !unique.length || ['chats','ledger','backups'].includes(id); paintHTML(parts[id].gap, unique.map(g => U.fieldHtml(g, { name: '读数说明', kind: viewer })).join(' · ')); if (!parts[id].batch && id !== 'projects' && !hasCardData(id, d[id])) emptyCard(id, d[id]); else cards[id].classList.remove('card--empty'); if (!parts[id].batch) paintStatus(id, d[id]); }
   }
   function renderHomeNeeds(d) {
     const needs = d.needs, focus = noticeFocus(d, viewer), card = cards.needs;
@@ -1502,9 +1507,8 @@
     // 电脑、手机卡上这段灰字折行时，句尾最后几个字连在一起折，末行不单剩“数）”“读数）”（r83 返修第三轮复看；text-wrap: pretty 只防末行剩一个字）
     // “·”前用不断行空格，折行时“·”跟着前一段，不挂到下一行开头（r83 返修第三轮复看）
     const groupedNote = ['computer', 'needs'].includes(id) ? U.itemTextUnits(note) : note;
-    let statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
-    if (id === 'needs' && state.tone === 'blue') statusHtml = keepWords(statusHtml);
-    p.status.hidden = !note; U.html(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
+    const statusHtml = ['computer', 'phone'].includes(id) && note ? groupedNote.replace(/ · /g, '\u00a0· ').replace(/([^<>\s·、，；：]{1,5})((?:<\/[a-z]+>)*)$/, '<span class="live-unit">$1</span>$2') : groupedNote;
+    p.status.hidden = !note; paintHTML(p.status, id === 'computer' ? keepComputerWords(statusHtml) : statusHtml);
     Light.tone(cards[id], cardTone(id, data, state));
   }
   const headline = (it, withLabel = true) => {
@@ -1555,14 +1559,14 @@
     async function load() {
       if (page !== changesPage || page.loading) return !!page.loaded;
       more.disabled = page.loading = true;
-      if (page.loaded) more.textContent = '正在读…';
+      if (page.loaded) paintHTML(more, '正在读…', false);
       else paintProjectChanges(ul, page.items, true);
       const r = await window.Live.get('projects/changes', page.cursor ? { cursor: page.cursor } : null);
       if (page !== changesPage || !home) return !!changesPage?.loaded;
       more.disabled = page.loading = false;
       if (!r.data || r.viewer?.kind && r.viewer.kind !== page.kind) {
         if (!page.loaded) paintList(ul, [{ key: 'error', cls: 'row row--flat', html: '<p class="row__text row__sub">暂时读不到近 7 天的变化</p>' }]);
-        more.textContent = '暂时读不到，点此重试 ›';
+        paintHTML(more, '暂时读不到，点此重试 ›', false);
         more.hidden = false;
         // 首页主数据确认接通后，这一批（同一个翻页位置）自己再取一次，不用点；收起着就等下次展开再读（M982）
         r.again?.then(() => {
@@ -1576,7 +1580,7 @@
       page.loaded = true;
       page.incomplete = ['unknown', 'partial', 'stale'].includes(r.data.q);
       paintProjectChanges(ul, page.items, false, page.incomplete);
-      more.textContent = '再看一些 ›';
+      paintHTML(more, '再看一些 ›', false);
       more.hidden = !page.cursor;
       return true;
     }
@@ -1822,7 +1826,7 @@
     for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
     paintBatchCards({});
     if (lastState?.conn?.emptyHome) for (const id of IDS) {
-      U.html(parts[id].head, U.head(addressed(NAME[id]), { lamp: false, href: href(id) }));
+      paintHTML(parts[id].head, U.head(addressed(NAME[id]), { lamp: false, href: href(id) }));
       labelCard(cards[id]);
     }
     balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
@@ -1891,7 +1895,7 @@
       renderCards(d);
       const published = timed(d.published) ? `网站上次发布 ${changeTime(d.published)}` : '';
       parts.projects.published.hidden = !published;
-      U.html(parts.projects.published, published && d.projects.site_project_id ? `<a class="more" href="${esc(route(`/live/project/?id=${encodeURIComponent(d.projects.site_project_id)}`))}">${published} ›</a>` : published);
+      paintHTML(parts.projects.published, published && d.projects.site_project_id ? `<a class="more" href="${esc(route(`/live/project/?id=${encodeURIComponent(d.projects.site_project_id)}`))}">${published} ›</a>` : published);
       for (const card of Object.values(cards)) labelCard(card);
       document.querySelectorAll('.board .card__head,.board .row__text,.board .row__main,.board .rows>.row>.row__sub,.board .kv__row,.board .card__note,.board .project-cell small').forEach(el => { el.title = (el.matches('#chats .row__text') ? el.querySelector('.row__main')?.textContent || '' : el.textContent).trim(); });
       seen.done(at);
@@ -1953,7 +1957,7 @@
         unreadable();
       }
       const fallbackNote = state.fallbackNote || state.meta?.fallbackNote;
-      for (const id of HOME_IDS) U.blockNote(cards[id].querySelector('.card__body'), { fallbackNote: /^数据截止\s/.test(fallbackNote) ? '' : fallbackNote });
+      for (const id of HOME_IDS) U.blockNote(cards[id].querySelector('.card__body'), { fallbackNote: /^数据截止\s/.test(fallbackNote) ? '' : fallbackNote }, keepWords);
       if (restoreY != null && home && state.meta?.status && state.meta.rev === paintedRev) requestAnimationFrame(restoreHome);
     },
     };

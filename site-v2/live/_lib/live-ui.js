@@ -125,7 +125,7 @@
   const tight = matchMedia('(max-width: 1440px)');
   const nowrap = s => esc(s).replace(/数据截止(?=\s+\d)/g, '数据截至').replace(/AI[ \t]+在修[ \t]+\d+[ \t]+件|（(?:(?:记录到|截至|上次)\s*)?(?:\d{1,2}-\d{2}\s+)?\d{1,2}:\d{2}(?::\d{2})?）|(?:还剩|共)\s*\d+(?:\.\d+)?\s*[GMKT]B|\d+[ \t]*(?:天|小时|分钟|秒|分)(?:[ \t]*\d+[ \t]*(?:天|小时|分钟|秒|分))+(?:前|后)?|\d{4}-\d{2}-\d{2}|\d{1,2}-\d{2}|\d{1,2}:\d{2}(?::\d{2})?|\d+×\d+|\d+(?:[.,]\d+)*[ \t]*(?:[GMKT]?B(?:\/s)?|kWh|ms|FPS|[GM]?Hz|W|%|℃|°C|小时|分钟|秒|分|天|个月|年|个|件|项|次|份|台|条|帧(?:\/秒)?)(?:前|后)?/g, '<span class="live-unit">$&</span>');
   tight.addEventListener?.('change', () => {
-    for (const span of document.querySelectorAll('main .live-unit')) { const parent = span.parentNode; span.replaceWith(...span.childNodes); parent.normalize(); }
+    for (const span of document.querySelectorAll('main .live-unit:not(.l1-unit)')) { const parent = span.parentNode; span.replaceWith(...span.childNodes); parent.normalize(); }
     const walker = document.createTreeWalker(document.querySelector('main'), NodeFilter.SHOW_TEXT), nodes = []; let node;
     while ((node = walker.nextNode())) if (!node.parentElement.closest('script,style,svg,textarea,select')) nodes.push(node);
     for (const text of nodes) {
@@ -246,7 +246,7 @@
     return keys.length ? { ...data, ...Object.fromEntries(keys.map(key => [key, ''])) } : data;
   }
   const olderNote = (at, data) => staleText(data, at);
-  function blockNote(el, state) {
+  function blockNote(el, state, format) {
     if (el?.matches?.('.grp')) el = el.querySelector('.grp__body');
     if (!el) return;
     let note = el.querySelector(':scope > .live-fallback-note');
@@ -254,7 +254,8 @@
     if (!text) { note?.remove(); return; }
     if (!note) { note = document.createElement('p'); note.className = 'row__sub live-fallback-note'; el.append(note); }
     if (el.classList?.contains?.('grp__body')) note.style.margin = '0 26px 16px 64px';
-    note.textContent = text;
+    if (format) html(note, format(esc(text)), false);
+    else note.textContent = text;
   }
 
   // 多久以前：按后端给的 now 算，不按这台电脑的钟
@@ -1553,7 +1554,7 @@
   };
 
   // 列表按条目编号更新：没变的不动；变了的原地淡换；新来的先撑开位置再落下淡入；下去的淡出、下面的合拢
-  function list(ul, rows, { animate = true } = {}) {
+  function list(ul, rows, { animate = true, format } = {}) {
     if (offline()) {
       animate = false;
       if (ul.id === 'notices') rows = rows.filter(r => !/电脑(?:自 |不在线)|连不上(?:电脑|实况服务)|实况服务暂不可用|当前设备未连接网络|暂时读不到本人实况/.test(r.html));
@@ -1570,16 +1571,17 @@
     });
     let prev = null;
     for (const r of rows) {
+      const content = format ? format(r.html) : r.html;
       let li = old.get(r.key);
       if (li) {
         old.delete(r.key);
         li.className = r.cls + (li.classList.contains('is-expanded') ? ' is-expanded' : '') + (li.classList.contains('notice-target') ? ' notice-target' : '');
-        html(li, r.html, animate);
+        html(li, content, animate);
       } else {
         li = document.createElement('li');
         li.className = r.cls;
         li.dataset.key = r.key;
-        html(li, r.html, false);
+        html(li, content, false);
         if (animate && r.enter !== false && ul.isConnected && ul.children.length) enter(li, k);
       }
       let at = prev ? prev.nextElementSibling : ul.firstElementChild;
