@@ -78,7 +78,7 @@
     // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
     const wrapSteps = repair || weekly;
-    const flow = `<ol class="ah-flow${wrapSteps ? ' ah-flow--words' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${wrapSteps ? keepWords(keepRange(esc(title))) : keepRange(esc(title))}</span></p><p class="ah-flow__text">${wrapSteps ? keepWords(esc(text)) : esc(text)}</p></li>`).join('')}</ol>`;
+    const flow = `<ol class="ah-flow${wrapSteps ? ' ah-flow--words' : ''}${weekly ? ' ah-flow--weekly' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${wrapSteps ? keepWords(keepRange(esc(title))) : keepRange(esc(title))}</span></p><p class="ah-flow__text">${wrapSteps ? keepWords(esc(text)) : esc(text)}</p></li>`).join('')}</ol>`;
     const promptIntro = id === 'weekly-live' && off ? '这一类关着。下面是关掉以前每一轮交给 AI 的原话，照原样留着。'
       : `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
     const prompt = c.prompt_template ? `<p>${promptIntro}</p>
