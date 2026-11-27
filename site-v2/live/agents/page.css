@@ -189,9 +189,12 @@
 .ag-hrows { display: grid; gap: 12px; margin: 14px 0 0; }
 .ag-hrow { display: grid; grid-template-columns: 330px minmax(0, 1fr) 120px; align-items: center; gap: 18px; }
 .ag-hrow__name { min-width: 0; overflow: hidden; font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-.ag-hrow__name small { font-size: 14px; font-weight: 600; color: #57564f; }
+.ag-skill-guide { position: relative; }
+.ag-skill-guide:is(:hover, :focus-visible)::after { content: attr(data-guide-tip); position: absolute; z-index: 3; inset: calc(100% + 6px) auto auto 0; width: max-content; max-width: 320px;
+  padding: 8px 10px; background: #fff; border: 1px solid var(--tp-line); border-radius: 8px; color: var(--ink); font: 13px/1.5 var(--sans); white-space: normal; pointer-events: none; }
 .ag-hrow__name:has(> .live-mark) { display: flex; align-items: center; }
 .ag-hrow__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ag-hrow__name:has(.ag-skill-guide), .ag-hrow__label:has(.ag-skill-guide) { overflow: visible; }
 .ag-hrow__name > .live-mark { flex: none; }
 .ag-hrow__track { display: flex; height: 20px; border-radius: 6px; background: rgb(20 20 19 / .06); overflow: hidden; }
 .ag-hrow__fill { display: flex; min-width: 6px; height: 100%; }
