@@ -168,12 +168,12 @@
     const names = missing.length === hs.length ? every : [...new Set([...every, ...(s.catalog || [])])];
     const unused = names.filter(n => hs.every(h => skillCount(n, h, w) === 0));
     const visible = names.filter(n => !unused.includes(n));
-    const rows = (skillsOpen ? visible : visible.slice(0, TOP)).map(n => w.rows.get(n) || { name: n, v: {} });
+    const hidden = Math.max(0, visible.length - TOP) + unused.length, fold = U.shouldFold(hidden);
+    const rows = (skillsOpen || !fold ? visible : visible.slice(0, TOP)).map(n => w.rows.get(n) || { name: n, v: {} });
     const total = f ? w.v[f] : null;
     const line = !f ? '' : known(total) ? `${fam(f).name} ${lead(p, w.starts[f] || w.start)}一共用了${s.lower[f] ? '至少' : ''} ${int(total)} 次技能${total === 0 ? '' : `，用到 ${every.length} 个`}` : rows.length ? `${fam(f).name} 这段时间的技能没采到` : '';
-    const hidden = Math.max(0, visible.length - TOP) + unused.length;
-    const more = hidden ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
-    const never = skillsOpen && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
+    const more = fold ? `<button type="button" class="ag-more ag-skillmore" data-skills-more aria-expanded="${skillsOpen}">${skillsOpen ? '收起' : `另 ${hidden} 个技能`}<span class="tp-chev" aria-hidden="true"></span></button>` : '';
+    const never = (skillsOpen || !fold) && unused.length ? `<div class="ag-unused"><p class="ag-unused__head">没用过的 ${unused.length} 个</p><div class="ag-hrows">${unused.map(n =>
       `<div class="ag-hrow is-unused">${skillName(n, s, w)}<span class="ag-hrow__track"></span><span class="ag-hrow__num"><b>没用过</b></span></div>`).join('')}</div></div>` : '';
     const later = hs.filter(h => p === 'all' && s.starts[h.id] && w.start && s.starts[h.id] > w.start).map(h => `${h.name} ${md(s.starts[h.id])} 起才有记录`);
     const behind = hs.filter(h => Date.parse(s.readAt) - Date.parse(s.through[h.id]) > 864e5).map(h => `${h.name} 只记到 ${T.when(s.through[h.id])}`);

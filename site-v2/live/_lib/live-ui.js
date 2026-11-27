@@ -1548,6 +1548,7 @@
       patch(el, template.content);
     }
     el._html = next;
+    if (next.includes('data-fold-count=')) fitNativeFolds(el);
     return true;
   }
 
@@ -1608,6 +1609,44 @@
   // 更新期间锁住眼前的那行；高度动画完成后也不会把它推走。
   // 页面自己要落到某处（从别页点“看等你的事”这类落点）时先 anchor.stop()，还在锁的旧行不再把页面拉回去。
   let anchorRun = 0;
+  let foldRoom;
+  function releaseFoldRoom() {
+    const page = document.scrollingElement;
+    if (page.scrollTop > Math.max(0, page.scrollHeight - page.clientHeight - foldRoom.offsetHeight)) return;
+    foldRoom.remove(); foldRoom = null;
+    window.removeEventListener('scroll', releaseFoldRoom);
+  }
+  function keepPageEnd(y) {
+    const page = document.scrollingElement;
+    const extra = Math.ceil(y + page.clientHeight - page.scrollHeight);
+    if (extra <= 0) return;
+    // 收起后文档可能太短，浏览器会把滚动位置夹到新页尾。只补这一段，往回滚就撤。
+    if (!foldRoom) {
+      foldRoom = document.createElement('div');
+      foldRoom.setAttribute('aria-hidden', 'true');
+      document.body.append(foldRoom);
+      window.addEventListener('scroll', releaseFoldRoom, { passive: true });
+    }
+    foldRoom.style.height = `${foldRoom.offsetHeight + extra}px`;
+  }
+  function holdAnchor(element, top, folding = false) {
+    const end = performance.now() + 1000 * speed(), run = anchorRun;
+    const events = folding ? ['wheel', 'touchstart', 'pointerdown', 'keydown'] : ['wheel'];
+    let cancelled = false;
+    const stop = () => { for (const name of events) window.removeEventListener(name, stop, folding); cancelled = true; };
+    for (const name of events) window.addEventListener(name, stop, { capture: folding, passive: true });
+    function hold() {
+      const el = element();
+      if (cancelled || run !== anchorRun || !el?.isConnected || !el.getClientRects().length || performance.now() >= end) { stop(); return; }
+      const dy = el.getBoundingClientRect().top - top;
+      if (Math.abs(dy) > .5) {
+        if (folding && dy > 0) keepPageEnd(scrollY + dy);
+        window.scrollBy({ top: dy, behavior: folding ? 'instant' : 'auto' });
+      }
+      requestAnimationFrame(hold);
+    }
+    hold();
+  }
   function anchor(update) {
     if (scrollY < 1 || restoring) { update(); return; }
     const rows = [...document.querySelectorAll('.rows > [data-key]')];
@@ -1615,16 +1654,66 @@
     const el = visible.find(el => el.matches(':hover,:focus-within')) || visible.find(el => el.classList.contains('is-expanded')) || visible[0];
     const top = el?.getBoundingClientRect().top;
     update();
-    if (!el) return;
-    const end = performance.now() + 1000 * speed(), run = anchorRun;
-    let cancelled = false;
-    const stop = () => { cancelled = true; };
-    window.addEventListener('wheel', stop, { once: true, passive: true });
-    // 顶住的那一行被收起（hidden、整块读不到时只留卡头）就不再顶：它的位置读出来是 0，再顶会每帧往上推、整页跳到页顶（M528）
-    function hold() { if (cancelled || run !== anchorRun || !el.isConnected || !el.getClientRects().length || performance.now() >= end) { window.removeEventListener('wheel', stop); return; } const dy = el.getBoundingClientRect().top - top; if (Math.abs(dy) > .5) window.scrollBy(0, dy); requestAnimationFrame(hold); }
-    hold();
+    if (el) holdAnchor(() => el, top);
   }
   anchor.stop = () => { anchorRun++; };
+
+  // 先记屏幕位置，再收起。重画会换按钮时传查找函数；按钮消失时用本块的顶。
+  function anchorFold(button, update, find = () => button, block = button.closest('section, article, li') || button.parentElement) {
+    const top = button.getBoundingClientRect().top, blockTop = block?.getBoundingClientRect().top;
+    const focused = document.activeElement === button;
+    anchor.stop();
+    const result = update();
+    const again = find();
+    if (again?.getClientRects().length) {
+      if (focused && again !== button) again.focus({ preventScroll: true });
+      holdAnchor(find, top, true);
+    }
+    else if (block?.getClientRects().length) holdAnchor(() => block, blockTop, true);
+    return result;
+  }
+  const shouldFold = (count, height = Infinity, buttonHeight = 0) => count > 1 && height > buttonHeight * 1.5;
+  function shouldFoldList(button, rest, count) {
+    if (count <= 1) return false;
+    const hidden = button.hidden;
+    button.hidden = false;
+    const fold = shouldFold(count, rest.offsetHeight || Infinity, button.offsetHeight);
+    button.hidden = hidden;
+    return fold;
+  }
+  const nativeFolds = new Set();
+  let foldFrame;
+  function fitNativeFolds(host) {
+    for (const fold of host.querySelectorAll('details[data-fold-count]')) nativeFolds.add(fold);
+    if (foldFrame || !nativeFolds.size) return;
+    foldFrame = requestAnimationFrame(() => {
+      foldFrame = 0;
+      for (const fold of nativeFolds) {
+        if (!fold.isConnected || !fold.getClientRects().length || fold.parentElement.closest('details:not([open]), .fold:not(.is-open)')) continue;
+        const summary = fold.firstElementChild, flat = fold.hasAttribute('data-fold-flat'), wasOpen = fold.open;
+        const count = Number(fold.dataset.foldCount);
+        summary.hidden = false;
+        const buttonHeight = summary.offsetHeight;
+        fold.open = true;
+        // 原生 details 的外盒可能仍是收起的高度，直接量内容行。
+        const tail = [...fold.children].slice(1).map(el => el.getBoundingClientRect()).filter(rect => rect.height);
+        const height = tail.length ? Math.max(...tail.map(r => r.bottom)) - Math.min(...tail.map(r => r.top)) : Infinity;
+        const show = !shouldFold(count, height, buttonHeight);
+        fold.toggleAttribute('data-fold-flat', show);
+        fold.open = show || (!flat && wasOpen);
+        summary.hidden = show;
+      }
+      nativeFolds.clear();
+    });
+  }
+  window.addEventListener?.('resize', () => fitNativeFolds(document));
+  document.addEventListener('toggle', e => { if (e.target.open) fitNativeFolds(e.target); }, true);
+  document.addEventListener('click', e => {
+    const summary = e.target.closest?.('details[open]:is([data-fold-count], [data-fold-anchor]) > summary');
+    if (!summary || e.defaultPrevented || e.target.closest('a, button, input')) return;
+    e.preventDefault();
+    anchorFold(summary, () => { summary.parentElement.open = false; });
+  });
   function enter(li, k) {
     requestAnimationFrame(() => {
       const h = li.offsetHeight;
@@ -1695,7 +1784,7 @@
     grow.observe(document.body);
     wait();
   });
-  function fold(btn, box, load) {
+  function fold(btn, box, load, keepPosition = false) {
     let node = box, key = '';
     while (node) {
       key = (node.id ? `#${node.id}` : node.dataset?.key ? `${node.tagName}[${node.dataset.key}]` : `${node.tagName}:${[...node.parentElement?.children || []].indexOf(node)}`) + '/' + key;
@@ -1708,6 +1797,7 @@
       box.inert = !open;
       box.setAttribute('aria-hidden', String(!open));
       box.classList.toggle('is-open', open);
+      if (open && keepPosition) fitNativeFolds(box);
       if (open && read && load && !box._loaded) {
         box._loaded = (await load(box.firstElementChild)) !== false;
       }
@@ -1718,7 +1808,12 @@
     set(open, false);
     if (open && load) Promise.resolve().then(() => set(true));
     if (open) requestAnimationFrame(() => requestAnimationFrame(() => box.style.removeProperty('transition')));
-    btn.addEventListener('click', () => { const pending = set(btn.getAttribute('aria-expanded') !== 'true'); saveFolds(); return pending; });
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      const pending = !open && keepPosition ? anchorFold(btn, () => set(false)) : set(open);
+      saveFolds();
+      return pending;
+    });
   }
 
   // 鼠标悬停照旧；触摸松手后保留读数，再点同一图或别处收起，横拖时跟着读。
@@ -1917,5 +2012,5 @@
       unavailable_since: row.unavailable_since || expired,
       last_online: row.last_online || (row.state === 'online' && age >= 0 ? row.observed_at : null) };
   }
-  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, shouldFold, shouldFoldList, anchorFold, fitNativeFolds, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();

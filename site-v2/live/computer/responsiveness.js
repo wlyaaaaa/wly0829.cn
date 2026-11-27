@@ -19,7 +19,7 @@
       const period = from && to ? `${from} 至 ${to}` : from || to;
       return `<li class="row"><div class="row__text"><p class="row__main">${esc(item.process_name)} · 采到 ${esc(item.sample_count)} 次没响应</p>${period ? `<p class="row__sub">${period}</p>` : ''}</div></li>`;
     }).join('')}</ul>`;
-    const more = recent.length > 5 ? `<details class="vz-more"><summary class="more"><span class="stability-more">展开（还有 ${recent.length - 5} 条）</span><span class="stability-less">收起</span> <span class="more__chev">›</span></summary>${rows(recent.slice(5))}</details>` : '';
+    const more = recent.length > 5 ? `<details class="vz-more" data-fold-count="${recent.length - 5}"><summary class="more"><span class="stability-more">展开（还有 ${recent.length - 5} 条）</span><span class="stability-less">收起</span> <span class="more__chev">›</span></summary>${rows(recent.slice(5))}</details>` : '';
     const end = clock(data.window_end);
     // 没读到时写后台给的原因（current_hung_gap、recent_hung_gap）；读数在、只是本页 15 秒没等到新采样的，写停在几点。
     const why = gap => typeof gap === 'string' && gap.trim() ? (/^正在/.test(gap.trim()) ? '' : '没读到：') + esc(gap.trim()) : '';
@@ -71,9 +71,9 @@
         });
         if (view.details !== previous.details) {
           const detail = host.querySelector('.computer-responsiveness__detail');
-          const open = detail.querySelector('details')?.open;
+          const open = detail.querySelector('details[open]:not([data-fold-flat])');
           detail.hidden = !view.details;
-          LiveUI.html(detail, open ? view.details.replace('<details class="vz-more">', '<details class="vz-more" open>') : view.details, false);
+          LiveUI.html(detail, open ? view.details.replace('<details ', '<details open ') : view.details, false);
         }
         if (view.end !== previous.end) {
           const end = host.querySelector('[data-window-end]');
