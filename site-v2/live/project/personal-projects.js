@@ -109,7 +109,7 @@
     const active = themes?.current_active ?? (delta ? themes?.active : null);
     add('comparison', '跟现在的 Steam 对得上吗', '', `<div class="pp-split">
       <div><h3>现在谁在备份</h3><p>Steam 设置跟着系统盘整盘镜像一起备份</p><p class="pp-muted">每周单独备份 11月23日 起停用</p>${link('/live/backup/?id=system_images', '去备份页看系统盘镜像')}</div>
-      <div><p>现在的 Steam 和 ${saved} 那份旧衣橱比 ${old(m.changes)}</p>
+      <div><p>对比 ${saved} <span class="pp-no-split">的旧衣橱</span> ${old(m.changes)}</p>
       <div class="pp-stats">${stat('多出', n(delta?.added))}${stat('改了', n(delta?.modified))}${stat('少了', n(delta?.deleted))}</div>
       ${detail(m.changes, '看改了哪些')}</div></div>`, m.changes, '这里比较已保存的 Steam 设置和现在的文件。游戏本体不在衣橱里。');
     const replicaText = replica?.completed_at && `${date(replica.completed_at)} · ${({ complete: '完整', partial: '部分完成', failed: '失败' })[replica.status] || unavailable} · 核对 ${n(replica.verified_files)} 个文件 · 保留 ${n(replica.retained_generations)} 代`;
@@ -160,21 +160,28 @@
       <div class="pp-mirror">${stat('GitHub 生成', date(source?.at))}<b aria-hidden="true">→</b>${stat('本机取到', date(mirror?.value))}${old(mirror || source)}</div>`,
       mirror, '贡献天数、覆盖日期及图取同一次 GitHub 输出。本机每次取到后记成功时间。');
     const profile = m.image_kinds != null;
-    add('profile', '主页摆了什么', 'GitHub 上现在的样子', `${row('置顶项目', profile ? `${n(m.cards?.value)} 个` : unavailable, profile ? detail(m.cards) : '')}
-      ${row('正文里的项目源码入口', profile ? `${n(m.source_links?.value)} 个 · 置顶另计` : unavailable)}
-      ${row('配图', profile ? `${n(m.image_kinds.value)} 种 · 亮暗各一套，共 ${n(m.image_files?.value)} 个文件` : unavailable)}
-      ${row('配图共', profile ? `${bytes(m.image_bytes?.value)} · 其中贡献小蛇两套 ${bytes(m.snake_bytes?.value)}` : unavailable)}
-      ${row('主页内容最后更新', date(m.profile_observed?.value))}`,
+    const mark = value => value === unavailable ? value : `<b class="pp-no-split">${esc(value)}</b>`;
+    add('profile', '主页摆了什么', 'GitHub 上现在的样子', `${row('置顶项目', profile ? `${mark(n(m.cards?.value))} 个` : unavailable, profile ? detail(m.cards) : '')}
+      ${row('正文里的项目源码入口', profile ? `${mark(n(m.source_links?.value))} 个 · 置顶另计` : unavailable)}
+      ${row('配图', profile ? `${mark(n(m.image_kinds.value))} 种 · 亮暗各一套，共 ${mark(n(m.image_files?.value))} 个文件` : unavailable)}
+      ${row('配图共', profile ? `${mark(bytes(m.image_bytes?.value))} · 其中贡献小蛇两套 ${mark(bytes(m.snake_bytes?.value))}` : unavailable)}
+      ${row('主页内容最后更新', mark(date(m.profile_observed?.value)))}`,
       profile ? m.cards : null, '置顶从 GitHub 读取。配图按 README（主页正文）实际引用的亮暗文件统计。');
   }
 
   function typora(d, viewer, add) {
     const m = d.readings;
     const editor = 'https://raw.githubusercontent.com/wlyaaaaa/typora-theme-pack/main/previews/typora-live-mint.png';
-    const preview = '/live/project/interfaces/typora-theme-pack/markdown-overview.png';
+    const samples = [
+      ['/live/project/interfaces/typora-theme-pack/original.png', '原版', 'MARKDOWN STANDARD', '中性、朴素、忠实原文'],
+      ['/live/project/interfaces/typora-theme-pack/company.png', '公司', 'TEAM DOCUMENT', '公司内部、专业审阅'],
+      ['/live/project/interfaces/typora-theme-pack/personal.png', '个人', 'PERSONAL READING', '更大字号、舒展长读'],
+    ];
     add('samples', 'Markdown / PDF 页面预览', '三种语义 · 原版 / 公司 / 个人',
       `<div class="pp-preview-tools"><span>样张最后改于 ${date(m.samples_changed?.value)}</span>${link(editor, '看实际编辑器', true)}</div>
-      <img class="pp-preview" data-preview-src="${preview}" width="2070" height="978" alt="同一篇样文的 Markdown 原版、公司 PDF 和个人 PDF 三栏真实预览" decoding="async">`, null, '', '');
+      <div class="pp-samples">${samples.map(([src, label, english, description]) => `<figure>
+        <img class="pp-preview" data-preview-src="${src}" width="1240" height="1680" alt="${label}样张预览" decoding="async">
+        <figcaption><strong>${label} <span lang="en">${english}</span></strong><span>${description}</span></figcaption></figure>`).join('')}</div>`, null, '', '');
     add('theme', '主题', '现在用的是哪套主题，安装的文件对不对？',
       `${row('上次核对使用的主题', field(m.theme, viewer))}
       ${row('上次核对主题文件与本仓一致吗', field(m.theme_files, viewer))}
@@ -201,7 +208,6 @@
 
   const desktopThumb = '/live/project/interfaces/emerald-veil/desktop-thumb.webp';
   const mobileThumb = '/live/project/interfaces/emerald-veil/mobile-thumb.webp';
-  const bubbleThumb = '/live/project/interfaces/emerald-veil/bubbles-thumb.webp';
   const bubbleImage = '/live/project/interfaces/emerald-veil/bubbles.webp';
   function wallpaperRows(b, rows, items, offset) {
     const shown = rows.map((row, i) => {
@@ -209,14 +215,19 @@
       if (typeof href !== 'string') return row;
       const name = href.split('/').at(-1).split('.')[0];
       const thumb = name === 'emerald-elf-1440x3200' ? mobileThumb : name === 'verdant-rain-4k' ? desktopThumb : '';
-      return thumb && !it.content_locked ? { ...row, html: `<img class="pp-wallpaper" data-preview-src="${thumb}" alt="" decoding="async">${row.html}` } : row;
+      return thumb && !it.content_locked ? { ...row, cls: `${row.cls} pp-wallpaper-card`,
+        html: `<img class="pp-wallpaper" data-preview-src="${thumb}" alt="" decoding="async">${row.html}` } : row;
     });
-    if (offset === 0) shown.unshift({ key: 'bubbles-preview', cls: 'pp-bubbles', html:
-      `<a href="${bubbleImage}" target="_blank" rel="noopener"><img class="pp-wallpaper" data-preview-src="${bubbleThumb}" alt="" decoding="async"><b>泡泡屏保 · 效果示意</b></a>` });
+    if (offset === 0) shown.unshift({ key: 'bubbles-preview', cls: 'row row--flat pj-item pp-wallpaper-card pp-bubbles', html:
+      `<img class="pp-wallpaper" data-preview-src="${bubbleImage}" alt="" decoding="async">
+      <div class="row__text"><p class="row__main"><span class="row__title">泡泡屏保 · 画面</span></p>
+      <p class="row__sub">雨林壁纸上的彩色泡泡。</p>
+      <div class="acts"><a class="btn btn--sm" href="${bubbleImage}" target="_blank" rel="noopener" data-mo-press>打开画面</a></div></div>` });
     b.main.classList.add('pp-wallpapers');
     return shown;
   }
 
+  const compactDateTitle = value => typeof value === 'string' ? value.replace(/(\d+)\s*月\s*(\d+)\s*日/g, '$1月$2日') : value;
   function lists({ blocks, left, right, block, arts, changeLog, changeIssue, viewer, artifactRow, loadArtifacts, loadChanges, keepWords }) {
     for (const [key, packet, load] of [['artifacts', arts, loadArtifacts], ['changes', changeLog, loadChanges]]) {
       let b = blocks.get(key);
@@ -234,19 +245,24 @@
       state.draw = () => {
         const offset = state.index * limit;
         let entries = rows.slice(offset, offset + limit);
+        const wallpaperPage = page === 'emerald' && key === 'artifacts';
         if (key === 'artifacts' && entries.length) entries = packet.items.slice(offset, offset + limit).map((it, i) =>
-          artifactRow(page === 'steam' ? { ...it, recent_detail: '' } : it, offset + i));
-        if (page === 'emerald' && key === 'artifacts') entries = wallpaperRows(b, entries, packet?.items || [], offset);
+          artifactRow(page === 'steam' ? { ...it, recent_detail: '', recent_title: compactDateTitle(it.recent_title),
+            public_title: compactDateTitle(it.public_title) } : it, offset + i));
+        if (wallpaperPage) entries = wallpaperRows(b, entries, packet?.items || [], offset);
         b.el.classList.toggle('pp-multiple', packet?.total > limit || !!packet?.next);
         U.list(b.main, entries.length ? entries : [{ key: 'pp-none', cls: 'pp-empty', html: packet && !packet.next && !changeIssue ? '暂无记录' : unavailable }], { animate: false });
-        if (key === 'changes') keepWords?.(b.main);
-        if (page === 'emerald' && key === 'artifacts') observeImages(b.main);
+        if (key === 'changes' || wallpaperPage) keepWords?.(b.main);
+        if (wallpaperPage) observeImages(b.main);
         const issue = (key === 'changes' && changeIssue) || state.issue;
         b.note.hidden = !issue;
         if (issue) U.html(b.note, esc(issue), false);
         const unit = key === 'artifacts' ? '份' : '条', more = rows.length > offset + limit || !!packet?.next;
         const last = packet?.total != null || !packet?.next ? Math.max(1, Math.ceil(count / limit)) : '';
-        U.html(nav, `<span>${packet && (packet.total != null || !packet.next) ? `共 ${n(count)} ${unit}` : packet ? `已读 ${n(rows.length)} ${unit}` : unavailable}</span><span>
+        const tally = packet && (packet.total != null || !packet.next)
+          ? wallpaperPage ? `共 ${n(count)} 份成品，另有 1 张屏保画面` : `共 ${n(count)} ${unit}`
+          : packet ? `已读 ${n(rows.length)} ${unit}` : unavailable;
+        U.html(nav, `<span>${tally}</span><span>
           <button class="more" type="button" data-step="-1" ${state.index && !state.pending ? '' : 'disabled'}>‹ 上一页</button>
           <span aria-live="polite">${state.index + 1}${last ? ` / ${last}` : ''}</span>
           <button class="more" type="button" data-step="1" ${more && !state.pending ? '' : 'disabled'}>下一页 ›</button></span>`, false);
@@ -275,6 +291,6 @@
   const columns = keys => keys.map(() => 0);
   window.ProjectPages = Object.assign(window.ProjectPages || {}, { [id]: { adapt, strip, board, lists, columns } });
   if (page === 'steam') import('/live/project/interface.js')
-    .then(m => m.mountInterface(id, document.querySelector('.pj-strip')))
+    .then(m => m.mountInterface(id, document.querySelector('#pj-board')))
     .catch(error => console.warn(error.message));
 })();
