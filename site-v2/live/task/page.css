@@ -136,8 +136,13 @@ h1 .task-provider { margin-left: .6em; }
 .task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
 .task-card dl dt { color: #505565; }
 .task-card dl dd { margin: 0; overflow-wrap: anywhere; text-wrap: balance; }
+.task-fact-missing { color: var(--muted); }
 .task-card dl div:last-child { border: 0; }
 .task-card :is(p,li,td,th,summary,dl) { font-size: 14px; line-height: 1.45; }
+.task-card.task-prompt { margin-top: 13px; padding: 16px 22px; background: #fff; }
+.task-prompt dl > div { grid-template-columns: 142px minmax(0, 1fr); align-items: baseline; padding-block: 9px; }
+.task-prompt__text { padding: 10px 14px; border-radius: 10px; background: #edf0f2; white-space: pre-wrap; text-wrap: wrap; }
+.task-prompt__source { color: #545b67; }
 .task-card .task-reading { margin: 7px 0 0; color: #545b67; font-size: 13px; }
 .task-card .task-run-extra { padding: 1px 4px 7px; margin: 0; }
 .task-card .task-run-extra p { margin: 4px 0; }
