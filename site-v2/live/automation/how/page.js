@@ -9,10 +9,10 @@
   if (!id) { location.replace('/live/automation/'); return; }
   const T = window.LiveTape, U = window.LiveUI, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
   const { list } = T;
-  const g = G[id] || {}, repair = id === 'auto-repair';
+  const g = G[id] || {}, repair = id === 'auto-repair', weekly = id === 'weekly-live';
   const segmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
   const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || text
-    .split(/(修不住|转给|知道|亲手|改动|详见|坏了)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
+    .split(/(要(?:你|本人)定|亲手做|修不住|转给|知道|改动|详见|坏了|自动修理|访客版)/).flatMap((part, i) => i % 2 ? [part] : Array.from(segmenter ? segmenter.segment(part) : part, token => token.segment ?? token))
     .map(word => /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join(''));
   let state, viewer = 'public', landed = false;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
@@ -77,7 +77,8 @@
     const steps = list(g.steps);
     // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
-    const flow = `<ol class="ah-flow${repair ? ' ah-flow--repair' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${repair ? keepWords(keepRange(esc(title))) : keepRange(esc(title))}</span></p><p class="ah-flow__text">${repair ? keepWords(esc(text)) : esc(text)}</p></li>`).join('')}</ol>`;
+    const wrapSteps = repair || weekly;
+    const flow = `<ol class="ah-flow${wrapSteps ? ' ah-flow--words' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${wrapSteps ? keepWords(keepRange(esc(title))) : keepRange(esc(title))}</span></p><p class="ah-flow__text">${wrapSteps ? keepWords(esc(text)) : esc(text)}</p></li>`).join('')}</ol>`;
     const promptIntro = id === 'weekly-live' && off ? '这一类关着。下面是关掉以前每一轮交给 AI 的原话，照原样留着。'
       : `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
     const prompt = c.prompt_template ? `<p>${promptIntro}</p>

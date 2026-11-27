@@ -226,7 +226,7 @@
     if (!sc) return '';
     const host = HOST[String(sc.host || '').toLowerCase()] || '';
     const body = sc.available && site(sc.href) ? go(sc.href, `${host ? `${esc(host)} · ` : ''}${T(sc.title) ? F(sc.title, '对话标题') : '那场对话'}`) : T(sc.unavailable_reason) ? F(sc.unavailable_reason, '来源') : '';
-    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${body}</p></section>` : '';
+    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${keepWords(body)}</p></section>` : '';
   }
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {

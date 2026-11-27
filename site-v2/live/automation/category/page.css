@@ -122,7 +122,7 @@
 .ak-sub small[data-tone="bad"] { color: var(--tp-red); }
 .ak-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; }
 
-@media (max-width: 1050px) {
+@media (max-width: 1150px) {
   .ak-hero { grid-template-columns: minmax(0, 1fr) 38%; }
   .ak-hero__art { width: 38%; }
   /* 窄窗（900 左右）放不下左右两栏：“最近几轮”占满一行，每条照 1440 的列宽排开；“接下来几次”“这一类”接在下面（M902） */

@@ -109,6 +109,9 @@ summary:hover > .ar-open, summary:hover > .ar-shut { text-decoration: underline;
 .ar-reply :is(th, td):first-child, .ar-reply code { overflow-wrap: break-word; }
 .ar-reply th { background: #f5f5f0; }
 .ar-reply a { color: var(--tp-green-ink); text-decoration: underline; }
+@media (max-width: 1100px) {
+  .ar-grid:has(.ar-reply) { grid-template-columns: minmax(0, 1fr) 255px; }
+}
 .ar-msg__label { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 999px; background: rgb(20 20 19 / .06); font-size: 12.5px; line-height: 20px; color: #6c6b64; vertical-align: 1px; }
 .ar-msg__more { margin: 6px 0 0 !important; font-size: 16px !important; }
 .ar-msg__more a, .ar-say-fold > summary { font-weight: 700; color: var(--tp-green-ink); text-decoration: none; }
