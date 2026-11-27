@@ -16,6 +16,11 @@
 .page--backups #more[aria-expanded="true"] .more__shut, .page--backups #more:not([aria-expanded="true"]) .more__open { display: none; }
 .page--backups #more[aria-expanded="true"] .more__chev { rotate: -90deg; }
 .page--backups .hero__note:not([hidden]) { display: block; }
+.page--backups .backup-phrase { white-space: nowrap; }
+@media (max-width: 1024px) {
+  .page--backups .card[data-pic][data-publication-revoked] .card__body { padding-right: calc(var(--win) + var(--gut)); }
+  .page--backups [data-publication-revoked] #head .head__lead { min-width: 0; white-space: normal; text-wrap: balance; }
+}
 .page--backups .backup-grid td[data-state] { background: transparent; color: var(--ink); border-radius: 0; }
 .page--backups .backup-grid td[data-state="gap"] { color: #a14b3a; box-shadow: inset 0 -1px #d8aa91; }
 .page--backups .backup-grid td[data-state="stale"] { color: #94631e; background: #fff0d6; border-radius: 8px; }

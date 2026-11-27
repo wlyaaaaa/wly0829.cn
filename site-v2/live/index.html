@@ -139,11 +139,13 @@
 .page--live.live-unreadable .board .card .card__head > .lamp, .live-unreadable #phone .card__head > .lamp { position: relative; inset: auto; width: 12px; height: 12px; flex: 0 0 12px; margin: 0; align-self: center; }
 .live-unreadable .head__lead { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable:not(.live-empty-home) #phone .head__lead { font-size: 18px; }
-/* 确认关机且首页没有正文：沿用插画和两栏，只收成等高的十张标题卡。 */
-.page--live.live-unreadable.live-empty-home .board .card .card__glass { min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
+/* 首页没有正文时沿用两栏和插画，独立读到的计划任务摘要也用同一行高。 */
+.live-unreadable.live-empty-home .board { grid-auto-rows: 1fr; align-items: stretch; }
+.page--live.live-unreadable.live-empty-home .board .card .card__glass { height: 100%; min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
 .page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
 .live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
 .live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
+.live-empty-home.live-home-summary .board #tasks[data-has-readings="yes"] [data-part="status"] { display: block !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
@@ -176,6 +178,9 @@
 .page--live :is(#computer .kv__row:last-child, #phone .kv__row) dt a:hover { text-decoration: underline; }
 .page--live #backups [data-part="main"] .row { grid-template-columns: var(--gut) minmax(0, max-content) auto; justify-content: start; }
 .page--live #backups .row__acts { padding-left: 10px; }
+@media (max-width: 960px) {
+ .page--live #backups [data-part="main"] .row { margin-inline-end: -24px; }
+}
 .page--live #backups .row > .lamp { scale: .6; transform-origin: left center; }
 .page--live #backups [data-part="restore"] .row { border-top: 1px solid var(--hair); padding: 8px 0; }
 .page--live #backups [data-part="restore"] .row__sub { display: block; white-space: normal; }
@@ -183,6 +188,7 @@
 .page--live #computer [data-part="why"] { margin-left: 25px; }
 .page--live #computer .kv__row:last-child dd { gap: 4px 10px; }
 .page--live #computer .kv__row:last-child .kv__link::after { content: none; }
+.page--live #computer .kv-device-time { white-space: nowrap; }
 .page--live #computer .kv__link > small { margin-top: 4px; text-wrap: pretty; }
 .page--live #phone .card__head + [hidden] + .kv { margin-top: 12px; }
 .page--live #phone .card__note:has(> .lamp) { padding-left: 18px; }
@@ -215,6 +221,7 @@
 .page--live #projects .project-groups { display: grid; gap: 16px; margin-top: 20px; }
 .page--live #projects .project-group { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 22px; background: linear-gradient(120deg, rgb(213 236 222 / .8), rgb(235 244 230 / .65)); border: 1px solid rgb(125 181 148 / .24); }
 .page--live #projects .project-group--occasional { background: linear-gradient(120deg, rgb(233 222 247 / .8), rgb(239 235 246 / .65)); border-color: rgb(171 148 205 / .22); }
+.page--live #projects .project-group--personal { background: linear-gradient(120deg, rgb(251 229 207 / .8), rgb(251 240 227 / .65)); border-color: rgb(218 165 118 / .24); }
 .page--live #projects .project-group--unknown { background: rgb(237 237 231 / .8); }
 .page--live #projects .project-group > h3 { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; margin: 0; font-size: 22px; line-height: 1.4; text-align: center; }
 .page--live #projects .project-group > h3 > span { font-size: 28px; }
@@ -236,7 +243,11 @@
 .page--live #computer .card__body > :is([data-part="gap"],[data-part="status"],[data-part="why"]),
 .page--live #phone .card__body > [data-missing-groups="yes"] { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; text-wrap: pretty; }   /* 卡头下面那段灰字（读数暂缺、读不准）最后一行不单剩“数）”“读数）”（r83 返修第三轮复看）；上面 #phone [data-part="head"] > .row__sub 那条管的是卡头里的“截至”小字，不是这一段 */
 .page--live #computer .card__body > [data-part="status"] { word-break: keep-all; }
+.page--live #computer .card__note { white-space: normal; overflow: visible; overflow-wrap: anywhere; text-wrap: pretty; }
 .page--live #computer .card__body > [data-part="status"] b { font-weight: 600; color: #3d3c38; }
+@media (max-width: 1024px) {
+ .page--live #computer .stutter-frame-note { color: var(--ink); background: rgb(255 255 255 / .88); box-shadow: 0 0 7px 3px rgb(255 255 255 / .65); border-radius: 4px; }
+}
 .page--live #chats .card__head:has(.chat-head-link) { margin-inline-end: calc(20px - var(--win)); }
 .page--live .board #chats .chat-head-link { display: block; flex: 1 1 100%; }
 .page--live #chats .chat-head-title { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
@@ -388,6 +399,7 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
 .b6-host__name i { width: .66em; height: .66em; border-radius: 3px; background: var(--host); }
 .b6-host__work { color: #4a5756 !important; font-size: 13.5px; }
 .b6-foot--split { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 22px; color: #44504c; }
+.b6-rule-part { white-space: nowrap; }
 .b6-empty { margin: 14px 0 10px; font-size: 16px; color: #0a532b; font-weight: 600; }
 /* 这两张卡每家一行、跟得最久一整句要宽一点：字让开得少一点，伸进画朝玻璃那一侧已经淡没的地方 */
 .page--live .board :is(#agents,#ledger).b6-card[data-pic="right"] .card__body { padding-right: min(21%, 150px); }

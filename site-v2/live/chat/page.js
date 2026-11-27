@@ -1,6 +1,6 @@
 // 第三层：一个 AI 对话的全过程，摆成共用模版“航线”（_lib/live-route.*，本人 11-17 20:15 点头的新模版）。
 // 页头照旧：对话名、型号档位、走到第几步、干了多久、最新进展、问情况和打开对话；下面一条航线是计划各步，
-// 再下面三栏：正在执行（当前这一步、正式摘要、最新回复）｜思考摘要 + 帮手（先列在做和出错的）｜过程记录（按时间，先列最近 5 条）。
+// 再下面三栏：正在执行（当前这一步、正式摘要、最新回复）｜思考摘要 + 帮手（先列在做和出错的）｜过程记录（先列最近 5 轮）。
 // 字一律走 LiveUI.fieldHtml / fieldText；灯一律 LiveUI.status，没有灯字段不画；计划每步的状态只照数据（completed / in_progress，或旧的 state），没给不写。
 (() => {
   'use strict';
@@ -12,7 +12,7 @@
   // 对话数据 → 要显示的字：和自动任务一轮的页共用 _lib/live-chat-view.js（本人 11-26：机制共通、内容一样全）；这一页只管摆成航线
   const V = window.LiveChatView.create({ viewer: () => viewer, chat: () => chat, at: () => at, route });
   const { lockedFields, ACTIVE, marker, who, text, pending, field, replyBody, fieldTag, withTag, flatWords, chatCell, said, privateSaid, headerNote, chatTitle, when, actions,
-    privatePlan, wholeOwner, chatState, stepWord, markOf, marks, visibleText, helperWords, stamp, events, recordEnd, workLine } = V;
+    privatePlan, wholeOwner, chatState, stepWord, markOf, marks, visibleText, helperWords, stamp, workLine } = V;
   let viewer = 'public', chat = null, at = null, first = true, changed = false, lit = false, lastOffline = false, leaving = false;
   const bar = U.topbar({ ask: () => chat ? `请看实况对话 ${chat.id}（${sp(chatTitle(chat))}${at ? `，${U.time(at)} 的数` : ''}）：${U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) || STATE[chat.state] || U.collectionText()}。请说明现在的情况。` : '' });
   L.add(hero);
@@ -124,35 +124,49 @@
     U.html($('helpers-more'), b.html);
   }
 
-  // —— 过程记录：记录由共用模块出，列表和长文本各自展开 ——
+  // —— 过程记录：每轮一块，展开列表和展开一行沿用原来的按钮 ——
   const LOG_FIRST = 5;
   const logMore = key => `<button type="button" class="route-clip__more" data-clip-for="${key}" aria-controls="${key}" hidden>展开</button>`;
-  function drawLog(list = events({ includeSteps: true })) {
-    const b = R.batch('log', list.length, { first: LOG_FIRST, step: 20, unit: '条' }), shown = list.slice(0, b.shown), note = $('log-note');
-    const tally = list.length > shown.length ? `${b.open ? '已显示' : '最近'} ${shown.length} 条 · ` : '';
-    U.html($('log-part'), list.length ? `${tally}共 ${list.length} 条` : '');
-    // 同一段字在页头、“现在”、思考摘要或较新的过程记录里已出现时，这行只留时刻和动作。
-    const above = new Set(pageWords);
-    const unique = html => {
-      const words = flatWords(html);
-      if (!words || above.has(words)) return false;
-      above.add(words);
-      return true;
-    };
-    U.list($('log'), shown.map(e => {
-      const key = `log-${esc(e.key)}`, parts = e.parts?.filter(unique).join('<br>');
-      const name = `<span class="route-row__name"${e.clipName ? ` id="${key}" data-clip="${key}"` : ''}>${e.name || ''}</span>`;
-      const body = parts ? `<p class="route-row__text" id="${key}" data-clip="${key}">${parts}</p>${logMore(key)}` : '';
-      const sub = e.sub ? `<p class="route-row__sub">${U.fieldHtml(e.sub, { name: '对话内容', kind: viewer })}</p>` : '';
-      return { key: e.key, cls: 'route-row route-row--log', html: `<time class="route-row__time">${e.at ? esc(stamp(e.at)) : ''}</time><div class="route-row__main"><div style="min-width:0;flex:1"><p class="route-row__line">${e.lamp || ''}<b class="route-word">${esc(e.word)}</b>${name}</p>${e.clipName ? logMore(key) : ''}${body}${e.detail || ''}</div>${sub}</div>` };
+  function roundWork(round, open) {
+    const helpers = round.helpers.map(V.roundHelper);
+    const summary = round.summary ? `<div>${round.summary}</div>` : '';
+    if (!helpers.length) return [round.knownEmpty ? '这一轮没派帮手。' + summary : summary || esc(U.collectionText()), ''];
+    const { counts } = R.tally(helpers, h => h.state || 'unknown', []);
+    const results = [...counts].sort(([a], [b]) => Number(b === 'done') - Number(a === 'done'))
+      .map(([state, n]) => `${esc(state === 'unknown' ? '没读到结局' : CREW[state] || state)} ${n} 个`);
+    const lead = counts.get('done') === helpers.length ? '都做完了' : results.join('、');
+    const reasons = [...new Set(helpers.map(h => h.reason).filter(Boolean))].map(reason => `<span class="is-failed">（出错：${reason}）</span>`).join('');
+    const rows = helpers.map(h => {
+      const name = h.name || U.fieldHtml({ visibility: 'owner' }, { name: '帮手名', kind: viewer });
+      return `<div class="route-round__helper${h.failed ? ' is-failed' : ''}">${[esc(h.model), name, esc(h.result)].filter(Boolean).join(' · ')}</div>`;
+    });
+    const disclosure = `<details class="route-round__helpers"${open ? ' open' : ''}><summary class="route-clip__more"><span>展开帮手</span><span>收起</span></summary>${rows.join('')}</details>`;
+    return [`派了 ${helpers.length} 个帮手，${lead}${reasons}${summary}`, disclosure];
+  }
+  function drawLog() {
+    const { rows: list, hasRoundList } = V.rounds();
+    const batch = R.batch('log', list.length, { first: LOG_FIRST, step: 20, unit: '轮' });
+    const tally = list.length > batch.shown ? `${batch.open ? '已显示' : '最近'} ${batch.shown} 轮 · ` : '';
+    U.html($('log-part'), hasRoundList && list.length ? `${tally}共 ${list.length} 轮` : '');
+    const opened = new Set([...$('log').querySelectorAll('.route-round__helpers[open]')].map(el => el.closest('li').dataset.key));
+    U.list($('log'), list.slice(0, batch.shown).map(r => {
+      const reply = r.reply ? r.reply + (r.replyAt ? U.nowrap(`（${r.replyAt}）`) : '') : r.pending ? '这一轮还没交回。' : '这一轮回了什么没记下。';
+      const work = roundWork(r, opened.has(r.key));
+      const fields = [['问', r.question || '这一轮问了什么没记下。'], ['做了', ...work], ['交回', reply]];
+      const body = fields.map(([label, value, extra = ''], i) => {
+        const key = `${r.key}-${i}`;
+        return `<div class="route-round__line"><b>${label}</b><div><div class="route-round__text" id="${key}" data-clip="${key}">${value}</div>${logMore(key)}${extra}</div></div>`;
+      }).join('');
+      return { key: r.key, cls: 'route-round', html: `<div class="route-round__head"><time>${esc(stamp(r.at))}</time><b>${esc(r.title)}</b></div>${body}` };
     }), { animate: !first });
-    const words = [!list.length && esc(U.collectionText('过程记录')), marks(new Set(shown.map(e => e.mark).filter(Boolean)), '帮手名')].filter(Boolean).join('<span class="route-note__sep">·</span>');
-    note.hidden = !words; U.html(note, words);
+    const note = $('log-note');
+    note.hidden = list.length > 0;
+    U.html(note, list.length ? '' : esc(U.collectionText('过程记录')));
     const footer = $('log-more'), focused = footer.contains(document.activeElement);
-    U.html(footer, list.length > LOG_FIRST ? b.html : '', false);
+    U.html(footer, list.length > LOG_FIRST ? batch.html : '', false);
     for (const button of footer.querySelectorAll('button')) {
       button.setAttribute('aria-controls', 'log');
-      button.setAttribute('aria-expanded', String(b.open));
+      button.setAttribute('aria-expanded', String(batch.open));
     }
     if (focused && !footer.contains(document.activeElement)) footer.querySelector('button')?.focus({ preventScroll: true });
   }
@@ -188,7 +202,7 @@
     viewer = kind === 'owner' ? 'owner' : 'public';
     if (chat.q === 'warming') { missing('正在准备'); return; }
     // 页头信息（型号档位、各项时刻、历时、实际工时、帮手几个、所属项目、App 标签）由共用模块出
-    const { locked, name, hiddenName, title, missingReply, plan, log, progress, rawReply, hasReply, meta, project, app } = V.pageMeta({ includeLogSteps: true });
+    const { locked, name, hiddenName, title, missingReply, plan, progress, rawReply, hasReply, meta, project, app } = V.pageMeta();
     document.title = `${title} · 实况`;
     const model = who(chat, true);
     // LINK1125（本人选 A）：“Opus 5.5 · max ›”去智能体页、落在这一家；“开场读的规矩 ›”去开场页这一家。哪一家照 software，旧回包照编号前缀。
@@ -211,14 +225,18 @@
     const state = !locked && !sk && F.quota(chat, viewer) ? U.fieldText(U.chatProgressText(chat.text, chat, viewer), viewer) : chatState(chat);
     // 设计第 9 节：标签后面接“从几点起”（排序时刻＋这一类的动词，同 AI 对话页行首）和原因；状态旧了 2 分钟以上加“状态是几点读的”。后台没给的那一项不写
     const reason = chat.status_reason != null ? U.fieldText(chat.status_reason, viewer).trim() : '';
+    const delegated = chat.state === 'done' && (!reason || reason === state) && F.workingHelpers(chat);
     const seen = Date.parse(chat.status_observed_at), asOf = Date.parse(now ?? at);
-    const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && `${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`,
-      reason && reason !== state && F.ownerWords(reason, viewer),
-      Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && `状态是 ${F.dayClock(chat.status_observed_at)} 读的`].filter(Boolean).join(' · ') : '';
+    const unit = text => `<span class="live-unit">${esc(text)}</span>`;
+    const since = sk ? [Number.isFinite(Date.parse(chat.sort_at)) && unit(`${F.dayClock(chat.sort_at)} ${F.ownerWords(F.sortVerb(chat), viewer)}`),
+      reason && reason !== state && esc(reason),
+      delegated && unit(`后台帮手另在处理（${delegated} 个）`),
+      Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 && unit(`状态是 ${F.dayClock(chat.status_observed_at)} 读的`)].filter(Boolean).join(' · ') : '';
     // 整页登记（见 once）从页头开始：标题（连同“ · ”两边各一段）和状态标签先记下
     pageWords = new Set();
     for (const words of new Set([title, sp(title), ...sp(title).split(' · '), state])) once(esc(words));
-    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + U.head(title, { lamp: false }) + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${esc(since)}</span>` : ''));
+    const heading = U.head(title, { lamp: false }).replaceAll('帮手', '<span class="live-unit">帮手</span>');
+    U.html(part('head'), U.status({ ...chat, level: chat.header_level ?? chat.level }).lamp + heading + (hiddenName ? chatCell(name, '对话标题', chat) : '') + U.visitorHiddenMark(chat, '这场对话', viewer) + (note ? `<span class="row__meta">${note}</span>` : '') + `<span class="head__tail">${esc(state)}</span>` + (since ? `<span class="head__since">${since}</span>` : ''));
     part('head').querySelector('.head__lead')?.classList.toggle('rewrite-pending', !locked && pending(name));
     part('privacy').hidden = !locked; U.html(part('privacy'), locked ? `${lockedFields}仅本人可见` : '');
     // 这场对话是哪一轮自动任务开的：后台 automation_run=[类, 轮号]，照等你的事、账本写“来源：…那一轮 ›”，点了到那一轮（验收 11-24 07:28）
@@ -245,15 +263,15 @@
     const facts = V.facts(rawReply, hasReply, missingReply, once), blockTag = V.blockTag;
     $('words').hidden = !facts.length; $('rec').hidden = false;
     U.html($('plan-box').querySelector('.route-h__text'), '执行计划' + (plan.plan.length ? blockTag('plan', '执行计划') : ''));
-    drawThought();   // 再登记思考摘要，最后过程记录（drawLog 只比不记）
-    drawPlan(plan); drawNow(plan, facts, currentText); drawHelpers(); drawLog(log);
+    drawThought();
+    drawPlan(plan); drawNow(plan, facts, currentText); drawHelpers(); drawLog();
     R.reclip();
     if (first && location.hash === '#plan-box' && !$('plan-box').hidden) requestAnimationFrame(() => $('plan-box').scrollIntoView());
   }
   function lightUp() { if (lit) return; lit = true; L.lightUp([hero, $('plan-box'), $('now-box'), $('think-box'), $('helpers-box'), $('log-box'), $('notices')]); }
   function clearRendered() {
     document.title = 'AI 对话 · 实况';
-    const fields = ['head', 'meta', 'say', 'acts', 'privacy'].map(part);
+    const fields = ['head', 'meta', 'say', 'acts', 'privacy', 'source'].map(part);
     ['plan', 'plan-sub', 'plan-note', 'now-step', 'now-text', 'facts', 'thinking',
       'helpers', 'helpers-part', 'helpers-tally', 'helpers-note', 'helpers-more',
       'log', 'log-part', 'log-note', 'log-more'].forEach(id => fields.push($(id)));
@@ -274,7 +292,7 @@
     const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: 'AI 对话' });
     const recRead = U.reading(rec, { ghost: U.ghost.rows(5), slow: false });
     window.Live.watch(`chats/${encodeURIComponent(id)}`, null, {
-      phase(state) { if (!chat) { heroRead.set(state); recRead.set(state); } },
+      phase(state) { if (!chat && !U.chatFields.withdrawal(state)) { heroRead.set(state); recRead.set(state); } },
       data(data, meta) {
         // 自动任务开的对话（后台 automation_run=[类, 轮号]）不在这里摆：转到那一轮的页，内容一样全（施工稿第三节第 6 条，旧链接解析到新页）
         const run = Array.isArray(data?.automation_run) && typeof data.automation_run[0] === 'string' && typeof data.automation_run[1] === 'string' && data.automation_run[1] ? data.automation_run : null;
@@ -285,13 +303,19 @@
       link(state) {
         if (leaving) return;
         try {
-        bar?.set(state); L.offline(state.offline);
+        const withdrawal = U.chatFields.withdrawal(state, '这场对话');
+        bar?.set(withdrawal && !state.offline ? { ...state, text: U.chatFields.withdrawal(state) } : state); L.offline(state.offline);
         U.list($('notices'), state.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(state.text)}</span>` }] : []);
+        if (withdrawal) {
+          chat = null; missing(withdrawal);
+          heroRead.done(false); heroRead.set({ ...state, phase: 'unavailable', say: esc(withdrawal) });
+          recRead.done(false); return;
+        }
         const offlineChanged = lastOffline !== !!state.offline; lastOffline = !!state.offline;
         if (chat) {
           if (!changed && state.offline && !offlineChanged) return;
           rec.hidden = false; render(state.viewer?.kind, state.now);
-          if (first) { heroRead.done(); recRead.done(); }
+          if (first || changed) { heroRead.done(); recRead.done(); }
           first = changed = false; requestAnimationFrame(lightUp); return;
         }
         heroRead.set(state); recRead.set(state);

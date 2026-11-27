@@ -854,7 +854,8 @@ const watchScreen = (recovering = false) => window.Live?.watch('screen', {}, {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
     // 失败后先隔 2、4、8 秒各再试一次，之后跟着每分钟重读一起试（live-client.js 的 retryFailure 和 startPolling）。
-    connectionTip(state.offline, state.reason, state.pageAtText, '每分钟自动再试，连上就换成最新的', state.pairNotice);
+    connectionTip(state.offline, state.hostOff ? '电脑关机了' : state.reason, state.pageAtText,
+      state.hostOff ? '开机后换成最新的' : '每分钟自动再试，连上就换成最新的', state.pairNotice);
     const paint = () => {
       recovering = false;
       renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);

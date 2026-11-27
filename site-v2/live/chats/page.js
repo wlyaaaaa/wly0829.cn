@@ -103,7 +103,7 @@
     return /^(?:API Error:|Error:)/i.test(text) ? '连接出错，正在重连' : '';
   }
   // —— M915 第一批：后台回包带 board（四栏、三家额度、页头数）时照设计第 3–5 节摆；没有 board 的旧回包照旧 ——
-  const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, quotaWindow, quotaRecovery, sortVerb, helperList } = U.chatFields;
+  const { KINDS, peopleIn, totalOf, listedOf, earlierCount, bySortAt, statusKind, dayClock, ownerWords, withdrawal, quotaWindow, quotaRecovery, sortVerb, helperList } = U.chatFields;
   // 在干和状态不明的分界照后台 live_chat_board.py 的 status_fields：这一轮没结束、离最后一条记录不到 2 小时算在干（30 分钟起在原因里写“已经 N 分钟没动静”），
   // 满 2 小时还没有这一轮的结束记录就标状态不明、进“停下了，没归档”（M928 机制写清；数字改了要跟着改）
   // 按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/live_chat_board.py 的 status_fields 查 idle 与 timedelta(hours=2) 的比较，现满 2 小时无新记录且没结束记录转为状态不明；变了改这句
@@ -126,16 +126,21 @@
     const words = c.status_reason != null ? U.fieldText(c.status_reason, viewer).trim() : '';
     const seen = Date.parse(c.status_observed_at), asOf = Date.parse(boardOf()?.as_of);
     const old = Number.isFinite(seen) && Number.isFinite(asOf) && asOf - seen > 120000 ? `状态是 ${dayClock(c.status_observed_at)} 读的` : '';
-    const reason = words && words !== rowState(c, viewer) ? esc(ownerWords(words, viewer)) : '';
+    const reason = words && words !== rowState(c, viewer) ? esc(words) : '';
     const text = [extra, reason, esc(old)].filter(Boolean).join(' · ');
     return text ? `<p class="row__sub chat-reason">${text}</p>` : '';
   }
-  function chatTitle(c) {
+  function chatTitle(c, keepArrow = false) {
     const name = field(c.title, c), marked = name.hidden || viewer === 'public' && name.visibility === 'owner' || name.rewrite === 'pending' && !name.text;
     const displayName = typeof name.text === 'string' ? { ...name, value: plain(name.text), text: plain(name.text) } : name;
     const titleHtml = contentLocked(c, viewer) ? '仅本人可见' : U.fieldHtml(name.text || marked ? displayName : '无标题', { name: '对话', place: 'title', kind: viewer });
     const href = c.detail ? detailHref(c.id) : '';
-    const title = href ? `<a class="row__title" href="${href}">${titleHtml} <span class="more__chev" aria-hidden="true">›</span></a>`
+    const arrow = '<span class="more__chev" aria-hidden="true">›</span>';
+    // 等待栏较窄，末字（也可能是转义后的字符）和箭头一起换行。
+    const linkedTitle = keepArrow && titleHtml.trim()
+      ? titleHtml.replace(/(?:&[\w#]+;|\S\p{M}*)\s*$/u, tail => `<span class="live-unit">${tail} ${arrow}</span>`)
+      : `${titleHtml} ${arrow}`;
+    const title = href ? `<a class="row__title" href="${href}">${linkedTitle}</a>`
       : titleHtml ? `<span class="row__title">${titleHtml}</span>` : '';
     return { name, marked, title, href };
   }
@@ -153,7 +158,7 @@
     // 这一行不在一段中间折（R14-05 同类：“2 小时前在动”的“2”和“小时”也会拆开）：“·”隔开的每一段包进现有的 .live-unit，放不下时整段挪到下一行，只在“·”处折；
     // 在干、等你那格和停下、做完那行同一份；实况首页同一个办法
     const timingHtml = timing.split(' · ').map(part => `<span class="live-unit">${esc(part)}</span>`).join(' · ');
-    const { name, marked, title, href } = chatTitle(c);
+    const { name, marked, title, href } = chatTitle(c, column === 'waiting');
     // “访客看不到”小签只挂在标题那一行（同实况首页的事项、单场对话页），模型那一行不再重复挂一个（M692）
     const titleMark = locked || U.visitorHiddenMark(c, '这场对话', viewer) ? '' : (marked ? chatCell(name, '对话名', c) : viewer === 'owner' && name.visibility === 'owner' ? '' : U.visibilityNote(name, viewer, '对话名'));
     const waitLabel = !column && c.state === 'waiting' && stateText(c);
@@ -300,17 +305,18 @@
     if (val) val.style.display = readingMerged ? 'none' : '';
     if (b && cell) cell.textContent = cell.textContent.replace(/^截至 /, '最近一次读数 ');
   }
-  function renderStats(stats, temporary = false) {
+  function renderStats(stats, unavailable = '') {
     const current = stats?.concurrent, { from, to } = current?.window ?? current ?? {}, peak = current?.peak;
     const plots = $('chat-counts').parentElement.querySelector('.chat-plots'); plots.style.display = stats ? '' : 'none';
     $('chat-end-date').textContent = [Number.isFinite(peak?.count) && `峰值 ${peak.count} 个${peak.at ? ` · ${stamp(peak.at)}` : ''}`,
       to && (current?.window?.from ? `${U.date(from)} 至 ${U.date(to)}` : U.date(to))].filter(Boolean).join(' · ');
     if (!stats || stats.q === 'warming') {
+      lastCurrent = null;
       plots.style.display = 'none';
       // 电脑连不上又没存下来：和页上别的空卡一个样子，写卡名“对话统计”加一句（r83 返修第二轮）
-      if (!temporary && stats?.q !== 'warming' && U.offline?.()) { $('chat-counts').dataset.read = 'gone'; U.html($('chat-counts'), '<div class="fog"><p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">对话统计</span></p><p class="fog__say">这块没存下来，连上后补上。</p></div>'); return; }
+      if (!unavailable && stats?.q !== 'warming' && U.offline?.()) { $('chat-counts').dataset.read = 'gone'; U.html($('chat-counts'), '<div class="fog"><p class="card__head fog__head"><span class="lamp" aria-hidden="true"></span><span class="head__lead fog__name">对话统计</span></p><p class="fog__say">这块没存下来，连上后补上。</p></div>'); return; }
       delete $('chat-counts').dataset.read;
-      U.html($('chat-counts'), `<p class="row__sub">${temporary ? '对话统计暂时读不到' : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return;
+      U.html($('chat-counts'), `<p class="row__sub">${unavailable ? esc(unavailable) : stats?.q === 'warming' ? '正在准备' : U.collectionText()}</p>`); return;
     }
     delete $('chat-counts').dataset.read;
     function n(v, d, key, label) {
@@ -361,13 +367,14 @@
     if (!daysKnown) daily.wait?.(U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText('每天开的对话', stats));
   }
   let viewer = 'public', activeChats = null, activeAt = null, homeChats = null, homeAt = null, recentAt = null, recentUsable = false, recentWarming = false, recentState = null, firstRecent = true;
+  let listWithdrawal = '';
   const pages = new Map();
   function newerReading(primary, other, time) {
     if (!primary) return other;
     return other && (Date.parse(time(other)) || 0) > (Date.parse(time(primary)) || 0) ? other : primary;
   }
   const listTime = reading => reading.source_at ?? reading.at ?? (reading === activeChats ? activeAt : homeAt);
-  const currentList = home => newerReading(activeChats, Array.isArray(home?.active) || !activeChats ? home : null, listTime);
+  const currentList = home => listWithdrawal ? null : newerReading(activeChats, Array.isArray(home?.active) || !activeChats ? home : null, listTime);
   let homeSources, recentSources;
   function drawSources() {
     const record = [homeSources, recentSources].find(r => r?.viewer === viewer && r.data && Object.hasOwn(r.data, 'unconnected_source_count'));
@@ -376,6 +383,7 @@
   function readViewer(meta) {
     const next = meta.viewer?.kind || 'public';
     if (next !== viewer) {
+      listWithdrawal = '';
       homeChats = activeChats = baseBoard = fullBoard = fullBoardStatus = null; recentUsable = false; pages.clear(); archivedPages.clear();
       pinRows = []; $('chat-pins').hidden = true; U.html($('chat-pins'), '');
       document.querySelectorAll('.chat-board ul.rows, #chat-done30 ul').forEach(ul => ul.replaceChildren());
@@ -390,7 +398,7 @@
     return observed > 0 ? `至少 ${observed} 个` : '';
   }
   function recentEvidence() {
-    const pack = recentUsable ? pages.get('') : Array.isArray(activeChats?.recent) ? activeChats : homeChats;
+    const pack = recentUsable ? pages.get('') : listWithdrawal ? null : Array.isArray(activeChats?.recent) ? activeChats : homeChats;
     const list = recentUsable ? [...pages.values()].flatMap(p => p.items) : pack?.recent;
     const rows = list == null ? null : [...new Map(list.map(c => [c.id ?? c.key, c])).values()];
     const count = peopleIn(rows), key = recentUsable ? 'total' : 'recent_total';
@@ -398,6 +406,7 @@
     return { rows, count, at, total: pack?.[key], label: chatCount(pack, key, count) };
   }
   function renderHeading(d) {
+    if (listWithdrawal) { missing(listWithdrawal, true); heroRead.done(false); return true; }
     const board = boardOf();
     const temporary = !board && d?.q === 'unknown' && !U.offline?.() && [404, 503].includes(recentState?.meta?.status);
     if (temporary) missing('对话暂时读不到', true);
@@ -439,6 +448,8 @@
   }
   function render(d, at) {
     const list = currentList(d), temporary = renderHeading(list);
+    board.el.hidden = !!listWithdrawal;
+    if (listWithdrawal) { activeRead.done(false); return; }
     if (boardOf()) { drawBoard(boardOf()); U.land(); activeRead.done(); return; }
     if (!list) return;
     if (list.q === 'warming') U.list($('active-list'), wait('正在准备'));
@@ -501,6 +512,7 @@
     return { ...b, quotas };
   }
   function boardOf() {
+    if (listWithdrawal) return null;
     if (!baseBoard) return fullBoard || readBoard(homeChats);
     // 页眉和完整首页可能先后送数。只有明细覆盖相同的首页包才替换专用清单。
     const hasRows = fullBoard && Object.keys(baseBoard.columns).every(key =>
@@ -650,7 +662,8 @@
     for (const card of [runningCard, waitingCard]) if (!card.bound) { card.bound = true; U.fold(card.more, card.box); }
     fillColumn(runningCard, 'working', cols.working, b);
     fillColumn(waitingCard, 'waiting', cols.waiting, b);
-    fillColumn(stoppedColumn(), 'stopped', cols.stopped, b);
+    const stopped = stoppedColumn(); stopped.el.hidden = false;
+    fillColumn(stopped, 'stopped', cols.stopped, b);
     fillColumn(doneCard, 'archived', cols.archived, b);
     $('recent-note').textContent = '';
     drawBackground(lastAutomation);
@@ -704,7 +717,15 @@
   function renderRecent() {
     const recentBoardData = boardOf();
     U.html($('recent-link'), recentBoardData ? '近 72 小时做完的 ›' : '近 72 小时回看 ›');
-    if (recentBoardData) { $('recent').hidden = false; if (recentUsable || baseBoard) recentRead.done(); return; }
+    if (recentBoardData) { $('recent').hidden = false; recentRead.done(); return; }
+    const message = !recentUsable && withdrawal(recentState, '72 小时记录');
+    if (message) {
+      $('recent').hidden = false;
+      U.html($('recent-title'), recentTitle); U.html($('recent-note'), '');
+      U.list($('recent-list'), wait(message), { animate: false }); U.list($('recent-rest'), [], { animate: false });
+      $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(false);
+      return;
+    }
     $('recent').hidden = !!U.offline?.() && !recentUsable && homeChats?.recent == null;
     if (!recentUsable && !homeChats?.recent?.length && !U.offline?.() && [404, 503].includes(recentState?.meta?.status)) { U.list($('recent-list'), wait('近 72 小时的回看暂时读不到')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
     if (recentWarming) { U.list($('recent-list'), wait('正在准备')); U.list($('recent-rest'), []); $('recent-more').hidden = $('recent-next').hidden = true; recentRead.done(); return; }
@@ -714,11 +735,16 @@
       key, name, rows: (rows || []).filter(c => states.includes(c.state))
         .map(c => ({ ...chat(c, at, true), count: c.private_count || 1 })),
     }));
+    const [done, stopped, unknown] = sections.map(group => group.rows.reduce((n, row) => n + row.count, 0));
+    const ended = done + stopped;
+    const full = count === total && ended + unknown === total && !label.startsWith('至少');
+    const endedLabel = full || ended ? `已结束 ${full ? '' : '至少 '}${ended} 个` : label;
     // 每组先摆一整排，多的留在本组后面、点“展开”才露出来：组名只出一次，展开后仍按组、组里按时间排。
-    const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label', html: `<h3>${name}</h3>` },
+    const main = sections.flatMap(({ key, name, rows }) => rows.length ? [{ key: `ended:${key}`, cls: 'chat-ended-label',
+      html: `<h3>${name}${key === 'ended_unknown' ? ` ${full ? '' : '至少 '}${unknown} 个` : ''}</h3>` },
       ...rows.map((row, i) => ({ ...row, i, cls: i < recentCols ? row.cls : `${row.cls} chat-ended-extra` }))] : []);
     recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, i: row.i }]));
-    U.html($('recent-title'), recentTitle + (label ? `<span class="lb-card__count">${esc(label)}</span>` : ''), false);
+    U.html($('recent-title'), recentTitle + (endedLabel ? `<span class="lb-card__count">${esc(endedLabel)}</span>` : ''), false);
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有可回看的对话'
       : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
     U.list($('recent-rest'), []);
@@ -754,7 +780,7 @@
     const asOf = boardOf()?.as_of;
     bar?.set(!s.offline && !s.publicPaused && s.shownAt && Number.isFinite(Date.parse(asOf)) ? { ...s, shownAt: asOf } : s);
   };
-  window.LiveHeader.watch(null, { phase(s) { if (!homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
+  window.LiveHeader.watch(null, { phase(s) { if (!listWithdrawal && !homeChats && !activeChats) { heroRead.set(s); activeRead.set(s); } }, data(d, meta) {
     readViewer(meta); const draw = () => {
       homeChats = d?.chats || null; homeSources = { data: homeChats, viewer }; drawSources(); homeAt = meta.at;
       if (!homeChats && !activeChats) { missing(U.collectionText()); if (d != null) { heroRead.done(false); if (!activeChats) activeRead.done(false); } }
@@ -765,7 +791,7 @@
     const minute = Math.floor(Date.parse(s.now) / 60000), offlineChanged = homeOffline !== !!s.offline; homeOffline = !!s.offline;
     if (homeChats && (offlineChanged || !s.offline && minute !== activityMinute)) { activityMinute = minute; U.anchor(() => render(homeChats, s.now)); }
     setBar(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
-    if (!s.data && !activeChats && !boardOf()) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
+    if (!listWithdrawal && !s.data && !activeChats && !boardOf()) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
   window.Live.watch('home', null, { data(d, meta) {
@@ -779,8 +805,9 @@
       U.anchor(() => { render(homeChats, meta.at); renderRecent(); });
     }
   } });
-  window.Live.watch('chats', null, { phase(s) { if (!activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
+  window.Live.watch('chats', null, { phase(s) { if (!listWithdrawal && !activeChats && !homeChats?.active) activeRead.set(s); }, data(d, meta) {
     readViewer(meta);
+    if (d) listWithdrawal = '';
     activeChats = Array.isArray(d?.active) ? d : null; activeAt = d?.at ?? meta.at;
     const nextBoard = readBoard(d);
     if (!nextBoard) archivedPages.clear();   // 名单更新（as_of 变了）时已读的后续几批照旧留着，见 laterArchived
@@ -790,6 +817,24 @@
     if (homeChats || activeChats || baseBoard) U.anchor(() => { render(homeChats, activeAt); if (!recentUsable) renderRecent(); });
     L.lightUp([$('active')]);
   }, link(s) {
+    const message = withdrawal(s, '对话列表');
+    if (message && !listWithdrawal) {
+      listWithdrawal = message;
+      activeChats = baseBoard = null; archivedPages.clear();
+      pinRows = []; U.html($('chat-pins'), ''); $('chat-pins').hidden = true;
+      if ($('chat-quota')) { U.html($('chat-quota'), ''); $('chat-quota').hidden = true; }
+      for (const host of [board.el, stoppedCard?.el, doneCard.el].filter(Boolean)) {
+        host.querySelectorAll('ul.rows').forEach(ul => U.list(ul, [], { animate: false }));
+        // 栏头和件数由同一次 U.html 管；清栏也更新标题的整段内容。
+        host.querySelectorAll('.lb-card__sub, .lb-card__title').forEach(el => U.html(el, '', false));
+      }
+      U.html(doneCard.title, recentTitle, false);
+      if (stoppedCard) stoppedCard.el.hidden = true;
+      document.body.classList.remove('chats-board');
+      U.html($('recent-note'), '');
+      render(homeChats, homeAt); renderRecent();
+    }
+    if (listWithdrawal) return;
     if (!s.data && (s.offline || s.meta?.status >= 400 || ['none', 'gone'].includes(s.phase))) drawPins(null);
     else if (!$('chat-pins').hidden && s.offline !== pinsOffline) drawPins(baseBoard);
     pinsOffline = s.offline;
@@ -799,13 +844,20 @@
     const draw = () => { renderRecent(); renderHeading(currentList(homeChats)); };
     if (firstRecent) draw(); else U.anchor(draw);
   };
-  window.Live.watch('chats', { window: '72h' }, { phase(s) { if (!recentUsable) recentRead.set(s); }, data(d, meta) {
+  window.Live.watch('chats', { window: '72h' }, { phase(s) { if (!recentUsable && !withdrawal(s)) recentRead.set(s); }, data(d, meta) {
     readViewer(meta); recentSources = { data: d, viewer }; drawSources(); recentWarming = d?.q === 'warming'; renderStats(recentWarming ? { q: 'warming' } : d?.stats); recentUsable = Array.isArray(d?.items); if (recentUsable) { if (meta.at !== recentAt) pages.clear(); pages.set('', d); recentAt = meta.at; } else pages.clear();
     redrawRecent(); if (recentUsable) firstRecent = false; else if (d != null) recentRead.done(false); L.lightUp([$('recent')]);
   }, link(s) {
-    const offlineChanged = !!recentState?.offline !== !!s.offline; recentState = s;
+    const previous = recentState; recentState = s;
+    const message = withdrawal(s, '对话统计');
+    if (message) {
+      if (!withdrawal(previous)) { concurrent.wait(message); daily.set(null); }
+      renderStats(null, message); redrawRecent(); return;
+    }
+    const offlineChanged = !!previous?.offline !== !!s.offline;
+    if (withdrawal(previous) && s.data) redrawRecent();
     if (offlineChanged && s.data?.stats) renderStats(s.data.stats);
-    if (!s.offline && [404, 503].includes(s.meta?.status) && !s.data) { if (!activeChats && (!homeChats || homeChats.q === 'unknown')) { missing('对话暂时读不到', true); heroRead.done(); activeRead.done(); } renderStats(null, true); redrawRecent(); }
+    if (!s.offline && [404, 503].includes(s.meta?.status) && !s.data) { if (!listWithdrawal && !activeChats && (!homeChats || homeChats.q === 'unknown')) { missing('对话暂时读不到', true); heroRead.done(); activeRead.done(); } renderStats(null, '对话统计暂时读不到'); redrawRecent(); }
     if (s.offline) { if (!recentUsable) renderStats(null); if (homeChats || activeChats || boardOf()) render(homeChats, homeAt); else missing(U.collectionText()); redrawRecent(); } const usable = Array.isArray(s.data?.items);
     if (usable !== recentUsable) { recentUsable = usable; redrawRecent(); }
     U.blockNote($('recent'), s);

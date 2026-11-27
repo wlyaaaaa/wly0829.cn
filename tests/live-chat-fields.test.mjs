@@ -52,7 +52,7 @@ test('the shared conversation labels distinguish a question from a finished repl
     const row = { id: `${provider}:test`, state: 'waiting' };
     for (const viewer of ['owner', 'public']) {
       assert.equal(rowState({ ...row, wait_kind: 'tool' }, viewer), '在提问');
-      assert.equal(rowState({ ...row, wait_kind: 'final' }, viewer), '等本人回答');
+      assert.equal(rowState({ ...row, wait_kind: 'final' }, viewer), viewer === 'public' ? '等本人回答' : '等你回答');
       assert.equal(rowState({ ...row, state: 'ended_unknown' }, viewer), '结局没读到');
     }
     assert.deepEqual(['running', 'waiting', 'done', 'failed', 'stopped'].map(state => rowState({ ...row, state }, 'owner')),

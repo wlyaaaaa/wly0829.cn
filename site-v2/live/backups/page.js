@@ -4,6 +4,7 @@
   const U = window.LiveUI, L = window.LiveLight, D = window.LiveDataViz, $ = id => document.getElementById(id), { esc, sp } = U;
   let disconnected = false;
   const offline = () => U.offline?.() ?? disconnected, missing = (name = '备份') => offline() ? '这块没存下来，连上后补上。' : `${name}暂时读不到`;
+  const updating = '备份总表正在更新访客版，稍后自动补上。';
   const inventoryUnknown = d => !d?.sets?.length && d?.summary?.sets == null && (!d?.summary || d.summary.q === 'unknown');
   const p = new URLSearchParams(location.search), hero = $('hero'), stamp = at => at ? `${U.date(at)} ${U.time(at)}` : offline() ? '' : U.collectionText();
   const route = href => { const u = new URL(href, location.href); if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
@@ -36,7 +37,7 @@
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”“没核实”连在一起（M781）；
   // 时刻里的日期和钟点各包一层，窄窗口的大小列放不下整个时刻时只在两者之间折行（见页内样式）；时刻后面紧跟的句号、逗号等一起包进去，折行时不剩一个“。”在下一行开头
-  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|\d+ 项读数不完整/g, m => /^(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?$/.test(m) ? `<span class="backup-unit backup-at"><span>${m.replace(' ', '</span> <span>')}</span></span>` : `<span class="backup-unit">${m}</span>`)
+  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|没有记录|\d+ 项读数不完整/g, m => /^(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?$/.test(m) ? `<span class="backup-unit backup-at"><span>${m.replace(' ', '</span> <span>')}</span></span>` : `<span class="backup-unit">${m}</span>`)
     .replace(/^([^\s<\d][^<]{0,8}?) (?=<span class="backup-unit[^"]*">(?:<span>)?\d)/, '<span class="backup-unit">$1</span> ').replace(/ (份 · 按) /, ' <span class="backup-unit">$1</span> ').replace(/没核实/g, '<span class="backup-unit">$&</span>').replace(/ 清单$/, ' <span class="backup-unit">清单</span>');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
@@ -301,9 +302,23 @@
     U.html($('backup-summary'), cards.join('') || `<p class="pj-note">${missing()}</p>`);
     return new Set(hCopies.map(s => s.id));
   }
-  function render(d) {
+  function render(d, revoked = false) {
     data = d; const unavailable = !d || inventoryUnknown(d) && !d.restore?.length; document.querySelector('.l2-board').hidden = $('backup-summary').hidden = $('backup-matrix').hidden = unavailable;
-    if (unavailable) { headline = missing(); U.html($('head'), U.status(d).lamp + U.head(headline, { lamp: false })); U.html($('note'), wrapSummary(U.status(d).note)); $('note').hidden = !U.status(d).note; L.tone(hero, d); if (offline()) homeRead.done(); else homeRead.set({ phase: 'none', data: null }); $('coverage').textContent = ''; return; }
+    hero.toggleAttribute('data-publication-revoked', unavailable && revoked);
+    if (unavailable) {
+      headline = revoked ? updating : missing();
+      const title = U.head(headline, { lamp: false });
+      const status = U.status(d);
+      U.html($('head'), status.lamp + (revoked ? title.replace(/(备份总表正在更新|访客版，|稍后自动补上。)/g, '<span class="backup-phrase">$&</span>') : title));
+      U.html($('note'), wrapSummary(status.note)); $('note').hidden = !status.note; L.tone(hero, d);
+      if (offline() || revoked) homeRead.done(false); else homeRead.set({ phase: 'none', data: null });
+      $('coverage').textContent = '';
+      if (revoked) {
+        cells.clear();
+        for (const id of ['backup-summary', 'backup-matrix', 'sets', 'rest', 'points']) $(id).replaceChildren();
+      }
+      return;
+    }
     const emptySets = d.summary?.sets === 0 || d.q === 'ok' && d.sets?.length === 0 && !Object.hasOwn(d.summary || {}, 'sets');
     mergedTable(d, summary(d), emptySets);
     // 左栏：只列要留意的几类和一句为什么，其余几类一句话带过（本人 11-25 选 A，样子见 B1）
@@ -361,13 +376,13 @@
     if (!lit) { lit = true; L.lightUp([hero, $('backup-matrix'), $('sets'), $('points')]); }
     U.land({ keepOnBack: true });
   }
-  window.Live.watch('backups', null, { phase(s) { if (s.data == null) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
+  window.Live.watch('backups', null, { phase(s) { if (s.data == null && !s.meta?.publicationRevoked) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
     data(d, meta) {
       const publicNow = viewer !== 'public' && meta.viewer.kind === 'public';
       viewer = meta.viewer.kind;
       if (publicNow) for (const id of ['sets', 'rest', 'points']) $(id).replaceChildren();
-      if (data && !publicNow) U.anchor(() => render(d)); else render(d);
+      if (data && !publicNow) U.anchor(() => render(d, meta.publicationRevoked)); else render(d, meta.publicationRevoked);
       if (d) detailReads.forEach(r => r.done());
-    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (s.data == null && (!s.offline && [404, 503].includes(s.meta?.status) || s.phase === 'none')) { detailReads.forEach(r => r.set(s)); render(null); } else if (s.data && (changed || data == null)) render(s.data); } });
+    }, link(s) { const changed = disconnected !== s.offline; disconnected = s.offline; bar?.set(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer }) }] : []); if (s.data == null && (!s.offline && [404, 503].includes(s.meta?.status) || s.phase === 'none')) { detailReads.forEach(r => r.set(s)); render(null, s.meta?.publicationRevoked); } else if (s.data && (changed || data == null)) render(s.data); } });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
 })();

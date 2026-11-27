@@ -201,8 +201,12 @@
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
   const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${U.fieldHtml(part, { name: '项目读数', kind: viewer })}</span>`).join('');
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
+  // 名册按组排：日用、个人（带 group: "personal" 的在用项目，本人 11-27 批准）、偶用，读不到分档的放最后；组内照旧按最近改动
+  const PHASE_GROUPS = { daily: '日用', personal: '个人', occasional: '偶用' };
+  const groupOf = it => it.group === 'personal' && it.phase !== 'archived' ? 'personal' : it.phase;
+  const groupRank = it => { const i = Object.keys(PHASE_GROUPS).indexOf(groupOf(it)); return i < 0 ? 9 : i; };
   function renderActive(items) {
-    fill('active', items?.filter(it => it.name || it.label).sort((a, b) => (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
+    fill('active', items?.filter(it => it.name || it.label).sort((a, b) => groupRank(a) - groupRank(b) || (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
       const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner'), shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer }), note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
@@ -237,11 +241,14 @@
       const valueLine = rule ? `<a class="pj-fig__link pj-fig__v" title="${esc(text)}" href="/rules/">${valueHtml}</a>`
         : `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const reading = (hasText ? labelLine + labelMark + valueLine : '') + (hasText || through ? scopeHtml + readAt : '');
-      return { key: it.id, href: it.href, secret: hidden, group: ({ daily: '日用', occasional: '偶用' })[it.phase] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
+      return { key: it.id, href: it.href, secret: hidden, group: PHASE_GROUPS[groupOf(it)] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
   }
-  function shortText(value, options) {
-    const full = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
+  function shortText(value, { keepChangeWords = false, ...options }) {
+    const html = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
+    const full = keepChangeWords
+      ? html.replace(/<[^>]+>|一次|讲解页/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
+      : html;
     const first = plain.match(/^[^。！？\n]*[。！？]?/)?.[0] || plain;
     const preview = [...first].slice(0, 80).join('');
     if (preview === plain) return full;
@@ -262,7 +269,7 @@
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
-    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
+    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
   // 全部变化、成品两块标题右边一排“近 7 天｜近 30 天｜全部”，默认近 7 天（本人 11-24 20:34）；样子和智能体页工期、工作量、钩子那三排一样（index.html 的 .pj-tseg）。
   // 近 7 天照旧用变化接口和名册送来的那份；近 30 天、全部点了才读 projects/changes?range=、projects/artifacts?range=（翻页同样带 cursor）。
   // 回包里 range 和点的那档对得上才用；后台还没给就写“后台还没送来”，不拿近 7 天的数顶上。
@@ -292,7 +299,9 @@
   }
   let lastOverview = null;
   function drawRange(key) { if (key === 'changes') renderChanges(); else drawProjectExtras(lastOverview); }
-  $('changes').querySelector('.part').insertAdjacentHTML('beforeend', rangeSeg('changes'));
+  const changesHeading = $('changes').querySelector('.part');
+  const changesTitle = changesHeading.firstChild;
+  changesHeading.insertAdjacentHTML('beforeend', rangeSeg('changes'));
   // 切时间档还在加载时，“加载中 · 下面先留着…”写在时间按钮下面、列表上面（和成品那块同一个位置），点了马上看得到
   const changesWaiting = document.createElement('p'); changesWaiting.className = 'pj-extra__note'; changesWaiting.hidden = true; $('changes').querySelector('.part').after(changesWaiting);
   document.addEventListener('click', e => {
@@ -317,20 +326,25 @@
     });
     const projects = new Map(roster.map(it => [it.id, it]));
     const rows = own.rows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
-    const data = own.data, gap = data?.gap && (data.q === 'partial' || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const data = own.data;
+    const partial = data?.q === 'partial' || Array.isArray(data?.partial) && data.partial.includes('total');
+    const gap = data?.gap && (partial || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const lastFull = !partial && (isStale(data) || U.offline?.()) && Number.isInteger(data?.total)
+      && Number.isFinite(Date.parse(data?.source_at)) && stamp(data.source_at).slice(-11);
+    changesTitle.textContent = partial ? '已读到的变化' : '全部变化';
     const hidden = data?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
     const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
     if (['loading', 'missing'].includes(own.state)) fill('changes', [], rangeWord('changes', range, own.state));
-    else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || gap ? '' : quiet);
+    else fill('changes', rows?.filter(it => it.name).map(changeRow), hidden || partial || gap ? '' : quiet);
     // 读到的项目组都露完了才出“更多变化 ›”接着读（和成品那块“更多成品 ›”一样）
     const groupsLeft = !$('changes-more').hidden && $('changes-more').getAttribute('aria-expanded') !== 'true';
     $('next').hidden = !!kept || !own.next || groupsLeft;
     // 近 30 天、全部的头一页和近 7 天一样从最新的排起：写清这一档一共几条、列了几条，看得出点了哪档（和成品那块“已列出 N 件，近 30 天共 M 件”一样）
-    const listed = own.rows?.length || 0, count = range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
+    const listed = own.rows?.length || 0, count = !partial && range !== '7d' && own.state === 'ok' && Number.isInteger(data?.total) && data.total > listed
       ? `已列出 ${listed} 条，${rangeLabel(range)}共 ${data.total.toLocaleString('zh-CN')} 条` : '';
     const waiting = kept ? waitingNote('changes', picked, kept) : '';
     changesWaiting.hidden = !waiting; U.html(changesWaiting, waiting);
-    const note = [gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
+    const note = [lastFull ? `这是 ${esc(lastFull)} 读全的那一批` : gap, hidden && `另有 ${esc(hidden)} 个${esc(data.hidden_what || '项目变化')}没列在这里`, count].filter(Boolean).join(' · ');
     changesNote.hidden = !note; U.html(changesNote, note);
   }
   function link(key, s) {

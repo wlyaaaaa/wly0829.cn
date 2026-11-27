@@ -98,6 +98,8 @@
   const quotaRecovery = at => { const when = dayClock(at); return when ? `预计 ${when} 恢复` : '恢复时间未确认'; };
   // 访客版把“你”换成“本人”（同全站“等本人回答”的说法）
   const ownerWords = (text, kind) => kind === 'public' && typeof text === 'string' ? text.replace(/等你/g, '等本人').replace(/问你/g, '问本人').replace(/^你叫停/, '本人叫停') : text;
+  const withdrawal = (state, name = '这块') => !state?.publicPaused && state?.meta?.withdrawn && state.meta.status === 503
+    ? `${name}正在更新访客版，稍后自动补上。` : '';
   const statusKind = d => typeof d?.status_kind === 'string' && Object.hasOwn(KINDS, d.status_kind) ? d.status_kind : '';
   const sortVerb = d => statusKind(d) === 'archived' && d.sort_at_source === 'last_activity' ? '最后动静' : (KINDS[statusKind(d)] || KINDS.unknown).verb;
   // 帮手名单：新回包在 helpers.items，旧回包是数组或 helpers.active
@@ -106,12 +108,13 @@
     const given = d?.status_label != null ? U.fieldText(d.status_label, kind).trim() : '', k = statusKind(d);
     if (k === 'quota_exhausted' && (Object.hasOwn(d, 'quota_reset_at') || !given))
       return `${quotaWindow(d.quota_window) || '额度'}用完了，${quotaRecovery(d.quota_reset_at)}`;
-    return ownerWords(given || KINDS[k]?.label || '', kind);
+    const label = KINDS[k]?.label || '';
+    return given && given !== label ? given : ownerWords(label, kind);
   }
   function rowState(d, kind) {
     const label = statusLabel(d, kind);
     if (label) return label;
-    if (d.state === 'waiting' && d.wait_kind === 'final') return '等本人回答';
+    if (d.state === 'waiting' && d.wait_kind === 'final') return ownerWords('等你回答', kind);
     return U.chatWaitLabel(d, kind) || stepWord(d.state);
   }
   const quota = (d, kind) => d.state === 'failed' && /^(?:(?:5 小时|周)额度|额度)用完(?:$| · )/.test(U.fieldText(d.text, kind));
@@ -153,7 +156,7 @@
   };
   const isRunning = row => (statusKind(row) || row.state) === 'running';
   U.chatFields = { peopleIn, totalOf, listedOf, earlierCount, bySortAt, isRunning, field, cell, appTag, contentLocked, contentLock, detailReply, stageLabel, originLabel, plain, states, rowState, quota, repeatsState, stepState, stepWord, planInfo, helperTotal, workingHelpers, helperActivity,
-    KINDS, statusKind, statusLabel, quotaWindow, quotaRecovery, dayClock, ownerWords, sortVerb, helperList };
+    KINDS, statusKind, statusLabel, quotaWindow, quotaRecovery, dayClock, ownerWords, withdrawal, sortVerb, helperList };
   const badge = c => c?.compaction?.count >= 1 ? `<span class="chat-pill">压缩过 ${esc(c.compaction.count)} 次</span>` : '';
   function compactionFacts(event) {
     const { trigger, pre_tokens: tokens, pre_context_ratio: ratio } = event || {};
@@ -294,8 +297,17 @@
     const disclosure = done.querySelector('details'), summary = disclosure.querySelector('summary');
     const range = disclosure.querySelector('[data-since]'), list = disclosure.querySelector('ul');
     // 读不到时只写“这块暂时读不到”“这块没存下来”，不在小标题底下把“近 30 天 · 做完的对话”再写一遍（主控 11-26 06:15 看 r83 时记）
-    const doneRead = U.reading(done.querySelector('[data-error]'), { ghost: '' });
+    const error = done.querySelector('[data-error]'), doneRead = U.reading(error, { ghost: '' });
     function doneUnavailable(state) {
+      const message = withdrawal(state, doneTitle);
+      if (message) {
+        done.hidden = false;
+        disclosure.hidden = true;
+        doneRead.done(false);
+        U.html(error, `<p class="row__sub">${esc(message)}</p>`);
+        return;
+      }
+      if (error.firstElementChild?.matches('.row__sub')) U.html(error, '');
       if (['none', 'gone'].includes(state.phase) || state.meta?.status >= 400) {
         done.hidden = false;
         // 没存下来时卡里只留雾里那行标题和一句话，可展开的小标题先收起，不把“近 30 天 · 做完的对话”写两遍（r83 返修）

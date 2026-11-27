@@ -13,7 +13,10 @@
 <link rel="stylesheet" href="/live/_lib/live-dossier.css">
 <link rel="stylesheet" href="/motion/motion.css">
 <script src="/motion/motion.js"></script>
-<style>.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
+<style>
+/* 窄窗访客顶栏按绿灯宽度缩放。站名字宽收拢的过程中也让绿灯盒维持这个宽度，右边按钮才不会被临时推出框。 */
+html[data-live-viewer="public"] .page--backup #topbar[data-fit="zoom"] .brand { box-sizing: border-box; width: 36px; }
+.page--backup .backup-path { max-width:34ch; } .page--backup .backup-path > summary { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; list-style:none; } .page--backup .backup-path > summary::-webkit-details-marker { display:none; } .page--backup .backup-path > div { overflow-wrap:anywhere; } .page--backup :is(#copies,#cloud) details > summary { cursor:pointer; }
 /* 档案卡里：右边窄栏的表按栏宽排，长路径在格子里单行截断（点开看全文） */
 .page--backup .dossier__side .fe-l3b-table { table-layout: fixed; }
 .page--backup .dossier__side .backup-path { max-width: 100%; }
@@ -22,7 +25,7 @@
 .page--backup :is(#points-result, #coverage) { margin: 0 0 8px; color: var(--ink); }
 .page--backup .dossier__side :is(.fe-l3b-note, .fe-l3b-point-note) { overflow-wrap: anywhere; }
 .page--backup #files-target-label:not([hidden]) + #files-more { margin-left: 8px; }
-.page--backup #files-privacy { margin: 8px 0 0; }
+.page--backup .backup-phrase { white-space: nowrap; }
 .page--backup .backup-time { white-space: nowrap; }
 .page--backup .backup-evidence-label { white-space: nowrap; }
 .page--backup .backup-copy-state[data-state="failed"] { color: #a8362c; }
@@ -108,7 +111,6 @@
         <label class="backup-target" id="files-target-label" hidden>去处 <select id="files-target" data-needs-pc><option value="drive">Drive</option><option value="photos">照片云</option></select></label>
         <button class="more fe-l3b-more" type="button" id="files-more" aria-controls="files-fold">看逐项明细 ›</button>
         <span class="fog__note" id="files-status" role="status"></span>
-        <p class="fe-l3b-note" id="files-privacy" hidden></p>
         <div class="fold" id="files-fold"><div id="files"></div></div>
       </section>
       <section class="dossier-card glass" id="media-section" data-mo-rise hidden>

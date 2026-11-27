@@ -8,6 +8,7 @@
   const route = path => path + (params.has('fixture') ? `${path.includes('?') ? '&' : '?'}fixture=${encodeURIComponent(params.get('fixture'))}` : '');
   let disconnected = false;
   const offline = () => U.offline?.() ?? disconnected, missing = (name = '一类备份') => offline() ? '这块没存下来，连上后补上。' : `${name}暂时读不到`;
+  const updating = name => `${name}正在更新访客版，稍后自动补上。`;
   const stamp = (at, meta, label = '时刻') => at ? `${U.date(at)} ${U.time(at)}` : offline() ? '—' : U.collectionText(label, meta);
   const said = (value, what = '备份内容') => U.fieldHtml(value == null ? offline() ? '—' : U.collectionText(what) : value, { name: what, kind: viewer });
   const count = (item, key, format) => item?.[key] == null ? offline() ? '—' : U.collectionText(({ count: '份数', total: '总份数', bytes: '大小', failed: '失败份数' })[key] || '', item) : D.count(item, key, format);
@@ -81,8 +82,10 @@
       .filter(([k]) => copy?.[k] == null && (k !== 'checked_at' || !checked)).map(([k, label]) => [label, absentReason(copy, k)]);
     const unknown = unverified.filter(([, reason]) => !reason).map(([label]) => label);
     if (!confirmed && !anomaly && !retired) unknown.push(original ? '原件' : '完整性');
-    const reasons = unverified.filter(([, reason]) => reason).map(([label, reason]) =>
-      `<span class="backup-evidence-label">${label}：</span>${said(reason, label)}`);
+    const reasons = unverified.filter(([, reason]) => reason).map(([label, reason]) => {
+      const text = reason === '没有记录' ? '<span class="backup-evidence-label">没有记录</span>' : said(reason, label);
+      return `<span class="backup-evidence-label">${label}：</span>${text}`;
+    });
     if (unknown.length) reasons.unshift(`${unknown.join('、').replace(/、([^、]+)$/, '和$1')}尚未核实`);
     // 这次没备份成：回包里给了几点试的、为什么、下一步，放在说明最前面（M376）。
     const failedAt = !original && !tier && (copy?.state === 'failed' || copy?.failed > 0) && copy?.last_attempt_at
@@ -131,7 +134,7 @@
   const copiesRead = U.reading($('copies'), { ghost: U.ghost.rows(3), slow: false });
   const MATERIAL = { current: '当前材料', retained_historical: '保留的历史材料', technical_snapshot: '技术快照', registered_manifest_snapshot: '清单快照' };
   const ASSET_CATEGORY = { boot_media: '启动介质', recovery_tools: '恢复工具', bios_settings: 'BIOS 设置', documentation: '使用说明', windows_iso: 'Windows 安装镜像', winpe_build_material: 'WinPE 制作材料', drivers: '驱动程序', bios_drivers: 'BIOS 与驱动', hash_manifest: '校验清单', core_recovery: '恢复包核心材料' };
-  let set = null, bundle = null, bundleSource, verification = null, verificationAt = null, viewer = 'public';
+  let set = null, bundle = null, bundleSource, verification = null, verificationAt = null, viewer = 'public', mainRevoked = false, verificationRevoked = false;
   Light.add(hero);
   // 从备份总表带着筛选（如“有问题”attention=gap）点进来的：“‹ 备份”回到原来那张带筛选的总表，能后退就直接后退（M115）
   const backLink = document.querySelector('[data-back]'), cameFrom = (() => { try { const u = new URL(document.referrer); return u.origin === location.origin && u.pathname === '/live/backups/' && u.search ? u : null; } catch { return null; } })();
@@ -139,8 +142,18 @@
   backLink.addEventListener('click', U.restoreBack);
   const bar = U.topbar({ ask: () => set ? `请看实况备份 ${sp(set.name || '一类备份')}：${copySummary(set).text}。请说明这类资料的副本和校验情况。` : '' });
   function showUnavailable(text = missing()) {
-    heroRead.done(false); copiesRead.done(false); U.html($('head'), lampTo('') + U.head(text, { lamp: false })); $('rec').hidden = true; Light.tone(hero, null);
-    if (id && !offline()) heroRead.set({ phase: 'none', data: null });
+    const title = U.head(text, { lamp: false });
+    heroRead.done(false); copiesRead.done(false);
+    U.html($('head'), lampTo('') + (mainRevoked ? title.replace('访客版', '<span class="backup-phrase">访客版</span>') : title));
+    $('rec').hidden = true; Light.tone(hero, null);
+    if (mainRevoked) {
+      document.title = '一类备份 · 实况';
+      for (const key of ['meta', 'actions', 'copies', 'cloud', 'points', 'points-result', 'coverage', 'media-counts']) $(key).replaceChildren();
+      $('copy-overview').querySelector('div').replaceChildren();
+      for (const key of ['meta', 'coverage', 'copies-section', 'cloud-section', 'points-section', 'media-section', 'copy-overview']) $(key).hidden = true;
+      $('rec').hidden = $('files-section').hidden = !filesWatch && !filesState;
+      renderVerification();
+    } else if (id && !offline()) heroRead.set({ phase: 'none', data: null });
   }
 
   function waiting(cloud) {
@@ -290,17 +303,21 @@
 
   function renderVerification() {
     const d = verification;
-    if (!d) return;
-    if (point && d.point && d.point !== point) {
+    if (!d && !verificationRevoked) return;
+    if (point && d?.point && d.point !== point) {
       U.html($('verified'), `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`);
       return;
     }
     if (!set) {
       $('rec').hidden = false;
-      for (const key of ['copies-section', 'cloud-section', 'points-section', 'files-section']) $(key).hidden = true;
-      U.html($('head'), lampTo(U.status(d).lamp) + U.head('恢复材料 · 校验结果', { lamp: false }));
-      document.title = '恢复材料校验 · 实况'; Light.tone(hero, d);
+      for (const key of ['copies-section', 'cloud-section', 'points-section', 'media-section']) $(key).hidden = true;
+      if (!mainRevoked) {
+        $('files-section').hidden = true;
+        U.html($('head'), lampTo(U.status(d).lamp) + U.head('恢复材料 · 校验结果', { lamp: false }));
+        document.title = '恢复材料校验 · 实况'; Light.tone(hero, d);
+      }
     }
+    if (verificationRevoked) { U.html($('verified'), `<p class="fe-l3b-note">${esc(updating('这份备份核对的结果'))}</p>`); return; }
     const results = d.rows?.flatMap(row => row.conclusions || []).map(c => c.status) || [], verified = ['sha256_verified', 'current_closure_and_sources_verified', 'reused', 'ok'];
     if (d.file_count == null && !results.length && !d.status) { U.html($('verified'), `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`); return; }
     const result = results.some(status => status === 'failed') ? '有文件没有通过核对' : results.length && results.every(status => verified.includes(status)) || verified.includes(d.status) ? '核对通过' : offline() ? '' : U.collectionText('核对结果', d);
@@ -330,26 +347,11 @@
   let filesWatch = null, filesHead = null, filesRequest = null, filesState = null, filesTarget = 'drive';
   const pointsResult = $('points-result'), filesButton = $('files-more'), filesFold = $('files-fold'), filesOpen = () => filesButton?.getAttribute('aria-expanded') === 'true';
   const files = $('files'), filesStatus = $('files-status');
-  const ownerFile = value => value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner';
-  const fileName = value => viewer === 'public' && ownerFile(value) ? '—' : pathHtml(value, '文件名');
+  const fileName = value => viewer === 'public' && (value?.hidden_block || value?.hidden || value?.visibility === 'owner' || value?.public === 'owner') ? '—' : pathHtml(value, '文件名');
   // 本人版：后台在这一条文件的 visitor_labels 里标了文件名（name；旧条目用 file_name、filename、relative_path 同名键）的，文件名旁挂签，一条只挂一个；没标的不挂
   const fileTag = item => { const tag = U.visitorLabel(item, ['$', 'name', 'file_name', 'filename', 'relative_path'], '这个文件名', viewer); return tag ? ` ${tag}` : ''; };
-  const privateNames = d => /^文件名(?:仅本人|可信设备)可见[。.]?$/u.test(typeof d?.text === 'string' ? d.text : '');
-  // 新私事规则（本人 11-24 02:56）：备份文件名访客版不给，原位按后台给的 file_name_count 拼一句普通字，说清有多少个、本人版能看到全部；
-  // 0 是已读且空（不写），null 是没读到或来源本来没有清单（不编数）。
-  // 本人版不再在清单上方挂一个“访客看不到”：现在访客回包里照列文件名，访客看不到或换了说法的由后台逐条标在 visitor_labels 上，逐条挂签（fileTag）。
   const countWords = n => n >= 10000 ? `${(Math.round(n / 1000) / 10).toLocaleString('zh-CN')} 万个` : `${n.toLocaleString('zh-CN')} 个`;
-  // 个人影音的清单是待传、失败和未核对的名册（scope: pending_or_failed），句子写明是这类名册（后台 03:53 定稿）。
-  const nameSentence = (n, what, pending = false) => Number.isSafeInteger(n) ? n > 0 ? (pending ? `这里是 ${countWords(n)}待传、失败或未核对的文件名，本人版能看到全部，所以不予展示` : `这里是${what} ${countWords(n)}文件名，本人版能看到全部，所以不予展示`) : ''
-    : pending ? '这里是待传、失败或未核对的文件名，本人版能看到全部，所以不予展示' : `这里是${what}文件名，本人版能看到全部，所以不予展示`;
-  function filePrivacy(d) {
-    const slot = $('files-privacy'), counted = Number.isSafeInteger(d?.file_name_count);
-    // 访客回包里列了文件就照列（名字给了就是能看），只有名字真被收起的才写那句；没列清单的照旧按 file_name_count 写。
-    const listed = viewer === 'public' && Array.isArray(d?.items) && d.items.length > 0;
-    const withheld = !notApplicable(d) && (listed ? d.items.some(item => ownerFile(item.name)) : counted ? d.file_name_count > 0 : privateNames(d) || (d?.hidden_count ?? d?.hidden) > 0);
-    const html = !withheld || viewer === 'owner' ? '' : esc(nameSentence(counted ? d.file_name_count : null, '这次备份的', d?.scope === 'pending_or_failed'));
-    if (slot) { U.html(slot, html); slot.hidden = !html; }
-  }
+  const nameSentence = (n, what) => Number.isSafeInteger(n) ? n > 0 ? `这里是${what} ${countWords(n)}文件名，本人版能看到全部，所以不予展示` : '' : `这里是${what}文件名，本人版能看到全部，所以不予展示`;
   function stopFiles() {
     filesWatch?.stop();
     filesWatch = null;
@@ -361,7 +363,7 @@
     filesHead = filesRequest = filesState = null; fileLimit = 5;
     if (filesFold) filesFold._loaded = false;
     files.inert = keepDisplayed;
-    if (!keepDisplayed) { U.html(files, ''); filePrivacy(null); }
+    if (!keepDisplayed) U.html(files, '');
   }
   const filesResource = () => `backups/${encodeURIComponent(id)}/files${params.has('fixture') && filesTarget === 'photos' ? '-photos' : ''}`;
   const filesQuery = cursor => ({ target: filesTarget === 'photos' ? 'photos' : null, cursor });
@@ -377,14 +379,19 @@
         if (state.data == null && ['idle', 'wait', 'slow'].includes(state.phase)) return;
         filesStatus.textContent = '';
         files.inert = false;
+        if (state.meta?.publicationRevoked) {
+          filesHead = filesRequest = filesState = null; fileLimit = 5;
+          U.html(files, `<p class="fe-l3b-note">${esc(updating('逐项明细'))}</p>`);
+          return;
+        }
         if (filesUnavailable(state)) {
-          if (!filesState) { filePrivacy(null); U.html(files, `<p class="fe-l3b-note">${esc(missing('在等、没传成的资料'))}</p>`); }
+          if (!filesState) U.html(files, `<p class="fe-l3b-note">${esc(missing('在等、没传成的资料'))}</p>`);
           return;
         }
         const head = JSON.stringify(state.data);
         if (head === filesHead) return;
         filesHead = head; filesRequest = null; filesState = state;
-        filePrivacy(state.data); renderFiles(state);
+        renderFiles(state);
       }
     });
     return true;
@@ -395,11 +402,12 @@
     const request = window.Live.get(filesResource(), filesQuery(cursor)).then(state => {
       if (filesRequest !== request) return false;
       filesRequest = null;
+      if (state.meta?.publicationRevoked) filesStatus.textContent = updating('逐项明细');
       if (filesUnavailable(state) || state.viewer?.kind !== filesState?.viewer?.kind) return false;
       const prior = filesState.data.items || [], seen = new Set(prior.map(item => item.id));
       state = { ...state, data: { ...state.data, items: [...prior, ...(state.data.items || []).filter(item => !seen.has(item.id))] } };
       fileLimit += 5;
-      filesState = state; filePrivacy(state.data); renderFiles(state); return true;
+      filesStatus.textContent = ''; filesState = state; renderFiles(state); return true;
     });
     return filesRequest = request;
   }
@@ -407,17 +415,16 @@
     const d = state.data, files = d.items || [], named = files.filter(item => item.name != null);
     if (notApplicable(d)) { U.html($('files'), '<p class="fe-l3b-note">云端传输不适用</p>'); return; }
     const dated = files.filter(item => ['waiting', 'queued', 'stable'].includes(item.state)).map(item => Date.parse(item.at)).filter(Number.isFinite), clock = offline() ? state.at : state.now, oldest = d.oldest_wait_days ?? (dated.length && clock ? Math.max(0, Math.floor((Date.parse(clock) - Math.min(...dated)) / 86400000)) : null);
-    const visible = named.filter(item => viewer !== 'public' || !ownerFile(item.name)).length;
-    const concealed = viewer === 'public' && privateNames(d) && !visible;
-    const totalKnown = !concealed && (d.hidden != null || d.total === 0 || visible > 0 && visible === files.length);
-    const modern = Object.hasOwn(d, 'listable_count') || Object.hasOwn(d, 'hidden_count');
-    const total = modern ? (d.listable_count == null ? null : count(d, 'listable_count'))
-      : totalKnown && d.total != null ? count(d, 'total') : concealed ? '0' : Array.isArray(d.items) ? `${d.next || d.total > files.length ? '至少 ' : ''}${visible}` : null;
-    const hidden = modern ? (d.hidden_count == null ? null : count(d, 'hidden_count'))
-      : d.hidden != null ? count(d, 'hidden') : concealed && d.total > 0 ? count(d, 'total') : named.length > visible ? `至少 ${named.length - visible}` : null;
-    const size = total == null ? '可列文件数尚未核实' : `可列文件 ${total} 条`, hiddenText = Object.hasOwn(d, 'file_name_count') ? '' : hidden != null ? `文件名未公开 ${hidden} 条` : modern || concealed ? '未公开文件名的条数尚未核实' : '';
+    const { listable_count: total, hidden_count: hidden, scope } = d, pending = scope === 'pending_or_failed';
+    const number = n => n.toLocaleString('zh-CN');
+    // 访客版旧回包在全部收起时用可列 0 加已收数量。
+    const allHidden = hidden > 0 && (hidden === total || total === 0);
+    const size = allHidden ? (pending ? `这里是 ${number(hidden)} 个在等、没传成或还没核对的文件名，本人版能看到全部，所以不予展示`
+      : `这里是这次备份的 ${number(hidden)} 个文件名，本人版能看到全部，所以不予展示`)
+      : `${pending ? '这份清单只列在等、没传成或还没核对的文件' : '这份清单列的是这次备份的文件'}，${total == null ? '共几个还没核实' : `共 ${number(total)} 个`}`;
+    const hiddenText = hidden > 0 && hidden < total ? `其中 ${number(hidden)} 个的文件名只给本人看` : '';
     const showTime = id !== 'recovery-kit' || files.some(item => verificationTime(item));
-    U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', size, hiddenText, oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}${d.text && !privateNames(d) ? `<br>${said(d.text)}` : ''}</p>`
+    U.html($('files'), `<p class="fe-l3b-note">${[id === 'personal_media' ? CLOUDS[filesTarget] : '', esc(size + (hiddenText ? `。${hiddenText}` : '')).replace(/本人版?/g, '<span class="backup-phrase">$&</span>'), oldest != null && `最早一份至少等了 ${said(oldest)} 天`].filter(Boolean).join(' · ')}${gap(d)}</p>`
       + (d.types?.length ? table(['资料类别', '份数'], d.types.filter(t => t.type).map(t => [said(t.type), count(t, 'count') + gap(t)]), '资料类别') : !Array.isArray(d.types) && !offline() ? `<p class="fe-l3b-note">${esc(U.collectionText('资料分类', d))}</p>` : '')
       + (named.length ? table(['资料', '去处', '情况 / 原因', ...(showTime ? ['时刻'] : [])], named.slice(0, fileLimit).map(item => [fileName(item.name) + fileTag(item), said(CLOUDS[item.target]), `${STATE[item.state] ? said(STATE[item.state]) : ''}${item.reason ? `<small>${said(item.reason, '没传成的原因')}</small>` : ''}`, ...(showTime ? [id === 'recovery-kit' ? verificationTime(item) : stamp(item.at)] : [])]), '在等、没传成的资料') : '') + (U.olderNote?.(state.at, state) ? `<p class="fe-l3b-note">${esc(U.olderNote(state.at, state))}</p>` : ''));
     const nextPage = fileLimit >= named.length && Boolean(d.next);
@@ -456,21 +463,23 @@
   if (!id) showUnavailable('没有说是哪类备份');
   else {
     window.Live.watch('backups', null, {
-      phase(state) { if (!set) { heroRead.set(state); copiesRead.set(state); } },
+      phase(state) { if (!set && !state.meta?.publicationRevoked) { heroRead.set(state); copiesRead.set(state); } },
       data(data, meta) {
         const next = data?.sets?.find(item => item.id === id) || null;
-        if (viewer !== meta.viewer.kind || !next || !set ||
-            notApplicable(next[filesTarget]) !== notApplicable(set[filesTarget])) resetFiles();
+        if (viewer !== meta.viewer.kind || (next && set ? notApplicable(next[filesTarget]) !== notApplicable(set[filesTarget])
+          : !meta.publicationRevoked && !mainRevoked)) resetFiles();
         viewer = meta.viewer.kind; bundle = data; set = next;
       },
       link(state) {
         bundleSource = state.meta?.source; disconnected = state.offline; bar?.set(state); Light.offline(state.offline);
+        mainRevoked = state.meta?.publicationRevoked;
         U.list($('notices'), state.offline ? [{ key: 'link', cls: 'notice glass', html: esc(state.text) }] : []);
-        if (!state.offline && [404, 503].includes(state.meta?.status) && state.data == null) showUnavailable();
+        if (mainRevoked) showUnavailable(updating('一类备份'));
+        else if (!state.offline && [404, 503].includes(state.meta?.status) && state.data == null) showUnavailable();
         else if (set) renderSet();
         else if (bundle || state.phase === 'none') {
           showUnavailable();
-          if (verification) renderVerification();
+          if (verification || verificationRevoked) renderVerification();
         } else { heroRead.set(state); copiesRead.set(state); if (state.phase === 'gone') $('rec').hidden = true; }
         // 这页只有这一块：从几点起读不到、手上是几点的，页顶那张卡已经说了，块里不再说第二遍（和自动任务、开场页只留页顶卡一样；D6 复查）
         [hero.querySelector('.card__body'), $('copies-section')].forEach(el => U.blockNote(el, null));
@@ -480,10 +489,12 @@
       $('verification').hidden = false;
       const read = U.reading($('verified'), { ghost: U.ghost.rows(3), name: '这份备份核对的结果' });
       window.Live.watch('backups/recovery-kit/verification', point ? { point } : null, {
-        phase(state) { if (!verification) read.set(state); },
+        phase(state) { if (!verification && !state.meta?.publicationRevoked) read.set(state); },
         data(data, meta) { viewer = meta.viewer.kind; verification = data; verificationAt = meta.at; },
         link(state) {
-          if (!state.offline && [404, 503].includes(state.meta?.status) && !verification) read.set({ ...state, data: null, phase: 'none' });
+          verificationRevoked = state.meta?.publicationRevoked;
+          if (verificationRevoked) { assetLimit = 5; read.done(false); renderVerification(); }
+          else if (!state.offline && [404, 503].includes(state.meta?.status) && !verification) read.set({ ...state, data: null, phase: 'none' });
           else if (verification) { renderVerification(); read.done(); }
           else { read.set(state); if (state.phase === 'none') U.html($('verified'), `<p class="fe-l3b-note">${esc(missing('这份备份核对的结果'))}</p>`); }
           U.blockNote($('verification'), state);

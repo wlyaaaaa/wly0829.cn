@@ -103,11 +103,20 @@
   const shown = () => only ? HOSTS.filter(h => h.id === only) : HOSTS;
   const dim = id => only && id !== only ? ' ag-dim' : '';   // 只看一家时，别家的卡、行、列变淡
   const dimAttr = id => only && id !== only ? ' class="ag-dim"' : '';
-  // 同一时刻只说一次（M746）：顶栏固定在屏幕顶上，已写“HH:MM 读到”；卡里的“截至”跟它（或这张卡已写的）同一分钟就不写，不一样才写这张卡自己的时刻
-  let shownCutoffs = [];
-  const minuteOf = at => { const t = T.stamp(at); return t == null ? null : Math.floor(t / 60000); };
-  const asof = (at, ...also) => { const m = minuteOf(at); return m == null || [...shownCutoffs, ...also].some(s => minuteOf(s) === m) ? '' : `截至 ${when(at)}`; };
-  const ruleVer = (v, label = esc(v), cls) => v ? link('/rules/', label, cls) : '';   // 规矩版本号点了去规则页（本人 11-24：“规则E多少多少可以跳转到规则页”）
+  // 公用读数由顶栏或页头报一次，只有同一批的时刻才拿来比；独立读数照写自己的截至。
+  const asof = (at, coveredAt) => T.stamp(at) == null || at === coveredAt ? '' : `截至 ${when(at)}`;
+  const RULE_CHECK = '开场先读的规矩';
+  const ruleHint = '每次采样时，拿三家开场要读的规矩文件跟本机现用的那版比一次，看是不是同一版。';
+  const ruleMismatch = `${RULE_CHECK} · 没比对上`;
+  const rulePart = text => `<span class="ag-rule-part">${text}</span>`;
+  function ruleStatus(entry) {
+    const version = typeof entry?.version === 'string' && /^E[1-9]\d*$/.test(entry.version) ? esc(entry.version) : '';
+    if (entry?.current === false) {
+      const hint = version ? ` title="采样时拿这家开场读的文件跟本机现用的 ${version} 比，对不上。这家实际读的是哪版，这里看不出。"` : '';
+      return `<span class="ag-rule-mismatch"${hint}>没比对上</span>`;
+    }
+    return entry?.current === true && version ? `${rulePart(`${version} · `)}<wbr>${rulePart('跟本机现用的一致')}` : '没读到';
+  }
   // 页顶那一排：全部｜Claude｜Codex｜Antigravity，和本页切时段的按钮同一种样子，一眼看得出能点
   const picker = () => `<div class="tp-seg ag-pick" role="group" aria-label="看哪一家"><button type="button" data-only="all" aria-pressed="${!only}">全部</button>${HOSTS.map(h =>
     `<button type="button" data-only="${h.id}" style="--host:${h.color}" aria-pressed="${only === h.id}"><i class="tp-swatch"></i>${h.name}</button>`).join('')}</div>`;
@@ -135,7 +144,7 @@
     const x = hostData(d, h), rows = [];
     const add = (ok, good, bad, extra = {}) => rows.push({ ok, text: ok === false ? bad : good, ...extra });
     const entry = x.entry || {};
-    add(entry.current ?? null, `开场读到的规矩是当前版 ${entry.version || ''}`, `开场读到的规矩不是当前版 ${entry.version || ''}`, entry.version ? { href: '/rules/' } : {});
+    add(entry.current ?? null, RULE_CHECK, ruleMismatch);
     if (h.id !== 'antigravity') {
       const off = x.memory === false && Object.values(x.memory_options || {}).every(v => v !== true);
       add(x.memory === true ? false : x.memory === false ? off : null, '自带记忆关着', '自带记忆开着，和规矩不一样');
@@ -162,7 +171,11 @@
     const fixer = i => i.handler_text ? F(i.handler_text, '谁在修') : i.handler ? `${F(i.handler, '谁在修')}${i.repairing === false ? '' : '在修'}` : '';
     const fixText = i => [fixer(i) || (owner ? '' : '还没人接手'), known(i.round) && `第 ${int(i.round)} 轮`].filter(Boolean).join(' · ');
     const fixLink = (i, html) => html && T.path(i.href) ? `<a href="${esc(T.path(i.href))}">${html} ›</a>` : html;
-    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${F(i.text)}${issues.length > 1 && fixText(i)
+    const issueText = i => {
+      const text = F(i.text);
+      return text === `${h.name} 开场读到的规矩不是当前版` ? ruleMismatch : text;
+    };
+    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${issueText(i)}${issues.length > 1 && fixText(i)
         ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
       : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${esc(r.text)}</a>` : esc(r.text)}</span></li>`).join('');
     const lead = issues.find(i => fixer(i)) || issues.find(i => T.path(i.href)) || issues[0];
@@ -170,7 +183,7 @@
       : `<p class="ag-fix">${lead ? fixLink(lead, fixText(lead)) : '还没人接手'}</p>`;
     const stats = d.hook_stats?.totals?.[h.id] || {};
     return `<article class="ag-score tp-flashable${dim(h.id)}" data-host="${h.id}">
-      <header><span>${h.name}</span><small>${[x.entry?.version && ruleVer(x.entry.version, `规矩 ${esc(x.entry.version)}`, 'ag-rulever'), known(stats.installed) && `钩子装着 ${stats.installed} 条 · <span class="ag-keep">定稿 ${stats.expected} 条</span>`].filter(Boolean).join(' · ')}</small></header>
+      <header><span>${h.name}</span><small>${ruleStatus(x.entry)} · <wbr>${link('/rules/', '规则页 ›', 'ag-rulever')}${known(stats.installed) ? ` · <wbr>${rulePart(`钩子装着 ${stats.installed} 条 · `)}<wbr>${rulePart(`定稿 ${stats.expected} 条`)}` : ''}</small></header>
       <div class="ag-score__main"><div><p class="ag-score__word" data-tone="${tone}">${word}</p>${fix}
         <p class="tp-small">${c.pass === c.total ? `${c.total} 项都照规矩` : `${c.total} 项里 ${c.pass} 项照规矩`}${ignored ? ` · ${T.you(viewer)}定了不管` : ''}${owner && health.href ? ` · ${link(health.href, '在等你的事里 ›')}` : ''}</p></div>
         ${T.ring(c.pass, c.total, { color: ringColor })}</div>
@@ -322,7 +335,9 @@
     if (!ws) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">工期账这一轮没读到。</p></section>`;
     if (ws.unavailable_reason) return `<section class="tp-panel" id="estimate"><div class="tp-panel__head"><h2>工期准不准</h2></div><p class="tp-empty">${esc(ws.unavailable_reason)}</p></section>`;
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${asof(ws.as_of) ? `<span class="tp-asof">${esc(asof(ws.as_of))}</span>` : ''}</div></div>`;
+    // 施工账统计与本页同次生成，后端只在这项的时间戳省掉小数秒。
+    const recordedAt = ws.as_of === d.at ? '' : asof(ws.as_of, typeof d.at === 'string' && d.at.replace(/\.\d+(?=Z|[+-]\d\d:\d\d$)/, ''));
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
     const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;
@@ -415,9 +430,9 @@
       return `${value || '没读到'}${info ? `<small>${info}</small>` : ''}`;
     };
     const waits = HOSTS.map(h => /EAGER/.test(String(x(h).approval || '')) ? false : x(h).waits_for_owner);
-    const version = entries.map(e => e.current === true ? `${ruleVer(e.version)} 当前版` : e.current === false ? `不是当前版 ${ruleVer(e.version)}` : '没读到');
+    const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
     const rows = [
-      row('开场先读的规矩', version, { diff: entries.map(e => e.current === false) }),
+      row(`<span title="${ruleHint}">${RULE_CHECK}</span>`, entries.map(ruleStatus), { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
       row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
@@ -428,10 +443,10 @@
       row('多接的工具', HOSTS.map(tools), { note: ['电脑接口、Google 以外', asof(d.tools_at, d.at)].map(esc).filter(Boolean).join('<br>') }),
     ];
     const codexReview = x(HOSTS[1]).reviewer === 'auto_review';
-    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2>${asof(d.at) ? `<span class="tp-asof">${esc(asof(d.at))}</span>` : ''}</div>
+    return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2></div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(familyHeading).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}规矩原文在${link('/rules/', '规则页 ›')}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}${rulesLink}</p></section>`;
   }
 
   // —— 五、钩子 ——
@@ -507,8 +522,9 @@
   }
   function hooksSection(d) {
     const hs = d.hook_stats || {}, p = hookNow(d), hv = hookView(d), totals = hv?.totals || {};
+    const recordedAt = asof(hv?.at || hs.at, d.at);
     // 标题“钩子”后面紧跟时间那排，再是说明，截至靠右（照 16:35 点头的图）
-    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
+    const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。电脑健康、磁盘空间、汇报页答复这类提醒不是单独的钩子，是“收到消息时补状态”等几条里的一项，点开格子能看到每项什么时候出现、看哪些数。</p>${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div>`;
     if (!hv) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">${timeLabel(p)}的钩子数后台还没送来${hs.periods ? '' : '，先看“近 7 天”'}。</p></section>`;
     const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const short = HOSTS.some(h => outcomeShort(totals[h.id]));
@@ -560,10 +576,8 @@
       page.tick.set(reading ? [{ text: '正在读这一页的读数…' }] : [], { off: true });
       return;
     }
-    // 顶栏或连接提示已写这一页读到的时刻；别的块的离线时刻不能代替本页的统计截至（M746）。
-    shownCutoffs = [state.shownAt];
-    const headAt = asof(d.at);
-    if (headAt) shownCutoffs.push(d.at);
+    const headerAt = state.conn ? state.conn.shownAt : !state.offline && state.shownAt;
+    const headAt = asof(d.at, headerAt);
     const html = `<div class="tp-head"><div><h1>智能体</h1><p>三家 AI 被管得对不对、估工期准不准、干了多少活，再往下是三家怎么被管：设置和钩子。</p></div>
         <div class="tp-head__side ag-headside">${headAt ? `<span>${esc(headAt)}</span>` : ''}${picker()}</div></div>
       ${T.stateNote(state)}${statusSection(d)}${window.AgentsHours?.html(d, viewer, { only, asof }) || ''}${estimateSection(d)}${workSection(d)}${window.AgentsMoved?.html(d, viewer, { only, chips, asof }) || ''}${configSection(d)}${hooksSection(d)}`;
