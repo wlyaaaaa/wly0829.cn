@@ -553,7 +553,7 @@
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${r.excerptFallback ? U.keepWords(conversation(r)) : conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.innerHTML = U.keepWords(originalReply(r.receipt.originalText));
+    if (original) original.innerHTML = U.keepWords(originalReply(r.receipt.originalText), /(暂缓)/u);
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

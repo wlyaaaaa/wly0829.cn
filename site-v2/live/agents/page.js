@@ -324,7 +324,7 @@
     // 时间那排在标题行右边（照 16:35 点头的图），准的比例、实际是估的几倍、超时原因、三种估法跟着换；按周走势本来就按周画，不跟着换
     // 施工账统计与本页同次生成，后端只在这项的时间戳省掉小数秒。
     const recordedAt = ws.as_of === d.at ? '' : asof(ws.as_of, typeof d.at === 'string' && d.at.replace(/\.\d+(?=Z|[+-]\d\d:\d\d$)/, ''));
-    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，估多估少都算偏</small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
+    const head = `<div class="tp-panel__head"><h2>工期准不准<small>落在估算程序给的允许范围内才算准，<span class="live-unit">估多估少都算偏</span></small></h2><div class="ag-mhead">${timeSeg('est', estPeriod)}${recordedAt ? `<span class="tp-asof">${esc(recordedAt)}</span>` : ''}</div></div>`;
     if (!HOSTS.every(h => inPeriod(d, estPeriod, h))) return `<section class="tp-panel" id="estimate">${head}<p class="tp-empty">${timeLabel(estPeriod)}的工期数后台还没送来，先看“全部”。</p></section>`;
     const { split_minutes: splitAt, short, long } = ws.estimate_tolerance || {};
     const band = [long?.early_fraction, long?.late_fraction, splitAt].every(known) ? [1 - long.early_fraction, 1 + long.late_fraction] : null;

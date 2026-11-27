@@ -32,7 +32,8 @@
   }
   // 照后台 visitor_labels 在原位挂签：本人版两种（访客看不到、对外换了说法），访客版只挂“对外换了说法”（M930，全站共用的签自己分）
   const vtag = (obj, keys, what) => { const t = obj && typeof obj === 'object' ? U.visitorLabel(obj, keys, what, viewer) : ''; return t ? ` ${t}` : ''; };
-  const taskWords = html => html.replace(/(<[^>]+>)|认领|处理|超时|太久没有|新的运行证据|运行证据|证据/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+  const taskWords = html => html.replace(/(<[^>]+>)|认领|处理结果|处理|超时|太久没有|新的运行证据|运行证据|证据/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
+  const detailWords = html => html.replace(/(<[^>]+>)|已恢复|记下|仅本人可见|可见/g, (word, tag) => tag || `<span class="live-unit">${word}</span>`);
   const titleOf = it => it.plain_title != null && U.fieldText(it.plain_title, viewer).trim() ? it.plain_title : it.text;
   // 还欠着的只算在做、在等、暂时不修这三种（后台 summary.open 也这样算）；本人定了不修的不算欠着，放进“最近了结的”
   const owed = d => list(d.items).filter(it => it.state);
@@ -297,8 +298,8 @@
       // 访客版：那一轮标了只给本人看、访客页头已经发布时，后台另给页头读口 source_header_href（/computer-access/live/v1/chats/{访客别名}），照 HEADLINK A 挂“看对话页头 ›”（M1078）
       const headerId = viewer === 'public' ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
       const header = headerId ? ` · ${link(T.path('/live/chat/', { id: decodeURIComponent(headerId) }), '看对话页头 ›')}` : '';
-      const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}${header}`;
-      return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
+      const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${detailWords(esc(why))}</small>` : ''}${header}`;
+      return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${detailWords(body)}${go}</li>`;
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
     const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
@@ -307,7 +308,7 @@
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
       <p class="lg-detail__t">${taskWords(F(titleOf(it), '事项标题'))}${vtag(it, ['$', 'title', 'plain_title'], '这件事的说法')}</p><p class="lg-chips">${chips.map(c => `<span class="tp-pill">${c}</span>`).join('')}</p>
-      ${progress && !repeatedProgress ? `<p class="tp-small">${F(progress, '进展')}</p>` : ''}
+      ${progress && !repeatedProgress ? `<p class="tp-small">${detailWords(F(progress, '进展'))}</p>` : ''}
       <ol class="lg-steps">${lines || (it.accepted || it.first_at ? `<li><b>${esc(when(it.accepted || it.first_at))}</b>${it.repeat ? '第一次出现' : 'AI 接手'}</li>${it.repeat && it.last_at ? `<li><b>${esc(when(it.last_at))}</b>最近一次又出现</li>` : ''}` : '')}${!lines && it.settled ? `<li><b>${it.at && stamp(it.at) !== stamp(it.accepted) ? esc(when(it.at)) : '哪天定的没记下'}</b>${settledLabel(it.settled)}</li>` : ''}${it.settled ? '' : full(it) ? `<li class="is-next"><b>现在</b>${int(it.check_limit)} 次看满了，AI 停手${it.when ? `，${waitText(it.when)}` : ''}</li>`
         : next ? `<li class="is-next"><b>${esc(when(next))}</b>下次看${known(it.check_count) ? `，第 ${int(it.check_count + 1)} 次` : ''}</li>` : ''}</ol>
       ${note ? `<p class="tp-small lg-gap">${note}</p>` : ''}${related ? `<p class="tp-small lg-rel">${related}</p>` : ''}</section>`;

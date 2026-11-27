@@ -189,13 +189,14 @@
   // 不留一两个字加标点单独占一行（看图 06：工程卡首段末尾“的”。”单独折下去）
   const TAIL = /(?:<(a|span|strong|code)\b[^>]*>[^<]{1,8}<\/\1>)?(?:&[#\w]+;|[^<>&\s]){1,4}$/;
   const QUOTED_TAIL = /[“「][^<“”「」]{1,8}[”」][。！？]$/u;
-  function tail(html, intro = false) {
+  const INTRO_WORDS = /(本人定|等(?:你|本人)的事|句末)/u;
+  function tail(html, intro = false, phrases) {
     const suffix = html.match(intro && QUOTED_TAIL.test(html) ? QUOTED_TAIL : TAIL);
     if (!suffix) return html;
     let cut = suffix.index;
     if (!suffix[0].includes('<')) {
       let start = html.lastIndexOf('>', cut - 1) + 1;
-      for (const part of U.wordParts(html.slice(start))) {
+      for (const part of U.wordParts(html.slice(start), phrases)) {
         const end = start + part.length;
         if (end > cut) { cut = start; break; }
         start = end;
@@ -208,8 +209,9 @@
     const stack = [];
     const flush = () => {
       if (!para.length) return;
-      const lines = para.map((line, i) => tail(inline(line), intro && i === para.length - 1)).join('<br>');
-      html += `<p${intro ? ' class="op-project-intro"' : ''}>${intro ? U.keepWords(lines) : lines}</p>`;
+      const phrases = intro ? INTRO_WORDS : undefined;
+      const lines = para.map((line, i) => tail(inline(line), intro && i === para.length - 1, phrases)).join('<br>');
+      html += `<p${intro ? ' class="op-project-intro"' : ''}>${intro ? U.keepWords(lines, phrases) : lines}</p>`;
       intro = false; para = [];
     };
     const close = (indent = -1) => { while (stack.length && stack.at(-1).indent > indent) html += `</li></${stack.pop().type}>`; };

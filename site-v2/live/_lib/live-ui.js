@@ -777,10 +777,11 @@
     .replace(/(<[^>]*>)|(?<![A-Za-z\d-])(?:\d{4}-)?\d{1,2}-\d{2}(?:[ \t]+\d{1,2}:\d{2}(?::\d{2})?)?(?![\d-])|\d{1,2}月\d{1,2}日(?:[ \t]+\d{1,2}:\d{2})?|网站登录卡|取代|关掉了|上午|本人选|核对|问情况|[\p{Script=Han}]{1,2}了(?![\p{Script=Han}])/gu,
       (value, tag) => tag || `<span class="live-unit">${value}</span>`);
   const textSegmenter = typeof Intl.Segmenter === 'function' && new Intl.Segmenter('zh-CN', { granularity: 'word' });
-  const wordParts = text => text.split(/(AI 自动任务账本|PowerShell 7|官方发布说明|要(?:你|本人)定|亲手做|修不住|最近一次|坏了|欠着|放着|认领|处理|证据|超时时?|自动修理|子任务产物|子任务|补上|验证码|(?:公开|访客)版|[GH]\s*盘|实况|数据|规矩|消息|\d+[–-]\d+\s*[句次轮天件]|\d{1,2}-\d{2}(?:\s+\d{1,2}:\d{2}(?::\d{2})?)?|\d{1,2}:\d{2}(?::\d{2})?|\d+(?:[.,]\d+)*\s*(?:毫秒|分钟|小时|个月|分(?!钟)|秒|项|件|天|年|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚|GB|MB|GiB|MiB|℃|%))/gu)
-    .flatMap((part, i) => i % 2 || !textSegmenter ? [part] : Array.from(textSegmenter.segment(part), x => x.segment));
+  const wordParts = (text, phrases) => (phrases ? text.split(phrases) : [text]).flatMap((chunk, index) => index % 2 ? [chunk] : chunk
+    .split(/(AI 自动任务账本|PowerShell 7|官方发布说明|要(?:你|本人)定|亲手做|修不住|最近一次|坏了|欠着|放着|认领|处理|证据|超时时?|自动修理|子任务产物|子任务|补上|验证码|(?:公开|访客)版|[GH]\s*盘|实况|数据|规矩|消息|\d+[–-]\d+\s*[句次轮天件]|\d{1,2}-\d{2}(?:\s+\d{1,2}:\d{2}(?::\d{2})?)?|\d{1,2}:\d{2}(?::\d{2})?|\d+(?:[.,]\d+)*\s*(?:毫秒|分钟|小时|个月|分(?!钟)|秒|项|件|天|年|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚|GB|MB|GiB|MiB|℃|%))/gu)
+    .flatMap((part, i) => i % 2 || !textSegmenter ? [part] : Array.from(textSegmenter.segment(part), x => x.segment)));
   // 只用于已转义的显示正文，保留原来的标签、实体、长网址和空白。
-  const keepWords = html => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || (/^https?:\/\//.test(text) ? text : wordParts(text)
+  const keepWords = (html, phrases) => html.replace(/(<[^>]+>|&[#\w]+;)|[^<>&]+/g, (text, markup) => markup || (/^https?:\/\//.test(text) ? text : wordParts(text, phrases)
     .map(word => word.length > 1 && word.length <= 24 && /[\p{L}\p{N}]/u.test(word) ? `<span class="live-unit">${word}</span>` : word).join('')));
   // 固定模板按受众取字，正文和引用走回包字段。
   const addressed = (text, kind = viewer) => kind === 'owner' ? text : text.replaceAll('你', '本人');

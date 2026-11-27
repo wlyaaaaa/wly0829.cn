@@ -112,6 +112,10 @@ summary:hover > .ar-open, summary:hover > .ar-shut { text-decoration: underline;
 .ar-reply a { color: var(--tp-green-ink); text-decoration: underline; }
 @media (max-width: 1100px) {
   .ar-grid:has(.ar-reply) { grid-template-columns: minmax(0, 1fr) 255px; }
+  .ar-reply table { table-layout: fixed; }
+  .ar-reply table:has(thead th:nth-child(3):last-child) th:first-child { width: 22%; }
+  .ar-reply table:has(thead th:nth-child(3):last-child) th:nth-child(2) { width: 30%; }
+  .ar-reply td .live-unit { display: inline-block; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 }
 .ar-msg__label { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 999px; background: rgb(20 20 19 / .06); font-size: 12.5px; line-height: 20px; color: #6c6b64; vertical-align: 1px; }
 .ar-msg__more { margin: 6px 0 0 !important; font-size: 16px !important; }
