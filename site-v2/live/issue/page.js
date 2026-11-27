@@ -184,10 +184,10 @@
   function repeatCard(d) {
     if (!faultOf(d)) return '';
     const card = body => `<section class="dossier-card glass iss-side"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
-    const f = faults(d), handoff = policy?.repeat_handoff_count, windowDays = policy?.repeat_window_days;
+    const f = faults(d), windowDays = policy?.repeat_window_days;
     const days = positive(windowDays) ? windowDays : 30;
-    const rule = positive(handoff) && positive(windowDays)
-      ? `${esc(days)} 天内第 ${esc(handoff)} 次坏，自动修理停手、转给${you()}。` : `坏几次会停手转给${you()}，这次没读到。`;
+    // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
+    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}花钱、登录或拍板的才转给${you()}。`;
     const n = Number.isInteger(f?.broken_30d) ? f.broken_30d : null, dates = (f?.broken_at || []).filter(timed);
     const lastAt = dates.at(-1) || f?.last_at;
     const said = n != null ? `近 ${esc(days)} 天坏了 ${esc(n)} 次${n > 0 && timed(lastAt) ? `，最近一次 ${clock(lastAt)}` : ''}。`

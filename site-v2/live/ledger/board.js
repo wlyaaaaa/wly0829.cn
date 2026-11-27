@@ -308,9 +308,8 @@
   // 以前写的是“又发生几次”（reopen_count，修好后又重开的次数，大半是 0，满屏红字“又发生 0 次”）。后台没给坏了几次的旧包照旧写重开几次。
   function repeats(d) {
     const r = d.repeat_fixes || {}, now = Date.now(), days = repeatDays(d), from = now - days * DAY;
-    const handoff = d.policy?.repeat_handoff_count;
-    const rule = positive(handoff) && positive(d.policy?.repeat_window_days)
-      ? `${int(days)} 天内第 ${int(handoff)} 次坏，自动修理停手、转给${you()}` : `坏几次会停手转给${you()}，这次没读到`;
+    // 反复坏不再按次数转本人（后台 14:00 起改了，跟本人 11-22 定的“转本人只限花钱、登录、拍板这类”一致）
+    const rule = `反复坏也照常交 AI 修，修的时候查为什么修不住；要${you()}花钱、登录或拍板的才转给${you()}`;
     const broke = it => Number.isInteger(it.broken_30d) && it.broken_30d > 0 ? it.broken_30d : null;
     const reopened = it => Number.isInteger(it.reopen_count) && it.reopen_count > 0 ? it.reopen_count : null;
     // 后台给了“近 30 天坏了几次”就只列坏了 2 次以上的（或已转给本人的）；没给这个数的（比如约好再查的那几件只记了重开）不算坏，不进这一块

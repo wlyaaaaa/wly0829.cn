@@ -41,7 +41,7 @@
 .ag-tseg button[aria-pressed="true"]:hover { color: #fff; }
 .ag-est { grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: start; }
 .ag-est > * + * { border-left: 1px solid var(--tp-hair); padding-left: 24px; }
-.ag-est2 { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 26px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--tp-hair); }
+.ag-est2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 26px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--tp-hair); }
 .ag-est2 > * + * { border-left: 1px solid var(--tp-hair); padding-left: 24px; }
 .ag-acc { display: grid; gap: 9px; }
 .ag-acc__row { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; gap: 8px; }

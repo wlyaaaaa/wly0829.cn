@@ -110,6 +110,7 @@
 .op-md ol.op-list { list-style: decimal; }
 .op-md .op-list .op-list { list-style: circle; }
 .op-md li { margin: 3px 0; }
+.op-md .op-tail { white-space: nowrap; }  /* 段末最后几个字粘成一块，见 page.js 的 tail */
 .op-md li::marker { color: #8f8d85; }
 .op-md strong { font-weight: 800; color: var(--ink); }
 .op-md code { padding: 1px 5px; border-radius: 5px; background: rgb(20 20 19 / .06); font-family: var(--mono); font-size: .88em; }

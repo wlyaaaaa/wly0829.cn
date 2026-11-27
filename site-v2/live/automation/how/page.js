@@ -42,12 +42,12 @@
   }
   function failurePolicy(p = {}) {
     if (id === 'auto-repair') {
-      const {repair_limit, repeat_window_days, repeat_handoff_count, urgent_wait_seconds, normal_wait_seconds} = p;
-      if (![repair_limit, repeat_window_days, repeat_handoff_count, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
+      const {repair_limit, urgent_wait_seconds, normal_wait_seconds} = p;
+      if (![repair_limit, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
         return '最多修几轮、坏几次转给本人，这次没读到。';
       }
-      // 按需更新快核：转给本人时写什么，核 PCConfig automation/scheduler.py 里 REPEATED_FAULT 那段（现写“之前修了 N 轮”和 root_guess，没有就写“原因还没查清”，选项是问情况和不办了）
-      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断要不要告诉本人或请本人选。同一处修好后 ${repeat_window_days} 天内第 ${repeat_handoff_count} 次坏，自动修理停手，直接转给本人，转的时候写明之前修了几轮和可能的原因（没查清就写没查清），由本人选接着查还是不办了。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
+      // 按需更新快核：修满轮数和反复坏怎么办，核 PCConfig automation/scheduler.py（14:00 起反复坏照常交 AI，不再按次数转本人；转本人只限花钱、删唯一数据、亲手做或登录、补只有他知道的、做取舍）
+      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断接着查、先放下，还是转给本人；只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
       ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';
@@ -71,9 +71,9 @@
     const off = m === 'off', base = [dispatchNote, g.trigger].filter(Boolean).join(' ');
     const start = off ? g.offStart || (base ? `打开后，${base}` : '') : base || g.offStart || '';
     const steps = list(g.steps);
-    // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）
+    // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
-    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span>${keepRange(esc(title))}</p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
+    const flow = `<ol class="ah-flow" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${keepRange(esc(title))}</span></p><p class="ah-flow__text">${esc(text)}</p></li>`).join('')}</ol>`;
     const prompt = c.prompt_template ? `<p>${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。</p>
         <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';

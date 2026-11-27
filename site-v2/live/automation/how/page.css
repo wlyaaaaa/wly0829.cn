@@ -27,7 +27,7 @@
 .ah-flow li { position: relative; min-width: 0; }
 .ah-flow li:not(:nth-child(4n + 1))::before { content: "→"; position: absolute; left: -26px; top: 14px; font-size: 22px; font-weight: 700; color: var(--tp-green); }
 .ah-flow__box { display: flex; align-items: center; gap: 10px; min-height: 66px; margin: 0 !important; padding: 8px 14px; border-radius: 12px; background: var(--tp-green-soft); font-size: 17px !important; line-height: 24px !important; font-weight: 800; color: var(--ink) !important; }
-.ah-flow__box span { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--tp-green); border-radius: 50%; font-size: 14px; color: var(--tp-green-ink); }
+.ah-flow__box > span:first-child { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--tp-green); border-radius: 50%; font-size: 14px; color: var(--tp-green-ink); }
 .ah-flow__text { margin: 10px 0 0 !important; padding-right: 4px; font-size: 15px !important; line-height: 25px !important; color: #3d3d3a; }
 
 .ah-prompt { margin-top: 10px; }
@@ -44,5 +44,6 @@
 .tp .ah-side a i { font-style: normal; transition: transform .15s ease; }
 .tp .ah-side a:hover i { transform: translateX(3px); }
 .ah-foot { margin: 22px 0 8px; padding-top: 14px; border-top: 1px solid var(--tp-line); font-size: 15px; color: #57564f; }
-/* 步骤标题里的“15–20 句”这类区间整块不折行 */
+/* 步骤标题整段是一个块，在绿底里正常折行；里面“15–20 句”这类区间整块不折行 */
+.ah-flow__title { min-width: 0; }
 .ah-keep { white-space: nowrap; }

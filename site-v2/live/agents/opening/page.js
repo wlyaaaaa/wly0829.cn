@@ -176,10 +176,14 @@
         ? `<a class="op-ext" href="${href}" target="_blank" rel="noopener">${label}</a>` : `<span class="op-ref">${label}</span>`);
     return t.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${codes[i]}</code>`);
   }
+  // 段末、行末最后 4 个字（后面只剩标点、前面紧挨着一小段链接或代码时连它一起）粘成一块不折行，
+  // 不留一两个字加标点单独占一行（看图 06：工程卡首段末尾“的”。”单独折下去）
+  const TAIL = /(?:<(a|span|strong|code)\b[^>]*>[^<]{1,8}<\/\1>)?(?:&[#\w]+;|[^<>&\s]){1,4}$/;
+  const tail = html => html.replace(TAIL, m => `<span class="op-tail">${m}</span>`);
   function md(lines) {
     let html = '', para = [], fence = null;
     const stack = [];
-    const flush = () => { if (para.length) html += `<p>${para.map(inline).join('<br>')}</p>`; para = []; };
+    const flush = () => { if (para.length) html += `<p>${para.map(l => tail(inline(l))).join('<br>')}</p>`; para = []; };
     const close = (indent = -1) => { while (stack.length && stack.at(-1).indent > indent) html += `</li></${stack.pop().type}>`; };
     for (const line of lines) {
       if (fence) { if (/^\s*(\x60{3}|~{3})/.test(line)) { html += `<pre>${esc(fence.join('\n'))}</pre>`; fence = null; } else fence.push(line); continue; }
@@ -197,12 +201,12 @@
           if (top.type === type) html += '</li><li>';
           else { html += `</li></${stack.pop().type}><${type} class="op-list"><li>`; stack.push({ type, indent }); }
         } else { html += `<${type} class="op-list"><li>`; stack.push({ type, indent }); }
-        html += inline(item[3]);
+        html += tail(inline(item[3]));
         continue;
       }
-      if (stack.length && /^\s{2,}\S/.test(line)) { html += '<br>' + inline(line.trim()); continue; }
+      if (stack.length && /^\s{2,}\S/.test(line)) { html += '<br>' + tail(inline(line.trim())); continue; }
       close();
-      if (/^\s*>/.test(line)) { flush(); html += `<blockquote>${inline(line.replace(/^\s*>\s?/, ''))}</blockquote>`; continue; }
+      if (/^\s*>/.test(line)) { flush(); html += `<blockquote>${tail(inline(line.replace(/^\s*>\s?/, '')))}</blockquote>`; continue; }
       para.push(line.trim());
     }
     if (fence) html += `<pre>${esc(fence.join('\n'))}</pre>`;
