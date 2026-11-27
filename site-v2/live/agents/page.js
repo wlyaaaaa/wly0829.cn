@@ -382,7 +382,7 @@
     const rows = weeks.map((w, i) => ({ label: labels[i], parts: shown().filter(h => !missing(d, h)).map(h => ({ color: h.color, value: (list(stats(d, h).weeks)[i]?.work?.actual_minutes || 0) / 60 })) }));
     return `<section class="tp-panel" id="work"><div class="tp-panel__head"><h2>报了估时的活<small>派活时报过估时的活；登记工时是完工时记下的用时，和上面实际在干的总时间不是一回事</small></h2><div class="ag-mhead">${timeSeg('work', period)}${first ? `<span class="tp-asof">${esc(T.day(first))} 起才有记录</span>` : ''}</div></div>
       <div class="tp-grid ag-workgrid"><div class="tp-grid ag-works">${HOSTS.map(h => workCard(d, h)).join('')}</div>
-      <div><p class="tp-sub">按周比 · 登记工时（小时）</p>${columns(rows, -1)}${chips()}</div></div></section>`;
+      <div><p class="tp-sub">按周比 · 登记工时（小时）</p>${columns(rows, -1)}${chips()}</div></div><p class="tp-small ag-foot">这里是实际派过的单数，不代表现在的规定；${link('/rules/topic-execution-coordination.html#本人定的分工和型号规矩原约法-l22l23', '分工和选型号的规矩 ›')}</p></section>`;
   }
   const columns = (rows, highlight) => T.columns({ rows, width: 440, height: 236, fmt: v => v >= 10 ? int(v) : dec(v), grow: firstTime('cols'), highlight });
 
