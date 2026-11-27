@@ -229,7 +229,8 @@
           if (top.type === type) html += '</li><li>';
           else { html += `</li></${stack.pop().type}><${type} class="op-list"><li>`; stack.push({ type, indent }); }
         } else { html += `<${type} class="op-list"><li>`; stack.push({ type, indent }); }
-        html += tail(inline(item[3]));
+        html += tail(inline(item[3])).replace(/<[^>]+>|网站上线收尾/g,
+          part => part.startsWith('<') ? part : `<span class="live-unit">${part}</span>`);
         continue;
       }
       if (stack.length && /^\s{2,}\S/.test(line)) { html += '<br>' + tail(inline(line.trim())); continue; }

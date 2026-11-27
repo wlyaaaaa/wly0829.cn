@@ -584,6 +584,8 @@
       if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
     if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
+    if (c.id === 'excerpt') sub = sub.replace(/<[^>]+>|结果/g,
+      part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
   }
   // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
@@ -613,7 +615,7 @@
     if (!days.length) return '<span class="tp-fog">还没采上</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     // 颜色跟柱图一样：成是绿字，坏了才是红字（M1096：原来整行一坏就全红，成也成了红字）
-    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮没读到';
+    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮<span class="au-nobr">没读到</span>';
     return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
