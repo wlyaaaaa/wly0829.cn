@@ -1293,7 +1293,7 @@
   const bar = U.topbar({ ask });
 
   // ================= 取数：/computer（读数、好坏、卡过、设备）和 /computer/charts（曲线） =================
-  const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '电脑' });
+  const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: '', slow: false });
   let litHero = false, first = true;
   function lightUp() {
     if (litHero) return;
@@ -1303,6 +1303,7 @@
 
   refresh();
   const responsiveness = window.ComputerResponsiveness?.mount($('responsiveness'));
+  U.connection({ conn: { stage: 'loading', say: '加载中' } });
   window.Live.watch('computer', null, {
     phase(state) {
       if (state.data != null || mainRevoked) return;

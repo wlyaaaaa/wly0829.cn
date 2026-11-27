@@ -628,6 +628,7 @@
     disconnected = s.offline;
     if (!['idle', 'wait', 'slow'].includes(s.phase)) reading = false;
     online = !disconnected && s.link?.state === 'online';
+    document.body.classList.toggle('has-live-reading', !!s.conn?.connected);
     document.body.classList.toggle('live-off', disconnected);
     if (s.meta.source === 'net' && (s.meta.status === 200 || s.meta.status === 304) && s.now !== serverClock?.at && Number.isFinite(Date.parse(s.now))) {
       serverClock = { at: s.now, received: performance.now() };

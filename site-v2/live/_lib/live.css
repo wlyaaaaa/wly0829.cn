@@ -378,9 +378,9 @@ body.page--live .btn.btn--go:active { background: #007639; }
   box-shadow: 0 0 0 4px rgb(242 165 22 / .16), 0 0 14px rgb(242 165 22 / .7);
   animation: live-conn-breathe 2.8s ease-in-out infinite; transition: background .45s ease, box-shadow .45s ease; }
 .live-conn__row.is-back .live-conn__lamp { background: #00A650; box-shadow: 0 0 0 4px rgb(0 166 80 / .16), 0 0 14px rgb(0 166 80 / .6); }
-.page--live .stage:not(:has(> .board)) .live-conn:has(.live-conn__row:is([data-stage="off"], [data-stage="lost"])) { --win: 0%; --conn-art: none; }
-.page--live .stage:has(> .board) .live-conn__row:is([data-stage="off"], [data-stage="lost"]) { min-height: 90px; }
-.live-conn__row[data-stage="off"] .live-conn__lamp { background: #9aa1aa; box-shadow: 0 0 0 4px rgb(140 148 158 / .18), 0 0 12px rgb(140 148 158 / .5); }
+.live-conn__row:is([data-stage="off"], [data-stage="lost"]) { min-height: 90px; }
+.live-conn__row[data-stage="lost"] .live-conn__lamp { background: radial-gradient(circle at 35% 30%, #ffe8b7, #f2a516 45%, #e67119); }
+.live-conn__row[data-stage="off"] .live-conn__lamp { background: transparent; box-shadow: inset 0 0 0 1.5px #9b9b96; }
 .live-conn__say { flex: 1 1 0; min-width: 0; }
 .live-conn__say b { font-family: var(--black); font-weight: 900; font-size: 26px; line-height: 34px; letter-spacing: .02em; color: var(--ink); }
 .live-conn__at { font-weight: 500; }
@@ -859,7 +859,6 @@ span.fog__slow { margin: 0 0 0 8px; }
 .live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"])) { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); }
 .live-offline :is(.lamp:not([data-tone]), .lamp:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { opacity: 1 !important; transform: none !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
 .live-offline :is(.lamp--sm:not([data-tone]), .lamp--sm:is([data-tone="gray"], [data-tone="grey"], [data-tone="灰"], [data-tone="off"]))::after { animation-name: lamp-breathe-sm !important; }
-.live-offline .topbar .brand__lamp { --l-hi: #f3f4f6; --l-mid: #c9cdd3; --l-base: #9aa1aa; --l-deep: #7b828b; --l-glow: rgb(140 148 158); background: radial-gradient(circle at 34% 30%, #f3f4f6 0%, #c9cdd3 26%, #9aa1aa 60%, #7b828b 100%) !important; animation: lamp-breathe 3.4s ease-in-out infinite !important; }
 .live-offline .notices .notice { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; font-size: 17px; line-height: 27px; color: var(--ink); }
 .live-offline .notices .notice::before, .live-offline .notices .notice > .lamp { display: none; }
 .live-offline [data-read="gone"], .live-offline .card__glass:has(> [data-read="gone"]) { min-height: 0 !important; height: auto !important; }

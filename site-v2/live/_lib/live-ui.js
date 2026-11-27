@@ -1311,6 +1311,7 @@
     };
     let link = rows.querySelector('.live-conn__row[data-key="link"]');
     const c = state.conn || { stage: 'online' };
+    document.body.classList.toggle('has-live-reading', !!c.connected);
     if (c.stage !== connNow) { connNow = c.stage; for (const hook of pillHooks) hook(c); }
     if (c.homePublication || ['loading', 'retrying', 'lost', 'off'].includes(c.stage)) {
       clearTimeout(connBack); connBack = 0;

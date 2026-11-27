@@ -57,6 +57,14 @@ body {
 }
 
 .page--auth    { --pad: calc(var(--bar-bottom) + clamp(42px, 12vh, 132px)); }
+.page:is(.page--live,.page--auth):not(.has-live-reading) .topbar .brand__lamp {
+  background: radial-gradient(circle at 34% 30%, #f3f4f6 0%, #c9cdd3 26%, #9aa1aa 60%, #7b828b 100%) !important;
+  animation: live-header-gray 3.4s ease-in-out infinite !important;
+}
+@keyframes live-header-gray {
+  0%, 100% { box-shadow: 0 0 0 3px rgb(140 148 158 / .12), 0 0 8px 1px rgb(140 148 158 / .42); }
+  50% { box-shadow: 0 0 0 4px rgb(140 148 158 / .17), 0 0 13px 2px rgb(140 148 158 / .65); }
+}
 .page--connect { --pad: calc(var(--bar-bottom) + clamp(40px, (100vh - 67px - 600px) * .38, 170px)); }
 .stage { padding-top: var(--pad); }
 

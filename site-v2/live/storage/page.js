@@ -17,8 +17,9 @@
     return text && !K.isPlaceholder(text) && Number.isFinite(raw) ? format(raw) : text;
   }
   const missed = '这块没存下来，连上后补上。';
-  const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '存储' });
-  const storageReads = [homeRead, U.reading($('cleanup-body'), { ghost: U.ghost.rows(4), name: '自动清理', slow: false }), U.reading($('disks-box'), { ghost: U.ghost.rows(5), name: '每块盘', slow: false }), U.reading($('categories'), { ghost: U.ghost.rows(4), name: '按用途', slow: false })];
+  const loadingRow = '<p class="pj-note">加载中</p>';
+  const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: '', slow: false });
+  const storageReads = [homeRead, U.reading($('cleanup-body'), { ghost: loadingRow, name: '自动清理', slow: false }), U.reading($('disks-box'), { ghost: loadingRow, name: '每块盘', slow: false }), U.reading($('categories'), { ghost: loadingRow, name: '按用途', slow: false })];
   const rank = document.createElement('ul');
   rank.className = 'vz-rank__list';
   $('ssd-rank').classList.add('vz-rank', 'vz-rank--pill');
@@ -36,7 +37,7 @@
     U.html(rankMore, left > RANK_STEP ? `再看 ${RANK_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`);
   }
   rankMore.addEventListener('click', () => { rankShown += RANK_STEP; drawRank(); });
-  const ssdRead = U.reading($('ssd-panel'), { ghost: U.ghost.rows(3), name: '谁在大量写 SSD', slow: false });
+  const ssdRead = U.reading($('ssd-panel'), { ghost: loadingRow, name: '谁在大量写 SSD', slow: false });
   U.fold($('ssd-more'), $('ssd-box'));
   const ssdMoreLabel = () => U.html($('ssd-more'), $('ssd-more').getAttribute('aria-expanded') === 'true' ? '收起原表 ‹' : '展开原表 ›');
   $('ssd-more').addEventListener('click', ssdMoreLabel);
@@ -329,6 +330,7 @@
       realtimeTimer = setInterval(() => window.Live.get(resource), seconds * 1000);
     }
   }
+  U.connection({ conn: { stage: 'loading', say: '加载中' } });
   window.Live.watch(resource, null, {
     phase(s) { if (s.data == null) { ssdRead.set(s); storageReads.forEach(r => r.set(s)); } },
     data(d, meta) {

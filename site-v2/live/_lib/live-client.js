@@ -28,6 +28,7 @@
   const oldBrowserCopy = /^wly-live-v2:(?:net|fixture:.*?):(?:public:)?(?:none|[a-f0-9]+):(?:owner|public):/;
   const visitorPolicy = 'policy-11'; // 与后端导出和云端接口的访客规则代号一致。
   const liveHome = /^\/live(?:\/(?:index\.html)?)?$/.test(location.pathname);
+  const loadingBanner = liveHome || /^\/live\/(?:computer|storage)(?:\/(?:index\.html)?)?$/.test(location.pathname);
   const offlinePage = /^\/(?:live|computer-access)(?:\/|$)/.test(location.pathname);
   const backupPages = offlinePage && fixture === null;
   const validAudience = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
@@ -288,6 +289,20 @@
   const dataAt = e => e.data === null ? null : e.resource === 'screen' && offline()
     ? latestStamp((e.lastCells || []).filter(cell => cell.id !== 'computer' || !hostOffline(latestConnection())).map(cell => cell.source_at)) : e.at;
   const shownUpTo = () => latestStamp(connectionEntries().map(e => dataAt(visibleEntry(e))));
+  function bannerDataAt(e) {
+    const at = dataAt(e);
+    if (e.resource === ACCESS) {
+      const observed = ['personal_data', 'unrestricted', 'windows'].map(key => e.data?.[key]?.observed_at_unix)
+        .filter(value => Number.isFinite(value) && value > 0).map(value => new Date(value * 1000).toJSON());
+      return latestStamp([at, ...observed]);
+    }
+    if (e.resource === 'computer/storage' && Array.isArray(e.data?.cleanup?.runs)) {
+      // 盘量和清理回执各自采集。横幅取页上实际展示的较新时刻，不把预定的下次清理当成读数。
+      const runs = e.data.cleanup.runs.map(run => run?.result === 'running' ? run.started_at : run?.finished_at);
+      return latestStamp([at, ...runs]);
+    }
+    return at;
+  }
   let connectionOffline = false, pageAt = null, pageOffSince = null;
   const returning = (() => { try { return performance.getEntriesByType('navigation')[0]?.type === 'back_forward'; } catch { return false; } })();
   const fromLive = document.referrer?.startsWith(location.origin + '/live/');
@@ -474,10 +489,11 @@
     if (publicPaused) return { stage: 'paused' };
     const active = connectionEntries();
     const main = active.find(e => isMain(e) && e.listeners.size) || active.find(isMain);
-    const compactHome = liveHome && !!main && visibleEntry(main).data === null;
+    const visibleMain = main && visibleEntry(main);
+    const compactHome = liveHome && !!visibleMain && visibleMain.data === null;
     if (offlinePage && offline()) {
       const link = latestConnection();
-      const at = main && dataAt(visibleEntry(main));
+      const at = visibleMain && bannerDataAt(visibleMain);
       const shownAt = at || latestStamp(active.filter(e => e.listeners.size && !['home', HARDWARE, 'ai-messages'].includes(e.resource)).map(e => dataAt(visibleEntry(e))));
       const suffix = shownAt ? `，这是 ${backupStamp(shownAt)} 的数据` : fallbackFile ? '，这页的数据没存下来' : '';
       return { stage: hostOffline(link) ? 'off' : 'lost', say: connectionTitle(link) + suffix, emptyHome: compactHome };
@@ -486,9 +502,12 @@
       return { stage: 'online', emptyHome: true, homeSummary: true, homePublication: true,
         say: '首页大部分读数正在更新访客版，稍后自动补上。' };
     }
-    if (compactHome && (!main.answered || main.lagging)) return { stage: 'loading', emptyHome: true, say: '加载中' };
+    if (loadingBanner && visibleMain?.data === null && (!main.answered || main.lagging)) {
+      return { stage: 'loading', emptyHome: compactHome, say: '加载中' };
+    }
     const shownAt = main && dataAt(main);
-    return main?.lagging ? { stage: 'retrying', say: '加载中', shownAt } : { stage: 'online', shownAt };
+    return main?.lagging ? { stage: 'retrying', say: '加载中', shownAt }
+      : { stage: 'online', shownAt, connected: !!(main?.freshAt && main.data !== null && main.validatedLink?.state === 'online') };
   }
   function present(e) {
     e = visibleEntry(e);
