@@ -282,9 +282,8 @@ function cutoffText(at, now, prefix) {
     return day(at) === day(now || Date.now()) ? `${prefix ?? '以上截至'} ${time}` : `${prefix ?? '截至'} ${day(at)} ${time}`;
   } catch { return ''; }
 }
-const aiCellAt = source => [source?.source_at, source?.at].find(value => Number.isFinite(Date.parse(value)));
 function aiCellView(source, meta, owner, pending, now) {
-  const at = aiCellAt(source);
+  const at = source?.source_at ?? source?.at ?? meta?.at;
   const stamp = Date.parse(at), age = (Date.parse(now) || Date.now()) - stamp;
   // /screen 的 n 只表示当前读数。过期时，同笔对话计数留在“上次 N 个在干”里。
   const last = source?.q === 'stale' && /^上次\s*(\d+)\s*个在干(?:\s*·|$)/.exec(source.text ?? '');
@@ -292,7 +291,7 @@ function aiCellView(source, meta, owner, pending, now) {
     : last && Number.isFinite(stamp) ? Number(last[1]) : cellFacts('ai', source).n;
   const view = cellView('ai', { n }, owner, pending || source?.q === 'warming', down);
   if (!view.num) return view;
-  if (source?.q === 'partial' || source?.q === 'stale' && source.gap === '只显示有记录的部分') {
+  if (source?.q === 'partial') {
     view.unit = '个以上';
     view.label = `AI 在干活，至少 ${view.num} 个`;
   }
@@ -318,14 +317,13 @@ function renderScreen(data, meta, pending = false, now) {
   const sample = meta?.source === 'fixture' ? '（示意数）' : '';
   const quiet = screenMotionOff() || document.hidden;
   const today = beijingDay.format(Date.parse(now) || Date.now());
-  let hasReading = false, shownAt = -Infinity;
   const otherDay = (at) => {
     const time = Date.parse(at);
     return Number.isFinite(time) && beijingDay.format(time) !== today;
   };
   cellTargets.forEach(([id, fallback], index) => {
     let source = data?.cells?.find((item) => item.id === id);
-    let at = id === 'ai' ? aiCellAt(source) : source?.source_at ?? source?.at ?? meta?.at;
+    let at = source?.source_at ?? source?.at ?? meta?.at;
     const waiting = source?.q === 'warming';
     // “今天”的维护数不能沿用跨日的回包或页面内副本。其余读数继续沿用各自的上一次。
     const maintenance = id === 'maintenance';
@@ -336,10 +334,7 @@ function renderScreen(data, meta, pending = false, now) {
     let view = read(source, facts, meta);
     const previous = lastReadings.get(id);
     const hasUptime = Number.isFinite(facts.uptime), time = Date.parse(at);
-    const priorTime = Date.parse(previous?.at);
-    const samePartial = id === 'ai' && time === priorTime && source?.q === 'stale' && previous.source.q === 'partial' && facts.n === previous.facts.n;
-    const retain = !view.off && previous && ((!view.num && (previous.hasNumber || !hasUptime)) ||
-      (id === 'ai' && !Number.isFinite(time)) || time < priorTime || samePartial);
+    const retain = !view.off && previous && ((!view.num && (previous.hasNumber || !hasUptime)) || time < Date.parse(previous.at));
     if (retain) {
       ({ source, at } = previous);
       view = read(source, previous.facts, { ...meta, at, source: 'copy' });
@@ -351,11 +346,6 @@ function renderScreen(data, meta, pending = false, now) {
       const stamp = cutoffText(at, now, '截至');
       if (stamp) { view.cutoff = true; view.sub = [view.sub, stamp].filter(Boolean).join('\n'); view.label += `，${stamp}`; }
     }
-    if (down.offline && !view.off && (view.num || id === 'computer' && view.sub.startsWith('开机 '))) {
-      hasReading = true;
-      const stamp = Date.parse(at);
-      if (Number.isFinite(stamp)) shownAt = Math.max(shownAt, stamp);
-    }
     let ring = -1;
     for (const panel of panels) ring = Math.max(ring, paintCell(panel.cells[index], view, fallback, sample, quiet));
     if (id === 'computer') {
@@ -364,7 +354,6 @@ function renderScreen(data, meta, pending = false, now) {
     }
     if (ring >= 0) panelState.pulse[index] = performance.now() + ring;   // 那圈光和字同时出来
   });
-  return { hasReading, cutoff: Number.isFinite(shownAt) ? cutoffText(shownAt, now, '').trim() : '' };
 }
 renderScreen(null, null, true);
 
@@ -837,12 +826,12 @@ function tipText(next) {
   };
 }
 // 家里网站上这台设备的配对失效时，原来顶上那句说明也放在这里（不亮灯）。
-function connectionTip(off, reason, at, sub, pair = '', hasReading = false) {
+function connectionTip(off, reason, at, sub, pair = '') {
   root.classList.toggle('home-off', !!off);           // “实时状态”按钮上那颗点跟着变橙、变回绿（.home-lamp）
   if (off || pair) {
     clearTimeout(tipHide);
     tipText({ pair: !off, say: off ? reason || '连不上实况服务' : pair,
-      at: !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : hasReading ? '' : ' · 右边屏上暂时没有数', sub: off ? sub : '' });
+      at: !off ? '' : at ? ` · 右边屏上是 ${at} 的数据` : ' · 右边屏上暂时没有数', sub: off ? sub : '' });
     if (tip.hidden) { tip.hidden = false; void tip.offsetWidth; }
     tip.classList.add('is-shown');
   } else if (tip.classList.contains('is-shown')) {
@@ -855,7 +844,7 @@ function connectionTip(off, reason, at, sub, pair = '', hasReading = false) {
   }
 }
 liveClient.src = '/live/_lib/live-client.js';
-const watchScreen = () => window.Live?.watch('screen', {}, {
+const watchScreen = (recovering = false) => window.Live?.watch('screen', {}, {
   link(state) {
     down.hostOff = state.hostOff;
     down.silent = !!state.silent;
@@ -864,19 +853,15 @@ const watchScreen = () => window.Live?.watch('screen', {}, {
     for (const panel of panels) for (const { link } of panel.cells) {
       if (state.text) link.title = state.text; else link.removeAttribute('title');
     }
-    const paint = () => renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
-    if (state.offline) {
-      paintAfterTip = null;
-      const { hasReading, cutoff } = paint();
-      const offSince = state.link?.offSince;
-      const offAt = state.hostOff && Number.isFinite(Date.parse(offSince)) ? cutoffText(offSince, null, '').trim() : '';
-      const reason = offAt ? `电脑 ${offAt} 关机了` : state.hostOff ? '电脑关机了' : '电脑不在线';
-      connectionTip(true, reason, cutoff, state.hostOff ? '开机后换成最新的' : '连上就换成最新的', '', hasReading);
-      return;
-    }
-    connectionTip(false, '', '', '', state.pairNotice);
-    // 接回时先收走断线小签，免得正式数字与旧提示同屏。
-    if (!state.pairNotice && !tip.hidden) paintAfterTip = paint;
+    // 失败后先隔 2、4、8 秒各再试一次，之后跟着每分钟重读一起试（live-client.js 的 retryFailure 和 startPolling）。
+    connectionTip(state.offline, state.hostOff ? '电脑关机了' : state.reason, state.pageAtText,
+      state.hostOff ? '开机后换成最新的' : '每分钟自动再试，连上就换成最新的', state.pairNotice);
+    const paint = () => {
+      recovering = false;
+      renderScreen(state.data, state.meta, state.warming, state.offline ? null : state.now);
+    };
+    // 补回脚本时先收走“右边屏上暂时没有数”，免得新数和这句同屏。
+    if (recovering && !state.offline && !state.pairNotice && !tip.hidden) paintAfterTip = paint;
     else { paintAfterTip = null; paint(); }
   }
 });
@@ -894,7 +879,7 @@ function fetchClientAgain() {
     clearInterval(clientRetry);
     removeEventListener('online', fetchClientAgain);
     document.removeEventListener('visibilitychange', fetchClientAgain);
-    watchScreen();
+    watchScreen(true);
   };
   again.onerror = () => { clientFetching = false; again.remove(); };
   document.head.append(again);
