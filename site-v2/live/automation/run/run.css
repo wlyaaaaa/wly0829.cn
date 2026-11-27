@@ -107,12 +107,13 @@ summary:hover > .ar-open, summary:hover > .ar-shut { text-decoration: underline;
 .ar-reply table { width: 100%; border-collapse: collapse; text-align: left; }
 .ar-reply :is(th, td) { padding: 8px 10px; border: 1px solid var(--tp-hair); vertical-align: top; }
 .ar-reply :is(th, td):first-child, .ar-reply code { overflow-wrap: break-word; }
+.ar-reply .ar-table-unit { white-space: nowrap; }
 .ar-reply th { background: #f5f5f0; }
 .ar-reply a { color: var(--tp-green-ink); text-decoration: underline; }
 @media (max-width: 1100px) {
   .ar-grid:has(.ar-reply) { grid-template-columns: minmax(0, 1fr) 255px; }
   .ar-reply table { table-layout: fixed; }
-  .ar-reply table:has(thead th:nth-child(3):last-child) th:first-child { width: 29%; }
+  .ar-reply table:has(thead th:nth-child(3):last-child) th:first-child { width: 34%; }
   .ar-reply table:has(thead th:nth-child(3):last-child) :is(th, td):first-child { padding-inline: 6px; }
   .ar-reply table:has(thead th:nth-child(3):last-child) th:nth-child(2) { width: 28%; }
   .ar-reply td .live-unit { display: inline-block; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }

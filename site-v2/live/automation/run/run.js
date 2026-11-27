@@ -345,7 +345,12 @@
       const lines = block.split('\n');
       if (lines.length >= 2 && lines.every(line => tableLine.test(line)) &&
           cells(lines[1]).every(cell => /^:?-{3,}:?$/u.test(cell))) {
-        const cellWords = html => html.replace(/<[^>]+>|暂缓/g, word => word.startsWith('<') ? word : `<span class="live-unit">${word}</span>`);
+        const unit = word => `<span class="ar-table-unit">${word}</span>`;
+        const cellWords = html => html.replace(/<[^>]+>|暂缓|\b(?:Host Python|PowerShell \d+|\d+(?:\.[a-z\d]+){2,})\b/gi, word => {
+          if (word.startsWith('<')) return word;
+          if (!/^\d/.test(word)) return unit(word);
+          return (word.match(/[^.]+\.?/g) || []).map(unit).join('<wbr>');
+        });
         const row = (line, tag) => `<tr>${cells(line).map(cell => `<${tag}>${cellWords(replyInline(cell))}</${tag}>`).join('')}</tr>`;
         return `<table><thead>${row(lines[0], 'th')}</thead><tbody>${lines.slice(2).map(line => row(line, 'td')).join('')}</tbody></table>`;
       }
