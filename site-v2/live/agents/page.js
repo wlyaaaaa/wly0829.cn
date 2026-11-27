@@ -75,8 +75,7 @@
     }
     const eager = typeof x.approval === 'string' && /EAGER/.test(x.approval);
     add(x.waits_for_owner === false || eager ? true : x.waits_for_owner === true ? false : null, '动手前不停下等批准', '动手前会停下等批准，和规矩不一样');
-    const pass = rows.filter(r => r.ok === true).length, fail = rows.filter(r => r.ok === false), unknown = rows.filter(r => r.ok == null).length; // 历史错误只在钩子表里计数
-    return { rows, pass, fail, unknown, total: rows.length };
+    return { pass: rows.filter(r => r.ok === true).length, fail: rows.filter(r => r.ok === false), unknown: rows.filter(r => r.ok == null).length, total: rows.length };
   }
   function scoreCard(d, h) {
     const c = checks(d, h), x = hostData(d, h), health = list(d.health?.providers).find(p => p.id === h.id) || {};
@@ -93,7 +92,7 @@
       const text = F(i.text);
       return text === `${h.name} 开场读到的规矩不是当前版` ? ruleMismatch : text;
     };
-    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${statusText(issueText(i))}${issues.length > 1 && fixText(i)
+    const list1 = issues.length ? issues.map(i => `<li><span class="tp-dot" data-tone="${owner ? 'owner' : 'repair'}"></span><span>${keepWords(statusText(issueText(i)))}${issues.length > 1 && fixText(i)
         ? `<small>${fixLink(i, fixText(i))}</small>` : ''}</span></li>`).join('')
       : c.fail.map(r => `<li><span class="tp-dot" data-tone="repair"></span><span>${r.href ? `<a href="${esc(r.href)}">${statusText(esc(r.text))}</a>` : esc(r.text)}</span></li>`).join('');
     const lead = issues.find(i => fixer(i)) || issues.find(i => known(i.round));
@@ -352,6 +351,7 @@
 
   // 拦、错只有新格式的记录里有；旧日志只记了次数和耗时。后台给 blocked_samples（记了拦没拦的有几次），比次数少就照实写只算了其中几次，不当全部
   const outcomeShort = t => known(t?.blocked_samples) && known(t?.runs) && t.blocked_samples < t.runs;
+  const unmeasuredErrors = t => t.errors === '未采到' || (t.errors === null && known(t.runs));
   function hookCell(hooks, station, h, hv, p) {
     const cell = hv?.cells?.[station]?.[h.id] || {};
     const count = hooks.filter(r => r.host === h.name && stationOf(r) === station).length;
@@ -363,7 +363,7 @@
     cellsBefore.set(flashKey, cell.runs);
     const stats = known(cell.runs) ? `<span>${int(cell.runs)} 次</span> <span>${ms(cell.median_ms)}</span>` : '<span>次数还没采上</span>';
     const badges = [known(cell.blocked) && cell.blocked > 0 && `<span class="ag-badge" data-tone="repair">拦 ${int(cell.blocked)}</span>`,
-      known(cell.errors) && cell.errors > 0 && `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>`].filter(Boolean).join('');
+      known(cell.errors) && cell.errors > 0 ? `<span class="ag-badge" data-tone="bad">错 ${int(cell.errors)}</span>` : unmeasuredErrors(cell) && '<span class="tp-small">未采到</span>'].filter(Boolean).join('');
     return `<td class="ag-heat${flash}${dim(h.id)}" style="--heat:${(.05 + heat * .38).toFixed(3)}" data-host="${h.id}"><button type="button" data-cell="${key}" aria-expanded="${expanded === key}" aria-controls="hook-detail-${station}">
       <span class="ag-heat-stats"><span>${count} 条</span> ${stats}</span>${badges ? `<span class="ag-heat-badges">${badges}</span>` : ''}<span class="tp-chev" aria-hidden="true">${expanded === key ? '收起' : ''}</span></button></td>`;
   }
@@ -372,12 +372,14 @@
     const sample = withSample && list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
     const preCompact = hook.key === 'PreCompact', limit = preCompact && compactLimit(d.hosts?.[hook.host]);
     // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
-    const summary = preCompact && typeof hook.summary === 'string'
-      ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
+    const summary = preCompact && typeof hook.summary === 'string' ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
+    const { install_state, metrics_state } = list(d.hooks).find(row => row.host === hook.host && row.key === hook.key) || {};
+    const notes = [['已生效', '已停用', '生效未确认'].includes(install_state) && install_state, hook.implementation?.description,
+      hook.implementation?.evidence, metrics_state === '后台实现，未写入统一计时' && metrics_state, hook.reason];
     return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span class="ag-truncate" title="${esc(U.fieldText(hook.name, viewer))}">${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
       <p class="tp-small">${keepWords(F(summary, '钩子说明') || '说明还没读到')}</p>
       ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)}` : '自动压缩线还没读到'}</p>` : ''}
-      ${hook.reason ? `<p class="ag-hook__num">${keepWords(F(hook.reason))}</p>` : ''}
+      ${notes.filter(Boolean).map(note => `<p class="ag-hook__num">${keepWords(F(note))}</p>`).join('')}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
   const hookGroups = (d, hooks) => HOOK_GROUPS.map(([id, label]) => {
@@ -392,25 +394,23 @@
     const rolloutNote = '改了钩子以后：Claude 开着的对话也会自己换上新的；Codex 要新开的线程才用新的，已经开着的线程一般还用旧的；Antigravity 要完整退出再打开才用新的。';
     const top = `<div class="tp-panel__head ag-hookhead"><h2>钩子</h2>${timeSeg('hook', p)}<p class="ag-hooklead">${keepWords(`钩子是三家在固定当口自动跑的小程序，次数和耗时由程序自动量。${rolloutNote}`)}</p>${asof(hv?.at || hs.at || d.at) ? `<span class="tp-asof">${esc(asof(hv?.at || hs.at || d.at))}</span>` : ''}</div>`;
     if (!hooks) return `<section class="tp-panel" id="hooks">${top}<p class="tp-empty">钩子清单还没读到。</p></section>`;
-    const noOutcome = HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null);
     const head = HOSTS.map(h => {
       const t = totals[h.id] || {};
       const parts = [`登记 ${int(hostHooks(d, h).length)} 条`, known(t.runs) ? `跑 ${big(t.runs, 'hooks-' + h.id)} 次` : '次数还没采上', known(t.median_ms) && `中位 ${ms(t.median_ms)}`,
-        known(t.blocked) && `拦 ${int(t.blocked)} 次`, known(t.errors) && `出错 ${int(t.errors)} 次`];
+        known(t.blocked) && `拦 ${int(t.blocked)} 次`, known(t.errors) ? `出错 ${int(t.errors)} 次` : unmeasuredErrors(t) && '未采到'];
       const note = outcomeShort(t) ? `拦、错只算记了的 ${keep(`${int(t.blocked_samples)} 次`)}` : '';
       return `<p class="ag-hooktotal${dim(h.id)}" data-host="${h.id}"><span class="tp-hostname">${h.name}</span> ${parts.map(part => `<span>${part || ''}</span>`).join(' ')} <small class="tp-small">${note}</small></p>`;
     }).join('');
     const body = STATIONS.map(([id, label]) => {
       const alerts = id === 'error' ? HOSTS.map(h => { const r = hostData(d, h).error_stop || {}; return `<span data-host="${h.id}"${dimAttr(h.id)}><b class="tp-hostname">${h.name}</b> ${F(r.status) || '没读到'}</span>`; }).join('') : '';
-      const open = expanded?.startsWith(id + '/') ? expanded.split('/')[1] : '';
-      const host = HOSTS.find(h => h.id === open);
+      const host = expanded?.startsWith(id + '/') && HOSTS.find(h => h.id === expanded.split('/')[1]);
       const detail = host ? hostHooks(d, host).filter(r => stationOf(r) === id).map(hook => hookCard(d, hook, true)).join('') : '';
       return `<tr id="hooks-${id}"><th scope="row">${label}</th>${HOSTS.map(h => hookCell(hooks, id, h, hv, p)).join('')}</tr>
         <tr id="hook-detail-${id}" class="ag-detailrow"${host ? '' : ' hidden'}><td colspan="4">${host ? `<p class="tp-sub">${label} · <span class="tp-hostname" data-host="${host.id}">${host.name}</span></p><div class="ag-hooks">${detail}</div>` : ''}</td></tr>
         ${alerts ? `<tr><th scope="row">推手机</th><td colspan="3" class="ag-errorrow">三家由实况程序统一看对话状态，确认是出错停下了就推手机。<span class="ag-errorhosts">${alerts}</span></td></tr>` : ''}`;
     }).join('');
     return `<section class="tp-panel" id="hooks">${top}
-      <div class="ag-hooktotals">${head}</div>${noOutcome ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${HOSTS.some(h => outcomeShort(totals[h.id]))
+      <div class="ag-hooktotals">${head}</div>${HOSTS.some(h => totals[h.id]?.runs && totals[h.id].blocked == null && totals[h.id].errors == null) ? '<p class="tp-small">拦了几次、出错几次这两样还没采上，先只有次数和耗时。</p>' : ''}${HOSTS.some(h => outcomeShort(totals[h.id]))
         ? '<p class="tp-small">旧日志只记了次数和耗时，没记拦没拦、错没错；拦和错只按记了的那部分算，更早的那部分没采上，不算 0。</p>' : ''}
       <table class="tp-table ag-hooktable"><thead><tr><th scope="col">当口</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>
       <p class="tp-small ag-foot">格子越深跑得越多；点开可看这个当口的钩子和最近一次塞给 AI 的原样。</p>${hookGroups(d, hooks)}</section>`;
