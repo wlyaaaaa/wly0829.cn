@@ -85,7 +85,7 @@
   }
   for (const a of document.querySelectorAll('.stage a[href^="/live/"]')) a.href = route(a.getAttribute('href'));
 
-  const SUBPAGES = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿与流畅'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
+  const SUBPAGES = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿和帧率'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
   part('grafana').insertAdjacentHTML('beforebegin', SUBPAGES.map(([path, label]) => `<a href="${esc(route(path))}">${esc(label)} ›</a>`).join(''));
 
   // “‹ 实况”：从第一层点进来的，退回去（第一层记着原来滚到哪）；别处来的直接去第一层
@@ -455,7 +455,7 @@
   }
   function stutterChapter(el) {
     el.innerHTML = `<div class="stut" data-x="cards"></div>
-      <div class="stut-foot"><p class="use-note">逐帧看，去<a class="more more--link" href="${esc(route('/live/smooth/'))}">卡顿与流畅 <span class="more__chev">›</span></a></p></div>`;
+      <div class="stut-foot"><p class="use-note">逐帧看，去<a class="more more--link" href="${esc(route('/live/smooth/'))}">卡顿和帧率 <span class="more__chev">›</span></a></p></div>`;
     const box = el.querySelector('[data-x="cards"]');
     box.addEventListener('click', (e) => {
       const b = e.target.closest('[data-stutter]');

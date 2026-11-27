@@ -1,361 +1,325 @@
-// 体检单：异常在前；曲线、时间带、逐次卡顿和程序对比一张不少。
 (() => {
   'use strict';
   const V = window.LiveViz, C = window.LiveChart, U = window.LiveUI, S = window.LiveStat;
-  const sync = C.sync(), L = (id, label, hue) => ({ id, label, hue });
-  let data = null, summary = null;
-  const measured = line => line?.points?.some(([, value]) => Number.isFinite(value));
-  function appLabel(label) {
-    if (typeof label !== 'string') return label;
-    const ranked = label.replace(/^\s*\d+\s*[·.)]\s*/, '');
-    const icon = ranked.match(/^[\p{Extended_Pictographic}\p{Regional_Indicator}\uFE0F\u200D]+\s+/u)?.[0] || '';
-    const name = ranked.slice(icon.length);
-    return icon + (U.programName?.(name) ?? name);
+  const sync = C.sync(), board = V.board(document.getElementById('board'), { key: 'smooth', sync, quiet: true });
+  const hero = document.getElementById('hero'), part = name => hero.querySelector(`[data-part="${name}"]`);
+  const line = (id, label, hue) => ({ id, label, hue });
+  const chips = [
+    { key: 'fps', label: '帧率', unit: 'FPS', lines: [line('current', '帧率', '#02b8d4'), line('average', '平均帧率', '#00A650'), line('low', '最低 1%', '#ee941e')] },
+    { key: 'frametime', label: '单帧耗时', unit: 'ms', lines: [line('frametime', '单帧耗时', '#258ff4')] },
+    { key: 'jitter', label: '帧时抖动', unit: 'ms', lines: [line('jitter', '帧时抖动', '#8a37ef')] },
+  ];
+  const frameIds = new Set(chips.flatMap(chip => chip.lines.map(l => l.id)));
+  const picture = '/live/img/head-smooth.webp', appPicture = '/live/img/head-apps.webp';
+  const finite = Number.isFinite, measured = s => s?.points?.some(([, v]) => finite(v));
+  const seconds = at => typeof at === 'number' ? at : Date.parse(at) / 1000;
+  const iso = at => new Date(at * 1000).toISOString();
+  const cutoff = at => finite(Date.parse(at)) ? `${U.date(at) === U.date(Date.now()) ? '' : `${U.date(at)} `}${U.time(at)}` : '';
+  const windowText = w => cutoff(w?.from) && cutoff(w?.to) ? `北京时间 ${U.date(w.from)} ${U.time(w.from)} 至 ${U.date(w.to)} ${U.time(w.to)}` : '';
+  const join = (...parts) => parts.filter(Boolean).join(' · ');
+  const hours = total => [total >= 3600 && `${Math.floor(total / 3600)} 小时`, `${Math.floor(total / 60) % 60} 分`].filter(Boolean).join(' ');
+  const wallpaper = /^(?:wallpaper(?:32|64|ui|engine)?|webwallpaper32|ui32)(?:\.exe)?$/i;
+  const frameSource = name => wallpaper.test(name || '') ? '动态壁纸' : U.programName(name);
+  const program = name => wallpaper.test(name || '') ? '动态壁纸（Wallpaper Engine）' : U.programName(name);
+  const modeName = label => U.sp(label).replace(/全屏\s*[/／]\s*无边框全屏|无边框全屏|全屏/g, '最大化窗口').replace(/普通窗口形态/g, '普通窗口');
+  const block = name => data?.blocks?.[name] || data?.[name];
+  const CLOSE_AFTER = 30 * 60, GAME_FRESH_FOR = 15;
+  const PAGE_REFRESH_MINUTES = 5; // computer/smooth 外层调度为 300 秒，data.refresh_seconds 是数据源的采样批次。
+  let data = null, framePack = {}, hardwareStatus = null;
+
+  function thresholds() {
+    const states = data?.stutters?.states || [];
+    // 按需更新快核：50／100 毫秒来自分级带；旧回包省略门槛时核默认值。5 秒及 3 秒待后台给数，按需核一次。
+    return { micro: states.find(s => s.id === 'micro_stutter')?.min_ms ?? 50,
+      severe: states.find(s => s.id === 'severe_stutter')?.min_ms ?? 100,
+      hang: 5, gameSample: 3, hangSample: 3 };
   }
-  const coveredReadings = new Set(['使用状态采样覆盖', '卡顿采样', '卡顿汇总', '卡顿时间带']);
-  const uncovered = (names, summary) => (names || []).filter(name => !summary?.coverage_note || !coveredReadings.has(name));
-  function displayData(d) {
-    if (!d) return d;
-    const gap = [d.summary, d.stutters, d.blocks?.summary, d.blocks?.stutters].map(o => o?.gap).find(g => U.sp(g) && !/^数据截止/.test(U.sp(g)));
-    const clean = (o) => o && { ...Object.fromEntries(Object.entries(o).map(([k, v]) => [k, ['gap', 'reason', 'why'].includes(k) && gap && U.sp(v) === U.sp(gap) ? '' : v])),
-      ...(d.summary?.coverage_note && o.missing_readings ? { missing_readings: uncovered(o.missing_readings, d.summary) } : {}) };
-    const names = uncovered(d.missing_readings?.length ? d.missing_readings : grayNames(d), d.summary);
-    const jitter = d.jitter?.series ? { ...d.jitter, series: d.jitter.series.map(line => ({ ...line, unit: 'ms',
-      points: line.points.map(([t, v]) => [t, v > 0 ? v : null]) })) } : d.jitter;
-    return { ...clean(d), missing_readings: names, ...(names.length ? { partial: d.partial?.length ? d.partial : ['readings'] } : {}),
-      jitter, stutterGap: gap, note: [].concat(d.note || []).filter(n => !gap || U.sp(n) !== U.sp(gap)),
-      summary: clean(d.summary), stutters: clean(d.stutters), usage: clean(d.usage),
-      groups: d.groups?.map(clean), blocks: d.blocks && Object.fromEntries(Object.entries(d.blocks).map(([k, v]) => [k, clean(v)])) };
+  function readingLine(key, available, prefix = '', empty = '') {
+    const b = block(key), end = b?.window?.to || b?.to || b?.at;
+    const flag = b?.read_error || ['stale', 'unavailable'].includes(b?.state) || b?.q === 'stale';
+    const last = cutoff(b?.recorded_at || b?.source_at || (available ? end : null));
+    if (last && (flag || !available || seconds(window.Live.clock()) - seconds(end) >= CLOSE_AFTER)) return `这块最后记录于 ${last}`;
+    return available ? join(prefix, cutoff(end) && `截至 ${cutoff(end)}`) : empty;
   }
-  const cutoff = (at) => at && Number.isFinite(Date.parse(at)) ? [U.date(at), U.time(at)].filter(Boolean).join(' ') : '';
-  const bounds = (row) => [Date.parse(row?.from) / 1000, Date.parse(row?.to) / 1000];
-  const windowText = (row) => cutoff(row?.from) && cutoff(row?.to) ? `北京时间 ${cutoff(row.from)} 至 ${cutoff(row.to)}` : '';
-  const summaryEnd = (d) => d?.summary?.window?.to || d?.blocks?.summary?.window?.to || d?.summary?.at || d?.blocks?.summary?.at;
-  const stutterNames = { summary: '卡顿汇总', stutters: '卡顿时间带' };
-  const grayNames = (d) => [...new Set((d?.groups || []).filter(g => ['gray', 'off', 'none'].includes(g.level)).map(g => stutterNames[g.key]).filter(Boolean))];
-  function timelinePack(pack, key) {
-    if (!pack?.states) return pack;
-    const fallback = pack.states.some(s => typeof s.hue !== 'string' || !s.hue) || new Set(pack.states.map(s => s.hue)).size <= 1 && (pack.states.length > 1 || key === 'foreground');
-    const warm = '#d39835', orange = '#d57c38', slate = '#8795a4', palette = ['teal', 'blue', 'violet', 'pink', orange, warm, slate];
-    return { ...pack, states: pack.states.map((s, i) => {
-      const sourceLabel = key === 'foreground' ? appLabel(s.display_label ?? s.label) : s.display_label ?? s.label;
-      const text = `${s.id} ${U.sp(sourceLabel)}`, micro = s.id === 'micro_stutter', severe = s.id === 'severe_stutter', graded = micro || severe || s.id === 'stutter' && typeof s.label === 'string';
-      const min = s.min_ms ?? (micro ? 50 : severe || /严重|100\s*(?:ms|毫秒)/i.test(text) ? 100 : 50), max = Object.hasOwn(s, 'max_ms') ? s.max_ms : micro ? 100 : null;
-      const label = graded ? `${micro ? '微卡顿' : severe || min >= 100 ? '严重卡顿' : '卡顿'}（${max == null ? `${min} 毫秒以上` : `${min} 至不足 ${max} 毫秒`}）` : typeof sourceLabel === 'string' ? U.sp(sourceLabel).replace(/^\s*(?:\d+\s*[·.)]\s*)?[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, '') : sourceLabel;
-      let hue = ({ amber: warm, orange, slate })[s.hue] || s.hue;
-      if (fallback) {
-        if (key === 'foreground') {
-          const name = U.sp(typeof sourceLabel === 'string' ? sourceLabel : s.id).replace(/^[\d\s·]+|[^\p{L}\p{N}._ -]/gu, '').trim().toLowerCase();
-          hue = palette[[...name].reduce((n, c) => (n * 31 + c.codePointAt(0)) >>> 0, 0) % palette.length];
-        } else hue = s.id === 'stutter' ? (min >= 100 ? 'pink' : warm) : /severe|严重|gpu|显卡.*(?:受限|瓶颈)/i.test(text) ? 'pink' : /cpu.*(?:受限|瓶颈)|^cpu /i.test(text) ? orange : /micro|微卡顿|away|idle|静止|暂离/i.test(text) ? warm : /sleep|睡眠|睡着/i.test(text) ? 'blue' : /display|screen.off|屏幕关/i.test(text) ? 'violet' : /off|关机|none|缺测/i.test(text) ? slate : /active|clear|normal|light|正常|轻载|流畅|在用/i.test(text) ? 'teal' : palette[i % palette.length];
-      }
-      return { ...s, label, hue, ...(graded ? { min_ms: min, max_ms: max } : {}) };
-    }) };
+
+  function gameStatus() {
+    if (U.offline?.()) return {};
+    const pack = hardwareStatus || data?.game_status || {};
+    const now = seconds(window.Live.clock());
+    const fresh = row => row && Math.abs(now - seconds(row.at)) < GAME_FRESH_FOR;
+    return { ...pack, foreground: fresh(pack.foreground) ? pack.foreground : null,
+      frame: fresh(pack.frame) ? pack.frame : null };
   }
-  const board = V.board(document.getElementById('board'), { key: 'smooth', sync, onCount(c) {
-    LiveDetail.count(c);
-    const hero = document.getElementById('hero');
-    const count = hero.querySelector('[data-part="count"]'), n = data?.attention_count ?? data?.attention_groups;
-    count.hidden = n == null;
-    if (n != null) U.html(count, `<b>${U.esc(n)} 项要处理</b>`);
-    window.LiveLight.tone(hero, data);
-    const end = cutoff(summaryEnd(data));
-    const observed = S.partial(data?.summary, 'events') || /卡顿次数和时长只算有记录的部分/.test(U.sp(data?.stutterGap));
-    const headline = data?.summary?.events == null ? (U.offline?.() ? '卡顿与流畅' : U.collectionText('近 24 小时卡顿次数', data?.summary || data)) : `${observed ? '有记录的时段' : '近 24 小时'}卡了 ${data.summary.events} 次`;
-    U.html(hero.querySelector('[data-part="head"]'), U.status(data).lamp + U.head(headline + (end && data?.summary?.events != null ? ` · 数据截止 ${end}` : ''), { lamp: false }));
-  } });
-  const num = (v, unit) => v == null ? (U.offline?.() ? '—' : U.collectionText()) : V.fmt(v, unit);
-  const metric = (r, key, label, unit) => `${label} ${S.text(r, key, (v) => num(v, unit))}`.replaceAll(' ', '\u00a0');
-  const metricLine = parts => parts.filter(Boolean).join('\u00a0· ');
-  function info(r, showPct) {
-    const frames = ['fps', 'low'].every(k => r[k] == null) || r.fps_samples === 0 ? ['无有效帧样本'] :
-      [metric(r, 'fps', '平均帧率', 'FPS'), metric(r, 'low', '低谷帧率', 'FPS'),
-        r.fps_samples == null && (r.fps === 0 || r.low === 0) ? '采样值 0／有效样本数未给' : ''];
-    return metricLine([...frames, showPct && metric(r, 'stutter_pct', '卡顿帧占比', '%'), r.stutter_events != null && metric(r, 'stutter_events', '卡顿', '次')]);
+  const history = () => gameStatus().history;
+  const playedTitle = h => h?.game_name ? `《${U.sp(h.game_name)}》` : '';
+  const gameHistory = h => h?.played === true ? `近 24 小时玩${finite(h.seconds) ? `了 ${hours(h.seconds)}` : '过游戏'}${playedTitle(h)}` : '';
+  function renderHero() {
+    if (!data) return;
+    const status = gameStatus(), fg = status.foreground, h = status.history;
+    const counts = eventCounts(data.summary), total = data.summary?.events;
+    const playing = fg?.classification === 'game' && fg.active === true;
+    const unknown = fg?.classification === 'unknown', name = U.sp(playedTitle(fg) || program(fg?.process_name));
+    const stopped = finite(counts.hang) ? `程序卡住 ${counts.hang} 次` : '';
+    const game = finite(counts.game) ? `游戏画面卡 ${counts.game} 次` : '';
+    const played = gameHistory(h), complete = h?.complete === true, noGame = complete && h?.played === false;
+    const currentFPS = playing && status.frame && finite(status.game_fps) && status.game_fps > 0;
+    const scope = U.offline?.() || !data.game_status && !hardwareStatus ? '' : !fg ? '现在在不在打游戏没读到' : playing
+      ? `正在玩${name || '游戏'} · ${currentFPS ? `现在 ${Math.round(status.game_fps)} 帧` : '帧率这会儿没读到'}`
+      : unknown ? `${name ? `现在前台是 ${name}，` : ''}认不出是不是游戏` : played ? '现在没在打游戏' : noGame ? '近 24 小时没打游戏' : '近 24 小时打没打游戏没记全';
+    let detail = [played, game, stopped].filter(Boolean).join('，');
+    if (!playing && unknown) detail = join(stopped, '认不出是游戏的程序，不量游戏画面卡');
+    else if (!playing && noGame) detail = join(stopped, `${fg ? '没打游戏' : '近 24 小时没打游戏'}，不量游戏画面卡`);
+    else if (h && !complete) detail = join(!fg ? stopped : detail, '游戏画面卡可能少算');
+    const pronoun = U.you(window.Live.viewerKind());
+    const warnings = [];
+    if (!fg && (data.game_status || hardwareStatus) && !U.offline?.()) warnings.push(`电脑记录工具这会儿没报上前台是哪个程序，所以不知道${pronoun}现在在不在玩`);
+    if (playing && !currentFPS) warnings.push('没读到帧率的这段时间量不了游戏画面卡，卡了几次可能少算');
+    if (h && !complete && !U.offline?.()) warnings.push('前台程序的记录中间断了一段，那段时间玩没玩游戏、画面卡没卡不知道');
+    const end = cutoff(data.summary?.window?.to);
+    const footer = join(end && `数据截至 ${end}`, `每 ${PAGE_REFRESH_MINUTES} 分钟自动更新`);
+    const head = finite(total) ? `近 24 小时卡了 ${total} 次` : '卡顿和帧率';
+    const lamp = part('head').querySelector('.lamp')?.outerHTML || '';
+    U.html(part('head'), lamp + U.head(join(head, scope), { lamp: false }) + (footer ? `<span class="head__cutoff">${U.esc(footer)}</span>` : ''));
+    part('count').hidden = !detail;
+    U.html(part('count'), detail && `<b>${U.esc(detail)}</b>`);
+    part('note').hidden = !warnings.length;
+    U.html(part('note'), warnings.map(text => `<span>${U.esc(text)}</span>`).join(''));
   }
-  function events() {
-    const st = data?.stutters, day = st?.rows?.day;
-    if (!day?.spans) return null;
-    const [from, to] = bounds(day);
-    return day.spans.flatMap(([t, state], i) => {
-      const level = st.states?.[state];
-      if (!['stutter', 'micro_stutter', 'severe_stutter'].includes(level?.id)) return [];
-      const start = Math.max(t, from);
-      const end = Math.min(day.spans[i + 1]?.[0] ?? to, to);
-      return end > start ? [{ start, end, micro: level.id === 'micro_stutter', id: level.id }] : [];
-    }).sort((a, b) => b.start - a.start);
+
+  // 分项是单独的读数，旧回包的 events 不能充作其中任何一项。
+  function eventCounts(summary) {
+    return { game: summary?.game_events, hang: summary?.program_hangs };
   }
-  function mergedEvents() {
-    // 新包的事件边界直接取后端，原分级片段只负责说明一次事件内的等级。
-    const st = data?.stutters, row = st?.rows?.day, fragments = events() || [];
-    if (!st) return null;
-    const byStart = new Map(fragments.map(f => [f.start, f]));
-    const list = Array.isArray(st.events) ? st.events.filter(e => Number.isFinite(e.start) && Number.isFinite(e.end) && e.end > e.start)
-      .map(e => ({ ...e, ids: new Set((e.fragment_starts || []).map(t => byStart.get(t)?.id).filter(Boolean)) })) : [];
-    if (!Object.hasOwn(st, 'events')) {
-      for (const { start, end, id } of fragments.reverse()) {
-        const last = list.at(-1);
-        if (last && start <= last.end) { last.end = Math.max(last.end, end); last.ids.add(id); }
-        else list.push({ start, end, ids: new Set([id]) });
-      }
-      const sameEnd = Date.parse(row?.to) === Date.parse(summaryEnd(data));
-      const clear = coveredSeconds(st, s => s.id === 'clear') > 0;
-      const zero = sameEnd && data?.summary?.events === 0 && !S.partial(data.summary, 'events');
-      if (!list.length && !(clear && !(sameEnd && data?.summary?.events > 0) || zero && row?.spans?.length)) return null;
-    } else if (!Array.isArray(st.events)) return null;
-    return list.sort((a, b) => b.start - a.start);
-  }
-  function coveredSeconds(pack, include) {
-    const row = pack?.rows?.day, [from, to] = bounds(row);
-    return (row?.spans || []).reduce((seconds, [at, state], i) => {
-      const s = pack.states?.[state], end = Math.min(row.spans[i + 1]?.[0] ?? to, to);
-      return seconds + (s && include(s) ? Math.max(0, end - Math.max(from, at)) : 0);
-    }, 0);
-  }
-  // 带子左边写这条带是什么（卡顿、使用状态……），时段看下面的刻度和说明。
-  function timeline(el, label, key, row = '近 24 小时') {
-    if (label) { const p = document.createElement('p'); p.className = 'grp-split__k'; p.textContent = label; el.append(p); }
-    const host = document.createElement('div'); el.append(host);
-    const block = V.block(host, V.timeline(host, { rows: [{ key: 'day', label: row }], interactiveObservedOnly: key === 'stutters' }), () => data, key);
-    // 后台给的行名一律是“近 24 小时”，会盖掉上面这个名字，所以这里换成这条带自己的名字。
-    const named = p => p?.rows?.day ? { ...p, rows: { ...p.rows, day: { ...p.rows.day, label: row } } } : p;
-    return { host, set: (pack) => block.set(named(timelinePack(pack, key))) };
-  }
-  function caption(el) {
-    const p = document.createElement('small'); p.className = 'stat-gap'; el.append(p);
-    return (...parts) => { p.textContent = parts.filter(Boolean).join(' · '); p.hidden = !p.textContent; };
+  const eventKinds = [
+    { id: 'game', label: '游戏画面卡', hue: 'pink', color: '#e2639f' },
+    { id: 'hang', label: '程序卡住', hue: '#f49839', color: '#f49839' },
+  ];
+  function eventTitle(e) {
+    if (e.kind === 'hang') return `${program(e.process_name) || '程序'} 卡住 ${+(e.end - e.start).toFixed(1)} 秒`;
+    const grade = e.max_frame_ms >= thresholds().severe ? '画面严重卡' : '画面卡';
+    return join(grade, finite(e.max_frame_ms) && `最慢一帧 ${Math.round(e.max_frame_ms)} 毫秒`);
   }
   function stutterChapter(el) {
-    el.innerHTML = '<div class="stutter-layout"><div data-x="moments"></div><div data-x="timeline"></div><div data-x="daily"></div><small class="stat-gap" data-x="gap"></small></div>';
-    const listHost = el.querySelector('[data-x="moments"]');
-    let list = null, picked = null;
-    const seconds = (e) => `${Number((e.end - e.start).toFixed(3)) || '不到 0.001'} 秒`;
-    const moreText = n => listHost.querySelector('button.more').getAttribute('aria-expanded') === 'true' ? '收起明细' : `还有 ${n} 次（共 ${list.length} 次）`;
-    const moments = V.moments(listHost, { show: 5, empty: '近 24 小时没有卡顿', more: moreText, onPick(key) {
-      picked = list?.find(e => String(e.start) === key) || null;
-      sync.mark(picked?.start ?? null, picked ? `卡了 ${seconds(picked)}` : '');
-      mark();
-    } });
-    listHost.querySelector('button.more').addEventListener('click', e => { e.currentTarget.firstChild.nodeValue = moreText(list.length - 5) + ' '; });
-    const tl = timeline(el.querySelector('[data-x="timeline"]'), '卡顿发生在哪一段', 'stutters', '卡顿');
-    const marker = document.createElement('i'); marker.className = 'vz-tl__cursor'; marker.style.width = '2px'; marker.hidden = true;
-    tl.host.querySelector('.vz-tl__plot').append(marker);
+    el.innerHTML = '<div class="stutter-layout"><div data-x="moments"></div><div data-x="graphs"><p class="grp-split__k">卡顿发生在哪一段</p><div data-x="timeline"></div><ul class="smooth-legend"></ul><div data-x="daily"></div></div><footer class="stat-gap">接着的几次卡算一次 · 没打游戏时不量画面卡</footer></div>';
+    const host = which => el.querySelector(`[data-x="${which}"]`);
+    const listHost = host('moments'), timelineHost = host('timeline'), dailyHost = host('daily'), legends = el.querySelector('.smooth-legend');
+    const tl = V.timeline(timelineHost, { rows: [{ key: 'day', label: '卡顿' }], interactiveObservedOnly: true });
+    const plot = timelineHost.querySelector('.vz-tl__plot');
+    let list = [], picked = null;
     function mark() {
-      const [from, to] = bounds(data?.stutters?.rows?.day);
-      const start = picked?.start;
-      marker.hidden = !(start >= from && start < to);
-      if (!marker.hidden) marker.style.left = `${(start - from) / (to - from) * 100}%`;
+      plot.querySelectorAll('[data-event]').forEach(marker => { marker.style.opacity = picked == null || marker.dataset.event === picked ? '1' : '.45'; });
+      const hit = list.find(e => `${e.kind}:${e.start}` === picked);
+      sync.mark(hit?.start ?? null, hit ? eventTitle(hit) : '');
     }
-    const host = el.querySelector('[data-x="daily"]');
-    const daily = V.block(host, V.bars(host, { title: '近 7 天每天卡了几次', unit: '次', stack: true, series: [{ id: 'events', label: '卡顿', hue: 'pink' }] }), () => data, 'daily_stutters');
-    let days = [];
-    new MutationObserver(() => {
-      const value = host.querySelector('.chart__vals b');
-      if (!value) return;
-      const selected = [...host.querySelectorAll('.vz-bars__lab')].findIndex((label) => label.classList.contains('is-on'));
-      const row = days[selected < 0 ? days.length - 1 : selected];
-      const text = row?.events == null && row?.gap && !U.offline?.()
-        ? U.sp(row.gap) : S.text(row, 'events', (count) => `${count} 次`);
-      if (value.textContent !== text) value.textContent = text;
-      let gap = host.querySelector('[data-stat-gap]');
-      const message = S.partial(row, 'events') && row?.events != null ? row.gap || '' : '';
-      if (message && !gap) {
-        gap = document.createElement('small');
-        gap.dataset.statGap = '';
-        gap.className = 'stat-gap';
-        host.querySelector('.chart__vals').append(gap);
+    const moments = V.moments(listHost, { empty: '近 24 小时没有卡顿', onPick(key) { picked = key; mark(); } });
+    const daily = V.bars(dailyHost, { title: '近 7 天每天卡了几次', unit: '次', stack: true, series: eventKinds });
+    return { set() {
+      const st = data?.stutters, bounds = st?.window || data?.summary?.window;
+      const counts = eventCounts(data?.summary), days = (data?.daily_stutters || []).slice(-7);
+      const hasDays = days.some(d => Object.values(eventCounts(d)).some(finite));
+      const seen = Array.isArray(st?.events) && (st.events.some(e => e.kind) || Object.values(counts).some(finite));
+      list = seen ? st.events.filter(e => eventKinds.some(k => k.id === e.kind) && finite(e.start) && finite(e.end) && e.end > e.start)
+        .sort((a, b) => b.start - a.start) : [];
+      if (picked && !list.some(e => `${e.kind}:${e.start}` === picked)) picked = null;
+      moments.set(list.map(e => ({ key: `${e.kind}:${e.start}`, day: U.date(iso(e.start)), time: U.time(iso(e.start)), title: eventTitle(e), hue: eventKinds.find(k => k.id === e.kind).hue })));
+      listHost.hidden = !seen;
+      host('graphs').hidden = !seen && !hasDays;
+      el.querySelector('footer').hidden = !seen;
+      const from = seconds(bounds?.from), to = seconds(bounds?.to);
+      const band = seen && to > from;
+      timelineHost.hidden = !band;
+      tl.set(band ? { states: [{ id: 'clear', label: '卡顿', hue: 'stone' }], rows: { day: { ...bounds, spans: [[from, null]] } } } : null);
+      plot.querySelectorAll('[data-event]').forEach(marker => marker.remove());
+      if (band) for (const e of list.filter(e => e.start >= from && e.start < to)) {
+        const marker = document.createElement('i'); marker.dataset.event = `${e.kind}:${e.start}`;
+        marker.style.cssText = `position:absolute;inset:0 auto 0 ${(e.start - from) / (to - from) * 100}%;width:3px;background:${eventKinds.find(k => k.id === e.kind).color};border-radius:3px;pointer-events:none`;
+        plot.append(marker);
       }
-      if (gap) U.html(gap, U.fieldHtml(message, { name: '当天卡顿统计' }), false);
-      if (!message) gap?.remove();
-    }).observe(host, { childList: true, characterData: true, subtree: true });
-    return { set(g) {
-      const st = data?.stutters, meta = data?.blocks?.stutters;
-      list = mergedEvents();
-      const levels = new Map(timelinePack(st, 'stutters')?.states?.map(s => [s.id, U.sp(s.label).split('（')[0]]));
-      moments.set(list?.map(e => {
-        const at = new Date(e.start * 1000).toISOString(), names = [...e.ids].map(id => levels.get(id)).filter(Boolean);
-        const grade = names.includes('严重卡顿') ? '严重卡顿' : e.ids.size === 1 && e.ids.has('micro_stutter') ? '微卡顿' : '卡顿';
-        return { key: String(e.start), day: U.date(at), time: U.time(at), title: `${grade} ${seconds(e)}`, text: names.length > 1 ? `含${names.join('、')}` : '', hue: grade === '微卡顿' ? '#d39835' : 'pink' };
-      }) ?? null);
-      if (!list && (st || meta?.state === 'unavailable')) moments.wait('这次没读到卡顿明细');
-      // 没卡顿时左栏写一句正常颜色的“近 24 小时没有卡顿”，卡头那颗孤零零的空心灯不画。
-      el.closest('.grp')?.toggleAttribute('data-no-stutter', Array.isArray(list) && !list.length);
-      if (picked && !list?.some(e => e.start === picked.start)) { picked = null; sync.mark(null, ''); }
-      const end = cutoff(st?.rows?.day?.to || st?.window?.to);
-      const missing = g?.missing_readings?.length && !['gray', 'off'].includes(g.level) ? `缺：${g.missing_readings.join('、')}` : '';
-      const parts = [missing, !data?.summary?.coverage_note && data?.stutterGap, list && end && `明细截止 ${end}`, list && (st.count_label || '相接的卡顿片段合成一次')];
-      U.html(el.querySelector('[data-x="gap"]'), parts.filter(Boolean).map(p => U.fieldHtml(p, { name: '卡顿采集说明' })).join(' · '));
-      tl.set(list?.length || coveredSeconds(st, () => true) > 0 ? st : null); mark();
-      days = data?.daily_stutters?.slice(-7) || [];
-      daily.set(data?.daily_stutters ? { labels: days.map((d) => ({ text: d.day.slice(5), title: d.day })), values: { events: days.map((d) => d.events) } } : null);
+      const h = history(), noGame = h?.complete === true && h.played === false;
+      U.html(legends, eventKinds.map(({ id, label, color }) => {
+        const value = counts[id], absent = id === 'game' && noGame;
+        return !absent && !finite(value) ? '' : `<li style="--swatch:${absent ? '#aaa9a5' : color}">${label}${absent ? '：没打游戏' : ` ${value} 次`}</li>`;
+      }).join(''));
+      dailyHost.hidden = !hasDays;
+      if (hasDays) daily.set({ labels: days.map(d => ({ text: d.day.slice(5), title: d.day })),
+        values: Object.fromEntries(eventKinds.map(({ id }) => [id, days.map(d => eventCounts(d)[id])])) });
+      mark();
     } };
+  }
+
+  function alignForeground(pack, frame) {
+    const day = pack?.rows?.day, from = seconds(frame.from), to = seconds(frame.to);
+    if (!day?.spans?.length || !(to > from)) return pack;
+    const dayEnd = seconds(day.to);
+    const spans = dayEnd < to ? [...day.spans.filter(([t]) => t < dayEnd), [dayEnd, null]] : day.spans;
+    return { ...pack, rows: { day: { ...day, label: '前台程序', from: frame.from, to: frame.to, spans } } };
+  }
+  function frameRanges(series) {
+    const groups = [];
+    const points = series?.points || [];
+    for (let i = 0; i < points.length; i++) {
+      const [start, value] = points[i];
+      if (!finite(value)) continue;
+      const end = Math.min(start + 60, points[i + 1]?.[0] ?? start + 60);
+      const prior = groups.at(-1);
+      if (prior?.end === start) prior.end = end;
+      else groups.push({ start, end });
+    }
+    return groups;
+  }
+  function frameLabels(plot, active) {
+    if (!plot) return;
+    const from = seconds(framePack.from), to = seconds(framePack.to), span = to - from;
+    const names = data?.fps?.sources?.length ? data.fps.sources : frameRanges(active);
+    let el = plot.querySelector('.smooth-frame-sources');
+    if (!el) { el = document.createElement('div'); el.className = 'smooth-frame-sources'; plot.append(el); }
+    U.html(el, span > 0 ? names.map(s => {
+      const start = Math.max(from, s.start), end = Math.min(to, s.end);
+      if (!(end > start)) return '';
+      const label = join(s.game_name ? `《${U.sp(s.game_name)}》` : U.sp(frameSource(s.process_name)) || '帧源未记录', finite(s.fps) && `${Math.round(s.fps)} 帧`);
+      return `<span${s.game_name ? ' data-game' : ''} style="left:${(start - from) / span * 100}%;width:${(end - start) / span * 100}%">${U.esc(label)}</span>`;
+    }).join('') : '');
   }
   function foregroundChapter(el) {
-    const fpsNote = document.createElement('p');
-    fpsNote.className = 'row__sub smooth-fps-empty';
-    fpsNote.textContent = '此时段没有帧率读数';
-    fpsNote.hidden = true;
-    el.append(fpsNote);
-    const tl = timeline(el, '前台程序同步带', 'foreground', '前台程序');
-    const say = caption(el);
-    return { set() {
-      const pack = data?.foreground, row = pack?.rows?.day;
-      const covered = coveredSeconds(pack, s => !unrecorded(s));
-      const noCurves = !!data && ![data.fps, data.frametime, data.jitter].some(p => p?.series?.some(measured));
-      fpsNote.hidden = !noCurves;
-      el.closest('.grp').classList.toggle('fps-no-curves', noCurves);
-      const names = timelinePack(pack, 'foreground')?.states?.filter(s => !unrecorded(s)).map(s => U.fieldText(s.label)).filter(Boolean);
-      const seconds = Math.round(covered), h = Math.floor(seconds / 3600), m = Math.floor(seconds / 60) % 60, s = seconds % 60;
-      const total = [h && `${h} 小时`, m && `${m} 分钟`, (s || !seconds) && `${s} 秒`].filter(Boolean).join(' ');
-      say(windowText(pack?.window) || windowText(row), covered > 0 && `前台共 ${total}`,
-        names?.length && `显示 ${new Set(names).size} 个程序（最多 15 个）`, names?.length && '各项单独四舍五入到分钟，离开电脑的时间不计');
-      tl.set(pack ?? null);
+    el.innerHTML = '<div class="frame-sync"><p class="grp-split__k">前台程序同步带 · 这会儿在看哪个窗口</p><div></div></div><p class="smooth-frame-notes">帧率按每两张画面的间隔算，每分钟取平均；平均帧率是实际画了几张除以秒数，两条差得多说明忽快忽慢<br>最低 1% 是最慢那 1% 画面的帧率；单帧耗时是每分钟最慢的一张画了多久；抖动是相邻两张差了多久</p>';
+    const wrap = el.querySelector('.frame-sync'), host = wrap.lastElementChild, card = el.closest('.grp');
+    const tl = V.timeline(host, { rows: [{ key: 'day', label: '前台程序' }] });
+    const plot = host.querySelector('.vz-tl__plot'), cursor = document.createElement('i');
+    cursor.className = 'smooth-sync-cursor'; cursor.hidden = true; plot.append(cursor);
+    let from, to;
+    sync.add({ mark() {}, point(at) {
+      cursor.hidden = at == null || !(to > from && at >= from && at <= to);
+      if (!cursor.hidden) cursor.style.left = `${(at - from) / (to - from) * 100}%`;
+    } });
+    U.pointing(plot, event => {
+      const box = plot.getBoundingClientRect();
+      if (box.width && to > from) sync.at(from + (event.clientX - box.left) / box.width * (to - from));
+    }, () => sync.at(null));
+    return { set(g) {
+      const measuredSeries = framePack.series?.filter(measured) || [];
+      const pack = data?.foreground;
+      const hues = new Set(pack?.states?.map(s => s.hue));
+      const states = pack?.states?.map((s, i) => ({ ...s,
+        label: program(U.fieldText(s.display_label ?? s.label)) || s.label,
+        hue: hues.size > 1 && s.hue || ['blue', 'pink', 'violet', 'apricot', 'teal'][i % 5],
+      }));
+      wrap.hidden = !pack?.rows?.day?.spans?.length;
+      const aligned = alignForeground({ ...pack, states }, framePack);
+      from = seconds(aligned.rows?.day?.from); to = seconds(aligned.rows?.day?.to);
+      if (!wrap.hidden) tl.set(aligned);
+      card.classList.toggle('fps-empty', Boolean(data) && !measuredSeries.length);
+      card.classList.toggle('fps-single', g.chips.length <= 1);
+      el.hidden = wrap.hidden && !measuredSeries.length;
+      const chart = card.querySelector('.grp__hero');
+      const active = measuredSeries.find(s => s.id === chart.querySelector('[data-line]')?.dataset.line) || measuredSeries[0];
+      frameLabels(chart.querySelector('.chart__plot'), active);
     } };
+  }
+
+  const metrics = (row, fields) => fields.filter(([k]) => finite(row[k])).map(([k, label, unit]) => `${label} ${V.fmt(row[k], unit)}`).join(' · ');
+  function addAppPicture(el) {
+    const card = el.closest('.grp'), glass = card.querySelector('.card__glass');
+    card.dataset.pic = 'right';
+    // 插画在靠近视口时和原来的画卡一起载入，首屏无需为下面两块先取图。
+    glass.insertAdjacentHTML('beforebegin', `<img class="card__tint" src="${appPicture}" alt="" loading="lazy" aria-hidden="true">`);
+    glass.insertAdjacentHTML('afterbegin', `<span class="card__pic" aria-hidden="true"><img src="${appPicture}" alt="" loading="lazy"></span>`);
   }
   function appsChapter(el) {
-    el.innerHTML = '<div class="grp-split"><div><p class="grp-split__k">各程序的流畅度 · 按前台时长排</p><div data-x="apps"></div></div><div><p class="grp-split__k">全屏和窗口的差别</p><div data-x="modes"></div></div></div>';
-    const appHost = el.querySelector('[data-x="apps"]'), modeHost = el.querySelector('[data-x="modes"]'), split = appHost.closest('.grp-split');
-    const apps = V.block(appHost, V.rank(appHost, { show: Infinity, mark: true, more: (n) => `展开（还有 ${n} 条）` }), () => data, 'apps');
-    const modes = V.block(modeHost, V.rank(modeHost, { show: Infinity, mark: true }), () => data, 'modes');
-    const appNote = caption(appHost.parentElement), modeNote = caption(modeHost.parentElement);
-    el.querySelectorAll('.vz-rank').forEach((host) => host.classList.add('vz-rank--detail'));
-    return { set() {
-      const a = data?.apps, m = data?.modes, meta = data?.blocks?.apps, attribution = data?.stutters?.attribution;
-      split.classList.toggle('is-unbalanced', (a?.length || 0) > Math.max(6, (m?.length || 0) * 3));
-      const appPct = a?.some(r => r.stutter_pct != null), modePct = m?.some(r => r.stutter_pct != null), severePct = m?.some(r => r.severe_pct != null);
-      appNote(a?.length && (windowText(meta?.window) || (cutoff(meta?.at) && `排行截止 ${cutoff(meta.at)}`)),
-        a?.length && (meta?.basis || '按有硬件帧采样的 30 秒段估算'), a?.length && data?.labels?.fps_table_low && U.sp(data.labels.fps_table_low).replace(/^有效 30 秒平均帧率的第 10 百分位$/, '低谷帧率：每 30 秒算一次平均帧率，取最差的那一成'),
-        a?.length && !appPct && '卡顿帧占比没有记录', attribution?.unassigned_events > 0 && `${attribution.unassigned_events} 次无法归到单一程序`,
-        attribution?.other_program_events > 0 && `${attribution.other_program_events} 次发生在未上榜程序`);
-      modeNote(m?.length && !modePct && '卡顿帧占比没有记录');
-      apps.set(a?.map((r, i) => {
-        const label = appLabel(r.display_label ?? r.app);
-        const icon = typeof label === 'string' && /^([\p{Extended_Pictographic}\p{Regional_Indicator}]\uFE0F?)\s+/u.exec(label);
-        const name = icon ? label.slice(icon[0].length) : label;
-        return S.row({ key: `app:${i}`, name, mark: icon?.[1], sub: info(r, appPct), value: r.seconds, text: num(r.seconds, '秒'), hue: V.categoryHues[r.category] }, r, 'seconds');
-      }) ?? null);
-      modes.set(m?.map((r, i) => S.row({ key: `mode:${i}`, name: r.mode, sub: metricLine([info(r, modePct), severePct && metric(r, 'severe_pct', '严重卡顿帧占比', '%')]), value: r.seconds, text: num(r.seconds, '秒'), hue: 'violet' }, r, 'seconds')) ?? null);
-    } };
-  }
-  function resourceChapter(el) {
-    const tl = timeline(el, '整机 CPU 和显卡使用情况', 'bottleneck', 'CPU 和显卡'), say = caption(el);
-    return { set() {
-      const pack = data?.bottleneck;
-      const plain = text => U.sp(text).replace(/前台进程/g, '前台程序').replace(/整机逻辑处理器时间/g, '整台电脑 CPU 时间').replace(/，?按分段取均值/g, '（每段取平均）');
-      say(data?.resource && `上图是${plain(data.resource.cpu_basis?.label || '前台进程占用')}`,
-        pack && `下方“CPU 很忙”指${plain(pack.cpu_basis?.label || '同一采样桶内整机 CPU ≥80% 且 GPU <80%')}`);
-      tl.set(pack ? { ...pack, states: pack.states?.map(s => typeof s.label === 'string' ? { ...s, label: s.label.replace(/CPU\s*忙碌瓶颈\s*\(>=\s*80%\)/, 'CPU 很忙（≥80%）') } : s) } : null);
-    } };
-  }
-  const unrecorded = s => /^(?:unrecorded|missing|none|unknown)$/.test(s.id) || /^(?:未记录|未采样|状态未识别|缺测|没有记录|没有前台采样|当前窗口无可用前台样本)/.test(U.sp(s.label));
-  function usageChapter(el) {
-    const tl = timeline(el, '', 'usage', '使用状态'), say = caption(el);
-    return { set() {
-      const pack = data?.usage, row = pack?.rows?.day, [from, to] = bounds(row);
-      const explicit = coveredSeconds(pack, unrecorded), known = coveredSeconds(pack, s => !unrecorded(s));
-      const missing = Math.max(0, to - from - known - explicit);
-      const totals = pack?.breakdown?.filter(s => Number.isFinite(s.seconds));
-      if (totals?.length) say(windowText(pack.window) || windowText(row), ...totals.map(s => `${U.sp(s.label)} ${s.seconds < 60 ? `${Math.round(s.seconds)} 秒` : V.dur(s.seconds)}`));
-      else say(known > 0 && windowText(row), known > 0 && missing > 0 && `${explicit > 0 ? '另有' : ''}未记录 ${missing < 60 ? '不足 1' : Math.round(missing / 60)} 分钟`);
-      tl.set(known > 0 ? pack : null);
-    } };
-  }
-  // 卡顿明细的卡头（M616）：“最近一次记录于”写最后一笔合格帧（recorded_at），截止时刻由页头和汇总自己的 window.to 写；
-  // 缺帧是部分记录，照各块给的缺项写缺了什么、为什么，只有 read_error 才写读取失败。
-  // 旧包这一组没有 recorded_at、缺项只有通用的 read_failed：时刻改用汇总的 recorded_at（也没有就不写时刻），缺项换成各块的真实缺项。
-  const lastStamp = t => [U.date(t) === U.date(Date.now()) ? '' : U.date(t), U.time(t)].filter(Boolean).join(' ');
-  function stutterGiven(given) {
-    if (!given || given.gray_reason !== 'partial') return given;
-    const blocks = [data?.blocks?.stutters, data?.blocks?.summary, data?.stutters, data?.summary];
-    if (Object.hasOwn(given, 'read_error') ? given.read_error === true : blocks.some(b => b?.read_error === true || b?.error)) return given;
-    const named = m => m && typeof m === 'object' ? Object.fromEntries(Object.entries(m).filter(([k]) => /[\u3400-\u9fff]/.test(k))) : {};
-    const real = Object.assign({}, ...blocks.map(b => named(b?.missing)), named(given.missing));
-    const keys = Object.keys(real), out = { ...given, partial: keys, missing: real };
-    if (!Object.hasOwn(given, 'recorded_at') && typeof given.why === 'string') {
-      const recorded = blocks.map(b => b?.recorded_at).find(t => t && Number.isFinite(Date.parse(t)));
-      out.why = given.why.replace(/[，,]?\s*最近一次记录于 (?:\d{2}-\d{2} )?\d{2}:\d{2}/, recorded ? `，最近一次记录于 ${lastStamp(recorded)}` : '');
+    addAppPicture(el);
+    el.innerHTML = '<div class="grp-split"><section><p class="grp-split__k">最大化窗口和普通窗口的差别</p><div data-x="modes"></div><p class="stat-gap"></p></section><section><p class="grp-split__k">各程序的流畅度 · 帧算在真正画它的程序头上</p><div data-x="apps"></div><p class="stat-gap"></p></section></div>';
+    const modesHost = el.querySelector('[data-x="modes"]'), appsHost = el.querySelector('[data-x="apps"]');
+    const modes = V.rank(modesHost, { show: Infinity, mark: true }), apps = V.rank(appsHost, { show: Infinity, mark: true });
+    const fields = [['fps', '平均帧率', 'FPS'], ['low', '低谷帧率', 'FPS'], ['stutter_pct', '卡顿帧占比', '%']];
+    function row(r, key, label, hue, readings) {
+      const named = U.sp(label), icon = /^([\p{Extended_Pictographic}\p{Regional_Indicator}]\uFE0F?)\s+/u.exec(named);
+      return S.row({ key, name: icon ? named.slice(icon[0].length) : named, mark: icon?.[1], sub: readings, value: r.seconds, text: finite(r.seconds) ? V.fmt(r.seconds, '秒') : '', hue }, r, 'seconds');
     }
-    return out;
+    return { set() {
+      const shapes = data?.modes, sources = data?.fps?.apps;
+      modesHost.parentElement.hidden = !shapes?.length;
+      modes.set(shapes?.map((r, i) => row(r, `mode:${i}`, modeName(r.mode), 'violet', metrics(r, [...fields, ['severe_pct', '严重卡顿帧占比', '%']]))) ?? null);
+      modesHost.nextElementSibling.textContent = shapes?.length ? readingLine('modes', true) : '';
+      const hasFrames = framePack.series?.some(measured);
+      appsHost.parentElement.hidden = !sources?.length && !hasFrames;
+      if (sources?.length) apps.set(sources.map((r, i) => row(r, `source:${i}`, r.display_label || program(r.process_name) || '帧源未记录', 'stone', metrics(r, [...fields, ['stutter_events', '卡顿', '次']]))));
+      else if (hasFrames) apps.wait('帧源未记录');
+      appsHost.nextElementSibling.textContent = sources?.length ? join(windowText(block('apps')?.window), block('apps')?.basis,
+        data?.labels?.fps_table_low && '低谷帧率：每 30 秒算一次平均帧率，取最差的那一成') : '';
+    } };
+  }
+
+  function methodChapter(el) {
+    addAppPicture(el);
+    el.closest('.grp').id = 'how-measured';
+    el.innerHTML = `<dl class="smooth-method">
+      <div><dt>帧率怎么量</dt><dd><p>显卡统计工具 RTSS 读每一张画面隔了多久；RTSS 读不到时，换 PresentMon 从 Windows 的显示记录里读。有画面在出帧就记，不管是游戏还是动态壁纸画的，大图里标着每一段是哪个程序画的。有曲线不等于在打游戏。</p><ul>
+      <li>帧率：按每两张画面隔多久算出的速度，每分钟取平均。</li>
+      <li>平均帧率：一段时间里实际画了几张，除以秒数。画面忽快忽慢时它会比帧率低，两条差得越多越不稳。</li>
+      <li>最低 1%：最慢那 1% 画面的帧率，每分钟取最低的。</li>
+      <li>单帧耗时：每分钟最慢的那一张画了多久。</li>
+      <li>帧时抖动：相邻两张画面用时差了多少，每分钟取最大的。</li>
+      <li>帧率是每分钟的平均，单帧耗时是每分钟最慢的那一张，所以 120 帧的那一分钟里也可能有一张 40 毫秒的画面，两个数不矛盾。</li></ul></dd></div>
+      <div><dt>卡顿怎么量</dt><dd><ul><li data-method="game"></li><li data-method="hang"></li><li>平时（不在游戏里）很短的顿一下记不到，现在没有能直接拿来数的读数。</li></ul></dd></div>
+      <div><dt>怎么算“在打游戏”</dt><dd>游戏在前台、你在用，才算在玩；游戏挂在后台不算，动态壁纸、微信、浏览器、游戏启动器也都不算。来回切换窗口时，“在玩”会跟着断断续续，这是正常的。</dd></div>
+      <div><dt>多久更新</dt><dd data-method="period"></dd></div>
+      <div><dt>什么时候不记</dt><dd><ul><li>关机、睡眠时不记，时间轴上写“关机”“睡眠”；死机到重启那段也算关机。</li><li>锁屏、关屏、离开电脑的时段不算卡顿。</li></ul></dd></div></dl>`;
+    return { set() {
+      const { micro, severe, hang, gameSample, hangSample } = thresholds();
+      const change = (name, text) => { el.querySelector(`[data-method="${name}"]`).textContent = text; };
+      change('game', `游戏画面卡：只在打游戏时量。一张画面超过 ${micro} 毫秒算卡（60 帧时一张约 17 毫秒），超过 ${severe} 毫秒算严重卡。每 ${gameSample} 秒看一次，挨着的几次合成一次。没打游戏时，曲线多半是动态壁纸画的，壁纸顿一下不影响你在用的程序，所以不算。`);
+      change('hang', `程序卡住：Windows 发现某个程序的窗口约 ${hang} 秒不响应，就标“没响应”；电脑记录工具约每 ${hangSample} 秒看一次，连着标的算一次，时长就是标了多久。平时用电脑卡不卡，看这一项。`);
+      change('period', `后台每秒记一次硬件读数，约每 ${hangSample} 秒看一次有没有程序卡住；这页每 ${PAGE_REFRESH_MINUTES} 分钟自动取一次新数。哪一块超过 ${CLOSE_AFTER / 60} 分钟没取到新数，那一块会写“最后记录于几点”。`);
+    } };
+  }
+
+  function fpsContext() {
+    const h = history(), status = gameStatus();
+    if (h?.played === true) return gameHistory(h);
+    const source = status.frame?.process_name;
+    const noGame = h?.complete === true && h.played === false;
+    return join(noGame && '近 24 小时没打游戏', source && `现在出帧的是 ${frameSource(source)}`);
   }
   function groups() {
-    const s = data?.summary, app = data?.apps?.[0], appName = appLabel(app?.display_label ?? app?.app);
-    const usage = data?.usage, active = coveredSeconds(usage, s => s.id === 'active' || /^(?:在用|正常使用|正常工作)$/.test(U.sp(s.label)));
-    const out = [
-      { key: 'stutters', name: '卡顿明细', palette: ['pink', 'violet'], pic: '/live/img/head-smooth.webp',
-        line: '',
-        figures: [{ key: 'active', label: '在用电脑', value: s?.active, unit: '秒' }, { key: 'clear', label: '流畅时段', value: s?.clear, unit: '秒' }, { key: 'stutter', label: '卡顿时长', value: s?.stutter, unit: '秒' }, { key: 'events', label: '近 24 小时卡顿', value: s?.events, unit: '次' }].map((f) => S.figure(f, s, f.key)), build: stutterChapter },
-      { key: 'fps', name: '帧率与手感', palette: ['teal', 'blue', 'pink'], line: '',
-        figures: [{ key: 'now', label: '帧率', line: 'current', hue: 'teal' }, { key: 'avg', label: '时点平均帧率', line: 'average', hue: 'apricot' }, { key: 'low', label: '最低 1%', line: 'low', hue: 'pink' }],
-        say: (c, sums) => c.key === 'fps' && sums[0]?.max != null ? `最高 ${num(sums[0].max, 'FPS')}${sums[0].maxAt == null ? '' : `（北京时间 ${cutoff(new Date(sums[0].maxAt * 1000).toISOString())}）`}，记录中的平均帧率 ${num(sums[0].avg, 'FPS')}` : '',
-        chips: [{ key: 'fps', label: '帧率', lines: [L('current', '帧率', 'teal')], unit: 'FPS' }, { key: 'average', label: '时点平均帧率', lines: [L('average', '时点平均帧率', 'apricot')], unit: 'FPS' }, { key: 'low', label: '最低 1%', lines: [L('low', '最低 1%', 'pink')], unit: 'FPS' }, { key: 'frametime', label: '单帧耗时', lines: [L('frametime', '单帧耗时', 'blue')], unit: 'ms' }, { key: 'jitter', label: '帧时抖动', lines: [L('jitter', '帧时抖动', 'violet')], unit: 'ms' }], build: foregroundChapter },
-      { key: 'apps', name: '各程序与窗口形态', palette: ['blue', 'violet'], line: typeof appName === 'string' ? `前台最久的是 ${U.sp(appName)}` : appName,
-        figures: [{ key: 'apps', label: '程序', value: data?.apps?.length, unit: '个' }, { key: 'modes', label: '窗口形态', value: data?.modes?.length, unit: '种' }, S.figure({ key: 'fps', label: '最久程序平均帧率', value: app?.fps_samples === 0 ? null : app?.fps, unit: 'FPS' }, app, 'fps')], build: appsChapter },
-      { key: 'resource', name: '资源与瓶颈', palette: ['violet', 'blue'], line: '对着卡顿时刻看前台资源和受限原因',
-        figures: [{ key: 'cpu', label: '前台 CPU', line: 'cpu', hue: 'violet' }, { key: 'gpu', label: '前台显卡', line: 'gpu', hue: 'blue' }, { key: 'ram', label: '前台内存', line: 'ram', hue: 'teal' }, { key: 'vram', label: '前台显存', line: 'vram', hue: 'apricot' }],
-        chips: [{ key: 'resource', label: '前台 CPU 和显卡', lines: [L('cpu', '前台 CPU', 'violet'), L('gpu', '前台显卡', 'blue')], unit: '%', ceil: 100 }, { key: 'memory', label: '前台内存和显存', lines: [L('ram', '前台内存', 'teal'), L('vram', '前台显存', 'apricot')], unit: 'GB' }], build: resourceChapter },
-      { key: 'usage', name: '使用状态', palette: ['apricot', 'blue'], line: '睡眠、暂离和在用的时段', figures: [{ key: 'active', label: '在用电脑', value: coveredSeconds(usage, s => !unrecorded(s)) > 0 ? active : null, unit: '秒' }], build: usageChapter },
-    ];
-    const known = { stutters: s ?? data?.stutters, fps: data?.fps, apps: data?.apps, resource: data?.resource, usage: data?.usage };
-    const pictures = { stutters: '/live/img/head-smooth.webp', fps: '/live/img/grp-machine.webp', apps: '/live/img/head-apps.webp', resource: '/live/img/grp-cpu.webp', usage: '/live/img/use-day.webp' };   // 图址写全，构建才认得出、换成云端地址
-    const curves = [...data?.fps?.series || [], ...data?.frametime?.series || [], ...data?.jitter?.series || []];
-    const hasCurve = id => measured(curves.find(line => line.id === id));
-    const knownGroups = out.map((g) => {
-      const found = data?.groups?.find(x => (x.key ?? x.id) === g.key), given = g.key === 'stutters' ? stutterGiven(found) : found;
-      const givenNames = g.key === 'stutters' ? [...new Set([...(s?.missing_readings || []), ...(data?.blocks?.summary?.missing_readings || []), ...(data?.blocks?.stutters?.missing_readings || [])])] : data?.blocks?.[g.key]?.missing_readings;
-      const names = uncovered(givenNames?.length || g.key !== 'stutters' ? givenNames : grayNames(data), s);
-      const frames = g.key === 'fps' && !!data;
-      return { ...given, ...g, ...(names?.length ? { missing_readings: names, partial: names } : {}),
-        ...(frames ? { chips: g.chips.filter((c, i) => !i || c.lines.some(l => hasCurve(l.id))) } : {}),
-        figures: frames ? g.figures.filter(f => hasCurve(f.line)) : known[g.key] == null ? [] : g.figures,
-        line: data ? g.line : '', pic: pictures[g.key], reason: given?.reason, grafana: data?.grafana?.href };
-    });
-    return window.LiveAdaptive?.groups(data, knownGroups, ['frametime', 'jitter', 'memory', 'foreground', 'bottleneck', 'summary', 'daily_stutters', 'modes']) || knownGroups;
+    const grafana = data?.grafana?.href;
+    const use = key => ({ sourceNotes: false, grafana, wait: data ? false : undefined,
+      level: key === 'stutters' ? 'gray' : 'none' });
+    const counts = eventCounts(data?.summary), complete = Object.values(counts).every(finite);
+    const stutterLine = readingLine('stutters', finite(data?.summary?.events), '近 24 小时');
+    const fpsLine = readingLine('fps', framePack.series.length > 0, '', '这段时间没读到帧率');
+    const first = data?.apps?.[0], front = first && U.sp(program(first.display_label ?? first.app));
+    const options = data ? chips.filter(c => c.lines.some(l => framePack.series?.some(s => s.id === l.id && measured(s)))) : chips;
+    return [
+      { ...use('stutters'), key: 'stutters', name: '卡顿明细', pic: picture, palette: ['pink', 'violet'], build: stutterChapter,
+        line: join(stutterLine, data && !complete && '游戏画面卡和程序卡住还没有分开记录') },
+      { ...use('fps'), key: 'fps', name: '帧率与手感', pic: picture, palette: ['teal', 'pink'], chips: options, hero: 'fps', build: foregroundChapter,
+        line: fpsLine, say: () => fpsContext() || ' ' },
+      { ...use('apps'), key: 'apps', name: '各程序与窗口形态', palette: ['violet', 'pink'], build: appsChapter,
+        line: join(front && `前台最久的是 ${front}`, readingLine('apps', Boolean(first))) },
+      { ...use(), key: 'method', name: '这页怎么量的', palette: ['violet', 'pink'], build: methodChapter, wait: false },
+    ].map(g => ({ ...g, line: data ? g.line : '' }));
   }
-  function tidyStutterHeading() {
-    const line = document.querySelector('.grp[data-key="stutters"] .grp__line');
-    if (!line) return;
-    const status = line.querySelector('.grp__status');
-    const recent = /最近一次记录于 (?:\d{2}-\d{2} )?\d{2}:\d{2}/;
-    const reported = status.textContent.match(recent)?.[0];
-    for (const block of status.querySelectorAll('[data-block="stutters"]')) {
-      const note = block.textContent.replace(/^卡顿\s*·\s*/, '');
-      if (/^(?:这次没读到，)?最近一次记录于 (?:\d{2}-\d{2} )?\d{2}:\d{2}$/.test(note) && U.sameCutoffNote(reported, note)) {
-        const separator = block.previousSibling;
-        if (separator?.nodeType === Node.TEXT_NODE) separator.textContent = separator.textContent.replace(/\s*·\s*$/, '');
-        block.remove();
-      }
-    }
-    // 卡头已写“数据截止 HH:MM”时，摘要、卡顿两块各自的“截至 MM-DD HH:MM”是同一时刻，不再说第二遍（M677）
-    const day = t => t.includes(' ') ? t : `${U.date(Date.now())} ${t}`;
-    const said = status.textContent.match(/数据截[止至] ((?:\d{2}-\d{2} )?\d{2}:\d{2})/)?.[1];
-    for (const block of status.querySelectorAll('[data-block]')) {
-      const at = block.textContent.match(/·\s*截[止至] ((?:\d{2}-\d{2} )?\d{2}:\d{2})$/)?.[1];
-      if (!said || !at || day(said) !== day(at)) continue;
-      const separator = block.previousSibling;
-      if (separator?.nodeType === Node.TEXT_NODE) separator.textContent = separator.textContent.replace(/\s*·\s*$/, '');
-      block.remove();
-    }
-    const time = line.querySelector('.grp__cutoff'), top = document.querySelector('#hero .head__cutoff')?.textContent;
-    if (/^数据截止 (?:\d{2}-\d{2} )?\d{2}:\d{2}$/.test(time.textContent) &&
-        [reported, top].some(note => U.sameCutoffNote(note, time.textContent))) time.textContent = '';
-    V.cardLineTitle(line);
-  }
-  const detailBoard = { ...board, blocks(d, map, off) {
-    summary = d?.summary;
-    board.blocks(displayData(d), { ...map, fps: d?.fps?.series?.some(measured) ? ['fps'] : [], usage: ['usage'] }, off);
+  const detailBoard = { ...board, blocks(d, _map, offline) {
+    board.blocks(d, { stutters: [], fps: [], apps: [], method: [] }, offline);
   } };
-  LiveDetail.mount({ resource: 'computer/smooth', board: detailBoard, merge: () => LiveDetail.merge(data, ['fps', 'frametime', 'jitter', 'resource', 'memory']),
-    statusData: d => d?.summary?.coverage_note ? { ...d, partial: uncovered(d.missing_readings, d.summary), gray_count: null } : d, render(d) {
-    data = d = displayData(d && !d.summary && summary?.events != null ? { ...d, summary } : d); const list = groups(); board.set(list); window.LiveAdaptive?.tail(document.getElementById('board'), list);
-    const notes = [...new Set([].concat(d?.note || []).filter(Boolean))].filter(s => !d?.groups?.some(g => ['red', 'yellow'].includes(g.level) && g.reason === s)), note = document.getElementById('hero').querySelector('[data-part="note"]');
-    if (d?.summary?.coverage_note) notes.push(d.summary.coverage_note);
-    if (d?.missing_readings?.length && U.status(d).tone !== 'gray') notes.push(`缺：${d.missing_readings.join('、')}`);
-    note.hidden = !notes.length; U.html(note, LiveDetail.noteHtml(notes));
-    if (d?.missing_readings?.length) queueMicrotask(() => {
-      const status = note.querySelector('[data-why]');
-      if (status) U.html(status, U.status(d, { missingNames: { readings: d.missing_readings.join('、') } }).note);
-    });
-    S.finish(d, { stutters: ['summary', 'stutters', 'daily_stutters'], apps: ['apps', 'modes'], resource: ['resource', 'memory', 'bottleneck'] });
-    queueMicrotask(tidyStutterHeading);
+  LiveDetail.mount({ resource: 'computer/smooth', board: detailBoard, merge: () => framePack,
+    statusData: d => ({ level: d?.summary?.lamp_q === 'ok' ? 'ok' : 'gray' }), statusNotes: false,
+    extraLinks: '<a class="more more--link" href="#how-measured">怎么量的 <span class="more__chev">↓</span></a>',
+    render(d) {
+      data = d;
+      framePack = LiveDetail.merge(d, ['fps', 'frametime', 'jitter']);
+      const bounds = [d?.fps, d?.frametime, d?.jitter].find(p => p?.series?.some(measured));
+      if (bounds) { framePack.from = bounds.from; framePack.to = bounds.to; }
+      framePack.series = framePack.series.filter(s => frameIds.has(s.id) && measured(s))
+        .map(s => ({ ...s, from: framePack.from, to: framePack.to }));
+      const { micro, severe, hang } = thresholds();
+      document.getElementById('smooth-thresholds').textContent = `近 24 小时 · 游戏里一帧 ${micro} 毫秒以上算卡，${severe} 毫秒以上算严重 · 程序窗口 ${hang} 秒没反应算卡住`;
+      renderHero();
+      board.set(groups());
+    } });
+  window.Live.watch('computer/hardware', null, { data(d) {
+    hardwareStatus = d?.game_status || null;
+    renderHero();
+    const context = document.querySelector('[data-key="fps"] .grp__say');
+    if (context) context.textContent = fpsContext();
   } });
 })();
