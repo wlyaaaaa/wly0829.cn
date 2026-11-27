@@ -29,6 +29,7 @@
 .page--smooth #hero .hero__links { margin-top: auto; padding-top: 18px; }
 .page--smooth #hero .hero__links .more { font-size: clamp(16px, 1.25vw, 19px); }
 .page--smooth .l2-nav--data > span { color: var(--ink-soft); font-size: 15px; }
+.page--smooth .l2-nav--data:not(:has(span:not(:empty))) { display: none; }
 .page--smooth .vz-board { gap: 24px; }
 .page--smooth .grp[data-pic] { --win: clamp(110px, 15vw, 230px); }
 .page--smooth .grp.is-open .card__body { padding-right: calc(var(--win) * .7); }
@@ -46,6 +47,7 @@
 .stutter-layout .vz-tl__row { grid-template-columns: 0 minmax(0, 1fr); gap: 0; }
 .stutter-layout .vz-tl__label, .stutter-layout .vz-legend, .frame-sync .vz-legend { display: none; }
 .stutter-layout .vz-moment__hit { padding-block: 9px; }
+.stutter-layout .vz-moment__text .smooth-term { color: inherit; font: inherit; letter-spacing: inherit; text-wrap: nowrap; }
 .stutter-layout .smooth-more-moments { margin-left: 82px; }
 .stutter-layout .stat-gap { margin: 0; }
 .stutter-layout .vz-bars { --chart-h: clamp(126px, 11.8vw, 170px); padding-top: 12px; border-top: 1px solid rgb(40 35 30 / .09); }
@@ -69,8 +71,10 @@
 .smooth-sync-cursor { position: absolute; inset: 0 auto 0 0; border-left: 1px solid #79756c; pointer-events: none; }
 .frame-sync .vz-tl__label { font-size: 11px; }
 .frame-sync .vz-tl__row[data-row="day"] .vz-tl__plot { height: 15px; }
-.smooth-frame-sources { margin-left: 58px; }
-.smooth-frame-sources > div { display: flex; }
+.smooth-frame-sources { position: relative; margin-left: 58px; }
+.smooth-frame-sources > div > div { display: flex; }
+.smooth-frame-sources:has(.smooth-frame-point:not([hidden])) > div { visibility: hidden; }
+.smooth-frame-point { position: absolute; inset: 0 0 auto; }
 .smooth-frame-sources span { box-sizing: border-box; flex: none; padding-inline: 3px; text-align: center; overflow-wrap: anywhere; color: #5b5752; font-size: 12px; line-height: 16px; }
 .smooth-term { white-space: nowrap; }
 .smooth-frame-sources span[data-game] { color: #007b3b; }
@@ -80,6 +84,7 @@
 .page--smooth [data-key="apps"] .vz-rank__name { display: grid; gap: 1px; font-size: 17px; }
 .page--smooth [data-key="apps"] .vz-rank__name small { display: block; margin: 2px 0 0; }
 #how-measured { scroll-margin-top: 88px; }
+.page--smooth #how-measured .gf { font-size: 16px; color: var(--ink); }
 .smooth-method { margin: 0; }
 .smooth-method > div { display: grid; grid-template-columns: minmax(135px,20%) minmax(0,1fr); gap: 12px; padding: 18px 0; }
 .smooth-method > div + div { border-top: 1px solid rgb(40 35 30 / .09); }
@@ -90,6 +95,9 @@
 @container (min-width: 605px) {
   .stutter-layout:has(.vz-moment__hit) { grid-template-columns: minmax(225px,.75fr) minmax(0,1.25fr); }
   .stutter-layout:has(.vz-moment__hit) > [data-x="moments"] { border-right: 1px solid rgb(40 35 30 / .09); padding-right: 13px; }
+  .stutter-layout[data-short] { grid-template-rows: min-content 1fr; }
+  .stutter-layout[data-short] > [data-x="graphs"] { grid-area: 1 / 2 / span 2; }
+  .stutter-layout[data-short] > footer { grid-area: 2 / 1; }
 }
 </style>
 <script src="/motion/motion.js"></script>
