@@ -21,7 +21,7 @@
 <meta property="og:description" content="owner: E:\.agents">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/8e50ea97722a3ddcffc60663a26365c6d88b13e0ee2533dfd7eb22641a65ac39/images/screen1-text-v2.webp">
-<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/af42b01f62b3a1342d41a3c72ba7a29843bfe0506d2e406056d00b34cc4766c3/%E5%85%AC%E7%94%A8/fonts/ui-bce8c3832ffe51cf.css">
+<link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/e22c9bbd22d988f8e1439d61a5f6dca514bf39b926214854a389319a3b88fedb/%E5%85%AC%E7%94%A8/fonts/ui-87d8fecb2404f687.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/402674852489c4a886028bd2747be12c75ed20aa73f4b64284e83423b0cddd33/%E5%85%AC%E7%94%A8/fonts/article-027d11379c7eb77d.css">
 <link rel="stylesheet" href="https://wly0829-img-media-shanghai.cn-shanghai.oss.aliyuncs.com/releases/bd90ba0eb4b1bff521290711a186107594771472aec3fca52833032a8d0ccdf5/%E5%85%AC%E7%94%A8/fonts/mono-fac4000d49c9c843.css">
 </head>
@@ -47,7 +47,7 @@
     <a class="pill" href="/computer-access/">授权与状态</a>
   </div>
 </header>
-<main class="rules-page" data-rule-release="E524" data-rule-page="topic-engineering-delivery">
+<main class="rules-page" data-rule-release="E525" data-rule-page="topic-engineering-delivery">
   <div class="rules-title"><p class="rules-kicker"><a href="index.html">我的 AI 约法</a><span class="rules-kicker-sep"> · </span>专题</p><h1 data-source-title="" id="工程与交付">工程与交付</h1><p class="rules-public-mark" data-rule-public-mark><span class="rules-public-mark__tag">公开版</span></p></div>
   <div class="rules-layout">
     <nav class="rules-toc" aria-label="本篇目录"><ol><li class="toc-level-1"><a href="#目标优先于实现"><span class="toc-number">01</span><span class="toc-label">目标优先于实现</span></a></li>
@@ -234,7 +234,7 @@
 <ul>
 <li><strong>长期授权</strong>（<code>standing_git_closeout_authorization</code>，约法 L13）：授权在 Git 仓库里干活，就包括验证后的定向暂存、提交和正常推送，不再问。新建本人 GitHub 私有仓库、把远端改成本人 GitHub 账号下的仓库、核对过不丢提交的历史改写（含强制推送），都是普通收尾，按<a href="topic-protected-actions.html#github-%E9%87%8D%E5%A4%A7%E5%8A%A8%E4%BD%9C">GitHub 普通收尾</a>核对后直接做。本人说只留本地、不提交或不推送时照办。仓库或目标不明、同步冲突或公开内容审查没过时停下；没有上游或不能快进时先核对是否属于上述普通收尾，不因此一律请示；可能丢提交的强制推送仍须本人明确同意。遇到测试因电脑负载延期，按<a href="#%E9%AA%8C%E8%AF%81">“没验证就说不知道”</a>办理。</li>
 <li><strong>做到默认分支才算完成。</strong> 个人仓库要把提交合进实际默认分支、正常推送，并回读远端默认分支确认看得到；只在 AI 分支或工作副本上的改动不算完成。合并推送后，把自动任务或技能直接在用的活动检出快进到最新（见<a href="topic-execution-coordination.html">分工与并行施工</a>）。本人明确只要本地、保留实验分支或只要提案时按本人说的验收，不把排除的动作当成残留，也不声称没发生的同步已完成。</li>
-<li><strong>定期清理覆盖的派活工作副本到期就删。</strong> 派活包装器的定期清理按原有期限处理。任务已结束且已到期的干净工作副本直接删，不检查提交是否推送，不删分支；脱离分支的提交先挂到备份引用留住。运行中、仍在续作保留期、线程待清理或有未提交改动的工作副本保留。</li>
+<li><strong>定期清理覆盖的派活工作副本到期就删。</strong> 派活包装器的定期清理逐项处理：轮次结束满 2 小时的临时目录、构建输出和试跑副本先收；干净工作副本等任务结束满 12 小时、原线程 24 小时续作期过了直接删，不检查提交是否推送，不删分支；脱离分支的提交先挂到备份引用留住。运行中、仍在续作期、有未提交改动或归属不明的工作副本保留，原线程还没删不影响到期。</li>
 <li><strong>未合进默认分支、又没写明用途的 AI 分支按垃圾删。</strong> 除上条由派活包装器负责的工作副本外，规则表范围内，AI 施工开的分支和工作副本符合这两个条件、又闲置满 3 天，由自动清理删除，未提交或未推送的改动一并删除。GitHub 上 AI 推的同类分支同样处理。确实长期要留的极少数分支用 <code>keep/用途</code> 命名，例如 <code>keep/上线回退</code>。有未关闭的拉取请求算写明了用途，分支和对应工作副本都保留。读不到拉取请求或默认分支状态时，保留该仓库的候选。需要的改动及时合进默认分支。</li>
 <li><strong>活动检出不留中间态。</strong> 活动检出本身就是合并处时（自动任务、钩子或技能直接在用的检出），可能冲突的合并先用 <code>git merge-tree --write-tree</code> 预演；有冲突就在临时集成工作树里合并、解决并测试，再快进活动检出。活动检出里不留冲突标记或半合并状态，哪怕几分钟，读它的自动任务会当场读坏。</li>
 <li><strong>每个改过的仓库都收尾。</strong> 任务结束前按实际改动的落点逐个仓库回读，包括链接指向的私人配套仓库；有改动就验证、提交、推送、回读默认分支。接手时发现别的任务留下的改动，先弄清来源和用意，确认那件事已结束、改动完整才一起提交。弄不清、还在做、实际有冲突或本人明确不推送的，留在原处并说一句。几个对话共用一个检出时，暂存区里可能已有别的对话暂存好的文件：提交自己的改动用 <code>git commit -- &lt;自己的文件&gt;</code>，只提交列出的路径；先 <code>git add</code> 再不带路径的 <code>git commit</code> 会把别人暂存的一起提交（2026-11-15 实际发生过）。</li>
@@ -253,8 +253,8 @@
 </article>
     <aside class="rules-meta" aria-label="版本与专题">
       <dl>
-        <div><dt>版本</dt><dd>E524</dd></div>
-        <div><dt>发布</dt><dd>2026-11-28 02:23 <small>北京时间</small></dd></div>
+        <div><dt>版本</dt><dd>E525</dd></div>
+        <div><dt>发布</dt><dd>2026-11-28 06:55 <small>北京时间</small></dd></div>
         <div><dt>适用范围</dt><dd>仅适用于 Codex、Claude、Antigravity</dd></div>
         <div class="meta-charter"><dt>约法</dt><dd><a href="index.html">我的 AI 约法</a></dd></div>
         <div class="meta-topics"><dt>专题</dt><dd><ul><li><a href="topic-authorization.html">用户授权</a></li>
@@ -268,7 +268,7 @@
 <li><a href="topic-claude-adapter.html">Claude 适配</a></li>
 <li><a href="topic-codex-adapter.html">Codex 适配</a></li>
 <li><a href="topic-antigravity-adapter.html">Antigravity 适配</a></li></ul></dd></div>
-        <div><dt>字数</dt><dd data-rule-count>约法 8,661 字<br>工程与交付 13,817 字</dd></div>
+        <div><dt>字数</dt><dd data-rule-count>约法 8,661 字<br>工程与交付 13,856 字</dd></div>
         <div class="meta-extra"><dt>钩子</dt><dd><a href="/live/agents/#hooks">实况 · 智能体页的钩子</a></dd></div>
       </dl>
     </aside>
