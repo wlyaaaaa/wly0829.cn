@@ -3,7 +3,7 @@
   if (cover) {
     const root = document.documentElement;
     const pictures = document.getElementById('pictures');
-    pictures.style.setProperty('--picture-scale', Math.min(1, root.clientWidth / pictures.offsetWidth));
+    pictures.style.setProperty('--picture-scale', Math.min(1, document.body.clientWidth / pictures.offsetWidth));
     if (root.classList.contains('mo-cover-refresh')) {
       cover.addEventListener('animationend', () => {
         root.classList.remove('mo-cover-refresh');
