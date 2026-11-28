@@ -5,7 +5,7 @@
 // 另读这一类的列表找上一轮、下一轮和接着做的那一轮，读 automation 拿快讯条和类名。取数转换在 ../runs.js。
 (() => {
   'use strict';
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, R = window.AutomationRuns, { esc } = U;
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
   // 已撤类别的旧轮仍可点开。
@@ -273,7 +273,8 @@
   // 派活程序先说排上这一轮：为什么开（后台写了就照写；没写用触发和这件活拼），账本这件第几次看，交给 AI 的原话
   function opening(r, d) {
     const start = r.queuedAt || r.startedAt, program = r.who?.program;
-    const reason = r.why ? F(r.why, '为什么开这一轮') : [r.trigger && `按“${F(r.trigger, '为什么开这一轮')}”开的这一轮。`, r.subject && `修的是“${F(r.subject.title, '这件活')}”${nth(r) ? `，这是第 ${int(nth(r))} 轮` : ''}。`, G[category]?.trigger && `这一类什么时候开：${esc(G[category].trigger)}`].filter(Boolean).join('') || '后台没写为什么开这一轮。';
+    const trigger = list(board?.data?.categories).find(c => c.id === category)?.how_to?.trigger;
+    const reason = r.why ? F(r.why, '为什么开这一轮') : [r.trigger && `按“${F(r.trigger, '为什么开这一轮')}”开的这一轮。`, r.subject && `修的是“${F(r.subject.title, '这件活')}”${nth(r) ? `，这是第 ${int(nth(r))} 轮` : ''}。`, trigger && `这一类什么时候开：${esc(trigger)}`].filter(Boolean).join('') || '后台没写为什么开这一轮。';
     const look = r.ledger?.look ? `${/[。！？.!?]$/.test(U.fieldText(r.why || '', viewer)) || !r.why ? '' : '。'}第 ${int(r.ledger.look)} 次看。` : '';
     const before = r.resumes ? other(r.resumes) : null;
     const resumes = r.resumes ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumes))}">接着${before ? ` ${esc(clockOf(r, before.startedAt))} ` : '前'}那一轮做${before?.reason ? `（那一轮${F(before.reason, '原因')}）` : ''} ›</a></p>` : '';

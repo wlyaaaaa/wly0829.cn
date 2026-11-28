@@ -1,15 +1,16 @@
 // 实况 · 自动任务 · 这一类怎么干：照成品图 05-怎么干-每周规矩复核（主控 01:29 定单做一页；本人 11-24 13:00：“怎么干”是看机制，不介绍最近几次）。
 // 什么时候开始、一轮怎么走、交给 AI 的话（原文收着，点开正常字号）、为什么这样设计、坏了会怎样、关了会怎样、花多少时间、结果去哪；右栏去这一类的页、自动任务、账本。
-// 办法的解释在 ../mechanisms.js，排期、时限、型号、开关和提示词从 automation 读。
+// 办法的解释、排期、时限、型号、开关和提示词都从 automation 读。
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
   const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/'); return; }
-  const T = window.LiveTape, U = window.LiveUI, G = window.LiveAutomationGuide || {}, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, { esc } = U;
   const { list } = T;
-  const g = G[id] || {}, repair = id === 'auto-repair';
+  const repair = id === 'auto-repair';
+  const category = d => list(d?.categories).find(x => x.id === id);
   const promptNames = { website: '网站交接', projects: '仓库清理' };
   let state, viewer = 'public', landed = false;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
@@ -47,7 +48,6 @@
       if (![repair_limit, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
         return '同一件最多修几轮、排队多久算没人接手，这次没读到。';
       }
-      // 按需更新快核：修满轮数和反复坏怎么办，核 PCConfig automation/scheduler.py（14:00 起反复坏照常交 AI，不再按次数转本人；转本人只限花钱、删唯一数据、亲手做或登录、补只有他知道的、做取舍）
       return `同一件最多派 AI 修 ${repair_limit} 轮。只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
@@ -57,8 +57,8 @@
   function draw() {
     const d = state?.data;
     viewer = T.viewerOf(state);
-    const c = list(d?.categories).find(x => x.id === id);
-    if (!d || !c) { T.paint(page.root, !d ? T.placeholder(state, '这一类怎么干') : '<p class="tp-placeholder">这一类没读到。</p>'); return; }
+    const c = category(d), g = c?.how_to;
+    if (!d || !g) { T.paint(page.root, !d ? T.placeholder(state, '这一类怎么干') : '<p class="tp-placeholder">这一类没读到。</p>'); return; }
     const name = F(cn(c.title || g.title), '类别'), m = c.setting?.mode;
     document.title = `${U.fieldText(cn(c.title || g.title), viewer)}怎么干 · 自动任务 · 实况`;
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
@@ -110,6 +110,6 @@
   }
   let queued = 0;
   const page = T.boot({ resource: 'automation', back: '/live/automation/',
-    ask: () => `请看实况自动任务里“${g.title || id}”这一类怎么干：什么时候开始、一轮怎么走、坏了或关了会怎样。先用大白话说，别动手。`,
+    ask: () => `请看实况自动任务里“${category(state?.data)?.how_to?.title || id}”这一类怎么干：什么时候开始、一轮怎么走、坏了或关了会怎样。先用大白话说，别动手。`,
     onState(next) { state = next; if (!queued) queued = requestAnimationFrame(() => { queued = 0; draw(); page.tick.set(R.ticker(state?.data, null, viewer), { off: state?.offline }); }); } });
 })();

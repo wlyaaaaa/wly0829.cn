@@ -63,7 +63,8 @@ test('automation lamp reads the background-AI level, reason and attention count,
 });
 
 test('automation work page shows one work and the read-only categories for owner and visitor (the old overview is retired)', () => {
-  const types = ['backup', 'ai-review', 'ai-stalled'].map(id => ({ id, title: id, setting: { mode: 'on', effort: null }, model_effort: 'high', model: 'Sol', sources: [{ at: '2026-11-20T01:00:00Z' }] }));
+  const how_to = { description: ['测试范围', '测试例子', '关了照样留回执', '要你本人恢复原件'], steps: ['要你本人确认'] };
+  const types = ['backup', 'ai-review', 'ai-stalled'].map(id => ({ id, title: id, how_to, setting: { mode: 'on', effort: null }, model_effort: 'high', model: 'Sol', sources: [{ at: '2026-11-20T01:00:00Z' }] }));
   const routines = [{ id: 'claude-guidance', producer: 'Claude', label: 'Claude 指导', trigger_text: '一件活三次没修好时', today_count: 0, at: '2026-11-20T11:39:00Z', plan_count: 1 }];
   const other_automatic_chats = [{ id: 'event-root', producer: 'Codex', label: '事件叫起', state_text: '正在跑', actual_model: 'GPT Sol' }];
   const scheduled_activities = [
@@ -121,7 +122,8 @@ test('automation work page shows one work and the read-only categories for owner
       assert.doesNotMatch(render(audience, type), /data-setting|默认档位|关了：|设置记录/);
     }
     const backup = render(audience, 'backup');
-    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>从备份里真把文件或整台电脑还原回来，这里不做/s);
+    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：<\/b>测试范围.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>要(?:你)?本人恢复原件/s);
+    assert.ok(backup.includes(audience === 'owner' ? '什么时候派：</b>要你本人确认' : '什么时候派：</b>要本人确认'));
     assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
   }
 });
