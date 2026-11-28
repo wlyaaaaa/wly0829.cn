@@ -119,3 +119,13 @@
   .env-table.env-table--versions th:nth-child(4) { width: 20%; }
   .env-table--versions td:nth-child(-n+3), .env-runtime p { white-space: normal; overflow-wrap: anywhere; }
 }
+.env-sub { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 30px 0 12px; font-size: 15px; color: var(--ink-soft); }
+.env-sub b { font-size: 18px; font-weight: 600; color: var(--ink); }
+.env-sub span { margin-left: 14px; font-size: 13px; color: var(--muted); }
+.env-apps { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; }
+.env-app { display: grid; align-content: start; gap: 2px; min-width: 0; padding: 14px 20px; border: 1px solid rgb(95 103 96 / .1); border-radius: 14px; background: rgb(255 255 255 / .55); font-size: 14px; line-height: 1.6; }
+.env-app b { font-size: 16px; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.env-app span { color: var(--muted); overflow-wrap: anywhere; }
+.env-app .env-app__change.is-recent { color: #00A650; font-weight: 600; }
+.env-daily .more { margin: 10px 0 0; translate: none; }
+.page--environment :is(#software, #runtimes, #startup, #software-changes) { scroll-margin-top: 76px; }
