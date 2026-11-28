@@ -92,6 +92,7 @@
 .wc-check .wc-dot { width: 7px; height: 7px; box-shadow: none; translate: none; }
 .wc-td--open { justify-self: end; }
 .wc-td--open .btn { white-space: nowrap; }
+.wc-arch { scroll-margin-top: calc(var(--bar-bottom) + 24px); }
 .wc-arch .wc-foot { padding-top: 10px; }
 
 /* ============ 收到新消息，程序多快备好材料 ============ */
@@ -116,9 +117,6 @@
 
 /* ============ 两栏：左边最近改动（宽），右边去哪看细节 ============ */
 .page--project #pj-board.pj-board.pj-board--wechat { grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr); }
-/* 最近改动卡底的“说明 ›”（page.js 画的卡，这页补上） */
-.pj-card[data-card="changes"] > .wc-changes-foot { padding-top: 10px; }
-.pj-card[data-card="changes"] > .wc-note { margin-top: 12px; }
 .wc-links { margin: 0; padding: 0; list-style: none; }
 .wc-links a { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 2px; font-size: 14.5px; line-height: 22px; font-weight: 600; color: var(--ink); text-decoration: none; }
 .wc-links a:hover { color: var(--wc-green); }

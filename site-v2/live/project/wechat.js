@@ -1,5 +1,5 @@
 // 微信收发室（/live/project/?id=wechatdirect）自己的几块；page.js 在三处接进来：adapt 改这一页的数据、board 加卡、columns 定卡放哪一栏，
-// 另有 artifactsHref：关键数字“最近产物 ›”落到这页自己的档案表，不再画通用的“最近产物”卡。
+// 档案表接住共用的 #artifacts；最近改动的说明也交给共用卡。
 // 本人 11-27 选的乙第 3 版（不要“最近一次成功读、发”两格）：最上面“现在怎么样”四格；三张小卡（存档最新到、存档文件还打得开吗、图片语音留住多少）；
 // 通栏“AI 存过档的聊天”（本机微信一共多少条和存档的几份并排、一根细条写占比、档案表露 5 行）；测速卡和更多数据并排；最下面最近改动（page.js 画）和去哪看细节。
 // 访客版同一套页面、同一份接口、同一套按钮：后台给访客的档案名是“档案 1…5”；两版档案名旁都挂紫色“访客看不到”；访客点“在电脑上打开”由共用拦截弹可信设备说明框。
@@ -216,7 +216,7 @@
     const notes = notesOf([v.sec('archives')?.note, archives?.scope, msgs?.note && `存档条数：${msgs.note}`, local?.note && `本机一共：${local.note}`, m(lists.section || 'owner_archives')?.note]);
     const sectionMetric = m(lists.section || 'owner_archives'), tags = sectionMetric?.note ? { [sectionMetric.note]: U.visitorLabel(sectionMetric, 'note', '这一句说明', viewer) } : {};
     const all5 = total ? `<a class="more wc-all" href="${esc(records(lists.section || 'owner_archives'))}">全部 ${esc(int(total))} 份 ${chev}</a>` : '';
-    return `<section class="pj-card glass wc-card wc-arch" id="wc-archives"><div class="wc-head"><b>AI 存过档的聊天</b></div>
+    return `<section class="pj-card glass wc-card wc-arch" id="artifacts"><div class="wc-head"><b>AI 存过档的聊天</b></div>
       <p class="wc-lead">只算本人点名、AI 存成档案的这几份，不是本机微信的全部聊天。</p>
       ${left || right ? `<div class="wc-sum${left && right ? '' : ' is-one'}">${left}${right}${bar}</div>` : ''}${table}${noteBox(notes, tags)}
       <div class="wc-foot">${all5}${explainBtn(notes)}<span class="wc-cut">${esc(mdTime(lists.at) ? `截止 ${mdTime(lists.at)}` : '')}</span></div></section>`;
@@ -273,16 +273,8 @@
   }
 
   // —— 两栏里右边一张“去哪看细节”；最近改动（page.js 画）放左边 ——
-  // —— 最近改动（page.js 画的共用卡）照批准图在卡底加“说明 ›”：两版同一句；卡摆好后补上，重画后再补 ——
-  const CHANGES_NOTE = '这个项目最近几次改动，取自项目的提交记录；自动任务约 10 分钟读一次。';
-  function changesNote(boardEl) {
-    const card = boardEl?.querySelector('.pj-card[data-card="changes"]');
-    if (!card || card.querySelector(':scope > .wc-changes-foot')) return;
-    card.insertAdjacentHTML('beforeend', `${noteBox([CHANGES_NOTE])}<div class="wc-foot wc-changes-foot">${explainBtn([CHANGES_NOTE])}</div>`);
-  }
   function board(d, viewer, graphBlock, boardEl) {
     boardEl?.classList.add('pj-board--wechat');
-    requestAnimationFrame(() => changesNote(boardEl));
     if (!d.wechatView) return [];
     last = { d, viewer, boardEl };
     load(viewer, draw);
@@ -297,5 +289,8 @@
   const COLUMNS = { changes: 0, 'wc-details': 1 };
   const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.('(max-width: 899px)').matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
 
-  window.ProjectPages = Object.assign(window.ProjectPages || {}, { [ID]: { adapt, board, columns, artifactsHref: '#wc-archives' } });
+  window.ProjectPages = Object.assign(window.ProjectPages || {}, { [ID]: {
+    adapt, board, columns, noArtifacts: true,
+    changes: { note: '这个项目最近几次改动，取自项目的提交记录；自动任务约 10 分钟读一次。' },
+  } });
 })();
