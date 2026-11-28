@@ -31,6 +31,11 @@
   aspect-ratio:2 / 3;
   max-height:100%;
 }
+/* 读前卡片较矮时，让渐隐画窗贴住靠右缩小的竖图。 */
+.page--phone .grp.is-open:is([data-key="usage"],[data-key="network"]):has(.grp__chapter[aria-busy="true"]) .card__pic {
+  width:auto;
+  max-width:var(--win);
+}
 .page--phone .grp.is-open:is([data-key="usage"],[data-key="network"]) .card__pic img {
   object-fit:contain;
   object-position:right top;
