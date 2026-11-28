@@ -106,16 +106,19 @@
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pp-wallpapers:has(> .pp-bubbles) {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 2.8fr) minmax(246px, 1.9fr);
+    grid-template-columns: minmax(0, 3.7fr) minmax(0, 3fr) minmax(246px, 2fr);
     align-items: stretch;
   }
   #artifacts .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card { grid-template-rows: auto auto auto 1fr auto; }
   .pp-wallpapers > .pp-bubbles { grid-column: auto; }
   .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card:not(.pp-bubbles) > .pp-wallpaper {
-    block-size: clamp(162px, 15vw, 224px);
+    block-size: clamp(162px, 16vw, 242px);
     aspect-ratio: auto;
     object-fit: contain;
   }
+  [data-personal-project="emerald"] #changes .rows > .row { padding-block: 14px; }
+  [data-personal-project="emerald"] #changes .rows > .row::before { top: 21px; }
+  [data-personal-project="emerald"] #changes .rows > .row::after { top: 32px; bottom: -17px; }
   [data-personal-project="typora"] .pp-preview-tools { margin-top: -42px; margin-bottom: 20px; }
   [data-personal-project="typora"] :is([data-card="artifacts"], [data-card="changes"]) { align-self: stretch; }
   [data-personal-project="typora"] #more-data .pj-viz { display: flex; align-items: baseline; gap: 16px; }
