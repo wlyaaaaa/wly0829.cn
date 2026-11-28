@@ -70,7 +70,7 @@
     }
     const count = limit % 10000 === 0 ? `${int(limit / 10000)} 万` : `${int(limit)} `;
     const scope = config.compact_scope === 'total' ? '总' : config.compact_scope === 'body_after_prefix' ? '新增' : '';
-    return `${keep(`${count}${scope}词元就压缩`)} ${compactStamp(config)}`;
+    return `${keep(`${count}${scope} token 就压缩`)} ${compactStamp(config)}`;
   }
   const firstTime = id => { const fresh = !drawn.has(id); drawn.add(id); return fresh; };
 
