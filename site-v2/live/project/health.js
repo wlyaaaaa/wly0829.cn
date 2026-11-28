@@ -302,12 +302,14 @@
     const rows = items.slice(0, open ? items.length : BRIEFS).map((x, i) => {
       // 取回方式不知道的（旧简报 unknown）不挂签，留空位让后面一列对齐
       const kind = KIND[x.capture_kind], chip = kind ? `<span class="hl-tag ${kind[1]}">${esc(kind[0])}</span>` : '<span></span>';
-      const to = md(x.complete_through);
+      const captured = zoned(x.captured_at);
+      const at = [U.date(iso(captured)), captured.time].filter(Boolean).join(' ');
+      const to = U.date(ymd(x.complete_through));
       // 两版同一颗“在电脑上打开”：本人版用现有打开程序；访客回包没有 open，按钮照摆，点了由共用拦截弹“不是可信设备”的弹窗
       const action = U.artifactAction({ open: x.open || { label: '在电脑上打开' } }, viewer, h => h);
       const act = action ? U.actions({ id: `personal-health-brief-${i}-${x.captured_at}`, title: `简报 ${x.captured_at}` }, [action]) : '';
       const privacy = act ? U.visitorHiddenTag('这份简报的正文', '打开本人电脑上的简报需要可信设备', viewer) : '';
-      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${chip}<span class="hl-brief__to">${to ? `资料到 ${keep(to)}` : ''}</span><span class="hl-brief__act">${act}${privacy}</span></li>`;
+      return `<li class="hl-brief"><span class="hl-brief__at">${esc(at)}</span>${chip}<span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span><span class="hl-brief__act">${act}${privacy}</span></li>`;
     }).join('');
     return rows ? `<ul class="hl-briefs">${rows}</ul>` : '';
   }
