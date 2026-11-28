@@ -12,6 +12,15 @@
   const kinds = Object.keys(types);
   const narrow = matchMedia('(max-width: 620px)');
   const twoColumns = matchMedia('(min-width: 1101px)');
+  const wideScreen = matchMedia('(min-width: 3200px)');
+  const scopeWords = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
+  const keepScopeWord = word => `<span class="media-compact">${esc(word)}</span>`;
+  const scopeHtml = text => text.split(/(时间戳|更新)/).map((part, i) => {
+    if (i % 2) return keepScopeWord(part);
+    if (!scopeWords) return esc(part);
+    return Array.from(scopeWords.segment(part), ({ segment, isWordLike }) =>
+      isWordLike && /^[\u3400-\u9fff]{2,}$/.test(segment) ? keepScopeWord(segment) : esc(segment)).join('');
+  }).join('');
   const num = n => Number.isFinite(n) ? n.toLocaleString('zh-CN') : '—';
   const gb = (n, digits = 2) => Number.isFinite(n) ? `${n.toFixed(digits)} GB` : '—';
   const beijingYear = (at = Date.now()) => new Date(new Date(at).getTime() + 8 * 3600000).getUTCFullYear();
@@ -64,7 +73,8 @@
     const peak = Math.max(1, ...Object.values(y?.years || {}).map(all));
     const counts = [typesRead?.image, typesRead?.video, m.audio_total?.value, m.total?.value];
     const sizes = [gb(m.image_gb?.value, 1), gb(capacity?.video_gb, 1), gb(m.audio_gb?.value, 1), gb(capacity?.gb)];
-    const audio = typesRead ? [`录音 ${num(typesRead.recordings)}`, `音乐铃声 ${num(typesRead.music)}`] : [];
+    const recordings = typesRead?.recordings;
+    const audio = typesRead ? [`录音 ${num(recordings)}`, `音乐铃声 ${num(typesRead.music)}`] : [];
     const subtitles = [[], [], audio, m.days?.value == null ? [] : [`有东西的日子 ${num(m.days.value)} 天`]];
     const segments = parts => parts.filter(Boolean).map((text, i) => `<span class="media-compact">${i ? '· ' : ''}${text}</span>`).join(' ');
     const rows = [...kinds, 'layers'].map((kind, row) => {
@@ -83,9 +93,12 @@
       if (!item) return '';
       const label = esc(item.label);
       if (item.value == null) return `<p>${label} · ${esc(item.unknown_text || item.scope || '暂时读不到')}</p>`;
+      if (key === 'audio_locatable' && Number.isFinite(recordings)) {
+        return `<p>${label} · <strong class="media-compact">${num(recordings)} 段里 ${num(item.value)} 段</strong><small class="media-reading-note">${scopeHtml('只算转写里带每句话时间的录音。')}</small>${cutoff(item, true)}</p>`;
+      }
       const unit = key === 'audio_locatable' ? '段' : item.unit;
       const scope = item.scope || (key === 'phone_actual' ? item.note : '');
-      return `<p>${label} · <strong>${num(item.value)}${unit ? ` ${esc(unit)}` : ''}</strong>${scope ? `<br>${esc(scope)}` : ''}${cutoff(item, true)}</p>`;
+      return `<p>${label} · <strong class="media-compact">${num(item.value)}${unit ? ` ${esc(unit)}` : ''}</strong>${scope ? `<br>${scopeHtml(scope)}` : ''}${cutoff(item, true)}</p>`;
     }).join('');
     return `<table class="media-years"><colgroup><col class="media-type-col"><col span="${width + 1}"></colgroup><thead><tr><td></td>${years.map(year => `<th scope="col">${year}</th>`).join('')}<th scope="col" class="media-undated">没日期</th></tr></thead><tbody>${rows}</tbody></table>
       ${!y || !typesRead || !capacity ? missing : ''}${gaps.length ? `<p class="media-gaps">还缺：${gaps.join(' · ')}</p>` : ''}
@@ -172,6 +185,17 @@
   }
   narrow.addEventListener('change', () => { yearPage = 0; refresh?.('year'); });
   twoColumns.addEventListener('change', () => { recentPage = 0; selectedDay = undefined; refresh?.('recent'); });
+  function placeArchiveExplanation(details) {
+    const panel = details?.querySelector('.media-extra');
+    if (!panel?.showPopover) return;
+    if (details.open && wideScreen.matches) {
+      if (!panel.matches(':popover-open')) { panel.popover = 'manual'; panel.showPopover(); }
+    } else if (panel.hasAttribute('popover')) panel.removeAttribute('popover');
+  }
+  document.addEventListener('toggle', e => {
+    if (e.target.matches('#media-archive details.media-pop')) placeArchiveExplanation(e.target);
+  }, true);
+  wideScreen.addEventListener('change', () => placeArchiveExplanation(document.querySelector('#media-archive details.media-pop[open]')));
   document.addEventListener('click', e => {
     const button = e.target.closest('[data-media-page]');
     const open = e.target.closest('.media-recent-list summary')?.parentElement;
