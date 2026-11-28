@@ -158,7 +158,7 @@
     if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">这次没读到</span>', plain: '这次没读到', long: false };
+    if (unknownValue(m) && /^(?:没有记录|暂时读不到)[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">这次没读到</span>', plain: '这次没读到', long: false };
     if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
