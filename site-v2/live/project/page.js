@@ -359,8 +359,10 @@
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
     return [...groups].map(([key, items]) => {
-      const extra = Math.max(0, items.length - preview), open = Math.min(extra, reveal.get(key) || 0), left = extra - open;
-      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const extra = Math.max(0, items.length - preview), asked = Math.min(extra, reveal.get(key) || 0);
+      // 只剩一条就直接摆出来，不让人为一条点“展开”（M1190）；自己没点过展开的，也不出“收起”
+      const open = extra - asked === 1 ? extra : asked, left = extra - open;
+      const step = (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
     });
   }
@@ -412,7 +414,9 @@
   }
   // 卡里收着的读数（数字格、两列小表）：同样一批一批露
   function drawRest(b, animate) {
-    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0, n = Math.min(all.length, b.restShown || 0), left = all.length - n;
+    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0;
+    if (open && all.length - Math.min(all.length, b.restShown) === 1) b.restShown = all.length;   // 只剩一条一起露（M1190）
+    const n = Math.min(all.length, b.restShown || 0), left = all.length - n;
     U.list(b.rest, [...all.slice(0, n), ...(open && !left ? unread : [])], { animate });
     b.box.classList.toggle('is-open', open); b.box.inert = !open; b.box.setAttribute('aria-hidden', String(!open));
     b.more.setAttribute('aria-expanded', String(open && !left));
@@ -435,14 +439,16 @@
       <p class="pj-note" data-p="note" hidden></p>
       <p class="pj-hidden" data-p="hidden" hidden></p>
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
-      <div class="pj-tail"><details class="pj-notes"><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
+      <div class="pj-tail"><details class="pj-notes" data-fold-anchor><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
     b = { key, kind, el, ...Object.fromEntries([...el.querySelectorAll('[data-p]')].map((n) => [n.dataset.p, n])) };
     b.box.inert = true; b.box.setAttribute('aria-hidden', 'true');
     b.more.setAttribute('aria-expanded', 'false');
     b.more.addEventListener('click', () => {
       const all = b.restRows?.length || 0, shown = Math.min(all, b.restShown || 0);
-      b.restShown = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
-      drawRest(b, true);
+      const next = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
+      // 收起：先记下这颗按钮在屏幕上的位置，收完把它放回原处，不跳（M1191）
+      const go = () => { b.restShown = next; drawRest(b, true); };
+      if (!next && b.restShown) U.anchorFold(b.more, go, () => b.more, b.el); else go();
     });
     b.page.addEventListener('click', () => b.changes ? loadChanges(b) : loadArtifacts(b));
     blocks.set(key, b);
@@ -493,7 +499,8 @@
       b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
       if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore);
     }
-    const show = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
+    const fit = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
+    const show = rows.length - fit === 1 ? rows.length : fit;   // 收起的只剩一条就不收（M1190）
     const shown = rows.length ? rows.slice(0, show) : unread.length || (hidden && !hiddenText) ? [] : [{ key: 'none', cls: b.kind === 'rows' ? 'row row--flat row--empty' : 'pj-empty', html: `${b.kind === 'rows' ? '<span></span>' : ''}<p class="row__sub">${U.fieldHtml(metricText(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(empty || '') ? '这块没存下来，连上后补上。' : hiddenText || empty))}</p>` }];
     if (b.artifacts && rows.length) clearArtifactEmpty(b);
     U.list(b.main, shown, { animate });
@@ -695,7 +702,7 @@
   }
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
-    const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
+    const asked = Math.min(loaded, preview + (b.reveal?.get('') || 0)), shown = loaded - asked === 1 ? loaded : asked;
     // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写
     const counts = [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n));
     const count = loaded ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
@@ -1096,7 +1103,8 @@
   function drawRuleEvents(host) {
     const box = host.querySelector('.pj-rh-list');
     if (!box) return;
-    const all = host._ruleEvents || [], n = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0)), left = all.length - n;
+    const all = host._ruleEvents || [], asked = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0));
+    const n = all.length - asked === 1 ? all.length : asked, left = all.length - n;   // 只剩一条一起露（M1190）
     box.innerHTML = all.slice(0, n).map(e => `<p>${e}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
   }
   function ruleTimeline(kept, current, text) {
@@ -1379,19 +1387,19 @@
     const btn = e.target.closest?.('.pj-rh-step'), host = btn?.closest('.pj-viz');
     if (!host) return;
     if (btn.hasAttribute('data-open')) {
+      // 收起：“逐版记录”那个开关落在刚才按钮的位置，不滚到块头（M1191）
       const details = btn.closest('details');
-      details.open = false;
-      if (details.getBoundingClientRect().top < 0) details.scrollIntoView({ block: 'start', behavior: 'instant' });
+      U.anchorFold(btn, () => { details.open = false; }, () => details.querySelector(':scope > summary'), details);
     } else { host._ruleShown = Math.max(RULE_STEP, host._ruleShown || 0) + RULE_STEP; drawRuleEvents(host); }
   });
   // 分组底下的“展开（还有 N 条）／收起”
   board.addEventListener('click', (e) => {
     const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
     if (!b) return;
-    const close = btn.hasAttribute('data-open'), sec = b.el;
-    stepGroup(b, btn.dataset.step, close);
-    // 收起后卡头跑到屏幕上面去了：滚回这一块的开头，不让人找不到刚才看的地方
-    if (close && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ block: 'start', behavior: 'instant' });
+    const close = btn.hasAttribute('data-open'), sec = b.el, key = btn.dataset.step;
+    // 收起：重画出来的同一颗按钮放回刚才的位置，接着往下看，不跳到块头（M1191）
+    if (close) U.anchorFold(btn, () => stepGroup(b, key, true), () => [...sec.querySelectorAll('.pj-step')].find(x => x.dataset.step === key), sec);
+    else stepGroup(b, key, false);
   });
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
