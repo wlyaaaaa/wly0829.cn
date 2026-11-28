@@ -952,21 +952,100 @@ a.dev-pill:hover { background: #fff; color: var(--ink); }
 .use-axisrow__k { padding-top: 16px; font-size: 14px; line-height: 20px; letter-spacing: .04em; color: var(--muted); }
 .use-axisrow__k small { display: block; font-size: 13px; color: #a8a69e; }
 .use-axisrow .chart--hero { margin-left: -44px; }   /* 纵轴的数让到左边那一列里，线的起点和横带对齐 */
-.focus-track { position: relative; height: 54px; margin: 6px 0 4px; }
-.focus-track__line { position: absolute; left: 0; right: 0; top: 22px; height: 6px; border-radius: 999px; background: rgb(20 20 19 / .05); }
+.use-focus-total { margin: 0 0 3px; font-size: 26px; font-weight: 650; line-height: 1.3; color: var(--ink); }
+.use-focus-total strong { color: #00A650; }
+.focus-track { position: relative; --date-width: 54px; --row-height: 42px; margin: 12px 12px 4px 0; color: var(--muted); }
+.focus-track.is-month { --row-height: 26px; }
+.focus-track > .vz-wait { position: static; padding: 12px 0; text-align: left; }
+.focus-track__row { display: grid; grid-template-columns: var(--date-width) minmax(0, 1fr); align-items: center; font-size: 13px; }
+.focus-track__row:has(.focus-track__longest) { padding-top: 12px; }
+.focus-track__plot { position: relative; height: var(--row-height); }
+.focus-track__line { position: absolute; top: 50%; translate: 0 -50%; height: 6px; border-radius: 999px; background: rgb(20 20 19 / .07); }
 .focus-track__pill {
   position: absolute;
-  top: 16px;
-  height: 18px;
-  min-width: 10px;
+  top: 50%;
+  translate: 0 -50%;
+  height: 22px;
   border-radius: 999px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 55%, #fff), var(--c));
-  box-shadow: 0 0 0 2px rgb(255 255 255 / .8), 0 6px 14px -6px var(--c);
-  cursor: default;
+  background: var(--c);
 }
-.focus-track__pill:hover { filter: brightness(1.05) saturate(1.1); }
-.focus-track__tick { position: absolute; top: 40px; translate: -50% 0; white-space: nowrap; font-size: 12px; color: #a8a69e; font-variant-numeric: tabular-nums; }
-.focus-track__tick.is-now { translate: -100% 0; color: var(--ink-soft); }
+.focus-track.is-month .focus-track__pill { box-shadow: 0 0 0 2px #fff; }
+.focus-track__pill.is-omitted { visibility: hidden; }
+.focus-track__open { position: absolute; inset: 0; width: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
+.focus-track__open[aria-pressed="true"], .focus-track__open:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
+.focus-track__label {
+  position: absolute;
+  top: 50%; left: 50%; translate: -50% -50%;
+  visibility: hidden;
+  pointer-events: none;
+  width: max-content;
+  padding-inline: 4px;
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 650;
+  color: #fff;
+}
+.page--live .focus-track__label .live-mark {
+  pointer-events: auto;
+  padding-block: 0;
+  min-height: 0;
+  font-size: 11px;
+  line-height: 14px;
+  vertical-align: middle;
+}
+.focus-track__pill[data-ai] .focus-track__label { color: #3A2A00; }
+.focus-track__label.is-fit { visibility: visible; }
+.focus-track__longest {
+  position: absolute;
+  bottom: calc(100% + 2px); left: 0;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #00A650;
+  color: #fff;
+  font-size: 11px;
+  line-height: 15px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.focus-track__longest.is-beside { bottom: 50%; left: calc(100% + 4px); translate: 0 50%; }
+.focus-track__axis { position: relative; height: 24px; margin: 4px 0 0 var(--date-width); border-top: 1px solid var(--hair); }
+.focus-track__tick { position: absolute; top: 6px; translate: -50% 0; white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; }
+.focus-track__tick::before { content: ""; position: absolute; top: -9px; left: 50%; height: 5px; border-left: 1px solid var(--hair); }
+.focus-track__tip {
+  position: absolute;
+  z-index: 2;
+  width: max-content; max-width: 100%;
+  padding: 7px 11px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 3px 12px rgb(0 0 0 / .16);
+  font-size: 13px;
+  pointer-events: none;
+}
+.use-focus-list { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hair); }
+.use-focus-list ol { list-style: none; margin: 0; padding: 0; }
+.use-focus-list li {
+  display: grid;
+  grid-template-columns: 12px minmax(136px, 21%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 37px;
+  padding-block: 3px;
+  border-bottom: 1px solid var(--hair);
+  font-size: 14px;
+}
+.use-focus-list li > i { width: 12px; height: 9px; border-radius: 4px; background: var(--c); }
+.focus-list__time, .use-focus-list li > b, .focus-program { white-space: nowrap; }
+.use-focus-list li > b { font-weight: 500; }
+.focus-program .live-mark { margin-left: 4px; }
+.use-focus-more { margin-top: 12px; padding: 7px 16px; border: 1px solid var(--hair); border-radius: 12px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.use-focus-more:hover { background: rgb(255 255 255 / .55); }
 
 /* 八个第二层页沿用电脑与项目样板：搜索、筛选、单栏和分节间距。 */
 .l2-board > .pj-sec { margin-top: 0; }

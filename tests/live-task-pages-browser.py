@@ -89,7 +89,7 @@ with service as server, sync_playwright() as pw:
             page.locator(f'{card} [data-part="head"] a').filter(has_text=label).click()
             expect(page).to_have_url(origin + path)
             expect(page.get_by_role('heading', name=label, exact=True)).to_be_visible()
-            text = ('不能单独核对' if old else '登记 1 项计划任务') if label == '计划任务' else ('AI 自动任务分组还没读到' if old else '部分平台日程还没读到')
+            text = ('不能单独核对' if old else '登记 1 项') if label == '计划任务' else ('AI 自动任务分组还没读到' if old else '部分平台日程还没读到')
             expect(page.get_by_text(text, exact=False).and_(page.locator(':visible')).first).to_be_visible()
             assert page.get_by_role('link', name='夹具 Windows 备份', exact=True).count() == int(label == '计划任务' and not old)
             if label == '计划任务' and not old:
