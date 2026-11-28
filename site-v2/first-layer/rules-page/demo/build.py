@@ -348,7 +348,7 @@ def documents_for(release, topics, policy):
     docs += [load_document(release / f"docs/contracts/agents.{key}.md", f"topic-{key}.html", policy)
              for key, _ in topics]
     for doc in docs:
-        doc["word_count"] = count_words(dom_text(doc["soup"])) - count_words(doc["title"].get_text())
+        doc["word_count"] = sum(not c.isspace() for c in doc["path"].read_text(encoding="utf-8-sig"))
     return docs
 
 
