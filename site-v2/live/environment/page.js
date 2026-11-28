@@ -26,21 +26,24 @@
   const list = d => d?.items, runtime = d => d?.items && Object.assign({ windows: d.items[0]?.windows }, Object.fromEntries(d.items.map(r => [r.runtime_id || r.name, r])));
   // 两边版本都没读到、或比较结果不是“相同／落后／更新”的，算没法比，不算进“0 个落后”（M436）。
   const noVersion = v => v == null || v === '';
-  const isDisabled = r => r.update_mode === 'disabled' || r.relation === 'disabled';
-  const compared = r => !isDisabled(r) && ['equal', 'behind', 'ahead'].includes(r.relation) && !(noVersion(r.current_version) && noVersion(r.target_version));
-  const uncomparable = r => !isDisabled(r) && !compared(r);
+  const isDisabled = r => r.update_mode === 'disabled' || (r.relation === 'disabled' && r.installed !== false);
+  const isUninstalled = r => r.installed === false && !isDisabled(r);
+  const inactive = r => isDisabled(r) || isUninstalled(r);
+  const compared = r => !inactive(r) && ['equal', 'behind', 'ahead'].includes(r.relation) && !(noVersion(r.current_version) && noVersion(r.target_version));
+  const uncomparable = r => !inactive(r) && !compared(r);
   const comparisonNote = rows => { const n = rows.filter(uncomparable).length; return n ? `${n} 个软件没法直接比版本` : ''; };
   const count = (n, unit, meta, key = 'total') => window.ComputerStat.text(n, unit, meta, key);
   const indicator = (row, level) => U.status({
     ...row, level: level && (!row.level || ['green', 'ok'].includes(row.level)) ? level : row.level,
   }, { small: true }).lamp;
+  // 保留可换行的说明文字，把日期和钟点连在一起。
+  const stamp = at => [U.date(at).replace('-', '\u2011'), U.time(at)].filter(Boolean).join('\u00a0');
   function snapshot(at, key) {
     if (!at) return offline() ? '' : U.collectionText('快照日期', data[key]);
     const days = Math.max(0, Math.floor((Date.parse(offline() ? referenceTime(key) || at : new Date().toISOString()) - Date.parse(at)) / 86400000));
-    return `${U.isStale(data[key]) ? '上次 ' : ''}${U.date(at)} ${U.time(at)} 查的${days > 7 ? `（${days} 天前）` : ''}`;
+    return `${U.isStale(data[key]) ? '上次 ' : ''}${stamp(at)} 查的${days > 7 ? `（${days} 天前）` : ''}`;
   }
   const weekday = at => validAt(at) ? '日一二三四五六'[new Date(Date.parse(at) + 8 * 3600000).getUTCDay()] : '';
-  const stamp = at => `${U.date(at)} ${U.time(at)}`.trimEnd();
   const rowInterval = rows => {
     const seconds = Number(rows?.[0]?.refresh_interval_seconds);
     return Number.isFinite(seconds) && seconds > 0 && rows.every(r => Number(r.refresh_interval_seconds) === seconds) ? seconds : null;
@@ -51,7 +54,7 @@
     if (s === 604800) period = w ? `每周${w} ${U.time(next)}`.trimEnd() : '每周';
     else if (s === 86400) period = '每天';
     else if (s > 0 && Number.isFinite(s)) period = s % 86400 === 0 ? `每 ${s / 86400} 天` : `每 ${Math.round(s / 3600)} 小时`;
-    return [period && `${label}${period}查一次${note}`, w && `下次 ${stamp(next)}`].filter(Boolean).join(' · ');
+    return [period && `${label}${period}查一次${note}`, w && `下次\u00a0${stamp(next)}`].filter(Boolean).join(' · ');
   }
   const softwareTiming = (d, rows) => {
     if (d?.target_schedule_enabled === false) return {};
@@ -104,6 +107,7 @@
       { key: 'behind', name: '版本落后', rows: behind.filter(r => !ownerManaged(r) && r.update_mode !== 'automatic') },
       { key: 'other', name: '没法比新旧', rows: rows.filter(uncomparable) },
       { key: 'latest', name: '已是最新', rows: rows.filter(isLatest) },
+      { key: 'uninstalled', name: '未安装', rows: rows.filter(isUninstalled) },
       { key: 'disabled', name: '已停用', rows: rows.filter(isDisabled) },
     ].filter(g => g.rows.length);
   }
@@ -115,11 +119,12 @@
       const w = Number(seconds) === 604800 && weekday(next);
       return `${w ? `每周${w}自动` : '自动更新'}${isBehind(r) && validAt(next) ? `，下次 ${U.date(next)}` : ''}`;
     }
-    return '还没读到';
+    return isUninstalled(r) ? '—' : '还没读到';
   }
   // “现在”：落后的自动项写上次自动更新的结果和原因（后台 last_update）
   function nowState(r) {
     if (isDisabled(r)) return { level: null, text: '已停用' };
+    if (isUninstalled(r)) return { level: null, text: '未安装' };
     if (isLatest(r)) return { level: 'green', text: r.relation === 'ahead' ? '已是最新（比上次查到的还新）' : '已是最新' };
     if (!compared(r)) return { level: null, text: [relations[r.relation] || r.state_text || relations.unknown, r.unknown_text].filter(Boolean).map(sp).join(' · ') };
     if (r.update_mode !== 'automatic') return { level: 'yellow', text: '落后' };
@@ -132,7 +137,7 @@
     const visibleState = group === 'behind' && now.text === '落后' ? '' : now.text;
     const wayText = esc(way).replace(/^(?:每周[日一二三四五六]自动|(?:你|本人)说一声，)|AI 来更新/g, '<span class="env-nw">$&</span>');
     const current = r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r);
-    const target = isDisabled(r) && noVersion(r.target_version) ? '—' : value(r.target_version, 'software', '最新版本', r);
+    const target = inactive(r) && noVersion(r.target_version) ? '—' : value(r.target_version, 'software', '最新版本', r);
     return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${current}">${current}</td><td title="${target}">${target}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${visibleState.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
