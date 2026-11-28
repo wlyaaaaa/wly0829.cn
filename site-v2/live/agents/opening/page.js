@@ -210,7 +210,7 @@
   const whenOpen = o => o.id === 'no_project' ? `${o.name}时` : `选${/^[A-Za-z0-9]/.test(o.name) ? ' ' : ''}${o.name}时`;
   const agyEstimate = r => r.method === 'antigravity_settings_estimate' || r.method === 'antigravity_settings';
   const approx = r => r?.method === 'o200k_base_estimate' || Boolean(r && agyEstimate(r));
-  const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> 词元` : '词元未算出';
+  const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> 词元` : '词元没算出来';
   const staleNote = x => x?.staleAt ? `<small class="op-stale">上次估算于 ${esc(when(x.staleAt))}</small>` : '';
   const EV = { observed: '看到的', inferred: '按加载规则推算', unavailable: '读不到' };
   const ev = kind => `<span class="op-ev" data-ev="${EV[kind] ? kind : 'unavailable'}">${EV[kind] || '没标'}</span>`;
@@ -243,12 +243,12 @@
     if (agyEstimate(r)) {
       const cut = new Map();
       r.files.forEach((f, i) => { if (f.header > 0) cut.set(f.header, [...(cut.get(f.header) || []), i + 1]); });
-      const heads = [...cut].map(([n, at]) => `第 ${at.join('、')} 份开头 ${int(n)} 字节`).join('，');
+      const heads = [...cut].map(([n, at]) => `第 ${at.join('、')} 份开头那 ${int(n)} 字节是触发设置`).join('，');
       const cap = known(r.limit) ? (r.limit % 10000 === 0 ? `${r.limit / 10000} 万` : int(r.limit)) : '';
-      return `每份按字节数除以 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
+      return `每份按字节数除以 3、向上取整${heads ? `；${heads}，不算` : ''}。${cap ? `${cap}词元是全局规则和项目规则合用的上限，超了，大的几份改成用到时再读。` : ''}`;
     }
-    if (r.method === 'o200k_base_estimate') return '词元按 GPT 的分词表估算。';
-    return '词元的计数方法暂缺。';
+    if (r.method === 'o200k_base_estimate') return '词元按 GPT 的分词表估。';
+    return '还不知道这家怎么数词元。';
   }
   function filesCard(m, h) {
     const o = modeOf(m), r = o.hosts[h.id];
@@ -258,19 +258,19 @@
     if (known(r.limit)) {
       const over = known(r.tokens) && r.tokens > r.limit;
       const left = over ? `<em data-tone="over">超了 ${int(r.tokens - r.limit)}</em>` : known(r.left) ? `<em>还剩 ${T.big(r.left, `op-left-${h.id}`)}</em>` : '';
-      const budget = known(r.tokens) ? `约 <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> / ${int(r.limit)} 词元` : '词元未算出';
+      const budget = known(r.tokens) ? `约 <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> / ${int(r.limit)} 词元` : '词元没算出来';
       sum = `<p class="op-files__sum"><span>${budget}</span>${left}</p>
         ${known(r.tokens) ? `<div class="op-gauge"${over ? ' data-tone="over"' : ''}><i style="width:${Math.min(100, r.tokens / r.limit * 100).toFixed(1)}%"></i></div>` : ''}`;
     } else {
       const base = m.modes.find(x => x.id === 'no_project')?.hosts[h.id], more = o.id !== 'no_project' && base ? r.count - base.count : null;
       const delta = known(more) ? `<em>${more > 0 ? `比无项目多读 ${int(more)} 份` : '和无项目读的一样'}</em>` : '';
-      sum = `<p class="op-files__sum"><span>${known(r.tokens) ? `合计${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> 词元` : '词元未算出'}</span>${staleNote(r)}${delta}</p>`;
+      sum = `<p class="op-files__sum"><span>${known(r.tokens) ? `合计${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> 词元` : '词元没算出来'}</span>${staleNote(r)}${delta}</p>`;
     }
     const own = r.files.filter(f => !f.project).length, extra = r.files.length - own;
     const rows = r.files.map((f, i) => (extra && i === 0 ? '<h3 class="op-files__group">全局入口</h3>' : '')
       + (extra && i === own ? `<h3 class="op-files__group">${esc(o.name)}多读的 ${int(extra)} 份</h3>` : '') + fileRow(f, i, r)).join('');
     const total = [`合计 ${int(r.count)} 份`, words(r.characters), known(r.bytes) ? `${int(r.bytes)} 字节` : '字节数没读全',
-      known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} 词元` : '词元未算全'];
+      known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} 词元` : '词元只算了一部分'];
     const onlyFile = r.files.length === 1 && r.count === 1 ? r.files[0] : null;
     const repeatsTotal = onlyFile?.read && known(r.bytes) && known(r.tokens) && r.bytes === onlyFile.bytes && r.tokens === onlyFile.tokens;
     // 签的说明只写这一家这种开法里真出现的那几种（Claude 全是“按加载规则推算”时，不再列一条用不上的“看到的”）
@@ -279,8 +279,8 @@
     const used = Object.keys(SAYS).filter(k => r.files.some(f => f.load === k));
     const sample = agyEstimate(r) && m.settingsSample;
     return `<section ${attrs}><div class="op-files__head"><h2>${esc(whenOpen(o))}读这 ${int(r.count)} 份</h2>${sum}</div>
-      <p class="op-files__how">${agyEstimate(r) ? '<b>按 Antigravity 设置口径估算</b> · ' : ''}${howCounted(r)}${r.nonblank ? '字数按非空白字符计。' : '旧字数含空格、换行和文件头。'}</p>
-      ${sample ? `<p class="op-files__how">设置截图 ${stampText(sample)} 收到 · ${esc(sample.version || '规则版本未记')} · ${int(sample.tokens)} 词元</p>` : ''}
+      <p class="op-files__how">${agyEstimate(r) ? '<b>按 Antigravity 设置页的算法估</b> · ' : ''}${howCounted(r)}${r.nonblank ? '字数按非空白字符计。' : '旧字数含空格、换行和文件头。'}</p>
+      ${sample ? `<p class="op-files__how">设置页截图 ${stampText(sample)} 收到 · ${esc(sample.version || '当时的规则版本没记')} · ${int(sample.tokens)} 词元</p>` : ''}
       ${r.files.length ? rows : `<p class="tp-empty">${esc(whenOpen(o))}，${h.name} 没有要读的规矩文件。</p>`}
       ${repeatsTotal ? '' : `<p class="op-files__total">${total.join(' · ')}</p>`}
       ${used.length ? `<ul class="op-files__legend">${used.map(k => `<li>${used.length > 1 ? ev(k) : ''}<span>${SAYS[k]}</span></li>`).join('')}</ul>` : ''}</section>`;
@@ -298,12 +298,12 @@
   function sharedTag(shared, h) {
     const names = list(shared).map(n => hostOf(n)).filter(x => x && x !== h).map(x => x.name);
     if (!names.length) return '';
-    return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家同文' : `与 ${names.join('、')} 同文`}</span>`;
+    return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家读的同一段' : `跟 ${names.join('、')} 读的同一段`}</span>`;
   }
   function blockHtml(b, h, key) {
     const body = md(b.rows.map(r => r.text));
     if (b.kind === 'charter') {
-      return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> · 与约法同文</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
+      return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> · 跟约法同一段</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
     }
     if (b.kind === 'host_only') return `<section class="op-only" data-host="${h.id}"><span class="op-only__tag">只有 ${h.name} 有</span><div class="op-md">${body}</div></section>`;
     const tag = b.kind === 'shared' ? sharedTag(b.shared, h) : b.kind === 'unverified' ? '<span class="op-tag" data-tone="off">材料不全，没比对</span>' : '';
@@ -342,12 +342,12 @@
       const row = r?.samples.find(x => x.phase === phase && x.role === role), s = row?.sample;
       if (s) return `<td><details><summary>${stampText(s)} · ${esc(s.version)} · ${words(s.characters)}</summary><pre>${esc(plain(s.text))}</pre></details></td>`;
       const date = row?.last_at && stampText({ at: row.last_at });
-      return `<td>本版无样本${date ? ` · 上次 ${date}` : ''}</td>`;
+      return `<td>这版规则还没样本${date ? ` · 上次 ${date}` : ''}</td>`;
     };
     const rows = Object.entries(PHASES).map(([id, name]) =>
       `<tr><th scope="row">${name}</th>${cell(id, 'root')}${cell(id, 'child')}</tr>`).join('');
-    const last = r?.hostLast ? `这家最近一条钩子记录 ${stampText({ at: r.hostLast })}` : '这家暂无钩子记录';
-    return `<section class="op-ctx" id="startup"><h2 id="op-context-title">开场和接续时补的内容</h2>
+    const last = r?.hostLast ? `这家最近一条钩子记录 ${stampText({ at: r.hostLast })}` : '这家还没有钩子记录';
+    return `<section class="op-ctx" id="startup"><h2 id="op-context-title">开场和接续时补给 AI 的内容</h2>
       <p class="op-ctx__when">${esc(m.active || '当前版')} · ${last} · ${link('/live/agents/#hooks-message', '看钩子 ›')}</p>
       <table class="op-ctx__samples" aria-labelledby="op-context-title"><thead><tr><th scope="col">阶段</th><th scope="col">主对话</th><th scope="col">子对话</th></tr></thead><tbody>${rows}</tbody></table>
       </section>`;
@@ -356,7 +356,7 @@
   function cmpNum(m, h) {
     if (!m.modes) return `<span class="op-cmp__num">${h.present ? `${words(h.characters)} · 只它有的 ${h.only.length} 段` : '这一轮没读到'}</span>`;
     const r = modeOf(m).hosts[h.id];
-    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? '词元未算出' : `${approx(r) ? '约 ' : ''}${int(r.tokens)}${known(r.limit) ? ` / ${int(r.limit)}` : ''} 词元${staleNote(r)}`}`;
+    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? '词元没算出来' : `${approx(r) ? '约 ' : ''}${int(r.tokens)}${known(r.limit) ? ` / ${int(r.limit)}` : ''} 词元${staleNote(r)}`}`;
     return `<span class="op-cmp__num">${size}</span>${h.present ? `<span class="op-cmp__num">只它有的 ${h.only.length} 段</span>` : ''}`;
   }
   function compare(m) {
