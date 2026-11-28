@@ -264,7 +264,7 @@
   for (const [key, resource] of Object.entries(resources)) window.Live.watch(recordResource(key), { section: resource }, {
     phase(s) { phases[key] = s.phase; boards[key].phase(s); readingRows(); if (!s.data) { if (key === 'software') heroRead.set(s); if (s.phase === 'none' || s.phase === 'gone') repaint(); } },
     data(d, meta) { if (key === 'software') softwareViewer = meta?.viewer?.kind || 'public'; data[key] = d; clocks[key] = d && validAt(meta?.at); if (d) boards[key].data({ series: [] }); repaint(); },
-    link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${esc(sp(s.text))}</span>` }] : []); } else if (s.offline) repaint(); else updateNotes(); },
+    link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); } else if (s.offline) repaint(); else updateNotes(); },
   });
   window.Live.watch('projects/pcconfig', null, { data(d) {
     // 后端 03:45：正式接入时这三组还在 registry 分组下、没有单独的 environment 分组，两种形状都给 data.environment，先读它

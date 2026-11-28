@@ -374,7 +374,7 @@
   }
   // 按下“全部”以外的按钮时，下面换成的那块
   function lists(d, v) {
-    const waiting = '<p class="au-empty">正在读…</p>';
+    const waiting = '<p class="au-empty">加载中</p>';
     // 七份列表都读完了、一份也没读到（连不上、服务出错这类）才退回老读数：照实说这会儿读不到（M980）。
     // 列表没读到时页面上没有“从几点起读不到”的时刻（摘要的“截至”是别的读数的时刻），所以不写几点起
     if (filter.view === 'problems') return sec('trouble', '出毛病的', v.problems.length, problemList(d, v));
