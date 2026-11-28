@@ -592,7 +592,11 @@
     const duplicate = skills && typeof r.text === 'string' && typeof (r.name || r.label) === 'string' && r.count != null &&
       [String(r.count), Number(r.count).toLocaleString('zh-CN')]
         .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
-    const say = !duplicate && r.text && (r.name || r.label) && text(r.text) !== marker(r, recordViewer) ? `<p>${text(r.text)}</p>` : '';
+    // 标了改写的说明两版都留原位，即使其中一版与次数列重合。
+    const rewritten = U.visitorRewrittenField(r, 'text', '这个技能的说明', recordViewer);
+    const body = (!duplicate || rewritten) && r.text && (r.name || r.label) ? text(r.text) : '';
+    const tag = body.includes('live-mark--reworded') ? '' : rewritten;
+    const say = body && body !== marker(r, recordViewer) ? `<p>${body}${tag ? ` ${tag}` : ''}</p>` : '';
     if (!skills) return say;
     const hosts = [['claude', 'Claude'], ['codex', 'Codex'], ['antigravity', 'Antigravity']].map(([k, label]) => {
       const lowerBound = k === 'antigravity';

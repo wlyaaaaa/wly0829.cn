@@ -504,6 +504,15 @@
     if (kind !== 'owner') return type === 'rewritten' ? visitorRewrittenTag(what, '', kind) : '';
     return type === 'hidden' ? visitorHiddenTag(what, item?.visitor_hidden_why, kind) : type === 'rewritten' ? visitorRewrittenTag(what, '', kind) : '';
   }
+  function visitorRewrittenField(item, keys, what, kind = viewer) {
+    const type = visitorFieldKind(item, keys);
+    if (type === 'hidden') return '';
+    const rewritten = type === 'rewritten' || [].concat(keys).some(key => {
+      const field = key === '$' ? item : item?.[key];
+      return field?.visibility === 'rewritten' || field?.public === 'rewrite';
+    });
+    return rewritten ? visitorRewrittenTag(what, '', kind) : '';
+  }
   // 新私事规则：访客侧不再画“另有 N 条仅本人可见”。
   const hiddenMore = () => '';
   function escapeNotes(text) {
@@ -2006,5 +2015,5 @@
       unavailable_since: row.unavailable_since || expired,
       last_online: row.last_online || (row.state === 'online' && age >= 0 ? row.observed_at : null) };
   }
-  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, shouldFold, shouldFoldList, anchorFold, fitNativeFolds, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
+  window.LiveUI = { memorySpec, laptopConnection, justSaved, savedWrite, savedItemClosures, savedReminder, confirmedItemState, restoreBack, programName, originName, collectionText, accumulatingText, offline, isReadingCutoff, sameReadingReason, isStale, staleText, olderNote, blockNote, isCutoffNote, sameCutoffNote, withoutSnapshotCutoff, isMissingText, hiddenMore, visitorFieldKind, visitorRewrittenTag, visitorRewrittenField, visitorLabel, visitorWholeHidden, privateDownload, trustText, visibilityNote, visitorHiddenMark, visitorHiddenTag, blockSentence, fieldText, capText, you, chatJoinedReply, chatPreviewSummary, chatStart, chatWaitLabel, chatProgressText, chatShortName, fieldHtml, mergePrivateRows, privateSummary, itemIntent, itemLabels, itemTextUnits, addressed, publicationNote, itemTitleField, privateField, itemReceipt, choiceText, writeItems, confirmItems, saveItems, itemWriting, itemWriteAction, actionAt, knowledgeCells, esc, sp, nowrap, time, date, onBeijingDayChange, ago, minutes, gb, status, head, actions, goActions, artifactAction, copy, flash, topbar, connection, publicPause, html, list, fold, shouldFold, shouldFoldList, anchorFold, fitNativeFolds, pointing, seen, swapped, guard, anchor, reading, ghost, order, land, chatActivity, receiptText, pruneReceipts, backupSummary, trafficBytes, separateTraffic, separateTrafficNote };
 })();
