@@ -10,7 +10,7 @@
   const wordUnit = /[\p{L}\p{N}]/u;
   const oneHan = /^\p{Script=Han}$/u;
   // 卡名和读数短标签按一个单元走，标签之外仍可按词换行。
-  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|停下(?:\s*·\s*)?没归档|上次(?:运行失败|读到在跑)|运行状态未读到|读数暂缺|读不准|磁盘余量|网络丢包|防护状态|手机流量|文件夹|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
+  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|停下(?:\s*·\s*)?没归档|上次(?:运行失败|读到在跑)|运行状态未读到|读数暂缺|读不准|磁盘余量|网络丢包|防护状态|住宅线路|手机流量|文件夹|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
   const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
   function keepWords(html) {
     if (!wordSegmenter || !html) return html;
@@ -45,7 +45,10 @@
     }
     return template.innerHTML;
   }
-  const paintHTML = (el, html, fade) => U.html(el, keepWords(html), fade);
+  const needsDate = /(<[^>]*>)|(?<!\d)\d{1,2}[ \t]*(?:月(?:[ \t]*\d{1,2}[ \t]*日)?|日)/g;
+  const unitsFor = (el, html) => keepWords(el.closest('#needs') && html
+    ? html.replace(needsDate, (part, tag) => tag || '<wbr>' + keepWord(part) + '<wbr>') : html);
+  const paintHTML = (el, html, fade) => U.html(el, unitsFor(el, html), fade);
   let viewer = 'public';
   const viewerKind = state => (state.viewer?.kind ?? state.meta?.viewer?.kind) === 'owner' ? 'owner' : 'public';
   const addressed = text => viewer === 'public' ? sp(text).replaceAll('你', '本人') : text;
@@ -379,7 +382,7 @@
     const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
     paintHTML(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
       : gone ? U.head(name) + `<br><span class="row__sub">${esc(text)}</span>` : cardHead(text, name));
-    for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (!el.querySelector?.('[data-part]')) paintHTML(el, ''); el.hidden = true; }
+    for (const [key, el] of Object.entries(p)) if (key !== 'head') { if (key !== 'more-changes' && !el.querySelector?.('[data-part]')) paintHTML(el, ''); el.hidden = true; }
     paintStatus(id, d);
   }
 
@@ -608,7 +611,7 @@
     restoreTimer = setTimeout(() => requestAnimationFrame(restoreHome), 650);
   });
   // 返回时先把列表放到完整高度，再恢复位置；逐行长高会把目标位置夹住。
-  const paintList = (ul, rows, options) => U.list(ul, rows, { format: keepWords, animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
+  const paintList = (ul, rows, options) => U.list(ul, rows, { format: html => unitsFor(ul, html), animate: entered && restoreY == null && (focused || !(focusId || home?.focus)), ...options });
   const elapsed = value => lastState?.offline ? U.time(value) : U.ago(value, at);
 
   // —— 等你的事 ——
@@ -1263,7 +1266,7 @@
     const rows = counts.length ? scheduledPreview(d, state) : [];
     const note = counts.length || rows.length ? counts
       : [state.offline ? '这块没存下来，连上后补上。' : revoked ? '计划任务正在更新访客版，稍后自动补上。'
-        : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '正在读' : '清单暂时读不到'];
+        : d?.q === 'warming' || ['idle', 'wait', 'slow'].includes(state.phase) ? '加载中' : '清单暂时读不到'];
     const p = parts[id], summary = join(note);
     const update = () => {
       const { lamp, tone } = U.status(!state.offline && d?.level ? d : { level: 'gray' });
@@ -1562,7 +1565,7 @@
     const top = new Set((home.projects.changes || []).slice(0, defaultCounts.projectChanges).map(c => c.id));
     const extra = [...items.values()].filter(c => !top.has(c.id));
     const rows = extra.map(c => shortRow({ ...c, name: changeName(c) }, [changeTime(c.at)], `/live/project/?id=${encodeURIComponent(c.project)}`));
-    if (!rows.length) rows.push({ key: 'empty', cls: 'row row--flat', html: `<p class="row__text row__sub">${pending ? '正在读近 7 天的变化…' : items.size ? '近 7 天的变化已在上面列出' : incomplete ? '近 7 天的变化暂时读不全' : '近 7 天没有变化'}</p>` });
+    if (!rows.length) rows.push({ key: 'empty', cls: 'row row--flat', html: `<p class="row__text row__sub">${pending ? '加载中' : items.size ? '近 7 天的变化已在上面列出' : incomplete ? '近 7 天的变化暂时读不全' : '近 7 天没有变化'}</p>` });
     paintList(ul, rows, { animate: false });
   }
   U.fold(parts.projects['more-changes'], parts.projects['changes-box'], async box => {
@@ -1572,7 +1575,7 @@
     async function load() {
       if (page !== changesPage || page.loading) return !!page.loaded;
       more.disabled = page.loading = true;
-      if (page.loaded) paintHTML(more, '正在读…', false);
+      if (page.loaded) paintHTML(more, '加载中', false);
       else paintProjectChanges(ul, page.items, true);
       const r = await window.Live.get('projects/changes', page.cursor ? { cursor: page.cursor } : null);
       if (page !== changesPage || !home) return !!changesPage?.loaded;
@@ -1834,13 +1837,17 @@
       }
     });
   }
-  function unreadable() {
+  function unreadable(compact = !!lastState?.conn?.emptyHome) {
     document.body.classList.add('live-unreadable');
-    for (const id of HOME_IDS) { reads[id].done(false); emptyCard(id, null); }
-    paintBatchCards({});
-    if (lastState?.conn?.emptyHome) for (const id of IDS) {
-      paintHTML(parts[id].head, U.head(addressed(NAME[id]), { lamp: false, href: href(id) }));
-      labelCard(cards[id]);
+    for (const id of HOME_IDS) reads[id].done(false);
+    if (compact) {
+      for (const id of IDS) {
+        paintHTML(parts[id].head, U.head(addressed(NAME[id]), { lamp: false, href: href(id) }));
+        labelCard(cards[id]);
+      }
+    } else {
+      for (const id of HOME_IDS) emptyCard(id, null);
+      paintBatchCards({});
     }
     balanceHome(); // 读数前配平两栏时给 AI 对话或自动任务卡设的最小高度去掉，不然收成一句话的卡还撑成大空卡
     Light.offline(!!lastState?.offline);
@@ -1874,7 +1881,7 @@
       d = { ...d };
       for (const id of HOME_IDS) d[id] = { ...U.withoutSnapshotCutoff(d[id], meta.at), items: Array.isArray(d[id]?.items) ? d[id].items : [] };
       // 快首页若只返回卡顿缺读占位，保留同一受众上一次的有效帧和覆盖截止。
-      if (kind === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
+      if (meta.source !== 'fallback' && kind === viewer && d.computer.missing_readings?.some(g => sp(U.fieldText(g?.name ?? g, viewer)).trim() === '卡顿')) {
         const next = stutterGroup(d.computer), unread = stutterUnread(d.computer), previous = stutterGroup(home?.computer);
         if (timed(previous?.recorded_at) && stutterThrough(previous) && !stutterThrough(next, unread) &&
             !timed(next?.recorded_at) && !timed(unread?.recorded_at) && !noStutterFrames(next, unread)) {
@@ -1893,11 +1900,11 @@
       }
       const metrics = d.computer.metrics;
       d.computer.metrics = copyFastHardware(metrics);
-      if (kind === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
+      if (meta.source !== 'fallback' && kind === viewer && d.computer.q !== 'warming') preserveComputerSamples(d.computer, home?.computer);
       else hardwareOverlay = false;
       if (d.focus) restoreY = null, pinned = false;
       const render = () => {
-      document.body.classList.remove('live-unreadable');
+      document.body.classList.remove('live-unreadable', 'live-empty-home');
       balanceHome();
       home = d;
       mainHardware = metrics;
@@ -1930,11 +1937,10 @@
         else restoreTimer ||= setTimeout(() => requestAnimationFrame(restoreHome), 650);
       }
     },
-    // 第一层还没收到包时也只占一行，避免请求未回时留下几张大空卡。
     phase(state) {
       if (!home) viewer = viewerKind(state);
       if (!home && ['none', 'gone'].includes(state.phase)) { unreadable(); return; }
-      if (!home) {
+      if (!home && !state.conn?.emptyHome) {
         for (const id of HOME_IDS) reads[id].set(state);
         if ((state.meta?.status === 503 && state.conn?.stage === 'retrying') || ['wait', 'slow'].includes(state.phase)) showHome();
       }
@@ -1983,6 +1989,9 @@
     scheduledWatch = window.Live.watch('tasks', { scope: 'scheduled', project }, { phase: state => paintTaskCard('tasks', state) });
   }
   window.LiveProjectLook?.load().then(looks => { projectLooks = looks; if (home?.projects) renderProjectGroups(home.projects); });
+  document.body.classList.add('live-empty-home');
+  U.connection({ conn: { stage: 'loading', say: '加载中' } });
+  unreadable(true);
   subscribe();
   // AI 留言不随“只看某个项目”变，单独订一份；有变化就重画页顶那张卡
   window.Live.watch('ai-messages', null, { data(d) { aiMessages = Array.isArray(d?.items) ? d.items : null; if (lastState) renderNotices(lastState); } });

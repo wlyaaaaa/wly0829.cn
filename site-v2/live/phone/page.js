@@ -16,11 +16,11 @@
   const USAGE_HUES = { on: '#00A650', active: 'teal', away: 'apricot', off: '#8f9bb3', sleep: 'violet', shutdown: '#3a4459', unrecorded: 'stone', pending: 'teal' };
   const USAGE_LABELS = { unrecorded: '没记录', pending: '等下一轮记录' };
   const usageRank = id => { const k = USAGE_ORDER.indexOf(id); return k < 0 ? USAGE_ORDER.length : k; };
-  let phone = null, viewer = 'public', done = false, linkOff = false, trafficProject = null, trafficDays = null, trafficDaysWatch = null;
+  let phone = null, viewer = 'public', done = false, linkOff = '', trafficProject = null, trafficDays = null, trafficDaysWatch = null;
   const ranges = {}, shownRanges = {}, watches = {}, generations = {}, chartStates = {};
   const packs = new Map(), chartDone = new Set(), sync = C.sync(), metric = id => phone?.metrics?.find(m => m.id === id);
   const isPartial = (o, key) => o?.lower_bound === true || o?.at_least === true || o?.q === 'partial' && (o.partial == null || o.partial.includes(key));
-  const pcOffline = () => linkOff || !!U.offline?.(), unread = () => pcOffline() ? '' : U.collectionText(), missing = '这块没存下来，连上后补上。';
+  const pcOffline = () => !!linkOff || !!U.offline?.(), unread = () => pcOffline() ? '' : U.collectionText(), missing = '这块没存下来，连上后补上。';
   // 流量柱图图例：电脑断开时图上是断开前的读数，这一格断开前就没有记录；写明原因，不留空白。
   const trafficMissing = () => pcOffline() ? '电脑断开前没有记录' : unread();
   const lowerText = (o, key, text) => o?.[key] != null && isPartial(o, key) && !/^不到/.test(sp(text)) ? `至少 ${sp(text)}` : sp(text);
@@ -330,7 +330,7 @@
     const NS = 'http://www.w3.org/2000/svg', LEFT = 58, TOP = 10, DAY = 86400, lanes = [['phone', '手机'], ['computer', '电脑']];
     const id = `pd${Math.random().toString(36).slice(2, 8)}`;
     host.classList.add('phone-days');
-    host.innerHTML = '<div class="phone-days__plot"><svg aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div><p class="vz-wait">正在读</p><span class="vz-tip phone-days__tip" hidden></span></div><div class="phone-days__x"></div><ul class="vz-legend"></ul><p class="use-note phone-days__note" hidden></p>';
+    host.innerHTML = '<div class="phone-days__plot"><svg aria-hidden="true"></svg><div class="chart__axis" aria-hidden="true"></div><p class="vz-wait">加载中</p><span class="vz-tip phone-days__tip" hidden></span></div><div class="phone-days__x"></div><ul class="vz-legend"></ul><p class="use-note phone-days__note" hidden></p>';
     const plot = host.querySelector('.phone-days__plot'), svg = plot.querySelector('svg'), axis = plot.querySelector('.chart__axis'), wait = plot.querySelector('.vz-wait'), tip = plot.querySelector('.vz-tip');
     const xs = host.querySelector('.phone-days__x'), legend = host.querySelector('.vz-legend'), note = host.querySelector('.phone-days__note');
     let data = null, W = 0, hover = null, pinned = null, hovered = null, muted = null;
@@ -857,7 +857,7 @@
       for (const node of card.querySelectorAll('.grp__said')) node.classList.toggle('row__sub', /这块还没算好/.test(node.textContent));
       tidyGroupStatus(card, card.dataset.key);
       if (card.dataset.key === 'usage' && !card.querySelector('.grp__extra:not([hidden])') && !card.querySelector('.grp__line').textContent.trim()) {
-        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? `${shownRanges.usage === '7d' ? '近 7 天' : '今天'}的使用记录暂时读不到` : '正在读使用记录');
+        U.html(card.querySelector('.grp__said'), chartDone.has('usage') ? `${shownRanges.usage === '7d' ? '近 7 天' : '今天'}的使用记录暂时读不到` : '加载中');
       }
       lineTip(card);
       for (const fig of card.querySelectorAll('.grp__fig')) { fig.toggleAttribute('data-lower', isPartial(metric(fig.dataset.key), 'value')); fig.toggleAttribute('data-accumulating', metric(fig.dataset.key)?.value === null && !!metric(fig.dataset.key)?.accumulating); }
@@ -901,8 +901,8 @@
     part('note').hidden = !notes; U.html(part('note'), notes);
     const helpers = phone?.collect?.helpers || [], routeName = !linkOff && ['online', 'partial'].includes(phone?.state) && { lan: '家里 WiFi', tailscale: 'Tailscale', bluetooth: '蓝牙' }[phone?.link?.route];
     const connected = phone?.state === 'online' || phone?.state === 'partial' && !lastOnline;
-    // 电脑连不上时下面摆的是存下的数，“电脑”这颗跟页顶那句一致写连不上，不照存下来时的“连着”
-    U.html(part('devs'), [{ ...phone?.link, name: ({ computer: '电脑', phone: '手机' })[phone?.link?.device || phone?.link?.id || 'computer'] || phone?.link?.label || phone?.link?.name || phone?.link?.title || phone?.link?.text || phone?.link?.device || phone?.link?.id, state: phone?.state, text: linkOff ? '连不上' : `${connected ? '连着' : phone?.state === 'offline' ? '连不上' : unread()}${routeName ? ` · 经 ${routeName}` : ''}` },{ name: '个人采集', ...phone?.collect?.collector }, ...helpers.filter(h => ['MacroDroid', 'TailSocks'].includes(h.name))].map(h => `<span class="dev-pill">${U.status(h, { small: true }).lamp}<b>${fh(h.name, '辅助应用', 'label')}</b>${fh(h.text || (h.state === 'online' ? '在跑' : h.state === 'offline' ? '没在跑' : unread()), '设备状态')}</span>`).join(''));
+    // 电脑连接状态跟页顶一致，即使手机读数来自上次。
+    U.html(part('devs'), [{ ...phone?.link, name: ({ computer: '电脑', phone: '手机' })[phone?.link?.device || phone?.link?.id || 'computer'] || phone?.link?.label || phone?.link?.name || phone?.link?.title || phone?.link?.text || phone?.link?.device || phone?.link?.id, state: phone?.state, text: linkOff || `${connected ? '连着' : phone?.state === 'offline' ? '连不上' : unread()}${routeName ? ` · 经 ${routeName}` : ''}` },{ name: '个人采集', ...phone?.collect?.collector }, ...helpers.filter(h => ['MacroDroid', 'TailSocks'].includes(h.name))].map(h => `<span class="dev-pill">${U.status(h, { small: true }).lamp}<b>${fh(h.name, '辅助应用', 'label')}</b>${fh(h.text || (h.state === 'online' ? '在跑' : h.state === 'offline' ? '没在跑' : unread()), '设备状态')}</span>`).join(''));
     const s = phone?.apps?.system;
     U.html(part('system'), specHtml(s, phone?.device));   // 规格只摆取到过的项，不写“未读到”（本人 11-24 01:40）
     U.html(part('lines'), tags.map(t => `<line x1="${t[3][0]}" y1="${t[3][1]}" x2="${t[4][0]}" y2="${t[4][1]}"/>`).join(''), false);
@@ -955,8 +955,9 @@
     data(d, meta) { phone = U.withoutSnapshotCutoff(d, meta.at); viewer = meta.viewer?.kind || 'public'; done = true; render(); read.done(); lightUp(); },
     link(s) {
       bar?.set(s); Light.offline(s.offline);
-      U.list($('notices'), s.offline ? [{ key: 'link', cls: 'notice glass', html: fh(s.text, '电脑连接状态') }] : []);
-      if (linkOff !== !!s.offline) { linkOff = !!s.offline; if (phone) render(); }
+
+      const next = s.conn?.stage === 'off' ? '关机了' : s.offline ? '连不上' : '';
+      if (linkOff !== next) { linkOff = next; if (phone) render(); }
       if (s.data == null && ['none', 'gone'].includes(s.phase)) {
         done = true; phone = { state: 'unknown' }; render(); read.done(); lightUp();
       }

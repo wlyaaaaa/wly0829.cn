@@ -355,7 +355,8 @@
   // 分批展开（R147）：先露 SHOW 那几条，点“展开（还有 N 条）”一次多露一批，露到底变“收起”；一批多少按排版定
   const BATCH = { figs: 8, kv: 10, rows: 10 };
   // reveal：这一块每组已多露了几条（组名 → 条数），重画时照着露；more(key)：这一组读完了、后面还能接着读（更早的改动、更多产物），这时不写“收起”，由那颗按钮接着读
-  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null) {
+  // label(left, open)：项目自己定的展开按钮写法（手机日记本的最近改动写“全部 N 条”），没给照“展开（还有 N 条）”
+  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null, label = null) {
     const groups = new Map();
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
@@ -363,7 +364,7 @@
       const extra = Math.max(0, items.length - preview), asked = Math.min(extra, reveal.get(key) || 0);
       // 只剩一条就直接摆出来，不让人为一条点“展开”（M1190）；自己没点过展开的，也不出“收起”
       const open = extra - asked === 1 ? extra : asked, left = extra - open;
-      const step = (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const step = (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
     });
   }
@@ -375,7 +376,7 @@
   }
   function drawGroups(b) {
     if (!b.groupSrc?.length) return;
-    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore), { animate: false });
+    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore, b.stepLabel), { animate: false });
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
@@ -508,7 +509,7 @@
     if (b.kind === 'rows') {
       b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
       b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
-      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore);
+      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore, b.stepLabel);
     }
     const fit = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
     const show = rows.length - fit === 1 ? rows.length : fit;   // 收起的只剩一条就不收（M1190）
@@ -714,12 +715,12 @@
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
     const asked = Math.min(loaded, preview + (b.reveal?.get('') || 0)), shown = loaded - asked === 1 ? loaded : asked;
-    // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写
+    // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写；展开按钮已写“全部 N 条”的（项目自己定的，见 custom.changes），不再另写一行条数
     const counts = [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n));
-    const count = loaded ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
+    const count = loaded && !custom?.changes?.step ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
-    const status = changeIssue || (!changeLog && '正在读改动记录…');
+    const status = changeIssue || (!changeLog && '加载中');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
     U.html(b.note, [esc(count), esc(available), cutoff && esc(`上次改动记录截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
@@ -1013,7 +1014,7 @@
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
@@ -1027,9 +1028,11 @@
         // 一批 10 条往下露；已读到的露完了才出“更早的改动”接着读
         b.step = BATCH.rows; b.hasNext = !!changeLog?.next;
         b.loaded = changeLog?.loaded === mine.length ? changeLog.loaded : mine.length;
-        const preview = changeLog?.shown;
+        // 项目自己定先露几条、展开按钮怎么写的（手机日记本：3 条、“全部 N 条”），照它
+        const preview = custom?.changes?.shown ?? changeLog?.shown;
         b.preview = Math.min(b.loaded, Number.isInteger(preview) && preview >= 0 ? preview : SHOW.rows);
-        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '' }, animate);
+        b.stepLabel = custom?.changes?.step ? (left, open) => custom.changes.step(left, open, changeLog?.total ?? b.loaded) : null;
+        fill(b, { label: '最近改动', rows: mine.map(changeRow), headOnly: !mine.length, empty: '', explain: custom?.changes?.note ? [esc(custom.changes.note)] : [] }, animate);
         const changed = !mine.length && proj.changed?.at ? proj.changed : null;
         const hasText = changed?.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(changed.text, projectViewer));
         b.reading.hidden = !changed;
@@ -1215,7 +1218,7 @@
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
   function commitsCell(cell) {
     const a = activity;
-    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '正在读提交记录…' : '提交记录暂时读不到。'}</small>` : '';
+    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '加载中' : '提交记录暂时读不到。'}</small>` : '';
     if (!a) return unavailable();
     if (!a.commits.length) return '';
     const vals = a.commits.map(n => (typeof n === 'number' && Number.isFinite(n) ? n : null));
@@ -1346,12 +1349,6 @@
     part('detail').hidden = true;
   }
 
-  // —— 出事时的横条：连不上 ——
-  function renderNotices(state) {
-    U.list(notices, state.offline
-      ? [{ key: 'link', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(state.text)}</span>` }] : []);
-  }
-
   // —— 页眉〔问情况〕：一句就够，不堆废话 ——
   function ask() {
     if (!proj) return '';
@@ -1435,7 +1432,7 @@
   let opening = [], revealTimer;
   const loading = setTimeout(() => {
     if (first && emptyHero.hidden && !document.documentElement.classList.contains('live-public-paused')) {
-      renderEmptyHero('正在读项目数据');
+      renderEmptyHero('加载中');
     }
   }, 400);  // 数据慢时 0.4 秒内先写“正在读项目数据”，不让整页空着（原来要等 2.5 秒）
   window.Live.watch(`projects/${enc(id)}`, null, window.Live.afterReady(lookReady, {
@@ -1524,7 +1521,6 @@
       bar?.set(state);
       if (disconnected !== state.offline) { disconnected = state.offline; if (proj && !first) { renderHero(proj); renderBoard(false); } }
       Light.offline(state.offline);
-      renderNotices(state);
       if (!proj && ['none', 'gone'].includes(state.phase)) {
         clearTimeout(loading);
         const locked = state.meta?.status === 403 && state.meta?.viewer?.kind === 'public';

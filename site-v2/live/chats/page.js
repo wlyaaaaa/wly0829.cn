@@ -681,14 +681,14 @@
   async function readArchived() {
     const b = boardOf(), kind = viewer, button = $('recent-next'), cursor = b && nextArchived(b.columns?.archived);
     if (cursor == null) return;
-    button.disabled = true; U.html(button, '正在读…', false);
+    button.disabled = true; U.html(button, '加载中', false);
     try {
       const r = await window.Live.get('chats', { window: '72h', state: 'archived', cursor });
       if (viewer !== kind || !boardOf() || r.meta?.viewer?.kind && r.meta.viewer.kind !== kind) return;
       // 读的时候名单更新了也照样接上（按编号去重），不让人再点一次（M915：读到第二页不能被更新冲掉）
       if (Array.isArray(r.data?.items)) { archivedPages.set(cursor, r.data); U.anchor(() => drawBoard(boardOf())); }
-      else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
-    } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
+      else U.html(button, U.fieldHtml(r.warming ? '加载中' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }), false);
+    } finally { button.disabled = false; if (button.textContent === '加载中') U.html(button, '继续读 ›', false); }
   }
   // 第一排两栏底边拉齐：矮的那栏最后一张卡拉长到和另一栏一样高；卡变高变矮（展开、来了新对话、换窗口宽）时重新拉（M534）
   const evenWatch = typeof ResizeObserver === 'function' ? new ResizeObserver(() => even()) : null, evenSeen = new WeakSet();
@@ -754,7 +754,7 @@
     recentRows = new Map(main.filter(row => row.count).map(row => [row.key, { count: row.count, i: row.i }]));
     U.html($('recent-title'), recentTitle + (endedLabel ? `<span class="lb-card__count">${esc(endedLabel)}</span>` : ''), false);
     U.list($('recent-list'), main.length ? main : wait(label === '0 个' ? '72 小时内没有可回看的对话'
-      : label ? '暂时只读到数量' : recentState?.warming ? '正在读' : U.collectionText()));
+      : label ? '暂时只读到数量' : recentState?.warming ? '加载中' : U.collectionText()));
     U.list($('recent-rest'), []);
     U.html($('recent-note'), esc([label && readAt(at), total != null && total > count ? `已列出 ${count} 个` : ''].filter(Boolean).join(' · ')) + (pages.get('')?.hidden ? ` ${U.hiddenMore?.(pages.get('').hidden, '场', pages.get('').hidden_what || '对话') || ''}` : ''));
     $('recent-next').hidden = nextRecentCursor() == null; U.html($('recent-next'), '继续读 ›');
@@ -765,7 +765,7 @@
     U.land();
   }
   function missing(text, temporary = false) { U.html($('head'), U.head('AI 对话', { lamp: false })); U.html($('chat-note'), U.fieldHtml(text, { name: 'AI 对话', place: 'body', kind: viewer })); if (temporary) { $('head').querySelector('.lamp')?.setAttribute('data-tone', 'off'); L.tone($('hero'), 'off', 'off'); } if (!activeChats) U.list($('active-list'), U.offline?.() ? [] : wait(text)); }
-  renderStats(null); missing('正在读'); U.list($('recent-list'), wait('正在读'));
+  renderStats(null); missing('加载中'); U.list($('recent-list'), wait('加载中'));
   let first = true, activityMinute = null, homeOffline = false;
   // 这页不列后台的对话（本人定的）；后台自动任务这会儿在跑的，顶上另起一行“后台另有 N 个在跑 ›”，点了到自动任务页。
   // 个数和实况首页 AI 对话卡同一个读口、同一个数法：完整的 home 回包里的 automation；页头用的 home?view=header 不带 automation，读它就永远是 0（M740）
@@ -798,8 +798,8 @@
   }, link(s) {
     const minute = Math.floor(Date.parse(s.now) / 60000), offlineChanged = homeOffline !== !!s.offline; homeOffline = !!s.offline;
     if (homeChats && (offlineChanged || !s.offline && minute !== activityMinute)) { activityMinute = minute; U.anchor(() => render(homeChats, s.now)); }
-    setBar(s); L.offline(s.offline); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text, { name: '连接情况', place: 'body', kind: viewer })}</span>` }] : []);
-    if (!listWithdrawal && !s.data && !activeChats && !boardOf()) missing(s.warming ? '正在读' : s.offline ? U.collectionText() : s.text || U.collectionText());
+    setBar(s); L.offline(s.offline);
+    if (!listWithdrawal && !s.data && !activeChats && !boardOf()) missing(s.warming ? '加载中' : s.offline ? U.collectionText() : s.text || U.collectionText());
     U.blockNote($('hero').querySelector('.card__body'), s);
   } });
   window.Live.watch('home', null, { data(d, meta) {
@@ -877,12 +877,12 @@
   $('recent-next').addEventListener('click', async () => {
     if (boardOf()) return readArchived();
     const button = $('recent-next'), cursor = nextRecentCursor(), firstPage = pages.get(''); if (cursor == null) return;
-    button.disabled = true; U.html(button, '正在读…', false);
+    button.disabled = true; U.html(button, '加载中', false);
     try { const r = await window.Live.get('chats', { window: '72h', cursor });
       if (firstPage !== pages.get('') || r.meta?.viewer?.kind !== viewer) return;
       if (Array.isArray(r.data?.items) && r.meta.at === recentAt) { pages.set(cursor, r.data); redrawRecent(); }
-      else U.html(button, U.fieldHtml(r.warming ? '正在读' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }));
-    } finally { button.disabled = false; if (button.textContent === '正在读…') U.html(button, '继续读 ›', false); }
+      else U.html(button, U.fieldHtml(r.warming ? '加载中' : r.text || U.collectionText(), { name: '继续读', place: 'button', kind: viewer }));
+    } finally { button.disabled = false; if (button.textContent === '加载中') U.html(button, '继续读 ›', false); }
   });
   refreshHistory = U.draw10?.mount({ row: chat, readViewer, isPinned });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
