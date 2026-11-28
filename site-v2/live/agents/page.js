@@ -65,6 +65,7 @@
   const stationOf = hook => STATION_OF[hook.key?.split(':')[0]] || 'other';
   const compactLimit = x => Number.isFinite(x?.compact_tokens) && x.compact_tokens > 0
     ? `${x.compact_tokens_basis === 'configured_estimate' ? '约 ' : ''}${kTok(x.compact_tokens)}` : '';
+  const compactStamp = x => x?.compact_stale_at ? `<small>这是 ${esc(when(x.compact_stale_at))} 读到的</small>` : '';
   const firstTime = id => { const fresh = !drawn.has(id); drawn.add(id); return fresh; };
 
   function checks(d, h) {
@@ -329,8 +330,8 @@
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
     const compact = h => {
       const limit = compactLimit(x(h));
-      return limit ? `${limit}就压缩${known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : ''}`
-        : F(x(h).compact) || '没读到';
+      return limit ? `${limit}就压缩${compactStamp(x(h)) || (known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : '')}`
+        : F(x(h).compact) || (h.id === 'claude' ? '这次读取压缩设置失败' : '没读到');
     };
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
@@ -373,7 +374,7 @@
   function hookCard(d, hook, withSample = false) {
     const id = HOSTS.find(h => h.name === hook.host)?.id;
     const sample = withSample && list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    const preCompact = hook.key === 'PreCompact', limit = preCompact && compactLimit(d.hosts?.[hook.host]);
+    const preCompact = hook.key === 'PreCompact', config = d.hosts?.[hook.host], limit = preCompact && compactLimit(config);
     // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
     const summary = preCompact && typeof hook.summary === 'string' ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
     const { install_state, metrics_state } = list(d.hooks).find(row => row.host === hook.host && row.key === hook.key) || {};
@@ -381,7 +382,7 @@
       hook.implementation?.evidence, metrics_state === '后台实现，未写入统一计时' && metrics_state, hook.reason];
     return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span class="ag-truncate" title="${esc(U.fieldText(hook.name, viewer))}">${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
       <p class="tp-small">${keepWords(F(summary, '钩子说明') || '说明还没读到')}</p>
-      ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)}` : '自动压缩线还没读到'}</p>` : ''}
+      ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)} ${compactStamp(config)}` : F(config?.compact) || '自动压缩线还没读到'}</p>` : ''}
       ${notes.filter(Boolean).map(note => `<p class="ag-hook__num">${keepWords(F(note))}</p>`).join('')}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
