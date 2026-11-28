@@ -230,7 +230,7 @@ $catalog = (Resolve-Path -LiteralPath 'site-v2/live/_lib/live-opened-catalog.jso
 第 1 步的差项清单和第 7 步收尾再对一遍，都按这张对。每类一行：源头在哪 → 网页哪页哪块；后面只写要人看的情况，其余由程序、接口、自动任务自己跟，不刷新。逐个项目、技能、任务能从登记展开的不抄在这里。新增、改名或撤掉实况页或模块时，同轮在这里补或改一行。
 
 - **项目：** PCConfig `registries/website-projects.json`（上不上站）、项目的 `docs/live.contract.json` 或 PCConfig 登记的私有接入单 → 实况「项目」列表和项目详情、讲解页项目列表。要人看：已定上站却缺讲解页、实况详情或接入单的；接入单里已批准的栏目、指标页面还没显示的。没定上站的不算差项。
-- **技能：** 规则仓 `config/personal-skill-supply.json`（安装、退役）和 `skills/<技能ID>/` → 实况「智能体」技能榜、项目页的技能、技能讲解页。要人看：新装、退役、改名的技能，插件技能不在顶层目录，要单独对；退役的讲解页按[退役内容的去处](design/panel-content-contract.md#退役内容的去处)留去向。
+- **技能：** 规则仓 `config/personal-skill-supply.json`（安装、退役）和 `skills/<技能ID>/` → 实况「智能体」技能榜、项目页的技能、技能讲解页。要人看：新装、退役、改名的技能，插件技能不在顶层目录，要单独对；退役的讲解页按[退役内容的去处](design/panel-content-contract.md#退役内容的去处)留去向。百工谱总览第 2 张图底牌和它的文字稿写着“在供共 35 个”（11-28 按规则仓 skills/ 下有 SKILL.md 的目录数出 35），在供数变了就用生图只换这个数，文字稿同时改。
 - **自动任务**（含 AI 约好的事、翻译官、自动修理）：PCConfig 的任务用途登记（`registries/dashboard_sources.json` 等）和自动任务类别（`tools/remote-computer-mcp/automation/`）→ 实况「自动任务」类别卡和详情、实况值守讲解。要人看：新增、改了、停了的任务类型，对它的做什么、为什么、怎么算做完；登记缺字段的交自动任务的维护方回源补，网站不另写一份。
 - **计划任务：** Windows 任务计划程序现场、PCConfig `docs/governance/scheduled_task_purpose_catalog.md` 和现有漂移检查回执 → `/live/tasks/`。要人看：页上“没写用途”的数，本人项目新增、停改的任务；用途照 PCConfig 原规矩补，不从网站倒推改任务。
 - **智能体：** 规则仓 `config/model-roster.json`、三家已装设置和适配覆盖 → 实况「智能体」卡、AI 百工谱讲哪个型号干什么的页。要人看：宿主或角色新增、改名、停用，型号换代（第二节）。
