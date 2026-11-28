@@ -12,7 +12,6 @@
   const kinds = Object.keys(types);
   const narrow = matchMedia('(max-width: 620px)');
   const twoColumns = matchMedia('(min-width: 1101px)');
-  const wideScreen = matchMedia('(min-width: 3200px)');
   const scopeWords = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
   const keepScopeWord = word => `<span class="media-compact">${esc(word)}</span>`;
   const scopeHtml = text => text.split(/(时间戳|更新)/).map((part, i) => {
@@ -185,17 +184,6 @@
   }
   narrow.addEventListener('change', () => { yearPage = 0; refresh?.('year'); });
   twoColumns.addEventListener('change', () => { recentPage = 0; selectedDay = undefined; refresh?.('recent'); });
-  function placeArchiveExplanation(details) {
-    const panel = details?.querySelector('.media-extra');
-    if (!panel?.showPopover) return;
-    if (details.open && wideScreen.matches) {
-      if (!panel.matches(':popover-open')) { panel.popover = 'manual'; panel.showPopover(); }
-    } else if (panel.hasAttribute('popover')) panel.removeAttribute('popover');
-  }
-  document.addEventListener('toggle', e => {
-    if (e.target.matches('#media-archive details.media-pop')) placeArchiveExplanation(e.target);
-  }, true);
-  wideScreen.addEventListener('change', () => placeArchiveExplanation(document.querySelector('#media-archive details.media-pop[open]')));
   document.addEventListener('click', e => {
     const button = e.target.closest('[data-media-page]');
     const open = e.target.closest('.media-recent-list summary')?.parentElement;

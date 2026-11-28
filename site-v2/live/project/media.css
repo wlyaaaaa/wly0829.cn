@@ -62,7 +62,6 @@ body.page--project:has(.pj-board--media) {
 .media-pop > summary { display: inline-flex; list-style: none; cursor: pointer; white-space: nowrap; }
 .media-pop > div { position: absolute; z-index: 2; top: calc(100% + 6px); left: 0; width: min(315px, 75vw); max-height: 220px; overflow: auto; padding: 12px; border-radius: 10px; background: #f3fffb; box-shadow: 0 6px 20px #19362733; }
 .media-pop > .media-extra { display: grid; gap: 8px; width: min(375px, 75vw); max-height: 270px; }
-.media-pop > .media-extra:popover-open { position: fixed; inset: 0; margin: auto; height: max-content; border: 0; color: inherit; }
 .media-extra p { margin: 0; }
 .media-reading-note { display: block; color: var(--ink-soft); font-size: 13px; line-height: 20px; }
 .pj-board--media .pj-card:has(.media-pop[open]) { z-index: 2; }
