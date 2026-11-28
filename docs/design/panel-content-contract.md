@@ -199,12 +199,12 @@ repository `AGENTS.md`. Code paths are interpreted from the repository root.
   G mirrors, phone-package and cloud-candidate derivatives. No separate
   deletion/protection/recovery framework is required. A whole source root
   being unavailable is still only unavailable.
-- Explain an unfamiliar technical term when its meaning is needed to understand
-  the action or result, preferably in the sentence itself; `English（中文含义）`
-  is useful only when that short explanation actually helps. Familiar formats,
-  common names and acronyms such as Markdown, PDF, Git and API do not need
-  automatic parenthetical translations. Do not repeatedly annotate a term
-  throughout a page. A glossary remains available for precise reference, but
+- Choose between English and Chinese, and decide which English term gets a
+  parenthetical Chinese meaning, by “用词照大部分人的说法” in
+  [AGENTS.md](../../AGENTS.md). When an uncommon term's meaning is needed to
+  understand the action or result, prefer explaining it in the sentence itself.
+  Do not repeatedly annotate a term throughout a page. A glossary remains
+  available for precise reference, but
   cannot replace an intelligible product explanation.
 - Automatic term annotation is a single-pass, longest-phrase safety net. It
   must never rewrite text that it already inserted or nest translations inside
