@@ -24,6 +24,11 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  if (id === 'pcconfig') {
+    const style = Object.assign(document.createElement('link'), { rel: 'stylesheet', href: '/live/project/pcconfig.css' });
+    document.head.append(style);
+    await import('/live/project/pcconfig.js').catch(() => style.remove());
+  }
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
   // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡
@@ -605,8 +610,18 @@
       if (proj && !first) renderBoard(false);
     };
     if (id === 'agents') reads.push(fetch('/live/project/weekly-new.json', { signal: AbortSignal.timeout(15000) }).then(r => r.ok ? r.json() : null).then(d => save('weekly', d)).catch(() => {}));
-    additionWatches.push(watch('computer', null, { data(d, meta) { if (!sameViewer(meta)) return; if (id === 'wly0829.cn') save('external', d?.external); save('batches', d?.batch_progress); } }));
-    if (id === 'pcconfig') additionWatches.push(readSoftware(save, watch));
+    additionWatches.push(watch('computer', null, { data(d, meta) {
+      if (!sameViewer(meta)) return;
+      if (id === 'wly0829.cn') save('external', d?.external);
+      if (id === 'pcconfig') additions.computer = d;
+      save('batches', d?.batch_progress);
+    } }));
+    if (id === 'pcconfig') {
+      additionWatches.push(readSoftware(save, watch));
+      for (const resource of ['phone', 'backups']) additionWatches.push(watch(resource, null, {
+        data(d, meta) { if (sameViewer(meta)) save(resource, d); },
+      }));
+    }
   }
   const sameViewer = meta => (meta?.viewer?.kind || 'public') === projectViewer;
   const getChanges = cursor => window.Live.get('projects/changes', { project: id, cursor }).catch(() => null);
@@ -904,6 +919,13 @@
     const seq = laidOut;
     if (!seq.length) return;
     for (const g of seq) cardTail(g.card, g.blocks);
+    if (custom?.grid) {
+      const rank = key => custom.grid.includes(key) ? custom.grid.indexOf(key) : custom.grid.length;
+      const ordered = [...seq].sort((a, b) => rank(a.key) - rank(b.key));
+      inOrder(main, ordered.map(g => g.card.el));
+      ordered.forEach(g => g.card.col = 0);
+      return;
+    }
     if (seq.length < 2) { inOrder(main, seq.map(g => g.card.el)); seq.forEach(g => g.card.col = 0); return; }
     // 摆齐的算法在 layout.js；那个文件没取到时卡片留在原来那一栏，不让整页出错
     const PL = window.ProjectLayout;
@@ -934,11 +956,11 @@
     const allMetrics = (proj?.sections || []).flatMap(s => s.metrics || []), skillUsage = id === 'agents' ? V.skillData(allMetrics) : null;
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
-      if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board));
-      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
-      if (id === 'pcconfig' && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
+      if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board, { additions, records, route, stamp }));
+      for (const card of custom?.ownsSections ? [] : window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
+      if (id === 'pcconfig' && !custom?.ownsSections && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
-      for (const s of proj.sections || []) {
+      for (const s of custom?.ownsSections ? [] : proj.sections || []) {
         const into = isMore(s) ? right : left;
         // 规则仓的“后台提醒程序”整块在智能体页的钩子表里，这里只留一行链过去
         if (id === 'agents' && s.id === 'hooks') {
@@ -1071,6 +1093,12 @@
       }
     }
     arrange(left, right);
+    const gallery = custom?.interfaceCard && blocks.get(custom.interfaceCard)?.viz;
+    if (gallery && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js')
+        .then(module => module.mountInterface(id, gallery, keepWords, { embedded: true, note: custom.interfaceNote }))
+        .catch(() => { interfaceLoad = null; });
+    }
     // 首次跳到分段后，晚到的项目数据可能把卡片移到另一栏。
     if (deepLink && deepLink.y === scrollY) {
       const target = document.getElementById(deepLink.id);
@@ -1287,7 +1315,7 @@
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.dataset.units = n;
     U.html(strip, keepWords(html)); fitStrip();
-    if (interfaceProjects.has(id) && !interfaceLoad) {
+    if (interfaceProjects.has(id) && !custom?.interfaceCard && !interfaceLoad) {
       interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip, keepWords))
         .catch(() => { interfaceLoad = null; });
     }
@@ -1474,6 +1502,7 @@
         correctionsWatch?.stop(); correctionsWatch = null; Object.keys(additions).forEach(key => delete additions[key]);
         artsWatch?.stop(); artsWatch = arts = artsState = null;
         opening = [];
+        if (!raw && custom?.interfaceCard) interfaceLoad = null;
       }
       projectViewer = viewer;
       if (raw) applyLook?.();

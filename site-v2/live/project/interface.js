@@ -6,7 +6,7 @@ function showImage(image, url) {
   image.src = url;
 }
 
-export async function mountInterface(id, strip, words = html => html) {
+export async function mountInterface(id, host, words = html => html, { embedded = false, note = '' } = {}) {
   const response = await fetch('/live/project/interface-data.json');
   if (!response.ok) throw new Error('界面图清单暂时读不到');
   const shots = (await response.json())[id];
@@ -21,19 +21,19 @@ export async function mountInterface(id, strip, words = html => html) {
 
   const { esc } = window.LiveUI;
   const section = document.createElement('section');
-  section.className = 'pj-interface pj-card glass';
-  section.setAttribute('aria-labelledby', 'pj-interface-title');
+  section.className = embedded ? 'pj-interface pj-interface--embedded' : 'pj-interface pj-card glass';
+  if (!embedded) section.setAttribute('aria-labelledby', 'pj-interface-title');
   section.innerHTML = `
-    <h2 id="pj-interface-title">界面</h2>
-    <p>点图看大图</p>
-    <div class="pj-interface-grid">${shots.map(([, , label]) => `
+    ${embedded ? '' : '<h2 id="pj-interface-title">界面</h2><p>点图看大图</p>'}
+    <div class="pj-interface-grid">${shots.map(([, , label, , caption = label]) => `
       <figure>
         <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
           <img decoding="async" alt=""><span class="pj-interface-zoom" aria-hidden="true"></span>
         </button>
-        <figcaption>${words(esc(label))}</figcaption>
+        <figcaption>${words(esc(embedded ? caption : label))}</figcaption>
       </figure>`).join('')}
     </div>
+    ${embedded && note ? `<p>${esc(note)}</p>` : ''}
     <dialog class="pj-interface-view" aria-label="界面大图">
       <figure><img decoding="async" alt=""><figcaption></figcaption></figure>
       <form class="pj-interface-controls" method="dialog">
@@ -84,5 +84,6 @@ export async function mountInterface(id, strip, words = html => html) {
     observer.observe(thumb);
     button.onclick = () => { show(index); dialog.showModal(); };
   });
-  strip.after(section);
+  if (embedded) host.append(section);
+  else host.after(section);
 }
