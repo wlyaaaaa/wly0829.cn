@@ -122,7 +122,8 @@ test('automation work page shows one work and the read-only categories for owner
     }
     const backup = render(audience, 'backup');
     assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：<\/b>(?:<[^>]+>)*测试范围.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>要(?:你)?本人恢复原件/s);
-    assert.ok(backup.includes(audience === 'owner' ? '什么时候派：</b>要你本人确认' : '什么时候派：</b>要本人确认'));
+    const steps = backup.match(/<ul class="aw-mechanism__rows">(.*?)<\/ul>/s)?.[1] || '';
+    assert.ok(steps.replace(/<[^>]+>/g, '').includes(audience === 'owner' ? '什么时候派：要你本人确认' : '什么时候派：要本人确认'));
     assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
   }
 });
