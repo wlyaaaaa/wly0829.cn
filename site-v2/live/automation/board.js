@@ -624,7 +624,7 @@
     const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
-    return `${wordsIn(text)}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    return `${text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : ''}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {

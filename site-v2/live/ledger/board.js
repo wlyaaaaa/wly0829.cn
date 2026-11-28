@@ -16,7 +16,7 @@
   const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
   let state, viewer = 'public', filter = params.get('outcome') || '', kind = ['promised', 'repair'].includes(params.get('kind')) ? params.get('kind') : '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
-  let older = [], olderNext, olderBusy = false, pickedRead;
+  let older = [], olderNext, olderBusy = false, pickedRead, projectRead;
   // 首页 AI 账本卡点进来的那几件：?view=open|opened|closed|due|overdue|opened_7d|closed_7d（数据约定-前端升级 §11）。读 ledger?view=…，
   // 后台返回 {view, started_at, items, total, next}，件数和卡上那个数是同一份；续页把 next 当 cursor，保留 view
   const VIEW = { open: 'AI 在跟的', opened: '新账起进的', closed: '新账起了结的', due: '今天到日子的', overdue: '过期没看的', opened_7d: '近 7 天进的', closed_7d: '近 7 天了结的' };
@@ -424,8 +424,9 @@
       page.tick.set([], { off: state.offline });
       return;
     }
+    const projectName = projectRead?.data?.id === project && T.viewerOf(projectRead) === viewer ? U.fieldText(projectRead.data.name, viewer).trim() : '';
     T.paint(page.root, publicHtml(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
-        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
+        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(projectName || project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
       ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split"><div class="lg-lists">${settled(d)}${repeats(d)}</div>${detail(d)}</div>`, viewer));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
@@ -479,6 +480,11 @@
         pick(want, true);
       } else draw();
     } });
+  if (project && !view) Live.watch(`projects/${encodeURIComponent(project)}`, null, { phase(next) {
+    if (next.data === projectRead?.data && T.viewerOf(next) === T.viewerOf(projectRead)) return;
+    projectRead = next;
+    if (state?.data) draw();
+  } });
   page.root.addEventListener('click', e => {
     const p = e.target.closest('button[data-pick]'), f = e.target.closest('[data-filter]');
     if (p) { autoPick = false; pick(p.dataset.pick); return; }

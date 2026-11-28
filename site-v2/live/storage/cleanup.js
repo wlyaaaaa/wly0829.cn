@@ -131,8 +131,10 @@
     return `<p class="cl-k">近 7 天${incomplete ? '已知腾出' : '共腾出'}</p><p class="cl-big${measured ? '' : ' is-gray'}">${esc(K.size(measured ? g.total : null))}</p><p class="cl-sub">${esc(last)}</p>${measured ? `<ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>` : ''}${receipts(g, viewer)}`;
   }
 
-  // 一根条 = 整块盘：灰蓝是已用，绿段是这轮刚腾出的，白色是其余空闲。没读到的盘（离线、还没接进读数）也留一行灰的写原因。
+  // 绿段来自删除回执，盘面前后的空闲变化不能当成删掉的字节。
   function volumes(d, g, viewer) {
+    const run = g?.last, complete = run?.removal_totals_complete === true;
+    const removal = v => run?.removed_by_volume?.[K.letter(v)];
     const all = (d?.volumes || []).filter(v => K.letter(v) !== 'F');
     const live = new Map(all.map(v => [K.letter(v), v]));
     const fromRun = K.splitRows(g?.last?.volumes, viewer).visible.map(r => ({ r, v: live.get(K.letter(r)) || { id: r.id } }));
@@ -141,21 +143,27 @@
     const rows = [...fromRun.sort((a, b) => (num(b.r.freed_bytes) || 0) - (num(a.r.freed_bytes) || 0)), ...rest];
     if (all.length && !live.has('V') && !seen.has('V')) rows.push({ r: null, v: { id: 'V:' }, missing: true });
     if (!rows.length) return '<p class="cl-sub">盘的容量还没读到。</p>';
-    const anyFreed = rows.some(x => x.v.state !== 'offline' && num(x.r?.freed_bytes) > 0);
+    let anyRemoved = false;
     return `<ul class="cl-vols">${rows.map(({ r, v, missing }) => {
+      const liveFree = num(v.free), free = liveFree ?? num(r?.free_after), totalBytes = num(v.total);
+      const diskRemoval = removal(v), bytes = num(diskRemoval?.removed_logical_bytes);
+      const removed = bytes == null ? '' : complete && diskRemoval.removed_entries === 0 && run.result === 'ok'
+        ? '没有到期的' : `${complete ? '' : '至少'}腾出 ${K.size(bytes)}`;
       if (v.state === 'offline') {
-        const text = [K.offlineRead(v, viewer), num(v.free) != null && `当时还剩 ${K.size(v.free)}`].filter(Boolean).join(' · ');
+        const left = free == null ? '' : `${liveFree == null ? `${when(run.finished_at)} ` : '当时'}还剩 ${K.size(free)}`;
+        const text = [removed, K.offlineRead(v, viewer), left].filter(Boolean).join(' · ');
         return `<li class="is-gray"><span class="cl-vol">${esc(K.volName(v))}</span><span class="cl-bar is-gray"></span><span class="cl-vol__t">${esc(text)}</span></li>`;
       }
-      const liveFree = num(v.free), free = liveFree ?? num(r?.free_after), totalBytes = num(v.total), freed = num(r?.freed_bytes);
       const why = missing ? '还没接进存储读数' : '容量没读到';
-      const left = free == null ? why : `${liveFree == null ? `${when(g.last.finished_at)} ` : ''}还剩 ${K.size(free)}`;
-      const text = !r ? left : `${freed == null ? '腾出量没读到' : `腾出 ${K.size(freed)}`} · ${left}`;
+      const left = free == null ? why : `${liveFree == null ? `${when(run.finished_at)} ` : ''}还剩 ${K.size(free)}`;
+      const text = [removed, left].filter(Boolean).join(' · ');
+      const segment = bytes > 0 && free > 0 && totalBytes > 0 ? Math.min(bytes, free) / totalBytes * 100 : 0;
+      anyRemoved ||= segment > 0;
       const bar = totalBytes > 0 && free != null
-        ? `<span class="cl-bar" role="img" aria-label="${esc(`${K.volName(v)} ${text}`)}"><i style="width:${((totalBytes - free) / totalBytes * 100).toFixed(2)}%"></i>${freed > 0 ? `<b style="width:${(Math.min(freed, free) / totalBytes * 100).toFixed(2)}%"></b>` : ''}</span>`
+        ? `<span class="cl-bar" role="img" aria-label="${esc(`${K.volName(v)} ${text}`)}"><i style="width:${((totalBytes - free) / totalBytes * 100).toFixed(2)}%"></i>${segment ? `<b style="width:${segment.toFixed(2)}%"></b>` : ''}</span>`
         : `<span class="cl-bar is-gray" title="${esc(`${K.volName(v)}${why}`)}"></span>`;
       return `<li${free == null ? ' class="is-gray"' : ''}><span class="cl-vol">${esc(K.volName(v))}</span>${bar}<span class="cl-vol__t">${esc(text)}</span></li>`;
-    }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
+    }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyRemoved ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝其余空闲' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
   }
 
   // 规则中文名：先用回执里 rules[] 的 label、failures[] 的 rule_name，再用上面的对照表；
