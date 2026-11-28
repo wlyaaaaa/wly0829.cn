@@ -96,10 +96,11 @@
     if (btn.hasAttribute('data-open')) { const go = () => { state.shown = RANK_STEP; drawRank(host); }; if (window.LiveUI?.anchorFold) window.LiveUI.anchorFold(btn, go, () => btn, host); else go(); return; }
     if (state.shown < state.rows.length) { state.shown += RANK_STEP; drawRank(host); return; }
     if (!state.load || btn.disabled) return;
+    note.hidden = true;
     btn.disabled = true; btn.textContent = '正在读…';
     const got = await state.load().catch(() => null);
     btn.disabled = false;
-    note.hidden = !!got; note.textContent = got ? '' : '已读到一部分，后面的接着读。';
+    note.hidden = !!got; note.textContent = got ? '' : '下一页这次没读到。';
     if (got) Object.assign(state, { shown: Math.min(state.shown, state.rows.length) + RANK_STEP, rows: [...state.rows, ...got.rows], load: got.load });
     drawRank(host);
   }

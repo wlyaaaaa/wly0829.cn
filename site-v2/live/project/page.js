@@ -61,14 +61,25 @@
   const enc = encodeURIComponent;
   const missingText = (state, what = '项目') => state?.offline || U.offline?.() ? '这块没存下来，连上后补上。'
     : `${U.fieldText(what) || '项目'}这次没读到`;   // 读失败、服务出错、没给这一块都算没读到（M1198 B66）；成功读到空的由各块自己写，比如“还没有产物”
+  // Live 用同一个 live_missing 回应无该项目和访客不可发现的项目。
+  const projectNotFound = meta => meta?.viewer?.kind === 'public' && meta.status === 404 && meta.withdrawn;
+  function missingProject(state) {
+    if (projectNotFound(state?.meta)) return '没有找到这个项目。';
+    if (state?.meta?.viewer?.kind === 'public' && state.meta.status === 403) return { visibility: 'owner', hidden_what: '此项目的实况' };
+    return missingText(state);
+  }
 
   const hero = $('pj-hero');
-  let coverSlug;
+  let coverSlug, applyLook;
   const lookReady = Promise.all([looks, fetch('/live/project/cover-links.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))])
     .then(([lookMap, coverLinks]) => {
       coverSlug = Object.keys(coverLinks).find(slug => coverLinks[slug] === id);
-      applyProjectLook(hero, id, lookMap);
-      paintTone(lookMap);
+      // 先等主读口认出项目，访客找不到时也用统一外观。
+      applyLook = () => {
+        applyProjectLook(hero, id, lookMap);
+        paintTone(lookMap);
+        applyLook = null;
+      };
     });
   // 页头的几块在卡里；关键数字那一条在卡下面
   const part = (name) => hero.querySelector(`[data-part="${name}"]`) || document.querySelector(`[data-part="${name}"]`);
@@ -158,7 +169,7 @@
     if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (unknownValue(m) && /^(?:没有记录|暂时读不到)[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">这次没读到</span>', plain: '这次没读到', long: false };
+    if (unknownValue(m) && /^(?:没有记录|暂时读不到)[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-text">这次没读到</span>', plain: '这次没读到', long: false };
     if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
@@ -400,14 +411,17 @@
     (m, date, unit, run) => date ? `<span class="pj-no-split">${m}</span>` : unit ? `<span class="pj-nb">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
   // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
   const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
-  function keepWords(html) {
+  function keepWords(html, timeline = false) {
     if (!html) return html;
     return String(html).split(/(<[^>]*>)/).map((t, i) => {
       if (i % 2 || !t) return t;
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
       if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
-      const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      const open = at => !quoted.some(([a, b]) => at > a && at < b), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
+      const segs = [...wordCut.segment(t)], cuts = [];
+      const intact = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)];
+      // 分词会把改动说明里的“普通程序”切成两词，时间线里按一个词折行。
+      if (timeline) intact.push(...t.matchAll(/普通程序/g));
+      const open = at => !intact.some(m => at > m.index && at < m.index + m[0].length), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
       segs.forEach((s, j) => { const next = segs[j + 1], prev = segs[j - 1];
         // 单字的副词、介词、否定词（真干活、很快、都用、把它、不改、新模型）跟后面的词走：断在它前面，它和后面的词之间不断
         if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !(prev && orphan(t, prev)) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
@@ -693,7 +707,7 @@
     const note = field === it ? '' : marker(it, projectViewer, it.hidden_what || '改动说明');
     const title = U.fieldHtml(field, { name: '改动说明', kind: projectViewer });
     const count = Number.isFinite(it.count) && (it.count > 1 || locked) ? `<span class="row__meta">${esc(num(it.count))} 次提交</span>` : '';
-    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${keepWords(title)}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
+    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${keepWords(title, true)}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
   }
   async function loadChanges(b) {
     const cursor = changeLog?.next, epoch = changeEpoch, label = b.page.innerHTML;
@@ -703,8 +717,8 @@
       const result = await getChanges(cursor);
       if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
       const page = result?.meta?.status < 400 && changePacket(result);
-      if (!page?.items.length) {
-        publishChanges('已读到一部分，后面的接着读。');
+      if (!page?.items?.length) {
+        publishChanges('下一页这次没读到。');
         // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
         result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
         return;
@@ -739,7 +753,7 @@
       // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
       if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else {
-        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "已读到一部分，后面的接着读。", { name: '项目内容', kind: projectViewer }));
+        b.note.hidden = false; U.html(b.note, U.fieldHtml(missingText(result, '下一页'), { name: '项目内容', kind: projectViewer }));
         // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
         result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
       }
@@ -782,7 +796,7 @@
       rows.push(...(result.data.items || [])); cursor = result.data.next;
     } while (cursor && !paged);
     b.recordStaleAt = staleAt; drawRecordCutoff(b);
-    const after = next => next ? async () => { const page = await read(next); return page.data && Array.isArray(page.data.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
+    const after = next => next ? async () => { const page = await read(next); return page.meta?.status < 400 && Array.isArray(page.data?.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
     if (paged) window.ProjectSiteReadings.pagedRank(b.viz, { rows: rows.map(pageRankRow), total: result.data.total, load: after(cursor), rank: { unit: '次', empty: '这段时间没有打开记录' } });
     else window.LiveProjectViz.chart(b.viz, m.id, rows);
     const { line, extra } = lineOf(m);
@@ -1017,8 +1031,9 @@
         const items = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
-        const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? (b.versionFailed || missingArts ? '这版的改动记录这次没读到' : '暂时没有读到这版的改动记录') : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        // 连接层还可能重读，但已经收到了失败响应，先照实写这次没读到。
+        const reading = missingArts && proj.artifacts && (!artsState || (artsState.meta?.status < 400 && ['idle', 'wait', 'slow'].includes(artsState.phase)));
+        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? (b.versionFailed || missingArts ? '这版的改动记录这次没读到' : '这版没有改动记录') : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
@@ -1251,7 +1266,8 @@
   // 一排最多 10 格、每格至少 106 像素（同 look.css），窄到一排放不下两格也排两列（不一格占一整行）；一排放不下时按排数均分，不让最后一格单独占一排、右边空一大片
   function fitStrip() {
     const strip = part('links'), n = +strip.dataset.units || 0, css = getComputedStyle(strip);
-    const room = Math.min(10, Math.max(2, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / 106)));
+    const min = parseFloat(css.getPropertyValue('--pj-cell-min'));
+    const room = Math.min(10, Math.max(2, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / min)));
     strip.style.setProperty('--pj-cells', String(n <= room ? Math.max(n, 4) : Math.ceil(n / Math.ceil(n / room))));
     // 折成几排、最后一排还空着格位：最后一格往右占满（各页自己改了列数的也照实际排出来的量）
     const cells = strip.querySelectorAll(':scope > .pj-cell'), last = cells[cells.length - 1];
@@ -1299,7 +1315,9 @@
   }
   function renderHero(d) {
     hero.hidden = false; emptyHero.hidden = true;
-    const status = U.status(d);
+    // 部分读数没回来时，灰灯沿用，页头只说明缺数；整页读数确实旧了才显示整页截止。
+    const partial = d.q === 'partial' && !isStale(d) && !U.offline?.();
+    const status = U.status(d, { cutoffShown: partial ? U.isCutoffNote : undefined });
     Light.tone(hero, d);
     document.body?.classList.toggle('pj-frozen', d.phase === 'archived' || d.state === 'frozen' || hero.dataset.frozen === 'true');
     // 名字＋日用／偶用／冻结小标签（分档读不到时写后端那句缺口）
@@ -1317,7 +1335,8 @@
     const repo = !d.size && (d.sections || []).find(sec => sec?.id === 'repository')?.metrics || [], metric = key => repo.find(m => m?.id === key && Number.isFinite(m.value));
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
-    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
+    const note = status.note || (partial ? '部分数据这次没读到' : '');
+    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, note && `<small class="pj-stale">${note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
     // 提交时刻页头那行已写，这里只写这次改了什么
@@ -1457,6 +1476,7 @@
         opening = [];
       }
       projectViewer = viewer;
+      if (raw) applyLook?.();
       if (raw && custom?.adapt) raw = custom.adapt(raw);
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
@@ -1505,7 +1525,7 @@
       }
       function draw(animate) {
         const render = () => {
-          if (raw) renderHero(raw); else renderEmptyHero(missingText());
+          if (raw) renderHero(raw); else renderEmptyHero(missingProject({ meta }));
           main.hidden = side.hidden = false;
           renderBoard(animate);
           if (!animate) for (const el of [part('facts'), part('links')]) U.swapped(el);
@@ -1524,13 +1544,14 @@
           documents = module.mount(id, board, () => projectLink);
         }).catch(() => { documents = null; });
       }
-      bar?.set(state);
+      const notFound = projectNotFound(state.meta);
+      bar?.set(notFound ? { ...state, text: '刷新' } : state);
       if (disconnected !== state.offline) { disconnected = state.offline; if (proj && !first) { renderHero(proj); renderBoard(false); } }
       Light.offline(state.offline);
       if (!proj && ['none', 'gone'].includes(state.phase)) {
         clearTimeout(loading);
-        const locked = state.meta?.status === 403 && state.meta?.viewer?.kind === 'public';
-        renderEmptyHero(locked ? { visibility: 'owner', hidden_what: '此项目的实况' } : missingText(state));
+        if (!notFound) applyLook?.();
+        renderEmptyHero(missingProject(state));
       }
       [hero.querySelector('.card__body'), ...[...blocks.values()].filter(b => !b.artifacts && !b.changes && !(id === 'agents' && ['quotes', 'agents-moved', 'hooks'].includes(b.key))).map(b => b.el)].forEach(el => U.blockNote(el, state));
     },

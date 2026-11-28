@@ -106,14 +106,20 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
+  --pj-cell-min: 106px;
   display: grid;
   container-type: inline-size;
-  grid-template-columns: repeat(auto-fill, minmax(min(50%, max(106px, 100% / var(--pj-cells, 6))), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(50%, max(var(--pj-cell-min), 100% / var(--pj-cells, 6))), 1fr));
   align-items: stretch;
   row-gap: 6px;
   margin-top: 16px;
   padding: 14px 10px;
   border-radius: var(--pj-card-radius);
+}
+/* 900 宽内容区容得下 7 格（含跨两格的状态），长状态和数字仍有各自的宽度。 */
+@media (max-width: 1100px) {
+  .pj-strip { --pj-cell-min: 100px; }
+  .pj-cell__v:has(> .pj-text) { white-space: normal; word-break: keep-all; overflow-wrap: anywhere; }
 }
 .pj-cell {
   position: relative;
@@ -366,7 +372,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-moved-line > span { color: var(--muted); }
 .pj-device-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
 .pj-device-table th, .pj-device-table td { padding: 7px 5px; border-bottom: 1px solid rgb(70 68 57 / .12); vertical-align: top; overflow-wrap: anywhere; }
+.pj-device-table th[scope="row"] { min-width: 4.2em; }
 .pj-device-table small { display: block; color: var(--muted); font-size: 12px; }
+@media (max-width: 1100px) { .pj-device-table :is(th, td) { padding-inline: 3px; } }
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
