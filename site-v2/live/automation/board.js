@@ -639,7 +639,7 @@
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
-    const text = [c.model, c.model_effort].filter(Boolean).map(v => `<span class="au-nobr">${esc(v)}</span>`).join(' · ');
+    const text = [c.model, c.model_effort].filter(Boolean).map(v => `<span class="au-nobr">${esc(v)}</span>`).join('&#8239;·<wbr> ');
     const family = text && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
     return !text ? '<span class="au-nobr">没读到</span>' : family ? link(family, `${text} ›`) : text;
   }

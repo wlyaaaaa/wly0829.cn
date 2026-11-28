@@ -230,8 +230,10 @@
         ? a.rows > b.rows || a.rows === b.rows && (a.gap < b.gap || a.gap === b.gap && moves(a.layout) < moves(b.layout))
         : a.gap > alignTolerance && b.gap > alignTolerance && (a.gap < b.gap || a.gap === b.gap && a.rows > b.rows));
     const max = key => Math.min(available[key], defaultCounts[key]);
+    const devconfig = previewGroups(cards.backups)[0].findIndex(row => row.dataset.key === 'devconfig') + 1;
+    const minRows = key => key === 'backups' && devconfig <= max(key) ? Math.max(previewRange.backups[0], devconfig) : previewRange[key][0];
     // 在干的对话不拿来配平高度：最多 5 行一直列全。
-    const min = key => key === 'active' ? max(key) : Math.min(available[key], previewRange[key][0]);
+    const min = key => key === 'active' ? max(key) : Math.min(available[key], minRows(key));
     const defaults = [];
     let best;
     function searchDefault(index, counts) {
