@@ -313,7 +313,7 @@
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
       <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p>${rounds}</div>${go(r.href)}</article>`;
   }
-  // 派活程序超过两轮半没转：各类的下次时间算不出来（和页头那句警告同一个判断）
+  // 各类下次时间沿用派活间隔判断。
   const stalled = d => {
     const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
     return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
@@ -325,6 +325,16 @@
     const interval = x.interval_seconds;
     const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
+    const pass = x.active_pass;
+    if (pass && T.stamp(pass.started_at) != null) {
+      const start = esc(when(pass.started_at)), progress = tick || pass.started_at;
+      const deadline = T.stamp(pass.deadline_at), now = Date.now();
+      if (deadline != null && now >= deadline) {
+        const elapsed = Math.max(0, Math.floor((now - T.stamp(progress)) / 60000));
+        return `<span class="au-warn">派活程序这一轮 ${start} 开始，已 ${elapsed} 分钟没有新进展</span>`;
+      }
+      return `派活程序这一轮 ${start} 开始，还在跑（最后一次进展 ${esc(when(progress))}）`;
+    }
     if (!T.stamp(tick)) return '<span class="au-warn"><span class="au-nobr">派活程序</span><wbr><span class="au-nobr">上次几点转的，</span><wbr><span class="au-nobr">这次没读到</span></span>';
     const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
     return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
