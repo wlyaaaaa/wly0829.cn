@@ -6,8 +6,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI;
-  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
-  // 各类的名字（笔记本每周巡检已取消，名字留着给旧记录用）：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
+  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-laptop', 'excerpt', 'ai-commitments'];
+  // 后台的 categories[].title 优先，已退役的每周实况核对保留旧轮的名字。
   const NAMES = { 'auto-repair': '自动修理', 'message-review': '替你看新消息', translator: '翻译官', 'weekly-rules': '每周规矩复核',
     'weekly-laptop': '笔记本每周巡检', 'weekly-live': '实况每周对一遍', excerpt: '摘一句', 'ai-commitments': 'AI 约好的事' };
   const FAMILIES = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
@@ -234,7 +234,10 @@
   // 访客版称呼：页面上指本人的“你”写“本人”（私事线 11-26：替本人看新消息、转给本人、等本人打开、需要本人操作）。
   // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
-  const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
+  const original = html => `<!--automation-original-->${html}<!--/automation-original-->`;
+  const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html
+    : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
+      .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人')).join('');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();

@@ -190,17 +190,20 @@
       .sort((a, b) => b.n - a.n).map(f => ({ n: f.n, text: `${f.place} · ${f.why} · ${f.n} 项` }));
   }
 
+  const cleanupWords = text => esc(text).replace(/访问|碰到|文件大小|缓存|远端分支/g, '<span class="live-unit">$&</span>');
+
   function tiles(g, viewer) {
     if (!g) return `<ul class="cl-tiles is-gray">${[['ok', '出错'], ['shield', '保护名单被删'], ['clock', '下次']].map(([i, k]) => `<li>${ICON[i]}<div><b>${k}</b><span class="cl-dash">—</span></div></li>`).join('')}</ul>`;
     const n = g.week.length, err = g.errors.length;
     // 最近出错那一轮写出原因：先露 3 条，其余收进“还有 N 项”（M328）
     const fails = err ? failures(g.errors[0], viewer) || [] : [], restFails = fails.slice(3);
-    const failHtml = fails.slice(0, 3).map(f => `<span>${esc(f.text)}</span>`).join('') + (restFails.length ? `<details class="cl-fail-more"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(f => `<span>${esc(f.text)}</span>`).join('')}</details>` : '');
+    const failRow = f => `<span>${cleanupWords(f.text)}</span>`;
+    const failHtml = fails.slice(0, 3).map(failRow).join('') + (restFails.length ? `<details class="cl-fail-more"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(failRow).join('')}</details>` : '');
     const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
       : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
     const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
-      : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>近 7 天一直是 0${hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''}</span></div></li>`;
+      : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>${cleanupWords('近 7 天一直是 0' + (hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''))}</span></div></li>`;
     const minutes = num(g.last?.duration_seconds) ?? (g.last && at(g.last.started_at) ? (at(g.last.finished_at) - at(g.last.started_at)) / 1000 : null);
     const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} 跑完${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
@@ -208,7 +211,7 @@
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
-      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
+      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(cleanupWords).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     // 按需更新快核（M928）核法：E:/PCConfig/tools/auto_cleanup_conversations.py 的 preserve_quotes，现 Codex、Claude 清前确认原话已存，缺时补存并回读，通过才继续；变了改下方提示
     const kept = num(g.last?.skipped_unsaved_conversations);
@@ -225,7 +228,7 @@
     if (!Array.isArray(g.last.rules)) return '<p class="cl-sub">最近一轮没记录每条规则腾出了多少。</p>';
     if (!list.length) return `<p class="cl-sub">${esc(withheld || '最近一轮没有到期要删的。')}</p>`;
     const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => ruleLabel(r, viewer);
-    const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
+    const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${cleanupWords(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
     // 规则多时先列腾出最多的 5 条，其余收进“展开”，免得这一栏比右边的走势图长出一大截、右边空着（M503）
     const shown = list.length > 6 ? 5 : list.length, rest = list.slice(shown);
     const more = rest.length ? `<details class="cl-rules-more" data-key="rules-more"><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="cl-rules">${rest.map((r, i) => row(r, i + shown)).join('')}</ul></details>` : '';
@@ -379,11 +382,7 @@
     K.put(document.getElementById('cleanup-pill'), pill(g));
     // 按需更新快核（M928）核法：E:/PCConfig/registries/automatic_cleanup.json 的 rules[].days、protection、conversation_cleanup.main_body_days，现常见网站和 AI 临时目录 1 天、主对话正文 45 天。
     // 直删和回收站分别对照 automatic_cleanup.py 与 Invoke-RecycleBinCleanup.ps1。
-    const note = [
-      '每 6 小时和开机时各清一轮：登记过的缓存、临时目录、施工产物和旧 AI 对话到期直接删，不进回收站，删了找不回。',
-      '回收站另算：每小时看一次，一般的东西留 7 天（G、H 盘也是 7 天），登记过的 AI 产物可以马上清，D 盘不动。',
-    ].map(esc).join('<br>').replaceAll('登记过', '<span class="live-unit">登记过</span>');
-    K.put(document.getElementById('cleanup-note'), note + (withheld ? ` · ${esc(withheld)}` : ''));
+    K.put(document.getElementById('cleanup-withheld'), withheld ? ` · ${esc(withheld)}` : '');
     K.put(document.getElementById('cleanup-total'), total(g, viewer));
     K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
     K.put(document.getElementById('cleanup-vols'), volumes(d, g, viewer));

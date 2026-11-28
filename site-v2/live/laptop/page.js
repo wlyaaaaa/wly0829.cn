@@ -2,7 +2,7 @@
   'use strict';
   const U = window.LiveUI, $ = id => document.getElementById(id);
   const page = $('laptop');
-  let audience = 'public', headline = '正在读笔记本';
+  let audience = 'public', headline = '加载中';
   const bar = U.topbar({ ask: () => `请看实况笔记本页：${headline}。请说明目前的情况。` });
   const unavailable = '这次没读到';
   const finite = value => typeof value === 'number' && Number.isFinite(value);
@@ -119,7 +119,7 @@
     const note = x?.read_error_reason ?? x?.missing_reason ?? (typeof x?.read_error === 'string' ? x.read_error : null);
     page.dataset.deviceState = checked ? 'online' : pending ? 'loading' : 'offline';
     // 缺这一轮连接回执时不说“笔记本连不上”。
-    headline = checked ? '在线' : pending ? '正在读笔记本' : x?.state === 'offline' ? '笔记本连不上'
+    headline = checked ? '在线' : pending ? '加载中' : x?.state === 'offline' ? '笔记本连不上'
       : seen || at(x?.last_online) ? '笔记本在线状态未重新确认' : x ? '笔记本在线状态这次没读到' : '电脑状态这次没带回笔记本读数';
     // 笔记本确认离线时：写从几点起连不上（后台 offline_since，M918）；observed_at 这时是确认离线那次探测，
     // 不能当“最后确认在线”，改用 last_online，不然会出现“自 22:10 起连不上 · 最后确认在线 22:40”打架
@@ -139,7 +139,7 @@
     $('laptop-state').classList.toggle('laptop-state--dot', checked);
     U.html($('laptop-state'), checked ? `<span class="laptop-good" aria-hidden="true">●</span><span>${status('在线', true)}${rest}</span>`
       : `${keepWords(status(headline, false))}${rest}`);
-    const missing = pending ? '正在读' : unavailable;
+    const missing = pending ? '加载中' : unavailable;
     const display = (value, name) => value == null && pending ? missing : field(value, name);
     const capacity = (value, name, format) => finite(value) ? field(`${name} ${format(value)}`, name) : display(value, name);
     const missingMetric = name => `<span class="laptop-missing">${display(null, name)}</span>`;
@@ -169,7 +169,7 @@
     read('remote', pending ? missing : !mcp ? 'MCP 这次没读到' : mcp.state === 'online' ? `MCP ${status(mcp.authenticated_at ? '通' : '入口通', !mcpOld)}`
       : mcp.state === 'offline' ? 'MCP 连不上' : 'MCP 这次没探出通不通',
       mcpAt ? U.esc(`${mcpAt} ${mcp.state === 'unknown' ? '探测' : mcpOld ? '最后测得' : '测得'}`) : '');
-    U.html($('laptop-apps'), pending ? '<tr><td colspan="3">正在读</td></tr>' : processes(x?.processes, sampled));
+    U.html($('laptop-apps'), pending ? '<tr><td colspan="3">加载中</td></tr>' : processes(x?.processes, sampled));
     if (!pending && x) { procSample(x, sampled); drawProc(); }
 
     const notes = [], add = (text, cls = '') => notes.push(`<li class="${cls}">${text}</li>`);
@@ -181,7 +181,7 @@
     if (x?.reboot_pending === true) add('Windows 更新等重启', 'laptop-alert');
     if (!pending && (!laptopRule || !desktopRule)) add('规则版本对比这次没读全');
     if (!pending && x?.reboot_pending == null) add('是否等重启这次没读到');
-    if (!notes.length) add(pending ? '正在读' : '没有要注意的');
+    if (!notes.length) add(pending ? '加载中' : '没有要注意的');
     const boot = time(x?.boot_at, state.now || Date.now());
     if (!pending) add(boot ? `最近一次开机 ${U.esc(boot)}` : '最近一次开机时刻这次没读到', boot ? 'laptop-ok' : '');
     U.html($('laptop-notes'), notes.join(''));
