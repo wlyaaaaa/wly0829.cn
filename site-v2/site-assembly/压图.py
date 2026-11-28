@@ -145,7 +145,8 @@ def optimize(site, _illustrations=()):
         p.unlink()
         images.remove(p)
     print(f'素材整理：拿掉未引用图 {len(removed)} 张、未引用 JSON {len(json_removed)} 份')
-    return compress_images(images, site=site)
+    # 根首页的透明标题图层沿用已验收的原图。
+    return compress_images(images - {site / 'images/screen1-textlayer-v2.webp'}, site=site)
 
 
 if __name__ == '__main__':
