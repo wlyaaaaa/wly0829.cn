@@ -339,7 +339,7 @@
             : '旧读数只含部分日期。');
           const yearState = usage?.deferred?.year && usage.blocks?.year?.state;
           const unread = yearState === 'computing' ? '正在读…' : yearState === 'unavailable' ? '暂时读不到' : usage?.year ? '没有使用记录' : missing();
-          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `<b>${k.lower ? '至少 ' : ''}${Math.round(k.total / 3600)}</b> <small>小时</small>` : `<span class="vz-none">${unread}</span>`);
+          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `${k.lower ? '<b>至少</b> ' : ''}<span class="year-sum__amount"><b>${Math.round(k.total / 3600)}</b> <small>小时</small></span>` : `<span class="vz-none">${unread}</span>`);
           U.html(el.querySelector('[data-x="best"]'), k.best ? `最长的一天 ${k.lower ? '至少 ' : ''}${U.fieldHtml(dur(k.best.value))} · ${U.fieldHtml(k.best.day)}` : '');
         } };
       } },

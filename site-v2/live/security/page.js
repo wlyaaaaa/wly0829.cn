@@ -46,7 +46,7 @@
     const programs = review.filter(x => /impersonation/.test(x.key || '') && Number.isInteger(x.programs)).reduce((n, x) => n + x.programs, 0);
     return [confirmed ? `已确认异常 ${confirmed} 组` : '没发现确认的异常',
       review.length && `${review.length} 组要核实${programs ? `（${programs} 个程序待筛查）` : ''}`,
-      unread.length && `${unread.length} 组这次没读到，不算没发现`].filter(Boolean).join('，');
+      unread.length && `${unread.length} 组这次没读到，结果不全`].filter(Boolean).join('，');
   }
   function serviceRows(rows) {
     const merged = new Map();
@@ -384,7 +384,7 @@
       let figures = hero.querySelector('[data-part="figures"]');
       if (verdict && !figures) { figures = document.createElement('p'); figures.className = 'hero__count'; figures.dataset.part = 'figures'; head.after(figures); }
       if (figures) { figures.hidden = !verdict; U.html(figures, verdict ? `<span>${counted(U.nowrap(title))}</span>` : ''); }
-      const words = verdict ? U.head(verdict, { lamp: false }).replaceAll('，', '，<br>')
+      const words = verdict ? U.head(verdict, { lamp: false }).replace(/，(?!结果不全)/g, '，<br>')
         .replace('程序待筛查）', '<span class="security-count">$&</span>')
         : counted(U.head(title, { lamp: false })).replace(/(，)(?=提权)/, '$1<br>');
       U.html(head, U.status(data).lamp + words);

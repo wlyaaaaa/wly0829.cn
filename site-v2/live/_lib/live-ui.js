@@ -196,7 +196,7 @@
     return !!one && !!two && sp(`数据截止 ${one}`) === sp(`数据截止 ${two}`);
   };
   const isMissingName = text => /^(?:没有标题|没有记录|没有名称|未命名|还没读到|暂未统计|这一项)$/.test(text.trim());
-  const isMissingText = text => /没有记录|还在采集|开始记|还没读到|暂未统计|未登记|读取失败|不适用|没读全|还不准/.test(text);
+  const isMissingText = text => /^这次没读到$|没有记录|还在采集|开始记|还没读到|暂未统计|未登记|读取失败|不适用|没读全|还不准/.test(text);
   function collectionText(label = '', meta = {}, value, key = 'value') {
     const text = typeof value === 'object' ? fieldText(value) : typeof value === 'number' && !Number.isFinite(value) ? '' : String(value ?? '');
     if (text.trim()) return `${(meta?.lower_bound === true || meta?.q === 'partial' && (!Array.isArray(meta.partial) || meta.partial.includes(key))) && !/^(至少\s*|不到)/.test(text) ? '至少 ' : ''}${text}`;
