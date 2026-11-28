@@ -196,8 +196,7 @@
         return `${assigned ? '已交' : ''}${p.handler}`;
       };
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
-      const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
-        : part.replace(/验收|太久|回复/g, '<span class="live-unit">$&</span>')).join('');
+      const { keepWords } = window.AutomationPresentation;
       const last = d.last_run;
       const lastDone = last?.title && R.timed(last.finished_at) && typeof last.ok === 'boolean' && R.timed(next.at)
         ? `上次 <span class="live-unit">${esc(U.time(last.finished_at))}</span> ${field(last.title, '任务名称')}${last.ok ? '跑完' : '没做成'}&nbsp;· ` : '';
@@ -211,7 +210,7 @@
       const idle = offline ? '当时没任务在跑' : '这会儿空着';
       const readRunning = Array.isArray(d.running);
       const prefix = readRunning ? `${idle}&nbsp;· ` : next.title || d.next === null ? '在跑的这次没读到&nbsp;· ' : '';
-      const runningTitle = w => field(w).replaceAll('下载目录', '<span class="b6-doing-word">下载目录</span>');
+      const runningTitle = w => keepWords(field(w));
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(runningTitle).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
         : `<p>${dot('off')}${prefix}${next.title ? `${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : d.next === null ? '没有排定的运行' : `${readRunning ? '下一个' : '在跑的和下一个'}<span class="live-unit">这次没读到</span>`}</p>`;
@@ -237,7 +236,7 @@
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
       const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 <span class="live-unit">${num(w.repaired)} 件</span>&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
-      return { tone, head, body: publicHtml(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
+      return { tone, head, body: publicHtml(`${big}${keepWords(fail)}${bar}<div class="b6-lines">${keepWords(doing)}${trouble}${keepWords(disabled + week)}</div>
         <p class="b6-muted b6-foot">${v.noAiWork ? '今天后台 AI 还没干活' : v.aiSeconds > 0 ? `今天后台 AI 用了 ${U.nowrap(spent(v.aiSeconds))}` : '今天后台 AI 用时<span class="live-unit">这次没读到</span>'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
     }
     if (id === 'agents') {

@@ -18,7 +18,7 @@
 .page--tasks .lb-card[data-art="ai-schedule"] { --lb-art: url("/live/img/tasks-grp-ai-schedule.webp"); }
 .page--tasks .lb-card[data-art="idle"] { --lb-art: url("/live/img/tasks-grp-idle.webp"); }
 .page--tasks .hero__note { display:block; letter-spacing:0; word-spacing:normal; }
-.page--tasks :is(#task-intro span, .task-phrase) { white-space: nowrap; }
+.page--tasks #task-intro span { white-space: nowrap; }
 .page--tasks #hero[data-publication-revoked] #head .head__lead { min-width: 0; white-space: normal; text-wrap: balance; }
 /* 维护明细（?scope=ai-today）的标题长：标题和说明在左边自己那一栏里折行，不伸到中间读数卡底下 */
 .tasks--ai-today .lbp-title > div { min-width: 0; }
@@ -148,4 +148,4 @@ body.page--tasks .lb-row.notice-target { outline: 2px solid rgb(38 60 55 / .6); 
 </div>
 <div id="groups"><p class="part" hidden data-keep>按用途</p><ul class="rows list" id="task-empty"><li class="row row--flat row--empty" data-key="wait"><span></span><p class="row__sub">正在读</p></li></ul></div>
 <button class="more" type="button" id="next" hidden data-needs-pc>还有更多 ›</button></main>
-<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/tasks/page.js"></script></body></html>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/automation/presentation.js"></script><script src="/live/tasks/page.js"></script></body></html>

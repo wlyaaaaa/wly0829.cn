@@ -16,6 +16,7 @@
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
+  const { keepWords } = window.AutomationPresentation;
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
   const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后|超时/g, word =>
@@ -109,11 +110,11 @@
   const hiddenTag = r => r && viewer === 'owner' ? U.visitorLabel(r, 'conversation', '这一轮的对话', viewer) : '';
   function stepText(v) {
     if (v == null) return '';
-    if (typeof v !== 'string') return F(v, '这一次做了什么');
+    if (typeof v !== 'string') return keepWords(F(v, '这一次做了什么'));
     const lines = v.split('\n').map(s => s.trim()).filter(Boolean);
-    const tail = esc(lines.at(-1)).replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="live-unit">$&</span>');
+    const tail = keepWords(esc(lines.at(-1)).replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="live-unit">$&</span>'));
     if (lines.length < 2) return tail;
-    return `${tail}<details class="iss-more" data-fold-anchor><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${esc(s)}</p>`).join('')}</details>`;
+    return `${tail}<details class="iss-more" data-fold-anchor><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${keepWords(esc(s))}</p>`).join('')}</details>`;
   }
 
   function render() {
@@ -233,7 +234,7 @@
     if (!sc) return '';
     const host = HOST[String(sc.host || '').toLowerCase()] || '';
     const body = sc.available && site(sc.href) ? go(sc.href, `${host ? `${esc(host)} · ` : ''}${T(sc.title) ? F(sc.title, '对话标题') : '那场对话'}`) : T(sc.unavailable_reason) ? F(sc.unavailable_reason, '来源') : '';
-    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${body}</p></section>` : '';
+    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${keepWords(body)}</p></section>` : '';
   }
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {

@@ -19,17 +19,24 @@
   const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
   const single = /^\p{Script=Han}$/u;
   const keep = word => `<span class="live-unit">${word}</span>`;
-  // 和实况首页一样，在词之间留换行处，单字跟相邻的词一起走。
-  const keepWords = html => html.replace(/<[^>]*>|&[\w#]+;|第[ \t]*\d+[ \t]*轮|\d+(?:[.,]\d+)?[ \t]*(?:小时(?:[ \t]*\d+[ \t]*分(?:钟)?)?|分钟|分|秒|轮|次|件|条|份)|[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)+|\p{Script=Han}{2,}/gu, part => {
-    if (/^[<&]/.test(part)) return part;
-    if (part.length <= 4 || !/^\p{Script=Han}+$/u.test(part)) return keep(part);
+  const markup = /<span\b[^>]*class="[^"\n]*\b(?:live-unit|au-nobr|iss-nowrap|task-phrase|ah-keep)\b[^"\n]*"[^>]*>[^<]*<\/span>|<[^>]*>|&[\w#]+;/;
+  const dates = /\d{1,2}[ \t]*月[ \t]*\d{1,2}[ \t]*日(?:[ \t]*(?:北京时间[ \t]*)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\w-])(?:[ \t]+(?:周[一二三四五六日][ \t]+)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w:])\d{1,2}:\d{2}(?::\d{2})?(?![\w:])/;
+  const amounts = /第[ \t]*\d+[ \t]*轮|\d+(?:[.,]\d+)?[ \t]*(?:小时(?:[ \t]*\d+[ \t]*分(?:钟)?)?|分钟|分|秒|轮|次|件|条|项|份|天|处|个|[KMG]i?B)|\b[A-Z][ \t]*盘/;
+  const phrases = /这次(?:没读到|读不到)|不完整|看得到|几点跑|随时派|备份|完成|自己开工|下一次开工|自动接活|定时任务|自己|收到|当时|采集|软件|下载目录|验收|太久|回复/;
+  const units = new RegExp(`(${[markup, dates, amounts, phrases, /（[^（）\n]{1,10}）/].map(part => part.source).join('|')})`, 'gu');
+  // 先保护完整日期和短语，再切普通中文。长英文、地址和路径仍由原容器换行。
+  const keepWords = html => html.split(units).map((part, index) => index % 2
+    ? (/^[<&]/.test(part) ? part : keep(part)) : part.replace(/\p{Script=Han}{2,}/gu, wordsIn)).join('');
+  function wordsIn(part) {
+    if (part.length <= 4) return keep(part);
     const words = [];
     for (const { segment } of segmenter.segment(part)) {
-      if (words.length && (single.test(segment) || single.test(words.at(-1)))) words[words.length - 1] += segment;
+      const prev = words.at(-1);
+      if (prev && prev.length + segment.length <= 6 && (single.test(segment) || single.test(prev))) words[words.length - 1] += segment;
       else words.push(segment);
     }
     return words.map(keep).join('<wbr>');
-  });
+  }
   function settingNotices() {
     let current, pending;
     const clear = () => { current?.close(); current = pending = null; };

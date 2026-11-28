@@ -140,7 +140,7 @@
   function workLine(row) {
     const target = route(row.href) || workHref(row.id), note = words(row.state_text, row.group === 'running' && row.attempts > 0 && `第 ${row.attempts} 次修理`,
       row.group === 'done' && row.verified && at(row.changed_at) && `已验 ${when(row.changed_at)}`, ...chatActivity(row));
-    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${P.keepWords(asOwner(rowTitle(row)))}</b>${note ? `<small>${note}</small>` : ''}`)}</li>`;
+    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${P.keepWords(asOwner(rowTitle(row)))}</b>${note ? `<small>${P.keepWords(note)}</small>` : ''}`)}</li>`;
   }
   const workRows = (rows, name = '这里没有活') => rows.length
     ? `<ul class="aw-lines">${rows.map(workLine).join('')}</ul>` : empty(name);
@@ -153,7 +153,9 @@
     const state_text = resultPill[row.status]?.[0];
     const info = words(row.period || row.trigger, row.at ? `上次 ${when(row.at)}` : row.gap || (!row.at && row.q !== 'ok' && '这里还看不到'),
       Number.isInteger(row.plan_count) ? `写回 ${row.plan_count} 份` : state_text, row.next_at && `下次 ${when(row.next_at)}`);
-    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}${field(row.label || row.title, '来源名称')}</b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
+    const name = P.keepWords(field(row.label || row.title, '来源名称'));
+    const source = row.id === 'website-release' ? link(route('/live/project/?id=wly0829.cn#website-status'), `${name} ›`) : name;
+    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}<span>${source}</span></b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
   }
   function results(data, rows) {
     const r = data.results7;
@@ -183,7 +185,7 @@
   function mechanism(data) {
     const id = data.id, guide = data.how_to || {};
     const labels = ['什么时候派', '怎么修', '怎么算修好', '修不好'];
-    const steps = list(guide.steps).map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
+    const steps = list(guide.steps).map((text, i) => `<li><b>${P.keepWords(labels[i] || '')}：</b>${P.keepWords(esc(guideCopy(text)))}</li>`).join('');
     const { common, specific } = data.repair_prompts || {};
     const note = (data.setting?.mode === 'off' && guide.off_prompt_note) || guide.prompt_note
       || (common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : specific ? '这一类的专用原话' : '这次没读到');
@@ -215,8 +217,8 @@
     const art = ART[data.id] || hero;
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(art)}" class="aw-art">
       <div class="aw-lead"><div class="aw-type-top"><h1>${lamp(data, false)}${field(data.title, '类型名称')}</h1><div class="aw-type-settings">${controls}</div></div>
-      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${P.keepWords(esc(description))}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
-      ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
+      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${P.keepWords(esc(description))}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${P.keepWords(esc(off))}</p>` : ''}</div>
+      ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${P.keepWords(esc(example))}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
       ? `<details class="aw-past" data-fold-count="${past.length}"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
     // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。

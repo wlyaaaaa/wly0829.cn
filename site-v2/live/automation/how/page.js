@@ -91,7 +91,7 @@
     const flow = `<ol class="ah-flow${repair ? ' ah-flow--words' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => {
       const caption = keepRange(esc(title)).replace(repair ? stepWords : /急缓/g, '<span class="ah-keep">$&</span>');
       const body = repair && i === 1 ? esc(text).replace(/下一轮/g, '<span class="ah-keep">$&</span>') : esc(text);
-      return `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${caption}</span></p><p class="ah-flow__text">${body}</p></li>`;
+      return `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${caption}</span></p><p class="ah-flow__text">${P.keepWords(body)}</p></li>`;
     }).join('')}</ol>`;
     const promptIntro = `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
     const words = (id, title, text) => `<details class="ah-prompt" id="${id}" data-fold-anchor><summary>${title}</summary><pre>${R.original(esc(text))}</pre></details>`;
@@ -100,7 +100,7 @@
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
     const specifics = list(c.prompt_sections).filter(s => promptNames[s.id] && s.text)
       .map(s => words(`prompt-${s.id}`, promptNames[s.id], s.text)).join('');
-    const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
+    const why = list(g.why).map(([q, a]) => `<p><b>${P.keepWords(esc(q))}</b>${P.keepWords(esc(a))}</p>`).join('');
     const failure = esc([failurePolicy(c.execution_policy || {}), g.failure].filter(Boolean).join(' '));
     const duration = timing(c.execution_policy);
     const cost = id === 'weekly-laptop' ? `<p>${esc(duration)}</p><p>${esc(g.cost)}</p>`

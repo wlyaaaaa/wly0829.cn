@@ -104,7 +104,7 @@
     const meta = parts.length ? `<span class="ak-line">${parts.join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
-      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${wordsIn(title)}</a>` : wordsIn(title)}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
+      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${wordsIn(title)}</a>` : wordsIn(title)}</b>${meta || why ? `<small>${wordsIn(meta || why)}</small>` : ''}</div>
       ${r.href ? `<a class="ak-run__go" href="${esc(r.href)}">看这一轮 <span aria-hidden="true">›</span></a>` : ''}</li>`;
   }
   const allRuns = () => {
@@ -151,8 +151,8 @@
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${title}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${status}</b></p>
-        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${id === 'translator' ? R.oneVersion(result, true) : result}</p>` : ''}
-        <p class="ak-hero__what">${description}</p>
+        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${wordsIn(id === 'translator' ? R.oneVersion(result, true) : result)}</p>` : ''}
+        <p class="ak-hero__what">${wordsIn(description)}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div>${heroArt}</section>`;
   }

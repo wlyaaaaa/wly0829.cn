@@ -20,9 +20,7 @@
   let board = null, dataAt = null, batchAt = null, pick = p.get('group') || '', projectList = null, projectKey = '', generation = 0;
   let runningReading = null;
   const taskLiveWords = new WeakMap();
-  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
-  const keepTaskWords = html => html.replace(/<[^>]+>|\p{Script=Han}{2,}/gu, part => part.startsWith('<') ? part :
-    Array.from(segmenter.segment(part), ({ segment }) => segment.length > 1 ? `<span class="task-phrase">${segment}</span>` : segment).join(''));
+  const { keepWords: keepTaskWords } = window.AutomationPresentation;
   function taskWords() {
     for (const el of document.querySelectorAll('[data-task-state]')) {
       const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), off = U.offline?.();

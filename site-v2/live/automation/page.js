@@ -9,7 +9,7 @@ window.LegacyAutomation = function (bar) {
   ].map(([id, name, intro, icon, art, columns]) => {
     const widths = id === 'ai-pickup' ? [1.25, 1.2, .68, 1.2] : [1.35, .72, 1.08, 1];
     const board = window.LiveBoard.create($('groups'), {
-      cols: 1, columns: columns.map((label, i) => ({ label, width: `minmax(0, ${widths[i]}fr)` })),
+      cols: 1, columns: columns.map((label, i) => ({ label, width: `minmax(${id === 'ai-schedule' && i === 1 ? '88px' : '0'}, ${widths[i]}fr)` })),
     });
     const card = board.card(id, { icon, tint: 'lilac', art });
     U.fold(card.more, card.box, null, true);
@@ -85,7 +85,7 @@ window.LegacyAutomation = function (bar) {
     // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
     const actions = U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
     const state = pickup ? last?.result : { running: 'running', failed: 'failed', warn: 'warn' }[t.state] || t.last?.result;
-    return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${title}</a></div>${cells.map(value => `<p class="lb-cell">${value}</p>`).join('')}<div class="row__acts">${actions}</div>` };
+    return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${P.keepWords(title)}</a></div>${cells.map(value => `<p class="lb-cell">${P.keepWords(value)}</p>`).join('')}<div class="row__acts">${actions}</div>` };
   }
   function renderSummary(all, planned, known, waiting) {
     const activity = packet?.automation_activity, historical = activity?.recent;
@@ -119,7 +119,7 @@ window.LegacyAutomation = function (bar) {
     U.html($('stats'), labels.map((label, i) => {
       const value = values[i], dated = i === 3 && value?.includes(' ');
       const text = dated ? value.split(' ').map(part => `<span class="live-unit">${part}</span>`).join(' ') : value;
-      return `<div><dt>${label}</dt><dd class="${value == null ? 'is-word' : dated ? 'is-dated' : ''}">${text ?? (waiting ? '正在读' : '未读到')}</dd></div>`;
+      return `<div><dt>${P.keepWords(label)}</dt><dd class="${value == null ? 'is-word' : dated ? 'is-dated' : ''}">${text ?? (waiting ? '正在读' : '未读到')}</dd></div>`;
     }).join(''));
     const note = !display.length ? waiting ? '正在读' : activity?.today_runs_q === 'ok' && Array.isArray(historical) ? '最近没有开工记录。' : '最近开工的时间和结果这次没读到。'
       : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';

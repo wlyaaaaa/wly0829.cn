@@ -43,8 +43,7 @@
     // 不是正在跑、又没有结束时刻和用时（没有收尾回执）：照实写没记到结束，不写用时
     return r.status !== 'running' && r.minutes == null ? `${whenDay(a)} 排上 · 没记到结束` : `${whenDay(a)} 排上`;
   };
-  // 日期连着时刻一起换行，短括号也作为一组。只包文字，不改标签里的属性。
-  const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/（[^（）\n]{1,10}）|(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])(?:[ \t]+(?:周[一二三四五六日][ \t]+)?\d{1,2}:\d{2}(?::\d{2})?)?|\d{1,2}[ \t]*月[ \t]*\d{1,2}[ \t]*日[ \t]*(?:北京时间[ \t]*)?\d{1,2}:\d{2}(?::\d{2})?|(?<![\d:])\d{1,2}:\d{2}(?::\d{2})?(?![\d:])/g, '<span class="live-unit">$&</span>')).join('');
+  const { keepWords } = window.AutomationPresentation;
   // 标题后面的签不单独掉到下一行：和标题最后两个字（或最后那个日期时刻）连在一起换行
   const withTag = (html, tag) => !tag ? html : /<span class="live-unit">[^<]*<\/span>$/.test(html) ? html.replace(/(<span class="live-unit">[^<]*<\/span>)$/, `<span class="ar-tail">$1${tag}</span>`)
     : /(?:&[#\w]+;|[^<>&\s]){1,2}$/.test(html) ? html.replace(/((?:&[#\w]+;|[^<>&\s]){1,2})$/, `<span class="ar-tail">$1${tag}</span>`) : html + tag;
@@ -123,7 +122,7 @@
     const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker), true);
     const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
-      .map(t => `<span class="ar-tag"><span>${keepDates(t)}</span></span>`).join('');
+      .map(t => `<span class="ar-tag"><span>${keepWords(t)}</span></span>`).join('');
   }
 
 
@@ -210,7 +209,7 @@
   const GEAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.5 8.8a.5.5 0 0 0 .1.6l2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6a.5.5 0 0 0-.1.6l1.9 3.3c.1.2.4.3.6.2l2.4-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.2.4.5.4h3.8c.3 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.4 1c.2.1.5 0 .6-.2l1.9-3.3a.5.5 0 0 0-.1-.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>';
   // 一条话：派活程序（齿轮）、AI（绿点）；name 是谁说的，at 是钟点，body 是正文，after 挂在正文下面（思考摘要、链接）
   const joined = html => html.split(/(<[^>]*>)/).map((s, i) => i % 2 ? s : s.replace(/([。！？])[ \t]*(?:[；;][ \t]*|·[ \t]*)/g, '$1')).join('');
-  const say = ({ who, name: by, at, body = '', after = '', tone = '', cls = '' }) => `<li class="ar-msg${cls ? ` ${cls}` : ''}" data-who="${who}"${tone ? ` data-tone="${tone}"` : ''}><span class="ar-ava" data-who="${who}" aria-hidden="true">${who === 'dispatcher' ? GEAR : ''}</span><div class="ar-msg__body"><p class="ar-msg__head"><b>${by}</b>${at ? `<time>${esc(at)}</time>` : ''}</p>${body ? `<p class="ar-msg__text">${keepDates(joined(body))}</p>` : ''}${after}</div></li>`;
+  const say = ({ who, name: by, at, body = '', after = '', tone = '', cls = '' }) => `<li class="ar-msg${cls ? ` ${cls}` : ''}" data-who="${who}"${tone ? ` data-tone="${tone}"` : ''}><span class="ar-ava" data-who="${who}" aria-hidden="true">${who === 'dispatcher' ? GEAR : ''}</span><div class="ar-msg__body"><p class="ar-msg__head"><b>${by}</b>${at ? `<time>${esc(at)}</time>` : ''}</p>${body ? `<p class="ar-msg__text">${keepWords(joined(body))}</p>` : ''}${after}</div></li>`;
 
   // 思考摘要：引用样子挂在那条话下面。宿主只存了外文的，去掉“宿主存下的外文思考摘要：”那串字，前面标“外文原文”；
   // 一条话下面超过 3 句的，先露 3 句，其余点“再看 N 句”展开（内容都在，不删）；没有思考摘要的不画空框
@@ -498,7 +497,7 @@
       const longer = longerThanChat(r, d);
       const family = R.familyOf({ host: d.software, model: CV.visibleText(d.model) }) || r.family;
       const facts = m.meta.map((v, i) => {
-        const words = keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
+        const words = keepWords(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
           { name: '对话内容', kind: viewer }));
         const modelHref = i === 0 && v === CV.who(d, true) && R.agentsPath(family, true);
         return modelHref ? link(modelHref, `${words} ›`) : words;
@@ -526,7 +525,7 @@
     const start = T.stamp(row.session_started_at) ? `对话开始 ${when(row.session_started_at)}` : T.stamp(row.born) ? `本次记录起于 ${when(row.born)}` : '';
     const parts = [who, known(count) && `原有 ${int(count)} 条消息`, plan.label || plan.count, start, T.stamp(row.at) && `主对话更新 ${when(row.at)}`,
       helpers === 0 ? '没有派帮手' : known(helpers) && `帮手 ${int(helpers)} 个`].filter(Boolean);
-    return CF.appTag(row) + parts.map(v => `<span>${keepDates(esc(v))}</span>`).join('');
+    return CF.appTag(row) + parts.map(v => `<span>${keepWords(esc(v))}</span>`).join('');
   }
 
   // —— 右栏：这一轮在办（属于账本哪件、第几次看、欠着还是放着；这件修理的全部几轮；谁约的→谁做的）、这一类和怎么干、上一轮和下一轮（带钟点） ——
@@ -565,7 +564,7 @@
     const compactOpen = page.root.querySelector('[data-compaction] details')?.open;
     // 大标题：日期、时刻不从中间断开；访客那边换了说法的挂签，签和标题最后几个字连着换行（标题和签包在一个 span 里，不让 h1 的 flex 把它们拆成几块）
     // 访客版画之前把指本人的“你”换成“本人”（paint）
-    paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
+    paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepWords(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');

@@ -732,7 +732,7 @@
   function heading(d) {
     const old = P.staleAt(state);
     const side = d ? [old ? `${esc(when(old))} 的数` : d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
-    return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
+    return `<div class="tp-head"><div><h1>自动任务</h1><p>${wordsIn(`后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。`)}</p>
       <p class="au-crosslinks">也看：${link('/live/chats/', 'AI 对话 ›')} · ${link('/live/agents/', '智能体 ›')}</p></div>
       ${side ? `<p class="tp-head__side"><span>${side}</span></p>` : ''}</div>`;
   }
