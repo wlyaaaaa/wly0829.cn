@@ -154,7 +154,8 @@
         if (b.firstElementChild) return;
         const [title, frame] = b.textContent.split(' · ');
         const sub = frame ? `<span class="smooth-moment-frame">${U.nowrap(frame)}</span>` : '';
-        U.html(b, keepTerms(U.nowrap(title)) + sub, false);
+        const heading = keepTerms(U.nowrap(title)).replace(/([A-Za-z0-9])\.(?=[A-Za-z])/g, '$1.<wbr>');
+        U.html(b, heading + sub, false);
       });
       more.hidden = limit >= list.length;
       if (!more.hidden) more.textContent = `再展开 ${Math.min(batch, list.length - limit)} 条`;
