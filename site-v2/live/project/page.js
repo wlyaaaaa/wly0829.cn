@@ -18,6 +18,12 @@
   function staleText(data, at, now = Date.now()) {
     return window.LiveUI.staleText(data, at || data?.at, now);
   }
+  function showRefreshCutoff(el, state) {
+    const data = state.data, shown = data?.source_at ?? state.shownAt ?? data?.at ?? state.meta?.at;
+    const cutoff = data && state.fallbackNote && Number.isFinite(Date.parse(shown)) && !staleText(data, shown)
+      ? `数据截至 ${stamp(shown, data.at_precision)}` : '';
+    U.blockNote(el, { fallbackNote: cutoff });
+  }
   const U = window.LiveUI;
   const Light = window.LiveLight;
   const { esc, sp } = U;
@@ -293,7 +299,9 @@
       const buttons = it.correction_text ? U.actions(it, [{ kind: 'copy', label: '这条不对', text: it.correction_text }]) : '';
       return { key: it.id || `record-${index}`, cls: 'row row--flat pj-item', html: `${status.lamp || '<span></span>'}<div class="row__text"><p class="row__main"><span class="row__title">${text(it.title)}</span></p>${it.text || marker(it, projectViewer, it.hidden_what || '这项资料') ? `<p class="row__sub">${[it.text ? text(it.text) : '', marker(it, projectViewer, it.hidden_what || '这项资料')].filter(Boolean).join(' · ')}</p>` : ''}${detail ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${detail}</details>` : ''}${buttons}</div><span class="pj-at">${stamp(it.at)}</span>` };
     }
-    const said = sp(STATE[it.state_text] || it.state_text || STATE[it.state] || '未记录状态');
+    const stateText = sp(it.state_text);
+    const finished = ['ready', 'done'].includes(it.state) && /^(?:状态不明|状态未知|未记录状态|未知)[。！]?$/.test(stateText);
+    const said = finished ? STATE[it.state] : sp(STATE[it.state_text] || it.state_text || STATE[it.state] || '未记录状态');
     const detail = [status.note, marker(it, projectViewer, it.hidden_what || '这项资料'), it.text && (it.name || it.label) && U.fieldHtml(it.text, { name: '条目说明', kind: projectViewer }), it.version != null && `版本 ${U.fieldHtml(it.version, { name: '版本', kind: projectViewer })}`, it.bytes != null && esc(U.gb.scaled(it.bytes))].filter(Boolean).join(' · ');
     return {
       key: it.id || `record-${index}`,
@@ -658,8 +666,18 @@
     const view = JSON.stringify([changeLog?.items, changeLog?.total, changeLog?.shown, changeLog?.next, changeIssue, cutoff]);
     if (view !== changeView) { changeView = view; if (!first) U.anchor(() => renderBoard(true)); }
   }
-  // 没读到时写从几点起读不到（这一页先读到过才有，M982）；手上那份截至几点另由“上次改动记录截至”那句写
+  // 已经结束的失败沿用原说明；还在重读时由卡片标出手上这批的时间。
   const unreadText = (result, what = '改动记录') => result?.failingSince ? `${stamp(result.failingSince)} 起的${what}这次没读到。` : `${what}这次没读到。`;
+  async function retryPage(read, current, waiting) {
+    let result = await read();
+    while (current() && result?.again) {
+      waiting?.();
+      await result.again;
+      if (!current()) return null;
+      result = await read();
+    }
+    return current() ? result : null;
+  }
   async function readChanges() {
     const read = ++changeRead;
     const result = await getChanges();
@@ -668,7 +686,9 @@
     result?.again?.then(() => { if (read === changeRead) readChanges(); });
     const first = changePacket(result), hint = first?.gap || first?.stale_text || first?.note || first?.text;
     const missing = result?.meta?.status >= 400 || !first || !first.items.length && (['unknown', 'missing', 'partial', 'stale'].includes(first.q) || /没读到|未读到|读不到|缺测|没有读到|读取失败|暂不可用|上次记录|最近一次记录/.test(U.fieldText(hint, projectViewer)));
-    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || unreadText(result)); return; }
+    const quiet = result?.warming || result?.again;
+    if (result?.warming && changeLog) { publishChanges(true); return; }
+    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(quiet ? true : hint || unreadText(result)); return; }
     const head = JSON.stringify([changeSource(first), first.items, first.total, first.next]);
     if (head === changeHead) {
       changeRefill = 0;
@@ -681,15 +701,16 @@
       changeRefill = read;
       try {
         while (replacement.next && replacement.items.length < loaded) {
-          const next = await getChanges(replacement.next);
-          if (read !== changeRead) return;
+          const current = () => read === changeRead;
+          const next = await retryPage(() => getChanges(replacement.next), current, () => publishChanges(true));
+          if (!current()) return;
           replacement = next?.meta?.status < 400 && extendChanges(replacement, changePacket(next));
           if (!replacement) { publishChanges('改动记录暂时没能更新，仍显示上次已读的记录。'); return; }
         }
         changeLog = replacement; changeHead = head;
       } finally { if (changeRefill === read) changeRefill = 0; }
     }
-    publishChanges(missing ? hint || unreadText(result) : '');
+    publishChanges(missing ? quiet ? true : hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
     if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
@@ -729,13 +750,12 @@
     if (!cursor || changeRefill) return;
     b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
-      const result = await getChanges(cursor);
-      if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
+      const current = () => epoch === changeEpoch && cursor === changeLog?.next && !changeRefill;
+      const result = await retryPage(() => getChanges(cursor), current, () => publishChanges(true));
+      if (!current()) return;
       const page = result?.meta?.status < 400 && changePacket(result);
       if (!page?.items?.length) {
         publishChanges('下一页这次没读到。');
-        // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
-        result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
         return;
       }
       const extended = extendChanges(changeLog, page);
@@ -753,26 +773,32 @@
     const count = loaded && !custom?.changes?.step ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
-    const status = changeIssue || (!changeLog && '加载中');
+    const status = changeIssue === true ? !changeLog && '加载中' : changeIssue || (!changeLog && '加载中');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
-    U.html(b.note, [esc(count), esc(available), cutoff && esc(`上次改动记录截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
+    U.html(b.note, [esc(count), esc(available), cutoff && esc(`数据截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
+  }
+  function showArtifactCutoff(b) {
+    if (!b || !artsState) return;
+    const state = b.pageWaiting ? { ...artsState, data: arts, fallbackNote: true } : artsState;
+    showRefreshCutoff(b.el, state);
   }
   async function loadArtifacts(b) {
     const generation = audience, cursor = arts?.next, label = b.page.innerHTML;
     if (!cursor) return;
     b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
-      const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
-      if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
+      const current = () => generation === audience && cursor === arts?.next;
+      const result = await retryPage(
+        () => window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor }), current,
+        () => { b.pageWaiting = true; showArtifactCutoff(b); });
+      if (!current() || !sameViewer(result?.meta)) return;
       // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
-      if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
+      if (result?.meta?.status < 400 && Array.isArray(result.data?.items)) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...result.data.items] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else {
         b.note.hidden = false; U.html(b.note, U.fieldHtml(missingText(result, '下一页'), { name: '项目内容', kind: projectViewer }));
-        // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
-        result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
       }
-    } finally { b.page.disabled = false; U.html(b.page, label, false); }
+    } finally { b.pageWaiting = false; showArtifactCutoff(b); b.page.disabled = false; U.html(b.page, label, false); }
   }
   // 从规则页按版本跳进来（?artifact=E…）：这一版不在已读到的几页里，就接着往后读，读到这一版或读完为止（R55）
   const versionHit = it => it.kind === 'rules' && typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion;
@@ -801,17 +827,30 @@
   }
   async function loadGraph(b, m) {
     b.metric = m;
+    const sameAudience = b.chartRequest?.viewerEpoch === audience;
+    const sourceAt = sameAudience ? b.chartRequest.sourceAt : null;
+    if (!sameAudience) { delete b.viz._paged; U.html(b.viz, ''); b.recordStaleAt = null; drawRecordCutoff(b); }
+    const request = b.chartRequest = { viewerEpoch: audience, sourceAt };
+    const current = () => request.viewerEpoch === audience && b.chartRequest === request;
+    const cutoff = at => { b.recordStaleAt = at; drawRecordCutoff(b); };
     const paged = m.id === 'top_pages' && window.ProjectSiteReadings?.pagedRank;
     const read = cursor => window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
     let rows = [], cursor = null, result, staleAt = null;
     do {
-      result = await read(cursor);
-      if (!result.data || !Array.isArray(result.data.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
+      result = await retryPage(() => read(cursor), current, () => cutoff(request.sourceAt));
+      if (!current()) return;
+      if (!sameViewer(result?.meta) || !Array.isArray(result?.data?.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
       if (isStale(result.data)) staleAt ||= result.data.at || result.meta.at;
       rows.push(...(result.data.items || [])); cursor = result.data.next;
     } while (cursor && !paged);
-    b.recordStaleAt = staleAt; drawRecordCutoff(b);
-    const after = next => next ? async () => { const page = await read(next); return page.meta?.status < 400 && Array.isArray(page.data?.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
+    request.sourceAt = result.data.source_at || result.data.at || result.meta?.at;
+    cutoff(staleAt);
+    const after = next => next ? async () => {
+      const page = await retryPage(() => read(next), current, () => cutoff(staleAt || request.sourceAt));
+      if (!(page?.meta?.status < 400 && Array.isArray(page.data?.items) && sameViewer(page.meta))) return null;
+      cutoff(staleAt);
+      return { rows: page.data.items.map(pageRankRow), load: after(page.data.next) };
+    } : null;
     if (paged) window.ProjectSiteReadings.pagedRank(b.viz, { rows: rows.map(pageRankRow), total: result.data.total, load: after(cursor), rank: { unit: '次', empty: '这段时间没有打开记录' } });
     else window.LiveProjectViz.chart(b.viz, m.id, rows);
     const { line, extra } = lineOf(m);
@@ -1026,7 +1065,7 @@
           if (m.section && id === 'wly0829.cn' && ['daily', 'top_pages'].includes(m.id)) {
             const b = graphBlock(m.id, m.label); b.group = m.id === 'top_pages' ? m.id : s.id; (m.id === 'top_pages' ? right : into).push(b);
             U.html(b.head, `<b>${esc(m.label)}${window.ProjectAdditions?.metricCadence(m, id) || ''}</b>`);
-            if (!b.chartLoaded || b.chartAt !== m.at) { b.chartLoaded = true; b.chartAt = m.at; loadGraph(b, m); }
+            if (!b.chartLoaded || b.chartAt !== m.at || b.chartRequest?.viewerEpoch !== audience) { b.chartLoaded = true; b.chartAt = m.at; loadGraph(b, m); }
           } else { const b = arrayBlock(m); b.group = s.id; into.push(b); }
         }
         // 规则版本自己一张卡：卡头一句“从几时开始记”，下面版本时间线和近两周的小柱子
@@ -1060,7 +1099,7 @@
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
         if (versionMore) readVersion(b);
-        U.blockNote(b.el, artsState);
+        showArtifactCutoff(b);
         right.unshift(b);
       }
       const mine = changeLog?.items || [];
@@ -1343,7 +1382,7 @@
   }
   function renderHero(d) {
     hero.hidden = false; emptyHero.hidden = true;
-    // 部分读数没回来时，灰灯沿用，页头只说明缺数；整页读数确实旧了才显示整页截止。
+    // 部分读数有缺口时沿用灰灯和已有的具体说明；整页读数确实旧了才显示整页截止。
     const partial = d.q === 'partial' && !isStale(d) && !U.offline?.();
     const status = U.status(d, { cutoffShown: partial ? U.isCutoffNote : undefined });
     Light.tone(hero, d);
@@ -1363,7 +1402,7 @@
     const repo = !d.size && (d.sections || []).find(sec => sec?.id === 'repository')?.metrics || [], metric = key => repo.find(m => m?.id === key && Number.isFinite(m.value));
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
-    const note = status.note || (partial ? '部分数据这次没读到' : '');
+    const note = status.note;
     const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, note && `<small class="pj-stale">${note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
@@ -1535,7 +1574,7 @@
             if (arts) U.anchor(update); else update();
             jump();
           },
-          link(state) { artsState = state; if (first) return; if (!arts) renderBoard(false); U.blockNote(blocks.get('artifacts')?.el, state); },
+          link(state) { artsState = state; if (first) return; if (!arts) renderBoard(false); showArtifactCutoff(blocks.get('artifacts')); },
         });
       }
       if (first) {
@@ -1582,7 +1621,7 @@
         if (!notFound) applyLook?.();
         renderEmptyHero(missingProject(state));
       }
-      [hero.querySelector('.card__body'), ...[...blocks.values()].filter(b => !b.artifacts && !b.changes && !(id === 'agents' && ['quotes', 'agents-moved', 'hooks'].includes(b.key))).map(b => b.el)].forEach(el => U.blockNote(el, state));
+      showRefreshCutoff(hero.querySelector('.card__body'), state);
     },
   }));
 

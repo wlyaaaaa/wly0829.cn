@@ -97,11 +97,11 @@
   }
   // 规则仓项目页原来的“技能使用”“今天你跟 AI 说了几句”两块搬到智能体页（本人 11-24 02:45 选 B），这里只留一行链过去，带今天的两个数。
   // 被拦不提：本人 03:00 取消了“AI 被拦”那块（拦下次数里多少是真违规、多少是检查太宽没人核过）。
-  function agentsMoved(talk, metrics, viewer) {
+  function agentsMoved(talk, metrics, viewer, stamp) {
     const subject = viewer === 'owner' ? '你' : '本人';
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date());
-    // 还没读到时写“正在读”，读到的不是今天的写“还没量到”，不写成一句没有数的“今天你说了几句”
-    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : talk ? `今天${subject}说了几句还没量到` : `正在读今天${subject}说了几句`;
+    const day = talk?.date === today ? '今天' : /^\d{4}-\d\d-\d\d$/.test(talk?.date ?? '') ? stamp(talk.date) : '';
+    const said = day && finite(talk.total) ? `${e(day)}${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : talk ? `今天${subject}说了几句还没量到` : `正在读今天${subject}说了几句`;
     const week = ['claude', 'codex', 'antigravity'].map(host => metrics.find(m => m.id === `${host}_d7`));
     const known = week.filter(m => finite(m?.value));
     // Antigravity 只记得到能核实的技能原文件读取，三家合起来一律写“至少”
@@ -128,7 +128,7 @@
     const device = row.devices?.[key];
     const last = device?.last_success_at ? `<small>上次读到 ${e(stamp(device.last_success_at).slice(-11))}</small>` : '';
     const app = key === 'phone' && row.name === 'Claude 桌面版' ? '<small>（Claude 手机应用）</small>' : '';
-    return versionText(device?.version) + last + app;
+    return (device?.installed === false ? '<span class="pj-nb">未安装</span>' : versionText(device?.version)) + last + app;
   }
   function softwareTable(rows, stamp) {
     const headers = ['软件', '台式机', ...deviceColumns.map(c => c.label)];
@@ -166,6 +166,6 @@
     if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
   window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, personalDetail, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
-    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
+    cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer, stamp), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();
