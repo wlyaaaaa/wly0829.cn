@@ -424,14 +424,21 @@ body.page--live .btn.btn--go:active { background: #007639; }
   box-shadow: inset 0 0 0 1px rgb(20 20 19 / .1), 0 2px 6px rgb(20 20 19 / .04);
   transition: left var(--live-at-t) var(--live-at-ease), right var(--live-at-t) var(--live-at-ease), background .2s ease;
 }
-/* 刚建出来还没有字（数据没回、也没到 2.5 秒写“正在读”）时先不占位，免得页头挂一个空白小胶囊 */
-.topbar .live-at:empty { display: none; }
+/* 用当前字体和字距给读到时刻占位，等待文字和到点的时间共用这块位置。 */
+.topbar .live-at:is(:empty, :has(> .live-refresh-text)) { display: inline-grid; }
+.topbar .live-at:is(:empty, :has(> .live-refresh-text))::after {
+  content: '00:00 读到';
+  visibility: hidden;
+}
+.live-at::after, .live-refresh-text { grid-area: 1 / 1; margin-left: 23px; }
+.topbar .live-at:empty { pointer-events: none; }
+.topbar .live-at:empty::before { content: '正在读'; display: grid; place-items: center; }
 .topbar .live-at:hover { background: transparent; box-shadow: none; color: #141413; }
 .topbar .live-at:hover::before { background: rgb(255 255 255 / .94); }
 .live-refresh-icon { position: absolute; left: 15px; top: calc(50% - 8px); display: block; width: 16px; height: 16px; transition: left var(--live-at-t) var(--live-at-ease); }
 .live-refresh-icon svg { display: block; width: 16px; height: 16px; }
 /* 展开时字等药丸展开过半再淡回来；收起时字一开始就淡掉 */
-.live-refresh-text { display: block; margin-left: 23px; transition: opacity calc(var(--live-at-t) * .45) ease calc(var(--live-at-t) * .55); }
+.live-refresh-text { display: block; transition: opacity calc(var(--live-at-t) * .45) ease calc(var(--live-at-t) * .55); }
 .topbar .live-at.is-refreshing::before { left: calc(50% - 17px); right: calc(50% - 17px); }
 /* 转圈时图标用一种深灰，不跟着指针在不在上面变：点的时候指针在上面是近黑、移开又变回浅灰，转到一半颜色跳 */
 .topbar .live-at.is-refreshing, .topbar .live-at.is-refreshing:hover { color: #4a4944; }

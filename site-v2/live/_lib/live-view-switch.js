@@ -8,25 +8,20 @@
 (() => {
   'use strict';
   const key = 'wly-live-view', site = /(^|\.)wly0829\.cn$/i.test(location.hostname);
+  const bar = document.getElementById('topbar'), live = location.pathname.startsWith('/live/');
   let publicView = sessionStorage.getItem(key) === 'public', owner = false, invalid = false, known = false, button, label;
-  // 切换是整页重载：点下去先转半圈再重载，点的时刻和按钮离右边多远记在 sessionStorage。实况各页等这一版的第一份结果到了（认清是不是本人）、
-  // 右边“几点读到”有了字、按钮要放的地方和点下去时一样，才把按钮画出来，从点下到切完按钮左右不挪（右边几颗的宽度随字变，按钮跟着挪就是跳）；
-  // 画出来时接着转（角度从点下去那一刻算，不跳），至少再转半圈、停在整圈。一直对不上的，8 秒后照样画出来停下。规则页没有实况数据，新页面一出来就画。
+  // 点下去先转半圈再重载。新页在固定位置接着转，角度从点下去那一刻算。
   const RESUME = 'wly-live-view-switch-at', TURN = 900;
   const resume = (() => { try { const v = JSON.parse(sessionStorage.getItem(RESUME)); sessionStorage.removeItem(RESUME); return v && Date.now() - v.at < 20000 ? v : null; } catch { return null; } })();
-  let spinning = resume?.at || 0, stopping = 0, waited = false, watcher;
-  const right = el => el.parentElement.getBoundingClientRect().right - el.getBoundingClientRect().right;   // 离所在那组右边多远
-  // 按钮还没放进去时，它会放在这组第一颗看得见的左边、隔一个间距
-  function inPlace(group) {
-    if (!Number.isFinite(resume?.right)) return true;
-    const first = [...group.children].find(el => el.getClientRects().length);
-    return !!first && Math.abs(right(first) + first.offsetWidth + (parseFloat(getComputedStyle(group).columnGap) || 0) - resume.right) < 2;
-  }
+  let spinning = resume?.at || 0, stopping = 0;
   const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2.25" stroke-linecap="round">'
     + '<g stroke="currentColor" fill="currentColor"><path d="M4.95 14.57A7.5 7.5 0 0 1 16.4 5.9" fill="none"/><path d="M18.5 7.4 14.3 7.7 17.5 3.4Z" stroke-width=".8" stroke-linejoin="round"/></g>'
     + '<g stroke="#00a650" fill="#00a650" transform="rotate(180 12 12)"><path d="M4.95 14.57A7.5 7.5 0 0 1 16.4 5.9" fill="none"/><path d="M18.5 7.4 14.3 7.7 17.5 3.4Z" stroke-width=".8" stroke-linejoin="round"/></g></svg>';
   const style = document.createElement('style');
-  style.textContent = '#wly-preview-view{gap:6px}#wly-preview-view svg{display:block;flex:none;width:16px;height:16px}'
+  style.textContent = '#wly-preview-view{gap:6px;order:-1}#wly-preview-view svg{display:block;flex:none;width:16px;height:16px}'
+    + '#wly-preview-view:active{transform:none}'
+    + '#topbar[data-view-mount]:not(:has(#wly-preview-view)){visibility:hidden}'
+    + '#topbar[data-view-mount] :is(.brand__word,.ch){transition:none}'
     + `#wly-preview-view.is-switching svg{animation:wly-view-turn ${TURN}ms cubic-bezier(.45,.1,.45,.9) var(--wly-view-at,0ms) infinite}`
     + '@keyframes wly-view-turn{to{transform:rotate(1turn)}}';
   document.head.append(style);
@@ -36,19 +31,12 @@
     const elapsed = Date.now() - spinning;
     stopping = setTimeout(() => { spinning = 0; button?.classList.remove('is-switching'); button?.removeAttribute('aria-busy'); }, Math.ceil((elapsed + TURN / 2) / TURN) * TURN - elapsed);
   }
-  // 实况各页等第一份回包认清是不是本人再画，免得本人先看到一下访客的字；
-  // 没有实况数据的页（规则页）在没配对过的设备上直接按访客画，配对过的等规则页读完本人稿再画。
   const paired = () => { try { return /^[A-Za-z0-9_-]{43}$/.test(localStorage.getItem('wly-cockpit-device') || ''); } catch { return false; } };
   function render() {
-    if (!publicView && !owner && !invalid && !known) return;
-    const group = document.querySelector('#topbar .topbar__group--right');
+    const group = bar?.querySelector('.topbar__group--right');
     if (!group) return;
-    if (!button && spinning && !waited && window.Live && (!known || !inPlace(group))) {
-      // 右边几颗换字、字体到了都会挪位置：盯着这一组，有变化再对一次
-      if (!watcher) { watcher = new MutationObserver(render); watcher.observe(group, { childList: true, subtree: true, characterData: true }); document.fonts?.ready.then(render); }
-      return;
-    }
-    watcher?.disconnect();
+    const pending = !publicView && !known && (paired() || location.hash.startsWith('#pair='));
+    const mounting = !button;
     if (!button) {
       button = document.createElement('button'); button.id = 'wly-preview-view'; button.type = 'button';
       button.className = 'pill live-view-pill';
@@ -58,7 +46,6 @@
       if (spinning) {
         button.classList.add('is-switching'); button.setAttribute('aria-busy', 'true');
         button.style.setProperty('--wly-view-at', `${-((Date.now() - spinning) % TURN)}ms`);
-        if (known || waited) settle();   // 画出来了才开始算“再转半圈停”，不在按钮还没出来时就停掉
       }
       button.onclick = () => {
         if (spinning) return;
@@ -66,18 +53,24 @@
         if (!publicView && !owner) return void window.TrustModal?.show();
         sessionStorage.setItem(key, publicView ? 'owner' : 'public');
         spinning = Date.now();
-        try { sessionStorage.setItem(RESUME, JSON.stringify({ at: spinning, right: right(button) })); } catch { /* 记不下：新页面照常显示，只少接着转那一段 */ }
+        try { sessionStorage.setItem(RESUME, JSON.stringify({ at: spinning })); } catch { /* 记不下：新页面照常显示，只少接着转那一段 */ }
         button.style.setProperty('--wly-view-at', '0ms'); button.classList.add('is-switching'); button.setAttribute('aria-busy', 'true');
         setTimeout(() => location.reload(), TURN / 2);
       };
     }
-    if (group.firstElementChild !== button) group.prepend(button);   // 实况页后加的“几点读到”“问情况”排在它右边
     // 字写点了去哪一版；配对失效的设备看不了本人版，直接写“配对已失效”（点了弹可信设备说明框）
-    const [text, tip] = publicView ? ['本人版', '切回本人版']
+    const [text, tip] = pending ? ['确认中', '正在确认这台设备可以查看哪一版']
+      : publicView ? ['本人版', '切回本人版']
       : invalid ? ['配对已失效', '这台设备的配对已失效，重新配对后才能看本人版']
       : owner ? ['公开版', '切到公开版，看访客看到的样子']
       : ['本人版', '本人版只有可信设备能看'];
-    label.textContent = text; button.title = tip; button.setAttribute('aria-label', tip);
+    label.textContent = text; button.title = tip; button.setAttribute('aria-label', tip); button.disabled = pending;
+    if (mounting) {
+      group.prepend(button);
+      // 顶栏按完整一排按钮做第一次排版，窄窗直接进入落定的位置。
+      dispatchEvent(new Event('resize'));
+      requestAnimationFrame(() => delete bar.dataset.viewMount);
+    }
   }
   window.LiveView = {
     isPublic: () => publicView,
@@ -87,14 +80,22 @@
       known = true;
       if (viewer?.device === 'invalid') { invalid = true; owner = false; }
       if (viewer?.kind === 'owner') { invalid = false; owner = true; }
-      render(); if (button) settle();
+      if (button) { render(); settle(); }
     }
   };
-  const start = () => {
-    if (!window.Live && !paired()) known = true;
+  if (!bar) return;
+  bar.dataset.viewMount = '';
+  const observer = new MutationObserver(() => { if (bar.querySelector('.live-at')) start(); });
+  function start() {
+    if (button) return;
+    observer.disconnect();
     render();
-    // 规则页的公开版不读本人稿、不会再回话：页面出来就算切完
-    if (known || !window.Live && publicView) settle(); else if (spinning) setTimeout(() => { waited = true; render(); settle(); }, 8000);
-  };
-  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', start, { once: true }); else start();
+    // 规则页公开版没有回包，实况等第一份结果再停。
+    if (known || !live && publicView) settle();
+    else if (spinning) setTimeout(settle, 8000);
+  }
+  if (live && document.readyState === 'loading' && !bar.querySelector('.live-at')) {
+    observer.observe(bar, { childList: true, subtree: true });
+    addEventListener('DOMContentLoaded', start, { once: true });
+  } else start();
 })();
