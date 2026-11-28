@@ -90,8 +90,8 @@
     const m = p.m('missed'), dm = p.m('days');
     if (!m && !days.length) return '';
     const sec = n(m, 'seconds'), val = v(m), parts = [];
-    if (finite(val.collection_gap_seconds)) parts.push(`明确缺口 ${int(val.collection_gap_seconds)} 秒`);
-    if (finite(val.uncovered_seconds)) parts.push(`完全没记录 ${int(val.uncovered_seconds)} 秒`);
+    if (finite(val.collection_gap_seconds)) parts.push(`采集断了 ${int(val.collection_gap_seconds)} 秒`);
+    if (finite(val.uncovered_seconds)) parts.push(`整段没采到 ${int(val.uncovered_seconds)} 秒`);
     const inner = !parts.length && typeof val.text === 'string' ? (/（(.+)）/.exec(val.text)?.[1] || '') : '';
     const head = hidden(m) ? big(DOTS, '') + ownerTag(m, '近 24 小时没记上多久') : finite(sec) ? big(esc(one(sec / 60)), '分钟') : m?.text ? `<p class="ta-line">${esc(m.text)}</p>` : '';
     const line = parts.length || inner ? `<p class="ta-line">近 24 小时没记上：${esc(parts.length ? parts.join(' + ') : inner)}</p>` : '';
@@ -228,7 +228,7 @@
     ['website_dashboards', '网站看板定义', m => finite(m.value) ? `${int(m.value)} 份（不算进看板总数）` : ''],
   ];
   function samplesCard(p) {
-    const tiles = [['samples24', '留下'], ['covered24', '有记录'], ['empty24', '没记录'], ['max_gap', '最长空段']].map(([id, k]) => ({ k, m: p.m(id) })).filter(t => t.m && (finite(t.m.value) || hidden(t.m)));
+    const tiles = [['samples24', '留下'], ['covered24', '有记录'], ['empty24', '没采到'], ['max_gap', '最长空段']].map(([id, k]) => ({ k, m: p.m(id) })).filter(t => t.m && (finite(t.m.value) || hidden(t.m)));
     const more = MORE.map(([id, k, text]) => { const m = p.m(id); return m && { k, m, text: text(m) }; }).filter(x => x && x.text);
     if (!tiles.length && !more.length) return '';
     // 只多一项就直接摆出来，不出“展开（还有 1 项）”（M1190）

@@ -72,11 +72,12 @@
   const RANK_STEP = 5;
   function pagedRank(host, { rows, total, load, rank }) {
     const state = host._paged ??= { shown: RANK_STEP };
-    Object.assign(state, { rows: rows || [], total, load, rank });
+    Object.assign(state, { rows: rows || [], total, load, rank, reading: null });
     if (!host.querySelector(':scope > .pj-rank-list')) {
       host.innerHTML = '<div class="pj-rank-list"></div><p class="pj-note pj-rank-note" hidden></p><button class="more pj-rank-step" type="button" hidden></button>';
       host.lastElementChild.addEventListener('click', () => stepRank(host));
     }
+    host.lastElementChild.disabled = false;
     drawRank(host);
   }
   function drawRank(host) {
@@ -96,10 +97,14 @@
     if (btn.hasAttribute('data-open')) { const go = () => { state.shown = RANK_STEP; drawRank(host); }; if (window.LiveUI?.anchorFold) window.LiveUI.anchorFold(btn, go, () => btn, host); else go(); return; }
     if (state.shown < state.rows.length) { state.shown += RANK_STEP; drawRank(host); return; }
     if (!state.load || btn.disabled) return;
+    note.hidden = true;
     btn.disabled = true; btn.textContent = '正在读…';
-    const got = await state.load().catch(() => null);
+    const read = state.reading = state.load();
+    const got = await read.catch(() => null);
+    if (state.reading !== read || btn.parentElement !== host) return;
+    state.reading = null;
     btn.disabled = false;
-    note.hidden = !!got; note.textContent = got ? '' : '下一页暂时读不到，已读到的留在这里。';
+    note.hidden = !!got; note.textContent = got ? '' : '下一页这次没读到。';
     if (got) Object.assign(state, { shown: Math.min(state.shown, state.rows.length) + RANK_STEP, rows: [...state.rows, ...got.rows], load: got.load });
     drawRank(host);
   }

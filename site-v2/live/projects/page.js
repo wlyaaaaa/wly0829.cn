@@ -146,8 +146,8 @@
       ? '<small>按日历算，含今天共 7 天；这几天有提交的项目各算 1 个，合并、机器人和自动记录的不算。跟项目详情里的“影响改动”不是一种算法，两个数别拿来比。</small>' : '';
     const activityRow = hidden || Number.isFinite(changed) ? `<span><small>近 7 天</small>${activity}</span>` : `<small>${activity}</small>`;
     U.html($('pj-summary'), (frozenOnly ? '' : activityRow + note)
-      + `<table class="pj-summary__sizes"><colgroup><col><col><col><col></colgroup>
-        <thead><tr><td></td><th scope="col">文档</th><th scope="col">代码</th><td></td></tr></thead>
+      + `<table class="pj-summary__sizes" aria-describedby="pj-size-count-note"><colgroup><col><col><col><col></colgroup>
+        <thead><tr><td><small id="pj-size-count-note">不计空格</small></td><th scope="col">文档</th><th scope="col">代码</th><td></td></tr></thead>
         <tbody>${frozenOnly ? '' : sizeLine('在用', activeSize, true)}${sizeLine('冻结<wbr><span class="live-unit">（单独计算）</span>', frozenSize)}</tbody></table>`);
   }
   function renderHead() {

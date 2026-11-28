@@ -112,6 +112,14 @@
 .page--computer .exit-guard__mode[data-tone="amber"] { color: #a76500; }
 .page--computer .exit-guard__mode[data-tone="amber"]::before { background: #efa719; }
 .page--computer .exit-guard__mode[data-tone="green"]::before { background: #00a650; }
+.page--computer .grp__head .memory-guard { display: block; grid-column: 2 / -1; margin: 3px 0 0; }
+.page--computer .grp__head .memory-guard[hidden] { display: none; }
+.page--computer .memory-guard > span { white-space: nowrap; }
+.page--computer .memory-guard__status::before {
+  content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 6px;
+  vertical-align: 1px; border-radius: 50%; background: currentColor;
+}
+.page--computer .memory-guard[data-watching] .memory-guard__status { color: #00a650; }
 
 .page--computer .grp.is-unread .grp__head, .page--computer .grp.is-unread .grp__fold { display: none; }
 .page--computer .grp.is-unread .card__body { padding: 18px 32px; }

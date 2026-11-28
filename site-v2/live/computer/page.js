@@ -649,6 +649,46 @@
     const detail = route('/live/task/?id=task-da408b6346691a43dbb3d55c');
     return `代理守护　<span class="exit-guard__mode" data-tone="${tone}">${label}</span>${note}${last ? ' · ' : ' '}<span class="exit-guard__action">${last}<a class="exit-guard__detail more__chev" href="${esc(detail)}" aria-label="查看代理守护详情">›</a></span>`;
   }
+  function renderMemoryGuard(card) {
+    let row = card.querySelector('.memory-guard');
+    if (!row) {
+      row = document.createElement('p');
+      row.className = 'grp__line memory-guard';
+      card.querySelector('.grp__head').append(row);
+    }
+    row.hidden = !computer && !stateDone;
+    const guard = computer?.memory?.guard;
+    const watching = guard?.state === 'watching';
+    row.toggleAttribute('data-watching', watching);
+    if (!guard) {
+      U.html(row, '内存守护状态暂不可用', false);
+      return;
+    }
+    const labels = {
+      disabled: '已停用', released: '已执行内存回收，守护继续', alert: '内存压力仍高，等待可回收项目',
+      error: '检查出错', action_failed: '回收动作未完成',
+    };
+    const known = watching || Object.hasOwn(labels, guard.state);
+    const status = watching ? '在看着' : known ? labels[guard.state] : '状态读不到';
+    const observedAt = guard.observed_at;
+    const observed = Date.parse(observedAt), now = Date.now();
+    const old = guard.stale === true || now - observed > 15000;
+    let cutoff = '';
+    if (known && old && Number.isFinite(observed)) {
+      const date = beijingDay(observed / 1000) !== beijingDay(now / 1000) ? U.date(observedAt) + ' ' : '';
+      cutoff = ` · ${date}${U.time(observedAt)}`;
+    }
+    const early = guard.trigger_levels?.early?.available_below_bytes;
+    const emergency = guard.trigger_levels?.emergency?.available_below_bytes;
+    const gb = bytes => Number((bytes / 2 ** 30).toFixed(2));
+    const limits = Number.isFinite(early) && Number.isFinite(emergency)
+      ? ` <span>· 可用内存低于 ${gb(early)} GB 开始回收，</span><span>低于 ${gb(emergency)} GB 急救</span>` : '';
+    const at = guard.last_trigger_at;
+    const stamp = typeof at === 'string' ? Date.parse(at) : NaN;
+    const date = Number.isFinite(stamp) && beijingDay(stamp / 1000) !== beijingDay(now / 1000) ? U.date(at) + ' ' : '';
+    const last = Number.isFinite(stamp) ? `上次触发 ${date}${U.time(at)}` : at === null && known ? '还没触发过' : '';
+    U.html(row, `<span>内存守护　<span class="memory-guard__status">${status}</span>${cutoff}</span>${limits}${last ? ` <span>· ${last}</span>` : ''}`, false);
+  }
   function exitField(value, name) {
     const html = U.fieldHtml(value, { name });
     return typeof value === 'string' ? html.replace(/出口(?:是固定 IP ✓|不是固定 IP)/g, '<span class="exit-word">$&</span>') : html;
@@ -878,6 +918,7 @@
       const revoked = def ? publicationRevoked(chartStates.get(def.group)?.meta) : mainRevoked;
       const card = $('board').querySelector(`.grp[data-key="${CSS.escape(g.key)}"]`);
       showUnread(card, g.name, !offline() && ready && !has, revoked ? publicationNote(g.name) : undefined);
+      if (g.key === 'memory' && card) renderMemoryGuard(card);
       if (g.key === 'network' && card) renderSeparateTraffic(card);
     }
     hero.classList.toggle('is-unread', !offline() && stateDone && !computer);

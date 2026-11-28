@@ -14,10 +14,9 @@
   const clock = at => bj(at, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   const monthDay = at => bj(at, { month: '2-digit', day: '2-digit' }).replace('/', '-');
 
-  // 类别名：访客版把“你”换成“本人”，和别处一样。
-  function categoryName(key, viewer) {
-    const name = CATEGORY[key] || '';
-    return viewer === 'public' ? name.replace('替你', '替本人') : name;
+  // 固定任务名在两版都照原样。
+  function categoryName(key) {
+    return CATEGORY[key] || '';
   }
   // 谁做的：“Claude Opus 5.5 medium”“GPT-6.2 Sol xhigh”；程序自己办的只写“程序”，不补型号。
   function worker(w) {

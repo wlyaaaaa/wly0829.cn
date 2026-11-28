@@ -41,7 +41,10 @@ const panes = new Map(), shots = new Map(), paginations = new Map();
 // 细节条数＝右栏编了号的那几条：小标题不算，“出处”“源码”放在栏底另列、也不算（和右栏的 01、02… 对得上）
 const detailCount = item => item.detail.map(parseItem).filter(entry=>entry.type !== 'heading' && !['出处','源码'].includes(entry.name)).length;
 function fitPictures() {
-  pictures.style.setProperty('--picture-scale',Math.min(1,document.documentElement.clientWidth / pictures.offsetWidth));
+  // 正文的可用宽度已经扣掉滚动条预留区。
+  const width = document.body.clientWidth;
+  pictures.style.setProperty('--picture-scale',Math.min(1,width / pictures.offsetWidth));
+  pictures.style.setProperty('--picture-area-width',`${width}px`);
 }
 const notes = pictures.querySelector(':scope > .owner-note, :scope > .owner-notes');
 const firstPicture = pictures.querySelector('[data-initial-cover]');
@@ -123,11 +126,24 @@ function buildPane(item) {
     button.addEventListener('click',()=>openDetails(next));pagination.append(button);
   }paginations.set(item.id,pagination);return pane;
 }
+const wideLandscape = matchMedia('(min-width: 160rem) and (orientation: landscape)');
+const widestPicture = Math.max(...data.map(item => item.width));
 function placeShot() {
-  const pad = 20, width = dialog.clientWidth - drawer.offsetWidth - 3*pad;
+  const pad = 20, stageWidth = dialog.clientWidth, drawerWidth = drawer.offsetWidth;
+  const width = stageWidth - drawerWidth - 3*pad;
   const scale = Math.min(1,width/active.width,(dialog.clientHeight-2*pad)/active.height);
+  let x = pad;
+  if (wideLandscape.matches) {
+    // 用本页最宽的图定位说明栏，翻张时只换图，栏留在原处。
+    const gap = 2*pad, imageSpan = Math.min(width,widestPicture);
+    const inset = (stageWidth - drawerWidth - imageSpan - gap)/2;
+    dialog.style.setProperty('--drawer-inset',`${inset}px`);
+    x = Math.max(pad,stageWidth - drawerWidth - inset - gap - active.width*scale);
+  } else {
+    dialog.style.removeProperty('--drawer-inset');
+  }
   shot.style.width = `${active.width}px`;
-  shot.style.setProperty('--shot-x',`${pad}px`);shot.style.setProperty('--shot-y',`${(dialog.clientHeight-active.height*scale)/2}px`);shot.style.setProperty('--shot-scale',scale);
+  shot.style.setProperty('--shot-x',`${x}px`);shot.style.setProperty('--shot-y',`${(dialog.clientHeight-active.height*scale)/2}px`);shot.style.setProperty('--shot-scale',scale);
 }
 // 全站动效（motion.js）给的开合口子；没有它或动效关着时，照原来瞬间开合。
 const motion = () => (window.MOTION_DETAIL && window.MOTION_DETAIL.active() ? window.MOTION_DETAIL : null);

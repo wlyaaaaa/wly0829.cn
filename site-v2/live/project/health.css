@@ -166,8 +166,7 @@
 .hl-tag.is-weekly { background: rgb(96 128 226 / .15); color: #3d58b4; }
 .hl-brief__to { color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hl-brief__act { display: flex; align-items: center; justify-self: end; white-space: nowrap; }
-.hl-brief:has(.live-mark) { grid-template-columns: max-content max-content minmax(0, 1fr) max-content; column-gap: 8px; }
-.hl-brief:has(.live-mark) .hl-brief__to { white-space: normal; }
+.hl-brief:has(.live-mark) { grid-template-columns: max-content 5.2em max-content minmax(max-content, 1fr); column-gap: 6px; }
 .hl-brief__act .btn { margin: 0; }
 @container (width < 440px) {
   .hl-brief, .hl-brief:has(.live-mark) { grid-template-columns: max-content minmax(0, 1fr) max-content; column-gap: 8px; }

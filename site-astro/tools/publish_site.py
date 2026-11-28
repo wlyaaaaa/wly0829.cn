@@ -15,7 +15,9 @@ import time
 from http.client import IncompleteRead, RemoteDisconnected
 from types import SimpleNamespace
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
@@ -194,6 +196,7 @@ def command(*args, timeout=None):
 
 LAST_ATTEMPT_KEYS = ('schema', 'status', 'publication_status', 'dry_run', 'started_at_beijing', 'completed_at_beijing',
                      'total_seconds', 'source_commit', 'source_commit_evidence', 'commit', 'deployment', 'error', 'oss_retention')
+ATTEMPT_HISTORY_LIMIT = 20
 RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次；内容核对不一致、HTTP 状态和其他错误一律不重试
 PAGE_RETRY_DELAYS = (0.5, 1, 2, 4)  # 每个页面最多请求五次，仅重试传输错误和 HTTP 5xx
 PAGE_ROUND_DELAYS = (120, 150, 180)  # 整轮结束后仅为传输失败网址补查，最多三轮
@@ -799,6 +802,11 @@ def publish(args):
                 receipt['oss_retention']['bucket_stat_failed'] = True
             if receipt['oss_retention']['status'] != 'complete':
                 print('发布已成功，OSS 回收未完成：' + str(report), file=sys.stderr)
+        else:
+            try:
+                receipt['oss_retention']['bucket_after'] = step('bucket_stat', lambda: retention.bucket_stat(CLI, 'website-images'))
+            except Exception as error:
+                receipt['oss_retention'].update(bucket_stat_failed=True, bucket_after_error=str(error))
         sys.path.insert(0, str(ROOT / 'scripts'))
         try:
             import live_project
@@ -806,23 +814,39 @@ def publish(args):
         except Exception as error:
             print('发布已成功，实况登记失败：' + str(error), file=sys.stderr)
         return receipt
-    except Exception as error:
-        receipt.update(status='failed', error=str(error))
+    except (Exception, KeyboardInterrupt) as error:
+        receipt.update(status='failed', error=str(error) or type(error).__name__)
         raise
     finally:
         receipt['total_seconds'] = round(time.monotonic()-started, 3)
         receipt['completed_at_beijing'] = oss.stamp()
         if not args.dry_run:  # 驾驶舱读的固定“最近一次正式尝试”，与 published.json 同目录；尽力写，写不成不改变结果和退出码
             try:
-                save_last_attempt(retention.shared()/'last-attempt.json', receipt)
-            except Exception:
-                pass
+                save_last_attempt(retention.shared()/'last-attempt.json', receipt,
+                                  history_version=attempt_version(args.dist, receipt, getattr(args, 'source_commit', None)))
+            except Exception as error:
+                print('发布回执本机登记失败：' + str(error), file=sys.stderr)
         oss.write(output/'publish-receipt.json', receipt)
         if owned:
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
                     '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')
 
-def save_last_attempt(path, receipt):
+def attempt_version(dist, receipt, source_commit):
+    identity = {}
+    if not receipt.get('release_id'):
+        try:
+            identity = retention.read(dist/'release-identity.json')
+        except (OSError, ValueError):
+            pass
+        if not isinstance(identity, dict):
+            identity = {}
+    versions = (receipt.get('release_id'), identity.get('release_id'),
+                receipt.get('source_commit'), identity.get('source_commit'), source_commit)
+    return next((value[:12] for value in versions if isinstance(value, str)
+                 and re.fullmatch(r'[0-9a-f]{40}|[0-9a-f]{64}', value)), 'unknown')
+
+
+def save_last_attempt(path, receipt, *, bucket_stats=(), history_version=None):
     latest = {key: receipt[key] for key in LAST_ATTEMPT_KEYS if key in receipt}
     try:
         previous = retention.read(path)
@@ -835,12 +859,24 @@ def save_last_attempt(path, receipt):
             stats = attempt.get('oss_retention')
             if isinstance(stats, dict):
                 readings.extend(stats.get(key) for key in ('bucket_before', 'bucket_after'))
+    readings.extend(bucket_stats)
     if latest_stat := max((row for row in reversed(readings) if isinstance(row, dict)
             and type(row.get('bytes')) is int and row['bytes'] >= 0
             and type(row.get('provider_updated_at')) is int and row['provider_updated_at'] > 0),
-            key=lambda row: row['provider_updated_at'], default=None):
+            key=lambda row: (row['provider_updated_at'], type(row.get('objects')) is int and row['objects'] >= 0), default=None):
         latest['last_bucket_stat'] = {key: latest_stat[key] for key in ('bytes', 'provider_updated_at')}
-    retention.write(path, latest)
+        if type(latest_stat.get('objects')) is int and latest_stat['objects'] >= 0:
+            latest['last_bucket_stat']['objects'] = latest_stat['objects']
+    try:
+        if history_version is not None:
+            history = path.parent/'attempts'
+            finished = datetime.fromisoformat(latest['completed_at_beijing'])
+            filename = f'publish-{finished:%Y%m%dT%H%M%S%f%z}-{history_version}-{uuid4().hex[:8]}.json'
+            retention.write(history/filename, latest)
+            for old in sorted(history.glob('publish-*.json'), reverse=True)[ATTEMPT_HISTORY_LIMIT:]:
+                old.unlink(missing_ok=True)
+    finally:
+        retention.write(path, latest)
 
 
 def collect_output(args, preparation, publication, report=None):
@@ -860,9 +896,9 @@ def collect_after_publication(args):
         '-Reason', 'Standalone website object retention', '-Json'))
     if claim.get('status') != 'acquired':
         raise ValueError('Standalone retention must acquire a fresh lock after publication releases it')
+    label = 'dry-run' if args.dry_run else 'retry'
+    report = preparation/f'oss-retention-{label}-{time.time_ns()}'/'oss-retention.json'
     try:
-        label = 'dry-run' if args.dry_run else 'retry'
-        report = preparation/f'oss-retention-{label}-{time.time_ns()}'/'oss-retention.json'
         code = collect_output(args, preparation, publication, report)
         result = {'status': 'retention_dry_run' if args.dry_run else 'retention_complete' if not code else 'retention_incomplete',
                   'publication_status': 'published', 'oss_retention': retention.read(report), 'exit_code': code,
@@ -871,6 +907,15 @@ def collect_after_publication(args):
             result['local_runs'] = prune_publish_runs()
         return result
     finally:
+        if not args.dry_run and report.is_file():
+            try:
+                stats = retention.read(report)
+                samples = tuple(stats[key] for key in ('bucket_before', 'bucket_after') if key in stats)
+                if samples:
+                    latest = retention.shared()/'last-attempt.json'
+                    save_last_attempt(latest, retention.read(latest) if latest.is_file() else publication, bucket_stats=samples)
+            except Exception as error:
+                print('OSS 回收后的实况统计写入失败：' + str(error), file=sys.stderr)
         if claim['status'] == 'acquired':
             command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Release',
                 '-Name', 'wly0829-publication', '-Holder', args.lock_holder, '-Json')

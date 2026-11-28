@@ -105,7 +105,6 @@
         "sources/pages/skill-timeaudit-diagnostics",
         "sources/pages/skill-vault-workflow",
         "sources/pages/skill-wechat-direct",
-        "sources/pages/skill-work-delivery",
         "sources/pages/skills-home"
       ]
     },
