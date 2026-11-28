@@ -31,7 +31,7 @@
       // 名字不公开的项目放项目页通用的那张画（没登记专门画的项目本来就用它），认不出是哪个项目，也不再是一块像没加载出来的空底（M1007）。
       const look = window.LiveProjectLook?.of(row.secret ? '' : row.project || row.key, looks);
       if (key === 'changes') return { ...row, band: band(look, row.href, 'pj-band--strip') };
-      return { ...row, cls: `${row.cls} pj-card`, html: `${band(look, row.href, 'pj-band--card', true)}<div class="pj-card__body">${row.html}</div>` };
+      return { ...row, cls: `${row.cls} pj-card`, html: `${band(look, row.href, 'pj-band--card', true)}<div class="pj-card__body">${keepRosterUnits(row.html)}</div>` };
     });
   }
   function updateCutoff(key, data) {
@@ -243,7 +243,7 @@
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
   const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${dateHtml(U.fieldHtml(part, { name: '项目读数', kind: viewer }))}</span>`).join('');
   // 只包读数里的文字，像“共 77 分钟”这样一整块换行。
-  const rosterUnit = /(?<![\d.,:])(?:(?:至少|大约|共|约)\s*)?[+-]?\d+(?:[.,]\d+)*(?:\/\d+)?\s*(?:(?:万|亿)?\s*(?:毫秒|分钟|小时|[项份个字行次笔件部天秒分条页期倍万亿])|(?:TB|GB|MB|KB|B)(?:\/s)?|[%％])(?![a-z])/gi;
+  const rosterUnit = /(?<![\d.,:])(?:(?:至少|大约|共|约)\s*)?[+-]?\d+(?:[.,]\d+)*(?:\/\d+)?\s*(?:(?:万|亿)?\s*(?:毫秒|分钟|小时|[项份个字行次笔件部天秒分条页期倍万亿处种组])|(?:TB|GB|MB|KB|B)(?:\/s)?|[%％])(?![a-z])/gi;
   const keepRosterUnits = html => html.replace(/(^|>)([^<]+)/g, (_, prefix, text) =>
     prefix + text.replace(rosterUnit, '<span class="live-unit">$&</span>'));
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
@@ -261,8 +261,7 @@
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
       const hasText = !!(text || marked);
-      const readingHtml = marked || remote ? dateHtml(U.fieldHtml(marked || text, { name: '项目读数', kind: viewer })) : rosterStat(text);
-      const valueHtml = keepRosterUnits(readingHtml);
+      const valueHtml = marked || remote ? dateHtml(U.fieldHtml(marked || text, { name: '项目读数', kind: viewer })) : rosterStat(text);
       let label = h?.label, scope = h?.scope;
       if (typeof scope === 'string') scope = dateWords(scope);
       const observed = typeof h?.at === 'string' && stamp(h.at), through = h?.data_through && stamp(h.data_through);
@@ -319,7 +318,7 @@
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
-    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
+    html: `<div class="row__text"><div class="row__sub">${keepRosterUnits(shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true }))}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
   // 全部变化、成品两块标题右边一排“近 7 天｜近 30 天｜全部”，默认近 7 天（本人 11-24 20:34）；样子和智能体页工期、工作量、钩子那三排一样（index.html 的 .pj-tseg）。
   // 近 7 天照旧用变化接口和名册送来的那份；近 30 天、全部点了才读 projects/changes?range=、projects/artifacts?range=（翻页同样带 cursor）。
   // 回包里 range 和点的那档对得上才用；后台还没给就写“后台还没送来”，不拿近 7 天的数顶上。
@@ -517,8 +516,8 @@
       const age = Number.isInteger(seconds) && seconds >= 0 && (mins < 60 && remainder ? [mins && `${mins} 分`, `${remainder} 秒`].filter(Boolean).join(' ') : U.minutes(Math.round(seconds / 60)));
       const hot = it.commits > 0;
       const words = [it.files > 0 && `${it.files} 个文件没提交`, age && `已放 ${age}`, it.local_only === true && '按你说的只留本地', it.note && it.note !== '按你说的只留本地' && field(it.note)].filter(Boolean);
-      const lead = hot ? `<p class="pj-mini__big"><b>${esc(it.commits)}</b> 个提交没推</p>` : '';
-      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
+      const lead = hot ? `<p class="pj-mini__big"><span class="live-unit"><b>${esc(it.commits)}</b> 个</span>提交没推</p>` : '';
+      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${keepRosterUnits(words.join(' · '))}</p>` : ''}</div>` };
     });
     // 多了才分批（R147、X4 第 111 项）：一排四格，有没推提交的大卡占两格、排在前面；先露两排（八格），点“展开（还有 N 个项目）”再露两排，到底变“收起”。两排放得下就不出按钮，样子照旧。
     const UNITS = 8, units = it => it.commits > 0 ? 2 : 1, total = items.reduce((n, it) => n + units(it), 0);
@@ -571,7 +570,7 @@
         const prefix = typeof project === 'string' ? `${project} · ` : '';
         title = audience === 'public' && [it.recent_title, it.title].some(v => concealed(v) || typeof v === 'string' && /(?:仅本人可见|可信设备可见)$/.test(v)) ? '成品名称仅本人可见'
           : field(typeof raw === 'string' && prefix && raw.startsWith(prefix) ? raw.slice(prefix.length) : raw);
-        sub = it.recent_detail ? field(it.recent_detail) : '';   // 没写说明就不写这一行，不再补兜底句
+        sub = it.recent_detail ? keepRosterUnits(field(it.recent_detail)) : '';   // 没写说明就不写这一行，不再补兜底句
         const publicLink = audience === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
         open = U.artifactAction({ ...it, web_open: publicLink }, audience, route);
         // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂签。
@@ -609,11 +608,11 @@
     const rowHtml = (r, quiet = false) => {
       const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '', note = x => quiet ? '' : x.item.ownerNote || '';
       const title = r.title + (quiet ? '' : r.tag);
-      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${note(m)}</div>` : note(m) ? `<div class="acts">${note(m)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
+      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${keepRosterUnits(esc(m.item.openNote))}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${note(m)}</div>` : note(m) ? `<div class="acts">${note(m)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
       // 本人版的“访客看不到”签跟着自己的日期，成组不拆行；整组每份都挂同一个签时，只在组名旁挂一个
       const groupNote = r.members.every(x => note(x) && note(x) === note(m)) ? note(m) : '';
-      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : note(x)) + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`}</span>`).join('');
+      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : note(x)) + (x.item.openNote ? `<span class="pj-at">${keepRosterUnits(esc(x.item.openNote))}</span>` : '') : `<span class="pj-at">${keepRosterUnits(esc([when(x), x.item.openNote].filter(Boolean).join(' · ')))}</span>`}</span>`).join('');
       return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${title} <span class="pj-art__count">×${r.members.length}</span>${groupNote}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;
