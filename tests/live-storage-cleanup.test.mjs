@@ -128,10 +128,13 @@ test('云盘用原始字节重算，旧摘要的十进制余量不会重复显�
 
 test('自动清理回执：近 7 天合计、页首轻重顺序', () => {
   const { StorageCleanup: C } = load();
-  const runs = [run(1, { freed_bytes: 600 * GiB }), run(7), run(13), run(24 * 8)];
+  const runs = [run(1, { freed_bytes: 600 * GiB, removed_logical_bytes: 7 * GiB, removal_totals_complete: true }), run(7),
+    run(13, { removed_logical_bytes: 3 * GiB, removal_totals_complete: false }), run(24 * 8)];
   const g = C.digest({ cleanup: { interval_hours: 6, runs } });
-  assert.equal(g.total, 620 * GiB);
+  assert.equal(g.total, 10 * GiB);
+  assert.equal(g.partial, true);
   assert.equal(g.week.length, 3);
+  assert.equal(C.digest({ cleanup: { runs: [run(1)] } }).total, null);
   assert.equal(C.alarm({ cleanup: { runs } }), null);
   assert.equal(C.alarm({ cleanup: { runs: [run(1, { result: 'error', error: '磁盘忙' }), ...runs] } }).tone, 'amber');
   assert.equal(C.alarm({ cleanup: { runs: [run(1, { result: 'error' }), run(2, { protected_deleted: 2 })] } }).tone, 'red');

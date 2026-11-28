@@ -9,6 +9,23 @@
   const num = n => Number.isFinite(n) ? n : null;
   const hm = s => U.time(s) || '';
   const when = s => s ? `${U.date(s)} ${U.time(s)}` : '';
+  const removalBytes = row => num(row?.removed_logical_bytes);
+  const diskRemoval = (run, volume) => run?.removed_by_volume?.[K.letter(volume)];
+  const removalComplete = run => run?.removal_totals_complete === true;
+  const emptyRemoval = (run, row = run) => removalComplete(run) && run.result === 'ok' && row?.removed_entries === 0;
+  function removalText(run, row = run) {
+    const bytes = removalBytes(row);
+    if (bytes == null) return '';
+    return emptyRemoval(run, row) ? '没有到期的' : `${removalComplete(run) ? '' : '至少'}腾出 ${K.size(bytes)}`;
+  }
+  function receiptVolumes(run) {
+    const known = Array.isArray(run?.volumes) ? run.volumes : [];
+    const letters = new Set(known.map(K.letter));
+    const extra = Object.entries(run?.removed_by_volume || {})
+      .filter(([id, row]) => /^[A-Z]$/.test(id) && !letters.has(id) && (row?.removed_entries > 0 || removalBytes(row) > 0))
+      .map(([id]) => ({ id: `${id}:` }));
+    return extra.length ? known.concat(extra) : run?.volumes;
+  }
   const readAmount = (value, label, viewer) => {
     const text = K.field(value, label, viewer);
     return K.isPlaceholder(text) ? text : K.size(K.raw(value));
@@ -49,11 +66,16 @@
     const runs = (Array.isArray(c.runs) ? c.runs : []).filter(r => at(r.started_at) || at(r.finished_at)).sort((a, b) => (at(b.finished_at) ?? at(b.started_at)) - (at(a.finished_at) ?? at(a.started_at)));
     const done = runs.filter(r => r.result !== 'running' && at(r.finished_at));
     const last = done[0] || null, week = done.filter(r => now - at(r.finished_at) < 7 * DAY);
-    const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: null, runs: 0 }; });
+    const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: null, runs: 0, partial: false }; });
+    let total = null, partial = false;
     for (const r of week) {
+      const bytes = removalBytes(r), incomplete = bytes == null || !removalComplete(r);
+      if (bytes != null) total = (total ?? 0) + bytes;
+      partial ||= incomplete;
       const day = days.find(x => x.key === K.dayKey(at(r.finished_at)));
       if (!day) continue;
-      if (num(r.freed_bytes) != null) day.bytes = (day.bytes ?? 0) + r.freed_bytes;
+      if (bytes != null) day.bytes = (day.bytes ?? 0) + bytes;
+      day.partial ||= incomplete;
       day.runs++;
     }
     const errors = week.filter(r => r.result === 'error'), deleted = week.reduce((n, r) => n + (num(r.protected_deleted) || 0), 0);
@@ -63,7 +85,7 @@
     let next = at(c.next_run_at), estimated = false;
     if (!next && last && hours && !running) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
     const overdue = !!(!running && hours && last && now - at(last.finished_at) > lateHours(hours) * 3600000);
-    return { c, runs, last, week, days, total: days.reduce((n, x) => n + (x.bytes ?? 0), 0), errors, deleted, hours, next, estimated, overdue, running };
+    return { c, runs, last, week, days, total, partial, errors, deleted, hours, next, estimated, overdue, running };
   }
 
   // 按需更新快核（M928）核法：“没按时跑”由下面 lateHours 计算，现两轮间隔再加 1 小时（间隔取 cleanup.interval_hours，现 6 小时，合计 13 小时）；变了核对“下次”那格
@@ -103,14 +125,16 @@
     const amount = (value, label) => readAmount(value, label, viewer);
     const items = g.week.map(run => {
       const result = run.result === 'warn' ? '部分完成' : run.result === 'error' ? '出错' : '跑完';
-      const summary = [when(run.finished_at), result,
-        run.freed_bytes != null ? `腾出 ${amount(run.freed_bytes, '本轮腾出量')}` :
-          K.field(run.freed_bytes_gap, '本轮腾出量缺因', viewer) || '腾出量没读到'].join(' · ');
-      const disks = receiptRows(run.volumes, viewer, '清理磁盘记录', '磁盘名称及前后余量', v =>
-        esc(`${K.volName(v, viewer)} · 空闲 ${amount(v.free_before, '清理前余量')} → ${amount(v.free_after, '清理后余量')} · 腾出 ${amount(v.freed_bytes, '腾出量')}`));
+      const summary = [when(run.finished_at), result, removalText(run)].filter(Boolean).join(' · ');
+      const disks = receiptRows(receiptVolumes(run), viewer, '清理磁盘记录', '磁盘名称及前后余量', v => {
+        const free = v.free_before != null && v.free_after != null ? `空闲 ${amount(v.free_before, '清理前余量')} → ${amount(v.free_after, '清理后余量')}`
+          : v.free_after != null ? `清理后还剩 ${amount(v.free_after, '清理后余量')}` : v.free_before != null ? `清理前还剩 ${amount(v.free_before, '清理前余量')}` : '';
+        return esc([K.volName(v, viewer), free, removalText(run, diskRemoval(run, v) || {})].filter(Boolean).join(' · '));
+      });
       const rules = receiptRows(run.rules, viewer, '清理规则记录', '规则名称和清理量', r => {
-        const basis = r.bytes_basis === 'removed_logical_bytes' ? '移除文件大小' : r.bytes_basis === 'net_free_change' ? '空闲净增' : '腾出';
-        return esc(`${ruleLabel(r, viewer)} · ${basis} ${amount(r.freed_bytes, '规则清理量')}`);
+        const size = r.bytes_basis === 'removed_logical_bytes' && removalBytes(run) != null && r.freed_bytes != null
+          ? `移除文件大小 ${amount(r.freed_bytes, '规则清理量')}` : '';
+        return esc([ruleLabel(r, viewer), size].filter(Boolean).join(' · '));
       });
       return `<details class="st-detail" data-key="${esc('cleanup-' + (run.id || run.finished_at))}"><summary class="live-disclosure">${esc(summary)}</summary><p class="cl-sub">各盘<br>${disks}</p><p class="cl-sub">各规则<br>${rules}</p></details>`;
     });
@@ -118,37 +142,35 @@
   }
 
   function total(g, viewer) {
-    if (!g?.last) return '<p class="cl-k">近 7 天共腾出</p><p class="cl-big is-gray">—</p>';
+    if (!g?.last) return '<p class="cl-k">近 7 天</p><p class="cl-big is-gray">—</p>';
     const max = Math.max(...g.days.map(x => x.bytes), 1);
+    const daily = x => `${x.partial ? '至少' : ''}腾出 ${K.size(x.bytes)}`;
     const bars = g.days.map((x, i) => x.bytes == null
       ? `<li data-missing title="${esc(x.key)} 没记录"><span>${esc(x.key)}</span>${x.runs || i === 6 ? '<em>没记录</em>' : ''}</li>`
-      : `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} 腾出 ${K.size(x.bytes)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(K.size(x.bytes))}</em>` : ''}</li>`).join('');
-    const recent = num(g.last.freed_bytes);
-    const amount = recent == null ? K.field(g.last.freed_bytes_gap, '本轮腾出量缺因', viewer) : `腾出 ${K.size(recent)}`;
-    const last = [`最近一轮 ${when(g.last.finished_at)}`, amount].filter(Boolean).join(' ');
-    const incomplete = g.week.some(run => num(run.freed_bytes) == null);
-    const measured = g.week.some(run => num(run.freed_bytes) != null);
-    return `<p class="cl-k">近 7 天${incomplete ? '已知腾出' : '共腾出'}</p><p class="cl-big${measured ? '' : ' is-gray'}">${esc(K.size(measured ? g.total : null))}</p><p class="cl-sub">${esc(last)}</p>${measured ? `<ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>` : ''}${receipts(g, viewer)}`;
+      : `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} ${daily(x)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(`${x.partial ? '至少 ' : ''}${K.size(x.bytes)}`)}</em>` : ''}</li>`).join('');
+    const last = [`最近一轮 ${when(g.last.finished_at)}`, removalText(g.last)].filter(Boolean).join(' · ');
+    const measured = g.total != null;
+    const heading = measured ? `近 7 天${g.partial ? '至少' : '共'}腾出 · ${g.week.length} 轮` : '近 7 天';
+    return `<p class="cl-k">${heading}</p><p class="cl-big">${esc(measured ? K.size(g.total) : `${g.week.length} 轮`)}</p><p class="cl-sub">${esc(last)}</p>${measured ? `<ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>` : ''}${receipts(g, viewer)}`;
   }
 
   // 绿段来自删除回执，盘面前后的空闲变化不能当成删掉的字节。
   function volumes(d, g, viewer) {
-    const run = g?.last, complete = run?.removal_totals_complete === true;
-    const removal = v => run?.removed_by_volume?.[K.letter(v)];
+    const run = g?.last;
     const all = (d?.volumes || []).filter(v => K.letter(v) !== 'F');
     const live = new Map(all.map(v => [K.letter(v), v]));
-    const fromRun = K.splitRows(g?.last?.volumes, viewer).visible.map(r => ({ r, v: live.get(K.letter(r)) || { id: r.id } }));
+    const fromRun = K.splitRows(receiptVolumes(run), viewer).visible.filter(r => K.letter(r) !== 'F')
+      .map(r => ({ r, v: live.get(K.letter(r)) || { id: r.id } }));
     const seen = new Set(fromRun.map(x => K.letter(x.v) || K.letter(x.r)));
     const rest = all.filter(v => !seen.has(K.letter(v))).sort(K.order).map(v => ({ r: null, v }));
-    const rows = [...fromRun.sort((a, b) => (num(b.r.freed_bytes) || 0) - (num(a.r.freed_bytes) || 0)), ...rest];
+    const deleted = v => removalBytes(diskRemoval(run, v)) ?? 0;
+    const rows = [...fromRun.sort((a, b) => deleted(b.v) - deleted(a.v) || K.order(a.v, b.v)), ...rest];
     if (all.length && !live.has('V') && !seen.has('V')) rows.push({ r: null, v: { id: 'V:' }, missing: true });
     if (!rows.length) return '<p class="cl-sub">盘的容量还没读到。</p>';
     let anyRemoved = false;
     return `<ul class="cl-vols">${rows.map(({ r, v, missing }) => {
       const liveFree = num(v.free), free = liveFree ?? num(r?.free_after), totalBytes = num(v.total);
-      const diskRemoval = removal(v), bytes = num(diskRemoval?.removed_logical_bytes);
-      const removed = bytes == null ? '' : complete && diskRemoval.removed_entries === 0 && run.result === 'ok'
-        ? '没有到期的' : `${complete ? '' : '至少'}腾出 ${K.size(bytes)}`;
+      const removal = diskRemoval(run, v) || {}, bytes = removalBytes(removal), removed = removalText(run, removal);
       if (v.state === 'offline') {
         const left = free == null ? '' : `${liveFree == null ? `${when(run.finished_at)} ` : '当时'}还剩 ${K.size(free)}`;
         const text = [removed, K.offlineRead(v, viewer), left].filter(Boolean).join(' · ');
@@ -239,11 +261,10 @@
 
   function rules(g, viewer) {
     const { visible, hidden } = K.splitRows(g?.last?.rules, viewer);
-    const withheld = K.hiddenRows(hidden, '清理规则记录', '规则名称和腾出量');
-    const list = visible.filter(r => num(r.freed_bytes) > 0).sort((a, b) => b.freed_bytes - a.freed_bytes);
+    const withheld = K.hiddenRows(hidden, '清理规则记录', '规则名称和删除量');
+    const list = visible.filter(r => r.bytes_basis === 'removed_logical_bytes' && num(r.freed_bytes) > 0).sort((a, b) => b.freed_bytes - a.freed_bytes);
     if (!g?.last) return '<p class="cl-big cl-big--sm is-gray">—</p>';
-    if (!Array.isArray(g.last.rules)) return '<p class="cl-sub">最近一轮没记录每条规则腾出了多少。</p>';
-    if (!list.length) return `<p class="cl-sub">${esc(withheld || '最近一轮没有到期要删的。')}</p>`;
+    if (!list.length) return `<p class="cl-sub">${esc(withheld || (emptyRemoval(g.last) ? '最近一轮没有到期要删的。' : '最近一轮没有按规则确认的删除量。'))}</p>`;
     const sum = list.reduce((n, r) => n + r.freed_bytes, 0), name = r => ruleLabel(r, viewer);
     const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${esc(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
     // 规则多时先列腾出最多的 5 条，其余收进“展开”，免得这一栏比右边的走势图长出一大截、右边空着（M503）
@@ -281,8 +302,9 @@
     if (tail) gaps.push(tail);
     const marks = [];
     for (const r of runs) for (const x of r.volumes || []) {
-      if (!(num(x.freed_bytes) >= 50 * K.GiB) || !Number.isFinite(x.free_after) || !series.some(s => s.id === K.letter(x))) continue;
-      marks.push({ id: K.letter(x), t: at(r.finished_at), v: x.free_after, bytes: x.freed_bytes });
+      const bytes = removalBytes(diskRemoval(r, x));
+      if (!(bytes >= 50 * K.GiB) || !Number.isFinite(x.free_after) || !series.some(s => s.id === K.letter(x))) continue;
+      marks.push({ id: K.letter(x), t: at(r.finished_at), v: x.free_after, bytes, partial: !removalComplete(r) });
     }
     return { series, from, to, win, last: tail ? last : null, before: first - from > DAY / 2 ? [from, first] : null,
       gaps: gaps.map(([a, b]) => [Math.max(a, from), Math.min(b, to)]).filter(([a, b]) => b > a), marks };
@@ -367,7 +389,7 @@
       const mx = x(m.t), my = y(m.v);
       svg.push(`<circle class="cl-mark" cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="4.5"/>`);
       if (i) return;
-      const label = `自动清理 +${K.size(m.bytes)}`, w = label.length * 12.5 + 8, px = Math.min(Math.max(L, mx - w + 14), W - R - w), py = Math.max(2, my - 32);
+      const label = `自动清理${m.partial ? '至少' : ''}删除 ${K.size(m.bytes)}`, w = label.length * 12.5 + 8, px = Math.min(Math.max(L, mx - w + 14), W - R - w), py = Math.max(2, my - 32);
       svg.push(`<line class="cl-mark__stem" x1="${mx.toFixed(1)}" x2="${mx.toFixed(1)}" y1="${(py + 20).toFixed(1)}" y2="${(my - 5).toFixed(1)}"/><rect class="cl-mark__pill" x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${w.toFixed(1)}" height="20" rx="10"/><text class="cl-mark__txt" x="${(px + w / 2).toFixed(1)}" y="${(py + 14).toFixed(1)}" text-anchor="middle">${esc(label)}</text>`);
     });
     svg.push('<g class="cl-guide" aria-hidden="true"></g></svg>', '<div class="cl-hover" role="tooltip" hidden></div>');
@@ -405,7 +427,8 @@
     ].map(esc).join('<br>').replaceAll('登记过', '<span class="live-unit">登记过</span>');
     K.put(document.getElementById('cleanup-note'), note + (withheld ? ` · ${esc(withheld)}` : ''));
     K.put(document.getElementById('cleanup-total'), total(g, viewer));
-    K.put(document.getElementById('cleanup-vols-k'), g?.last?.volumes?.length ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
+    const hasDiskRemoval = Object.values(g?.last?.removed_by_volume || {}).some(row => removalBytes(row) != null);
+    K.put(document.getElementById('cleanup-vols-k'), hasDiskRemoval ? '各盘 · 最近一轮腾出 / 现在还剩' : '各盘 · 现在还剩');
     K.put(document.getElementById('cleanup-vols'), volumes(d, g, viewer));
     K.put(document.getElementById('cleanup-tiles'), tiles(g, viewer));
     K.put(document.getElementById('cleanup-rules'), rules(g, viewer));
