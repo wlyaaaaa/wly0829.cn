@@ -147,12 +147,12 @@
         const text = [K.offlineRead(v, viewer), num(v.free) != null && `当时还剩 ${K.size(v.free)}`].filter(Boolean).join(' · ');
         return `<li class="is-gray"><span class="cl-vol">${esc(K.volName(v))}</span><span class="cl-bar is-gray"></span><span class="cl-vol__t">${esc(text)}</span></li>`;
       }
-      const free = num(v.free) ?? num(r?.free_after), totalBytes = num(v.total), freed = Math.max(0, num(r?.freed_bytes) || 0);
-      const why = missing ? '还没接进存储读数' : v.state === 'offline' ? '离线，没读到' : '容量没读到';
-      const left = free == null ? why : `还剩 ${K.size(free)}`;
-      const text = !r || free == null ? left : freed > 0 ? `腾出 ${K.size(freed)} · ${left}` : `没有到期的 · ${left}`;
+      const liveFree = num(v.free), free = liveFree ?? num(r?.free_after), totalBytes = num(v.total), freed = num(r?.freed_bytes);
+      const why = missing ? '还没接进存储读数' : '容量没读到';
+      const left = free == null ? why : `${liveFree == null ? `${when(g.last.finished_at)} ` : ''}还剩 ${K.size(free)}`;
+      const text = !r ? left : `${freed == null ? '腾出量没读到' : `腾出 ${K.size(freed)}`} · ${left}`;
       const bar = totalBytes > 0 && free != null
-        ? `<span class="cl-bar" role="img" aria-label="${esc(`${K.volName(v)} ${text}`)}"><i style="width:${((totalBytes - free) / totalBytes * 100).toFixed(2)}%"></i>${freed ? `<b style="width:${(Math.min(freed, free) / totalBytes * 100).toFixed(2)}%"></b>` : ''}</span>`
+        ? `<span class="cl-bar" role="img" aria-label="${esc(`${K.volName(v)} ${text}`)}"><i style="width:${((totalBytes - free) / totalBytes * 100).toFixed(2)}%"></i>${freed > 0 ? `<b style="width:${(Math.min(freed, free) / totalBytes * 100).toFixed(2)}%"></b>` : ''}</span>`
         : `<span class="cl-bar is-gray" title="${esc(`${K.volName(v)}${why}`)}"></span>`;
       return `<li${free == null ? ' class="is-gray"' : ''}><span class="cl-vol">${esc(K.volName(v))}</span>${bar}<span class="cl-vol__t">${esc(text)}</span></li>`;
     }).join('')}</ul><p class="cl-key"><i class="is-used"></i>蓝＝占用${anyFreed ? '<i class="is-freed"></i>绿＝这轮腾出的<i class="is-free"></i>白＝原本就空' : '<i class="is-free"></i>白＝空闲'}${rows.some(x => x.v.state === 'offline' || num(x.v.free) == null && num(x.r?.free_after) == null) ? '<i class="is-none"></i>斜线＝离线或没读到' : ''}</p>`;
@@ -219,7 +219,7 @@
     const runNote = g.running ? `<span class="task-result" data-state="running" data-result="running"><i class="task-dot" data-state="running" aria-hidden="true"></i>正在跑</span> · ${U.nowrap(hm(g.running.started_at))} 开始` : U.nowrap(lastNote);
     const nextNote = [runNote, ...[
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
-      g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
+      g.estimated && `按上次结束加 ${g.hours} 小时估`,
       !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc)].filter(Boolean).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     // 按需更新快核（M928）核法：E:/PCConfig/tools/auto_cleanup_conversations.py 的 preserve_quotes，现 Codex、Claude 清前确认原话已存，缺时补存并回读，通过才继续；变了改下方提示

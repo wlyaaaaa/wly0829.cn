@@ -209,9 +209,11 @@
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮', offline ? '当时' : '现在') : '';
       // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const idle = offline ? '当时没任务在跑' : '这会儿空着';
+      const readRunning = Array.isArray(d.running);
+      const prefix = readRunning ? `${idle}&nbsp;· ` : next.title || d.next === null ? '在跑的这次没读到&nbsp;· ' : '';
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `${idle}&nbsp;· ${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
-          : Array.isArray(d.running) && d.next === null ? `${idle}&nbsp;· 没有排定的运行` : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
+        : `<p>${dot('off')}${prefix}${next.title ? `${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
+          : d.next === null ? '没有排定的运行' : `${readRunning ? '下一个' : '在跑的和下一个'}<span class="live-unit">这次没读到</span>`}</p>`;
       // 同一事项也可能随修理回执出现，首页选短标题，详情仍去原来的事项。
       const problemTitles = new Map(v.problems.filter(p => p.href && p.short).map(p => [p.href, p.short]));
       const problemLine = p => {
@@ -228,7 +230,7 @@
         const category = shortProblemTitle(p.raw.title, viewer) || R.categoryName(p.raw.category, viewer) || '自动任务';
         const what = detail && p.title && !U.fieldText(detail, viewer).includes(p.title)
           ? `<span${p.title === '摘一句' ? '' : ' class="b6-problem__kind"'}>${field(category)}&nbsp;· </span>${detailHtml}` : detailHtml || field(category);
-        const who = esc(handled(p)) + (p.round && !/轮/.test(p.handler) ? `&nbsp;· <span class="live-unit">第 ${p.round} 轮</span>` : '');
+        const who = keepWords(esc(handled(p))) + (p.round && !/轮/.test(p.handler) ? `&nbsp;· <span class="live-unit">第 ${p.round} 轮</span>` : '');
         return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `<span class="b6-problem__label">出毛病的：</span>${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${offline ? '<span class="live-unit">当时：</span>' : ''}${who}</span></p>`;
       };
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
@@ -296,7 +298,7 @@
     const top = `<div class="b6-lg"><a class="b6-lg__owed" href="${esc(route(c.owedHref))}">欠着 <em>${num(c.owed)}</em> 件</a><i class="b6-lg__sep" aria-hidden="true"></i>`
       + `<a class="b6-lg__parked" href="${esc(route(c.parkedHref))}">放着 <b>${num(c.parked)}</b> 件<span class="b6-lg__chev">›</span></a></div>`;
     const bar = timebar(c.today.map(r => ({ at: r.next_at, kind: c.late(r) ? 'late' : 'next', href: r.href,
-      tip: `${U.fieldText(r.title, viewer)} · ${c.late(r) ? `到点没看，原定 ${clock(r.next_at)}` : `${clock(r.next_at)} 看`}` })), now, route, '今天要看的');
+      tip: `${U.fieldText(r.title, viewer)} · ${c.late(r) ? `到点没看，原定 ${clock(r.next_at)}` : `${clock(r.next_at)} 看`}` })), now, route, '今天要看的', offline ? '当时' : '现在');
     // 列出来的每一件：标题点了到那件；到点没看的橙点、写“到点没看，原定几点”，还没到的绿点、写“几点看”
     // 这件对外换了说法的，标题后面挂“对外换了说法”（两版都挂，M930；本人版访客看不到的另挂“访客看不到”）
     const titleTag = r => { const t = U.visitorLabel(r, ['$', 'title', 'plain_title'], '这件事的说法', viewer); return t ? ` ${t}` : ''; };

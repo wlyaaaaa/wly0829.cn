@@ -322,13 +322,20 @@
   }
 
   let checkedViewer = false;
+  const readBody = s => {
+    const waiting = !s.offline && (s.data?.q === 'warming' || s.phase === 'none' && s.conn?.stage === 'retrying');
+    const reading = waiting ? { ...s, phase: 'wait' } : s;
+    heroRead.set(reading); restRead.set(reading);
+    return reading.phase;
+  };
   if (!id) empty('没有说是哪一件');
   else window.Live.watch(`ledger/${encodeURIComponent(id)}`, null, {
-    phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
+    phase(s) { if (!item && !ended) readBody(s); },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
+      if (kind !== viewer && d?.q === 'warming' && item) { item = null; empty('正在准备'); }
       if (kind !== viewer) { viewer = kind; policy = undefined; repeat = undefined; repeatAsked = false; }
-      if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
+      if (!d?.item?.id || d.q === 'warming') return;
       $('rest').hidden = false; ended = false; delete hero.dataset.updating;
       at = meta.at || d.at || null; item = d.item; policy = d.policy ?? policy; history = Array.isArray(d.history) ? d.history : [];
       misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
@@ -337,7 +344,9 @@
     link(s) {
       try {
         const missing = s.meta?.status === 404 ? s.link?.ledger_missing : null;
-        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen } : s);
+        const holding = item && at && s.data?.q === 'warming';
+        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen }
+          : holding ? { ...s, shownAt: at, meta: { ...s.meta, at } } : s);
         L.offline(s.offline);
         U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
         if (s.meta?.publicationRevoked) { updating(); return; }
@@ -358,9 +367,9 @@
             [titleLine && `原题：${esc(originalTitle)}`, related].filter(Boolean).join('<br>'));
         }
         if (ended) return;
-        heroRead.set(s); restRead.set(s);
-        if (s.phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
-        else if (s.phase === 'none') empty('这一件暂时读不到');
+        const phase = readBody(s);
+        if (phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
+        else if (phase === 'none') empty('这一件暂时读不到');
       } finally { [hero.querySelector('.card__body'), $('rest')].forEach(el => U.blockNote(el, s)); }
     },
   });

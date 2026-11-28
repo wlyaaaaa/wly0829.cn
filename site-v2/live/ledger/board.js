@@ -155,6 +155,7 @@
     return pts;
   }
   function track(d) {
+    const missingLimits = [!positive(d.policy?.repair_limit) && '最多修几轮', !positive(d.policy?.check_limit) && '最多看几次'].filter(Boolean).join('、');
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
     const sort = rows => rows.sort((a, b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue)) || (stamp(nextOf(a)) ?? 9e15) - (stamp(nextOf(b)) ?? 9e15));
     const blocks = { owed: sort(shown.filter(it => groupOf(it) === 'owed')), parked: sort(shown.filter(it => groupOf(it) === 'parked')) };
@@ -190,7 +191,7 @@
     };
     return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修和到点没了结的 ${int(blocks.owed.length)} 件${U.isStale(d) || U.offline() ? '' : '<span class="lg-live">实时</span>'}<small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2>${asOf(d) ? `<span class="tp-asof">截至 ${asOf(d)}</span>` : ''}</div>
       ${board('owed', '没有在修的事。')}</section>
-      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '最多修几轮、最多看几次，这次没读到。'}</small></h2></div>
+      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${missingLimits ? `${missingLimits}，这次没读到。` : ''}</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
   }
   // “现在”竖线跟着时间往右走
@@ -222,7 +223,7 @@
   // 一件只剩摘要、没有逐轮经过时，写一句为什么
   function gapText() {
     const got = pickedState?.data;
-    if (got === undefined) return '逐轮经过这次没读到，先列摘要。';
+    if (got === undefined) return '经过正在读…';
     const why = U.fieldText(got?.gap || got?.coverage?.gap || '', viewer).trim();
     return why ? `没有逐轮经过：${esc(why)}` : '账本只留了这一件的摘要，逐轮经过没有记下来。';
   }
@@ -447,10 +448,13 @@
     const s = await read.pending;
     if (pickedRead !== read) return;
     read.pending = null;
-    pickedState = s?.data?.item?.id === id && T.viewerOf(s) === audience && !(s.meta?.status >= 400)
-      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at } : { ...previous, pending: false, failed: true,
+    const withdrawn = s?.publicPaused || s?.meta?.publicationRevoked || [403, 404, 410].includes(s?.meta?.status);
+    const retrying = !withdrawn && Boolean(s?.again);
+    pickedState = s?.data?.item?.id === id && T.viewerOf(s) === audience && !withdrawn
+      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at, pending: retrying } : { ...(withdrawn ? null : previous), pending: retrying, failed: !retrying,
         notFound: s?.meta?.status === 404, offlineMissing: s?.phase === 'gone' && !(s.meta?.status >= 400 && s.meta?.status < 500) };
     draw();
+    if (retrying) s.again.then(() => { if (pickedRead === read) pick(id, true); });
   }
   async function readOlder() {
     const d = state?.data, cursor = older.length ? olderNext : d?.next;
