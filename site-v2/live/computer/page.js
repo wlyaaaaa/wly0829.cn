@@ -658,7 +658,7 @@
     }
     row.hidden = !computer && !stateDone;
     const guard = computer?.memory?.guard;
-    const watching = guard?.state === 'watching' && guard.watching === true;
+    const watching = guard?.state === 'watching';
     row.toggleAttribute('data-watching', watching);
     if (!guard) {
       U.html(row, '内存守护状态暂不可用', false);
@@ -669,7 +669,15 @@
       error: '检查出错', action_failed: '回收动作未完成',
     };
     const known = watching || Object.hasOwn(labels, guard.state);
-    const status = watching ? '在看着' : known ? labels[guard.state] : '状态读不到或已过期';
+    const status = watching ? '在看着' : known ? labels[guard.state] : '状态读不到';
+    const observedAt = guard.observed_at;
+    const observed = Date.parse(observedAt), now = Date.now();
+    const old = guard.stale === true || now - observed > 15000;
+    let cutoff = '';
+    if (known && old && Number.isFinite(observed)) {
+      const date = beijingDay(observed / 1000) !== beijingDay(now / 1000) ? U.date(observedAt) + ' ' : '';
+      cutoff = ` · ${date}${U.time(observedAt)}`;
+    }
     const early = guard.trigger_levels?.early?.available_below_bytes;
     const emergency = guard.trigger_levels?.emergency?.available_below_bytes;
     const gb = bytes => Number((bytes / 2 ** 30).toFixed(2));
@@ -677,9 +685,9 @@
       ? ` <span>· 可用内存低于 ${gb(early)} GB 开始回收，</span><span>低于 ${gb(emergency)} GB 急救</span>` : '';
     const at = guard.last_trigger_at;
     const stamp = typeof at === 'string' ? Date.parse(at) : NaN;
-    const date = Number.isFinite(stamp) && beijingDay(stamp / 1000) !== beijingDay(Date.now() / 1000) ? U.date(at) + ' ' : '';
+    const date = Number.isFinite(stamp) && beijingDay(stamp / 1000) !== beijingDay(now / 1000) ? U.date(at) + ' ' : '';
     const last = Number.isFinite(stamp) ? `上次触发 ${date}${U.time(at)}` : at === null && known ? '还没触发过' : '';
-    U.html(row, `<span>内存守护　<span class="memory-guard__status">${status}</span></span>${limits}${last ? ` <span>· ${last}</span>` : ''}`, false);
+    U.html(row, `<span>内存守护　<span class="memory-guard__status">${status}</span>${cutoff}</span>${limits}${last ? ` <span>· ${last}</span>` : ''}`, false);
   }
   function exitField(value, name) {
     const html = U.fieldHtml(value, { name });
