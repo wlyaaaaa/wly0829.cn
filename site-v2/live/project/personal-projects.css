@@ -112,7 +112,7 @@
 [data-personal-project="typora"] #more-data .pp-row > span { flex: none; }
 /* 折到新一行时，竖线落在容器左边，随容器裁掉。 */
 [data-personal-project="typora"] #more-data .pp-row + .pp-row::before {
-  content: ""; position: absolute; inset-block: 0; inset-inline-start: -16px; border-inline-start: 1px solid var(--hair);
+  content: ""; position: absolute; inset-block: 2px; inset-inline-start: -17px; border-inline-start: 2px solid var(--muted);
 }
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
