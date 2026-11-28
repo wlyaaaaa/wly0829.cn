@@ -27,6 +27,7 @@
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
   // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡
+  window.ProjectPages?.frozenArchive?.register(id);
   const custom = window.ProjectPages?.[id] || null;
   const artifactVersion = id === 'agents' && /^E\d+$/.test(params.get('artifact') || '') && params.get('artifact');
   function projectLookKey(id) {

@@ -1,0 +1,44 @@
+.page--project:has(#frozen-archive) :is([data-part="detail"], [data-part="factsbox"], .pj-strip),
+.page--project:has(#frozen-archive) #pj-board .pj-card:not([data-card="frozen-archive"]) {
+  display: none;
+}
+.page--project:has(#frozen-archive) #pj-board { grid-template-columns: minmax(0, 1fr); }
+.page--project:has(#frozen-archive) #pj-board > .l2-col:not(:has(#frozen-archive)) { display: none; }
+.pj-line .pj-archive-details { order: 2; margin: 0 0 0 7px; }
+.pj-line .pj-archive-note { color: var(--muted); text-wrap: balance; }
+
+.pj-card[data-card="frozen-archive"] {
+  padding: 23px clamp(24px, 3vw, 36px) 25px;
+  border: 1px solid rgb(255 255 255 / .75);
+  background: linear-gradient(150deg, rgb(255 255 255 / .67), color-mix(in srgb, var(--pj-tone) 28%, rgb(255 255 255 / .5)));
+}
+#frozen-archive { scroll-margin-top: 100px; }
+#frozen-archive .pj-viz { margin: 0; }
+.pj-archive-title, .pj-archive-body { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.pj-archive-title h2 { margin: 0; font-size: 23px; }
+.pj-archive-title p { margin: 0; font-size: 14px; color: var(--muted); }
+.pj-archive-body { margin-top: 22px; }
+.pj-archive-body dl { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
+.pj-archive-body dl > div + div { padding-left: clamp(10px, 2vw, 28px); border-left: 1px solid rgb(20 20 19 / .09); }
+.pj-archive-body dt { font-size: 14px; color: var(--muted); }
+.pj-archive-body dd { margin: 5px 0 0; font-size: clamp(20px, 2.05vw, 28px); font-weight: 700; line-height: 1.15; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pj-archive-body dd small { margin-left: 4px; font-size: 16px; color: var(--ink-soft); }
+.pj-archive-body dd .pj-archive-lines { display: block; margin: 5px 0 0; font-size: 13px; font-weight: 400; }
+.pj-archive-repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  padding: 10px 15px;
+  border: 1px solid rgb(255 255 255 / .9);
+  border-radius: 999px;
+  background: rgb(255 255 255 / .75);
+  color: var(--pj-accent-ink);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+:is(a, button).pj-archive-repo { cursor: pointer; }
+:is(a, button).pj-archive-repo:hover { background: #fff; color: var(--pj-accent-ink); }
+.pj-archive-body .pj-archive-unread { color: var(--muted); font-size: 14px; font-weight: 400; }

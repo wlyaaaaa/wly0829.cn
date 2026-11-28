@@ -31,44 +31,26 @@
       // 名字不公开的项目放项目页通用的那张画（没登记专门画的项目本来就用它），认不出是哪个项目，也不再是一块像没加载出来的空底（M1007）。
       const look = window.LiveProjectLook?.of(row.secret ? '' : row.project || row.key, looks);
       if (key === 'changes') return { ...row, band: band(look, row.href, 'pj-band--strip') };
-      return { ...row, cls: `${row.cls} pj-card`, html: `${band(look, row.href, 'pj-band--card', true)}<div class="pj-card__body">${row.html}</div>` };
+      return { ...row, cls: `${row.cls} pj-card`, html: `${band(look, row.href, 'pj-band--card', true)}<div class="pj-card__body">${keepRosterUnits(row.html)}</div>` };
     });
   }
   function updateCutoff(key, data) {
     const section = $(key === 'changes' ? 'changes-footer' : key), at = stamp(data?.at);
-    // 冻结名册的截至时刻跟着“冻结 N 个 ›”排在偶用那组下面、左边那几行字的右边；只看冻结的时候照旧写在名册底下
+    // 冻结名册的截至时刻跟着左侧入口；只看冻结的时候写在名册底下。
     const host = key === 'frozen' && !frozenOnly ? $('frozen-head') : section;
     const label = { active: '在用项目名册截止', frozen: '冻结项目名册截止', changes: '项目变化截止' }[key];
     const legacy = !at && isStale(data) && staleText(data);
     const merged = key === 'active' && !hero.hidden && Date.parse(data?.at) === Date.parse(home?.at);
-    const text = at && !merged ? `${label.replace(/截止$/, '截至')} ${at}` : legacy ? `${label.replace(/截止$/, '')} · ${legacy}` : '';
+    const text = at && !merged ? `${label.replace(/截止$/, '截至')} ${at}` : legacy ? `${label.replace(/截止$/, '')} · ${dateWords(legacy)}` : '';
     let note = section.querySelector('[data-source-cutoff]');
-    if (!text) { note?.remove(); if (key !== 'changes') alignFrozen(); return; }
+    if (!text) { note?.remove(); return; }
     if (!note) { note = document.createElement('p'); note.className = 'row__sub'; note.dataset.sourceCutoff = ''; }
     if (note.parentElement !== host) host.append(note);
     note.textContent = text;
-    if (key !== 'changes') alignFrozen();
   }
-  // “冻结 N 个 ›”和下面那行截至时刻往上提，和偶用那组最后的“展开（还有 N 条）”同一行起（没有展开就和“在用项目名册截至”同一行）；
-  // 横着的位置在 index.html 里定（左边对齐第二列卡片，图5 那处）。那组点开了、或两行都没有，就在下面自成一行。提多少按当时版面量；高度至少垫到左边最后一行字底下，下面的近 30 天不会压上来，也不多空一截。
-  function alignFrozen() {
-    const head = $('frozen-head');
-    head.style.marginTop = head.style.minHeight = '';
-    if (frozenOnly || $('board').hidden || $('frozen').dataset.read || !head.querySelector(':scope > :not([hidden])')) return;
-    const anchor = $('active-list').lastElementChild?.querySelector(':scope > .pj-step') || $('active').querySelector('[data-source-cutoff]');
-    if (!anchor?.getClientRects().length) return;
-    // 按排版位置量（offsetTop 一层层加），不受切换名册时那下 6 像素的动效位移影响
-    const pageY = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
-    const lift = pageY(head) - pageY(anchor);
-    if (lift <= 0) return;
-    head.style.marginTop = `${-lift}px`;
-    // 高度也按排版位置量：名册分批展开时那一组正带着位移动效，量屏幕位置会差出几百像素，冻结卡下面空一大块
-    head.style.minHeight = `${Math.max(0, Math.round(pageY($('active')) + $('active').offsetHeight - pageY(anchor)))}px`;
-  }
-  if ('ResizeObserver' in window) new ResizeObserver(() => alignFrozen()).observe($('active'));
   let disconnected;
   const repaints = new Map(), remember = (key, draw) => (d, meta) => { repaints.set(key, () => draw(d, meta)); draw(d, meta); };
-  let viewer = 'public', home = null, changes = null, changeRows = null, changeViewer = 'public', next = null;
+  let viewer = 'public', homeViewer = 'public', home = null, changes = null, changeRows = null, changeViewer = 'public', next = null;
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '项目' });
   const projectGhost = `<div class="pj-figs pj-grid-ghost">${Array.from({ length: 4 }, () => '<div class="pj-fig"><span class="pj-fig__k fog__text">正在读项目</span><span class="pj-fig__v fog__text">正在读这一项</span></div>').join('')}</div>`;
   const reads = Object.fromEntries(['active', 'frozen', 'changes'].map(key => [key, U.reading($(key), { ghost: key === 'changes' ? U.ghost.rows(4) : projectGhost, slow: key !== 'active' })]));
@@ -120,7 +102,7 @@
   function setRosterVisibility() {
     $(frozenOnly ? 'all-link' : 'frozen-link').removeAttribute('aria-current');
     $(frozenOnly ? 'frozen-link' : 'all-link').setAttribute('aria-current', 'page');
-    for (const id of ['board', 'activity', 'active', 'changes', 'pj-summary']) $(id).hidden = frozenOnly;
+    for (const id of ['board', 'activity', 'active', 'changes']) $(id).hidden = frozenOnly;
     $('active').parentElement.hidden = frozenOnly;
     $('board').classList.toggle('is-single', frozenOnly);
   }
@@ -130,9 +112,48 @@
     const button = $(`${key}-more`); if (count != null) button.dataset.count = count;
     U.html(button, `${button.getAttribute('aria-expanded') === 'true' ? '收起' : key === 'frozen' ? `冻结 ${button.dataset.count} 个` : key === 'changes' ? `展开（还有 ${button.dataset.count} 个项目组）` : `还有 ${button.dataset.count} 个`} <span class="more__chev">›</span>`);
   }
+  function sizeLine(label, size, active = false) {
+    const count = active ? size?.active : size?.total;
+    const value = (key, unit) => {
+      const format = n => `${n.toLocaleString('zh-CN')} ${unit}`;
+      if (Number.isFinite(size?.[key])) return { text: format(size[key]), prefix: '', coverage: '' };
+      const observed = size?.[`observed_${key}`], covered = size?.coverage?.[key];
+      if (!Number.isFinite(observed)) return { text: '', prefix: '', coverage: '' };
+      const coverage = Number.isInteger(covered) && Number.isInteger(count) ? `（已读 ${covered}/${count} 个）` : '';
+      return { text: format(observed), prefix: '至少 ', coverage };
+    };
+    const docs = value('docs_chars', '字'), code = value('code_chars', '字'), lines = value('code_lines', '行');
+    const unavailable = !docs.text && !code.text && !lines.text;
+    const at = active && stamp(size?.at || size?.collected_at || size?.date);
+    const cutoff = at ? `${unavailable || U.isStale(size) || U.offline?.() ? '上次截止' : '截止'} ${at}` : '';
+    const reading = ({ text, prefix, coverage }) => {
+      if (!text) return '<small>暂时读不到</small>';
+      const note = coverage && active && viewer === 'public' ? `<small>${esc(coverage)}</small>` : esc(coverage);
+      return `<b>${prefix}<span class="live-unit">${esc(text)}</span>${note}</b>`;
+    };
+    return `<tr><th scope="row">${label}</th>${unavailable ? '<td colspan="2"><small>暂时读不到</small></td>'
+      : `<td>${reading(docs)}</td><td>${reading(code)}${lines.text || code.text ? `<small>${esc(lines.prefix + lines.text + lines.coverage || '行数暂时读不到')}</small>` : ''}</td>`}
+      <td class="pj-summary__cutoff">${esc(cutoff)}</td></tr>`;
+  }
+  function renderSummary(summary, activeSize, frozenSize) {
+    const changed = summary?.changed_7d;
+    const partial = summary?.q === 'partial' && summary.partial?.includes('changed_7d');
+    const hidden = viewer === 'public' && summary?.changed_7d_visibility === 'owner';
+    const activity = hidden ? U.visibilityNote({ visibility: 'owner', hidden_what: summary.hidden_what }, viewer, '近 7 天项目统计')
+      : Number.isFinite(changed) ? `<b>${partial ? '至少 ' : ''}${esc(changed)}</b><small>个项目动过</small>`
+      : esc(U.collectionText('近 7 天', summary));
+    const note = !hidden && Number.isFinite(changed)
+      ? '<small>按日历算，含今天共 7 天；这几天有提交的项目各算 1 个，合并、机器人和自动记录的不算。跟项目详情里的“影响改动”不是一种算法，两个数别拿来比。</small>' : '';
+    const activityRow = hidden || Number.isFinite(changed) ? `<span><small>近 7 天</small>${activity}</span>` : `<small>${activity}</small>`;
+    U.html($('pj-summary'), (frozenOnly ? '' : activityRow + note)
+      + `<table class="pj-summary__sizes"><colgroup><col><col><col><col></colgroup>
+        <thead><tr><td></td><th scope="col">文档</th><th scope="col">代码</th><td></td></tr></thead>
+        <tbody>${frozenOnly ? '' : sizeLine('在用', activeSize, true)}${sizeLine('冻结<wbr><span class="live-unit">（单独计算）</span>', frozenSize)}</tbody></table>`);
+  }
   function renderHead() {
     const roster = key => { const state = states.get(key); return state?.viewer?.kind === viewer ? state.data : null; };
     const activeRoster = roster('active'), frozenRoster = roster('frozen');
+    const matchingHome = homeViewer === viewer ? home : null;
     const source = frozenOnly ? frozenRoster : home || activeRoster || frozenRoster;
     L.tone(hero, source);
     const active = home?.active ?? activeRoster?.total, frozen = home?.frozen ?? frozenRoster?.total;
@@ -140,8 +161,10 @@
       ?? (Number.isFinite(active) && Number.isFinite(frozen) ? active + frozen : null);
     const privateSummary = home?.text && typeof home.text === 'object';
     const summary = privateSummary ? '' : sp(home?.text).split(' · ').filter(s => !/^数据截止\s/.test(s)).join(' · ');
-    // 约法“全部项目”不含冻结：项目数只算在用的（日用、偶用），冻结的另写一句；文档、代码的字数和行数在下面那排，也只算在用的（本人 11-24 02:45 定的那一批）
-    const size = activeRoster?.code_size, inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
+    const size = activeRoster?.code_size || matchingHome?.code_size;
+    const inUse = Number.isFinite(size?.active) ? size.active : active, cold = Number.isFinite(size?.frozen) ? size.frozen : frozen;
+    renderSummary(activeRoster?.summary || matchingHome?.summary, size,
+      frozenRoster?.frozen_code_size || activeRoster?.frozen_code_size || matchingHome?.frozen_code_size);
     const counts = [Number.isFinite(inUse) && `共 ${inUse} 个在用项目`, Number.isFinite(cold) && cold > 0 && `另有 ${cold} 个冻结，不算在内`].filter(Boolean).join(' · ');
     const text = frozenOnly ? Number.isFinite(frozenRoster?.total) ? `共 ${frozenRoster.total} 个冻结项目` : '冻结的项目'
       : Number.isFinite(inUse) ? counts : [Number.isFinite(total) && `共 ${total} 个项目`, summary].filter(Boolean).map(sp).join(' · ');
@@ -153,7 +176,7 @@
     const status = U.status(source, { cutoffShown: text => !!at && U.sameCutoffNote(U.fieldText(text), U.staleText({ stale: true }, sourceAt)) });
     const empty = U.offline?.() ? '这块没存下来，连上后补上。' : '项目暂时读不到';
     const title = headerUpdating(states.get('home')) ? '项目页头正在更新' : text || (privateSummary ? '项目' : empty);
-    U.html($('head'), status.lamp + U.head(title, { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
+    U.html($('head'), status.lamp + U.head(title, { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${dateHtml(status.note)}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${dateHtml(U.fieldHtml(home.text, { name: '项目说明', kind: viewer }))}</span>` : ''));
   }
   let changesPack = null;
   let changesWidth;
@@ -220,15 +243,25 @@
   // M767：本人版里访客看不到的项目（后台标 visitor_labels.name=hidden），名字旁挂“访客看不到”；访客版只挂其中的“对外换了说法”（M930），没标的不挂
   const projectTag = (it, kind = viewer) => U.visitorLabel(it, ['$', 'name'], '这个项目', kind);
   const name = (it, kind = viewer) => { const field = it.name || it.label || '', hidden = kind === 'public' && (field?.hidden || field?.visibility === 'owner' || field?.public === 'owner'), text = U.fieldHtml(field, { name: '项目', place: 'label', kind }), note = (hidden ? U.fieldHtml(field, { name: '项目名', kind }) : U.visibilityNote(it, kind, it.hidden_what || '这个项目')) || projectTag(it, kind); return (it.href ? `<a class="row__title" href="${esc(route(it.href))}">${text} <span class="more__chev">›</span></a>` : `<span class="row__title">${text}</span>`) + (note ? `<span class="row__meta">${note}</span>` : ''); };
+  const beijingOffset = 8 * 60 * 60 * 1000;
+  const localYear = () => new Date(Date.now() + beijingOffset).getUTCFullYear();
   const stamp = at => {
     if (typeof at !== 'string' || !at) return '';
-    if (/^\d{4}-\d\d-\d\d$/.test(at)) return at.startsWith('2026-') ? at.slice(5) : at;
+    const dayOnly = /^\d{4}-\d\d-\d\d$/.test(at);
+    if (dayOnly) at += 'T00:00';
+    at = at.replace(' ', 'T');
     if (!/(?:Z|[+-]\d\d:\d\d)$/.test(at)) at += '+08:00';
-    const date = new Date(at); if (!Number.isFinite(+date)) return '';
-    const year = new Intl.DateTimeFormat('en', { timeZone: 'Asia/Shanghai', year: 'numeric' }).format(date);
-    return `${year === '2026' ? '' : `${year}-`}${U.date(at)} ${U.time(at)}`;
+    const date = Date.parse(at);
+    if (!Number.isFinite(date)) return '';
+    const [day, time] = new Date(date + beijingOffset).toISOString().slice(0, 16).split('T');
+    const [year, month, dayOfMonth] = day.split('-').map(Number);
+    return `${year === localYear() ? '' : year + '年'}${month}月${dayOfMonth}日${dayOnly ? '' : ' ' + time}`;
   };
-  const display = s => sp(s).replace(/\d{4}-\d\d-\d\d(?:T\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?)/g, stamp).replaceAll('登记', '记录');
+  const dateWords = text => text.replace(/\b(?:\d{4}-\d\d-\d\d(?:[T ]\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?)?|(?:0[1-9]|1[0-2])-\d\d(?: +\d\d:\d\d|(?=\s*(?:以前|以后|以来|之前|之后))))\b/g,
+    raw => stamp(/^\d{4}-/.test(raw) ? raw : `${localYear()}-${raw.replace(/ +/, ' ')}`) || raw);
+  const dateHtml = html => html.replace(/(^|>)([^<]+)/g, (_, prefix, text) => prefix + dateWords(text)
+    .replace(/(?:\d{4}年)?\d{1,2}月\d{1,2}日(?: \d\d:\d\d)?/g, date => `<span class="live-unit">${date}</span>`));
+  const display = s => dateWords(sp(s)).replaceAll('登记', '记录');
   const headline = (it, withLabel = true) => {
     const h = it.headline, v = h?.value, seconds = v?.window?.seconds;
     const days = h?.id === 'contribution_days' || h?.data_through;
@@ -249,7 +282,11 @@
     return window.LiveProjectViz.lower(h, 'value') && !text.includes('至少') && /\d/.test(reading) ? `至少 ${text}` : text;
   };
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
-  const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${U.fieldHtml(part, { name: '项目读数', kind: viewer })}</span>`).join('');
+  const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${dateHtml(U.fieldHtml(part, { name: '项目读数', kind: viewer }))}</span>`).join('');
+  // 只包读数里的文字，像“共 77 分钟”这样一整块换行。
+  const rosterUnit = /(?<![\d.,:])(?:(?:至少|大约|共|约)\s*)?[+-]?\d+(?:[.,]\d+)*(?:\/\d+)?\s*(?:(?:万|亿)?\s*(?:毫秒|分钟|小时|[项份个字行次笔件部天秒分条页期倍万亿处种组])|(?:TB|GB|MB|KB|B)(?:\/s)?|[%％])(?![a-z])/gi;
+  const keepRosterUnits = html => html.replace(/(^|>)([^<]+)/g, (_, prefix, text) =>
+    prefix + text.replace(rosterUnit, '<span class="live-unit">$&</span>'));
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
   // 名册按组排：日用、个人（带 group: "personal" 的在用项目，本人 11-27 批准）、偶用，读不到分档的放最后；组内照旧按最近改动
   const PHASE_GROUPS = { daily: '日用', personal: '个人', occasional: '偶用' };
@@ -258,14 +295,16 @@
   function renderActive(items) {
     fill('active', items?.filter(it => it.name || it.label).sort((a, b) => groupRank(a) - groupRank(b) || (Date.parse(b.changed?.at) || 0) - (Date.parse(a.changed?.at) || 0)).map(it => {
       const status = U.status(it, { small: true }), phase = it.phase === 'archived' ? '冻结' : it.phase_gap;
-      const text = String(headline(it, false)).trim(), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner');
+      const text = dateWords(String(headline(it, false)).trim()), hidden = viewer === 'public' && (it.name?.hidden || it.name?.visibility === 'owner' || it.name?.public === 'owner');
       const shown = newProjectLabel(it) + U.fieldHtml(it.name || it.label || it.title || it.id, { name: '项目', place: 'label', kind: viewer })
         .replace(/名册(?![^<>]*>)/g, '<span style="white-space:nowrap">$&</span>');
       const note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
-      const hasText = !!(text || marked), valueHtml = marked || remote ? U.fieldHtml(marked || text, { name: '项目读数', kind: viewer }) : rosterStat(text);
+      const hasText = !!(text || marked);
+      const valueHtml = marked || remote ? dateHtml(U.fieldHtml(marked || text, { name: '项目读数', kind: viewer })) : rosterStat(text);
       let label = h?.label, scope = h?.scope;
+      if (typeof scope === 'string') scope = dateWords(scope);
       const observed = typeof h?.at === 'string' && stamp(h.at), through = h?.data_through && stamp(h.data_through);
       if (through && !marked && !text.includes(through) && (!scope || typeof scope === 'string' && !scope.includes(through))) scope = [`截至 ${through}`, scope].filter(Boolean).join(' · ');
       if (remote && !marked) {
@@ -279,12 +318,10 @@
       if (it.id === 'ai-cli-profile-manager' && h?.id === 'latest_agent' && label === '最后一次实战（含旧版）') label = '最近一次让 AI 真干活的测试';
       if (it.id === 'video-scaffold' && h?.id === 'films' && typeof scope === 'string') scope = scope.replace(/^已选的 (\d+) 组本地完整长版及各自成片目录；不是全历史或发布总数。.*$/s, '只算这台电脑上存着成片的 $1 部，不是做过的全部片子，也不是发出去的数量。');
       const labelHtml = label ? U.fieldHtml(label, { name: '项目读数', place: 'label', kind: viewer }) : '', labelBody = label ? U.fieldHtml(label, { kind: viewer }) : '';
-      // 说明里的日期连成一段，折行时不拆成“2026-11-／24”（只动标签外面的字）
-      const keepDates = html => html.replace(/(^|>)([^<]+)/g, (m, a, t) => a + t.replace(/\d{4}-\d{2}-\d{2}|\d{1,2}-\d{2}(?:\s+\d{1,2}:\d{2})?/g, '<span class="live-unit">$&</span>'));
-      const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${keepDates(U.fieldHtml(scope, { name: '项目说明', kind: viewer }))}</small>` : '';
+      const scopeHtml = scope ? `<small class="pj-fig__sub pj-fig__scope" title="${esc(typeof scope === 'string' ? scope : '')}">${dateHtml(U.fieldHtml(scope, { name: '项目说明', kind: viewer }))}</small>` : '';
       // 代表数的时刻是“这件事最后一次发生”的：写那一句，不写“读取于”（M769）
       const moment = !marked && window.LiveProjectMoments?.headline(it);
-      const readAt = moment ? `<small class="pj-fig__sub">${esc(moment)}</small>`
+      const readAt = moment ? `<small class="pj-fig__sub">${dateHtml(esc(moment))}</small>`
         : observed && observed !== through && !marked && !text.includes(observed) && !(typeof scope === 'string' && scope.includes(observed)) ? `<small class="pj-fig__sub">读取于 ${esc(observed)}</small>` : '';
       const labelHidden = viewer === 'public' && labelBody.includes('live-mark--owner') && (label?.hidden || label?.visibility === 'owner' || label?.public === 'owner' || /^〔?[^〔〕<>]*(?:仅本人可见|可信设备可见)〕?$/.test(labelHtml.trim()));
       // AI 百工谱的读数是现役规则版本号（E 加数字）：读数名和版本号点了去规则页，名字后带箭头，和项目页能点的读数一个样子（本人 11-24 13:00）
@@ -294,11 +331,11 @@
       const valueLine = rule ? `<a class="pj-fig__link pj-fig__v" title="${esc(text)}" href="/rules/">${valueHtml}</a>`
         : `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const reading = (hasText ? labelLine + labelMark + valueLine : '') + (hasText || through ? scopeHtml + readAt : '');
-      return { key: it.id, href: it.href, secret: hidden, group: PHASE_GROUPS[groupOf(it)] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer })}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${status.note}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
+      return { key: it.id, href: it.href, secret: hidden, group: PHASE_GROUPS[groupOf(it)] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${dateHtml(U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer }))}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${dateHtml(status.note)}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
   }
   function shortText(value, { keepChangeWords = false, ...options }) {
-    const html = U.fieldHtml(value, options), plain = U.fieldText(value, options.kind);
+    const html = dateHtml(U.fieldHtml(value, options)), plain = dateWords(U.fieldText(value, options.kind));
     const full = keepChangeWords
       ? html.replace(/<[^>]+>|一次|讲解页|收工|补跑一轮/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
       : html;
@@ -310,7 +347,7 @@
   function renderFrozen(items) {
     fill('frozen', items?.filter(it => it.name || it.label).map(it => {
       const status = U.status(it, { small: true }), phase = { daily: '日用', occasional: '偶用', archived: '冻结' }[it.phase] || it.phase_gap;
-      const detail = [phase && !(frozenOnly && it.phase === 'archived') && U.fieldHtml(phase, { name: '项目分档', kind: viewer }), it.reason && shortText(it.reason, { name: '冻结原因', kind: viewer }), status.note]
+      const detail = [phase && !(frozenOnly && it.phase === 'archived') && U.fieldHtml(phase, { name: '项目分档', kind: viewer }), it.reason && shortText(it.reason, { name: '冻结原因', kind: viewer }), dateHtml(status.note)]
         .filter(Boolean).map(line => `<div class="pj-fig__sub">${line}</div>`).join('');
       // 冻结项目的详情页照样打得开（/live/project/?id=…）；后台名册没给链接时按编号接上
       const secret = secretName(it.name || it.label), href = secret ? '' : it.href || (it.id ? `/live/project/?id=${encodeURIComponent(it.id)}` : '');
@@ -322,7 +359,7 @@
   const changeRow = it => ({ key: it.id, project: it.project, group: it.project || it.id, groupLabel: it.name, secret: secretName(it.name, changeViewer),
     href: it.href || (it.project ? `/live/project/?id=${encodeURIComponent(it.project)}` : ''),
     cls: 'row row--flat pj-item pj-item--change',
-    html: `<div class="row__text"><div class="row__sub">${shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true })}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
+    html: `<div class="row__text"><div class="row__sub">${keepRosterUnits(shortText(typeof it.text === 'string' ? display(it.text) : it.text || (U.offline?.() ? '' : '变化内容暂时读不到'), { name: '项目变化', kind: changeViewer, keepChangeWords: true }))}</div></div><span class="pj-at">${it.at ? stamp(it.at) : ''}</span>` });
   // 全部变化、成品两块标题右边一排“近 7 天｜近 30 天｜全部”，默认近 7 天（本人 11-24 20:34）；样子和智能体页工期、工作量、钩子那三排一样（index.html 的 .pj-tseg）。
   // 近 7 天照旧用变化接口和名册送来的那份；近 30 天、全部点了才读 projects/changes?range=、projects/artifacts?range=（翻页同样带 cursor）。
   // 回包里 range 和点的那档对得上才用；后台还没给就写“后台还没送来”，不拿近 7 天的数顶上。
@@ -381,9 +418,9 @@
     const rows = own.rows?.map(it => ({ ...it, name: it.name || projects.get(it.project)?.name || '项目变化', href: it.href || projects.get(it.project)?.href }));
     const data = own.data;
     const partial = data?.q === 'partial' || Array.isArray(data?.partial) && data.partial.includes('total');
-    const gap = data?.gap && (partial || isStale(data)) ? U.fieldHtml(data.gap, { kind: changeViewer }) : '';
+    const gap = data?.gap && (partial || isStale(data)) ? dateHtml(U.fieldHtml(data.gap, { kind: changeViewer })) : '';
     const lastFull = !partial && (isStale(data) || U.offline?.()) && Number.isInteger(data?.total)
-      && Number.isFinite(Date.parse(data?.source_at)) && stamp(data.source_at).slice(-11);
+      && stamp(data?.source_at);
     changesTitle.textContent = partial ? '已读到的变化' : '全部变化';
     const hidden = data?.hidden;   // 两版同一套（本人禁令 11-24 14:16）：没列出的条数两版都写
     const quiet = { '7d': '近 7 天没有实质变化', '30d': '近 30 天没有实质变化', all: '还没有记下实质变化' }[range];
@@ -450,11 +487,7 @@
       extraLanded = true;
       requestAnimationFrame(() => target.scrollIntoView());
     }
-    // 文档字数、代码行数和代码字数用 code_size（数据约定第 10 节：同一份只算在用项目的合计）；它还没出数的那几项照旧用 summary
-    const size = d?.code_size && Object.fromEntries(['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars', 'covered', 'active'].filter(k => Number.isFinite(d.code_size[k])).map(k => [k, d.code_size[k]]));
-    const sizeDate = ['docs_chars', 'code_lines', 'code_chars', 'observed_code_chars'].some(k => Number.isFinite(size?.[k])) ? stamp(d.code_size.date) : '';
-    window.LiveProjectViz.summary($('pj-summary'), d?.summary && size ? { ...d.summary, ...size } : d?.summary, viewer, sizeDate); renderActivity(d?.activity, d?.items);
-    if (!U.offline?.() && !d?.summary) U.html($('pj-summary'), '<span class="pj-summary-none">近 7 天、文档、代码暂时读不到</span>');
+    renderActivity(d?.activity, d?.items);
     $('activity').querySelector('.part').hidden = !U.offline?.() && !d?.activity;
     if (!U.offline?.() && !d?.activity) U.html($('activity-chart'), '<p class="pj-note">近 30 天项目活跃暂时读不到</p>');
 
@@ -468,7 +501,7 @@
     return `<span class="pj-mini__pic" style="background:${bg}" aria-hidden="true">${ready ? lazyImg(look.thumb, 160) : ''}</span>`;
   }
   function drawProjectExtras(d) {
-    const field = v => U.fieldHtml(v, { kind: viewer });
+    const field = v => dateHtml(U.fieldHtml(v, { kind: viewer }));
     const section = (id, title, rows, note = '', rest = []) => {
       let box = $(id);
       if (!rows.length && !note) { if (box) box.hidden = true; return; }
@@ -524,8 +557,8 @@
       const age = Number.isInteger(seconds) && seconds >= 0 && (mins < 60 && remainder ? [mins && `${mins} 分`, `${remainder} 秒`].filter(Boolean).join(' ') : U.minutes(Math.round(seconds / 60)));
       const hot = it.commits > 0;
       const words = [it.files > 0 && `${it.files} 个文件没提交`, age && `已放 ${age}`, it.local_only === true && '按你说的只留本地', it.note && it.note !== '按你说的只留本地' && field(it.note)].filter(Boolean);
-      const lead = hot ? `<p class="pj-mini__big"><b>${esc(it.commits)}</b> 个提交没推</p>` : '';
-      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${words.join(' · ')}</p>` : ''}</div>` };
+      const lead = hot ? `<p class="pj-mini__big"><span class="live-unit"><b>${esc(it.commits)}</b> 个</span>提交没推</p>` : '';
+      return { key: it.id, cls: `pj-mini${hot ? ' is-hot' : ''}`, html: `${miniPic(it.id, it.name)}<div class="pj-mini__text"><p class="pj-mini__name">${field(it.name)}${projectTag(it) ? ` ${projectTag(it)}` : ''}</p>${lead}${words.length ? `<p class="pj-mini__sub">${keepRosterUnits(words.join(' · '))}</p>` : ''}</div>` };
     });
     // 多了才分批（R147、X4 第 111 项）：一排四格，有没推提交的大卡占两格、排在前面；先露两排（八格），点“展开（还有 N 个项目）”再露两排，到底变“收起”。两排放得下就不出按钮，样子照旧。
     const UNITS = 8, units = it => it.commits > 0 ? 2 : 1, total = items.reduce((n, it) => n + units(it), 0);
@@ -584,7 +617,7 @@
         const prefix = typeof project === 'string' ? `${project} · ` : '';
         title = audience === 'public' && [it.recent_title, it.title].some(v => concealed(v) || typeof v === 'string' && /(?:仅本人可见|可信设备可见)$/.test(v)) ? '成品名称仅本人可见'
           : field(typeof raw === 'string' && prefix && raw.startsWith(prefix) ? raw.slice(prefix.length) : raw);
-        sub = it.recent_detail ? field(it.recent_detail) : '';   // 没写说明就不写这一行，不再补兜底句
+        sub = it.recent_detail ? keepRosterUnits(field(it.recent_detail)) : '';   // 没写说明就不写这一行，不再补兜底句
         const publicLink = audience === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
         open = U.artifactAction({ ...it, web_open: publicLink }, audience, route);
         // 新私事规则：登记时填了 open_note（“这里是这份材料的正文（8 页），所以不予展示”）的成品，访客版在打开链接的位置显示这句普通字；本人版照给链接，旁边挂签。
@@ -622,11 +655,11 @@
     const rowHtml = (r, quiet = false) => {
       const one = r.members.length === 1, m = r.members[0], when = x => x.at ? stamp(x.at) : '', note = x => quiet ? '' : x.item.ownerNote || '';
       const title = r.title + (quiet ? '' : r.tag);
-      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${esc(m.item.openNote)}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${note(m)}</div>` : note(m) ? `<div class="acts">${note(m)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
+      if (one) return `<li class="pj-art__row"><div class="pj-art__text"><p class="pj-art__title">${title}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}${m.item.openNote ? `<p class="pj-art__sub">${keepRosterUnits(esc(m.item.openNote))}</p>` : ''}${m.open ? `<div class="acts">${openAction(m.item, m.open)}${note(m)}</div>` : note(m) ? `<div class="acts">${note(m)}</div>` : ''}</div><span class="pj-at">${esc(when(m))}</span></li>`;
       const caption = r.members.find(x => x.open)?.open.label;
       // 本人版的“访客看不到”签跟着自己的日期，成组不拆行；整组每份都挂同一个签时，只在组名旁挂一个
       const groupNote = r.members.every(x => note(x) && note(x) === note(m)) ? note(m) : '';
-      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : note(x)) + (x.item.openNote ? `<span class="pj-at">${esc(x.item.openNote)}</span>` : '') : `<span class="pj-at">${esc([when(x), x.item.openNote].filter(Boolean).join(' · '))}</span>`}</span>`).join('');
+      const times = r.members.map(x => `<span class="pj-art__time">${x.open ? openAction(x.item, { ...x.open, label: when(x) || x.open.label }) + (groupNote ? '' : note(x)) + (x.item.openNote ? `<span class="pj-at">${keepRosterUnits(esc(x.item.openNote))}</span>` : '') : `<span class="pj-at">${keepRosterUnits(esc([when(x), x.item.openNote].filter(Boolean).join(' · ')))}</span>`}</span>`).join('');
       return `<li class="pj-art__row is-many"><div class="pj-art__text"><p class="pj-art__title">${title} <span class="pj-art__count">×${r.members.length}</span>${groupNote}</p>${r.sub ? `<p class="pj-art__sub">${r.sub}</p>` : ''}<div class="acts pj-art__times">${typeof caption === 'string' ? `<span class="pj-art__caption">${esc(caption)}</span>` : ''}${times}</div></div></li>`;
     };
     const SHOW = 3;
@@ -676,7 +709,7 @@
   window.LiveHeader.watch(null, {
     phase: s => phase('home', s),
     data: remember('home', (d, meta) => {
-      viewer = meta.viewer?.kind || 'public'; home = d?.projects; if (p.has('fixture')) renderOverview(home); renderHead();
+      viewer = homeViewer = meta.viewer?.kind || 'public'; home = d?.projects; if (p.has('fixture')) renderOverview(home); renderHead();
       if (changeRows?.length) renderChanges();  // 变化先到时名字还没有，项目名到了重画
       $('published').textContent = d?.published ? `网站上次发布 ${stamp(d.published)}` : '';
       if (d) homeRead.done();
@@ -689,7 +722,7 @@
     renderHead(); renderOverview(d); update('active', () => renderActive(d?.items));
     if (d) reads.active.done();
   }), link: s => link('active', s) };
-  window.Live.watch('projects', { state: 'frozen' }, { phase: s => phase('frozen', s), data: remember('frozen', (d, meta) => { viewer = meta.viewer?.kind || 'public'; if (!d) return; update('frozen', () => renderFrozen(d.items)); reads.frozen.done(); alignFrozen(); }), link: s => link('frozen', s) });
+  window.Live.watch('projects', { state: 'frozen' }, { phase: s => phase('frozen', s), data: remember('frozen', (d, meta) => { viewer = meta.viewer?.kind || 'public'; if (!d) return; update('frozen', () => renderFrozen(d.items)); reads.frozen.done(); }), link: s => link('frozen', s) });
   const changeAt = d => d?.source_at || d?.at;
   const rosterChanges = { phase: s => phase('changes', s), data: remember('changes', (d, meta) => {
     if (!d) return;
