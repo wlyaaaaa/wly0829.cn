@@ -323,7 +323,8 @@
     document.title = `${text(name) || '任务详情'} · 实况`;
     const showLast = last && runTime(last) != null && runTime(last) <= now;
     const state = showLast ? last.result : ['disabled', 'paused', 'never'].includes(d.state) ? d.state : null;
-    const stateHtml = result(state, kind, showLast ? last : null), textLast = showLast ? `${kind === 'pickup' ? '最近' : '上次'} ${esc(stamp(runTime(last), true))}${last.start == null ? ' 结束' : ''} ` : '';
+    const partial = showLast && last.result === 'warn' && last.reason_code === 'time_limit' && field(last.reason, '运行说明');
+    const stateHtml = result(state, kind, showLast ? last : null) + (partial ? ` · ${partial}` : ''), textLast = showLast ? `${kind === 'pickup' ? '最近' : '上次'} ${esc(stamp(runTime(last), true))}${last.start == null ? ' 结束' : ''} ` : '';
     const due = upcoming[0], original = valid(time(d.next_plan?.original_at)) ? time(d.next_plan.original_at) : kind === 'plan' ? pastNext(d) : NaN;
     const pending = kind === 'plan' && text(d.next_plan?.pending_text);
     const disabled = kind === 'plan' && (d.state === 'disabled' || d.enabled === false);
@@ -460,7 +461,8 @@
       const cutoff = running && (offline || d.q === 'stale') ? `<small class="task-run-duration">截至 ${stamp(checkedAt, true)}</small>` : '';
       const amount = kind === 'plan' ? keepDuration(took || running) : took || running;
       const elapsed = took ? `用了 ${amount}` : running ? `已跑 ${amount}${cutoff}` : '—';
-      return `<li data-time="${runTime(r)}"><div class="task-row">${kind === 'schedule' ? timeRange(r) : timeCell(r)}${result(r.result, kind, r)}<span class="task-row__duration">${elapsed}</span><span>${kind === 'schedule' ? output || '成果未读到' : field(trigger, '触发方式') || (kind === 'plan' && d.scheduler === 'windows' ? outsideLog(r) ? '这一轮不在已读的日志里' : 'Windows 日志没记触发方式' : '触发方式未读到')}</span>${chatLink(r)}</div>${extra(d, r, !!output, open.includes(runTime(r)))}</li>`;
+      const partial = r.result === 'warn' && r.reason_code === 'time_limit' && field(r.reason, '运行说明');
+      return `<li data-time="${runTime(r)}"><div class="task-row">${kind === 'schedule' ? timeRange(r) : timeCell(r)}${result(r.result, kind, r)}<span class="task-row__duration">${elapsed}</span><span>${kind === 'schedule' ? output || '成果未读到' : field(trigger, '触发方式') || (kind === 'plan' && d.scheduler === 'windows' ? outsideLog(r) ? '这一轮不在已读的日志里' : 'Windows 日志没记触发方式' : '触发方式未读到')}${partial ? `<small class="task-run-duration">${partial}</small>` : ''}</span>${chatLink(r)}</div>${extra(d, r, !!output, open.includes(runTime(r)))}</li>`;
     }).join('')}</ol>`;
   }
   function checks(body) {

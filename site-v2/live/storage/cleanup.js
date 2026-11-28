@@ -70,6 +70,7 @@
     if (!g) return null;
     if (g.deleted > 0) return { tone: 'red', text: `保护名单里有 ${g.deleted} 件被删了 · 自动清理近 7 天` };
     if (g.last?.result === 'error') return { tone: 'amber', text: `自动清理上一轮出错 · ${when(g.last.finished_at)}` };
+    if (g.last?.result === 'warn') return { tone: 'amber', text: '部分完成' };
     if (g.overdue) return { tone: 'amber', text: `自动清理没按时跑 · 上次 ${when(g.last.finished_at)}` };
     return null;
   }
@@ -78,6 +79,7 @@
     if (!g?.last && !g?.running) return '<span class="cl-pill" data-tone="gray"><i></i>这页还没读到自动清理结果</span>';
     if (g.deleted > 0) return '<span class="cl-pill" data-tone="red"><i></i>保护名单被删</span>';
     if (g.last?.result === 'error') return '<span class="cl-pill" data-tone="amber"><i></i>上一轮出错</span>';
+    if (g.last?.result === 'warn') return '<span class="cl-pill" data-tone="amber"><i></i>部分完成</span>';
     if (g.overdue) return '<span class="cl-pill" data-tone="amber"><i></i>没按时跑</span>';
     if (g.running) return '<span class="cl-pill" data-tone="green"><i></i>正在跑</span>';
     if (!g.hours) return `<span class="cl-pill" data-tone="gray"><i></i>上次 ${esc(hm(g.last.finished_at))} 跑完</span>`;
@@ -95,7 +97,7 @@
     if (!g.week.length) return '';
     const amount = (value, label) => readAmount(value, label, viewer);
     const items = g.week.map(run => {
-      const result = run.result === 'error' ? '出错' : '跑完';
+      const result = run.result === 'warn' ? '部分完成' : run.result === 'error' ? '出错' : '跑完';
       const summary = [when(run.finished_at), result,
         run.freed_bytes != null ? `腾出 ${amount(run.freed_bytes, '本轮腾出量')}` :
           K.field(run.freed_bytes_gap, '本轮腾出量缺因', viewer) || '腾出量没读到'].join(' · ');
@@ -196,8 +198,9 @@
     // 最近出错那一轮写出原因：先露 3 条，其余收进“还有 N 项”（M328）
     const fails = err ? failures(g.errors[0], viewer) || [] : [], restFails = fails.slice(3);
     const failHtml = fails.slice(0, 3).map(f => `<span>${esc(f.text)}</span>`).join('') + (restFails.length ? `<details class="cl-fail-more" data-fold-count="${restFails.length}"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(f => `<span>${esc(f.text)}</span>`).join('')}</details>` : '');
-    const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
-      : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
+    const first = g.last?.result === 'warn' ? `<li data-tone="amber">${ICON.warn}<div><b>部分完成</b><span>${esc(K.field(g.last.error, '运行说明', viewer))}</span></div></li>`
+      : err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
+      : `<li>${ICON.ok}<div><b>出错 0 次</b>${g.week.some(r => r.result === 'warn') ? '' : `<span>近 7 天 ${n} 轮都跑完</span>`}</div></li>`;
     const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
       : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>近 7 天一直是 0${hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''}</span></div></li>`;
