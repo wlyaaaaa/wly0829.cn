@@ -86,11 +86,6 @@ def compress_images(paths, *, site=None):
     encoders = {'.webp': compress_webp, '.png': compress_png}
     # JPEG、已有损或动图 WebP、SVG、GIF、AVIF 和 ICO 按现有编码原样发布。
     unique = {path.resolve() for path in paths if path.suffix.lower() in encoders}
-    if site is not None:
-        glow = {path for path in unique if path.parent == site / 'wall/img' and path.name.endswith('-glow.compressed.webp')}
-        if glow:
-            print(f'压图：墙图光晕 {len(glow)} 张为例外，原因：半透明渐变需先比较实际网页效果，本轮保留无损。', flush=True)
-        unique -= glow
     ordered = sorted(unique)
     with ThreadPoolExecutor(max_workers=4) as pool:
         savings = 0
