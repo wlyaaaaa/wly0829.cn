@@ -43,16 +43,14 @@
   const detailsRead = U.reading($('rec'), { ghost: U.ghost.rows(4), slow: false });
   const more = $('events-more');
   $('earlier').setAttribute('data-needs-pc', '');
-  U.fold(more, $('events-box-rest'));
-  if ($('raw-more')) U.fold($('raw-more'), $('raw-box'));
-  // 经过先摆几条、待答的问题先摆几条，其余收进“更早的 N 条”“还有 N 个问题”；档案卡各 5 条，账本一条照旧 6 条。
-  const FIRST = dossier ? 5 : 6, FIRST_QUESTIONS = 5;
-  let foldedRuns = null;
-  function moreLabel() { U.html(more, more.getAttribute('aria-expanded') === 'true' ? '收起 <span class="more__chev">›</span>' : `更早的 ${Math.max(0, foldedRuns ?? historyRows.length - 6)} 条 <span class="more__chev">›</span>`); }
+  U.fold(more, $('events-box-rest'), null, true);
+  if ($('raw-more')) U.fold($('raw-more'), $('raw-box'), null, true);
+  let foldedRuns = 0, foldedQuestions = 0;
+  function moreLabel() { U.html(more, more.getAttribute('aria-expanded') === 'true' ? '收起 <span class="more__chev">›</span>' : `更早的 ${foldedRuns} 条 <span class="more__chev">›</span>`); }
   more.addEventListener('click', moreLabel);
   const askMore = $('questions-more');
-  function askLabel() { if (askMore) U.html(askMore, askMore.getAttribute('aria-expanded') === 'true' ? '收起 <span class="more__chev">›</span>' : `还有 ${Math.max(0, (record?.questions?.length || 0) - FIRST_QUESTIONS)} 个问题 <span class="more__chev">›</span>`); }
-  if (askMore) { U.fold(askMore, $('questions-box-rest')); askMore.addEventListener('click', askLabel); }
+  function askLabel() { U.html(askMore, askMore.getAttribute('aria-expanded') === 'true' ? '收起 <span class="more__chev">›</span>' : `还有 ${foldedQuestions} 个问题 <span class="more__chev">›</span>`); }
+  if (askMore) { U.fold(askMore, $('questions-box-rest'), null, true); askMore.addEventListener('click', askLabel); }
 
   const sentences = s => s.match(/[^\n。！？]+(?:[。！？]+[”’」』"]*)?/gu) || [];
   const contentKey = s => s.replace(/[\s。！？]+$/gu, '').trim();
@@ -183,9 +181,9 @@
     const askHtml = q => { const html = `<p>${say(q.text && typeof q.text === 'object' ? q.text : q, '问题内容')}</p>${Array.isArray(q.options) ? `<div class="rec-acts">${optionActions(d, q)}</div>` : ''}`; return dossier ? `<div class="dossier-ask">${html}</div>` : html; };
     // 本人版给全：问题、经过都不收。
     const firstAsk = Infinity, firstRun = Infinity;   // 两版同一套（本人禁令 11-24 14:16）：两版问题、经过都不收
-    const askShown = askMore ? qs.slice(0, firstAsk) : qs, askRest = askMore ? qs.slice(firstAsk) : [];
-    U.html($('question-text'), askShown.map(askHtml).join(''));
-    if (askMore) { U.html($('question-rest'), askRest.map(askHtml).join('')); askMore.hidden = !askRest.length; askLabel(); }
+    const askCut = askMore && U.shouldFold(qs.length - firstAsk) ? firstAsk : qs.length, askRest = qs.slice(askCut);
+    U.html($('question-text'), qs.slice(0, askCut).map(askHtml).join(''));
+    if (askMore) { foldedQuestions = askRest.length; U.html($('question-rest'), askRest.map(askHtml).join('')); askMore.hidden = !foldedQuestions; askLabel(); }
     const refs = [];
     // 一条关联：档案卡画成一行一块（能点的整行能点），旧页面照旧是“名字 | 内容 ›”。
     const ref = (name, html, href = '', note = '') => refs.push(dossier ? D.link({ label: name, html, href: href && route(href), note }) : fact(name, (href ? `<a href="${esc(route(href))}">${html} ›</a>` : html) + (note ? `<small>${note}</small>` : '')));
@@ -251,10 +249,11 @@
     });
     const noHistory = d.archiveWithoutHistory ? `<p class="run__none item-read-note">${ARCHIVE_MISSING}</p>`
       : `<p class="run__none">${U.offline?.() ? '这块没存下来，连上后补上。' : U.collectionText('经过')}</p>`;
-    U.list($('events'), events.length ? events.slice(0, firstRun) : [{ key: 'empty', cls: 'run run--empty', html: noHistory }], { animate: !first });
-    U.list($('events-rest'), events.slice(firstRun), { animate: !first });
-    if (dossier) foldedRuns = Math.max(0, events.length - firstRun);
-    more.hidden = events.length <= firstRun; $('history-box').classList.toggle('has-more', events.length > firstRun); moreLabel();
+    const runCut = U.shouldFold(events.length - firstRun) ? firstRun : events.length;
+    U.list($('events'), events.length ? events.slice(0, runCut) : [{ key: 'empty', cls: 'run run--empty', html: noHistory }], { animate: !first });
+    U.list($('events-rest'), events.slice(runCut), { animate: !first });
+    foldedRuns = events.length - runCut;
+    more.hidden = !foldedRuns; $('history-box').classList.toggle('has-more', !!foldedRuns); moreLabel();
     $('earlier').hidden = !issue || !next; U.html($('earlier'), '继续读更早的经过 ›');
     $('coverage').textContent = coverage?.from && Date.parse(coverage.from) !== Date.parse(d.accepted) ? `记录从 ${when(coverage.from)} 起` : '';
     $('rec').hidden = privateItem; if (body) body.hidden ||= privateItem; heroRead.done(); detailsRead.done(); first = false;
@@ -262,7 +261,8 @@
   }
   function clearRecord() {
     revision++; closedAsk++;
-    record = at = next = coverage = foldedRuns = null;
+    record = at = next = coverage = null;
+    foldedRuns = foldedQuestions = 0;
     searching = $('earlier').disabled = false;
     historyRows = []; pages.clear();
     document.title = `${issue ? '账本详情' : '事项详情'} · 实况`;

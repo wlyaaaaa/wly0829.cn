@@ -215,7 +215,7 @@
   $('search').addEventListener('submit', e => e.preventDefault());
   $('q').addEventListener('input', () => { query = $('q').value.trim().toLowerCase(); redrawItems(); if (reportsData) renderReports(reportsData); });
   const readers = { home: [U.reading($('hero').querySelector('.card__body'), { ghost: U.ghost.card(1), name: '等你的事', publicName: addressed('等你的事', 'public') }), ...Object.keys(KIND).map(key => U.reading($(key), { ghost: U.ghost.rows(2), slow: false }))], 'items/closed': [U.reading($('closed'), { ghost: U.ghost.rows(4) })], reports: [U.reading($('reports'), { ghost: U.ghost.rows(3) })] };
-  for (const key of [...Object.keys(KIND), 'closed', 'reports']) U.fold($(key + '-more'), $(key + '-box'));
+  for (const key of [...Object.keys(KIND), 'closed', 'reports']) U.fold($(key + '-more'), $(key + '-box'), null, true);
   function sideHtml(trend, closed) {
     if (!Array.isArray(trend)) return closed == null ? `<p>${U.collectionText()}</p>` : closed.length ? [...closed].sort((a,b) => Date.parse(b.closed?.at || 0) - Date.parse(a.closed?.at || 0)).slice(0, 4).map(it => {
       const href = closedHref(it);
@@ -250,7 +250,11 @@
     for (const btn of ul.querySelectorAll('[data-text-toggle]')) {
       const row = btn.closest('.row'), title = row.querySelector('.row__title'), opened = row.dataset.textOpen === 'true';
       requestAnimationFrame(() => { btn.hidden = !opened && title.scrollHeight <= title.clientHeight + 1; }); btn.textContent = opened ? '收起' : '展开'; btn.setAttribute('aria-expanded', String(opened));
-      btn.onclick = () => { const open = row.dataset.textOpen !== 'true'; row.dataset.textOpen = String(open); btn.textContent = open ? '收起' : '展开'; btn.setAttribute('aria-expanded', String(open)); };
+      btn.onclick = () => {
+        const open = row.dataset.textOpen !== 'true';
+        const update = () => { row.dataset.textOpen = String(open); btn.textContent = open ? '收起' : '展开'; btn.setAttribute('aria-expanded', String(open)); };
+        if (open) update(); else U.anchorFold(btn, update);
+      };
     }
     for (const btn of ul.querySelectorAll('[data-detail]')) {
       if (btn._fold) continue;
@@ -286,7 +290,7 @@
             target.insertAdjacentHTML('beforeend', openLink);
           },
         });
-      }));
+      }), true);
       btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') === 'true';
         row.classList.toggle('is-expanded', open);
@@ -512,9 +516,10 @@
     }
     const grouped = key === 'closed' && items.length > 0 && method(items[0]) !== method(items.at(-1));
     const groupName = kind => KIND[kind] ? addressed(KIND[kind], viewer) : '没写类别';
-    // 本人版列表默认给全；访客照旧先摆 5 条。
+    // 两版都展示已读的全部事项，远端续页由另外的按钮负责。
     const ul = $(key + '-list'), limit = Infinity, main = items.slice(0, limit), rest = items.slice(limit), pinned = new Set([...ul.children].filter(n => n.matches('.is-expanded,[data-text-open="true"],:hover,:focus-within')).map(n => n.dataset.key));
     if (key !== 'closed') for (let i = rest.length - 1; i >= 0; i--) if (pinned.has(rest[i].id)) main.push(...rest.splice(i, 1));
+    if (!U.shouldFold(rest.length)) main.push(...rest.splice(0));
     const draw = (group, previous) => group.flatMap(it => {
       if (!grouped) return [renderer(it)];
       const current = method(it), heading = previous !== current;
@@ -807,8 +812,9 @@
     const drawn = rows?.length ? rows.map(it => ({ key: it.id, cls: 'row row--flat lb-item', html: `${['green', 'ok'].includes(it.light) ? '' : U.status({ ...it, level: it.light }, { small: true }).lamp}<div class="row__text"><p class="row__main"><span class="row__title">${U.fieldHtml(it.text && typeof it.text === 'object' ? { ...it, ...it.text } : it, { name: '待答汇报', place: 'title', kind: viewer })}</span></p><p class="row__sub">${[it.unanswered != null ? `${sp(it.unanswered)} 题没答` : !U.offline?.() && U.collectionText(), it.opened && `${U.date(it.opened)} ${U.time(it.opened)} 弹出`].filter(Boolean).join(' · ')}</p></div><div class="row__acts">${actions(it)}${checkbox(it)}</div>` })) : wait(d.items == null ? U.collectionText() : d.items.length ? '汇报里的待答问题已列在前面的事里' : '没有两小时没答的汇报');
     reportCount = rows == null ? null : rows.length; filterBoard();
     U.html(cards.get('reports').title, `${addressed(labels.reports, viewer)}<span class="lb-count">（${reportCount > 0 ? `<b class="lb-count__n">${reportCount}</b>` : reportCount ?? '—'} 件）</span>`);
-    const shown = drawn.length;   // 两版同一套（本人禁令 11-24 14:16）：两版都列全
-    U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${Math.max(0, drawn.length - shown)} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
+    const limit = Infinity;   // 两版同一套：两版都列全
+    const shown = U.shouldFold(drawn.length - limit) ? limit : drawn.length;
+    U.list($('reports-rest'), drawn.slice(shown)); $('reports-more').hidden = drawn.length <= shown; U.html($('reports-more'), `展开（还有 ${drawn.length - shown} 条） ›`); U.list($('reports-list'), drawn.slice(0, shown)); renderSelection();
   }
   watch('reports', renderReports, text => {
     reportsData = reportCount = null; reportsUnavailable = true; filterBoard();
