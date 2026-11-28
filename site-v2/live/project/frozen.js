@@ -70,8 +70,8 @@
           return frozen(d) ? { ...d, size: null, sections: [], counts: null, artifacts: null, changes7: null }
             : original.adapt?.(d) || d;
         },
-        board(d, viewer, graphBlock, host) {
-          return frozen(d) ? archiveCard(d, viewer, graphBlock) : original.board?.(d, viewer, graphBlock, host) || [];
+        board(d, viewer, graphBlock, host, ...args) {
+          return frozen(d) ? archiveCard(d, viewer, graphBlock) : original.board?.(d, viewer, graphBlock, host, ...args) || [];
         },
       };
     },
