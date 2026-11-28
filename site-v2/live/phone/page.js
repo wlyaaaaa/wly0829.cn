@@ -74,14 +74,12 @@
   }
   // 本人版给完整版，不挂“仅你可见”；对外换了说法的照旧提一句。
   const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
-  const listName = (a, rankUnit) => {
+  const listName = (a, keepRankHeight = false) => {
     if (marked(a.name) || viewer !== 'owner' && a.name == null && a.visibility === 'owner') return '';
-    const rewrite = U.visitorRewrittenField(a, ['name', '$'], '这个应用名', viewer);
-    // 用量排行的签等排法定了再加，这一版沿用原来的一行。
-    const tag = rankUnit === 's' && rewrite ? '' : rewrite || note(a);
+    const tag = U.visitorRewrittenField(a, ['name', '$'], '这个应用名', viewer) || note(a);
     if (a.name == null && a.visibility === 'owner') return tag;
     // 流量排行的胶囊保持原大小，外层只占原来一行的高度，免得双列重新分行。
-    const markStyle = rankUnit === 'B' && tag.includes('live-mark--reworded') ? ' style="display:inline-block;block-size:1lh;vertical-align:top"' : '';
+    const markStyle = keepRankHeight && tag.includes('live-mark--reworded') ? ' style="display:inline-block;block-size:1lh;vertical-align:top"' : '';
     return `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${tag ? ` <span class="phone-mark"${markStyle}>${tag}</span>` : ''}`;
   };
   const paragraph = text => `<p class="use-note">${fh(text && typeof text === 'object' ? text : humanText(text))}</p>`;
@@ -273,7 +271,7 @@
     const max = Math.max(0, ...(rows || []).map(a => a[field] ?? 0));
     for (const li of host.querySelectorAll('li[data-key]')) {
       const a = rows?.[Number(li.dataset.key)]; if (!a) continue;
-      const name = nameField(a), label = name === a || marked(name) ? U.fieldHtml(name, { name: '应用名', kind: viewer, marker: true }) : listName(a, unit);
+      const name = nameField(a), label = name === a || marked(name) ? U.fieldHtml(name, { name: '应用名', kind: viewer, marker: true }) : listName(a, unit === 'B');
       U.html(li.querySelector('.vz-rank__name'), label + (a.opens == null ? '' : `<small>打开 ${formattedHtml(a.opens, lowerText(a, 'opens', `${sp(a.opens)} 次`), '打开次数')}</small>`), false);
       const bar = li.querySelector('.vz-rank__bar > i'); if (bar) { bar.style.setProperty('--v', max > 0 ? a[field] / max : 0); bar.hidden = a[field] == null; }
     }
