@@ -425,10 +425,16 @@
   }
   function lifecycle(el) {
     el.classList.add('security-life');
+    const recent = at => `最近实测 ${U.esc(stamp(new Date(at * 1000).toISOString()))}`;
     const chart = C.create(el, { size: 'mid', sync, floor: 0, title: '进程启动与退出', unit: '次', lines: [{ id: 'start', label: '启动', hue: 'teal' }, { id: 'exit', label: '退出', hue: 'apricot' }], onRead(values, t) {
+      const [start, exit] = values;
+      const sharedAt = t == null && start?.at != null && start.at === exit?.at ? start.at : null;
+      const title = el.querySelector('.chart__name');
+      title.querySelector('.stat-gap')?.remove();
+      if (sharedAt != null) title.insertAdjacentHTML('beforeend', `<small class="stat-gap" style="letter-spacing:.01em">${recent(sharedAt)}</small>`);
       for (const v of values) {
         const cell = el.querySelector(`.chart__val[data-line="${v.id}"] b`);
-        if (t == null && v.at != null) cell.innerHTML = `${U.esc(v.text)}<small class="stat-gap">最近实测 ${U.esc(stamp(new Date(v.at * 1000).toISOString()))}</small>`;
+        if (t == null && v.at != null && sharedAt == null) cell.innerHTML = `${U.esc(v.text)}<small class="stat-gap">${recent(v.at)}</small>`;
         if (t != null && v.value == null) cell.textContent = '没记录';
       }
     } });
