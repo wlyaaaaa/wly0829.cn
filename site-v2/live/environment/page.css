@@ -121,6 +121,7 @@
   .env-table.env-table--versions th:first-child { width: 20%; }
   .env-table.env-table--versions th:nth-child(4) { width: 20%; }
   .env-table--versions td:nth-child(-n+3), .env-runtime p { white-space: normal; overflow-wrap: anywhere; }
+  .env-table--versions td:last-child .env-nw { white-space: normal; overflow-wrap: anywhere; }
 }
 .env-sub { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 6px; margin: 30px 0 12px; font-size: 15px; color: var(--ink-soft); }
 .env-sub b { font-size: 18px; font-weight: 600; color: var(--ink); }

@@ -26,8 +26,8 @@
   const list = d => d?.items, runtime = d => d?.items && Object.assign({ windows: d.items[0]?.windows }, Object.fromEntries(d.items.map(r => [r.runtime_id || r.name, r])));
   // 两边版本都没读到、或比较结果不是“相同／落后／更新”的，算没法比，不算进“0 个落后”（M436）。
   const noVersion = v => v == null || v === '';
-  const isDisabled = r => r.update_mode === 'disabled' || (r.relation === 'disabled' && r.installed !== false);
-  const isUninstalled = r => r.installed === false && !isDisabled(r);
+  const isUninstalled = r => r.installed === false;
+  const isDisabled = r => !isUninstalled(r) && (r.update_mode === 'disabled' || r.relation === 'disabled');
   const inactive = r => isDisabled(r) || isUninstalled(r);
   const compared = r => !inactive(r) && ['equal', 'behind', 'ahead'].includes(r.relation) && !(noVersion(r.current_version) && noVersion(r.target_version));
   const uncomparable = r => !inactive(r) && !compared(r);
@@ -68,7 +68,10 @@
   const commandRows = r => [['powershell_core', 'PowerShell 7'], ['windows_powershell', '系统自带的 Windows PowerShell']].filter(([key]) => r[key]).map(([key, name]) => {
     const p = r[key], risks = fields.filter(k => Number(p[k]) === 20127).length;
     const normal = fields.every(k => Number(p[k]) === 65001);
-    return { lamp: indicator(p, risks ? 'yellow' : normal ? 'green' : null), text: `${name}${Number(p.pipeline_output_code_page) === 20127 ? ' 管道里中文可能乱码' : risks ? ' 里有中文可能乱码的编码设置' : normal ? ' 里中文正常' : ' 的中文编码需按明细查看'}` };
+    const text = key === 'windows_powershell' && Number(p.pipeline_output_code_page) === 20127
+      ? '系统自带的 Windows PowerShell 往外部程序传中文会乱码（它默认不用 UTF-8）'
+      : `${name}${Number(p.pipeline_output_code_page) === 20127 ? ' 管道里中文可能乱码' : risks ? ' 里有中文可能乱码的编码设置' : normal ? ' 里中文正常' : ' 的中文编码需按明细查看'}`;
+    return { lamp: indicator(p, risks ? 'yellow' : normal ? 'green' : null), text };
   });
   const hero = $('hero'), heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(2), name: '软件与环境' });
   const bar = U.topbar({ ask: () => '帮我看看软件与环境，哪些版本落后、中文编码有什么不同。' });
@@ -98,7 +101,7 @@
   let latestShown = LATEST_FIRST;
   const isBehind = r => compared(r) && r.relation === 'behind', isLatest = r => compared(r) && ['equal', 'ahead'].includes(r.relation);
   const ownerManaged = r => ['owner_managed', 'owner_approval'].includes(r.update_mode);
-  const hasMode = rows => rows.some(r => ownerManaged(r) || ['automatic', 'disabled'].includes(r.update_mode));
+  const hasMode = rows => rows.some(r => !isUninstalled(r) && (ownerManaged(r) || ['automatic', 'disabled'].includes(r.update_mode)));
   function versionGroups(rows) {
     const behind = rows.filter(isBehind);
     return [
@@ -112,6 +115,7 @@
     ].filter(g => g.rows.length);
   }
   function updateWay(r, { seconds, next }) {
+    if (isUninstalled(r)) return '—';
     if (isDisabled(r)) return '已停用';
     if (ownerManaged(r)) return `${you()}说一声，AI 来更新`;
     // 还落后的自动项顺带写下次几号再试（放这列，“现在”那列就能一行写完上次的结果）
@@ -119,7 +123,7 @@
       const w = Number(seconds) === 604800 && weekday(next);
       return `${w ? `每周${w}自动` : '自动更新'}${isBehind(r) && validAt(next) ? `，下次 ${U.date(next)}` : ''}`;
     }
-    return isUninstalled(r) ? '—' : '还没读到';
+    return '还没读到';
   }
   // “现在”：落后的自动项写上次自动更新的结果和原因（后台 last_update）
   function nowState(r) {
@@ -313,7 +317,7 @@
     // 页顶大字先说有几个要你点头才更新，小字说其余的（照图 ENV-1）；后台还没给 update_mode 时照旧写“几个软件 · 几个版本落后”
     if (rows && hasMode(rows)) {
       const n = Object.fromEntries(versionGroups(rows).map(g => [g.key, count(g.rows.length, '个', data.software)]));
-      $('note').textContent = [n.auto && `${n.approval ? '另有 ' : ''}${n.auto}会自动更新，还没更新上`, n.behind && `${n.behind}版本落后`, n.latest && `${n.latest}已是最新`, n.other && `${n.other}没法比新旧`, n.disabled && `${n.disabled}已停用`].filter(Boolean).join(' · ');
+      $('note').textContent = [n.auto && `${n.approval ? '另有 ' : ''}${n.auto}会自动更新，还没更新上`, n.behind && `${n.behind}版本落后`, n.latest && `${n.latest}已是最新`, n.other && `${n.other}没法比新旧`, n.uninstalled && `${n.uninstalled}未安装`, n.disabled && `${n.disabled}已停用`].filter(Boolean).join(' · ');
       $('note').hidden = !$('note').textContent;
       U.html($('head'), status.lamp + U.head(n.approval ? `${n.approval}要${you()}点头才更新` : `没有要${you()}点头才更新的软件`, { lamp: false })); heroRead.done();
     } else if (rows) { $('note').textContent = comparisonNote(rows); $('note').hidden = !$('note').textContent; }
