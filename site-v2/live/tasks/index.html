@@ -18,7 +18,7 @@
 .page--tasks .lb-card[data-art="ai-schedule"] { --lb-art: url("/live/img/tasks-grp-ai-schedule.webp"); }
 .page--tasks .lb-card[data-art="idle"] { --lb-art: url("/live/img/tasks-grp-idle.webp"); }
 .page--tasks .hero__note { display:block; letter-spacing:0; word-spacing:normal; }
-.page--tasks :is(#task-intro span, .task-phrase) { white-space: nowrap; }
+.page--tasks #task-intro span { white-space: nowrap; }
 .page--tasks #hero[data-publication-revoked] #head .head__lead { min-width: 0; white-space: normal; text-wrap: balance; }
 /* 维护明细（?scope=ai-today）的标题长：标题和说明在左边自己那一栏里折行，不伸到中间读数卡底下 */
 .tasks--ai-today .lbp-title > div { min-width: 0; }
@@ -34,6 +34,9 @@
 #task-side { align-self: stretch; }
 /* 右边一栏展开“再看”“变化”时在栏里滚动，不把左边标题、中间大卡和下面的搜索往下推 */
 #task-side { contain: size; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+#task-side:has(#changes-box[open]) { scroll-snap-type: y proximity; }
+#changes > li { scroll-snap-align: end; }
+#changes-title { scroll-snap-align: start; }
 /* 首屏统计格按字的长短排，标签不折成两行 */
 .page--tasks .lbp-stats { display: flex; flex-wrap: wrap; }
 .page--tasks .lbp-stat { flex: 1 1 auto; }
@@ -72,6 +75,7 @@
 /* 任务名下面那行用途整句显示，放不下就换行，不截成“…”（M760） */
 .page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
 .task-compact .lb-cell--time > * { overflow: visible; }
+.task-compact .lb-cell--time > :is(time, small, [data-task-state]) { white-space: normal; overflow-wrap: normal; }
 .task-compact .task-last > span { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
 /* 已停用的下次运行只有“停用”，把多余列宽留给完整的上次结果。 */
 .page--tasks:not(.tasks--ai-today) .lb-card[data-key="disabled"] { --lb-row-cols: 10px minmax(0, 1fr) minmax(94px, .42fr) minmax(60px, .42fr) 64px; }
@@ -131,8 +135,9 @@ body.page--tasks .lb-row.notice-target { outline: 2px solid rgb(38 60 55 / .6); 
 <div class="card__glass glass"><span class="card__pic" aria-hidden="true"><img src="/live/img/tasks.webp" width="1000" height="1000" alt=""></span><div class="card__body">
 <p class="card__head" id="head"><span class="lamp" aria-hidden="true"></span><span class="head__lead">加载中</span></p><p class="hero__note" id="note">加载中</p><div class="lbp-stats" id="stats"></div></div></div></article>
 <section class="lbp-side glass l2-col" id="task-side" data-mo-rise>
-<section id="upcoming" hidden><p class="part">接下来 24 小时</p><ul class="rows list"></ul><details><summary class="live-disclosure"></summary><ul class="rows list"></ul></details></section>
-<details id="changes-box"><summary id="changes-title" data-keep>任务变化</summary><ul class="rows list" id="changes"><li class="row row--flat row--empty" data-key="wait"><span></span><p class="row__sub">加载中</p></li></ul></details>
+<section id="upcoming" hidden><p class="part">接下来 24 小时</p><ul class="rows list"></ul><details data-fold-anchor><summary class="live-disclosure"></summary><ul class="rows list"></ul></details></section>
+<details id="changes-box" data-fold-anchor><summary id="changes-title" data-keep>任务变化</summary><ul class="rows list" id="changes"><li class="row row--flat row--empty" data-key="wait"><span></span><p class="row__sub">加载中</p></li></ul></details>
+<div id="changes-empty" hidden><p class="part">任务变化</p><ul class="rows list"></ul></div>
 <p class="part" id="coverage-label" hidden>读到了哪些</p><p class="pj-note" id="coverage" hidden>加载中</p><ul class="rows list" id="sources" hidden></ul></section>
 </div>
 <div class="lbp-tools" data-mo-rise>
@@ -144,4 +149,4 @@ body.page--tasks .lb-row.notice-target { outline: 2px solid rgb(38 60 55 / .6); 
 </div>
 <div id="groups"><p class="part" hidden data-keep>按用途</p><ul class="rows list" id="task-empty"><li class="row row--flat row--empty" data-key="wait"><span></span><p class="row__sub">加载中</p></li></ul></div>
 <button class="more" type="button" id="next" hidden data-needs-pc>还有更多 ›</button></main>
-<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/tasks/page.js"></script></body></html>
+<script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-board.js"></script><script src="/live/automation/presentation.js"></script><script src="/live/tasks/page.js"></script></body></html>

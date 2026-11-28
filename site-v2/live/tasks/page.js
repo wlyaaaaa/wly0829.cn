@@ -20,6 +20,7 @@
   let board = null, dataAt = null, batchAt = null, pick = p.get('group') || '', projectList = null, projectKey = '', generation = 0;
   let runningReading = null;
   const taskLiveWords = new WeakMap();
+  const { keepRowWords: keepTaskWords } = window.AutomationPresentation;
   function taskWords() {
     for (const el of document.querySelectorAll('[data-task-state]')) {
       const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), off = U.offline?.();
@@ -32,9 +33,10 @@
   }
   const nextAt = at => `${U.date(at) === U.date(now || Date.now()) ? '今天' : U.date(at)} ${U.time(at)}`;
   const MODE = { event: '有事才跑', on_demand: '叫了才跑', resident: '一直开着', service_loop: '一直开着' };
-  const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
+  const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|维护明细这次没读全|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
   // 上次出错、这次没读到运行状态的任务，后台标 scheduled_issue 并算进“项要处理”，表里也按要处理排前面
-  const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
+  const confirmedFailure = t => t.confirmed_failure === true && t.level === 'yellow' && t.last?.result === 'failed';
+  const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : confirmedFailure(t) || ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
   // 没有下次时间的任务：按 Windows 登记的触发方式写“登录时”“开机时”这类，不写“没读到”
   function triggerWhen(t) {
     if (!Array.isArray(t.trigger_types)) return '';
@@ -51,6 +53,7 @@
   // 要留意的任务：写后台给的原因；后台只标了要留意、没给具体原因的，照实说
   function warnWhy(t) {
     const pick = v => typeof v === 'string' ? v.trim() : typeof v?.text === 'string' ? v.text.trim() : '';
+    if (t.last?.result === 'warn' && t.last.reason_code === 'time_limit' && pick(t.last.reason)) return pick(t.last.reason);
     const said = [pick(t.problem?.reason), t.last?.result === 'warn' && pick(t.last.output), pick(t.output), pick(t.status_note), pick(t.why)].find(v => v && !/^(?:任务有当前问题|运行有异常|有 \d+ 件事要留意)$/.test(v));
     return said || '后台只标了要留意，没给具体原因，点进去看最近几次';
   }
@@ -84,7 +87,13 @@
     if (!e.target.open) return;
     const side = $('task-side'), head = $('changes-title');
     // 展开的内容是一点点长出来的，跟着长几帧，直到“变化”标题停在栏顶
-    const start = performance.now(), follow = () => { side.scrollTop += head.getBoundingClientRect().top - side.getBoundingClientRect().top - 8; if (performance.now() - start < 700) requestAnimationFrame(follow); };
+    const start = performance.now(), follow = () => {
+      const { top, bottom } = side.getBoundingClientRect();
+      side.scrollTop += head.getBoundingClientRect().top - top - 8;
+      if (performance.now() - start < 700) return void requestAnimationFrame(follow);
+      const cut = [...$('changes').children].map(row => row.getBoundingClientRect()).find(row => row.top < bottom && row.bottom > bottom);
+      if (cut) side.scrollTop += side.scrollTop >= bottom - cut.top ? cut.top - bottom : cut.bottom - bottom;
+    };
     requestAnimationFrame(follow);
   });
   const changesTitle = $('changes-title') || changesBox.querySelector('.part');
@@ -100,13 +109,19 @@
     : day?.state === 'ok' && day.partial ? 'observed-ok' : day?.state);
   const observedFailure = '有出错记录，全天结果未确认';
   const dayTrouble = day => ['mostly', 'partial', 'failed', 'observed-failed'].includes(dayTier(day));
+  const dayReason = window.LiveBoard.taskDayReason, dayMissing = '那天结果没读到';
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0 && o.state !== 'none'
     ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   function week(d) {
     if (U.offline?.() && !Array.isArray(d.days7)) return '';
-    const labels = { ok: '跑成了', 'observed-ok': '至少一轮成功', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '全部出错', 'observed-failed': observedFailure, warn: '部分完成', none: '没跑' }, days = d.days7;
+    const labels = { ok: '跑成了', 'observed-ok': '至少一轮成功', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '全部出错', 'observed-failed': observedFailure, warn: '部分完成' }, days = d.days7;
     if (!Array.isArray(days) || days.every(day => dayTier(day) == null || dayTier(day) === 'unknown')) return '';
-    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const state = dayTier(day), label = `${U.date(day.date)} ${labels[state] || U.collectionText()}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`; return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
+    const marks = [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => {
+      const state = dayTier(day);
+      const label = `${U.date(day.date)} ${labels[state] || (day.started ? '跑过，结果未确认' : dayReason(day) || (state === 'none' && day.coverage_complete === true ? '这天没跑' : dayMissing))}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`;
+      return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`;
+    });
+    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${marks.join('')}</div></div>`;
   }
   function taskName(t) {
     if (viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden || t.hidden_block || t.content_locked)) return { visibility: 'owner' };
@@ -126,6 +141,8 @@
   };
   const stateDot = (value, label = '') => `<i class="task-state-dot" data-state="${value}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}></i>`;
   const shortStatus = { ok: '成功', failed: '出错', warn: '要留意', running: '正在跑', disabled: '停用', never: '没跑过', unknown: '没读到' };
+  const ended = last => Number.isFinite(Date.parse(last?.end));
+  const retainedResult = t => Number.isFinite(Date.parse(t.last_read_at)) && (ended(t.last) || ['ok', 'failed', 'warn'].includes(t.last?.result));
   function taskState(t) {
     if (t.enabled === false || t.state === 'disabled' || t.not_running_reason === 'disabled') return 'disabled';
     if (t.source_readable === false) return 'unknown';
@@ -159,16 +176,19 @@
     const name = taskName(t), title = U.fieldHtml(name || '自动任务', { name: '自动任务', place: 'title', kind: viewer });
     if (!maintenance) {
       const state = taskState(t), lastState = lastAt ? last?.result || 'unknown' : state === 'never' ? 'never' : '';
-      const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next)
-        : MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到');
+      const failed = confirmedFailure(t), shownAt = failed ? last.end || lastAt : lastAt;
+      const oldAt = Number.isFinite(Date.parse(t.last_read_at)) ? stamp(t.last_read_at) : '';
+      const oldNext = oldAt && Number.isFinite(Date.parse(t.last_read_next_at)) ? `原定 ${nextAt(t.last_read_next_at)} · ${oldAt} 的安排` : '';
+      const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next) : oldNext
+        || (MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到'));
       const triggerTitle = !next && Array.isArray(t.trigger_types) && t.trigger_types.length ? ` title="${esc(`触发方式：${t.trigger_types.join('、')}`)}"` : '';
-      // 这次没读到运行状态的行一律写“这次没读到”（卡头也这样说），上次读到的结果放在指上去的提示里
-      const shown = t.source_readable === false ? 'unread' : state === 'warn' ? 'warn' : lastState;
+      // 这轮未更新时，仍显示后端保留的上次结果及读数时刻。
+      const shown = t.source_readable === false && !retainedResult(t) ? 'unread' : state === 'warn' ? 'warn' : lastState;
       // 上次那一轮只做完一部分（last.result=warn，M381）写“部分完成”，黄点照旧
       const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? lastState === 'warn' ? '部分完成' : shortStatus.warn
-        : lastState === 'unknown' ? state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
+        : lastState === 'unknown' ? ended(last) ? '已结束，结果未确认' : state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
       const lastTitle = shown === 'warn' ? ` title="${esc(warnWhy(t))}"` : (shown === 'unread' || lastState === 'unknown') && typeof t.status_text === 'string' ? ` title="${esc(t.status_text)}"` : '';
-      const why = shown === 'warn' && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
+      const why = (failed || shown === 'warn') && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(failed ? t.problem_reason ?? last.reason ?? t.why : warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
       const registeredPurpose = t.purpose ?? sentence;
       const purposeText = typeof registeredPurpose === 'string' ? registeredPurpose.split(/[。；，]/u, 1)[0].trim() : registeredPurpose;
       const purpose = !hidden && purposeText && (typeof purposeText !== 'string' || !/^(?:在跑|正在跑|到点没跑|已停用|停用|所需状态未读到)$/u.test(purposeText))
@@ -182,9 +202,11 @@
       const fixNote = fixing ? `<p class="lb-sub task-fixing">AI 在修${fixAt ? ` · ${esc(nextAt(fixAt))} 接着修` : ''}</p>` : '';
       // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
       const actions = U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
+      const outcomeDot = failed ? stateDot('warn') : stateDot(shown === 'unread' ? 'unknown' : shown);
+      const running = failed && state === 'running' ? `<span data-task-state>${stateDot('running')}${shortStatus.running}</span>` : '';
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
-        `<span class="lb-row__lamp">${fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
-        <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>
+        `<span class="lb-row__lamp">${failed ? stateDot('warn', '上次运行失败') : fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${keepTaskWords(title)}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${keepTaskWords(purpose)}</p>` : ''}${verified}${fixNote}${keepTaskWords(why)}</div>
+        <div class="lb-cell lb-cell--time task-last">${shownAt ? `<time>${stamp(shownAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${outcomeDot}${esc(failed ? shortStatus.failed : lastWord)}</span>` : '—'}${oldAt && shown !== 'unread' && lastState ? `<small>截至 ${esc(oldAt)}</small>` : ''}${running}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }
     const nameBody = U.fieldHtml(name, { name: '自动任务', kind: viewer, marker: true });
@@ -192,7 +214,7 @@
     const status = U.status(t, { small: true });
     const unreliable = Array.isArray(coverage) && coverage.some(c => c?.id === t.id && c.reliable === false);
     const note = (!description.length || ['red', 'amber', 'blue'].includes(status.tone)) && status.note !== outcome && !/^(?:数据截止|这次没读到|没有记录)/.test(status.note) && status.note;
-    const extra = [nameNote && `<span class="row__meta">${nameNote}</span>`, maintenance && Number.isInteger(t.rounds) && `已观察到 ${t.rounds} 次`, t.source_readable === false && '已登记，本轮没读到运行状态', note, unreliable && '这段运行记录不可靠', t.ledger_id && `<a class="lb-link" href="${esc(route(`/live/issue/?id=${encodeURIComponent(t.ledger_id)}`))}">关联账本 ›</a>`].filter(Boolean).join(' · ');
+    const extra = [nameNote && `<span class="row__meta">${nameNote}</span>`, maintenance && Number.isInteger(t.rounds) && `已观察到 ${t.rounds} 次`, t.source_readable === false && '已登记，这次没读到运行状态', note, unreliable && '这段运行记录不可靠', t.ledger_id && `<a class="lb-link" href="${esc(route(`/live/issue/?id=${encodeURIComponent(t.ledger_id)}`))}">关联账本 ›</a>`].filter(Boolean).join(' · ');
     const rawName = t.name && !hidden && t.name !== name && (viewer === 'owner' || typeof name === 'string' && name.trim() && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
     const facts = [rawName && `原名称：${field(t.name, '原名称')}`, plan && `原调度：${plan}`, t.at && `明细采集：${stamp(t.at)}`, t.duration && taskDuration(t.duration)].filter(Boolean);
     return { key: t.id, cls: `row row--flat lb-row${attention(t) ? ' is-attention' : ''}`, html: `<span class="lb-row__lamp">${status.lamp}</span><div class="lb-cell lb-cell--name"><p class="lb-clip"><a class="row__title" href="${esc(detail)}">${title}</a></p>${projectCell ? `<p class="lb-sub lb-clip1">${projectCell}</p>` : ''}</div><p class="lb-cell lb-clip"${typeof text === 'string' && !privateField(t.text) ? ` title="${esc(text)}"` : ''}>${description.join(' ')}</p><div class="lb-cell lb-cell--time">${lastCell.filter(Boolean).join('')}</div><div class="lb-cell lb-cell--time">${nextText ? `<span>${nextText}</span>` : ''}</div><div class="row__acts">${U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }])}</div>${extra ? `<p class="lb-row__extra row__sub">${extra}</p>` : ''}${facts.length ? `<details class="lb-row__extra"><summary class="lb-link">运行详情</summary><p>${facts.join(' · ')}</p></details>` : ''}` };
@@ -225,6 +247,7 @@
     U.html($('coverage'), revoked ? '' : U.fieldHtml(text, { name: '读取情况', place: 'body', kind: viewer }));
     U.html(changesTitle, '任务变化');
     if (revoked) $('changes').replaceChildren(); else U.list($('changes'), empty(text));
+    showChangeEmpty(revoked ? '' : text);
     $('next').hidden = true;
     const upcoming = $('upcoming'); if (upcoming) upcoming.hidden = true;
   }
@@ -234,28 +257,33 @@
   const updating = '计划任务正在更新访客版，稍后自动补上。';
   const nextPage = $('next'), nextLabel = nextPage.textContent;
   const GROUP_STEP = 10;
-  const backSteps = performance.getEntriesByType('navigation')[0]?.type === 'back_forward' ? history.state?.taskGroupSteps : null;
+  const keepGroupWords = html => html.replace(/<[^>]+>|计划任务|计划|任务/g, word =>
+    word.startsWith('<') ? word : `<span class="task-phrase">${word}</span>`);
+  function showChangeEmpty(text) {
+    const show = maintenance && !!text, panel = $('changes-empty');
+    panel.hidden = !show;
+    $('changes-box').hidden = show;
+    if (show) {
+      panel.querySelector('.part').textContent = changesTitle.textContent;
+      U.list(panel.querySelector('ul'), empty(text));
+    }
+  }
   function drawGroup(s) {
     if (!s.groupRows) return;
     const all = [...new Map([...s.groupRows, ...(s.loadedRows || [])].map(t => [t.id, t])).values()].filter(t => !s.preview.has(t.id));
-    const shown = maintenance ? all : all.slice(0, s.step), local = all.length > shown.length;
-    const left = Math.max(all.length, s.size - s.preview.size) - shown.length;
-    U.list(s.rest, shown.map(s.rowOf));
-    s.localMore = local;
-    s.next.hidden = !local && (!s.remote || s.cursor == null && s.loadedRows != null);
-    s.next.toggleAttribute('data-needs-pc', !local);
-    if (!s.next.disabled) s.next.textContent = !local && s.failed ? s.failed === updating ? updating : '这批没读到，再试一次 ›'
+    const remaining = Math.max(all.length, s.size - s.preview.size);
+    const remote = s.remote && (s.loadedRows == null || s.cursor != null);
+    const flat = !remote && all.length === 1 && !U.shouldFold(remaining);
+    const left = remaining - all.length;
+    const main = s.groupRows.slice(0, s.preview.size);
+    U.list(s.main, (flat ? main.concat(all) : main).map(s.rowOf));
+    U.list(s.rest, flat ? [] : all.map(s.rowOf));
+    s.more.hidden = !remaining || flat;
+    s.next.hidden = !remote;
+    if (!s.next.disabled) s.next.textContent = s.failed ? s.failed === updating ? updating : '这批没读到，再试一次 ›'
       : left > 0 ? `再看 ${Math.min(GROUP_STEP, left)} 条（还有 ${left} 条） ›` : '继续看 ›';
   }
-  function moreGroup(id) {
-    const s = sections.get(id);
-    if (s.localMore) { s.step += GROUP_STEP; drawGroup(s); L.lightUp([s.el]); taskWords(); }
-    else return loadGroup(id, s.loadedRows != null, s.cursor != null);
-  }
-  function saveGroupSteps() {
-    history.replaceState({ ...history.state, taskGroupSteps: Object.fromEntries([...sections].map(([id, s]) => [id, s.step])) }, '');
-  }
-  async function loadGroup(id, advance = false, append = false) {
+  async function loadGroup(id, append = false) {
     const s = sections.get(id), ticket = generation;
     if (!s.remote) return true;
     if (s.next.disabled) return false;
@@ -271,11 +299,10 @@
         return false;
       }
       if (ticket !== generation || r.meta?.viewer?.kind !== viewer || r.meta?.at !== batchAt || !maintenance && !scheduledPacket(r.data)) return false;
-      U.blockNote(s.el, r);
+      U.blockNote(s.el, { fallbackNote: readingNote(r) });
       if (!Array.isArray(r.data?.items)) return false;
       s.loadedRows = [...new Map([...(append ? s.loadedRows : []), ...(taskGroups({ task_purpose_catalog: page?.task_purpose_catalog }, r.data.items).get(id) || [])].map(t => [t.id, t])).values()];
       s.cursor = r.data.next !== s.cursor ? r.data.next : null;
-      if (advance) s.step += GROUP_STEP;
       loaded = s.box._loaded = true;
       return true;
     } finally {
@@ -289,13 +316,13 @@
   function render(d, append = false) {
     function changeDetail(c) {
       if (typeof c.owner_detail !== 'string' || !c.owner_detail.trim()) return '';
-      return `<details><summary>变更详情</summary><p class="row__sub">${esc(c.owner_detail)}</p></details>`;
+      return `<details data-fold-anchor><summary>变更详情</summary><p class="row__sub">${keepTaskWords(U.nowrap(c.owner_detail))}</p></details>`;
     }
     if (d?.q === 'warming') { page = d; waiting('正在准备'); taskHead(); groupsRead.done(); changesRead.done(); return; }
     if (d && !maintenance && !scheduledPacket(d)) {
       page = null; rows = []; dataAt = null;
       waiting('当前数据还不能单独核对 Windows 登记，等任务名册更新。');
-      U.html($('head'), U.head('Windows 计划任务名册未读到')); groupsRead.done(false); changesRead.done(false); heroRead.done(false); return;
+      U.html($('head'), U.head('Windows 计划任务名册这次没读到')); groupsRead.done(false); changesRead.done(false); heroRead.done(false); return;
     }
     page = append ? { ...page, next: d.next } : d; const received = fixture && scope === 'ai-today' && d?.ai_today ? d.ai_today : d?.items ?? (d?.groups?.some(g => Array.isArray(g.items)) ? d.groups.flatMap(g => g.items || []) : null);
     $('groups').dataset.audience = viewer;
@@ -310,10 +337,9 @@
     for (const [id, list] of groups) {
       const visible = Math.min(5, list.length);
       if (!sections.has(id)) {
-        const c = board.card(id, look(id)); c.step = backSteps?.[id] || GROUP_STEP; sections.set(id, c);
-        U.fold(c.more, c.box, () => loadGroup(id));
-        c.more.addEventListener('click', () => { if (c.more.getAttribute('aria-expanded') === 'false') { c.step = GROUP_STEP; drawGroup(c); saveGroupSteps(); } });
-        c.next.addEventListener('click', async () => { await moreGroup(id); saveGroupSteps(); });
+        const c = board.card(id, look(id)); sections.set(id, c);
+        U.fold(c.more, c.box, () => loadGroup(id), true);
+        c.next.addEventListener('click', () => loadGroup(id, c.cursor != null));
       }
       const group = registeredGroup((page.groups || []).find(g => g.id === id));
       const groupName = group?.name || group?.label || group?.title || group?.text;
@@ -325,16 +351,15 @@
       const bare = (maintenance || group?.total === 0) && !list.length; s.el.hidden = bare; if (!bare) cards++;
       const name = (typeof LOOK === 'undefined' || !Object.hasOwn(LOOK, id) ? null : LOOK[id].name) || groupName || groups.labels?.get(id) || labels.get(id) || (id === 'ai-today' ? '今天 AI 后台自动维护' : id === 'other' ? '其他' : id), status = U.status(group);
       s.label = `${sp(name)}（${count}）`;
-      U.html(s.title, `<b>${U.fieldHtml(name, { name: '任务分组', place: 'label', kind: viewer })}</b><span class="lb-card__count">${U.fieldHtml(count, { kind: viewer })}</span>${status.lamp}`);
+      U.html(s.title, `<b>${keepGroupWords(U.fieldHtml(name, { name: '任务分组', place: 'label', kind: viewer }))}</b><span class="lb-card__count">${U.fieldHtml(count, { kind: viewer })}</span>${status.lamp}`);
       // 卡头第二行：有缺口、有灯的原因先写；都没有就写这一组排在前面的几件
       const names = list.slice(0, 3).filter(t => viewer === 'owner' || !(t.hidden || t.hidden_block || t.content_locked)).map(t => U.fieldText(taskName(t), viewer)).filter(name => name && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
       const about = [gap && U.fieldHtml(gap, { kind: viewer }), status.note, groupHidden && U.fieldHtml(groupName, { name: '任务分组', place: 'body', kind: viewer }), scope === 'ai-today' && group?.project_name && U.fieldHtml(group.project_name, { name: '项目', place: 'body', kind: viewer })].filter(Boolean);
-      U.html(s.sub, about.length ? about.join(' · ') : names.length ? `${U.fieldHtml(names.join('、'), { kind: viewer })}${size > names.length ? ' 等' : ''}` : '');
+      U.html(s.sub, keepGroupWords(about.length ? about.join(' · ') : names.length ? `${U.fieldHtml(names.join('、'), { kind: viewer })}${size > names.length ? ' 等' : ''}` : ''));
       const row = t => task(t, page.coverage);
       const remaining = Math.max(0, Math.max(size, list.length) - visible);
       s.groupRows = list; s.size = size; s.rowOf = row;
-      U.list(s.main, list.slice(0, visible).map(row)); drawGroup(s);
-      s.more.hidden = remaining === 0;
+      drawGroup(s);
       U.html(s.more, `<span class="lb-more__open">${incomplete && group?.total == null ? '展开' : `展开（还有 ${remaining} 条）`}</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
     for (const [id, s] of sections) if (!groups.has(id)) s.el.hidden = true;
@@ -348,7 +373,9 @@
       s.el.classList.toggle('task-full', !maintenance && full);
     }
     board.layout(); pickGroup(); pickProjects();
-    const noTasks = maintenance && (d.q !== 'ok' || maintenanceRounds(d) !== 0) ? '还没读到维护明细'
+    const rounds = maintenanceRounds(d);
+    const noTasks = maintenance && (d.q !== 'ok' || rounds !== 0)
+      ? (Number.isInteger(rounds) && rounds > 0 ? '维护明细这次没读全' : '还没读到维护明细')
       : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
     let none = $('task-empty'); if (!none) { none = document.createElement('ul'); none.className = 'rows list'; none.id = 'task-empty'; $('groups').append(none); } none.hidden = cards > 0; U.list(none, empty(noTasks));
     const ranges = Array.isArray(d.coverage) ? d.coverage : [];
@@ -357,8 +384,8 @@
     const partial = d.q === 'partial' || d.coverage?.q === 'partial' || ranges.some(c => c.complete === false) || missing.length;
     const wording = ranges.length ? ranges.map(c => c.text).filter(Boolean) : [d.coverage?.text].filter(Boolean);
     const text = wording.flatMap(value => typeof value === 'object' ? [value] : value.split(/[，；,;]/).filter(s => /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|有缺口|不完整/.test(s)));
-    const runtimeMissing = rows.filter(t => t.source_readable === false).length;
-    coverageNote = !maintenance && runtimeMissing ? `${runtimeMissing} 项这次没读到运行状态，表里标着“这次没读到”，指上去能看上次读到的结果`
+    const runtimeMissing = rows.filter(t => t.source_readable === false && !retainedResult(t)).length;
+    coverageNote = !maintenance && runtimeMissing ? `${runtimeMissing} 项这次没读到运行状态`
       : !maintenance && d.unreadable_total > 0 ? '部分已登记任务的运行状态没读到'
       : partial && !U.offline?.() ? text.length ? text : missing.length ? missing : [received.length ? '运行记录覆盖不完整' : '任务运行记录没读到'] : [];
     $('coverage-label').hidden = $('coverage').hidden = true;
@@ -370,10 +397,13 @@
     U.html(changesTitle, moved?.title || '任务变化');
     const detailLock = viewer === 'public' && Array.isArray(d.changes7) && d.changes7.length && !d.changes7.some(c => typeof c.owner_detail === 'string')
       ? [{ key: 'detail-lock', cls: 'row row--flat', html: `<span></span><p class="row__sub">${U.fieldHtml({ value: null, visibility: 'owner', hidden_what: '每条变化的详情（任务在电脑上的原名和最近运行时间）' }, { place: 'body', kind: viewer })}</p>` }] : [];
-    U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? [...detailLock, ...d.changes7.map(c => ({
+    const changeEmpty = maintenance && !Object.hasOwn(d, 'changes7') ? '任务变化在计划任务页查看。'
+      : !Array.isArray(d.changes7) ? '任务变更记录这次没读到' : !d.changes7.length ? moved.empty : '';
+    showChangeEmpty(changeEmpty);
+    U.list($('changes'), changeEmpty ? empty(changeEmpty) : [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
-      html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
-    }))] : empty(moved.empty));
+      html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${keepTaskWords(U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer }))}</a><span class="row__meta">${keepTaskWords(U.nowrap({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化'))} · ${U.nowrap(stamp(c.at))}</span></p>${changeDetail(c)}</div>`,
+    }))]);
     taskHead(moved);
     cursor = d.next; nextPage.hidden = !cursor; nextPage.textContent = nextLabel; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
     if (!maintenance) drawUpcoming(listedTasks(groups)); U.land(); taskWords();
@@ -402,12 +432,13 @@
     const complete = dataAt && page?.unreadable_total === 0 && (Array.isArray(page?.upcoming) || !page?.next && page?.total != null);
     box.hidden = false;
     box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
-    const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
-    const firstRows = list.length ? list.slice(0, 6).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间');
-    if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace('下次运行时间', '<span class="task-phrase">$&</span>');
+    const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${keepTaskWords(U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer }))}</a>` });
+    const split = U.shouldFold(list.length - 6) ? 6 : list.length;
+    const firstRows = list.length ? list.slice(0, split).map(entry) : empty(complete ? '没有排定运行的任务' : '下次运行时间这次没读全');
+    if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace(/下次运行时间|这次没读全/g, '<span class="task-phrase">$&</span>');
     U.list(box.querySelector('ul'), firstRows, { animate: false });
-    U.list(box.querySelector('details ul'), list.slice(6).map(entry), { animate: false });
-    box.querySelector('details').hidden = list.length <= 6;
+    U.list(box.querySelector('details ul'), list.slice(split).map(entry), { animate: false });
+    box.querySelector('details').hidden = list.length === split;
     const moreLabel = `<span class="disclosure-closed">再看 ${list.length - 6} 个</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
     const summary = box.querySelector('summary'); if (summary.innerHTML !== moreLabel) summary.innerHTML = moreLabel;
   }
@@ -473,6 +504,14 @@
     sel.value = project || '';
   }
   $('project-pick').addEventListener('change', e => { const u = new URL(location.href); e.target.value ? u.searchParams.set('project', e.target.value) : u.searchParams.delete('project'); u.searchParams.delete('group'); location.assign(u.pathname + u.search + u.hash); });
+  function readingNote(s, alreadyAt) {
+    const note = s.fallbackNote || s.meta?.fallbackNote || '';
+    const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
+    if (note && s.data && s.meta?.source !== 'fallback' && Number.isFinite(Date.parse(source))) {
+      return Date.parse(source) === Date.parse(alreadyAt) ? '' : `清单来源截至 ${stamp(source)}`;
+    }
+    return note.replace(/^数据截止 /, '清单来源截至 ');
+  }
   function link(s) {
     const dayChanged = s.now && U.date(s.now) !== U.date(now);
     now = s.now || now; if (dayChanged && page) render(page);
@@ -487,25 +526,26 @@
       if (projectList !== null) pickProjects();
     } else if (!page && !s.data) {
       $('coverage').hidden = true;
-      waiting(s.warming ? '加载中' : s.text || U.collectionText());
+      const pending = s.warming || ['idle', 'wait', 'slow'].includes(s.phase);
+      waiting(pending ? '加载中' : s.text || U.collectionText());
+      if (!pending) { taskHead(); heroRead.done(false); }
     }
-    let note = s.fallbackNote || s.meta?.fallbackNote || '';
-    const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
-    if (note.startsWith('数据截止 ')) note = Date.parse(source) === Date.parse(dataAt) ? '' : note.replace('数据截止 ', '清单来源截至 ');
-    U.blockNote($('groups'), { fallbackNote: note });
+    U.blockNote($('groups'), { fallbackNote: readingNote(s, dataAt) });
     if (page && !maintenance) drawUpcoming(listedTasks(taskGroups(page, rows)));
     taskWords();
   }
   function load() {
     generation++; watch?.stop();
-    for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.step = GROUP_STEP; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
-    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('加载中'); taskHead();
+    for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
+    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('加载中'); taskHead(null, false, true);
     watch = window.Live.watch('tasks', { scope, project, q: query || null }, {
-      phase(s) { if (!page && !s.meta?.publicationRevoked) { groupsRead.set(s); changesRead.set(s); } },
+      phase(s) { if (!page && !s.meta?.publicationRevoked) { if (['idle', 'wait', 'slow'].includes(s.phase)) heroRead.set(s); groupsRead.set(s); changesRead.set(s); } },
       data(d, meta) {
-        const ticket = ++generation, kind = meta.viewer?.kind || 'public';
+        const kind = meta.viewer?.kind || 'public';
+        if (kind === viewer && page && page.q !== 'warming' && d?.q === 'warming' && !meta.publicationRevoked) return;
+        const ticket = ++generation;
         if (meta.publicationRevoked) { rows = []; runningReading = null; coverageNote = ''; $('sources').replaceChildren(); }
-        if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.step = GROUP_STEP; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
+        if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
         const paint = packet => {
           if (viewer !== kind) runningReading = null;
           viewer = kind; batchAt = meta.at; now = meta.now || meta.at;
@@ -562,26 +602,37 @@
       : items.filter(t => (!pageOnly || t.source_readable === true) && taskState(t) === 'running').length;
     return count || !partial ? { count, at: dataAt, partial, pageOnly } : null;
   }
-  function taskHead(moved, revoked = false) {
+  function taskHead(moved, revoked = false, pending = false) {
     hero.toggleAttribute('data-publication-revoked', revoked);
-    if (page?.q === 'warming') { headline = '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); heroRead.done(); return; }
+    if (pending || page?.q === 'warming') { headline = pending ? '加载中' : '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); if (!pending) heroRead.done(); return; }
     const total = page?.total, rounds = maintenanceRounds(page);
     const observed = Number.isInteger(rounds) && (rounds > 0 || rounds === 0 && page?.q === 'ok');
     // 新私事规则（本人 11-24 02:56）：访客版不再按项藏，总数旁边不再写“另有 N 项仅本人可见”。
     const ownerOnly = 0;
     headline = revoked ? updating : maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
-      : total != null ? `登记 ${total} 项${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
+      : total != null ? `登记 ${total} 项${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册这次没读到';
     const cutoff = /^数据截止 /;
     const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
     const title = U.head(headline, { lamp: false });
     U.html($('head'), status.lamp + (revoked ? title.replace(/(计划任务正在更新|访客版，|稍后自动补上。)/g, '<span class="task-phrase">$&</span>') : title));
     if (project) U.html($('project-label'), [linkedProject(project) && typeof page?.project_name === 'string' ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(project)}`))}">${U.fieldHtml(page.project_name, { name: '项目筛选', kind: viewer })} ›</a>` : U.fieldHtml(page?.project_name || page?.project_name_gap || U.collectionText('项目名称', page), { name: '项目筛选', kind: viewer }), !maintenance && U.fieldHtml(total != null ? `${String(total).startsWith('至少') ? '' : '共 '}${total} 件` : U.collectionText('任务总数', page), { name: '项目筛选', kind: viewer })].filter(Boolean).join(' · '));
     // 小方块黄橙怎么分。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现出错次数不超过成功次数算大部分成功；变了改这句
-    const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)) && `近 7 天出过事的任务画小方块。灰格是那天没记录。黄格“大部分成功”是出错次数不超过成功次数，旧记录的黄格也可能是“${observedFailure}”。橙格“部分成功”是出错多于成功`, ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');
-    const rosterOld = Date.now() - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
-    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册停在 ${U.time(dataAt)}，之后没更新` : ''
+    const markedDays = rows.filter(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)).flatMap(t => t.days7);
+    const emptyDays = markedDays.filter(day => dayTier(day) == null || ['none', 'unknown'].includes(dayTier(day)));
+    const reasons = [...new Set(emptyDays.map(dayReason).filter(Boolean))].map(label => label === '这天不用跑' ? '不用跑' : label);
+    const legend = markedDays.length && ['近 7 天出过事的任务画小方块',
+      emptyDays.some(day => !day.started && !dayReason(day)) && `灰格：${dayMissing}`,
+      ...reasons, `黄格“大部分成功”是出错次数不超过成功次数，旧记录的黄格也可能是“${observedFailure}”。橙格“部分成功”是出错多于成功`,
+    ].filter(Boolean).join(' · ');
+    const noteField = value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer });
+    const note = [
+      ...[coverageNote, scope === 'ai-today' && '今天 AI 后台自动维护'].flat().filter(Boolean).map(noteField),
+      legend && esc(legend).replace(/灰格：那天结果没读到|不用跑|停用中|这天没跑|等下一轮跑/g, '<span class="task-phrase">$&</span>'),
+      ...[...new Set(rows.map(t => t.days7_gap).filter(Boolean))].map(noteField),
+    ].filter(Boolean).join(' · ');
+    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? ''
       : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
-    U.html($('note'), [note, statusNote].filter(Boolean).join(' · ')); $('note').hidden = !note && !statusNote;
+    U.html($('note'), keepTaskWords([note, statusNote].filter(Boolean).join(' · '))); $('note').hidden = !note && !statusNote;
     drawStats(moved);
     L.tone(hero, page);
     if (page) heroRead.done(); taskWords();
@@ -593,7 +644,8 @@
     const modern = Object.hasOwn(d, 'changes_window');
     const window = modern ? d.changes_window : Array.isArray(d.coverage) && d.coverage.find(c => c?.id === 'identity-changes');
     const start = Date.parse(window?.from), end = Date.parse(window?.to);
-    const since = modern && end - start >= 7 * 864e5 ? '近 7 天' : Number.isFinite(start) ? `${U.date(window.from)} 起` : modern && Number.isFinite(end) ? `截至 ${U.date(window.to)}` : '已读';
+    const from = Number.isFinite(start) ? U.date(window.from).replace(/(\d+)-(\d+)/, (_, month, day) => `${Number(month)} 月 ${Number(day)} 日`) : '';
+    const since = modern && end - start >= 7 * 864e5 ? '近 7 天' : from ? `${from}起` : modern && Number.isFinite(end) ? `截至 ${U.date(window.to)}` : '已读';
     const title = since === '已读' ? '已读变化' : `${since}的变化${modern && Number.isFinite(start) && Number.isFinite(end) ? `（截至 ${U.date(window.to)} ${U.time(window.to)}）` : ''}`;
     const empty = `${since === '已读' ? '已读范围内' : since}没有任务变化`;
     const countable = list.every(c => Object.hasOwn(kinds, c?.kind));

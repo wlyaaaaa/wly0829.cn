@@ -16,6 +16,8 @@
   const back = document.querySelector('[data-back]');
   const from = document.referrer ? new URL(document.referrer) : null;
   const hero = $('hero'), stage = $('stage');
+  const runsFold = $('runs-fold'), runsToggle = $('runs-toggle');
+  U.fold(runsToggle, runsFold, null, true);
   if (from?.origin === location.origin && from.pathname === '/live/automation/') {
     back.href = from.pathname + from.search; back.textContent = '自动任务';
   }
@@ -27,6 +29,17 @@
   const pageOf = d => d?.runs_page && typeof d.runs_page === 'object' && Array.isArray(d.runs) ? d.runs_page : null;
   let detailWatches = [];
   const field = (v, name) => U.fieldHtml(v, { name, kind: viewer });
+  const keepUnit = value => `<span class="live-unit">${value}</span>`;
+  const keepDuration = value => value.replace(/\d+ (?:小时|分钟|秒|分)/g, keepUnit);
+  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const words = run => Array.from(segmenter.segment(run), ({ segment }) => segment);
+  const keepExpectedWords = html => html.includes('<') ? html : html.replace(/\p{Script=Han}+/gu, run =>
+    words(run).map(keepUnit).join('<wbr>'));
+  // 分词器会把部分网络维护词拆成单字，先保住整词。
+  const keepFactWords = html => html.replace(/<[^>]+>|\p{Script=Han}{2,}/gu, run => run.startsWith('<') ? run :
+    run.split(/(断线|中转|接回|照开)/u).flatMap((part, i) => i % 2 ? [part] : words(part))
+      .map(word => word.length > 1 ? `<span class="task-fact-word">${word}</span>` : word).join(''));
+  const keepSchedule = html => html.replace(/<[^>]+>|每(?:[ \t]*\d+[ \t]*)?(?:分钟|小时)/g, word => word.startsWith('<') ? word : keepUnit(word));
   const text = v => U.fieldText(v, viewer);
   const time = v => typeof v === 'number' ? v : Date.parse(text(v));
   const stamp = (t, relative = false) => !Number.isFinite(t) ? '' : [
@@ -77,7 +90,7 @@
     warn: '部分完成',   // 只做完一部分的那一轮（后台 result=warn，如原话补漏“这次只补完一部分消息”），用列表“要留意”的黄色（M381）
   })[state] || '结果未读到';
   // 计划任务某一轮结果没读到时写清缘故：没记到结束、结束了但结果未确认（和列表同一个说法），或结果码的含义没登记
-  const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '结果未确认' : '';
+  const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '已结束，结果未确认' : '';
   const result = (state, variant, run) => {
     const result = ['ok', 'done', 'failed', 'warn', 'running', 'stopped', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
     const tone = result === 'stopped' ? 'failed' : result;
@@ -94,12 +107,26 @@
   function runsOf(d) {
     const list = Array.isArray(d.runs) && d.runs.length ? d.runs : d.recent || [], runs = new Map(), plan = variantOf(d) === 'plan';
     const strength = { ok: 3, failed: 3, stopped: 3, warn: 3, done: 2, running: 1 };
-    for (const source of [...list, ...(d.last ? [d.last] : [])]) {
-      if (!source || protectedField(source)) continue;
-      const run = asRun(source), at = runTime(run);
+    // 清理脚本比 Windows 调度器晚启动：这两份回执可以指向同一轮。
+    const history = list.filter(r => r && !protectedField(r)).map(asRun);
+    const last = d.last && !protectedField(d.last) ? asRun(d.last) : null;
+    const candidates = last ? [...history, last] : history;
+    const native = d.id === 'task-016904572d963efcbca591e0' ? candidates.filter(r => typeof r.run_key === 'string' && r.run_key) : [];
+    const duplicates = new Set();
+    for (const run of candidates) {
+      const at = runTime(run);
       if (at == null || at > now) continue;
+      const alias = !run.run_key && run.start != null && run.end != null && native.find(r =>
+        r.start != null && r.start < run.start && r.result === run.result && (r.end === run.end ||
+          r.end == null && r.run_key.startsWith('scheduler:') && r.start === time(d.windows_last_start) &&
+          run.start === time(d.last?.started ?? d.last?.start) && run.end === time(d.last?.finished ?? d.last?.end)));
+      if (alias) {
+        const second = Math.floor(run.start / 1000);
+        if (run !== last && second !== Math.floor(alias.start / 1000)) duplicates.add(second);
+        run.start = alias.start; run.length = (run.end - run.start) / 1000;
+      }
       // 同一轮：Windows 日志的开始时刻带毫秒，上次运行只记到秒，按秒合并，免得一轮显示成两行
-      const key = plan ? Math.floor(at / 1000) : at, prior = runs.get(key);
+      const key = plan ? Math.floor(runTime(run) / 1000) : at, prior = runs.get(key);
       if (!prior) runs.set(key, run);
       else {
         for (const [key, value] of Object.entries(run)) {
@@ -108,7 +135,7 @@
         if ((strength[run.result] || 0) > (strength[prior.result] || 0)) prior.result = run.result;
       }
     }
-    return [...runs.values()].sort((a, b) => runTime(b) - runTime(a));
+    return { runs: [...runs.values()].sort((a, b) => runTime(b) - runTime(a)), duplicates };
   }
   function crumbs(d, kind) {
     const plan = kind === 'plan', list = plan ? '/live/tasks/' : '/live/automation/';
@@ -152,7 +179,8 @@
   }
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
-  const weekLabel = { ok: '有成功记录', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
+  const weekLabel = { ok: '有成功记录', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '有部分完成', none: '那天结果没读到', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '那天结果没读到' };
+  const dayReason = window.LiveBoard.taskDayReason;
   // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
   // 旧包只有一次出错的证据时用黄格提醒，全天明确全出错才用红格。
   const TIER = { success: ['ok', '全部成功'], mostly_successful: ['mostly', '有出错，大部分成功'], partial_success: ['partial', '有出错，部分成功'],
@@ -160,7 +188,15 @@
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0
     ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   const dayMark = (state, key = false) => `<span class="task-mark${key ? '' : ' task-day'}" data-state="${state}" aria-hidden="true"></span>`;
-  function week(days, runs) {
+  const quietMissing = '近 7 天的运行记录这次没读到';
+  const quietPartial = '读到的这几天没跑过，其余没读到';
+  const quietEmpty = '近 7 天没跑过';
+  function week(days, runs, quiet) {
+    const head = '<strong>近 7 天</strong>';
+    const unavailable = `<div class="task-week">${head}<span>这 7 天的每日结果没读到</span></div>`;
+    if (quiet && !(Array.isArray(days) && days.some(dayReason))) {
+      return quiet === quietMissing ? unavailable : `<div class="task-week"><strong>${quiet}</strong></div>`;
+    }
     const dateKey = t => new Date(t + BJ).toISOString().slice(0, 10), evidence = new Map();
     for (const run of runs) {
       if (run.start == null) continue;
@@ -176,16 +212,18 @@
       const failed = day.state === 'failed' || outcome === 'failed';
       // 当天有部分完成（后台 days7 的 state=warn；旧包从已读到的轮次看出）：同一天先算出错，其次成功，再次部分完成（M676）
       const state = failed ? 'observed-failed' : day.state === 'ok' || outcome === 'ok'
-        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn' : day.state === 'none' && !sawRun ? 'none' : 'unknown';
+        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn'
+          : day.state === 'none' && !sawRun ? 'none' : 'unknown';
       const started = day.started || sawRun;
-      const name = weekLabel[state === 'unknown' && started ? 'started' : state];
+      const reason = !started && ['none', 'unknown'].includes(state) ? dayReason(day) || (state === 'none' && day.coverage_complete === true ? '这天没跑' : '') : '';
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
-      return { ...day, state: state === 'unknown' && started ? 'started' : state, name, started };
+      const shown = reason ? 'none' : state === 'unknown' && started ? 'started' : state;
+      return { ...day, state: shown, name: reason || weekLabel[shown], started };
     });
-    if (!cells.some(day => day.state !== 'unknown' || day.started)) return '<div class="task-week"><strong>近 7 天</strong><span>每日结果还没读到</span></div>';
+    if (!cells.some(day => day.state !== 'unknown' || day.started)) return unavailable;
     const marks = cells.map(({ date, state, name, counts = '' }) => `<li title="${esc(date)} ${name}${counts}">${dayMark(state)}<time datetime="${esc(date)}" aria-label="${esc(date)} ${name}${counts}">${esc(date.slice(5))}</time></li>`).join('');
-    const legend = [...new Map(cells.map(day => [`${day.state}|${day.key || weekLabel[day.state]}`, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.key || weekLabel[day.state]}</span>`).join('');
-    return `<div class="task-week"><strong>近 7 天</strong><ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}</div></div>`;
+    const legend = [...new Map(cells.map(day => [day.name, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.name}</span>`).join('');
+    return `<div class="task-week">${head}<ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}${quiet && quiet !== quietMissing ? `<span>${quiet}</span>` : ''}</div></div>`;
   }
   function count(n, exact) {
     return Number.isInteger(n) && n >= 0 && (exact || n > 0) ? `${exact ? '' : '<small>至少 </small>'}${n}<small> 次</small>` : '';
@@ -205,7 +243,7 @@
     const plan = kind === 'plan', exact = s.exact === true, span = exact && s.covered !== true, from = time(s.from);
     const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running);
     const { warn, unread, mixed } = partialRuns(d, s, runs, n(s.unknown));
-    const why = v => v || !plan ? '' : running ? '还在跑' : total ? '已读部分没有' : '';
+    const why = v => !v && plan && total ? '已读部分没有' : '';
     const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果${mixed ? '或部分完成' : ''}`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const totalRow = ['total', `${span && valid(from) ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(s.total, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(s.ok, s.success_exact === true), '', why(ok)];
@@ -245,7 +283,7 @@
     const readsToday = lastSample <= now && dayStart(lastSample) === today && ['ok', 'partial'].includes(d.today_runs_q);
     const todayCount = readsToday ? count(d.today_runs, d.today_runs_q === 'ok')
       : count(recent.filter(r => r.start >= today).length, covered);
-    const plan = kind === 'plan', why = n => n || !plan ? '' : running ? '还在跑' : counted.length ? '已读部分没有' : '';
+    const plan = kind === 'plan', why = n => !n && plan && counted.length ? '已读部分没有' : '';
     const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const total = ['total', `${span ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(counted.length, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(good.length, exact && (span || knownOutcomes)), '', why(good.length)];
@@ -259,23 +297,28 @@
     const from = time(coverage?.from), to = time(coverage?.to);
     const range = valid(from) && valid(to) && from <= to && to <= now ? `记录覆盖 ${stamp(from)} 至 ${stamp(to)}` : '';
     const gap = covered ? '' : runs.length ? '只显示已读到的轮次' : '运行记录未读到';
-    const reason = text(d.gap).startsWith('最近一次记录于') && range ? '' : field(d.gap, '缺数原因');
+    const freshHistory = valid(to) && time(d.runs_at) === to && coverage.reliable !== false && !coverage.gap_reason;
+    const reason = range && (text(d.gap).startsWith('最近一次记录于') || freshHistory && U.isReadingCutoff(text(d.gap))) ? '' : field(d.gap, '缺数原因');
     return [...new Set([esc(range), reason, esc(gap)].filter(Boolean))].join(' · ');
   }
   function disabledStatus(d) {
     const cutoff = time(d.disabled_since), checked = Math.min(now, time(d.at ?? packetAt));
     return valid(cutoff) && cutoff <= checked
-      ? `已停用至少 ${duration(Math.floor((checked - cutoff) / 1000))}（${stamp(cutoff, true)} 记到停用）`
-      : '已停用';
+      ? `停用中，不用排 · 已停用至少 ${duration(Math.floor((checked - cutoff) / 1000))}（${stamp(cutoff, true)} 记到停用）`
+      : '停用中，不用排';
   }
   function quietWeek(d, runs, kind, covered) {
     const start = dayStart(now) - 6 * DAY;
-    if (kind !== 'plan' || !d.scheduler || runs.some(r => runTime(r) >= start || r.end >= start)
-      || d.days7?.some(day => day.started || ['ok', 'failed'].includes(day.state))) return '';
-    const last = time(d.windows_last_start), checked = time(d.at ?? packetAt);
-    if (covered || d.source_readable === true && valid(checked) && checked >= dayStart(now)
-      && (valid(last) && last < start || d.state === 'never')) return '近 7 天没有运行';
-    return '近 7 天没有读到运行记录';
+    const days = Array.isArray(d.days7) ? d.days7 : [], last = time(d.windows_last_start);
+    if (kind !== 'plan' || !d.scheduler || d.runs_summary?.total > 0 || runs.some(r => runTime(r) >= start || r.end >= start)
+      || days.some(day => day.started || day.reason === 'run_result_unknown' || ['ok', 'failed', 'warn'].includes(day.state))
+      || (d.source_readable === true && last >= start && last <= now)) return '';
+    const readDays = new Set(days.filter(day => {
+      const at = time(`${day.date}T00:00:00+08:00`);
+      return day.state === 'none' && day.coverage_complete === true && at >= start && at <= now;
+    }).map(day => day.date));
+    if (readDays.size === 7 || !days.some(day => typeof day.coverage_complete === 'boolean') && covered && time(d.coverage?.to) + 120000 >= now) return quietEmpty;
+    return readDays.size ? quietPartial : quietMissing;
   }
   // Windows 登记的触发方式：没有下次时间的任务写“登录时运行”“开机时运行”，没有触发条件的写“叫了才跑”
   function triggerLine(d) {
@@ -295,19 +338,28 @@
     document.title = `${text(name) || '任务详情'} · 实况`;
     const showLast = last && runTime(last) != null && runTime(last) <= now;
     const state = showLast ? last.result : ['disabled', 'paused', 'never'].includes(d.state) ? d.state : null;
-    const stateHtml = result(state, kind, showLast ? last : null), textLast = showLast ? `${kind === 'pickup' ? '最近' : '上次'} ${esc(stamp(runTime(last), true))}${last.start == null ? ' 结束' : ''} ` : '';
+    const partial = showLast && last.result === 'warn' && last.reason_code === 'time_limit' && field(last.reason, '运行说明');
+    const stateHtml = result(state, kind, showLast ? last : null) + (partial ? ` · ${partial}` : ''), textLast = showLast ? `${kind === 'pickup' ? '最近' : '上次'} ${esc(stamp(runTime(last), true))}${last.start == null ? ' 结束' : ''} ` : '';
     const due = upcoming[0], original = valid(time(d.next_plan?.original_at)) ? time(d.next_plan.original_at) : kind === 'plan' ? pastNext(d) : NaN;
     const pending = kind === 'plan' && text(d.next_plan?.pending_text);
-    const stopped = ['disabled', 'paused'].includes(d.state);
+    const disabled = kind === 'plan' && (d.state === 'disabled' || d.enabled === false);
+    const stopped = disabled || ['disabled', 'paused'].includes(d.state);
     const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'stopped', 'warn'];
     const originalFinished = valid(original) && last?.start >= original && completed.includes(last.result);
     const resident = kind === 'plan' && ['resident', 'service_loop', 'on_demand', 'event'].includes(d.mode);
-    const planStatus = stopped ? kind === 'plan' && d.state === 'disabled' ? disabledStatus(d) : showLast && label(d.state, kind)
+    const oldRead = time(d.last_read_at), oldNext = time(d.last_read_next_at);
+    const planStatus = stopped ? disabled ? disabledStatus(d) : showLast && label(d.state, kind)
       : valid(due) ? `${offline ? '原定' : '下次'} ${stamp(due, true)}`
       : valid(original) && !originalFinished ? `原定 ${stamp(original, true)}，${pending || '结果待更新'}`
+      : valid(oldRead) && valid(oldNext) ? `原定 ${stamp(oldNext, true)} · ${stamp(oldRead)} 的安排`
       : resident ? d.schedule ? '' : MODE[d.mode] : kind === 'plan' && triggerLine(d) ? triggerLine(d)
-      : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? '下次时间未读到' : '';
-    write($('task-status'), [showLast || !planStatus ? textLast + stateHtml : '', esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
+      : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? kind === 'plan' ? '下次时间没读到' : '下次时间未读到' : '';
+    const failed = kind === 'plan' && d.confirmed_failure === true && d.level === 'yellow' && d.last?.result === 'failed' && !protectedField(d.last);
+    const failedAt = failed && time(d.last.end ?? d.last.start);
+    const warning = failed && `<span class="task-result" data-state="warn"><i class="task-dot" data-state="warn" aria-hidden="true"></i>上次${valid(failedAt) ? ` ${esc(stamp(failedAt))} ` : ''}出错</span>`;
+    const why = failed && field(d.problem_reason ?? d.last.reason ?? d.why, '出错原因');
+    const summary = failed ? d.state === 'running' && result('running', kind) : showLast || !planStatus ? textLast + stateHtml : '';
+    write($('task-status'), [warning, why, summary, showLast && valid(oldRead) && runTime(last) <= oldRead && `截至 ${esc(stamp(oldRead))}`, esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
     // Windows 名册记“还没运行过”、日志里却有运行的（任务后来重新登记过），说一句，免得和列表的“没跑过”对不上
     if (kind === 'plan' && d.state === 'never' && showLast) U.html($('task-status'), `${$('task-status').innerHTML}<small class="task-status__note">Windows 名册记的是“还没运行过”（列表照这个写“没跑过”），上面是 Windows 日志里读到的运行</small>`, false);
     const group = GROUP[d.group], mode = stopped ? '' : d.schedule ?? (kind === 'plan' && !resident && triggerLine(d) || MODE[d.mode]);
@@ -315,7 +367,7 @@
       : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', bjSchedule(d) ?? d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
     write($('task-purpose'), purpose(d, kind));
-    write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
+    write($('task-week'), kind === 'plan' ? week(d.days7, runs, quiet) : quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : '');
     // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
     const off = d.state === 'disabled' || d.enabled === false;
     const acts = U.actions(d, Array.isArray(d.actions) ? d.actions
@@ -359,8 +411,8 @@
     const projectCell = marked(project, d, 'project_name', '所属项目');
     const rows = [
       ['做什么', purpose(d, kind)],
-      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(field(d.expected_result, '怎么算做完'), d, 'expected_result', '怎么算做完')
-        || '<span class="task-fact-missing">登记时没写怎么算做完</span>'],
+      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(keepExpectedWords(field(d.expected_result, '怎么算做完')), d, 'expected_result', '怎么算做完')
+        || '<span class="task-fact-missing">登记时没写怎么算做完</span>', 'task-expected-result'],
       ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
         : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field((kind === 'schedule' ? bjSchedule(d) : null) ?? d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
@@ -373,7 +425,10 @@
       typeof d.ledger_id === 'string' && ['关联账本', link(route('/live/issue/', { id: d.ledger_id }), '看这件事')],
     ].filter(row => row?.[1]);
     $('about-title').textContent = kind === 'pickup' ? '这个动作' : '这个任务';
-    U.html($('facts'), rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('') || '<p>说明未读到</p>', false);
+    U.html($('facts'), rows.map(([k, v, css]) => {
+      const body = kind === 'plan' && !css ? keepFactWords(k === '时间安排' ? keepSchedule(v) : v) : v;
+      return `<div><dt>${k}</dt><dd${css ? ` class="${css}"` : ''}>${body}</dd></div>`;
+    }).join('') || '<p>说明未读到</p>', false);
   }
   const timeCell = r => `<time datetime="${new Date(runTime(r)).toISOString()}">${stamp(runTime(r))}${r.start == null ? ' 结束' : ''}</time>`;
   const endStamp = r => r.start != null && dayStart(r.start) === dayStart(r.end) ? U.time(r.end) : stamp(r.end);
@@ -396,14 +451,18 @@
   function extra(d, r, output = false, open = false) {
     const path = runPath(d, r), info = [times(r), marked(field(r.reason, '运行说明'), r, 'reason', '运行说明'), !output && marked(field(r.output, '运行成果'), r, 'output', '运行成果')].filter(Boolean);
     if (!open && !path && r.end == null && r.exit_code == null && !r.reason && !(!output && r.output)) return '';
-    return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
+    return `<details class="task-run-extra" data-fold-anchor${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
-  function history(d, rows, kind, open, heads = true) {
+  function history(d, rows, kind, open, heads = true, quiet = '') {
+    if (!rows.length && kind === 'plan') {
+      const summary = quiet !== quietMissing || d.days7?.length ? quiet : '';
+      return `<p>${summary || '这段时间的运行记录没读到'}</p>`;
+    }
     if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
-      `<tr data-time="${runTime(r)}"><td>${timeCell(r)}${r.length == null ? "" : `<small class="task-run-duration">用了 ${duration(r.length)}</small>`}</td><td>${value(r.cause ?? r.trigger_text, '起因')}${extra(d, r, false, open.includes(runTime(r)))}</td><td>${provider(r.executor) || '未读到'}</td><td>${result(r.result, kind, r)}</td><td>${chatLink(r)}</td></tr>`).join('')}</tbody></table>`;
+      `<tr data-time="${runTime(r)}"><td>${timeCell(r)}${r.length == null ? "" : `<small class="task-run-duration">用了 ${duration(r.length)}</small>`}</td><td>${value(r.cause ?? r.trigger_text ?? (r.trigger === 'automation' ? d.trigger_text : null), '起因')}${extra(d, r, false, open.includes(runTime(r)))}</td><td>${provider(r.executor) || '未读到'}</td><td>${result(r.result, kind, r)}</td><td>${chatLink(r)}</td></tr>`).join('')}</tbody></table>`;
     const last = kind === 'plan' && d.state === 'running' && d.last?.result === 'running' && !protectedField(d.last) ? asRun(d.last) : null;
     const checkedAt = time(d.runs_at ?? d.source_at ?? d.at ?? packetAt);
     const logFrom = time(d.coverage?.from), logTo = time(d.coverage?.to);
@@ -417,8 +476,10 @@
       const running = r.result === 'running' && r.start != null && last && Math.floor(r.start / 1000) === Math.floor(last.start / 1000) && last.end == null
         && checkedAt >= r.start && checkedAt <= now ? span((checkedAt - r.start) / 1000) : '';
       const cutoff = running && (offline || d.q === 'stale') ? `<small class="task-run-duration">截至 ${stamp(checkedAt, true)}</small>` : '';
-      const elapsed = took ? `用了 ${took}` : running ? `已跑 ${running}${cutoff}` : '—';
-      return `<li data-time="${runTime(r)}"><div class="task-row">${kind === 'schedule' ? timeRange(r) : timeCell(r)}${result(r.result, kind, r)}<span class="task-row__duration">${elapsed}</span><span>${kind === 'schedule' ? output || '成果未读到' : field(trigger, '触发方式') || (kind === 'plan' && d.scheduler === 'windows' ? outsideLog(r) ? '这一轮不在已读的日志里' : 'Windows 日志没记触发方式' : '触发方式未读到')}</span>${chatLink(r)}</div>${extra(d, r, !!output, open.includes(runTime(r)))}</li>`;
+      const amount = kind === 'plan' ? keepDuration(took || running) : took || running;
+      const elapsed = took ? `用了 ${amount}` : running ? `已跑 ${amount}${cutoff}` : '—';
+      const partial = r.result === 'warn' && r.reason_code === 'time_limit' && field(r.reason, '运行说明');
+      return `<li data-time="${runTime(r)}"><div class="task-row">${kind === 'schedule' ? timeRange(r) : timeCell(r)}${result(r.result, kind, r)}<span class="task-row__duration">${elapsed}</span><span>${kind === 'schedule' ? output || '成果未读到' : field(trigger, '触发方式') || (kind === 'plan' && d.scheduler === 'windows' ? outsideLog(r) ? '这一轮不在已读的日志里' : 'Windows 日志没记触发方式' : '触发方式未读到')}${partial ? `<small class="task-run-duration">${partial}</small>` : ''}</span>${chatLink(r)}</div>${extra(d, r, !!output, open.includes(runTime(r)))}</li>`;
     }).join('')}</ol>`;
   }
   function checks(body) {
@@ -444,18 +505,29 @@
     }
     return field(body.text ?? body.note, '检查记录');
   }
+  function readingNote(target, state, at) {
+    const note = state.fallbackNote || state.meta?.fallbackNote;
+    const sample = time(at);
+    U.blockNote(target, { fallbackNote: state.data && state.meta?.source !== 'fallback' && valid(sample)
+      && (note || state.warming || state.data.q === 'warming') ? `截至 ${stamp(sample)}` : note });
+  }
   function readChecks(resource, target) {
     if (!resource) return;
     const expected = viewer;
+    let resultAt = null;
     detailWatches.push(window.Live.watch(resource, null, {
       data(d, meta) {
         if (!target.isConnected) return;
-        U.html(target, d && meta.viewer?.kind === expected && viewer === expected ? checks(d) || '逐项结果未读到' : '', false);
+        const current = d && meta.viewer?.kind === expected && viewer === expected;
+        if (current && d.q === 'warming') return;
+        const body = current && checks(d);
+        resultAt = body ? meta.at : null;
+        U.html(target, current ? body || '逐项结果未读到' : '', false);
       },
       link(state) {
         if (!target.isConnected) return;
         if (!state.data && ['none', 'gone'].includes(state.phase)) U.html(target, state.offline ? '这块没存下来，连上后补上。' : '逐项结果未读到', false);
-        U.blockNote(target, state);
+        readingNote(target, state, resultAt);
       },
     }));
   }
@@ -469,18 +541,26 @@
     const output = marked(field(runOutput(d, r), '本次运行结果'), r.output != null ? r : d, 'output', '本次运行结果');
     U.html($('failure-text'), [times(r), why || (r.exit_code != null ? '只读到退出码，没有出错原因的记录' : '没有出错原因的记录'), output].filter(Boolean).map(v => `<p>${v}</p>`).join(''), false);
     const target = $('failure-checks');
-    U.html(target, '', false); readChecks(runPath(d, r), target);
+    const resource = runPath(d, r);
+    U.html(target, resource ? '正在读逐项结果' : '', false); readChecks(resource, target);
   }
   const bar = U.topbar({ ask: () => task ? `请看实况的任务「${text(task.name)}」，说明怎么跑、最近结果及该关注什么。` : '' });
   const stopChecks = () => { detailWatches.forEach(w => w.stop()); detailWatches = []; };
   function render(d) {
-    const page = pageOf(d), kind = variantOf(d), runs = runsOf(page ? { ...d, runs: [...d.runs, ...olderRuns.values()] } : d), upcoming = nextRuns(d);
+    const page = pageOf(d), kind = variantOf(d), upcoming = nextRuns(d);
+    const { runs, duplicates } = runsOf(page ? { ...d, runs: [...d.runs, ...olderRuns.values()] } : d);
+    const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
+    const cutoff = dayStart(now) - 6 * DAY;
+    const observed = duplicates.size && cursor && runTime(runs.at(-1)) > cutoff;
+    const affectedDays = new Set([...duplicates].map(second => new Date(second * 1000 + BJ).toISOString().slice(0, 10)));
+    const stats = duplicates.size ? { ...d, runs_summary: null, coverage: observed ? { ...d.coverage, complete: false, reliable: false } : d.coverage,
+      days7: Array.isArray(d.days7) ? d.days7.map(day => affectedDays.has(day.date) ? { ...day, outcome: null, partial: true } : day) : d.days7 } : d;
     document.body.dataset.variant = kind;
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
-    const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
+    const { rows, covered, outcome } = metrics(stats, runs, kind);
     const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? '还没跑过' : '');
-    crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
+    crumbs(d, kind); renderHero(stats, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     schedulePrompt(d, kind);
     // 统计格用同一批次的结果；旧包按格里使用的次数分档。
     $('task-stats').dataset.outcome = kind === 'plan' ? outcome : '';
@@ -488,10 +568,10 @@
     // 出错那格读到的是 0 次（含“已读部分没有出错”）时不上粉色：粉色是有出错时的底色，0 次和“全成功不上色”同一个意思（M779）
     write($('task-stats'), quiet ? '' : rows.map(([key, label, number, note, reason]) => {
       const whole = !number && reason === '已读部分没有', none = key === 'failure' && (whole || number === count(0, true));
-      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${number || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
+      const display = kind === 'plan' && key === 'average' ? keepDuration(number) : number;
+      return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${display || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
     }).join(''), false);
-    const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
-    const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
+    const total = page ? Math.max(runs.length, (Number(page.total) || 0) - duplicates.size) : runs.length;
     const second = r => Math.floor(runTime(r) / 1000);
     const old = legacyRun && (runs.find(r => r.run_key === legacyRun) || pickedRun && runs.find(r => second(r) === second(pickedRun))) || null;
     // 要看的那一次比已取的都早：先摆已取的，“再看”按钮在中间，那一次单独摆在最后并展开
@@ -499,19 +579,24 @@
     if (legacyRun && !old && page && cursor && !pickAsked) askPicked();
     const open = [...$('rec').querySelectorAll('[data-time]:has(details[open])')].map(el => Number(el.dataset.time));
     if (old || detached) open.push(runTime(old || detached));
-    U.html($('runs'), history(d, runs.slice(0, 6), kind, open), false);
-    $('more-runs').hidden = total <= 6;
-    const earlier = Math.max(0, total - 6), moreLabel = `<span class="disclosure-closed">展开（更早的 ${earlier} 次）</span><span class="disclosure-open">收起（更早的 ${earlier} 次）</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
-    if ($('more-runs').querySelector('summary').innerHTML !== moreLabel) $('more-runs').querySelector('summary').innerHTML = moreLabel;
+    const first = !cursor && total === runs.length && !U.shouldFold(total - 6) ? total : 6;
+    U.html($('runs'), history(d, runs.slice(0, first), kind, open, true, quiet), false);
+    $('more-runs').hidden = total <= first && !cursor && !detached;
+    const earlier = Math.max(0, total - first);
+    const countNote = earlier ? `（更早的 ${earlier} 次）` : '';
+    const moreLabel = `<span class="disclosure-closed">展开${countNote}</span><span class="disclosure-open">收起${countNote}</span><span class="more__chev" aria-hidden="true">›</span>`;
+    U.html(runsToggle, moreLabel, false);
     // 更早的一次只摆一批，底下“再看 50 次”接着摆；几千次一次全写进来会把页面卡死（M632）。要看的那一次在后面时摆到它为止。
     // 后台分页时已取的都摆出来，“再看”向后台取下一批；老回包一次带全的照旧本地分批摆
-    const rest = runs.slice(6), target = old ? rest.indexOf(old) : -1;
+    const rest = runs.slice(first), target = old ? rest.indexOf(old) : -1;
     if (!page && target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
-    const shown = page ? rest : rest.slice(0, restShown), left = Math.max(0, total - 6 - shown.length - (detached ? 1 : 0));
-    const more = left && (!page || cursor) ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›`}</button>` : '';
+    const shown = page || !U.shouldFold(rest.length - restShown) ? rest : rest.slice(0, restShown);
+    const left = Math.max(0, total - first - shown.length - (detached ? 1 : 0));
+    const readMore = left ? `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›` : '再读更早的记录 ›';
+    const more = cursor || !page && left ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || readMore}</button>` : '';
     U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
-    if (target >= 0 || detached) $('more-runs').open = true;
-    write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
+    if (target >= 0 || detached) runsFold._liveOpen();
+    write($('run-coverage'), quiet ? '' : readNotice(d, d.coverage, runs, covered));
     $('future').hidden = kind !== 'schedule';
     if (kind === 'schedule') {
       U.html($('future-runs'), upcoming.map(t => `<li><time datetime="${new Date(t).toISOString()}">${esc(stamp(t, true))}</time></li>`).join(''), false);
@@ -555,7 +640,9 @@
     window.Live.watch(`tasks/${encodeURIComponent(id)}`, null, {
       phase(state) { if (!task && !state.meta?.publicationRevoked) reading.set(state); },
       data(d, meta) {
-        viewer = meta.viewer?.kind || 'public'; packetAt = meta.at; changed = true;
+        const kind = meta.viewer?.kind || 'public';
+        if (kind === viewer && task && task.q !== 'warming' && d?.q === 'warming' && !meta.publicationRevoked) return;
+        viewer = kind; packetAt = meta.at; changed = true;
         if (olderViewer !== viewer || meta.publicationRevoked) { olderRuns = new Map(); deepCursor = undefined; pickedRun = null; pickAsked = pageFailed = false; olderViewer = viewer; }
         else if (pageOf(task)) keepRuns(task.runs);
         task = d;
@@ -580,7 +667,7 @@
           reading.done();
         }
         changed = false;
-        U.blockNote(stage, state);
+        readingNote(stage, state, task && task.q !== 'warming' ? task.source_at ?? task.at ?? packetAt : null);
       },
     });
   }

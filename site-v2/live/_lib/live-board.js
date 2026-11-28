@@ -133,5 +133,12 @@
     return { el: grid, card, layout, only, get: id => cards.get(id), get single() { return single; } };
   }
 
-  window.LiveBoard = { create, icon };
+  const taskDayReasons = new Map([
+    ['not_scheduled', '这天不用跑'],
+    ['disabled', '停用中'],
+    ['scheduled_not_run', '这天没跑'],
+    ['schedule_pending', '等下一轮跑'],
+  ]);
+  const taskDayReason = day => taskDayReasons.get(day?.reason) || '';
+  window.LiveBoard = { create, icon, taskDayReason };
 })();

@@ -5,7 +5,7 @@
 // 另读这一类的列表找上一轮、下一轮和接着做的那一轮，读 automation 拿快讯条和类名。取数转换在 ../runs.js。
 (() => {
   'use strict';
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, R = window.AutomationRuns, P = window.AutomationPresentation, { esc } = U;
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
   // 已撤类别的旧轮仍可点开。
@@ -21,7 +21,10 @@
   const listLabel = retired || fromList && fromList.searchParams.get('category') !== category ? '自动任务' : '';
   let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
-  const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
+  const paint = (root, html) => {
+    T.paint(root, R.asOwner(html, viewer));
+    U.fitNativeFolds(root);
+  };
   const F = (v, name) => T.field(v, viewer, name);
   // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
   const said = v => U.fieldText(v ?? '', viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
@@ -40,12 +43,10 @@
     // 不是正在跑、又没有结束时刻和用时（没有收尾回执）：照实写没记到结束，不写用时
     return r.status !== 'running' && r.minutes == null ? `${whenDay(a)} 排上 · 没记到结束` : `${whenDay(a)} 排上`;
   };
-  // 日期连着时刻一起换行，短括号也作为一组。只包文字，不改标签里的属性。
-  const keepDates = html => html.split(/(<[^>]*>)/).map((p, i) => i % 2 ? p : p.replace(/（[^（）\n]{1,10}）|(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\d-])(?:[ \t]+(?:周[一二三四五六日][ \t]+)?\d{1,2}:\d{2}(?::\d{2})?)?|\d{1,2}[ \t]*月[ \t]*\d{1,2}[ \t]*日[ \t]*(?:北京时间[ \t]*)?\d{1,2}:\d{2}(?::\d{2})?|(?<![\d:])\d{1,2}:\d{2}(?::\d{2})?(?![\d:])/g, '<span class="live-unit">$&</span>')).join('');
+  const { keepWords } = window.AutomationPresentation;
   // 标题后面的签不单独掉到下一行：和标题最后两个字（或最后那个日期时刻）连在一起换行
   const withTag = (html, tag) => !tag ? html : /<span class="live-unit">[^<]*<\/span>$/.test(html) ? html.replace(/(<span class="live-unit">[^<]*<\/span>)$/, `<span class="ar-tail">$1${tag}</span>`)
     : /(?:&[#\w]+;|[^<>&\s]){1,2}$/.test(html) ? html.replace(/((?:&[#\w]+;|[^<>&\s]){1,2})$/, `<span class="ar-tail">$1${tag}</span>`) : html + tag;
-  const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   // 回执里“这次带入：……读到……”那串明细（receipt.scan）不进大标题和结论，挪到对话卡头（主控 11-26）
   const SCAN = /这次带入[:：][\s\S]*$/;
@@ -83,7 +84,9 @@
     const thing = r.subject ? F(r.subject.title, '这件活') : '';
     const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     // 暂缓的轮次标题一律短（“这件活 · 第 N 轮 · 暂时不修”），说明写在“这一轮做成了什么”（主控 11-25）；没有这件活的名字时用这一类的名字打头
-    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+    const note = F(r.receipt.closingNote, '结局');
+    const failure = note ? F(r.reason || r.stop?.text, '原因') || note : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? failure : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : firstSentence(withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), thing), r)) || '跑完了';
     // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
     return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
@@ -106,14 +109,14 @@
   };
   function tags(r) {
     const d = chat?.data || r.conversation.meta;
-    const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
+    const elapsed = r.status === 'running' && R.runningTime(r, state);
     const whole = R.minutesBetween(r.queuedAt || r.startedAt, r.finishedAt);
     // 派活先启动、随后 AI 对话才开始时，不能把含派活启动的时长写成对话处理时间。
     const runSpan = R.minutesBetween(r.startedAt, r.finishedAt);
     const workLabel = !longerThanChat(r, d) ? 'AI 实际 ' : T.dec(runSpan) === T.dec(r.workedMinutes)
       ? `任务运行 ${T.when(r.startedAt)} 起，` : '后台记录用时 ';
     const time = [clockRange(r), whole != null && `整轮 ${T.dec(whole)} 分钟`,
-      r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
+      elapsed && `已跑 ${elapsed}`,
       r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `${workLabel}${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
     const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
@@ -121,7 +124,7 @@
     const family = !r.who?.program && R.agentsPath(r.family || R.familyOf(worker), true);
     const who = !model ? '' : family ? link(family, `${esc(model)} ›`) : esc(model);
     return [esc(name()), F(r.trigger, '为什么开这一轮'), who, r.status === 'running' ? '<b class="ar-live">正在跑</b>' : '', time].filter(Boolean)
-      .map(t => `<span class="ar-tag"><span>${keepDates(t)}</span></span>`).join('');
+      .map(t => `<span class="ar-tag"><span>${keepWords(t)}</span></span>`).join('');
   }
 
 
@@ -196,17 +199,19 @@
   let chat = null, chatWatch = null;
   const CV = window.LiveChatView.create({ viewer: () => viewer, chat: () => chat?.data || null, at: () => chat?.meta?.at || null, route: p => T.path(p) || p });
   function watchChat(c) {
-    const key = c.available ? c.resource : '';
+    const key = c.resource || '';
     if (chatWatch?.key === key) return;
-    chatWatch?.sub.stop(); chat = null; chatWatch = null;
-    if (key) chatWatch = { key, sub: Live.watch(key, null, { phase(st) { chat = st; if (state) draw(); } }) };
+    chatWatch?.sub?.stop(); chat = null; chatWatch = null;
+    if (!key) return;
+    const watch = chatWatch = { key };
+    watch.sub = Live.watch(key, null, { phase(st) { if (chatWatch === watch) { chat = st; if (state) draw(); } } });
   }
   // 钟点：和这一轮同一天只写几点，别的日子带上日子
   const clockOf = (r, at) => !T.stamp(at) ? '' : T.dayKey(at) === T.dayKey(r.startedAt || r.queuedAt || at) ? T.clock(at) : `${T.day(at)} ${T.clock(at)}`;
   const GEAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.5 8.8a.5.5 0 0 0 .1.6l2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6a.5.5 0 0 0-.1.6l1.9 3.3c.1.2.4.3.6.2l2.4-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.2.4.5.4h3.8c.3 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.4 1c.2.1.5 0 .6-.2l1.9-3.3a.5.5 0 0 0-.1-.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>';
   // 一条话：派活程序（齿轮）、AI（绿点）；name 是谁说的，at 是钟点，body 是正文，after 挂在正文下面（思考摘要、链接）
   const joined = html => html.split(/(<[^>]*>)/).map((s, i) => i % 2 ? s : s.replace(/([。！？])[ \t]*(?:[；;][ \t]*|·[ \t]*)/g, '$1')).join('');
-  const say = ({ who, name: by, at, body = '', after = '', tone = '', cls = '' }) => `<li class="ar-msg${cls ? ` ${cls}` : ''}" data-who="${who}"${tone ? ` data-tone="${tone}"` : ''}><span class="ar-ava" data-who="${who}" aria-hidden="true">${who === 'dispatcher' ? GEAR : ''}</span><div class="ar-msg__body"><p class="ar-msg__head"><b>${by}</b>${at ? `<time>${esc(at)}</time>` : ''}</p>${body ? `<p class="ar-msg__text">${keepDates(joined(body))}</p>` : ''}${after}</div></li>`;
+  const say = ({ who, name: by, at, body = '', after = '', tone = '', cls = '' }) => `<li class="ar-msg${cls ? ` ${cls}` : ''}" data-who="${who}"${tone ? ` data-tone="${tone}"` : ''}><span class="ar-ava" data-who="${who}" aria-hidden="true">${who === 'dispatcher' ? GEAR : ''}</span><div class="ar-msg__body"><p class="ar-msg__head"><b>${by}</b>${at ? `<time>${esc(at)}</time>` : ''}</p>${body ? `<p class="ar-msg__text">${keepWords(joined(body))}</p>` : ''}${after}</div></li>`;
 
   // 思考摘要：引用样子挂在那条话下面。宿主只存了外文的，去掉“宿主存下的外文思考摘要：”那串字，前面标“外文原文”；
   // 一条话下面超过 3 句的，先露 3 句，其余点“再看 N 句”展开（内容都在，不删）；没有思考摘要的不画空框
@@ -230,7 +235,8 @@
     }).filter(Boolean);
     if (!items.length) return '';
     const rest = items.slice(3);
-    return `<blockquote class="ar-quote">${items.slice(0, 3).join('')}${rest.length ? `<details class="ar-quote__more" id="ar-q-${esc(key)}"><summary class="live-disclosure"><span class="ar-open">再看 ${rest.length} 句思考摘要 ›</span><span class="ar-shut">收起 ‹</span></summary>${rest.join('')}</details>` : ''}</blockquote>`;
+    if (!U.shouldFold(rest.length)) return `<blockquote class="ar-quote">${items.join('')}</blockquote>`;
+    return `<blockquote class="ar-quote">${items.slice(0, 3).join('')}<details class="ar-quote__more" id="ar-q-${esc(key)}" data-fold-count="${rest.length}"><summary class="live-disclosure"><span class="ar-open">再看 ${rest.length} 句思考摘要 ›</span><span class="ar-shut">收起 ‹</span></summary>${rest.join('')}</details></blockquote>`;
   }
   // 回复是一段程序原文（JSON）时不照摆：取里面的中文句子，一句一行（施工稿第三节第 9 条：不给看 JSON 和英文字段）
   function readable(words) {
@@ -269,7 +275,8 @@
   // 派活程序先说排上这一轮：为什么开（后台写了就照写；没写用触发和这件活拼），账本这件第几次看，交给 AI 的原话
   function opening(r, d) {
     const start = r.queuedAt || r.startedAt, program = r.who?.program;
-    const reason = r.why ? F(r.why, '为什么开这一轮') : [r.trigger && `按“${F(r.trigger, '为什么开这一轮')}”开的这一轮。`, r.subject && `修的是“${F(r.subject.title, '这件活')}”${nth(r) ? `，这是第 ${int(nth(r))} 轮` : ''}。`, G[category]?.trigger && `这一类什么时候开：${esc(G[category].trigger)}`].filter(Boolean).join('') || '后台没写为什么开这一轮。';
+    const trigger = list(board?.data?.categories).find(c => c.id === category)?.how_to?.trigger;
+    const reason = r.why ? F(r.why, '为什么开这一轮') : [r.trigger && `按“${F(r.trigger, '为什么开这一轮')}”开的这一轮。`, r.subject && `修的是“${F(r.subject.title, '这件活')}”${nth(r) ? `，这是第 ${int(nth(r))} 轮` : ''}。`, trigger && `这一类什么时候开：${esc(trigger)}`].filter(Boolean).join('') || '后台没写为什么开这一轮。';
     const look = r.ledger?.look ? `${/[。！？.!?]$/.test(U.fieldText(r.why || '', viewer)) || !r.why ? '' : '。'}第 ${int(r.ledger.look)} 次看。` : '';
     const before = r.resumes ? other(r.resumes) : null;
     const resumes = r.resumes ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumes))}">接着${before ? ` ${esc(clockOf(r, before.startedAt))} ` : '前'}那一轮做${before?.reason ? `（那一轮${F(before.reason, '原因')}）` : ''} ›</a></p>` : '';
@@ -277,7 +284,7 @@
     const asTitle = !r.prompt && !d?.task_prompt && d && CV.visibleText(d.title) ? `<div class="ar-prompt">${bodyOf(d.title, '交给 AI 的原话')}</div>` : '';
     const promptText = r.prompt ? `<pre class="ar-prompt">${F(r.prompt, '提示词')}</pre>` : d?.task_prompt ? `<div class="ar-prompt">${bodyOf(d.task_prompt, '任务原文')}</div>` : asTitle;
     const promptTag = asTitle && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'title', '交给 AI 的原话', viewer) : '';
-    const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt"><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${R.original(promptText)}</details>`
+    const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt" data-fold-anchor><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${R.original(promptText)}</details>`
       : `<p class="ar-msg__more"><a href="${esc(T.path('/live/automation/', { type: category }) + `#prompt-${category}`)}">这一类交给 AI 的原话 ›</a></p>`;
     return { at: start, html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, start), body: `排上这一轮：${reason}${look}${program ? '这一轮由程序直接办，没叫 AI。' : ''}`, after: resumes + prompt }) };
   }
@@ -286,8 +293,18 @@
   function closing(r, lastWords) {
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
-    let body, tone, original = '';
-    if (r.deferred) {
+    const note = F(r.receipt.closingNote, '结局');
+    let body, tone, original = '', used = '';
+    if (r.excerptFallback && r.receipt.originalText.trim()) {
+      const reply = originalReply(r.receipt.originalText);
+      const inline = /^<p>(?:(?!<\/p>).)+<\/p>$/u.test(reply);
+      used = inline ? '<br>用的是：<span data-excerpt-original></span>' : '<br>用的是：';
+      if (!inline) original = '<div class="ar-reply" data-excerpt-original></div>';
+    }
+    if (note) {
+      body = note + used;
+      tone = r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : 'ok';
+    } else if (r.deferred) {
       // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
       // 这一轮做了什么（summary）另起一行，和原因是同一句的不再写（公网复核 11-26：暂缓原因没显示）
       const why = F(r.reason, '为什么先放着'), whyPlain = plainOf(r.reason), note = R.deferredNote(r, F);
@@ -296,8 +313,7 @@
     } else if (r.excerptFallback) {
       const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
         .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
-      if (r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
-      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original ? '<br>用的是：' : ''}`; tone = 'bad';
+      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${used}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
@@ -420,7 +436,7 @@
       const own = messages.map(m => say({ who: 'ai', name: esc(row.model || '帮手'), at: clockOf(r, m.at), body: m.body, after: quotes(m.quotes, m.key) })).join('');
       const line = [row.state && `<b class="ar-helper__state">${esc(row.state)}</b>`, row.name || (row.state ? '' : row.head)].filter(Boolean).join('：');
       const inside = `${own ? `<ol class="ar-chat ar-chat--sub">${own}</ol>` : ''}<p class="ar-helper__meta">${U.fieldHtml(row.meta, { name: '对话内容', kind: viewer })}</p>${row.detail}${row.more}${row.canOpen ? `<div class="ar-helper__acts">${CV.actions(h)}</div>` : ''}`;
-      out.push({ at: h.at, html: `<li class="ar-msg ar-helper" data-who="helper"><details class="ar-helper__fold" id="ar-h-${esc(row.key)}"><summary class="live-disclosure"><span class="ar-helper__hook" aria-hidden="true"></span><span class="ar-ava" data-who="helper" aria-hidden="true"></span><b class="ar-helper__who">帮手${row.model ? ` · ${esc(row.model)}` : ''}</b>${T.stamp(h.at) ? `<time>${esc(clockOf(r, h.at))}</time>` : ''}<span class="ar-helper__line">${line}</span><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><div class="ar-helper__body">${inside}</div></details></li>` });
+      out.push({ at: h.at, html: `<li class="ar-msg ar-helper" data-who="helper"><details class="ar-helper__fold" id="ar-h-${esc(row.key)}" data-fold-anchor><summary class="live-disclosure"><span class="ar-helper__hook" aria-hidden="true"></span><span class="ar-ava" data-who="helper" aria-hidden="true"></span><b class="ar-helper__who">帮手${row.model ? ` · ${esc(row.model)}` : ''}</b>${T.stamp(h.at) ? `<time>${esc(clockOf(r, h.at))}</time>` : ''}<span class="ar-helper__line">${line}</span><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><div class="ar-helper__body">${inside}</div></details></li>` });
     });
     out.sort((a, b) => (T.stamp(a.at) ?? Infinity) - (T.stamp(b.at) ?? Infinity));
     return { out, gap, lastWords };
@@ -436,7 +452,7 @@
     const now = p.plan[p.current];
     const head = [p.count, now && (ended ? `停在${p.label}` : p.label), now && !ended && CV.stepWord(U.chatFields.stepState(now))].filter(Boolean).join(' · ');
     const tag = !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'plan', '执行计划', viewer) : '';
-    return `<details class="ar-fold ar-planfold" id="ar-plan"><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
+    return `<details class="ar-fold ar-planfold" id="ar-plan" data-fold-anchor><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
   }
 
   function conversation(r) {
@@ -450,7 +466,7 @@
     let note = '', lastWords = '';
     if (program || waitingForConversation) note = '';
     else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : '这一轮的对话没存下来，看下面派活程序收到的结论。';
-    else if (!d) note = chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
+    else if (!d) note = !P.retrying(chat) && (chat?.phase === 'none' || chat?.meta?.status >= 400) ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
     else {
       const { out, gap, lastWords: previous } = middle(r, d, ai, locked);
       lastWords = previous;
@@ -460,8 +476,7 @@
       else if (!out.length) note = esc(gap || '这一轮说了什么没有存下来。');
       items.push(...out);
     }
-    const headerLink = viewer === 'public' && hiddenFromVisitor && c.headerHref ? ` · ${link(c.headerHref, '看对话页头 ›')}` : '';
-    if (note) items.push({ html: `<li class="ar-gap">${note}${headerLink}</li>` });
+    if (note) items.push({ html: `<li class="ar-gap">${note}</li>` });
     // 还在跑：最后一行写它这会儿在干什么；跑完了：派活程序说结论
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
@@ -472,7 +487,10 @@
 
     // 卡头：这场对话自己的状态（和这一轮的结局分开写）、条数；型号档位、各项时刻、帮手几个、所属项目、App 标签、压缩次数、问情况、打开对话；计划收在“计划”里
     // 访客版对话藏着时后台不给 state，看 metadata 里记的状态
-    const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state || c.meta?.state] || '';
+    const ended = ['done', 'stopped', 'failed', 'ended_unknown'];
+    const conversationState = ended.includes(d?.state) ? d.state : c.state || c.meta?.state || d?.state;
+    const talkState = program || waitingForConversation && !c.resource && !c.meta ? '' : { running: '对话还在跑', done: '对话已结束', stopped: '对话已结束', failed: '对话出错停了',
+      ended_unknown: '对话已结束', unknown: '对话状态不明' }[conversationState] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；标 rewritten 的挂“对外换了说法”（M684）
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
     const tag = viewer !== 'owner' ? (c.reason === 'private' || c.why || labeled !== 'rewritten' ? '' : U.visitorRewrittenTag('这一轮的对话', '', viewer)) : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
@@ -480,7 +498,9 @@
     const count = items.filter(x => x.html.startsWith('<li class="ar-msg')).length;
     let meta = '', plan = '';
     // 这一轮带入了哪些来源、各读到几点（回执的 scan）：从大标题挪到这里，单独一行（主控 11-26）
-    const scan = scanOf(r), scanLine = scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '';
+    const scan = scanOf(r), previousAt = when(P.staleAt(chat));
+    const scanLine = (previousAt ? `<p class="ar-talk__note">对话截至 ${esc(previousAt)}</p>` : '') +
+      (scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '');
     if (d && !program && c.available) {
       const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
@@ -488,7 +508,7 @@
       const longer = longerThanChat(r, d);
       const family = R.familyOf({ host: d.software, model: CV.visibleText(d.model) }) || r.family;
       const facts = m.meta.map((v, i) => {
-        const words = keepDates(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
+        const words = keepWords(U.fieldHtml(longer && typeof v === 'string' ? v.replace(/^AI 开始处理 /, 'AI 对话开始 ') : v,
           { name: '对话内容', kind: viewer }));
         const modelHref = i === 0 && v === CV.who(d, true) && R.agentsPath(family, true);
         return modelHref ? link(modelHref, `${words} ›`) : words;
@@ -497,10 +517,10 @@
       const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
       if (mark) facts[0] = `<span class="live-unit">${facts[0] || ''}${mark}</span>`;
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${facts.map(v => `<span>${v}</span>`).join('')}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
-      plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
+      plan = locked ? '' : planFold(m.plan, ended.includes(conversationState));
     } else {
       // 对话没读到（访客版对话藏着、本人版还在读或读不到）：照后台给的 conversation.metadata 和 message_count 写卡头这一行，正文照旧
-      const facts = program ? '' : talkFacts(c.meta, c.count);
+      const facts = program ? '' : talkFacts(d || c.meta, c.count);
       if (facts || scanLine) meta = `<div class="ar-talk__meta">${facts ? `<p class="ar-talk__facts">${facts}</p>` : ''}${scanLine}</div>`;
     }
     return `<section class="tp-panel ar-card ar-talk"><div class="ar-talk__head"><h2>这一轮的对话</h2>${tag}${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-count">共 ${count} 条</span></div>${meta}${plan}<ol class="ar-chat">${items.map(x => x.html).join('')}</ol></section>`;
@@ -516,7 +536,7 @@
     const start = T.stamp(row.session_started_at) ? `对话开始 ${when(row.session_started_at)}` : T.stamp(row.born) ? `本次记录起于 ${when(row.born)}` : '';
     const parts = [who, known(count) && `原有 ${int(count)} 条消息`, plan.label || plan.count, start, T.stamp(row.at) && `主对话更新 ${when(row.at)}`,
       helpers === 0 ? '没有派帮手' : known(helpers) && `帮手 ${int(helpers)} 个`].filter(Boolean);
-    return CF.appTag(row) + parts.map(v => `<span>${keepDates(esc(v))}</span>`).join('');
+    return CF.appTag(row) + parts.map(v => `<span>${keepWords(esc(v))}</span>`).join('');
   }
 
   // —— 右栏：这一轮在办（属于账本哪件、第几次看、欠着还是放着；这件修理的全部几轮；谁约的→谁做的）、这一类和怎么干、上一轮和下一轮（带钟点） ——
@@ -548,18 +568,21 @@
     page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline || !state?.data });
     const d = state?.data;
     if (!category || !id) { T.paint(page.root, '<p class="tp-placeholder" role="status">网址里没写是哪一轮。</p>'); return; }
-    if (!d) { T.paint(page.root, T.placeholder(state, '这一轮')); return; }
+    if (!d) { T.paint(page.root, T.placeholder(P.retrying(state) ? null : state, '这一轮')); return; }
     const r = R.detail(d, viewer);
     watchChat(r.who?.program ? {} : r.conversation);
     // 压缩次数和顶层页同一个画法（draw10.detail 挂在卡头信息后面）；整块重画时留住展开没有
     const compactOpen = page.root.querySelector('[data-compaction] details')?.open;
     // 大标题：日期、时刻不从中间断开；访客那边换了说法的挂签，签和标题最后几个字连着换行（标题和签包在一个 span 里，不让 h1 的 flex 把它们拆成几块）
     // 访客版画之前把指本人的“你”换成“本人”（paint）
-    paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepDates(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
+    paint(page.root, `<div class="ar-head"><h1><i class="ar-dot" data-tone="${toneOf(r)}" aria-hidden="true"></i><span class="ar-title">${withTag(keepWords(title(r)), titleTag(r))}</span></h1><p class="ar-tags">${tags(r)}</p></div>${T.stateNote(state)}
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.innerHTML = originalReply(r.receipt.originalText);
+    if (original) {
+      const reply = originalReply(r.receipt.originalText);
+      original.innerHTML = original.tagName === 'SPAN' ? reply.slice(3, -4) : reply;
+    }
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);
@@ -567,10 +590,6 @@
       if (fold && compactOpen) fold.open = true;
     }
   }
-
-  setInterval(() => {
-    for (const el of document.querySelectorAll('[data-ran]')) el.textContent = span((Date.now() - Number(el.dataset.ran)) / 60000);
-  }, 1000);
 
   let page;
   page = T.boot({ resource: `automation/runs/${encodeURIComponent(category || '_')}/${encodeURIComponent(id || '_')}`, back,

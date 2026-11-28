@@ -9,21 +9,23 @@
   const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/' + location.hash); return; }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
+  const P = window.AutomationPresentation, notices = P.settingNotices();
+  const wordsIn = html => P.keepWords(R.asOwner(html, viewer));
   const { list, known, int, link, when } = T;
   const heroArt = document.getElementById('ak-hero-art').innerHTML;
-  const g = G[id] || {};
-  let state, viewer = 'public', busy = false, feedback = null, pausing = null, runs = null, excerptToday;
+  let state, viewer = 'public', busy = false, failedPause = null, pausing = null, runs = null, excerptToday;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   // 最近几轮：先摆 5 轮，“再看 N 轮”每次多摆 20 轮，读到的不够就往后翻一页（长列表全站一个规则，本人 11-26 02:12）
   const FIRST = 5, STEP = 20;
-  let shown = FIRST, more = [], cursor, paging = false, pageFailed = false;
+  let shown = FIRST, more = [], cursor, paging = false, pageFailed = false, pageRetry;
   const F = (v, name) => T.field(v, viewer, name);
   const said = v => R.asOwner(v, viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/u, '')
     .replace(/^原因[：:]\s*/u, '');
   const resultWords = v => said(v).replace(/^这(?:一轮|次)\s*/u, '').replace(/[！？；!?]$/u, '');
-  const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
+  const cn = v => id === 'message-review' ? R.catName(id, viewer)
+    : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
   const catOf = d => list(d?.categories).find(c => c.id === id);
@@ -46,6 +48,7 @@
 
   // —— 一轮的样子：灯、几个字的结局 ——
   function tag(r) {
+    if (r.emptyCheck) return { text: '空查', tone: 'off' };
     if (r.excerptFallback) return { text: '没写成摘要', tone: 'bad' };
     const label = typeof r.statusLabel === 'string' && r.statusLabel.trim() ? F(r.statusLabel, '状态') : '';
     const [text, tone] = r.status === 'running' ? ['正在跑', 'run'] : r.deferred ? ['暂时不修', 'off'] : r.status === 'incomplete' ? ['没做成', 'bad']
@@ -66,9 +69,9 @@
     // 没有那件活的名字时：结果的第一句当标题，其余放下面小字；第一句太长就截一段当标题，整句照放小字里，不丢字
     const plain = R.oneVersion(U.fieldText(r.summary, viewer).trim()), first = plain.split(/(?<=[。；！？])/)[0] || '';
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
-    const title = r.excerptFallback ? '这次用了原来的回复。' : thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
+    const title = r.emptyCheck ? '查过，没有新消息' : r.excerptFallback ? '这次用了原来的回复。' : F(R.shortTitle(r.subject?.title), '这件活') || (r.status === 'incomplete' && reason ? F(R.shortTitle(r.statusReason || r.reason), '原因') : short || F(R.shortTitle(R.oneVersion(r.summary)), '这一轮做了什么')) || (r.status === 'running' ? F(R.shortTitle(r.activity), '正在干什么') || '正在跑' : '跑完了');
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
-    const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
+    const detail = r.emptyCheck || r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
     const labelPrefix = `${t.text} · `, titlePrefix = `${title} · `;
     const originalNote = detail.startsWith(labelPrefix) ? detail.slice(labelPrefix.length) : detail;
@@ -84,15 +87,15 @@
       return at === 0 || at > 0 && /[。！？；：:·]\s*$/u.test(earlier.slice(0, at));
     });
     const nth = r.subject && known(r.subject.round) && r.subject.round > 0 ? `第 ${int(r.subject.round)} 轮` : '';
-    const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `<span class="au-nw">跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}</span>` : '') : known(r.minutes) ? `<span class="au-nw">用了 ${minutes(r.minutes * 60)}</span>` : '';
+    const elapsed = r.status === 'running' ? R.runningTime(r, runs) : known(r.minutes) ? minutes(r.minutes * 60) : '';
+    const ran = elapsed ? `<span class="au-nw">${r.status === 'running' ? '跑了' : '用了'} ${elapsed}</span>` : '';
     // 本人版：整轮对访客藏着的挂“访客看不到”、换了说法的挂“对外换了说法”（私事线 11-26）
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
-    const who = r.who?.text ? esc(r.who.text) : '';
+    const who = !r.emptyCheck && r.who?.text ? esc(r.who.text) : '';
     const segs = [[repeated ? '' : note, false], [nth, true], [who, true], [ran, true]].filter(([s]) => s);
-    // 说明末尾至少三个汉字一起折，避免句号前一两个字单独占一行。
-    const noteHtml = R.asOwner(note, viewer).replace(/(?:\p{Script=Han}\p{P}*){3}(?=\s*$)/u, '<span class="au-nobr">$&</span>');
+    const noteHtml = wordsIn(note);
     const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${keep ? s : noteHtml}</span>`);
     // 说明删短后，执行方式和用时一起换行；整组比栏还宽时，内部仍可折开。
     if (note && !repeated && note !== originalNote && who && ran) {
@@ -102,7 +105,7 @@
     const meta = parts.length ? `<span class="ak-line">${parts.join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
-      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
+      <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${wordsIn(title)}</a>` : wordsIn(title)}</b>${meta || why ? `<small>${wordsIn(meta || why)}</small>` : ''}</div>
       ${r.href ? `<a class="ak-run__go" href="${esc(r.href)}">看这一轮 <span aria-hidden="true">›</span></a>` : ''}</li>`;
   }
   const allRuns = () => {
@@ -116,7 +119,7 @@
   // 派活程序超过两轮半没转：下次时间算不出来（和总表页头那句警告同一个判断）
   const stalled = d => {
     const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
-    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && (T.stamp(P.staleAt(state)) ?? Date.now()) - tick > 2.5 * x.interval_seconds * 1000;
   };
   function nowText(d, c, rows) {
     const p = pauseOf(d), pr = c.problem, st = c.state || {}, m = mode(c), live = rows.find(r => r.status === 'running');
@@ -138,17 +141,19 @@
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
     const lastAt = last ? last.finishedAt || last.lastAt : c.last_result?.at;
     const lastText = lastAt ? `上次 ${esc(when(lastAt))}${lt ? ` <span class="ak-dot" data-tone="${lt.tone}"></span><b data-tone="${lt.tone}">${lt.text}</b>` : ''}`
-      : `<span class="tp-muted">${c.recent_stats?.recorded_since ? `${esc(when(c.recent_stats.recorded_since))} 起还没跑过` : '还没跑过'}</span>`;
+      : `<span class="tp-muted">${runs?.data?.total === 0 ? '最近没有运行记录' : '运行记录这次没读到'}</span>`;
     const [tone, now] = nowText(d, c, rows);
+    const title = F(cn(c.title), '类别');
+    const status = title ? now.split(title).map(wordsIn).join(`<span class="au-nobr">${title}</span>`) : wordsIn(now);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
-    const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
+    const description = [esc(c.how_to?.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     const result = F(c.last_result?.text, '上次结果');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
-        <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
-        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
-        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${id === 'translator' ? R.oneVersion(result, true) : result}</p>` : ''}
-        <p class="ak-hero__what">${description}</p>
+        <div class="ak-hero__title"><h1>${title}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
+        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${status}</b></p>
+        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${wordsIn(id === 'translator' ? R.oneVersion(result, true) : result)}</p>` : ''}
+        <p class="ak-hero__what">${wordsIn(description)}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div>${heroArt}</section>`;
   }
@@ -161,7 +166,7 @@
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p>${tail ? `<p class="ak-stat__tail">${tail}</p>` : ''}</div>`;
     const basis = s.basis ? U.fieldText(s.basis.text, viewer) : '';
-    return `<section class="ak-stats">${cell(late ? `${esc(T.day(w.from))} 起` : '近 7 天', w.runs, '轮', known(w.average_seconds) ? `平均每轮 ${minutes(w.average_seconds)}` : '每轮多久没记下', 'plain')}
+    return `<section class="ak-stats">${cell(late ? `${esc(T.day(w.from))} 起` : '近 7 天', w.runs, '轮', known(w.average_seconds) ? `平均每轮 ${minutes(w.average_seconds)}` : w.runs > 0 ? '每轮多久没记下' : '', 'plain')}
       ${cell('做成', w.completed, '', repair ? '修好或核实已恢复' : '跑完、交出了结果', 'ok')}
       ${cell('没做成', w.incomplete, '', '报错、超时或没交回结论', 'bad')}
       ${cell('等下次检查', w.waiting, '', '', 'plain')}</section>
@@ -175,17 +180,20 @@
     const other = known(info.total) && ai != null ? info.total - ai - checks : 0;
     const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
-    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
-    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">加载中</p></section>`;
+    const old = P.staleAt(runs) || (pageRetry ? runs?.meta?.at : '');
+    const hint = [total, when(old) && `${esc(when(old))} 的数`].filter(Boolean).join(' · ');
+    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${hint ? `<small>${wordsIn(hint)}</small>` : ''}</div>`;
+    if (!runs?.data && (P.retrying(runs) || !runs || ['idle', 'wait', 'slow'].includes(runs.phase))) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">加载中</p></section>`;
     if (!rows.length) {
       const next = catNext();
       const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
-      const empty = `还没跑过${nextText ? `，${nextText}` : ''}。`;
-      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
+      const empty = `${info.total === 0 ? '最近没有运行记录' : '运行记录这次没读到'}${nextText ? `，${nextText}` : ''}。`;
+      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '每一轮的记录这次没读到。'}</p></section>`;
     }
-    const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
+    const limit = !info.more && !U.shouldFold(rows.length - shown) ? rows.length : shown;
+    const left = rows.length - limit, rest = left > 0 ? left : info.more ? null : 0;
     const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '加载中' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
-    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}
+    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, limit).map(runRow).join('')}</ol>${btn}
       ${pageFailed ? '<p class="tp-small" role="status">这一批没读到，可以再点一次。</p>' : ''}</section>`;
   }
   const catNext = () => { const c = catOf(state?.data); return c?.state?.next_at || c?.next_at || list(c?.upcoming)[0]?.at; };
@@ -196,7 +204,7 @@
     const next = c.state?.next_at || c.next_at;
     const schedule = F(c.schedule_text, '排期说明');
     const queue = id === 'auto-repair' && known(d.counts?.queue) ? `<p class="ak-queue">现在排着等修的：<b>${int(d.counts.queue)} 件</b></p>` : '';
-    const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不排下一次。</p>'
+    const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不用排时间。</p>'
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
       : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`
@@ -207,7 +215,8 @@
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
-    // 关着的类：页头已经说了关着，“什么时候跑”写打开后几点跑（mechanisms.js 的 offWhen），不再抄一遍页头那句
+    // 关着的类：页头已经说了关着，“什么时候跑”写打开后几点跑，不再抄一遍页头那句
+    const g = c.how_to || {};
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const rows = [['做什么', esc(g.purpose || g.short || '')], ['谁来做', model ? model + '（跟着模型清单走）' : '这一类用哪个型号没读到'],
       ['什么时候跑', (mode(c) === 'off' && g.offWhen ? esc(g.offWhen) : F(c.schedule_text, '排期说明')) || '这次没读到，下一轮会自动再读。']];
@@ -215,7 +224,7 @@
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
-      return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}${noteFor(sub.id)}</span>`;
+      return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}</span>`;
     }).join('')}</div>`]);
     if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：${[
       known(p.version) ? `第 ${int(p.version)} 版` : '版本没读到', when(p.published_at) ? esc(when(p.published_at)) : '发布时间没读到',
@@ -233,24 +242,14 @@
   // —— 开关和暂停：照自动任务页那份就地写一份一样的 ——
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
   const isoOf = v => typeof v === 'number' ? new Date(v * 1000).toISOString() : v;
-  const rowOf = x => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === x);
-  const noteFor = x => {
-    if (feedback?.id !== x) return '';
-    let { text, tone = '' } = feedback;
-    if (feedback.want && feedback.reread) {
-      const s = rowOf(x)?.setting || {}, m = s.mode, want = feedback.want, until = isoOf(s.until_at);
-      const same = m === want.mode && (!want.until || T.stamp(until) === T.stamp(want.until));
-      [text, tone] = same ? ['已保存', 'ok'] : [`最新读数还是${m === 'paused' ? `暂停到 ${when(until)}` : { on: '开着', off: '关着' }[m] || '没读到'}`, ''];
-    }
-    return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
-  };
-  const waitingOn = x => feedback?.id === x && feedback.pending ? ' aria-busy="true"' : '';
+  const rowOf = (x, data = state?.data) => list(data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === x);
+  const waitingOn = x => notices.waiting(x) ? ' aria-busy="true"' : '';
   function switchCell(c) {
     const m = mode(c), until = c.setting?.until_at, paused = esc(pausedText(until) || '暂停中');
     const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? paused : '没读到';
     if (state?.offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
-      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? paused : '暂停到…'}</button>${noteFor(c.id) || '<small role="status"></small>'}`;
+      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? paused : '暂停到…'}</button>`;
   }
   async function save(x, value) {
     if (busy) return null;
@@ -266,22 +265,22 @@
   const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: isoOf(cur.until_at) } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去，滑完再整块重画；没存上的留在原档写原因
   async function saved(x, reply, want) {
-    feedback = reply.status === 'saved' ? { id: x, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id: x, text: reply.message || '已撤' }
-      : { id: x, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad', want: reply.status === 'unknown' ? want : undefined };
+    const update = notices.finish(reply.status === 'saved' ? 'ok' : 'fail',
+      reply.error === 'cockpit_owner_required' ? '' : reply.status === 'saved' ? '已保存'
+        : reply.status === 'retired' ? reply.message || '已撤' : failText(reply));
     const row = rowOf(x);
     if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
     const el = page.root.querySelector(`.au-switch[data-toggle="${CSS.escape(x)}"]`), m = row && mode(row);
     if (el && m && el.dataset.mode !== m) {
       el.dataset.mode = m; el.setAttribute('aria-checked', String(m === 'on')); el.removeAttribute('aria-busy');
       el.querySelector('span').textContent = m === 'on' ? '开' : '关';
-      const note = el.parentElement.querySelector('small[role="status"]');
-      if (note) { note.textContent = feedback.text; note.dataset.tone = feedback.tone || ''; }
       await new Promise(r => setTimeout(r, 320));
     }
     draw();
-    const fb = feedback;
     Live.get('automation', {}).then(read => {
-      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+      if (reply.status === 'unknown' && want && read.data && read.meta.status >= 200 && read.meta.status < 400) {
+        P.settingReadback(update, rowOf(x, read.data)?.setting, want, when);
+      }
     });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
@@ -309,13 +308,12 @@
     const original = form.dataset.originalUntil;
     const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
-    result.textContent = '正在保存…';
-    feedback = { id: x, text: '正在保存…', pending: true };
+    dialog.close();
+    notices.start(x);
     draw();
     const reply = await save(x, { mode: 'paused', until_at: until });
     if (!reply) return;
-    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
-    else result.textContent = failText(reply);
+    failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id: x, until };
     saved(x, reply, { mode: 'paused', until });
   });
 
@@ -328,16 +326,16 @@
     const c = catOf(d);
     if (!c) {
       const phase = state?.phase;
-      const note = phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
+      const note = !d && P.retrying(state) ? '加载中' : phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
         : phase === 'idle' || phase === 'wait' ? '加载中' : d ? '这一类自动任务没读到。' : '';
       T.paint(page.root, note ? `<p class="tp-placeholder" role="status">${note}</p>` : T.placeholder(state, '这一类自动任务'));
       page.tick.set([], { off: true });
       return;
     }
     document.title = `${U.fieldText(cn(c.title), viewer)} · 自动任务 · 实况`;
-    const info = allRuns();
+    const info = allRuns(), old = P.staleAt(state);
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><strong aria-current="page">${F(cn(c.title), '类别')}</strong></nav>
-      ${T.stateNote(state)}${hero(d, c, info.rows)}${stats(c)}
+      ${T.stateNote(state)}${when(old) ? `<p class="tp-note" data-tone="off">${esc(when(old))} 的数。</p>` : ''}${hero(d, c, info.rows)}${stats(c)}
       <div class="ak-grid">${recent(info.rows, info)}<div class="ak-side">${upcoming(d, c)}${about(d, c)}</div></div>`);
     page.tick.set(R.ticker(d, info.rows, viewer), { off: state.offline });
   }
@@ -350,21 +348,24 @@
     const next = cursor !== undefined ? cursor : runs?.data?.next;
     if (next == null || paging) return;
     const first = runPageKey(runs);
-    paging = true; pageFailed = false; draw();
+    paging = true; pageFailed = false; pageRetry = null; draw();
     const s = await Live.get('automation/runs', { category: id, cursor: next }).catch(() => null);
     paging = false;
     if (first !== runPageKey(runs)) { draw(); return; }
     if (Array.isArray(s?.data?.items) && s.data.next !== next) {
       more.push(...s.data.items); cursor = s.data.next ?? null; shown += STEP;
+    } else if (P.retrying(s) && s.again) {
+      pageRetry = s;
+      s.again.then(() => { if (pageRetry === s) loadMore(); });
     } else pageFailed = true;
     draw();
   }
 
   const page = T.boot({ resource: 'automation', back: '/live/automation/',
-    ask: () => `请看实况自动任务里“${g.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
+    ask: () => `请看实况自动任务里“${catOf(state?.data)?.how_to?.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
     onState(next) { state = next; schedule(); } });
   Live.watch('automation/runs', { category: id }, { phase(st) {
-    if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; }
+    if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; pageRetry = null; }
     runs = st; schedule();
   } });
   if (id === 'excerpt') Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } });
@@ -374,17 +375,21 @@
     if (toggle) {
       const x = toggle.dataset.toggle, next = toggle.dataset.mode === 'on' ? 'off' : 'on';
       if (busy) return;
-      feedback = { id: x, text: '正在保存…', pending: true };
+      notices.start(x);
       T.keep(page.root, `[data-toggle="${CSS.escape(x)}"]`, draw);
       saved(x, await save(x, { mode: next }) || { status: 'unknown' }, { mode: next });
       return;
     }
     if (pause) {
+      if (busy) return;
+      notices.clear();
+      busy = true;
       const access = await Live.automationSetting({ operation: 'access' });
-      if (access.status === 'unknown') { feedback = { id: pause.dataset.pause, text: '电脑没回话，再点一次' }; draw(); return; }
+      busy = false;
+      if (access.status === 'unknown') { notices.finish('fail', '电脑没回话，再点一次'); return; }
       if (access.status !== 'pass') { saved(pause.dataset.pause, access); return; }
       pausing = pause.dataset.pause;
-      fillWhen(rowOf(pausing)?.setting?.until_at);
+      fillWhen(failedPause?.id === pausing ? failedPause.until : rowOf(pausing)?.setting?.until_at);
       form.querySelector('[data-result]').textContent = '';
       dialog.showModal();
     }

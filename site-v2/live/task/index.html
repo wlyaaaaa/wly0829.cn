@@ -47,7 +47,10 @@
       <section class="glass task-card task-history" id="run-results">
         <header><span class="lb-card__badge" data-icon-name="clock"></span><h2>最近几次</h2></header>
         <div id="runs"></div>
-        <details id="more-runs" hidden><summary class="live-disclosure"></summary><div id="runs-rest"></div></details>
+        <div id="more-runs" hidden>
+          <button class="more" type="button" id="runs-toggle" aria-controls="runs-fold"></button>
+          <div class="fold" id="runs-fold"><div><div id="runs-rest"></div></div></div>
+        </div>
         <p class="task-reading" id="run-coverage" hidden></p>
       </section>
       <aside class="task-aside">

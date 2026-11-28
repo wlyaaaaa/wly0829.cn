@@ -10,7 +10,7 @@
 .ak-hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 520px; align-items: stretch; margin: 0 0 16px; padding: 26px 0 24px 34px; border-radius: 22px; overflow: hidden; background: linear-gradient(100deg, #fff 0%, #fbfbf9 55%, #f6f5f1 100%); box-shadow: 0 1px 0 rgb(20 20 19 / .04), 0 18px 40px -28px rgb(20 20 19 / .35); }
 .ak-hero__copy { position: relative; z-index: 1; min-width: 0; }
 .ak-hero__title { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
-.ak-hero h1 { margin: 0; font-family: var(--black); font-size: 50px; line-height: 1.1; letter-spacing: .01em; }
+.ak-hero h1 { margin: 0; font-family: var(--black); font-size: 50px; line-height: 1.1; letter-spacing: .01em; white-space: nowrap; }
 .tp .ak-pill { display: inline-block; padding: 4px 14px; border-radius: 999px; background: var(--tp-green-soft); font-size: 15px; font-weight: 600; color: var(--tp-green-ink); text-decoration: none; }
 .tp a.ak-pill:hover { text-decoration: underline; text-underline-offset: 3px; }
 .ak-hero__state { margin: 14px 0 0; font-size: 18px; line-height: 28px; font-weight: 600; }
@@ -55,6 +55,7 @@
 .ak-panel__head { display: flex; align-items: center; gap: 12px; margin: 0 0 10px; }
 .ak-panel__head h2 { margin: 0; font-family: var(--black); font-size: 26px; line-height: 34px; }
 .ak-panel__head small { margin-left: auto; font-size: 13px; color: #6c6b64; }
+.ak-panel__head > :is(h2, .ak-ico) { flex: none; }
 .ak-ico { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--tp-green-soft); font-size: 18px; color: var(--tp-green-ink); }
 
 /* 最近几轮：左边一根竖线串起各轮 */
@@ -64,7 +65,7 @@
 .ak-run:last-child { border-bottom: 0; }
 .ak-run__node { position: relative; z-index: 1; width: 14px; height: 14px; margin-top: 4px; border: 2px solid #c9c7bf; border-radius: 50%; background: #fff; }
 .ak-run time { font-family: var(--mono); font-size: 14.5px; font-weight: 600; line-height: 22px; }
-.ak-run__tag { display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 700; line-height: 22px; color: #57564f; }
+.ak-run__tag { display: inline-flex; align-items: center; gap: 6px; font-size: 14.5px; font-weight: 700; line-height: 22px; color: #57564f; white-space: nowrap; }
 .ak-run__tag i { width: 10px; height: 10px; border-radius: 50%; background: #c9c7bf; }
 .ak-run[data-tone="ok"] .ak-run__tag { color: var(--tp-green-ink); }
 .ak-run[data-tone="ok"] .ak-run__tag i, .ak-run[data-tone="run"] .ak-run__tag i { background: var(--tp-green); }

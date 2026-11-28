@@ -72,6 +72,7 @@
 .iss-facts .rec-fact > dd small { display: block; margin: 2px 0 0; }
 .iss-facts .rec-fact > dd a.iss-go { color: #00A650; }
 #raw[open] .dossier-fold__chev { rotate: -90deg; }
+@media (max-width: 1024px) { #raw > summary { flex-wrap: wrap; } }
 #raw .rec-fact > dd { white-space: pre-wrap; overflow-wrap: anywhere; }
 
 /* 访客版读口撤回时（账本 48，page.js 的 updating()）：这一件旧内容全清，页头大卡铺满第一屏当这一页的封面——

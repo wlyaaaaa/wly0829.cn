@@ -4,7 +4,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
-  const { list, known, int, dec, link, when, big, stamp, day } = T;
+  const { list, known, int, dec, when, big, stamp, day } = T, R = window.LiveRuns;
+  const link = (href, ...args) => T.link(R.runPage(href), ...args);
   // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
   const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
@@ -15,7 +16,7 @@
   const ROUND = { not_fixed: '这一轮没修好', not_done: '没办成', deferred: '先放一放', superseded: '并进了别的一件' };
   const DAY = 86400000;
   let state, viewer = 'public', filter = params.get('outcome') || '', kind = ['promised', 'repair'].includes(params.get('kind')) ? params.get('kind') : '', showAll = { owed: false, parked: false }, picked = params.get('id') || null, asked = picked, autoPick = !picked, pickedState = null, landed = false;
-  let older = [], olderNext, olderBusy = false, pickedRead;
+  let older = [], olderNext, olderBusy = false, pickedRead, projectRead;
   // 首页 AI 账本卡点进来的那几件：?view=open|opened|closed|due|overdue|opened_7d|closed_7d（数据约定-前端升级 §11）。读 ledger?view=…，
   // 后台返回 {view, started_at, items, total, next}，件数和卡上那个数是同一份；续页把 next 当 cursor，保留 view
   const VIEW = { open: 'AI 在跟的', opened: '新账起进的', closed: '新账起了结的', due: '今天到日子的', overdue: '过期没看的', opened_7d: '近 7 天进的', closed_7d: '近 7 天了结的' };
@@ -154,6 +155,7 @@
     return pts;
   }
   function track(d) {
+    const missingLimits = [!positive(d.policy?.repair_limit) && '最多修几轮', !positive(d.policy?.check_limit) && '最多看几次'].filter(Boolean).join('、');
     const all = owed(d), shown = kind ? all.filter(it => kindOf(it) === kind) : all;
     const sort = rows => rows.sort((a, b) => Number(Boolean(b.overdue)) - Number(Boolean(a.overdue)) || (stamp(nextOf(a)) ?? 9e15) - (stamp(nextOf(b)) ?? 9e15));
     const blocks = { owed: sort(shown.filter(it => groupOf(it) === 'owed')), parked: sort(shown.filter(it => groupOf(it) === 'parked')) };
@@ -189,7 +191,7 @@
     };
     return `<section class="tp-panel lg-owed" id="owed"><div class="tp-panel__head"><h2>欠着 · AI 在修和到点没了结的 ${int(blocks.owed.length)} 件${U.isStale(d) || U.offline() ? '' : '<span class="lg-live">实时</span>'}<small>按下次看的日子排，到点还没看的在最前${known(d.summary?.open) && d.summary.open !== all.length ? `；后台合计 ${int(d.summary.open)} 件，这里读到 ${int(all.length)} 件` : ''}${decided(d).length ? `；${you()}定了不修的 ${int(decided(d).length)} 件不算欠着，在下面“定了不修”里` : ''}</small></h2>${asOf(d) ? `<span class="tp-asof">截至 ${asOf(d)}</span>` : ''}</div>
       ${board('owed', '没有在修的事。')}</section>
-      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${positive(d.policy?.repair_limit) && positive(d.policy?.check_limit) ? '' : '最多修几轮、最多看几次，这次没读到。'}</small></h2></div>
+      <section class="tp-panel lg-owed" id="parked"><div class="tp-panel__head"><h2>放着 · ${int(blocks.parked.length)} 件<small>先不动手的，每件写清为什么放着、等什么；${positive(d.policy?.repair_limit) ? `自动修理同一件修 ${int(d.policy.repair_limit)} 轮还没好，也先放到这里；` : ''}到那天还没了结就挪进欠着。${positive(d.policy?.check_limit) ? `看满 ${int(d.policy.check_limit)} 次就了结。` : ''}${missingLimits ? `${missingLimits}，这次没读到。` : ''}</small></h2></div>
       ${board('parked', '没有放着的事。')}</section>`;
   }
   // “现在”竖线跟着时间往右走
@@ -217,6 +219,13 @@
       if (g) g.rows.push(r); else { const n = { rows: [r] }; groups.push(n); if (key) byKey.set(key, n); }
     }
     return groups;
+  }
+  // 一件只剩摘要、没有逐轮经过时，写一句为什么
+  function gapText() {
+    const got = pickedState?.data;
+    if (got === undefined) return '经过正在读…';
+    const why = U.fieldText(got?.gap || got?.coverage?.gap || '', viewer).trim();
+    return why ? `没有逐轮经过：${esc(why)}` : '账本只留了这一件的摘要，逐轮经过没有记下来。';
   }
   // 后台给的口径说明 {text, from}：近 7 天修好几次和自动任务页的“修好”、自动修理的成坏数的不是一回事，照写后台那句；
   // text 里没写哪天起的才补“几号起”
@@ -268,13 +277,6 @@
     }
     return groups;
   }
-  // 一件只剩摘要、没有逐轮经过时，写一句为什么
-  function gapText() {
-    const got = pickedState?.data;
-    if (got === undefined) return '逐轮经过这次没读到，先列摘要。';
-    const why = U.fieldText(got?.gap || got?.coverage?.gap || '', viewer).trim();
-    return why ? `没有逐轮经过：${esc(why)}` : '账本只留了这一件的摘要，逐轮经过没有记下来。';
-  }
   function summaryItem(d, id) {
     const repeat = list(d.repeat_fixes?.items).map(r => ({ ...r, repeat: true }));
     return [...owed(d), ...settledRows(d), ...list(d.items), ...repeat].find(r => r.id === id)
@@ -286,9 +288,11 @@
   }
   function detail(d) {
     const summary = summaryItem(d, picked), fresh = pickedState?.data?.item;
-    const it = pickedState?.pending || pickedState?.failed ? summary || fresh || {} : { ...summary, ...fresh };
+    const it = { ...summary, ...fresh };
+    const offlineGap = pickedState?.offlineMissing && (viewer === 'owner' ? '离线时没存这件的详情' : '');
     if (!it.id) return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2></div><p class="tp-empty">${!picked ? '点左边或上面任一件，这里看它的经过。'
-      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。' : '这一件的详情这次没读到，再点一次可以重试。'}</p></section>`;
+      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。'
+      : pickedState?.offlineMissing ? offlineGap : '这一件的详情这次没读到，再点一次可以重试。'}</p></section>`;
     const events = list(pickedState?.data?.history).length ? list(pickedState.data.history) : list(d.history).filter(r => (r.issue || r.id) === (it.issue || it.id));
     const sorted = [...events].sort((a, b) => (stamp(a.at) || 0) - (stamp(b.at) || 0));
     const groups = merge(sorted);
@@ -306,18 +310,24 @@
       const body = n > 1 ? `${every ? every + '一次，' : ''}${a.event === 'attempt' && !SETTLED[out] && !ROUND[out] ? `处理了 ${n} 轮` : `${label}，共 ${n} 次`}${g.text ? `，都是：${esc(g.text)}` : ''}` : `${label}${g.text ? `：${esc(g.text)}` : ''}`;
       // 这一步是哪一轮、哪场对话做的：后台给了地址（source_href）就挂“那一轮 ›”“那场对话 ›”；没地址照后台给的原因写一句小字（M722“点不进对话”）
       // 对话被藏的那一步：访客版后台给了那一轮的地址照给，原因（如“这一轮的对话仅本人可见。”）照字写在后面；本人版挂“访客看不到”
-      const src = [...g.rows].reverse().map(r => r.source_href || r.automation_run?.href).find(h => T.path(h));
+      const src = [...g.rows].reverse().map(r => {
+        const at = stamp(r.at), rounds = list(r.rounds), exact = rounds.find(x => x?.id && typeof r.evidence_ref === 'string' && r.evidence_ref.endsWith(`#${x.id}`));
+        const matching = rounds.filter(x => x && at != null && stamp(x.at) != null && stamp(x.at) - 2000 <= at && at <= stamp(x.end_at || x.at) + 600000);
+        return R.runHref(r.automation_run) || (exact || (matching.length === 1 ? matching[0] : null))?.source_href || r.source_href;
+      }).find(h => T.path(h));
       const why = g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
       const hidden = g.rows.flatMap(r => list(r.rounds)).find(x => x?.visitor_labels?.conversation === 'hidden');
       // 访客版：那一轮标了只给本人看、访客页头已经发布时，后台另给页头读口 source_header_href（/computer-access/live/v1/chats/{访客别名}），照 HEADLINK A 挂“看对话页头 ›”（M1078）
-      const headerId = viewer === 'public' ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
+      const headerId = viewer === 'public' && !R.runPage(src)?.startsWith('/live/automation/run/')
+        ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
       const header = headerId ? ` · ${link(T.path('/live/chat/', { id: decodeURIComponent(headerId) }), '看对话页头 ›')}` : '';
       const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}${header}`;
       return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
-    const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
-      ? `逐轮经过这次没读到${oldAt ? `，下面先列 ${esc(oldAt)} 读到的` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
+    const note = oldAt && (pickedState?.pending || pickedState?.failed) ? `经过截至 ${esc(oldAt)}`
+      : pickedState?.pending ? '经过正在读…' : pickedState?.offlineMissing ? offlineGap : pickedState?.failed
+        ? '逐轮经过这次没读到，先列摘要。再点这件可以重试。' : lines ? '' : gapText();
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>
@@ -414,8 +424,9 @@
       page.tick.set([], { off: state.offline });
       return;
     }
+    const projectName = projectRead?.data?.id === project && T.viewerOf(projectRead) === viewer ? U.fieldText(projectRead.data.name, viewer).trim() : '';
     T.paint(page.root, publicHtml(`<div class="tp-head"><div><h1>AI 自动任务账本</h1><p>上面是 AI 还欠着的每一件，实时；下面是最近了结的和反复出现的，更早的翻页看。点一件看它的完整经过。</p></div>
-        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
+        <p class="tp-head__side">${project ? `<span>只看项目 ${esc(projectName || project)} · ${link('/live/ledger/', '看全部 ›')}</span>` : ''}${asOf(d) ? `<span>截至 ${asOf(d)}</span>` : ''}</p></div>
       ${T.stateNote(state)}${top(d)}${kinds(d)}${track(d)}<div class="tp-grid lg-split"><div class="lg-lists">${settled(d)}${repeats(d)}</div>${detail(d)}</div>`, viewer));
     drawn = true;
     page.tick.set(feed(d), { off: state.offline });
@@ -438,9 +449,13 @@
     const s = await read.pending;
     if (pickedRead !== read) return;
     read.pending = null;
-    pickedState = s?.data?.item?.id === id && T.viewerOf(s) === audience && !(s.meta?.status >= 400)
-      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at } : { ...previous, pending: false, failed: true, notFound: s?.meta?.status === 404 };
+    const withdrawn = s?.publicPaused || s?.meta?.publicationRevoked || [403, 404, 410].includes(s?.meta?.status);
+    const retrying = !withdrawn && Boolean(s?.again);
+    pickedState = s?.data?.item?.id === id && T.viewerOf(s) === audience && !withdrawn
+      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at, pending: retrying } : { ...(withdrawn ? null : previous), pending: retrying, failed: !retrying,
+        notFound: s?.meta?.status === 404, offlineMissing: s?.phase === 'gone' && !(s.meta?.status >= 400 && s.meta?.status < 500) };
     draw();
+    if (retrying) s.again.then(() => { if (pickedRead === read) pick(id, true); });
   }
   async function readOlder() {
     const d = state?.data, cursor = older.length ? olderNext : d?.next;
@@ -465,6 +480,11 @@
         pick(want, true);
       } else draw();
     } });
+  if (project && !view) Live.watch(`projects/${encodeURIComponent(project)}`, null, { phase(next) {
+    if (next.data === projectRead?.data && T.viewerOf(next) === T.viewerOf(projectRead)) return;
+    projectRead = next;
+    if (state?.data) draw();
+  } });
   page.root.addEventListener('click', e => {
     const p = e.target.closest('button[data-pick]'), f = e.target.closest('[data-filter]');
     if (p) { autoPick = false; pick(p.dataset.pick); return; }

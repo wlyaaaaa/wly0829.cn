@@ -15,9 +15,9 @@
   const str = v => typeof v === 'string' ? v.trim() : '';
   const num = v => typeof v === 'number' && Number.isFinite(v) ? v : null;
 
-  // 类名：访客版把“替你”写成“替本人”
+  // 这类任务的“你”指本人，访客版换称呼。
   function catName(id, viewer, title) {
-    const name = typeof title === 'string' && title ? title : NAMES[id] || id || '';
+    const name = id === 'message-review' ? NAMES[id] : typeof title === 'string' && title ? title : NAMES[id] || id || '';
     return viewer === 'owner' ? name.replace(/^替本人/, '替你') : name.replace(/^替你/, '替本人');
   }
   // 哪一家：worker.host 优先；没给就按型号猜（GPT 走 Codex，Gemini 走 Antigravity）
@@ -36,10 +36,16 @@
     return { program: false, text: text || (worker?.kind === 'ai' ? 'AI（型号没记下）' : ''), short: text };
   }
   const runPath = (category, id) => category && id ? T.path('/live/automation/run/', { type: category, run: id }) : '';
+  function shortTitle(value) {
+    if (typeof value !== 'string') return value;
+    const chars = Array.from(value.trim().split(/(?<=[。！？；])|\r?\n/u, 1)[0]);
+    return chars.length > 60 ? chars.slice(0, 59).join('') + '…' : chars.join('');
+  }
   // “用谁”点进智能体页看这一家干了多少：落在“三家各干了多少活”那块、亮出这一家（和首页智能体卡同一个落点，只看一家一律 ?family=）
   const agentsPath = (family, today = false) => !FAMILIES[family] ? '' : today
     ? `/live/agents/?hours=today&family=${family}#hours` : `/live/agents/?family=${family}#work`;
   const minutesBetween = (a, b) => { const x = T.stamp(a), y = T.stamp(b); return x != null && y != null && y >= x ? (y - x) / 60000 : null; };
+  const runningTime = (row, reading) => U.minutes(minutesBetween(row?.startedAt, reading?.meta?.at));
   const OUTPUT = {
     owner_item: { where: '等你的事那张卡', go: '去那张卡' },
     ledger_item: { where: '账本那件', go: '去账本那件' },
@@ -68,9 +74,11 @@
     // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
     // status 照后台原样；自动任务页“只看跑完的”“只看没做成的”两个筛选都不含暂缓的轮次（board.js）。
     const deferred = status !== 'running' && str(r.outcome) === 'deferred';
+    const checked = num(r.checked_messages) ?? num(r.messages);
+    const emptyCheck = status === 'completed' && r.check_only === true && r.outcome === 'no_new' && (checked == null || checked === 0);
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
-      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
+      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, emptyCheck, trigger: r.trigger, who, family: familyOf(r.worker),
       excerptFallback: category === 'excerpt' && status === 'incomplete' && r.outcome === 'fallback',
       queuedAt: r.queued_at, startedAt: started, finishedAt: r.finished_at, lastAt: r.last_activity_at || r.finished_at || started,
       minutes, summary: r.summary, reason: r.reason, activity: r.activity, subject,
@@ -128,7 +136,7 @@
       (match, lead, _title, _version, count) => count && !withMessageCount ? match : lead + (count || ''))
     : s;
 
-  // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
+  // 对话正文和访客可见页头都通过同一轮内的后台读口显示。
   function chatOf(conv) {
     const chatId = href => {
       const id = /\/chats\/([^/?#]+)/.exec(href)?.[1] || (/^\/live\/chat\/\?(?:.*&)?id=([^&#]+)/.exec(href)?.[1]);
@@ -136,9 +144,8 @@
     };
     const chat = chatId(str(conv?.href));
     const header = conv?.content_locked === true ? chatId(str(conv.header_href)) : '';
-    return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
-      href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
-      headerHref: header ? T.path('/live/chat/', { id: header }) : '',
+    return { available: conv?.available === true && !!chat, id: chat, resource: chat || header ? `chats/${encodeURIComponent(chat || header)}` : '',
+      state: str(conv?.state),
       // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
       reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why),
       // 卡头的事实：几条消息，和对话的软件、型号档位、状态、时刻、第几步、帮手数（metadata，有记录才给）；对话对访客藏着时两版也都给
@@ -155,6 +162,7 @@
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
       receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan,
+        closingNote: receipt.closing_note,
         originalText: typeof receipt.original_text === 'string' && (viewer === 'owner' || !receipt.source?.content_locked) ? receipt.original_text : '' },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
       // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、
@@ -197,7 +205,11 @@
         if (r.category === 'excerpt' || r.legacy) continue;
         const actor = title(r.category), what = r.subject ? `${text(r.subject.title)}${r.subject.round ? ` 第 ${r.subject.round} 轮` : ''}` : text(r.summary);
         if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(startBody(what || '这一轮', actor))}</span>`, href: r.href, tone: 'ok' });
-        if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
+        if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) {
+          const empty = r.category === 'translator' && r.emptyCheck;
+          const label = empty ? '空查' : '跑完', summary = text(r.summary) || (empty ? '查过，没有新消息' : '跑完了');
+          out.push({ at: r.finishedAt, actor, html: `<span><em>${label}</em>：${U.esc(summary)}</span>`, href: r.href, tone: empty ? 'info' : 'ok' });
+        }
         if (r.deferred && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>暂时不修</em>：${U.esc(text(r.summary).replace(/^暂时不修\s*[·:：]\s*/, '') || '等下一次检查')}</span>`, href: r.href, tone: 'info' });
         else if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
       }
@@ -231,13 +243,13 @@
     return title.includes(`第${v}版`) ? '' : ` 第 ${U.esc(String(o.version))} 版`;
   }
 
-  // 访客版称呼：页面上指本人的“你”写“本人”（私事线 11-26：替本人看新消息、转给本人、等本人打开、需要本人操作）。
+  // 访客版称呼：页面上指本人的“你”写“本人”（如替本人看新消息、等本人打开、需要本人操作）。
   // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const original = html => `<!--automation-original-->${html}<!--/automation-original-->`;
   const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html
     : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
-      .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人')).join('');
+      .map((part, i) => i % 2 ? part : part.replace(YOU, (_, verb) => verb ? `${verb}本人` : '本人')).join('');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, shortTitle, agentsPath, minutesBetween, runningTime, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();

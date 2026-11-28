@@ -10,7 +10,7 @@
   const wordUnit = /[\p{L}\p{N}]/u;
   const oneHan = /^\p{Script=Han}$/u;
   // 卡名和读数短标签按一个单元走，标签之外仍可按词换行。
-  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|停下(?:\s*·\s*)?没归档|上次(?:运行失败|读到在跑)|运行状态未读到|读数暂缺|读不准|磁盘余量|网络丢包|防护状态|住宅线路|手机流量|文件夹|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
+  const protectedUnit = /(AI[ \t]*(?:自动任务账本|使用记录|对话)|(?:计划|自动)任务|停下(?:\s*·\s*)?没归档|上次(?:运行失败|读到在跑)|运行状态(?:未读到|没读到)|读数暂缺|读不准|磁盘余量|网络丢包|防护状态|住宅线路|手机流量|文件夹|验证码|子任务(?:产物)?|(?:公开|访客)版|\b[A-Z][ \t]*盘(?:软件原件|项目原件)?|(?:(?:上次(?:截至)?|记录到|截至) )?(?:(?:\d{4}-)?\d{1,2}-\d{2} )?\d{1,2}:\d{2}(?::\d{2})?|(?:\d{4}-)?\d{1,2}-\d{2}|\d+(?:[.,]\d+)*[ \t]*(?:毫秒|分钟|小时|个月|GiB|MiB|KiB|GB|MB|KB|℃|%|项|件|天|年|秒|份|个|台|条|次|轮|处|部|组|类|页|字|张|本|套|块|笔|段|种|人|家|场|枚))/g;
   const keepWord = word => '<span class="l1-unit">' + esc(word) + '</span>';
   function keepWords(html) {
     if (!wordSegmenter || !html) return html;
@@ -233,8 +233,10 @@
         ? a.rows > b.rows || a.rows === b.rows && (a.gap < b.gap || a.gap === b.gap && moves(a.layout) < moves(b.layout))
         : a.gap > alignTolerance && b.gap > alignTolerance && (a.gap < b.gap || a.gap === b.gap && a.rows > b.rows));
     const max = key => Math.min(available[key], defaultCounts[key]);
+    const devconfig = previewGroups(cards.backups)[0].findIndex(row => row.dataset.key === 'devconfig') + 1;
+    const minRows = key => key === 'backups' && devconfig <= max(key) ? Math.max(previewRange.backups[0], devconfig) : previewRange[key][0];
     // 在干的对话不拿来配平高度：最多 5 行一直列全。
-    const min = key => key === 'active' ? max(key) : Math.min(available[key], previewRange[key][0]);
+    const min = key => key === 'active' ? max(key) : Math.min(available[key], minRows(key));
     const defaults = [];
     let best;
     function searchDefault(index, counts) {
@@ -1205,7 +1207,7 @@
       [Number.isInteger(running?.count) && (running.count > 0 || !running.partial) &&
         `${current ? '' : '上次读到 '}${running.partial ? '至少 ' : ''}${running.count} 项在跑`, running?.at],
       [failed > 0 && `${d.unreadable_total ? '已读到 ' : ''}${failed} 项上次运行失败`, d.runtime_at],
-      [d.unreadable_total > 0 && `${d.unreadable_total} 项运行状态未读到`],
+      [d.unreadable_total > 0 && `${d.unreadable_total} 项运行状态没读到`],
     ];
     const groups = new Map();
     for (const [label, at] of readings) {
@@ -1256,7 +1258,8 @@
       const card = cards[id], p = parts[id];
       const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline, now: lastState?.now || data.at });
       U.html(p.head, view.head);
-      U.html(p.batch, view.body);
+      if (id === 'automation') paintHTML(p.batch, view.body);
+      else U.html(p.batch, view.body);
       p.batch.hidden = false;
       Light.tone(card, view.tone === 'repair' ? 'blue' : view.tone === 'owner' ? 'amber' : view.tone === 'ok' ? 'green' : 'off');
     }

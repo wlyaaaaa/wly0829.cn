@@ -63,7 +63,8 @@ test('automation lamp reads the background-AI level, reason and attention count,
 });
 
 test('automation work page shows one work and the read-only categories for owner and visitor (the old overview is retired)', () => {
-  const types = ['backup', 'ai-review', 'ai-stalled'].map(id => ({ id, title: id, setting: { mode: 'on', effort: null }, model_effort: 'high', model: 'Sol', sources: [{ at: '2026-11-20T01:00:00Z' }] }));
+  const how_to = { description: ['测试范围', '测试例子', '关了照样留回执', '要你本人恢复原件'], steps: ['要你本人确认'] };
+  const types = ['backup', 'ai-review', 'ai-stalled'].map(id => ({ id, title: id, how_to, setting: { mode: 'on', effort: null }, model_effort: 'high', model: 'Sol', sources: [{ at: '2026-11-20T01:00:00Z' }] }));
   const routines = [{ id: 'claude-guidance', producer: 'Claude', label: 'Claude 指导', trigger_text: '一件活三次没修好时', today_count: 0, at: '2026-11-20T11:39:00Z', plan_count: 1 }];
   const other_automatic_chats = [{ id: 'event-root', producer: 'Codex', label: '事件叫起', state_text: '正在跑', actual_model: 'GPT Sol' }];
   const scheduled_activities = [
@@ -102,6 +103,7 @@ test('automation work page shows one work and the read-only categories for owner
     assert.match(detail, /已占位 · 会话状态未读到.*验收 · 会话状态未读到.*修理 · 在跑 · GPT Sol · 上次动静 2026-11-20 09:00/s);
     assert.doesNotMatch(detail, /进行中|xhigh|未确认型号/);
     assert.match(detail, /id="round-1" class="is-past".*id="round-2" class="is-current".*class="is-future".*独立验收.*class="is-future".*关单/s);
+    assert.match(detail, /修理路线：这次没读到，下一轮会自动再读。/);
     assert.match(render(audience, '', {}, { work, rounds, repair_route: '路线甲', result_text: '结果乙' }), /修理路线：路线甲.*结果：结果乙/s);
     assert.doesNotMatch(render(audience, '', {}, { work: { ...work, group: 'done' }, rounds }), /is-current|is-future/);
     const verification = { id: 'verify', type_id: 'acceptance', title: '核实本人事项', group: 'followup', state_text: '等回执再核实' };
@@ -120,7 +122,9 @@ test('automation work page shows one work and the read-only categories for owner
       assert.doesNotMatch(render(audience, type), /data-setting|默认档位|关了：|设置记录/);
     }
     const backup = render(audience, 'backup');
-    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>从备份里真把文件或整台电脑还原回来，这里不做/s);
+    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：<\/b>(?:<[^>]+>)*测试范围.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>要(?:你)?本人恢复原件/s);
+    const steps = backup.match(/<ul class="aw-mechanism__rows">(.*?)<\/ul>/s)?.[1] || '';
+    assert.ok(steps.replace(/<[^>]+>/g, '').includes(audience === 'owner' ? '什么时候派：要你本人确认' : '什么时候派：要本人确认'));
     assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
   }
 });

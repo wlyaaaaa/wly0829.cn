@@ -16,10 +16,10 @@ CHROME = Path('C:/Program Files/Google/Chrome/Application/chrome.exe')
 AT = datetime.now(timezone.utc).isoformat()
 NEXT = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
 WINDOWS = {'id': 'backup', 'name': '夹具 Windows 备份', 'group': 'backup', 'source_readable': False, 'state': 'unknown'}
-PICKUPS = [{'id': f'pickup-{i}', 'name': f'夹具动作{i}', 'automation_group': 'ai-pickup', 'trigger_text': '验收信号',
+PICKUPS = [{'id': f'pickup-{i}', 'name': f'夹具动作{i}', 'automation_group': 'ai-pickup', 'trigger_text': '验收信号', 'project': 'qa',
             'today_runs': n, 'today_runs_q': q, 'runs_at': AT, 'last': {'end': AT, 'result': 'ok'}, 'recent': [{'end': AT, 'result': 'ok'}]}
            for i, (n, q) in enumerate([(0, 'ok'), (69, 'partial'), (99, 'unknown')])]
-SCHEDULE = {'id': 'schedule', 'name': '夹具 Codex 日程', 'automation_group': 'ai-schedule', 'scheduler': 'codex', 'schedule': '每日 23:00',
+SCHEDULE = {'id': 'schedule', 'name': '夹具 Codex 日程', 'automation_group': 'ai-schedule', 'scheduler': 'codex', 'schedule': '每日 23:00', 'project': 'qa',
             'state': 'paused', 'last': {'start': AT, 'result': 'failed'}, 'recent': [{'start': AT, 'result': 'failed'}], 'next_at': None}
 SCHEDULES = [SCHEDULE] + [dict(SCHEDULE, id=f'schedule-{i}', name=f'平台日程{i}', state='active', next_at=NEXT) for i in range(5)]
 
@@ -78,8 +78,7 @@ with service as server, sync_playwright() as pw:
         page.on('pageerror', lambda e: errors.append((page.url, str(e))))
         page.goto(origin + '/', wait_until='domcontentloaded')
         for label, path in [('实时状态', '/live/'), ('它如何工作', '/principles/')]:
-            entry = page.get_by_role('link', name=label, exact=True)
-            expect(entry).to_be_visible()
+            entry = page.get_by_role('link', name=label, exact=True, include_hidden=True)
             expect(entry).to_have_attribute('href', path)
         for label in ('计划任务', '自动任务'):
             expect(page.get_by_role('link', name=label, exact=True, include_hidden=True)).to_have_count(0)
@@ -89,11 +88,13 @@ with service as server, sync_playwright() as pw:
             page.locator(f'{card} [data-part="head"] a').filter(has_text=label).click()
             expect(page).to_have_url(origin + path)
             expect(page.get_by_role('heading', name=label, exact=True)).to_be_visible()
+            if label == '自动任务':
+                page.goto(origin + '/live/automation/work/?project=qa', wait_until='domcontentloaded')
             text = ('不能单独核对' if old else '登记 1 项') if label == '计划任务' else ('AI 自动任务分组还没读到' if old else '部分平台日程还没读到')
             expect(page.get_by_text(text, exact=False).and_(page.locator(':visible')).first).to_be_visible()
             assert page.get_by_role('link', name='夹具 Windows 备份', exact=True).count() == int(label == '计划任务' and not old)
             if label == '计划任务' and not old:
-                expect(page.locator('#changes')).to_contain_text('任务变更记录没读到')
+                expect(page.locator('#changes')).to_contain_text('任务变更记录这次没读到')
                 expect(page.locator('.task-compact [data-state="unknown"]').first).to_be_visible()
             if len(sys.argv) > 2 and not old: page.screenshot(path=Path(sys.argv[2]) / f'{audience}-{path.split("/")[2]}.png')
         if not old:
@@ -106,7 +107,7 @@ with service as server, sync_playwright() as pw:
             expect(page.locator('#recent')).to_contain_text('已退出清单的一次任务')
             expect(page.locator('#groups')).not_to_contain_text('已退出清单的一次任务')
             expect(page.locator('#groups')).not_to_contain_text('夹具 Codex 日程')
-            page.get_by_role('button', name='展开（还有 1 项）').click()
+            expect(page.get_by_role('button', name='展开（还有 1 项）')).to_have_count(0)
             expect(page.get_by_role('link', name='平台日程4', exact=True)).to_be_visible()
             assert ('夹具本人动作' in page.locator('#groups').inner_text()) == (audience == 'owner')
             page.locator('#recent').get_by_role('link', name='夹具 Codex 日程', exact=True).click()

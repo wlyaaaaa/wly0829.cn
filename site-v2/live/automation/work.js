@@ -15,7 +15,8 @@
   const segment = encodeURIComponent;
   const resource = work ? `automation/work/${segment(work)}` : type ? `automation/types/${segment(type)}` : 'automation';
   const bar = U.topbar({ ask: () => '请看实况这页的自动任务，说明现在在后台跑什么、在修什么、什么时候再验、要不要我出面。' });
-  let legacyStop, state, configuration, busy = false, feedback, didLand = false, category = false;
+  let legacyStop, state, configuration, busy = false, failedPause, didLand = false, category = false;
+  const notices = P.settingNotices();
   const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));
   const showLegacy = () => {
     root.hidden = true;
@@ -96,25 +97,9 @@
   // 已撤的类（M802）：后台不再收它的开关和暂停，点了只回“已撤”，所以旧链接打开时不摆这两个按钮，只写已撤
   const retired = id => id === 'improvements';
   const retiredNote = '<p class="aw-readonly">这一类已撤，开关和暂停不再起作用，下面是撤之前的记录</p>';
-  // 每类四句：管、比如、关了、不管（本人审定的原句，备份、软件和工具、规则和技能按定稿第六轮⑤改成白话）。
-  const descriptions = {
-    'computer': ["硬盘空间突然往下掉，内存守护没压住内存上涨，系统记录里的蓝屏、非正常关机、致命硬件和磁盘错误", "内存守护碰到打不开的进程就整轮停摆 → AI 改成跳过它接着查 → 重载后真跑不再报错才算好", "守护照常报警，页面上看得到，只是没人去查谁在狂写盘、吃内存", "电脑卡顿不派人修，只用来让不急的重活错开"],
-    'programs': ["Windows 定时任务跑失败，AI 定时任务跑失败或没按时跑，守护没按时报到", "开机后代理守护退出了 → AI 修好它一碰文件占用就退出的毛病 → 等下次自然开机它自己起来才算好", "失败、停了照样记着、看得到，只是没人去查去修", "备份没有按时跑，归“备份”"],
-    'software': ["每周软件检查没过的项、现有网站登录检查发现的失效和工具启动报错", "周检保存时被文案检查挡住，提示里带了程序名 → AI 把程序名挪走 → 之后的周检这项过了才算好", "周检照跑，没过的项照样记着，没人修", "要你本人登录的，挂到“等你的事”等你登"],
-    'backup': ["各份备份（个人资料和照片视频、开发配置、微信、电脑使用记录、文档等）报失败或好久没更新；系统镜像的恢复点、恢复包的完整性检查没过", "本地和传云的补跑撞在一起，云那份抢不到锁就退出 → AI 改成排队等 → 换着先后顺序重演都过才算好", "备份照常跑，坏了页面上看得到，但没人修，一直缺着一份", "从备份里真把文件或整台电脑还原回来，这里不做"],
-    'website': ["实况打不开、读数出错或停更、访客版露出不该露的字、网站发布失败", "实况时不时把在跑的任务数清零 → 查出名单刚好过期被作废，放宽有效期 → 线上连读多次都齐才算好", "照样记着、看得到，只是不派 AI 自动修；没人接手的话，你和访客看到的可能一直是旧数、错数"],
-    'projects': ["各项目夜里自动跑的测试没过；冻结的、登记过的已知失败不算", "本地文字识别夜测报失败 → AI 拿样图实际识一遍字能用 → 之后夜测通过才关，原因没查到", "测试红着照样记着，没人查是程序坏了还是测试过时", "规则仓库的夜测归“规则和技能”"],
-    'testing': ["规则仓库正式夜测里新出的失败，和到期后夜测确认仍失败的已知失败；由程序分出来交规则线，不派 AI", "规则仓夜测有几项没过 → 程序交给规则线修 → 下一轮夜测这几项都过了，程序自己划掉", "到期后仍失败的测试留着，没人处理"],
-    'acceptance': ["AI 在账本里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的到期事项不在这里，在“等你的事”", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
-    'ai-review': ["以前对话压缩后的复核、Claude 自动验收、Claude 出方案留下的记录；这几样都已撤，不会再有新的", "想知道以前某次 Claude 自动验收是怎么判的 → 点开这里看那一轮的记录", "", "复核挑出的错交回原对话，验收结论留在原事项，不在这里修"],
-    'ai-stalled': ["别的类里放太久没人领的活，和 AI 干着干着没动静、跑太久被收回重排的活，集中到这里给你看", "一件活排了很久没人领，或 AI 干到一半没动静被收回 → 都汇总到这里亮黄灯，一眼看到没人在管", "", "派活程序自己停了不归这里，首页卡直接亮黄灯"],
-    'rules': ["规则和技能仓库的夜测没过的项、每周体检和规则复核的结论，还有 AI 递来的规则、技能毛病", "自检把历史汇报的日期目录当断链、把技能简介长短当错 → AI 改了这几项检查 → 隔夜自检这几项过了", "夜测红着照样记着，只是不派 AI 自动修；没人接手的话，AI 照旧按有毛病的规则和工具干活", "夜测超时的分项归“待测”；AI 定时任务没跑成归“计划任务和后台程序”；每周结论里只是“待关注”的不建活"],
-    'materials': ["照片视频的云端维护、手机照片视频收进电脑，跑完报失败或没跑完", "手机照片视频收进电脑那步报失败 → AI 查出原因修好 → 下次自动收取正常结束才算好", "照常整理，坏了没人修，手机里的可能一直没收进电脑", "只是“待关注”的不建活"],
-    'improvements': ["AI 和程序递来的毛病、可改进处，别的类不收的都落在这", "网站后台改写程序几次没生成公开说明 → 汇总成一条递来 → AI 核实后并成一件跟进", "递来的照样记下，只是没人判断、没人做", "只是记一笔的、已经恢复的、过期的，不进这里"],
-  };
   function control(action, id, label, config = {}) {
-    // 后台回话之前开关留在原档，标上 aria-busy；旁边那行写“正在保存…”（message）
-    const attrs = (config.checked == null ? '' : ` role="switch" aria-checked="${config.checked}"`) + (feedback?.pending && feedback.id === id ? ' aria-busy="true"' : '');
+    // 后台回话之前开关留在原档，标上 aria-busy，由浮窗写“正在保存…”。
+    const attrs = (config.checked == null ? '' : ` role="switch" aria-checked="${config.checked}"`) + (notices.waiting(id) ? ' aria-busy="true"' : '');
     const value = config.value == null ? '' : ` data-value="${esc(config.value)}"`;
     return `<button type="button" class="more aw-control ${config.checked == null ? '' : 'aw-switch'}" data-setting="${action}" data-id="${esc(id)}"${attrs}${value}${config.name ? ` aria-label="${esc(config.name)}"` : ''}>${label}</button>`;
   }
@@ -155,7 +140,7 @@
   function workLine(row) {
     const target = route(row.href) || workHref(row.id), note = words(row.state_text, row.group === 'running' && row.attempts > 0 && `第 ${row.attempts} 次修理`,
       row.group === 'done' && row.verified && at(row.changed_at) && `已验 ${when(row.changed_at)}`, ...chatActivity(row));
-    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${rowTitle(row)}</b>${note ? `<small>${note}</small>` : ''}`)}</li>`;
+    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${P.keepWords(asOwner(rowTitle(row)))}</b>${note ? `<small>${P.keepWords(note)}</small>` : ''}`)}</li>`;
   }
   const workRows = (rows, name = '这里没有活') => rows.length
     ? `<ul class="aw-lines">${rows.map(workLine).join('')}</ul>` : empty(name);
@@ -163,23 +148,15 @@
   const resultPill = { ok: ['正常', 'ok'], done: ['正常', 'ok'], success: ['正常', 'ok'], warn: ['需留意', 'warn'], failed: ['出错', 'bad'],
     error: ['出错', 'bad'], no_conclusion: ['没结论', 'off'], launched: ['已启动', 'run'], running: ['正在跑', 'run'] };
   const result = status => pill(...(resultPill[status] || []));
-  function message(id) {
-    let text = feedback?.id === id ? feedback.text : '';
-    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
-    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
-    if (text && feedback.want && feedback.reread) {
-      const s = configFor(targetOf(id) || {}), want = feedback.want;
-      const same = s.mode === want.mode && (!want.until || instant(s.until_at) === instant(want.until));
-      text = same ? '已保存' : `最新读数还是${s.mode === 'paused' ? `暂停到 ${when(s.until_at)}` : { on: '开着', off: '关着' }[s.mode] || '没读到'}`;
-    }
-    return `<p class="row__sub aw-update" role="status"${text ? '' : ' hidden'}>${esc(text)}</p>`;
-  }
   function sourceRow(row) {
     const anchor = row.id ? `routine-${row.id}` : '';
     const state_text = resultPill[row.status]?.[0];
     const info = words(row.period || row.trigger, row.at ? `上次 ${when(row.at)}` : row.gap || (!row.at && row.q !== 'ok' && '这里还看不到'),
       Number.isInteger(row.plan_count) ? `写回 ${row.plan_count} 份` : state_text, row.next_at && `下次 ${when(row.next_at)}`);
-    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}${field(row.label || row.title, '来源名称')}</b><span>${info}</span>${row.purpose ? `<small>${field(row.purpose)}</small>` : ''}</li>`;
+    const name = P.keepWords(field(row.label || row.title, '来源名称'));
+    const source = row.id === 'website-release' ? link(route('/live/project/?id=wly0829.cn#website-status'), `${name}&nbsp;›`) : name;
+    const landed = anchor && location.hash === `#${anchor}`;
+    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}${landed ? ' class="aw-source--landed"' : ''}><b>${lamp(row)}<span>${source}</span></b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
   }
   function results(data, rows) {
     const r = data.results7;
@@ -201,38 +178,37 @@
     const rows = data.setting_log;
     if (!Array.isArray(rows)) return empty('这里还看不到');
     if (!rows.length) return empty('还没改过设置');
-    return `<ul class="aw-log">${rows.map(row => `<li><time>${when(row.at)}</time><span>${field(row.text)}</span><small>${words(row.device, row.result)}</small></li>`).join('')}</ul>`;
+    return `<ul class="aw-log aw-log--settings">${rows.map(row => {
+      const session = /^(?:claude|codex|antigravity):[\w-]{12,}$/i.test(U.fieldText(row.device, audience));
+      return `<li><time>${when(row.at)}</time><span>${P.keepWords(field(row.text))}</span><small>${P.keepWords(words(session ? '' : row.device, row.result))}</small></li>`;
+    }).join('')}</ul>`;
   }
   function mechanism(data) {
-    const id = data.id, notes = window.LiveRepairTypeGuide?.[id] || [];
+    const id = data.id, guide = data.how_to || {};
     const labels = ['什么时候派', '怎么修', '怎么算修好', '修不好'];
-    const steps = notes.map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
+    const steps = list(guide.steps).map((text, i) => `<li><b>${P.keepWords(labels[i] || '')}：</b>${P.keepWords(esc(guideCopy(text)))}</li>`).join('');
     const { common, specific } = data.repair_prompts || {};
-    const rulesRoute = id === 'testing' || id === 'rules';
-    const note = rulesRoute ? '这一类现在不派 AI：程序把毛病交给规则线（上线收尾以后交每周规矩复核）'
-      : readonly(id) || retired(id) ? '这一类不派 AI'
-      : id === 'website' && data.setting?.mode === 'off' ? '这一类现在关着；打开后派给 AI 的是共用原话，前面加下面这段网站交接'
-      : id === 'projects' ? '夜测失败用共用原话；仓库清理用下面这段专用原话'
-      : id === 'acceptance' ? '用 AI 约好的事那一份原话'
-      : common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到';
+    const note = (data.setting?.mode === 'off' && guide.off_prompt_note) || guide.prompt_note
+      || (common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : specific ? '这一类的专用原话' : '这次没读到');
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
-    const more = '<span class="aw-mechanism__more">展开看全文 ›</span>';
-    const shared = common ? `<details id="aw-repair-common"><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
+    const more = name => `<span class="aw-mechanism__more"><span class="disclosure-closed">展开看${name}全文</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span></span>`;
+    const shared = common ? `<details id="aw-repair-common" data-fold-anchor><summary class="live-disclosure">${title}${more('共用修理原话')}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
     const lines = specific ? specific.split('\n') : [];
+    const specificName = id === 'website' ? '网站交接' : id === 'projects' ? '仓库清理' : '专用原话';
     const ownPrompt = lines.length > 12
-      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific"><summary>${more}</summary>${pre(lines.slice(5).join('\n'))}</details>`
+      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific" data-fold-anchor><summary class="live-disclosure"><span class="disclosure-open">${specificName}</span>${more(specificName)}</summary>${pre(lines.slice(5).join('\n'))}</details>`
       : specific ? pre(specific) : '';
     const commitment = id === 'acceptance';
-    const guide = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
+    const guideHref = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
     return panel('怎么干', `<ul class="aw-mechanism__rows">${steps}</ul><div class="aw-mechanism__words">
-      ${shared}${link(guide, commitment ? 'AI 约好的事怎么干 ›' : '自动修理怎么干 ›', 'aw-mechanism__link')}${ownPrompt}</div>`,
+      ${shared}${link(guideHref, commitment ? 'AI 约好的事怎么干 ›' : '自动修理怎么干 ›', 'aw-mechanism__link')}${ownPrompt}</div>`,
     { cls: 'aw-mechanism', extra: '<span class="aw-head-note">自动修理怎么处理这一类</span>' });
   }
   function typePage(data) {
     const c = data.counts || {}, rows = list(data.works);
     // 四句是本人审定的原句，本人版照写；访客版里指本人的“你”都称“本人”（M1141：“你自己的事项”“你和访客”整页换称呼接不住，“要你本人”会成“要本人本人”）
-    const [description, example, off, boundary] = (descriptions[data.id] || []).map(guideCopy);
+    const [description, example, off, boundary] = list(data.how_to?.description).map(guideCopy);
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
@@ -241,11 +217,11 @@
     const counters = stats([['在修', c.occupied ?? c.running, 'run'], ['等复查', c.followup, 'queue'], [`要${own()}`, c.owner, 'owner'], ['7 天修好', c.repaired, 'done']]);
     const art = ART[data.id] || hero;
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(art)}" class="aw-art">
-      <div class="aw-lead"><div class="aw-type-top"><h1>${lamp(data, false)}${field(data.title, '类型名称')}</h1><div class="aw-type-settings">${controls}${message(data.id)}</div></div>
-      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${esc(description)}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
-      ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
+      <div class="aw-lead"><div class="aw-type-top"><h1>${lamp(data, false)}${field(data.title, '类型名称')}</h1><div class="aw-type-settings">${controls}</div></div>
+      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${P.keepWords(esc(description))}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${P.keepWords(esc(off))}</p>` : ''}</div>
+      ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${P.keepWords(esc(example))}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
-      ? `<details class="aw-past"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
+      ? `<details class="aw-past" data-fold-count="${past.length}"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
     // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。
     // 已撤的类不再收活，照实说；没撤的照常写这里还看不到
     const sources = list(data.sources).filter(row => row && (row.label ?? row.title) !== '这里还看不到');
@@ -262,9 +238,9 @@
     const last = c.last_result && at(c.last_result.at) ? `${when(c.last_result.at)} · ${field(c.last_result.text, '结果')}` : '';
     const controls = c.setting ? settingBar(c) : modelText(c) ? `<p class="aw-type__model">${modelText(c)}</p>` : '';
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(ART[c.id] || hero)}" class="aw-art">
-      <div class="aw-lead"><div class="aw-type-top"><h1>${field(c.title, '类别名称')}</h1><div class="aw-type-settings">${controls}${message(c.id)}</div></div>
+      <div class="aw-lead"><div class="aw-type-top"><h1>${field(c.title, '类别名称')}</h1><div class="aw-type-settings">${controls}</div></div>
       <div class="aw-type-top aw-type-top--lines">${now ? `<p class="aw-covers"><b>现在：</b>${now}</p>` : '<span></span>'}${last ? `<p class="aw-off"><b>上一次：</b>${last}</p>` : ''}</div></div></section>`;
-    const runs = !Array.isArray(c.recent_runs) ? empty('这里还看不到') : !c.recent_runs.length ? empty('还没有记录')
+    const runs = !Array.isArray(c.recent_runs) ? empty('最近几轮这次没读到') : !c.recent_runs.length ? empty('最近还没跑过')
       : `<ul class="aw-log">${c.recent_runs.map(run => `<li><time>${when(run.at)}</time><span>${link(route(run.ledger_href), field(run.summary, '这次做了什么'))}</span></li>`).join('')}</ul>`;
     const known = new Set(list(data.types).map(t => t.id));
     const subs = list(c.subcategories).map(t => `<li>${line(known.has(t.id) ? typeHref(t.id) : '', `<b>${field(t.title, '小类')}</b><small>${({ on: '已开', off: '已关', paused: '暂停中' })[t.setting?.mode] || ''}</small>`)}</li>`).join('');
@@ -295,7 +271,7 @@
         ...list(run.facts).filter(fact => !['这轮交付', '验收人'].includes(fact.label))]);
       const latest = i + 1 === events.length;
       return `<li id="round-${esc(run.id)}" class="${step(latest)}">
-        <details${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
+        <details data-fold-anchor${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && run.executor !== '派活程序' && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
@@ -309,7 +285,7 @@
     const row = data.work || {};
     const status = `<p class="aw-work-state">${lamp(row, false)}<span>${field(row.state_text, '状态')}</span></p>
        <p class="aw-work-meta">${words(...chatActivity(row), row.attempts > 0 && `已修 ${row.attempts} 次`, at(data.next_at) && `下次看 ${when(data.next_at)}`)}</p>
-       ${data.next_step ? `<p class="aw-work-next"><b>接下来：</b>${field(data.next_step, '下一步')}</p>` : ''}${message(row.id)}`;
+       ${data.next_step ? `<p class="aw-work-next"><b>接下来：</b>${field(data.next_step, '下一步')}</p>` : ''}`;
     const related = [
       [route(data.task_href || data.source?.href), '来源', data.source?.label || '来源'],
       [route(data.owner_href), '要办的事', `要${own()}出面的事`],
@@ -342,8 +318,9 @@
     root.hidden = false;
     if (!data?.enabled) {
       delete root._html;
-      const reading = !state || ['idle', 'wait', 'slow'].includes(state.phase);
-      root.innerHTML = `<p class="glass aw-load">${reading ? '加载中' : state.meta?.status === 404 ? '这件活或这一类没有读到' : field(state.text)}</p>`;
+      const loading = !data && (!state || P.retrying(state) || ['idle', 'wait', 'slow'].includes(state?.phase));
+      const missing = state?.meta?.status === 404 ? state.meta.withdrawn ? (work ? '没有找到这件活' : '没有找到这一类') : '这件活或这一类没有读到' : '';
+      root.innerHTML = `<p class="glass aw-load">${loading ? '加载中' : field(missing || state?.text || '加载中')}</p>`;
       return;
     }
     audience = state.meta?.viewer?.kind || data.audience || 'public';
@@ -358,7 +335,9 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, work ? asOwner(workPage(data)) : kind ? asOwner(categoryPage(data, kind)) : typePage(data), false);
+    const old = when(P.staleAt(state));
+    const page = work ? asOwner(workPage(data)) : kind ? asOwner(categoryPage(data, kind)) : typePage(data);
+    U.html(root, `${old ? `<p class="row__sub">截至 ${esc(old)}</p>` : ''}${page}`, false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;
@@ -372,32 +351,29 @@
         didLand = true;
         const fold = item.matches('details') ? item : item.querySelector('details');
         if (fold) fold.open = true;
-        requestAnimationFrame(() => item.scrollIntoView({ block: 'start' }));
+        requestAnimationFrame(() => $(target)?.scrollIntoView({ block: 'start' }));
       }
     }
   }
-  // 结果写在开关旁边那行：已保存／没存上：后台给的原因／还没确认存上（超时、断线、电脑回不了话）
-  const feedbackFor = (id, reply, want) => {
-    if (reply.status === 'saved') feedback = { id, text: '已保存' };
-    // 后台回“已撤”时照写它给的说明，不说“没存上”
-    else if (reply.status === 'retired') feedback = { id, text: reply.message || '已撤' };
-    // 不是本人设备：可信设备弹框已经弹了，旁边不另写
-    else if (reply.error === 'cockpit_owner_required') feedback = null;
-    else if (reply.status === 'unknown') feedback = { id, text: '还没确认存上', want };
-    else feedback = { id, text: typeof reply.message === 'string' && /[一-鿿]/.test(reply.message) ? `没存上：${reply.message}` : '没存上，再试一次' };
-  };
+  function finishSetting(reply) {
+    const text = reply.error === 'cockpit_owner_required' ? '' : reply.status === 'saved' ? '已保存'
+      : reply.status === 'retired' ? reply.message || '已撤' : reply.status === 'unknown' ? '还没确认存上'
+        : typeof reply.message === 'string' && /[一-鿿]/.test(reply.message) ? `没存上：${reply.message}` : '没存上，再试一次';
+    return notices.finish(reply.status === 'saved' ? 'ok' : 'fail', text);
+  }
   // 回包到了才动开关：存上了照回包里的 current 显示；没存上但后台带回了电脑上读到的 current（读回和请求不一致），也照它显示；
   // 别的没存上、还没确认的留在原档，再读一次照新读数显示
-  const targetOf = id => { const data = state?.data; return work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id); };
-  function applySaved(id, reply) {
+  const targetOf = (id, data = state?.data) => work || type && !category ? data : [...list(data?.types), ...list(data?.categories)].find(t => t.id === id);
+  function applySaved(id, reply, want) {
+    const update = finishSetting(reply);
     const t = targetOf(id);
     if (t && reply.current && typeof reply.current === 'object') t.setting = { ...t.setting, ...reply.current };
     paint();
     if (reply.error === 'cockpit_owner_required') return;
-    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（message）
-    const fb = feedback;
     Live.get(category ? 'automation' : resource, {}).then(read => {
-      if (feedback === fb && fb?.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; paint(); }
+      if (reply.status === 'unknown' && want && read.data && read.meta.status >= 200 && read.meta.status < 400) {
+        P.settingReadback(update, targetOf(id, read.data)?.setting, want, when);
+      }
     });
   }
   async function save(operation, id, value) {
@@ -409,14 +385,13 @@
   async function applySetting(button) {
     const op = button.dataset.setting, id = button.dataset.id, value = button.dataset.value;
     if (busy) return;
-    feedback = null;
+    notices.clear();
     if (op === 'toggle') {
-      // 后台回之前开关留在原档，旁边写“正在保存…”；访客点了由可信设备弹框说明，不写这句
-      if (audience === 'owner') { feedback = { id, text: '正在保存…', pending: true }; paint(); }
+      // 后台回之前开关留在原档，浮窗写“正在保存…”；访客点了由可信设备弹框说明。
+      if (audience === 'owner') { notices.start(id); paint(); }
       const want = value === 'on' ? 'off' : 'on';
       const reply = await save('type-mode', id, { mode: want }) || { status: 'unknown' };
-      feedbackFor(id, reply, { mode: want });
-      applySaved(id, reply);
+      applySaved(id, reply, { mode: want });
       if (reply.error === 'cockpit_owner_required') return;
       const current = [...root.querySelectorAll('[data-setting=toggle]')].find(el => el.dataset.id === id);
       current?.focus({ preventScroll: true });
@@ -426,36 +401,44 @@
     const access = await Live.automationSetting({ operation: 'access' });
     busy = false;
     // 只是先问一声能不能操作，还没保存什么：电脑没回话就照实说，不写“还没确认存上”
-    if (access.status === 'unknown') { feedback = { id, text: '电脑没回话，再点一次' }; paint(); return; }
-    if (access.status !== 'pass') { feedbackFor(id, access); paint(); return; }
+    if (access.status === 'unknown') { notices.finish('fail', '电脑没回话，再点一次'); return; }
+    if (access.status !== 'pass') { finishSetting(access); return; }
     configuration = { op, id };
     $('automation-setting-title').textContent = '暂停到几点';
-    settings.querySelector('[data-fields]').innerHTML = '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>';
-    const current = instant(targetOf(id)?.setting?.until_at);
+    settings.querySelector('[data-fields]').innerHTML = `<div class="aw-date"><label>北京时间 <input required name="value" placeholder="年-月-日 时:分"></label>
+      <button type="button" class="more" data-pick-date>选日期</button><input type="datetime-local" name="picker" tabindex="-1" aria-hidden="true"></div>
+      <p class="row__sub">已经在修的这一轮会先收尾。</p>`;
+    const { value: dateField, picker } = form.elements;
+    dateField.oninput = () => dateField.setCustomValidity('');
+    picker.onchange = () => { dateField.value = picker.value.replace('T', ' '); dateField.setCustomValidity(''); };
+    form.querySelector('[data-pick-date]').onclick = () => { picker.value = dateField.value.trim().replace(' ', 'T'); picker.showPicker(); };
+    const current = instant(failedPause?.id === id ? failedPause.until : targetOf(id)?.setting?.until_at);
     if (Date.parse(current) > Date.now()) {
-      form.elements.value.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16);
+      dateField.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16).replace('T', ' ');
       configuration.until = current;
     }
-    form.querySelector('[data-dialog-result]').textContent = '';
     settings.showModal();
   }
   settings.querySelector('[data-cancel]').addEventListener('click', () => settings.close());
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !configuration) return;
-    const { id } = configuration, value = form.elements.value.value, result = form.querySelector('[data-dialog-result]');
-    // 等后台回话：框里和开关旁边都写“正在保存…”，原来的状态和暂停时刻留着
-    result.textContent = '正在保存…';
-    feedback = { id, text: '正在保存…', pending: true };
+    const { id } = configuration, { value, picker } = form.elements;
+    const local = value.value.trim().replace(' ', 'T');
+    picker.value = local;
+    if (picker.value !== local || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(local)) {
+      value.setCustomValidity('请按年-月-日 时:分填写，例如 2026-11-29 13:00。');
+      value.reportValidity();
+      return;
+    }
+    settings.close();
+    notices.start(id);
     paint();
-    const selected = `${value}:00+08:00`;
+    const selected = `${local}:00+08:00`;
     const until = Math.floor(Date.parse(configuration.until) / 60000) === Date.parse(selected) / 60000 ? configuration.until : selected;
     const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
-    feedbackFor(id, reply, { mode: 'paused', until });
-    // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
-    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') settings.close();
-    else result.textContent = feedback?.text || '';
-    applySaved(id, reply);
+    failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id, until };
+    applySaved(id, reply, { mode: 'paused', until });
   });
   root.addEventListener('click', async event => {
     const button = event.target.closest('button');
@@ -463,7 +446,7 @@
     if (!button?.dataset.copyIntent || U.guard(event)) return;
     const id = button.closest('[data-owner-id]').dataset.ownerId;
     const item = group(state?.data?.works, 'owner').find(row => (row.owner_id || row.id) === id);
-    if (item && await U.copy(Live.copy({ id, title: U.fieldText(item.title, audience) }, button.dataset.copyIntent))) U.flash(button, '已复制');
+    if (item && await U.copy(Live.copy({ id, title: U.fieldText(item.title, audience) }, button.dataset.copyIntent))) window.SiteNotice('已复制').set('ok', '已复制');
   });
   // 新八类（替你看新消息、每周规矩复核这些）没有自己的读口：原地址读不到，就改读自动任务总包，从 categories 里按 id 找这一类。
   // 原修理分项和单件仍走原地址；旧后台总包里没有 categories，照旧显示“没有读到”。

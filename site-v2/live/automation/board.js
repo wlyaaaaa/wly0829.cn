@@ -9,7 +9,6 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  // 按需更新快核（总表分类次序）核法：对照 AUTOPAGES1126 选 A 的《页面说明·自动任务》总表和 /automation 的 categories，再核 E:/PCConfig/tools/remote-computer-mcp/automation/core.py 的 CATEGORIES。
   const R = window.AutomationRuns, IDS = R.CATS;
   // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
   const PAST = ['weekly-live'];
@@ -35,16 +34,18 @@
     location.replace(path.pathname + path.search + path.hash);
     return;
   }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, dec, link, when, big, clock } = T;
-  let state, viewer = 'public', busy = false, feedback = null, landed = false, pausing = null, olderOpen = false;
+  let state, viewer = 'public', busy = false, failedPause = null, landed = false, pausing = null, olderOpen = false;
   // 长列表全站一个规则（本人 11-26 02:12）：先摆一部分，点一次再多摆一批，一直能摆到底
   const STEP = 20;
   let doneShown = STEP;
   const catPath = id => T.path('/live/automation/category/', { type: id }), howPath = id => T.path('/live/automation/how/', { type: id });
   const F = (v, name) => T.field(v, viewer, name);
-  // 类名是后台给的，“替你看新消息”在公开版改成“替本人”
-  const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
+  const P = window.AutomationPresentation, notices = P.settingNotices();
+  const wordsIn = html => P.keepWords(R.asOwner(html, viewer));
+  const cn = (v, id) => id === 'message-review' ? R.catName(id, viewer)
+    : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
   // 总表只列后台仍在提供的现役类别。
@@ -143,6 +144,7 @@
         while (job.next != null && !seen.has(String(job.next))) {
           seen.add(String(job.next));
           const s = await Live.get('automation/runs', { ...query, cursor: job.next }).catch(() => null);
+          job.retrying = !Array.isArray(s?.data?.items) && P.retrying(s);
           if (backPages.get(id) !== job || !Array.isArray(s?.data?.items)) break;
           job.rows.push(...s.data.items);
           job.next = s.data.next;
@@ -243,7 +245,7 @@
   }
 
   // —— 卡片 ——
-  const catLabel = (d, id) => F(cn(list(d.categories).find(c => c.id === id)?.title || R.catName(id, viewer)), '类别');
+  const catLabel = (d, id) => F(cn(list(d.categories).find(c => c.id === id)?.title || R.catName(id, viewer), id), '类别');
   const range = r => {
     const a = r.startedAt || r.queuedAt, b = r.finishedAt;
     if (!T.stamp(a)) return b ? esc(when(b)) : '';
@@ -274,7 +276,7 @@
   // 暂缓（暂时不修）是灰点，和没做成的红点分开（M674）
   const tone = r => r.status === 'running' ? 'run' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
   // 暂缓的轮次大字只写“暂时不修”，为什么放着单独写一行小字（主控 11-25；QA 11-26 从下面那行拆出来）
-  const endText = r => r.deferred ? '暂时不修' : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+  const endText = r => r.deferred ? '暂时不修' : `没做成：${F(R.shortTitle(r.reason), '原因') || '原因没记下'}`;
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
@@ -297,10 +299,11 @@
       const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
       if (earlier.length) rounds = `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
-    else title = R.oneVersion(F(r.summary, '这一轮做了什么')) || (r.status === 'running' ? '正在跑' : '跑完了');
+    else title = F(R.shortTitle(r.subject?.title || R.oneVersion(r.summary)), '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = Fm(r.activity, '正在干什么');
-      meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
+      const elapsed = elapsedRun(r);
+      meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起${elapsed ? `，跑了 ${elapsed}` : ''}` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
       body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
       // 暂缓的为什么放着、在等什么单独一行；下面那行照别的卡只写几点、谁、为什么开这一轮
@@ -314,10 +317,10 @@
     return `<article class="au-card" data-tone="${tone(r)}" data-key="${esc(c.key)}"><span class="au-card__dot${r.status === 'running' ? ' is-live' : ''}" aria-hidden="true"></span>
       <div class="au-card__body">${head}<h3 class="au-card__title">${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</h3>${body}${why ? `<p class="au-card__meta">${why}</p>` : ''}<p class="au-card__meta">${meta}</p>${rounds}</div>${go(r.href)}</article>`;
   }
-  // 派活程序超过两轮半没转：各类的下次时间算不出来（和页头那句警告同一个判断）
+  // 各类下次时间沿用派活间隔判断。
   const stalled = d => {
     const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
-    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && (T.stamp(P.staleAt(state)) ?? Date.now()) - tick > 2.5 * x.interval_seconds * 1000;
   };
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
@@ -326,8 +329,18 @@
     const interval = x.interval_seconds;
     const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
-    if (!T.stamp(tick)) return '<span class="au-warn">派活程序几点转的没读到</span>';
-    const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
+    const pass = x.active_pass, now = T.stamp(P.staleAt(state)) ?? Date.now();
+    if (pass && T.stamp(pass.started_at) != null) {
+      const start = esc(when(pass.started_at)), progress = tick || pass.started_at;
+      const deadline = T.stamp(pass.deadline_at);
+      if (deadline != null && now >= deadline) {
+        const elapsed = Math.max(0, Math.floor((now - T.stamp(progress)) / 60000));
+        return `<span class="au-warn">派活程序这一轮 ${start} 开始，已 ${elapsed} 分钟没有新进展</span>`;
+      }
+      return `派活程序这一轮 ${start} 开始，还在跑（最后一次进展 ${esc(when(progress))}）`;
+    }
+    if (!T.stamp(tick)) return '<span class="au-warn"><span class="au-nobr">派活程序</span><wbr><span class="au-nobr">上次几点转的，</span><wbr><span class="au-nobr">这次没读到</span></span>';
+    const late = every && now - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
     return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
       : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，多久转一圈没读到'}`;
   }
@@ -354,6 +367,10 @@
   // 北京日期写成“11 月 24 日 周二”，今天的前面加“今天 · ”
   const zhDay = key => { const x = new Date(key + 'T12:00:00Z'); return `${key === today() ? '今天 · ' : ''}${x.getUTCMonth() + 1} 月 ${x.getUTCDate()} 日 周${'日一二三四五六'[x.getUTCDay()]}`; };
   // 出毛病的：按天排一长列（本人 11-24 选的 03 那种）：几点、哪一类、坏了什么、谁在处理、看这一轮
+  const problemTitle = (d, p) => {
+    const href = T.path(p.href), work = href && list(d.works).find(w => T.path(w.href) === href);
+    return R.shortTitle(work?.title || p.title || p.headline || p.text);
+  };
   function problemList(d, v) {
     if (!v.problems.length) return '<p class="au-empty">现在没有挂着的毛病。</p>';
     const days = new Map();
@@ -367,7 +384,7 @@
       const who = [p.repairing === true ? '<b class="au-ok">AI 在修</b>' : '', F(p.handler_text, '谁在处理') || (p.handler ? `已交${catLabel(d, p.handler)}` : '还没人接手')].filter(Boolean).join(' · ');
       const go = run ? `<a class="au-prob__go" href="${esc(run)}">${known(p.round) && p.round > 0 ? `看第 ${int(p.round)} 轮` : '看这一轮'} <span aria-hidden="true">›</span></a>` : '';
       return `<li class="au-prob"><span class="au-prob__dot" aria-hidden="true"></span><time>${esc(T.clock(p.at) || '')}</time><span class="au-prob__cat">${link(catPath(p.category), catLabel(d, p.category))}</span>
-        <b class="au-prob__what">${F(p.headline || p.title || p.text, '哪里坏了')}</b><span class="au-prob__who">${who}</span>${go}</li>`;
+        <b class="au-prob__what">${F(problemTitle(d, p), '哪里坏了')}</b><span class="au-prob__who">${who}</span>${go}</li>`;
     };
     return `${[...days.entries()].map(([key, ps]) => `<div class="au-probday"><h3>${key ? zhDay(key) : '时间没记下'}</h3><ul>${ps.map(row).join('')}</ul></div>`).join('')}
       <p class="tp-small au-probnote">只列现在还挂着的；修好了的在“近 72 小时跑完的”里，按“全部”回到${kinds(d)}表。</p>`;
@@ -380,15 +397,27 @@
     if (filter.view === 'problems') return sec('trouble', '出毛病的', v.problems.length, problemList(d, v));
     const running = filter.view === 'running', status = running ? 'running' : 'finished';
     const affected = set => v.board ? set.has(status) : set.size > 0;
-    const cards = running ? v.live : v.done, reading = affected(v.waiting) || (!running && v.paging);
+    const cards = running ? v.live : v.done;
+    const sources = v.board ? [[status, board[status]]] : board ? Object.entries(board) : [...pages];
+    const loading = sources.some(([, s]) => !Array.isArray(s?.data?.items) && P.retrying(s));
+    const reading = affected(v.waiting) || (!running && v.paging) || loading && !cards.length;
     const missing = affected(v.missing) || (!running && v.pageFailed);
-    const legacy = v.legacy && cards.length
-      ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
-    const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
+    const stamps = [...new Set(sources.filter(([, st]) => Array.isArray(st?.data?.items))
+      .map(([key, st]) => P.staleAt(st) || (backPages.get(key)?.retrying ? st.meta?.at : '')).filter(T.stamp))];
+    if (!stamps.length && loading && v.legacy && cards.length && T.stamp(state?.meta?.at || d.at)) stamps.push(state?.meta?.at || d.at);
+    const datedRead = stamps.length ? `<p class="tp-note" data-tone="off">${stamps.length > 1 ? '其中有 ' : ''}${stamps.map(at => esc(when(at))).join('、')} 的数。</p>` : '';
+    const hardMissing = sources.some(([key, st]) => {
+      const job = backPages.get(key);
+      if (!Array.isArray(st?.data?.items)) return loaded(st) && !P.retrying(st);
+      return !running && st.data.next != null && !job?.done && !job?.busy && !job?.retrying;
+    });
+    const legacy = v.legacy && cards.length && hardMissing
+      ? `<p class="tp-note" data-tone="off">每一轮的记录这次没读到：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
+    const incomplete = hardMissing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
     if (filter.view === 'running') {
       const next = shownCats(d).filter(c => c.next_at).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
       const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
-      return (legacy || incomplete) + sec('running', '进行中', v.counts.running, v.live.length ? v.live.map(c => card(d, v, c)).join('') : reading ? waiting : missing ? '' : idle);
+      return datedRead + (legacy || incomplete) + sec('running', '进行中', v.counts.running, v.live.length ? v.live.map(c => card(d, v, c)).join('') : reading ? waiting : missing ? '' : idle);
     }
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
     // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
@@ -404,11 +433,12 @@
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
       ? `<p class="tp-small au-roundsnote">${int(v.doneRounds)} 是轮数：自动修理同一件修了几轮的，收在同一张卡里，所以下面是 ${int(v.done.length)} 张卡。</p>` : '';
     const excerpt = excerptToday?.data && known(excerptToday.data.total) ? `摘一句不在这里列，今天摘了 ${int(excerptToday.data.total)} 句。` : '';
-    const left = v.done.length - doneShown;
+    const limit = !reading && !missing && !U.shouldFold(v.done.length - doneShown) ? v.done.length : doneShown;
+    const left = v.done.length - limit;
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
-    const content = v.done.length ? kindsNote + rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : '';
+    const content = v.done.length ? kindsNote + rounds + v.done.slice(0, limit).map(c => card(d, v, c)).join('') + more : '';
     const empty = !missing && !content ? `<p class="au-empty">${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}</p>` : '';
-    return (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading ? waiting : empty),
+    return datedRead + (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading && !content ? waiting : empty),
       filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
   }
   // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
@@ -432,10 +462,10 @@
   // —— 下半部：近 7 天替你做成了（和右边“近 7 天后台 AI 共用了”同一个说法）——
   function results(d) {
     const r = d.results_7d || {};
-    // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句，不写“还没采上”
+    // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句。
     const cell = (label, value, unit, tail, key, why) => `<div class="au-win"><p class="au-win__label">${label}</p>
       ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}`
-        : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
+        : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">没采到</p>'}</div>`;
     const translatorWhy = F(r.translator_versions_missing ?? list(d.categories).find(c => c.id === 'translator')?.result_7d?.missing_reason, '为什么空着');
     return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>近 7 天替${you()}做成了</h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
       <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', basis(r.repaired_basis), 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
@@ -466,13 +496,13 @@
     const days = list(d.ai_usage?.total?.days_7);
     const u = d.ai_usage || {}, since = T.stamp(u.covered_since), weekStart = T.stamp(d.results_7d?.from) || Date.now() - 7 * 86400000;
     const short = known(seconds) && spent(seconds);
-    const number = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
+    const number = !known(seconds) ? '<span class="tp-fog">没采到</span>'
       : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
       : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
     // 合计和“三家各干了多少”点了都到智能体页“三家干了多少”那块，先选好“近 7 天”（这个数本来就是从 6 天前 0 点算到现在，和那边“近 7 天”同一段时间；
     // 两边算法不同：这里只算自动任务各类登记的每次调用，那边按三家日志里实际干活的时间算，所以数会不一样，数旁边写明这里的口径）
     const label = known(seconds) ? `<a class="au-use__go" href="${esc(T.path(WEEK_HOURS))}">${number}<span class="au-use__chev" aria-hidden="true">›</span></a>` : number;
-    const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的没有记录</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
+    const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的还没开始记</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
     // 星期照上面日期格子的取法，按北京日期本身算，不用浏览器本机时区
     const names = ['日', '一', '二', '三', '四', '五', '六'];
     const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00Z').getUTCDay()],
@@ -483,17 +513,17 @@
     return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>近 7 天后台 AI 共用了</h2></div><p class="au-use__num">${label}${known(seconds) ? '<small class="au-use__basis">只算自动任务各类登记的每次调用</small>' : ''}${covered}</p>${chart}${gaps.length ? `<p class="tp-small au-use__gaps">${gaps.join('；')}</p>` : ''}</section>`;
   }
 
-  // 跑着的卡：跑了几分钟，每秒往前走；七类表“现在”那格写“已 N 分钟”
-  setInterval(() => {
-    for (const el of document.querySelectorAll('[data-ran]')) el.textContent = `跑了 ${minutes((Date.now() - Number(el.dataset.ran)) / 1000)}`;
-    for (const el of document.querySelectorAll('[data-since]')) el.textContent = `已 ${minutes((Date.now() - Number(el.dataset.since)) / 1000)}`;
-  }, 1000);
+  // 两处用同一份运行列表的时刻，刷新后一起更新。
+  const elapsedRun = run => {
+    const reading = board?.running || pages.get(run?.category);
+    return R.runningTime(run, reading);
+  };
 
   // 停等条：哪几类因为登录过期、额度用完停着，几点起，期间看了几次（后台 check_count）；
   // 接上以后读 feed 里 kind=resumed 的那行（provider＋started_at 对上同一段等待），写“几点接上”，24 小时后不再出
   const checks = n => known(n) ? ` · 期间看了 ${int(n)} 次` : '';
   function pauses(d) {
-    const names = ids => list(d.categories).filter(c => list(ids).includes(c.id)).map(c => U.fieldText(cn(c.title), viewer)).join('、');
+    const names = ids => list(d.categories).filter(c => list(ids).includes(c.id)).map(c => U.fieldText(cn(c.title, c.id), viewer)).join('、');
     const now = list(d.provider_pauses).filter(p => list(p.categories).length).map(p =>
       `<p class="tp-note au-pause" data-tone="warn">${esc(names(p.categories))}停着：${pauseText(p)}${checks(p.check_count)}</p>`);
     const waiting = new Set(list(d.provider_pauses).map(p => `${p.provider}|${p.started_at}`));
@@ -519,29 +549,15 @@
   // —— 八行总表 ——
   // 只有本人能点的按钮：访客版加 data-need-trusted，现成的可信设备弹框（trust-modal.js）在捕获阶段拦下、弹“这一步只有可信设备能做”；本人版不加，照常
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
-  // 开关旁边那行小字：正在保存…／已保存／没存上：原因／还没确认存上（feedback 按开关的 id 记）
-  const noteFor = id => {
-    if (feedback?.id !== id) return '';
-    let { text, tone = '' } = feedback;
-    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
-    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
-    if (feedback.want && feedback.reread) {
-      const s = rowOf(id)?.setting || {}, m = s.mode, want = feedback.want, until = isoOf(s.until_at);
-      const same = m === want.mode && (!want.until || T.stamp(until) === T.stamp(want.until));
-      [text, tone] = same ? ['已保存', 'ok'] : [`最新读数还是${m === 'paused' ? `暂停到 ${when(until)}` : { on: '开着', off: '关着' }[m] || '没读到'}`, ''];
-    }
-    return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
-  };
-  const waitingOn = id => feedback?.id === id && feedback.pending ? ' aria-busy="true"' : '';
+  const waitingOn = id => notices.waiting(id) ? ' aria-busy="true"' : '';
   function switchCell(c, offline) {
-    // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，旁边写“正在保存…”
+    // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，浮窗写“正在保存…”
     const m = mode(c), until = c.setting?.until_at, paused = esc(pausedText(until) || '暂停中');
     const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? paused : '没读到';
     if (offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
-    const fb = noteFor(c.id) || '<small role="status"></small>';
     // 访客版照样摆同一套开关和“暂停到…”（M716，定稿：公开版保留已定按钮）；点了由现成的可信设备弹框拦下，只提示本人才能操作，什么都不改
-    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
-      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
+    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title, c.id), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
+      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>`;
   }
   // 件数与账本“约好再查的”一致；已经在办的仍是未了结，但不参与下一件的排期。
   function promised() {
@@ -557,39 +573,41 @@
   // “现在”那格（照第一屏图）：灯＋一句话，下面一行小字。先后：停等（登录过期、额度用完）＞出毛病＞正在跑＞关着＞暂停到＞空着等下次
   function nowCell(d, c, v) {
     const p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
-    const live = v.live.find(x => x.category === c.id)?.run, since = T.stamp(live?.startedAt);
+    const live = v.live.find(x => x.category === c.id)?.run;
     const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
     let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
     else if (pr && (pr.headline || pr.title || pr.text)) {
-      const headline = F(pr.headline || pr.title || pr.text, '哪里坏了');
+      const headline = F(problemTitle(d, pr), '哪里坏了');
       const name = F(c.title, '类别'), prefix = `${name} · `;
       const problem = name && headline.startsWith(prefix) ? headline.slice(prefix.length) : headline;
       tone = 'warn'; main = `出毛病：${problem || headline}`;
       sub = [pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理'), known(pr.round) && pr.round > 0 ? `第 ${int(pr.round)} 轮` : ''].filter(Boolean).join('，') || sub;
     } else if (c.running || st.kind === 'running' || live) {
       tone = 'run';
-      const ran = since ? `<span data-since="${since}">已 ${minutes((Date.now() - since) / 1000)}</span>` : known(st.elapsed_seconds) ? `已 ${minutes(st.elapsed_seconds)}` : '';
+      const elapsed = elapsedRun(live) || (known(st.elapsed_seconds) ? minutes(st.elapsed_seconds) : '');
+      const ran = elapsed ? `<span class="au-nobr">已 ${elapsed}</span>` : '';
       const doing = live && (F(live.activity, '正在干什么') || (live.subject ? F(live.subject.title, '这件活') : ''));
       main = `正在跑${ran ? ` · ${ran}` : ''}`; sub = doing ? `${doing.replace(/^正在/, '')}` : sub;
-    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = waiting || sub; }
+    } else if (m === 'off') { tone = 'off'; main = '关着，不用排时间'; sub = waiting || sub; }
     else if (m === 'paused') { tone = 'off'; main = esc(pausedText(c.setting?.until_at) || '暂停中'); }
     else if (c.id === 'excerpt') main = excerptToday?.data && known(excerptToday.data.total) ? `今天摘了 ${int(excerptToday.data.total)} 句` : '空着';
-    else if (c.id === 'ai-commitments') {
-      const owed = promised();
-      main = owed?.next ? `空着 · 下一件 ${esc(when(owed.next))}` : '空着';
-      // 点了落到账本页“欠着 · AI 在修的”那块开头，并选好“约好再查的”筛选，进去列的就是这几件（主控 11-26 02:20 定）
-      if (owed) sub = link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
-    } else {
+    else if (c.id === 'ai-commitments') main = '空着';
+    else {
       const next = st.next_at || c.next_at;
       main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : stalled(d) ? '空着 · 派活程序没按时跑，下次几点暂时算不出' : waiting ? `空着 · ${waiting}` : '空着';
       if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
       if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
-    if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
-    return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
+    if (c.id === 'ai-commitments') {
+      const owed = promised(), count = owed ? (owed.count ? `${int(owed.count)} 件在等` : '没有在等的') : '约好再查';
+      const entry = link('/live/ledger/?kind=promised#kinds', `${count} ›`, 'tp-link au-nobr');
+      sub = [main === '空着' ? '' : main, sub].filter(Boolean).join(' · ');
+      main = owed?.next ? `${entry} · <span class="au-nobr">下一件 ${esc(when(owed.next))}</span>` : entry;
+    }
+    return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${wordsIn(main)}</b>${sub ? `<small>${wordsIn(sub)}</small>` : ''}</p></div>`;
   }
-  // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
+  // AI 约好的事先写今天的读数，再写上一次结果。
   function todayText(c) {
     if (c.id !== 'ai-commitments') return '';
     const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
@@ -598,46 +616,55 @@
   }
   const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
     part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
+  const sentenceSegments = new Intl.Segmenter('zh-CN', { granularity: 'sentence' });
   function lastCell(c, problem) {
-    const r = c.last_result, since = c.recent_stats?.recorded_since;
-    if (!r) return `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
+    const r = c.last_result, today = todayText(c);
+    if (!r) return `${today ? `<small>${today}</small>` : ''}<span class="tp-muted">运行记录这次没读到</span>`;
     const headline = problem?.headline || problem?.title || problem?.text;
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
     const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
-    const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
-    const words = duplicate ? '' : keepDates(F(result, '上次结果'));
+    const sentences = [...sentenceSegments.segment(U.fieldText(result, viewer).trim())];
+    const brief = sentences.length > 2 ? sentences[0].segment + sentences[1].segment.trimEnd() : '';
+    const shown = brief && typeof result === 'object' ? { ...result, value: brief, text: brief } : brief || result;
+    const detail = [today, keepDates(esc(when(r.at)))].filter(Boolean).join(' · ');
+    const words = duplicate ? '' : keepDates(F(shown, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
-    return `${text}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    const summary = text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : '';
+    const foot = detail ? `<small${today ? ' class="au-today"' : ''}>${detail}</small>` : duplicate ? '—' : '';
+    return today ? foot + summary : summary + foot;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
     const days = list(c.daily_30d), s = c.recent_stats || {};
-    if (!days.length) return '<span class="tp-fog">还没采上</span>';
+    if (!days.length) return '<span class="tp-fog">没采到</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     // 颜色跟柱图一样：成是绿字，坏了才是红字（M1096：原来整行一坏就全红，成也成了红字）
-    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮<span class="au-nobr">没读到</span>';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    const hasCounts = known(s.success) || known(s.failed);
+    const nums = hasCounts ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>`
+      : '<span class="au-nobr">成了几轮、</span><wbr><span class="au-nobr">坏了几轮，</span><wbr><span class="au-nobr">这次没读到</span>';
+    const wrap = !hasCounts || late && (!known(s.success) || !known(s.failed));
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${wrap ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起记</span></small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
-    const text = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
+    const text = [c.model, c.model_effort].filter(Boolean).map(v => `<span class="au-nobr">${esc(v)}</span>`).join('&#8239;·<wbr> ');
     const family = text && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
-    return !text ? '没读到' : family ? link(family, `${text} ›`) : text;
+    return !text ? '<span class="au-nobr">没读到</span>' : family ? link(family, `${text}&nbsp;›`) : text;
   }
   // 七类表（照第一屏图）：任务和怎么干、现在、上次结果、近 30 天、用谁、开关、›。点一行到这一类的页，“怎么干 ›”到怎么干页（本人 11-24：八类卡点进去是另一页，怎么干看机制）
   function table(d, v) {
     const cats = shownCats(d);
-    if (!cats.length) return `<section class="tp-panel" id="types"><p class="tp-empty">${d.types ? '这一版后台还没给各类的读数。' : '各类自动任务没读到。'}</p></section>`;
+    if (!cats.length) return `<section class="tp-panel" id="types"><p class="tp-empty">${d.types ? '各类的读数这次没读到。' : '各类自动任务这次没读到。'}</p></section>`;
     const offline = state?.offline;
     return `<section class="tp-panel au-board" id="types">
       <table class="tp-table au-table"><thead><tr><th scope="col">任务</th><th scope="col">现在</th><th scope="col">上次结果</th><th scope="col">近 30 天</th><th scope="col">用谁</th><th scope="col">开关</th><th scope="col" aria-label="进这一类"></th></tr></thead>
       <tbody>${cats.map(c => {
-        const g = G[c.id] || {}, p = pauseOf(d, c.id);
+        const g = c.how_to || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
-          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
+          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${wordsIn(esc(g.short || ''))}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干&nbsp;›</a></th>
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
-          <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title), viewer))}这一类">›</a></td></tr>`;
+          <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title, c.id), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>
       <p class="tp-small au-foot">点一行看这一类；不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。摘一句每答完一次就跑一下、单独记数，不算在上面“进行中”“近 72 小时跑完的”里。</p>${scheduled(d)}</section>`;
   }
@@ -675,7 +702,7 @@
       const w = r.last_wake, started = w?.at || r.at;
       if (!T.stamp(started)) return '';
       const title = F(w?.chat_title, '那一场对话'), at = when(started), href = T.path(w?.chat_href);
-      const chat = title ? (href ? link(href, `${title} ›`) : title) : '';
+      const chat = href ? link(href, `${title || '那场对话'} ›`) : title;
       if (at === shown && href && chat) return `<small class="au-wake">上次跑的对话：${chat}</small>`;
       return `<small class="au-wake">上次跑：${esc(at)}${chat ? ` · ${chat}` : ''}</small>`;
     };
@@ -699,7 +726,7 @@
       const mine = rows.filter(r => r.producer === h).sort((a, b) => T.stamp(b.next_at || b.at) - T.stamp(a.next_at || a.at));
       const missing = gaps.filter(g => g.includes(h));
       const notes = missing.map(g => `<small>${esc(g)}</small>`).join('');
-      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '这次没读到' : '没有';
+      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '' : '没有';
       return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${content}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
@@ -712,8 +739,9 @@
 
   let drawn = false;
   function heading(d) {
-    const side = d ? [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
-    return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
+    const old = P.staleAt(state);
+    const side = d ? [old ? `${esc(when(old))} 的数` : d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
+    return `<div class="tp-head"><div><h1>自动任务</h1><p>${wordsIn(`后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。`)}</p>
       <p class="au-crosslinks">也看：${link('/live/chats/', 'AI 对话 ›')} · ${link('/live/agents/', '智能体 ›')}</p></div>
       ${side ? `<p class="tp-head__side"><span>${side}</span></p>` : ''}</div>`;
   }
@@ -721,7 +749,8 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) {
-      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(state, '自动任务'));
+      const initial = P.retrying(state) ? undefined : state;
+      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(initial, '自动任务'));
       page.tick.set([], { off: true });
       return;
     }
@@ -749,14 +778,15 @@
   }
   // 时刻可能是秒数（后台回包）或时刻字符串（读数）：一律换成时刻字符串再比、再写
   const isoOf = v => typeof v === 'number' ? new Date(v * 1000).toISOString() : v;
-  const rowOf = id => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
+  const rowOf = (id, data = state?.data) => list(data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
   // 后台回包里的 until_at 是秒数，读数里是时刻字符串：并进来时换成时刻字符串，页面照常写“暂停到 几点”
   const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: isoOf(cur.until_at) } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去；没存上但后台带回了电脑上读到的 current（读回和请求不一致），照它显示；
   // 别的没存上、还没确认的，开关留在原档，之后照新读数显示
   async function saved(id, reply, want) {
-    feedback = reply.status === 'saved' ? { id, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id, text: reply.message || '已撤' }
-      : { id, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad', want: reply.status === 'unknown' ? want : undefined };
+    const update = notices.finish(reply.status === 'saved' ? 'ok' : 'fail',
+      reply.error === 'cockpit_owner_required' ? '' : reply.status === 'saved' ? '已保存'
+        : reply.status === 'retired' ? reply.message || '已撤' : failText(reply));
     const row = rowOf(id);
     if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
     // 主开关在原地滑到新档（圆钮滑、底色跟着变），滑完再整块重画
@@ -764,15 +794,13 @@
     if (el && m && el.dataset.mode !== m) {
       el.dataset.mode = m; el.setAttribute('aria-checked', String(m === 'on')); el.removeAttribute('aria-busy');
       el.querySelector('span').textContent = m === 'on' ? '开' : '关';
-      const note = el.parentElement.querySelector('small[role="status"]');
-      if (note) { note.textContent = feedback.text; note.dataset.tone = feedback.tone || ''; }
       await new Promise(r => setTimeout(r, 320));
     }
     draw();
-    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（noteFor）
-    const fb = feedback;
     Live.get('automation', {}).then(read => {
-      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+      if (reply.status === 'unknown' && want && read.data && read.meta.status >= 200 && read.meta.status < 400) {
+        P.settingReadback(update, rowOf(id, read.data)?.setting, want, when);
+      }
     });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
@@ -802,15 +830,12 @@
     const original = form.dataset.originalUntil;
     const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
-    // 等后台回话：框里和开关旁边都写“正在保存…”，开关和原来的暂停时间留着
-    result.textContent = '正在保存…';
-    feedback = { id, text: '正在保存…', pending: true };
+    dialog.close();
+    notices.start(id);
     draw();
     const reply = await save(id, { mode: 'paused', until_at: until });
     if (!reply) return;
-    // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
-    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
-    else result.textContent = failText(reply);
+    failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id, until };
     saved(id, reply, { mode: 'paused', until });
   });
 
@@ -833,26 +858,35 @@
     if (clear) { setFilter({ [clear.dataset.clear]: null }); return; }
     if (day) { setFilter({ view: 'done', date: day.dataset.day === today() ? 'today' : day.dataset.day }); T.reveal('done'); return; }
     if (e.target.closest('[data-more-done]')) { T.keep(page.root, '[data-more-done]', () => { doneShown += STEP; draw(); }); return; }
-    if (e.target.closest('[data-older]')) { T.keep(page.root, '[data-older]', () => { olderOpen = !olderOpen; draw(); }); return; }
+    const older = e.target.closest('[data-older]');
+    if (older) {
+      if (olderOpen) U.anchorFold(older, () => { olderOpen = false; draw(); }, () => page.root.querySelector('[data-older]'));
+      else T.keep(page.root, '[data-older]', () => { olderOpen = true; draw(); });
+      return;
+    }
     // 整行都能点：点在开关、暂停、链接以外的地方，等于点了这一行，到这一类的页
     const row = !e.target.closest('a, button, input, select') && e.target.closest('tr[data-row]');
     if (row) { location.href = catPath(row.dataset.row); return; }
     if (toggle) {
       const id = toggle.dataset.toggle, next = toggle.dataset.mode === 'on' ? 'off' : 'on';
       if (busy) return;
-      // 后台回之前开关留在原档，旁边只写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
-      feedback = { id, text: '正在保存…', pending: true };
+      // 后台回之前开关留在原档，浮窗先写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
+      notices.start(id);
       T.keep(page.root, `[data-toggle="${CSS.escape(id)}"]`, draw);
       saved(id, await save(id, { mode: next }) || { status: 'unknown' }, { mode: next });
       return;
     }
     if (pause) {
+      if (busy) return;
+      notices.clear();
+      busy = true;
       const access = await Live.automationSetting({ operation: 'access' });
+      busy = false;
       // 只是先问一声能不能操作，还没保存什么：电脑没回话就照实说，不写“还没确认存上”
-      if (access.status === 'unknown') { feedback = { id: pause.dataset.pause, text: '电脑没回话，再点一次' }; draw(); return; }
+      if (access.status === 'unknown') { notices.finish('fail', '电脑没回话，再点一次'); return; }
       if (access.status !== 'pass') { saved(pause.dataset.pause, access); return; }
       pausing = pause.dataset.pause;
-      fillWhen(list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(c => c.id === pausing)?.setting?.until_at);
+      fillWhen(failedPause?.id === pausing ? failedPause.until : rowOf(pausing)?.setting?.until_at);
       form.querySelector('[data-result]').textContent = '';
       dialog.showModal();
     }

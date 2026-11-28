@@ -13,10 +13,13 @@
   const dayKey = at => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date(at));
   const clock = at => bj(at, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   const monthDay = at => bj(at, { month: '2-digit', day: '2-digit' }).replace('/', '-');
+  const messageReviewName = viewer => viewer === 'public' ? '替本人看新消息' : CATEGORY['message-review'];
 
-  // 固定任务名在两版都照原样。
-  function categoryName(key) {
-    return CATEGORY[key] || '';
+  // 类别名：访客版把“你”换成“本人”，和别处一样。
+  function categoryName(key, viewer) {
+    if (key === 'message-review') return messageReviewName(viewer);
+    const name = CATEGORY[key] || '';
+    return viewer === 'public' ? name.replace('替你', '替本人') : name;
   }
   // 谁做的：“Claude Opus 5.5 medium”“GPT-6.2 Sol xhigh”；程序自己办的只写“程序”，不补型号。
   function worker(w) {
@@ -64,7 +67,8 @@
   }
   // 一轮的名字：“自动修理第 2 轮”；没有轮次就是类别名。
   function runName(run, viewer) {
-    const name = categoryName(run?.category, viewer) || (typeof run?.category_name === 'string' ? run.category_name : '');
+    const fallback = typeof run?.category_name === 'string' ? run.category_name : '';
+    const name = categoryName(run?.category, viewer) || (fallback === CATEGORY['message-review'] ? messageReviewName(viewer) : fallback);
     return Number.isInteger(run?.round) && run.round > 0 ? `${name}第 ${run.round} 轮` : name;
   }
   // 事项（等你的事、账本一件）上的“来源”：后台 automation_runs[] 里写明的那几轮，原样照列，不按标题或时间去猜。

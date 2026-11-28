@@ -16,8 +16,11 @@
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
+  const { keepRowWords: keepWords } = window.AutomationPresentation;
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
+  const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后|超时/g, word =>
+    word.startsWith('<') ? word : `<span class="iss-nowrap">${word}</span>`);
   const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
   // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
   function publicHtml(html, viewer) {
@@ -58,7 +61,7 @@
   }
 
   // 每看一次（待本人定的 A：每一轮都列一行）：自动修理那几件按每一轮列（修理、验收各一行，写型号档位，点进那一轮）；AI 约好的事每一轮就是到点去看一次。
-  // 这次看记在哪一轮里（那一轮开始以后、结束后 10 分钟内记下的，取结束得最近的）就并进那一轮那一行，不另起一行；那一轮缺的型号档位、地址拿这次看的补上，那场对话另挂一个链接。
+  // 并入同一轮的核对记录时，直接用这一轮的详情地址。
   // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻有那一轮的，挂在那一轮的“修理”“验收”后面；没有的才另补一行。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
   // 对话被藏的那一轮（visitor_labels.conversation 是 hidden）：本人版挂“访客看不到”；访客版时刻、型号档位照给，那一轮的页后台给了链接就照给，原位写后台给的原因。
   function steps(d, repair) {
@@ -74,12 +77,11 @@
       const chat = site(c.source_href), own = site(c.run_href), who = [c.model, c.effort].filter(Boolean).join(' · '), hit = roundOf(c.at);
       if (hit) {
         hit.who ||= who;
-        if (!hit.href && (own || chat)) Object.assign(hit, { href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
-        else if (chat && chat !== hit.href) hit.chat = chat;
+        if (!hit.href && (own || chat) || own && /^\/live\/chat\//.test(hit.href)) Object.assign(hit, { href: own || chat, why: c.source_unavailable_reason });
         hit.checkAt = c.at;
         continue;
       }
-      rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
+      rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, why: c.source_unavailable_reason });
     }
     const hits = t => x => x && Math.abs(ms(x) - ms(t)) < 2000, near = t => rows.some(r => [r.at, r.checkAt].some(hits(t)));
     const start = timed(d.accepted) && history.find(e => e && hits(d.accepted)(e.at)
@@ -95,7 +97,7 @@
       }
       if (near(e.at)) continue;
       rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind, outcome: out,
-        who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
+        who: '', href: site(R.runHref(e.automation_run)) || site(e.source_href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
     }
     if (timed(d.accepted)) {
       const href = site(d.registered_by_href) || site(start?.source_href);
@@ -108,11 +110,11 @@
   const hiddenTag = r => r && viewer === 'owner' ? U.visitorLabel(r, 'conversation', '这一轮的对话', viewer) : '';
   function stepText(v) {
     if (v == null) return '';
-    if (typeof v !== 'string') return F(v, '这一次做了什么');
+    if (typeof v !== 'string') return keepWords(F(v, '这一次做了什么'));
     const lines = v.split('\n').map(s => s.trim()).filter(Boolean);
-    const tail = esc(lines.at(-1)).replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="live-unit">$&</span>');
+    const tail = keepWords(esc(lines.at(-1)).replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="live-unit">$&</span>'));
     if (lines.length < 2) return tail;
-    return `${tail}<details class="iss-more"><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${esc(s)}</p>`).join('')}</details>`;
+    return `${tail}<details class="iss-more" data-fold-anchor><summary>前面写的 ${esc(lines.length - 1)} 段</summary>${lines.slice(0, -1).map(s => `<p>${keepWords(esc(s))}</p>`).join('')}</details>`;
   }
 
   function render() {
@@ -125,7 +127,7 @@
     const titleText = document.createElement('template');
     titleText.innerHTML = shownTitle;
     document.title = `${titleText.content.textContent.trim() || '账本一件'} · 实况`;
-    U.html(head, `<span class="head__lead">${shownTitle}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
+    U.html(head, `<span class="head__lead">${keepTitleWords(shownTitle)}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
@@ -161,14 +163,14 @@
     const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
-    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
+    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${keepWords(F(v, h))}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
-    const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
+    const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
       const repeated = r === rows.at(-1) && cells.some(([, v]) => nodot(T(r.text)) === nodot(T(v)));
-      const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
+      const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
       return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${repeated ? '' : stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
@@ -194,7 +196,7 @@
   const faults = d => hasWindowCount(d) ? d : repeat ?? d;
   function repeatCard(d) {
     if (!faultOf(d)) return '';
-    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
+    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${keepWords(body)}</p>${basisOf(d)}</section>`;
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const newCount = Number.isInteger(d.faults_in_window) ? d.faults_in_window : null;
     const range = positive(windowDays) ? `近 ${esc(windowDays)} 天` : newCount != null ? '当前统计期内' : '近 30 天';
@@ -222,7 +224,9 @@
     const head = `另有 ${esc(n)} 次是误判，没算进去`;
     if (!rows.length) return `${line}<p class="iss-basis">${head}。</p>`;
     const row = r => `<li><p><b class="iss-when">${esc(when(r.at))}</b>${T(r.summary) ? F(r.summary, '当时记的') : ''}</p>${T(r.why) || site(r.href) ? `<p class="iss-meta">${[T(r.why) && `不算：${F(r.why, '为什么不算')}`, site(r.href) && go(r.href, goName(r.href))].filter(Boolean).join(' · ')}</p>` : ''}</li>`;
-    return `${line}<details class="iss-more iss-misjudged"><summary class="iss-go live-disclosure">${head}<span aria-hidden="true">›</span></summary><ol>${rows.map(row).join('')}</ol></details>`;
+    const records = `<ol>${rows.map(row).join('')}</ol>`;
+    if (!U.shouldFold(rows.length)) return `${line}<p class="iss-basis">${head}。</p><div class="iss-more iss-misjudged">${records}</div>`;
+    return `${line}<details class="iss-more iss-misjudged" data-fold-anchor><summary class="iss-go live-disclosure">${head}<span aria-hidden="true">›</span></summary>${records}</details>`;
   }
   // 来源：记下这件事的那场对话；没有对话的写后台给的原因（自动修理自己查出来的那句）
   function sourceCard(d) {
@@ -230,7 +234,7 @@
     if (!sc) return '';
     const host = HOST[String(sc.host || '').toLowerCase()] || '';
     const body = sc.available && site(sc.href) ? go(sc.href, `${host ? `${esc(host)} · ` : ''}${T(sc.title) ? F(sc.title, '对话标题') : '那场对话'}`) : T(sc.unavailable_reason) ? F(sc.unavailable_reason, '来源') : '';
-    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${body}</p></section>` : '';
+    return body ? `<section class="dossier-card glass iss-side"><h2>来源</h2><p>${keepWords(body)}</p></section>` : '';
   }
   // 这件事：谁记的（点进记下它的那场对话或那一轮）、记下、谁在修、怎么算办完、属于哪一类、关联的项目和卡
   function factsCard(d, s, repair, who, born) {
@@ -259,13 +263,23 @@
   }
 
   function rawCard(d) {
-    const rows = fact('原文', F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项'))
-      + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
+    const raw = F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项')
+      .replace(/<[^>]+>|数据/g, word => word === '数据' ? '<span class="live-unit">数据</span>' : word);
+    const rows = fact('原文', raw) + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
     if (!rows) return '';
-    return `<details class="dossier-card dossier-card--raw glass" id="raw"${$('raw')?.open ? ' open' : ''}>
-      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></summary>
-      <dl class="rec-facts">${rows}</dl></details>`;
+    return `<details class="dossier-card dossier-card--raw glass" id="raw" data-fold-anchor${$('raw')?.open ? ' open' : ''}>
+      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span><span class="iss-nowrap">原始记录</span>
+        <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-closed">展开看原始记录全文</span><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
+      <dl class="rec-facts">${rows}</dl>
+      <button type="button" class="more" data-close-raw>收起 <span class="more__chev" aria-hidden="true">‹</span></button></details>`;
   }
+  $('side').addEventListener('click', e => {
+    const summary = e.target.closest('[data-close-raw]')?.parentElement.querySelector('summary');
+    if (!summary) return;
+    summary.click();
+    summary.focus({ preventScroll: true });
+    summary.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  });
 
   // 单件的现行读口已带齐时，省掉对账本列表的补读。
   async function loadRepeat() {
@@ -286,7 +300,7 @@
   function empty(message, detail = '') {
     ended = true; delete hero.dataset.updating;
     const head = part('head'), src = part('src');
-    U.html(head, `<span class="head__lead">${esc(message).replace(/\b\d{1,2}-\d{2} \d{2}:\d{2}\b/g, '<span class="iss-nowrap">$&</span>')}</span>`);
+    U.html(head, `<span class="head__lead">${keepTitleWords(esc(message).replace(/\b\d{1,2}-\d{2} \d{2}:\d{2}\b/g, '<span class="iss-nowrap">$&</span>'))}</span>`);
     head.classList.toggle('is-long', Boolean(detail) && [...message].length > 40);
     U.html(src, detail); src.hidden = !detail; part('state').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
@@ -308,13 +322,21 @@
     L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
 
+  let checkedViewer = false;
+  const readBody = s => {
+    const waiting = !s.offline && (s.data?.q === 'warming' || s.phase === 'none' && s.conn?.stage === 'retrying');
+    const reading = waiting ? { ...s, phase: 'wait' } : s;
+    heroRead.set(reading); restRead.set(reading);
+    return reading.phase;
+  };
   if (!id) empty('没有说是哪一件');
   else window.Live.watch(`ledger/${encodeURIComponent(id)}`, null, {
-    phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
+    phase(s) { if (!item && !ended) readBody(s); },
     data(d, meta) {
       const kind = meta.viewer?.kind || 'public';
+      if (kind !== viewer && d?.q === 'warming' && item) { item = null; empty('正在准备'); }
       if (kind !== viewer) { viewer = kind; policy = undefined; repeat = undefined; repeatAsked = false; }
-      if (!d?.item?.id) { if (d?.q === 'warming' && !item) empty('正在准备'); return; }
+      if (!d?.item?.id || d.q === 'warming') return;
       $('rest').hidden = false; ended = false; delete hero.dataset.updating;
       at = meta.at || d.at || null; item = d.item; policy = d.policy ?? policy; history = Array.isArray(d.history) ? d.history : [];
       misjudged = Array.isArray(d.misjudged_records) ? d.misjudged_records : Array.isArray(d.item.misjudged_records) ? d.item.misjudged_records : [];
@@ -323,25 +345,36 @@
     link(s) {
       try {
         const missing = s.meta?.status === 404 ? s.link?.ledger_missing : null;
-        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen } : s);
+        const holding = item && at && s.data?.q === 'warming';
+        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen }
+          : holding ? { ...s, shownAt: at, meta: { ...s.meta, at } } : s);
         L.offline(s.offline);
         if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
         if (s.meta?.status === 404) {
+          // 缺件回包没有 viewer；沿用授权读口核对设备，由 Live 更新版本切换。
+          if (!checkedViewer && !window.LiveView?.isPublic()) {
+            checkedViewer = true;
+            void window.Live.get('access');
+          }
           const { text, prefix, target, headline, original_title: originalTitle } = missing ?? {};
           const titleLine = headline && typeof originalTitle === 'string' && [...originalTitle].length > 24;
           const related = target ? (text ? `${esc(prefix)}<br>` : '') +
-            go(`/live/issue/?id=${encodeURIComponent(target.id)}`, esc(target.title)) +
+            go(`/live/issue/?id=${encodeURIComponent(target.id)}`, keepTitleWords(esc(target.title))) +
             U.visitorLabel(target, '$', '换号后的那件', 'owner') : '';
           return empty((titleLine && headline) || text || prefix || '这一件暂时读不到',
             [titleLine && `原题：${esc(originalTitle)}`, related].filter(Boolean).join('<br>'));
         }
         if (ended) return;
-        heroRead.set(s); restRead.set(s);
-        if (s.phase === 'gone') empty('这块没存下来，连上后补上。');
-        else if (s.phase === 'none') empty('这一件暂时读不到');
-      } finally { [hero.querySelector('.card__body'), $('rest')].forEach(el => U.blockNote(el, s)); }
+        const phase = readBody(s);
+        if (phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
+        else if (phase === 'none') empty('这一件暂时读不到');
+      } finally {
+        const old = !ended && item && at && !s.offline && (s.warming || s.meta?.status >= 500) && !s.meta?.publicationRevoked;
+        U.blockNote(hero.querySelector('.card__body'), old && !s.fallbackNote ? { fallbackNote: `截至 ${when(at)}` } : s);
+        U.blockNote($('rest'), s);
+      }
     },
   });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));

@@ -73,7 +73,7 @@
 .tp .au-row[data-mode="off"]:hover > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-green-ink); }
 .au-name { display: grid; gap: 1px; color: inherit; text-decoration: none; }
 .au-name b { font-size: 17px; font-weight: 800; }
-.au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
+.au-name > span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
 .au-name:hover b { text-decoration: underline; text-underline-offset: 3px; }
 .au-name:focus-visible, .au-how:focus-visible, .au-go a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
 .tp a.au-how { display: inline-block; margin-top: 2px; font-size: 13.5px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; }
@@ -89,16 +89,28 @@
 .au-now small a.tp-link { font-weight: 700; }
 .au-last { font-size: 14px; line-height: 21px; }
 .au-last small { display: block; margin-top: 2px; font-size: 12.5px; color: #6c6b64; }
+@media (min-width: 1400px) {
+  .au-table thead th:nth-child(1) { width: 14%; }
+  .au-table thead th:nth-child(2) { width: 21%; }
+  .au-table thead th:nth-child(3) { width: 22%; }
+  .au-table thead th:nth-child(6) { width: 184px; }
+  .au-table td.au-last { padding-right: 6px; }
+  .au-last-summary .live-unit { white-space: normal; }
+  .au-last .au-today { text-wrap: wrap; }
+}
+@media (min-width: 1760px) { .au-table td.au-model { padding-inline: 8px 0; } }
 .au-go { text-align: right; }
 .tp .au-go a { display: inline-block; padding: 4px 2px; font-size: 22px; font-weight: 700; line-height: 1; color: #8a8981; text-decoration: none; transition: color .15s ease, transform .15s ease; }
 .au-row:hover .au-go a { color: var(--tp-green-ink); transform: translateX(3px); }
-.au-model, .tp .au-model .tp-link { white-space: normal; }
+.au-model, .tp .au-model .tp-link { white-space: normal; text-wrap: wrap; }
+.au-name b, .au-state { white-space: nowrap; }
 .au-warn { color: var(--tp-amber); font-weight: 700; }
 .au-warn a.tp-link { color: var(--tp-amber); white-space: normal; }
 .tp a.tp-link.au-warn { white-space: normal; }
 .au-ok { color: var(--tp-green-ink); font-weight: 700; }
 .au-trend { display: grid; gap: 2px; justify-items: start; }
 .au-trend > span { font-size: 12.5px; color: #57564f; white-space: nowrap; }
+.au-trend > .au-trend__wrap { white-space: normal; }
 .au-trend .au-n[data-tone="ok"] { color: var(--tp-green-ink); }
 .au-trend .au-n[data-tone="bad"] { color: var(--tp-red); }
 .au-switchcell { white-space: nowrap; }
@@ -113,20 +125,26 @@
 .au-switch:focus-visible, .au-pausebtn:focus-visible, .au-mini:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .au-pausebtn { margin-left: 6px; padding: 3px 9px; border: 1px solid var(--tp-line); border-radius: 7px; background: #fff; font: inherit; font-size: 12.5px; color: #3d3d3a; cursor: pointer; vertical-align: middle; }
 .au-pausebtn:hover { border-color: var(--ink); }
-.au-switchcell small { display: block; min-height: 19px; margin-top: 4px; max-width: 190px; font-size: 12.5px; color: #57564f; white-space: normal; }
-.au-switchcell small[data-tone="ok"], .au-subs small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
-.au-switchcell small[data-tone="bad"], .au-subs small[data-tone="bad"] { color: var(--tp-red); }
+.au-subs small[data-tone="ok"] { color: var(--tp-green-ink); font-weight: 700; }
+.au-subs small[data-tone="bad"] { color: var(--tp-red); }
 /* 电脑上把窗口拉窄（1400 以下）时：栏不再死撑一行，柱图跟着栏宽缩，“暂停到…”换到开关下面，免得“现在”“上次结果”挤成一字一行（M902）。
    1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1399px) {
-  .au-table thead th:nth-child(4) { width: 15%; }
-  .au-table thead th:nth-child(6) { width: 110px; }
+  .au-table thead th:nth-child(1) { width: 17%; }
+  .au-table thead th:nth-child(2) { width: 19%; }
+  .au-table thead th:nth-child(3) { width: auto; }
+  .au-table thead th:nth-child(4) { width: 12%; }
+  .au-table thead th:nth-child(5) { width: 18%; }
+  .au-table thead th:nth-child(6) { width: 86px; }
+  .au-table td, .au-table th { padding-inline: 8px; }
   .au-table tbody th, .au-model, .au-trend > span, .au-switchcell { white-space: normal; }
+  .au-table td.au-model { padding-inline: 5px 0; }
+  .au-last-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
   .au-trend { justify-items: stretch; }
   .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }
   .au-pausebtn { margin: 6px 0 0; }
-  /* 成坏数后面的“几号起记”整段换到下一行，不留打头的“·”，也不把“记”字单独甩下去 */
-  .au-table .au-trend > span small { display: block; white-space: nowrap; }
+  /* 日期和起记说明各自保留完整，窄到同一行放不下时可以分行。 */
+  .au-table .au-trend > span small { display: block; white-space: normal; }
   .au-table .au-trend > span small i { display: none; }
 }
 .au-state { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; background: var(--tp-green); }
