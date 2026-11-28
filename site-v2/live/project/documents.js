@@ -23,19 +23,18 @@ function eligible(state) {
 }
 
 export function mount(project, anchor, state) {
-  let frame, size, route, list, current, waiting, timer, note;
+  let frame, size, route, list, current, waiting, timer, note, loadedAt;
   function clear() {
     clearTimeout(timer);
     waiting?.abort();
     size?.disconnect();
     frame?.remove();
     note?.remove();
-    frame = size = route = list = current = waiting = note = null;
+    frame = size = route = list = current = waiting = note = loadedAt = null;
   }
-  // 这块读不到（不是“这个项目没有”）时留一句为什么，一分钟后自动再读，不让整块无声消失
-  function unavailable() {
+  function showNote(text) {
     if (!note) { note = document.createElement('p'); note.className = 'row__sub'; note.style.margin = '16px 0'; anchor.before(note); }
-    note.textContent = `${project === 'wly0829.cn' ? '来访人明细' : '项目文档'}这次没读到（连接后台出错），1 分钟后自动再读。`;
+    note.textContent = text;
   }
   const active = () => eligible(state()) && !document.hidden && navigator.onLine;
 
@@ -93,6 +92,7 @@ export function mount(project, anchor, state) {
       anchor.before(frame);
     }
     current = url;
+    loadedAt = new Date();
     frame.srcdoc = policy + ownerTag(html.replace(/^\s*<!doctype html>/i, ''));
   }
 
@@ -130,9 +130,18 @@ export function mount(project, anchor, state) {
         show(html, url);
       }
     } catch (error) {
-      if (request === waiting) {
+      if (request === waiting && frame && active() && target.token === connection()?.token &&
+          (error?.status >= 500 || !error?.status && error?.name !== 'AbortError')) {
+        const time = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+        showNote(`页面载入于 ${time.format(loadedAt)}`);
+        waiting = null;
+        timer = setTimeout(() => read(url), 60000);
+      } else if (request === waiting) {
         clear();
-        if (error?.status !== 404 && error?.name !== 'AbortError' && active()) { unavailable(); timer = setTimeout(read, 60000); }
+        if (error?.status !== 404 && error?.name !== 'AbortError' && active()) {
+          showNote(`${project === 'wly0829.cn' ? '来访人明细' : '项目文档'}这次没读到（连接后台出错），1 分钟后自动再读。`);
+          timer = setTimeout(read, 60000);
+        }
       }
     } finally {
       if (request === waiting) {

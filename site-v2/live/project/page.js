@@ -18,12 +18,26 @@
   function staleText(data, at, now = Date.now()) {
     return window.LiveUI.staleText(data, at || data?.at, now);
   }
+  function showRefreshCutoff(el, state) {
+    const data = state.data, shown = data?.source_at ?? state.shownAt ?? data?.at ?? state.meta?.at;
+    const cutoff = data && state.fallbackNote && Number.isFinite(Date.parse(shown)) && !staleText(data, shown)
+      ? `数据截至 ${stamp(shown, data.at_precision)}` : '';
+    U.blockNote(el, { fallbackNote: cutoff });
+  }
   const U = window.LiveUI;
   const Light = window.LiveLight;
   const { esc, sp } = U;
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  const plugin = id === 'pcconfig' ? ['/live/project/pcconfig.js', '/live/project/pcconfig.css']
+    : id === 'agents' ? ['/live/project/agents.js', '/live/project/agents.css'] : null;
+  if (plugin) {
+    const [script, href] = plugin;
+    const style = Object.assign(document.createElement('link'), { rel: 'stylesheet', href });
+    document.head.append(style);
+    await import(script).catch(() => style.remove());
+  }
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
   // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡
@@ -61,15 +75,26 @@
   };
   const enc = encodeURIComponent;
   const missingText = (state, what = '项目') => state?.offline || U.offline?.() ? '这块没存下来，连上后补上。'
-    : [404, 503].includes(state?.meta?.status) || !(state?.meta?.status > 0) || state.meta.status >= 500 ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
+    : `${U.fieldText(what) || '项目'}这次没读到`;   // 读失败、服务出错、没给这一块都算没读到（M1198 B66）；成功读到空的由各块自己写，比如“还没有产物”
+  // Live 用同一个 live_missing 回应无该项目和访客不可发现的项目。
+  const projectNotFound = meta => meta?.viewer?.kind === 'public' && meta.status === 404 && meta.withdrawn;
+  function missingProject(state) {
+    if (projectNotFound(state?.meta)) return '没有找到这个项目。';
+    if (state?.meta?.viewer?.kind === 'public' && state.meta.status === 403) return { visibility: 'owner', hidden_what: '此项目的实况' };
+    return missingText(state);
+  }
 
   const hero = $('pj-hero');
-  let coverSlug;
+  let coverSlug, applyLook;
   const lookReady = Promise.all([looks, fetch('/live/project/cover-links.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))])
     .then(([lookMap, coverLinks]) => {
       coverSlug = Object.keys(coverLinks).find(slug => coverLinks[slug] === id);
-      applyProjectLook(hero, id, lookMap);
-      paintTone(lookMap);
+      // 先等主读口认出项目，访客找不到时也用统一外观。
+      applyLook = () => {
+        applyProjectLook(hero, id, lookMap);
+        paintTone(lookMap);
+        applyLook = null;
+      };
     });
   // 页头的几块在卡里；关键数字那一条在卡下面
   const part = (name) => hero.querySelector(`[data-part="${name}"]`) || document.querySelector(`[data-part="${name}"]`);
@@ -159,7 +184,7 @@
     if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">暂时读不到</span>', plain: '暂时读不到', long: false };
+    if (unknownValue(m) && /^(?:没有记录|暂时读不到)[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-text">这次没读到</span>', plain: '这次没读到', long: false };
     if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
@@ -278,7 +303,9 @@
       const buttons = it.correction_text ? U.actions(it, [{ kind: 'copy', label: '这条不对', text: it.correction_text }]) : '';
       return { key: it.id || `record-${index}`, cls: 'row row--flat pj-item', html: `${status.lamp || '<span></span>'}<div class="row__text"><p class="row__main"><span class="row__title">${text(it.title)}</span></p>${it.text || marker(it, projectViewer, it.hidden_what || '这项资料') ? `<p class="row__sub">${[it.text ? text(it.text) : '', marker(it, projectViewer, it.hidden_what || '这项资料')].filter(Boolean).join(' · ')}</p>` : ''}${detail ? `<details><summary class="live-disclosure"><span class="disclosure-closed">展开</span><span class="disclosure-open">收起</span><span class="disclosure-chev">›</span></summary>${detail}</details>` : ''}${buttons}</div><span class="pj-at">${stamp(it.at)}</span>` };
     }
-    const said = sp(STATE[it.state_text] || it.state_text || STATE[it.state] || '未记录状态');
+    const stateText = sp(it.state_text);
+    const finished = ['ready', 'done'].includes(it.state) && /^(?:状态不明|状态未知|未记录状态|未知)[。！]?$/.test(stateText);
+    const said = finished ? STATE[it.state] : sp(STATE[it.state_text] || it.state_text || STATE[it.state] || '未记录状态');
     const detail = [status.note, marker(it, projectViewer, it.hidden_what || '这项资料'), it.text && (it.name || it.label) && U.fieldHtml(it.text, { name: '条目说明', kind: projectViewer }), it.version != null && `版本 ${U.fieldHtml(it.version, { name: '版本', kind: projectViewer })}`, it.bytes != null && esc(U.gb.scaled(it.bytes))].filter(Boolean).join(' · ');
     return {
       key: it.id || `record-${index}`,
@@ -312,7 +339,9 @@
     const brief = canShorten ? trim(it.display_title) || null : null, version = canShorten && /^(E\d+)\s*[｜|：:]/.exec(title)?.[1];
     const display = typeof brief === 'string' && brief && version && !/^E\d+\b/.test(brief) ? `${version}｜${brief}` : brief ?? (legacy ? `${legacy[1]}｜${legacy[2]}` : title);
     const nameHidden = projectViewer === 'public' && [it.recent_title, it.title].some(v => restricted(v) || /(?:仅本人可见|可信设备可见)$/.test(sp(v)));
-    const name = nameHidden ? '成品名称仅本人可见' : titleVisible ? [proj?.name && text(proj.name), text(it.recent_title || '已登记的成品')].filter(Boolean).join(' · ') : '';
+    const rulesVersion = it.kind === 'rules' && version;
+    const caption = rulesVersion ? `${rulesVersion} 规则更新` : it.recent_title || (canShorten ? title : '已登记的成品');
+    const name = nameHidden ? '成品名称仅本人可见' : titleVisible ? [!canShorten && proj?.name && text(proj.name), text(caption)].filter(Boolean).join(' · ') : '';
     // M684：本人版成品名称旁按后台 visitor_labels.title 挂签；后台还没标、但访客版另有名字（public_title 和本人版的名字不一样）的，就是成品改了名字，挂第二种签。
     const renamed = projectViewer === 'owner' && typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(it.recent_title || it.title, projectViewer).trim();
     // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：本人版名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
@@ -323,28 +352,35 @@
     const wholeTag = whole && !quiet ? U.visitorHiddenMark(it, '这份成品', projectViewer, { keys: ['$'] }) : '';
     const nameTag = !name || quiet ? '' : wholeTag || U.visitorLabel(it, ['$', 'title', 'recent_title'], '这份成品的名称', projectViewer) || (renamed ? U.visitorRewrittenTag('这份成品的名称', '', projectViewer) : '');
     const changes = canShorten && Array.isArray(it.changes) && it.changes.length ? it.changes : display !== title ? [typeof title === 'string' ? title.replace(/([。！？])\s*；/g, '$1') : title] : [];
-    const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${text(change)}</p>`).join('')}</details>` : '';
+    const details = changes.length ? `<details${artifactVersion ? ' open' : ''}><summary class="live-disclosure">查看改动${Number.isFinite(it.change_count) ? `（${num(it.change_count)} 条）` : ''}</summary>${changes.map(change => `<p class="row__sub">${keepWords(text(change), false, true)}</p>`).join('')}</details>` : '';
     const publicLink = projectViewer === 'public' && typeof it.open === 'string' && !it.web_open ? { href: it.open, label: '打开成品' } : it.web_open;
     // 新私事规则：登记时填了 open_note 的成品，访客版在打开链接的位置显示这句普通字（“这里是……，所以不予展示”）；本人版照给链接，旁边挂签。
     // M684：访客那边正文看不到（整块写成“这里是……，所以不予展示”），挂“访客看不到”；后台给了 visitor_labels.open 时照它挂哪种。
     const openNote = U.fieldText(it.open_note, projectViewer).trim();
     // 两版同一套：访客版正文那句（open_note）照写，打开按钮也照摆，不再让那句把按钮压掉
-    const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
-    const action = target ? projectViewer === 'public' && typeof target.href === 'string'
+    const target = (!artifactVersion || projectViewer === 'owner') && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
+    const versionUrl = rulesVersion && route(`/live/project/?id=agents&artifact=${rulesVersion}#artifacts`);
+    const openTag = quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer);
+    const versionButton = versionUrl && !artifactVersion && (projectViewer === 'owner'
+      ? `<a class="btn btn--sm" href="${esc(versionUrl)}" data-mo-press>看这版改动</a>${openTag}`
+      : '<button type="button" class="btn btn--sm" data-rule-trust data-mo-press>看这版改动</button>');
+    const action = versionButton || (target ? projectViewer === 'public' && typeof target.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>${U.visitorLabel(it, 'open', '这份成品的正文', projectViewer)}`
-      : pcActions(item, [target]) + (quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
+      : pcActions(item, [target]) + (quiet || whole ? '' : openTag || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '');
     const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
-    const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
+    const canOpen = projectViewer === 'owner' && (versionButton || target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id));
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');
     // 没写说明就不写这一行（原来的兜底句“这项成品已有登记，内容说明待补充。”两版读着都像没写）
     const explanation = titleVisible ? it.recent_detail || '' : '';
     const solution = canShorten && typeof it.solves === 'string' ? it.summary_zh || it.solves : it.solves;
-    const knownSolution = solution && !/^(?:没有|未)记录(?:解决)?(?:[。.]|$)/.test(sp(solution));
-    const solves = knownSolution ? `<p class="row__sub">解决：${U.fieldHtml(solution, { name: '解决', kind: projectViewer })}</p>` : '';
+    const distinctSolution = id !== 'agents' || ![explanation, ...changes].some(value =>
+      U.fieldText(value, projectViewer).trim() === U.fieldText(solution, projectViewer).trim());
+    const knownSolution = solution && distinctSolution && !/^(?:没有|未)记录(?:解决)?(?:[。.]|$)/.test(sp(solution));
+    const solves = knownSolution ? `<p class="row__sub">解决：${keepWords(U.fieldHtml(solution, { name: '解决', kind: projectViewer }), false, true)}</p>` : '';
     return {
       key: item.id,
       cls: 'row row--flat pj-item',
-      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${keepWords(name)}</span>${nameTag}</p><p class="row__sub">${keepWords([explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · '))}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
+      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${keepWords(name, false, true)}</span>${nameTag}</p><p class="row__sub">${keepWords([explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · '), false, true)}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
     };
   }
 
@@ -357,7 +393,7 @@
   const BATCH = { figs: 8, kv: 10, rows: 10 };
   // reveal：这一块每组已多露了几条（组名 → 条数），重画时照着露；more(key)：这一组读完了、后面还能接着读（更早的改动、更多产物），这时不写“收起”，由那颗按钮接着读
   // label(left, open)：项目自己定的展开按钮写法（手机日记本的最近改动写“全部 N 条”），没给照“展开（还有 N 条）”
-  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null, label = null) {
+  function groupedRows(rows, preview = SHOW.rows, reveal = new Map(), more = null, label = null, externalControls = false) {
     const groups = new Map();
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
@@ -365,7 +401,7 @@
       const extra = Math.max(0, items.length - preview), asked = Math.min(extra, reveal.get(key) || 0);
       // 只剩一条就直接摆出来，不让人为一条点“展开”（M1190）；自己没点过展开的，也不出“收起”
       const open = extra - asked === 1 ? extra : asked, left = extra - open;
-      const step = (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const step = !externalControls && (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
     });
   }
@@ -377,7 +413,7 @@
   }
   function drawGroups(b) {
     if (!b.groupSrc?.length) return;
-    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore, b.stepLabel), { animate: false });
+    U.list(b.main, groupedRows(b.groupSrc, b.groupPreview, b.reveal, b.groupMore, b.stepLabel, b.changes), { animate: false });
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
@@ -389,6 +425,8 @@
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
   // 单字的副词、介词、否定词：分词常把它单切出来（真|干活、还|没读|到），它属于后面的词
   const lead = s => /^[真很太最更都也还就才再又只先刚正越别不没未在把被给对向从往跟和与比让新旧]$/.test(s.segment);
+  // 中文标点后面打头的单字（“、换对话”的“换”）前面没有词可跟，也跟后面的词走；数字后面的量词（3 条）照旧跟数字
+  const orphan = (t, s) => [...s.segment].length === 1 && /[\u3400-\u9fff]/.test(s.segment) && !/^[的了着过地得吗呢吧啊]$/.test(s.segment) && /[，。、；：！？（）《》“”「」…—]$/.test(t.slice(0, s.index));
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
   // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
   // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
@@ -399,31 +437,60 @@
     (m, date, unit, run) => date ? `<span class="pj-no-split">${m}</span>` : unit ? `<span class="pj-nb">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
   // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
   const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
-  function keepWords(html) {
+  function keepWords(html, timeline = false, punctuation = false) {
     if (!html) return html;
     return String(html).split(/(<[^>]*>)/).map((t, i) => {
       if (i % 2 || !t) return t;
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
-      if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
-      const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      const open = at => !quoted.some(([a, b]) => at > a && at < b), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
+      const finish = part => {
+        const formatted = glueDates(part);
+        return punctuation ? formatted.replace(/([\u3400-\u9fff])([，。！？、；：]+)(?![^<]*>)/g, '<span class="pj-nb">$1$2</span>') : formatted;
+      };
+      if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return finish(t);
+      const segs = [...wordCut.segment(t)], cuts = [];
+      const intact = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)];
+      // 分词会把改动说明里的“普通程序”切成两词，时间线里按一个词折行。
+      if (timeline) intact.push(...t.matchAll(/普通程序/g));
+      const open = at => !intact.some(m => at > m.index && at < m.index + m[0].length), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
       segs.forEach((s, j) => { const next = segs[j + 1], prev = segs[j - 1];
         // 单字的副词、介词、否定词（真干活、很快、都用、把它、不改、新模型）跟后面的词走：断在它前面，它和后面的词之间不断
-        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
-        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
+        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !(prev && orphan(t, prev)) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
+        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !orphan(t, s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
       const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
       let out = '', from = 0;
       for (const at of cuts) { out += t.slice(from, at) + '<wbr>'; from = at; }
-      return glueDates(out + t.slice(from));
+      return finish(out + t.slice(from));
     }).join('');
   }
   function syncPage(b) {
     if (!b.changes && !b.artifacts) return;
-    const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - (b.reveal?.get('') || 0));
-    b.page.hidden = !b.hasNext || left > 0;
-    if (b.changes) changeCounts(b);
+    const revealed = b.reveal?.get('') || 0;
+    const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - revealed);
+    b.page.hidden = !b.hasNext || left > 1;
+    if (b.changes) {
+      b.more.hidden = left <= 1;
+      b.close.hidden = !revealed;
+      b.foot.hidden = b.more.hidden && b.close.hidden;
+      b.more.setAttribute('aria-expanded', String(!!revealed));
+      b.main.classList.toggle('is-expanded', !!revealed);
+      U.html(b.more, `${b.stepLabel?.(left, revealed) || `展开（还有 ${num(left)} 条）`} <span class="more__chev">›</span>`);
+      changeCounts(b);
+      requestAnimationFrame(() => fitChanges(b));
+    }
+  }
+  function fitChanges(b) {
+    if (!b?.changes || !b.main.isConnected) return;
+    const list = b.main;
+    list.style.maxHeight = '';
+    const room = list.clientHeight, scrollable = list.classList.contains('is-expanded') && room > 0 && list.scrollHeight > room;
+    b.scrollHint.hidden = !scrollable;
+    if (!scrollable) { list.removeAttribute('tabindex'); return; }
+    list.tabIndex = 0;
+    const top = list.getBoundingClientRect().top + list.clientTop - list.scrollTop;
+    const full = [...list.querySelectorAll('.pj-item')].map(row => Math.ceil(row.getBoundingClientRect().bottom - top)).filter(end => end <= room).at(-1);
+    if (full) list.style.maxHeight = `${full}px`;
   }
   // 卡里收着的读数（数字格、两列小表）：同样一批一批露
   function drawRest(b, animate) {
@@ -448,7 +515,7 @@
     el.innerHTML = `<p class="pj-part" data-p="head"></p><p class="pj-reading" data-p="reading" hidden></p><p class="pj-note" data-p="cutoff" hidden></p>
       <ul class="${LIST[kind]}" data-p="main"></ul>
       <div class="fold" data-p="box"><div><ul class="${LIST[kind]}" data-p="rest"></ul></div></div>
-      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a></div>
+      <div class="pj-foot" data-p="foot" hidden><button class="more" type="button" data-p="more" hidden></button><a class="more more--link" data-p="link" hidden></a>${key === 'changes' ? '<button class="more pj-change-close" type="button" data-p="close" hidden>收起 <span class="more__chev">›</span></button><small class="pj-scroll-hint" data-p="scrollHint" hidden>滚动看更多 ↓</small>' : ''}</div>
       <p class="pj-note" data-p="note" hidden></p>
       <p class="pj-hidden" data-p="hidden" hidden></p>
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
@@ -457,12 +524,14 @@
     b.box.inert = true; b.box.setAttribute('aria-hidden', 'true');
     b.more.setAttribute('aria-expanded', 'false');
     b.more.addEventListener('click', () => {
+      if (b.changes) { stepGroup(b, '', false); return; }
       const all = b.restRows?.length || 0, shown = Math.min(all, b.restShown || 0);
       const next = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
       // 收起：先记下这颗按钮在屏幕上的位置，收完把它放回原处，不跳（M1191）
       const go = () => { b.restShown = next; drawRest(b, true); };
       if (!next && b.restShown) U.anchorFold(b.more, go, () => b.more, b.el); else go();
     });
+    b.close?.addEventListener('click', () => U.anchorFold(b.close, () => { b.main.scrollTop = 0; stepGroup(b, '', true); }, () => b.more, b.el));
     b.page.addEventListener('click', () => b.changes ? loadChanges(b) : loadArtifacts(b));
     blocks.set(key, b);
     return b;
@@ -510,7 +579,7 @@
     if (b.kind === 'rows') {
       b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
       b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
-      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore, b.stepLabel);
+      if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore, b.stepLabel, b.changes);
     }
     const fit = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
     const show = rows.length - fit === 1 ? rows.length : fit;   // 收起的只剩一条就不收（M1190）
@@ -590,8 +659,18 @@
       if (proj && !first) renderBoard(false);
     };
     if (id === 'agents') reads.push(fetch('/live/project/weekly-new.json', { signal: AbortSignal.timeout(15000) }).then(r => r.ok ? r.json() : null).then(d => save('weekly', d)).catch(() => {}));
-    additionWatches.push(watch('computer', null, { data(d, meta) { if (!sameViewer(meta)) return; if (id === 'wly0829.cn') save('external', d?.external); save('batches', d?.batch_progress); } }));
-    if (id === 'pcconfig') additionWatches.push(readSoftware(save, watch));
+    additionWatches.push(watch('computer', null, { data(d, meta) {
+      if (!sameViewer(meta)) return;
+      if (id === 'wly0829.cn') save('external', d?.external);
+      if (id === 'pcconfig') additions.computer = d;
+      save('batches', d?.batch_progress);
+    } }));
+    if (id === 'pcconfig') {
+      additionWatches.push(readSoftware(save, watch));
+      for (const resource of ['phone', 'backups']) additionWatches.push(watch(resource, null, {
+        data(d, meta) { if (sameViewer(meta)) save(resource, d); },
+      }));
+    }
   }
   const sameViewer = meta => (meta?.viewer?.kind || 'public') === projectViewer;
   const getChanges = cursor => window.Live.get('projects/changes', { project: id, cursor }).catch(() => null);
@@ -628,8 +707,18 @@
     const view = JSON.stringify([changeLog?.items, changeLog?.total, changeLog?.shown, changeLog?.next, changeIssue, cutoff]);
     if (view !== changeView) { changeView = view; if (!first) U.anchor(() => renderBoard(true)); }
   }
-  // 没读到时写从几点起读不到（这一页先读到过才有，M982）；手上那份截至几点另由“上次改动记录截至”那句写
-  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${what}自 ${stamp(result.failingSince)} 起暂时读不到。` : `${what}暂时读不到。`;
+  // 已经结束的失败沿用原说明；还在重读时由卡片标出手上这批的时间。
+  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${stamp(result.failingSince)} 起的${what}这次没读到。` : `${what}这次没读到。`;
+  async function retryPage(read, current, waiting) {
+    let result = await read();
+    while (current() && result?.again) {
+      waiting?.();
+      await result.again;
+      if (!current()) return null;
+      result = await read();
+    }
+    return current() ? result : null;
+  }
   async function readChanges() {
     const read = ++changeRead;
     const result = await getChanges();
@@ -638,7 +727,9 @@
     result?.again?.then(() => { if (read === changeRead) readChanges(); });
     const first = changePacket(result), hint = first?.gap || first?.stale_text || first?.note || first?.text;
     const missing = result?.meta?.status >= 400 || !first || !first.items.length && (['unknown', 'missing', 'partial', 'stale'].includes(first.q) || /没读到|未读到|读不到|缺测|没有读到|读取失败|暂不可用|上次记录|最近一次记录/.test(U.fieldText(hint, projectViewer)));
-    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(hint || unreadText(result)); return; }
+    const quiet = result?.warming || result?.again;
+    if (result?.warming && changeLog) { publishChanges(true); return; }
+    if (missing && (changeLog || !first?.items.length)) { changeRefill = 0; publishChanges(quiet ? true : hint || unreadText(result)); return; }
     const head = JSON.stringify([changeSource(first), first.items, first.total, first.next]);
     if (head === changeHead) {
       changeRefill = 0;
@@ -651,18 +742,19 @@
       changeRefill = read;
       try {
         while (replacement.next && replacement.items.length < loaded) {
-          const next = await getChanges(replacement.next);
-          if (read !== changeRead) return;
+          const current = () => read === changeRead;
+          const next = await retryPage(() => getChanges(replacement.next), current, () => publishChanges(true));
+          if (!current()) return;
           replacement = next?.meta?.status < 400 && extendChanges(replacement, changePacket(next));
           if (!replacement) { publishChanges('改动记录暂时没能更新，仍显示上次已读的记录。'); return; }
         }
         changeLog = replacement; changeHead = head;
       } finally { if (changeRefill === read) changeRefill = 0; }
     }
-    publishChanges(missing ? hint || unreadText(result) : '');
+    publishChanges(missing ? quiet ? true : hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
-    if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
+    if (id === 'agents' && !custom?.ownsSections && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
       if (sameViewer(meta) && d?.stats?.owner_corrections) { additions.corrections = d.stats.owner_corrections; if (!first) renderBoard(false); }
     } });
     reads.push(readChanges());
@@ -675,7 +767,9 @@
       if (!sameViewer(meta)) return;
       const a = data?.activity, row = a?.items?.find(x => x.id === id);
       const next = Array.isArray(a?.days) && Array.isArray(row?.commits)
-        ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
+        ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial }
+        // 提交表没回来（读失败、连不上）记 false，和“回来了、里面没有这个项目”（null）分开；还在准备（202）照旧算在读
+        : data == null && !meta?.warming && (meta?.offline || !(meta?.status > 0) || meta.status >= 400) ? false : data == null ? undefined : null;
       if (!next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
       activity = next; if (!first) renderStrip(proj);
     };
@@ -690,20 +784,19 @@
     const note = field === it ? '' : marker(it, projectViewer, it.hidden_what || '改动说明');
     const title = U.fieldHtml(field, { name: '改动说明', kind: projectViewer });
     const count = Number.isFinite(it.count) && (it.count > 1 || locked) ? `<span class="row__meta">${esc(num(it.count))} 次提交</span>` : '';
-    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${keepWords(title)}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
+    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${keepWords(title, true)}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
   }
   async function loadChanges(b) {
     const cursor = changeLog?.next, epoch = changeEpoch, label = b.page.innerHTML;
     if (!cursor || changeRefill) return;
     b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
-      const result = await getChanges(cursor);
-      if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
+      const current = () => epoch === changeEpoch && cursor === changeLog?.next && !changeRefill;
+      const result = await retryPage(() => getChanges(cursor), current, () => publishChanges(true));
+      if (!current()) return;
       const page = result?.meta?.status < 400 && changePacket(result);
-      if (!page?.items.length) {
-        publishChanges('下一页暂时读不到，已读到的留在这里。');
-        // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
-        result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
+      if (!page?.items?.length) {
+        publishChanges('下一页这次没读到。');
         return;
       }
       const extended = extendChanges(changeLog, page);
@@ -716,31 +809,61 @@
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
     const asked = Math.min(loaded, preview + (b.reveal?.get('') || 0)), shown = loaded - asked === 1 ? loaded : asked;
-    // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写；展开按钮已写“全部 N 条”的（项目自己定的，见 custom.changes），不再另写一行条数
-    const counts = [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n));
-    const count = loaded && !custom?.changes?.step ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
-    // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
-    const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
-    const status = changeIssue || (!changeLog && '加载中');
+    const count = loaded && !custom?.changes?.step ? [shown !== total && `最近 ${num(shown)} 条`, Number.isFinite(total) && `共 ${num(total)} 条`].filter(Boolean).join(' · ') : '';
+    const status = changeIssue === true ? !changeLog && '加载中' : changeIssue || (!changeLog && '加载中');
     const cutoff = (isStale(changeLog) || changeIssue || U.offline?.()) && (changeLog?.source_at || changeLog?.at);
     b.note.hidden = !count && !status && !cutoff;
-    U.html(b.note, [esc(count), esc(available), cutoff && esc(`上次改动记录截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
+    U.html(b.note, [esc(count), cutoff && esc(`数据截至 ${stamp(cutoff)}`), status && U.fieldHtml(status, { name: '改动记录', kind: projectViewer })].filter(Boolean).join('<br>'));
+  }
+  function showArtifactCutoff(b) {
+    if (!b || !artsState) return;
+    const state = b.pageWaiting ? { ...artsState, data: arts, fallbackNote: true } : artsState;
+    showRefreshCutoff(b.el, state);
+  }
+  function artifactPage(b, items, size) {
+    if (!b.artifactPager) {
+      const pager = b.artifactPager = document.createElement('nav');
+      pager.className = 'pj-artifact-pages';
+      pager.setAttribute('aria-label', '产物分页');
+      b.page.after(pager);
+      pager.onclick = async e => {
+        const button = e.target.closest('[data-artifact-step]');
+        if (!button || b.artifactLoading) return;
+        const index = b.artifactPage + Number(button.dataset.artifactStep), epoch = audience;
+        b.artifactLoading = true;
+        try {
+          if (index * size >= arts?.items?.length && arts?.next) await loadArtifacts(b);
+          if (epoch === audience && index >= 0 && index * size < (arts?.items?.length || 0)) {
+            b.artifactPage = index;
+            renderBoard(false);
+          }
+        } finally { b.artifactLoading = false; }
+      };
+    }
+    const count = Math.max(1, Math.ceil((arts?.next ? Math.max(arts.total || 0, items.length + 1) : items.length) / size));
+    const index = b.artifactPage = Math.min(b.artifactPage || 0, Math.max(0, Math.ceil(items.length / size) - 1));
+    b.artifactPager.hidden = !items.length;
+    U.html(b.artifactPager, `<button type="button" class="more" data-artifact-step="-1"${index === 0 ? ' disabled' : ''}>‹ 上一页</button>
+      <span aria-live="polite">${index + 1} / ${count}</span>
+      <button type="button" class="more" data-artifact-step="1"${index + 1 === count ? ' disabled' : ''}>下一页 ›</button>`, false);
+    return items.slice(index * size, (index + 1) * size);
   }
   async function loadArtifacts(b) {
     const generation = audience, cursor = arts?.next, label = b.page.innerHTML;
     if (!cursor) return;
     b.page.disabled = true; U.html(b.page, '正在读…', false);
     try {
-      const result = await window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor });
-      if (generation !== audience || !sameViewer(result.meta) || cursor !== arts?.next) return;
+      const current = () => generation === audience && cursor === arts?.next;
+      const result = await retryPage(
+        () => window.Live.get(`projects/${enc(id)}/artifacts${params.has('fixture') ? `-${enc(cursor)}` : ''}`, { cursor }), current,
+        () => { b.pageWaiting = true; showArtifactCutoff(b); });
+      if (!current() || !sameViewer(result?.meta)) return;
       // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
-      if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
+      if (result?.meta?.status < 400 && Array.isArray(result.data?.items)) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...result.data.items] }; if (!artifactVersion && !b.artifactPager) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else {
-        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer }));
-        // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
-        result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
+        b.note.hidden = false; U.html(b.note, U.fieldHtml(missingText(result, '下一页'), { name: '项目内容', kind: projectViewer }));
       }
-    } finally { b.page.disabled = false; U.html(b.page, label, false); }
+    } finally { b.pageWaiting = false; showArtifactCutoff(b); b.page.disabled = false; U.html(b.page, label, false); }
   }
   // 从规则页按版本跳进来（?artifact=E…）：这一版不在已读到的几页里，就接着往后读，读到这一版或读完为止（R55）
   const versionHit = it => it.kind === 'rules' && typeof it.title === 'string' && /^(E\d+)\s*｜/.exec(it.title)?.[1] === artifactVersion;
@@ -769,17 +892,30 @@
   }
   async function loadGraph(b, m) {
     b.metric = m;
+    const sameAudience = b.chartRequest?.viewerEpoch === audience;
+    const sourceAt = sameAudience ? b.chartRequest.sourceAt : null;
+    if (!sameAudience) { delete b.viz._paged; U.html(b.viz, ''); b.recordStaleAt = null; drawRecordCutoff(b); }
+    const request = b.chartRequest = { viewerEpoch: audience, sourceAt };
+    const current = () => request.viewerEpoch === audience && b.chartRequest === request;
+    const cutoff = at => { b.recordStaleAt = at; drawRecordCutoff(b); };
     const paged = m.id === 'top_pages' && window.ProjectSiteReadings?.pagedRank;
     const read = cursor => window.Live.get(`projects/${enc(id)}/records${params.has('fixture') ? `-${enc(m.section)}` : ''}`, { section: m.section, cursor });
     let rows = [], cursor = null, result, staleAt = null;
     do {
-      result = await read(cursor);
-      if (!result.data || !Array.isArray(result.data.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
+      result = await retryPage(() => read(cursor), current, () => cutoff(request.sourceAt));
+      if (!current()) return;
+      if (!sameViewer(result?.meta) || !Array.isArray(result?.data?.items)) { b.chartLoaded = false; b.viz.innerHTML = `<p class="pj-note">${U.fieldHtml(missingText(result, m.id === 'top_pages' ? '打开记录' : m.label || '这块'), { name: '项目内容', kind: projectViewer })}</p>`; balance(); return; }
       if (isStale(result.data)) staleAt ||= result.data.at || result.meta.at;
       rows.push(...(result.data.items || [])); cursor = result.data.next;
     } while (cursor && !paged);
-    b.recordStaleAt = staleAt; drawRecordCutoff(b);
-    const after = next => next ? async () => { const page = await read(next); return page.data && Array.isArray(page.data.items) && sameViewer(page.meta) ? { rows: page.data.items.map(pageRankRow), load: after(page.data.next) } : null; } : null;
+    request.sourceAt = result.data.source_at || result.data.at || result.meta?.at;
+    cutoff(staleAt);
+    const after = next => next ? async () => {
+      const page = await retryPage(() => read(next), current, () => cutoff(staleAt || request.sourceAt));
+      if (!(page?.meta?.status < 400 && Array.isArray(page.data?.items) && sameViewer(page.meta))) return null;
+      cutoff(staleAt);
+      return { rows: page.data.items.map(pageRankRow), load: after(page.data.next) };
+    } : null;
     if (paged) window.ProjectSiteReadings.pagedRank(b.viz, { rows: rows.map(pageRankRow), total: result.data.total, load: after(cursor), rank: { unit: '次', empty: '这段时间没有打开记录' } });
     else window.LiveProjectViz.chart(b.viz, m.id, rows);
     const { line, extra } = lineOf(m);
@@ -887,6 +1023,13 @@
     const seq = laidOut;
     if (!seq.length) return;
     for (const g of seq) cardTail(g.card, g.blocks);
+    if (custom?.grid) {
+      const rank = key => custom.grid.includes(key) ? custom.grid.indexOf(key) : custom.grid.length;
+      const ordered = [...seq].sort((a, b) => rank(a.key) - rank(b.key));
+      inOrder(main, ordered.map(g => g.card.el));
+      ordered.forEach(g => g.card.col = 0);
+      return;
+    }
     if (seq.length < 2) { inOrder(main, seq.map(g => g.card.el)); seq.forEach(g => g.card.col = 0); return; }
     // 摆齐的算法在 layout.js；那个文件没取到时卡片留在原来那一栏，不让整页出错
     const PL = window.ProjectLayout;
@@ -918,11 +1061,11 @@
     const allMetrics = (proj?.sections || []).flatMap(s => s.metrics || []), skillUsage = id === 'agents' ? V.skillData(allMetrics) : null;
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
-      if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board));
-      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
-      if (id === 'pcconfig' && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
+      if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board, { additions, records, route, stamp }));
+      for (const card of custom?.ownsSections ? [] : window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
+      if (id === 'pcconfig' && !custom?.ownsSections && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
-      for (const s of proj.sections || []) {
+      for (const s of custom?.ownsSections ? [] : proj.sections || []) {
         const into = isMore(s) ? right : left;
         // 规则仓的“后台提醒程序”整块在智能体页的钩子表里，这里只留一行链过去
         if (id === 'agents' && s.id === 'hooks') {
@@ -988,7 +1131,7 @@
           if (m.section && id === 'wly0829.cn' && ['daily', 'top_pages'].includes(m.id)) {
             const b = graphBlock(m.id, m.label); b.group = m.id === 'top_pages' ? m.id : s.id; (m.id === 'top_pages' ? right : into).push(b);
             U.html(b.head, `<b>${esc(m.label)}${window.ProjectAdditions?.metricCadence(m, id) || ''}</b>`);
-            if (!b.chartLoaded || b.chartAt !== m.at) { b.chartLoaded = true; b.chartAt = m.at; loadGraph(b, m); }
+            if (!b.chartLoaded || b.chartAt !== m.at || b.chartRequest?.viewerEpoch !== audience) { b.chartLoaded = true; b.chartAt = m.at; loadGraph(b, m); }
           } else { const b = arrayBlock(m); b.group = s.id; into.push(b); }
         }
         // 规则版本自己一张卡：卡头一句“从几时开始记”，下面版本时间线和近两周的小柱子
@@ -1009,19 +1152,23 @@
       if (!custom?.noArtifacts && (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden)))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
-        // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
-        b.step = 5; b.hasNext = !artifactVersion && !!arts?.next;
+        const pageSize = !artifactVersion && custom?.artifactPageSize;
+        // 默认仍逐批展开。项目自己指定每页大小时，用前后页。
+        b.step = 5; b.hasNext = !artifactVersion && !pageSize && !!arts?.next;
         const missingArts = !Array.isArray(arts?.items) && !(arts?.hidden || proj.artifacts?.hidden);
-        const items = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const loadedItems = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const items = pageSize ? artifactPage(b, loadedItems, pageSize) : loadedItems;
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
-        const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        // 连接层还可能重读，但已经收到了失败响应，先照实写这次没读到。
+        const reading = missingArts && proj.artifacts && (!artsState || (artsState.meta?.status < 400 && ['idle', 'wait', 'slow'].includes(artsState.phase)));
+        const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? (b.versionFailed || missingArts ? '这版的改动记录这次没读到' : '这版没有改动记录') : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
-        fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
+        if (pageSize) b.preview = pageSize;
+        fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i + (b.artifactPage || 0) * (pageSize || 0), sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
         if (versionMore) readVersion(b);
-        U.blockNote(b.el, artsState);
+        showArtifactCutoff(b);
         right.unshift(b);
       }
       const mine = changeLog?.items || [];
@@ -1055,6 +1202,12 @@
     }
     if (proj) custom?.lists?.({ blocks, left, right, block, arts, changeLog, changeIssue, viewer: projectViewer, artifactRow, loadArtifacts, loadChanges, keepWords: typeof keepWords === 'function' ? keepWords : null });
     arrange(left, right);
+    const gallery = custom?.interfaceCard && blocks.get(custom.interfaceCard)?.viz;
+    if (gallery && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js')
+        .then(module => module.mountInterface(id, gallery, keepWords, { embedded: true, note: custom.interfaceNote, pageSize: custom.interfacePageSize }))
+        .catch(() => { interfaceLoad = null; });
+    }
     // 首次跳到分段后，晚到的项目数据可能把卡片移到另一栏。
     if (deepLink && deepLink.y === scrollY) {
       const target = document.getElementById(deepLink.id);
@@ -1103,16 +1256,18 @@
     drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
     if (axis && !axis._whole) {
-      axis._whole = new ResizeObserver(() => {
+      // 对齐到整格：离右边框最近的那一颗的右边对上右边框（r6 拍到过整条轴偏了约 18 像素，右端时间被裁、左端露出上一颗的残字）
+      axis._snap = () => {
         const edge = axis.getBoundingClientRect().right, off = [...axis.children].map(li => li.getBoundingClientRect().right - edge).reduce((a, b) => Math.abs(b) < Math.abs(a) ? b : a, Infinity);
         if (Number.isFinite(off) && Math.abs(off) > 1) axis.scrollLeft += off;
-      });
+      };
+      axis._whole = new ResizeObserver(() => axis._snap());
       axis._whole.observe(axis);
     }
-    if (axis && left < 0) axis.scrollLeft = left;
+    if (axis && left < 0) { axis.scrollLeft = left; axis._snap?.(); }
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
       const current = axis.querySelector('.is-now');
-      if (current && axis.isConnected && axis.scrollLeft === 0) axis.scrollLeft = current.getBoundingClientRect().right - axis.getBoundingClientRect().right;
+      if (current && axis.isConnected && axis.scrollLeft === 0) { axis.scrollLeft = current.getBoundingClientRect().right - axis.getBoundingClientRect().right; axis._snap?.(); }
     });
   }
 
@@ -1178,7 +1333,7 @@
       const words = metricText(remote.text || m?.text || h?.text || '');
       const total = lower(m, 'value') || lower(remote, 'total') ? '<small class="pj-atleast">至少</small>' : '';
       const { cadence, desktop } = m ? lineOf(m) : {};
-      head.push(cell(readingLabel(m?.label || 'AI 远程用电脑') + (cadence || ''), `${total}<b>${esc(num(remote.total))}</b><small>次</small>`, { wide: true, href: m && metricHref(m), sub: esc([words, desktop].filter(Boolean).join(' · ')) }));
+      head.push(cell(readingLabel(m?.label || 'AI 远程用电脑') + (cadence || ''), `${total}<b>${esc(num(remote.total))}</b><small>次</small>`, { href: m && metricHref(m), sub: esc([words, desktop].filter(Boolean).join(' · ')) }));
     } else if (h && typeof h === 'object' && h.text) {
       const { cadence, desktop } = m ? lineOf(m) : {};
       const words = headline({ ...d, headline: { ...h, at: null } });
@@ -1199,7 +1354,8 @@
     const spark = commitsCell(cell);
     if (spark) head.push(spark);
     const size = d.size, bigCell = (n, unit) => { const t = big(n, unit), hit = /^([\d.,]+)\s*(.*)$/.exec(t); return hit ? `<b>${esc(hit[1])}</b><small>${esc(hit[2])}</small>` : esc(t); };
-    if (size?.text) tail.push(cell('有多大', esc(size.text), { kind: 'text' }));
+    const structuredSize = [size?.docs_chars, size?.code_chars, size?.code_lines].some(Number.isFinite);
+    if (size?.text && (!structuredSize || restricted(size))) tail.push(cell('有多大', esc(size.text), { kind: 'text' }));
     else {
       if (size?.docs_chars != null) tail.push(cell('文档', bigCell(size.docs_chars, '字'), { title: `文档 ${big(size.docs_chars, '字')}` }));
       // 代码：量了字数的，字数写成大数、行数用小字放在下面（本人 11-28 05:31「先写代码XX字，下面再有代码XX行」）；还没量字数的照旧只写行数，不留空格子
@@ -1207,7 +1363,7 @@
       if (codeChars || size?.code_lines != null) {
         const least = key => lower(size, key) ? '至少 ' : '', lines = size.code_lines != null ? `${least('code_lines')}${big(size.code_lines, '行')}` : '';
         const value = codeChars ? `${least('code_chars') ? '<small class="pj-atleast">至少</small>' : ''}${bigCell(size.code_chars, '字')}` : bigCell(size.code_lines, '行');
-        tail.push(cell('代码', value, { title: `代码 ${codeChars ? [`${least('code_chars')}${big(size.code_chars, '字')}`, lines].filter(Boolean).join('、') : lines}`, sub: codeChars ? esc(lines) : '' }));
+        tail.push(cell('代码', value, { title: `代码 ${codeChars ? [`${least('code_chars')}${big(size.code_chars, '字')}`, lines].filter(Boolean).join('、') : lines}`, sub: codeChars && lines ? `代码 ${esc(lines)}` : '' }));
       }
     }
     // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
@@ -1220,9 +1376,12 @@
   }
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
   function commitsCell(cell) {
-    const a = activity;
-    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '加载中' : '提交记录暂时读不到。'}</small>` : '';
-    if (!a) return unavailable();
+    const a = custom?.activity?.(proj) ?? activity;
+    // 表还没回来写“加载中”、读失败写“这次没读到”，每个项目页都写（主持 11-28 10:42：照智能体页；智能体页的“正在读提交记录…”已随 main 的实况离线定稿改成“加载中”）；表回来了但里面没有这个项目，照原来（智能体页写原句，别的页不写）
+    const note = text => `<small class="pj-strip-note">${text}</small>`, unavailable = () => note('提交记录这次没读到。');
+    if (a === undefined) return note('加载中');
+    if (a === false) return unavailable();
+    if (!a) return id === 'agents' ? note('提交记录暂时读不到。') : '';
     if (!a.commits.length) return '';
     const vals = a.commits.map(n => (typeof n === 'number' && Number.isFinite(n) ? n : null));
     const known = vals.filter(n => n != null), total = known.reduce((s, n) => s + n, 0);
@@ -1245,7 +1404,8 @@
   // 一排最多 10 格、每格至少 106 像素（同 look.css），窄到一排放不下两格也排两列（不一格占一整行）；一排放不下时按排数均分，不让最后一格单独占一排、右边空一大片
   function fitStrip() {
     const strip = part('links'), n = +strip.dataset.units || 0, css = getComputedStyle(strip);
-    const room = Math.min(10, Math.max(2, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / 106)));
+    const min = parseFloat(css.getPropertyValue('--pj-cell-min'));
+    const room = Math.min(10, Math.max(2, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / min)));
     strip.style.setProperty('--pj-cells', String(n <= room ? Math.max(n, 4) : Math.ceil(n / Math.ceil(n / room))));
     // 折成几排、最后一排还空着格位：最后一格往右占满（各页自己改了列数的也照实际排出来的量）
     const cells = strip.querySelectorAll(':scope > .pj-cell'), last = cells[cells.length - 1];
@@ -1265,8 +1425,8 @@
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
     strip.hidden = !html; strip.dataset.units = n;
     U.html(strip, keepWords(html)); fitStrip();
-    if (interfaceProjects.has(id) && !interfaceLoad) {
-      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip, keepWords))
+    if (interfaceProjects.has(id) && !custom?.interfaceCard && !interfaceLoad) {
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, custom?.interfaceAnchor?.() || strip, keepWords))
         .catch(() => { interfaceLoad = null; });
     }
   }
@@ -1293,7 +1453,9 @@
   }
   function renderHero(d) {
     hero.hidden = false; emptyHero.hidden = true;
-    const status = U.status(d);
+    // 部分读数有缺口时沿用灰灯和已有的具体说明；整页读数确实旧了才显示整页截止。
+    const partial = d.q === 'partial' && !isStale(d) && !U.offline?.();
+    const status = U.status(d, { cutoffShown: partial ? U.isCutoffNote : undefined });
     Light.tone(hero, d);
     document.body?.classList.toggle('pj-frozen', d.phase === 'archived' || d.state === 'frozen' || hero.dataset.frozen === 'true');
     // 名字＋日用／偶用／冻结小标签（分档读不到时写后端那句缺口）
@@ -1311,7 +1473,8 @@
     const repo = !d.size && (d.sections || []).find(sec => sec?.id === 'repository')?.metrics || [], metric = key => repo.find(m => m?.id === key && Number.isFinite(m.value));
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
-    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
+    const note = status.note;
+    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, note && `<small class="pj-stale">${note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
     // 提交时刻页头那行已写，这里只写这次改了什么
@@ -1333,7 +1496,8 @@
     const sizeInStrip = !!d.size && (d.size.text || d.size.docs_chars != null || d.size.code_lines != null || Number.isFinite(d.size.code_chars));
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
-    const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
+    const gap = U.fieldText(missing, projectViewer).trim();
+    const extra = [d.about && d.note && ['说明', d.note], gap && d.gap !== d.stale_text && !/数据截止/.test(gap) && !/^只显示有记录的部分[。.]?$/.test(gap) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
     U.html(part('facts'), keepWords(`${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}${impactNote || changes ? `<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${changes && `<span>${changes}</span>`}${impactNote}</dd></div>` : ''}${sized && !sizeInStrip ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`));
     part('detail').hidden = false;
     renderStrip(d);
@@ -1405,6 +1569,7 @@
   });
   // 分组底下的“展开（还有 N 条）／收起”
   board.addEventListener('click', (e) => {
+    if (e.target.closest?.('[data-rule-trust]')) { U.guard(e); return; }
     const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
     if (!b) return;
     const close = btn.hasAttribute('data-open'), sec = b.el, key = btn.dataset.step;
@@ -1415,8 +1580,9 @@
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏
-  document.fonts?.ready?.then(() => { fitStrip(); balance(); });
-  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(() => { fitStrip(); balance(); }, 200); });
+  function fitPage() { fitStrip(); fitChanges(blocks.get('changes')); balance(); }
+  document.fonts?.ready?.then(fitPage);
+  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(fitPage, 200); });
   // 读数条自己变宽变窄（例如各页窄屏样式在数据到后才套上）也重排格子，不只等窗口改大小
   let stripWidth = 0; const stripBox = part('links');
   if (stripBox && window.ResizeObserver) new ResizeObserver(([e]) => { const w = Math.round(e.contentRect.width); if (w && w !== stripWidth) { stripWidth = w; fitStrip(); } }).observe(stripBox);
@@ -1449,8 +1615,10 @@
         correctionsWatch?.stop(); correctionsWatch = null; Object.keys(additions).forEach(key => delete additions[key]);
         artsWatch?.stop(); artsWatch = arts = artsState = null;
         opening = [];
+        if (!raw && custom?.interfaceCard) interfaceLoad = null;
       }
       projectViewer = viewer;
+      if (raw) applyLook?.();
       if (raw && custom?.adapt) raw = custom.adapt(raw);
       if (raw && !raw.name) raw = { ...raw, name: raw.label || raw.title || raw.id || id };
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
@@ -1483,7 +1651,7 @@
             if (arts) U.anchor(update); else update();
             jump();
           },
-          link(state) { artsState = state; if (first) return; if (!arts) renderBoard(false); U.blockNote(blocks.get('artifacts')?.el, state); },
+          link(state) { artsState = state; if (first) return; if (!arts) renderBoard(false); showArtifactCutoff(blocks.get('artifacts')); },
         });
       }
       if (first) {
@@ -1502,7 +1670,7 @@
       }
       function draw(animate) {
         const render = () => {
-          if (raw) renderHero(raw); else renderEmptyHero(missingText());
+          if (raw) renderHero(raw); else renderEmptyHero(missingProject({ meta }));
           main.hidden = side.hidden = false;
           renderBoard(animate);
           if (!animate) for (const el of [part('facts'), part('links')]) U.swapped(el);
@@ -1518,18 +1686,19 @@
       else if (!documents && state.data && state.meta.source === 'net' && state.viewer.kind === 'owner' &&
           !state.offline && !window.LiveView?.isPublic()) {
         documents = import('/live/project/documents.js').then(module => {
-          documents = module.mount(id, board, () => projectLink);
+          documents = module.mount(id, custom?.documentsAnchor?.() || board, () => projectLink);
         }).catch(() => { documents = null; });
       }
-      bar?.set(state);
+      const notFound = projectNotFound(state.meta);
+      bar?.set(notFound ? { ...state, text: '刷新' } : state);
       if (disconnected !== state.offline) { disconnected = state.offline; if (proj && !first) { renderHero(proj); renderBoard(false); } }
       Light.offline(state.offline);
       if (!proj && ['none', 'gone'].includes(state.phase)) {
         clearTimeout(loading);
-        const locked = state.meta?.status === 403 && state.meta?.viewer?.kind === 'public';
-        renderEmptyHero(locked ? { visibility: 'owner', hidden_what: '此项目的实况' } : missingText(state));
+        if (!notFound) applyLook?.();
+        renderEmptyHero(missingProject(state));
       }
-      [hero.querySelector('.card__body'), ...[...blocks.values()].filter(b => !b.artifacts && !b.changes && !(id === 'agents' && ['quotes', 'agents-moved', 'hooks'].includes(b.key))).map(b => b.el)].forEach(el => U.blockNote(el, state));
+      showRefreshCutoff(hero.querySelector('.card__body'), state);
     },
   }));
 

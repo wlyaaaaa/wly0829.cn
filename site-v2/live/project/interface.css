@@ -26,13 +26,20 @@
 .pj-interface-zoom::after { content: ""; position: absolute; top: 16px; left: 16px; width: 7px; height: 2px; border-radius: 2px; background: currentColor; transform: rotate(45deg); transform-origin: left; }
 .pj-interface-view {
   box-sizing: border-box; flex-direction: column; width: max-content; max-width: min(1200px, calc(100vw - 48px)); max-height: calc(100dvh - 48px);
-  padding: 15px; border: 1px solid var(--hair); border-radius: 16px; background: var(--pj-paper); color: var(--ink); overscroll-behavior: contain;
+  padding: 12px; border: 1px solid var(--hair); border-radius: 16px; background: #faf9f5; color: var(--ink); overscroll-behavior: contain;
 }
+.pj-interface-view[open] { display: flex; }
 .pj-interface-view::backdrop { background: rgb(22 23 21 / .66); }
-.pj-interface-view img { display: block; max-width: 100%; max-height: calc(100dvh - 160px); width: auto; height: auto; margin: 0 auto; }
-.pj-interface-view[open]:has(.is-scrollable) { display: flex; width: calc(min(var(--pj-interface-image-width), 720px) + 48px); }
-.pj-interface-view .is-scrollable { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.pj-interface-view .is-scrollable img { max-width: min(100%, 720px); max-height: none; }
-.pj-interface-view .is-scrollable + .pj-interface-controls { flex: none; }
-.pj-interface-view figcaption { text-align: center; }
-.pj-interface-controls { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+.pj-interface-view img { display: block; max-width: 100%; max-height: calc(100dvh - 174px); width: auto; height: auto; margin: 0 auto; background: #fff; }
+.pj-interface-view img[hidden] { display: none; }
+.pj-interface-view[open]:has(.is-scrollable) { width: calc(min(var(--pj-interface-image-width), 720px) + 34px); }
+.pj-interface-view .is-scrollable { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; scrollbar-color: rgb(0 166 80 / .6) transparent; }
+.pj-interface-view .is-scrollable img { max-height: none; }
+.pj-interface-caption, .pj-interface-status, .pj-interface-scroll { flex: none; margin: 6px 0 0; text-align: center; font-size: 14px; line-height: 20px; }
+.pj-interface-scroll { font-size: 13px; color: #56534b; }
+.pj-interface-controls { display: flex; flex: none; justify-content: center; gap: 8px; margin-top: 8px; }
+.pj-interface-controls .btn { min-height: 40px; padding-inline: 16px; font-size: 14px; }
+
+.pj-interface-pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.pj-interface-pages > span { color: var(--muted); font-size: 13px; }
+.pj-interface-pages .more:disabled { visibility: hidden; }

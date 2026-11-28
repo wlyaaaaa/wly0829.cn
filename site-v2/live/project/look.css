@@ -91,6 +91,8 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-line .hero__note { display: contents; }
 .pj-line .pj-when { order: 1; font-size: 15px; line-height: 26px; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pj-line .pj-detail-btn { order: 2; margin: 0 0 0 -4px; height: 26px; translate: none; }
+.pj-detail-btn .more__chev, .page--project .pj-notes > summary .disclosure-chev { rotate: 90deg; }
+.pj-detail-btn[aria-expanded="true"] .more__chev, .page--project .pj-notes[open] > summary .disclosure-chev { rotate: -90deg; transform: none; }
 .pj-line .pj-stale { order: 3; font-size: 13px; color: #9c9a92; white-space: nowrap; }
 .pj-line .pj-about { order: 4; flex-basis: 100%; margin-top: 6px; font-size: 15.5px; line-height: 26px; letter-spacing: .03em; color: #3d3c38; text-wrap: pretty; }
 .pj-hero-fold:not(.is-open) .trust-note { visibility: hidden; }
@@ -106,14 +108,20 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
+  --pj-cell-min: 106px;
   display: grid;
   container-type: inline-size;
-  grid-template-columns: repeat(auto-fill, minmax(min(50%, max(106px, 100% / var(--pj-cells, 6))), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(50%, max(var(--pj-cell-min), 100% / var(--pj-cells, 6))), 1fr));
   align-items: stretch;
   row-gap: 6px;
   margin-top: 16px;
   padding: 14px 10px;
   border-radius: var(--pj-card-radius);
+}
+/* 900 宽内容区容得下 7 格（含跨两格的状态），长状态和数字仍有各自的宽度。 */
+@media (max-width: 1100px) {
+  .pj-strip { --pj-cell-min: 100px; }
+  .pj-cell__v:has(> .pj-text) { white-space: normal; word-break: keep-all; overflow-wrap: anywhere; }
 }
 .pj-cell {
   position: relative;
@@ -278,6 +286,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"], .pj-step, .pj-rh-step) .more__chev { color: var(--pj-accent); }
 .pj-notes > summary:hover { background: rgb(255 255 255 / .55); color: var(--ink); }
 .pj-notes > .pj-note { margin: 4px 0 0; }
+.pj-notes[open] > .pj-note { color: #56534b; }
 .pj-notes > .pj-note b { font-weight: 600; color: #6f6e68; }
 .pj-cut { margin-left: auto; padding-top: 4px; font-size: 12px; line-height: 18px; color: #68665f; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
@@ -296,6 +305,13 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 
 /* 记录类做成时间线：一串小圆点连成一条线，最新那一颗是绿的；时刻在前、说的事在后 */
 .pj-card .pj-sec--timeline .rows { container: pj-recent / inline-size; }
+#pj-board #changes.pj-sec--timeline > [data-p="main"] { max-height: none; overflow: visible; }
+#pj-board #changes.pj-sec--timeline > .is-expanded[data-p="main"] {
+  max-height: min(540px, 65vh); overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-gutter: stable; scrollbar-color: rgb(0 166 80 / .55) transparent;
+}
+.pj-scroll-hint { margin-inline-start: auto; font-size: 13px; color: #56534b; }
+.pj-card .pj-change-close .more__chev { rotate: -90deg; }
 /* 一行的和几行的条目之间一样宽：不按通用行的最小高度撑 */
 .pj-card .pj-sec--timeline .rows .row { position: relative; grid-template-columns: 0 minmax(0, 1fr) auto; min-height: 0; padding: 6px 0 6px 24px; border-top: 0; }
 .pj-card .pj-sec--timeline .rows .row::before { content: ""; position: absolute; left: 3px; top: 13px; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #bdbbb3; }
@@ -305,6 +321,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-tl-at { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pj-card .pj-sec--timeline .row__main { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px; font-size: 14.5px; line-height: 22px; font-weight: 400; }
 .pj-tl-copy { overflow-wrap: anywhere; }
+#artifacts .row__text { line-break: strict; }
 .pj-card .pj-sec--timeline .row__title { display: inline; font-weight: 400; color: #3d3c38; }
 /* 卡窄（900 宽两栏时）或窗口不到 1100 宽（账房这类窄窗一栏的页，最近改动整行宽）：时刻放上面一行，说的事占满整行，各页同一个样子 */
 @container pj-recent (width < 420px) { .pj-card .pj-sec--timeline .row__main { grid-template-columns: minmax(0, 1fr); gap: 0; } }
@@ -366,7 +383,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-moved-line > span { color: var(--muted); }
 .pj-device-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
 .pj-device-table th, .pj-device-table td { padding: 7px 5px; border-bottom: 1px solid rgb(70 68 57 / .12); vertical-align: top; overflow-wrap: anywhere; }
+.pj-device-table th[scope="row"] { min-width: 4.2em; }
 .pj-device-table small { display: block; color: var(--muted); font-size: 12px; }
+@media (max-width: 1100px) { .pj-device-table :is(th, td) { padding-inline: 3px; } }
 .pj-card .pj-viz .vz-bars__plot { height: 150px; }
 #site_update_todo .pj-kv { grid-template-columns: minmax(0, 1fr); }
 #site-visitors [data-visit-rank] { margin: 4px 0 12px; }
@@ -389,3 +408,6 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .page--project.pj-sparse #pj-hero .card__glass { min-height: 300px; padding-top: 56px; }
 .page--project.pj-sparse #pj-hero.card[data-pic] { --win: clamp(460px, 64%, 900px); }
 .page--project.pj-sparse .pj-line .pj-about { font-size: 16.5px; line-height: 28px; }
+
+.pj-artifact-pages { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+.pj-artifact-pages .more:disabled { opacity: .45; cursor: default; }
