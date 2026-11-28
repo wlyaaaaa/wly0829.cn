@@ -89,6 +89,7 @@
 .au-now small a.tp-link { font-weight: 700; }
 .au-last { font-size: 14px; line-height: 21px; }
 .au-last small { display: block; margin-top: 2px; font-size: 12.5px; color: #6c6b64; }
+@media (min-width: 1400px) { .au-last-summary .live-unit { white-space: normal; } }
 .au-go { text-align: right; }
 .tp .au-go a { display: inline-block; padding: 4px 2px; font-size: 22px; font-weight: 700; line-height: 1; color: #8a8981; text-decoration: none; transition: color .15s ease, transform .15s ease; }
 .au-row:hover .au-go a { color: var(--tp-green-ink); transform: translateX(3px); }
