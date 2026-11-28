@@ -1,4 +1,4 @@
-"""Keep current website and in-flight keys; collect verified generated objects."""
+"""Keep current, previous and in-flight keys; collect verified generated objects."""
 import argparse
 import hashlib
 import importlib.util
@@ -141,6 +141,7 @@ def rollback_keep(preparation, plan, commit=None, persist=True, immediate_only=F
             raise ValueError('Unknown or contradictory retired rollback objects')
     now = datetime.now(timezone.utc)
     snapshot_sha = plan.get('previous_publication_sha256')
+    immediate = set()
     if snapshot_sha:
         snapshot = Path(preparation) / 'previous-publication.json'
         if digest(snapshot) != snapshot_sha:
@@ -151,6 +152,7 @@ def rollback_keep(preparation, plan, commit=None, persist=True, immediate_only=F
         objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in previous['oss']['objects'].values()}
         for key in previous['oss'].get('reference_keys', []):
             objects.setdefault(key, {})
+        immediate = set(objects)
         record = state['records'].get(snapshot_sha)
         for key, proof in (record or {}).get('retired_objects', {}).items():
             if key not in objects or objects[key] != proof:
@@ -169,7 +171,7 @@ def rollback_keep(preparation, plan, commit=None, persist=True, immediate_only=F
     if persist:
         write(path, state)
     if immediate_only:
-        return set(objects) if snapshot_sha else set()
+        return immediate
     return {key for row in live.values() for key in row['objects']}
 
 
@@ -335,9 +337,6 @@ def collect_verified(args):
         if not (shared()/'rollback-retention.json').is_file():
             raise ValueError('Finalized publication requires its rollback inventory')
     rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run, immediate_only=finalized)
-    # The frozen predecessor is still verified. Finalized releases keep only current and in-flight references.
-    if finalized:
-        rollback = set()
     keep.update(rollback)
     retired, pending, missing_plans = [], [], False
     for path in (shared() / 'pins').glob('*.json'):

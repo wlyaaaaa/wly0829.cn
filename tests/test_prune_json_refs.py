@@ -33,7 +33,7 @@ class PruneJsonReferenceTests(unittest.TestCase):
             self.assertTrue((site / 'live/more.json').exists())
             self.assertFalse((site / 'live/stray.json').exists())
 
-    def test_only_adopted_lossless_illustrations_get_smaller(self):
+    def test_all_retained_lossless_webps_get_smaller(self):
         optimize = load_optimize()
         with tempfile.TemporaryDirectory() as tmp:
             site = Path(tmp)
@@ -56,8 +56,8 @@ class PruneJsonReferenceTests(unittest.TestCase):
             report = optimize(site, (fresh, renamed, alternate))
             compressed = fresh.read_bytes()
             self.assertLess(len(compressed), len(original))
-            self.assertEqual(report, (1, len(original) - len(compressed)))
-            self.assertEqual(old.read_bytes(), original)
+            self.assertEqual(report, (2, 2 * (len(original) - len(compressed))))
+            self.assertEqual(old.read_bytes(), compressed)
             self.assertEqual(renamed.read_bytes(), already_lossy)
             self.assertFalse(alternate.exists())
             with Image.open(fresh) as result:

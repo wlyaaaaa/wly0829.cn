@@ -1,7 +1,9 @@
-"""Compress selected WebP illustrations and prune unused assembly assets."""
+"""Prune unused assembly assets and optimize the remaining images by format."""
 import argparse
 import html
 import re
+import struct
+import zlib
 from concurrent.futures import ThreadPoolExecutor
 from io import BytesIO
 from pathlib import Path
@@ -31,38 +33,82 @@ def is_lossless_webp(path):
     return False
 
 
-def compress_webp(path):
-    if not is_lossless_webp(path):
-        return 0
-    original_size = path.stat().st_size
-    output = BytesIO()
-    with Image.open(path) as image:
-        metadata = {key: image.info[key] for key in ('icc_profile', 'exif', 'xmp') if image.info.get(key)}
-        image.save(output, 'WEBP', quality=90, method=6, alpha_quality=100, exact=True, **metadata)
-    saved = original_size - output.tell()
+def replace_smaller(path, data):
+    saved = path.stat().st_size - len(data)
     if saved <= 0:
         return 0
     stream = NamedTemporaryFile(dir=path.parent, delete=False)
     temporary = Path(stream.name)
     try:
         with stream:
-            stream.write(output.getbuffer())
+            stream.write(data)
         temporary.replace(path)
     finally:
         temporary.unlink(missing_ok=True)
     return saved
 
 
-def compress_images(paths):
-    unique = sorted({path.resolve() for path in paths if path.suffix.lower() == '.webp'})
+def compress_webp(path):
+    if not is_lossless_webp(path):
+        return None
+    output = BytesIO()
+    with Image.open(path) as image:
+        metadata = {key: image.info[key] for key in ('icc_profile', 'exif', 'xmp') if image.info.get(key)}
+        image.save(output, 'WEBP', quality=90, method=6, alpha_quality=100, exact=True, **metadata)
+    return replace_smaller(path, output.getbuffer())
+
+
+def compress_png(path):
+    # Recompress only the PNG image stream, preserving its exact pixels and other chunks.
+    source = path.read_bytes()
+    cursor = 8  # PNG signature
+    chunks = []
+    while cursor < len(source):
+        size, tag = struct.unpack_from('>I4s', source, cursor)
+        end = cursor + 12 + size
+        if tag == b'IDAT':
+            if not chunks:
+                first = cursor
+            last = end
+            chunks.append(source[cursor + 8:end - 4])
+        elif chunks:
+            break
+        cursor = end
+    if not chunks:
+        raise ValueError(f'PNG 缺少图像数据：{path}')
+    compressed = zlib.compress(zlib.decompress(b''.join(chunks)), level=9)
+    chunk = b'IDAT' + compressed
+    data = source[:first] + struct.pack('>I', len(compressed)) + chunk + struct.pack('>I', zlib.crc32(chunk)) + source[last:]
+    return replace_smaller(path, data)
+
+
+def compress_images(paths, *, site=None):
+    encoders = {'.webp': compress_webp, '.png': compress_png}
+    # JPEG、已有损或动图 WebP、SVG、GIF、AVIF 和 ICO 按现有编码原样发布。
+    unique = {path.resolve() for path in paths if path.suffix.lower() in encoders}
+    if site is not None:
+        glow = {path for path in unique if path.parent == site / 'wall/img' and path.name.endswith('-glow.compressed.webp')}
+        if glow:
+            print(f'压图：墙图光晕 {len(glow)} 张为例外，原因：半透明渐变需先比较实际网页效果，本轮保留无损。', flush=True)
+        unique -= glow
+    ordered = sorted(unique)
     with ThreadPoolExecutor(max_workers=4) as pool:
-        savings = list(pool.map(compress_webp, unique))
-    count, size = sum(saved > 0 for saved in savings), sum(savings)
-    print(f'压图：压小 {count} 张，省 {size} 字节', flush=True)
-    return count, size
+        savings = 0
+        count = 0
+        for path, saved in zip(ordered, pool.map(lambda path: encoders[path.suffix.lower()](path), ordered)):
+            if saved is None:
+                continue
+            savings += saved
+            count += saved > 0
+            if site is not None:
+                status = f'省 {saved} 字节' if saved else '未变小，原样保留'
+                print(f'压图：{path.relative_to(site).as_posix()}，{status}', flush=True)
+    print(f'压图：压小 {count} 张，省 {savings} 字节', flush=True)
+    return count, savings
 
 
-def optimize(site, illustrations=()):
+def optimize(site, _illustrations=()):
+    site = site.resolve()
     images = {p.resolve() for p in site.rglob('*') if p.suffix.lower() in IMAGE_EXT}
     jsons = {p.resolve() for p in site.rglob('*.json')}
     texts = {p: p.read_bytes().decode('utf-8') for p in site.rglob('*')
@@ -102,8 +148,9 @@ def optimize(site, illustrations=()):
             continue
         removed.append(dict(path=p.relative_to(site).as_posix(), bytes=p.stat().st_size))
         p.unlink()
+        images.remove(p)
     print(f'素材整理：拿掉未引用图 {len(removed)} 张、未引用 JSON {len(json_removed)} 份')
-    return compress_images(used.intersection(illustrations))
+    return compress_images(images, site=site)
 
 
 if __name__ == '__main__':
