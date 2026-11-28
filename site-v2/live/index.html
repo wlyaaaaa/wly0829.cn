@@ -423,6 +423,15 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
 .b6-body p.b6-fail { margin: 0 0 2px; font-size: 16px; font-weight: 650; color: #3a4642; }
 .b6-lines p { font-size: 14.5px; }
 #automation .b6-body p { text-wrap: pretty; }
+#automation .b6-problem__summary {
+  display: -webkit-inline-box;
+  max-inline-size: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
 .page--live:not(.live-unreadable) .b6-card .b6-lines > p > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 .b6-lg { display: flex; align-items: center; gap: 22px; margin: 8px 0 0; }
 .b6-lg__owed { display: inline-flex; align-items: baseline; gap: 10px; font-size: 22px; font-weight: 700; color: #20302b !important; text-decoration: none !important; }

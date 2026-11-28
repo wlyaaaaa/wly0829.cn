@@ -63,7 +63,7 @@
 .automation-groups .lb-cell { overflow-wrap: anywhere; }
 .automation-groups .lb-card .lb-row { min-height: 47px; }
 .automation-groups .automation-result { margin-inline-start: 5px; }
-.automation-groups .lb-cell:nth-child(5) { white-space: nowrap; overflow-wrap: normal; }
+.automation-groups .lb-cell:nth-child(5):not(:has(.automation-gap)) { white-space: nowrap; overflow-wrap: normal; }
 .page--automation .stage { padding-bottom: 42px; }
 .automation-provider { display: inline-block; padding: 2px 9px; border-radius: 999px; background: #eee8f7; color: #514368; }
 .automation-provider[data-provider="codex"] { background: #e8f0ec; color: #2b5143; }

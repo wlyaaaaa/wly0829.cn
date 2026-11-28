@@ -137,7 +137,7 @@
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
     const lastAt = last ? last.finishedAt || last.lastAt : c.last_result?.at;
     const lastText = lastAt ? `上次 ${esc(when(lastAt))}${lt ? ` <span class="ak-dot" data-tone="${lt.tone}"></span><b data-tone="${lt.tone}">${lt.text}</b>` : ''}`
-      : `<span class="tp-muted">${c.recent_stats?.recorded_since ? `${esc(when(c.recent_stats.recorded_since))} 起还没跑过` : '还没跑过'}</span>`;
+      : '<span class="tp-muted">运行记录这次没读到</span>';
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
@@ -179,8 +179,8 @@
     if (!rows.length) {
       const next = catNext();
       const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
-      const empty = `还没跑过${nextText ? `，${nextText}` : ''}。`;
-      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
+      const empty = `运行记录这次没读到${nextText ? `，${nextText}` : ''}。`;
+      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '每一轮的记录这次没读到。'}</p></section>`;
     }
     const limit = !info.more && !U.shouldFold(rows.length - shown) ? rows.length : shown;
     const left = rows.length - limit, rest = left > 0 ? left : info.more ? null : 0;
@@ -196,7 +196,7 @@
     const next = c.state?.next_at || c.next_at;
     const schedule = F(c.schedule_text, '排期说明');
     const queue = id === 'auto-repair' && known(d.counts?.queue) ? `<p class="ak-queue">现在排着等修的：<b>${int(d.counts.queue)} 件</b></p>` : '';
-    const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不排下一次。</p>'
+    const body = mode(c) === 'off' ? '<p class="ak-up__none">关着，不用排时间。</p>'
       : mode(c) === 'paused' ? `<p class="ak-up__none">${esc(pausedText(c.setting?.until_at) || '暂停中')}</p>`
       : rows.length ? `${schedule ? `<p class="ak-up__how">${schedule}</p>` : ''}<ul class="ak-up">${rows.map((u, i) => `<li${i === 0 ? ' class="is-next"' : ''}><time>${esc(when(u.at))}</time><span>${F(u.text, '要做什么')}</span></li>`).join('')}</ul>`
       : `<p class="ak-up__none">${T.stamp(next) > Date.now() ? `下次 <time>${esc(when(next))}</time>。`

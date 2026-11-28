@@ -287,8 +287,10 @@
   function detail(d) {
     const summary = summaryItem(d, picked), fresh = pickedState?.data?.item;
     const it = pickedState?.pending || pickedState?.failed ? summary || fresh || {} : { ...summary, ...fresh };
+    const offlineGap = pickedState?.offlineMissing && (viewer === 'owner' ? '离线时没存这件的详情' : '');
     if (!it.id) return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2></div><p class="tp-empty">${!picked ? '点左边或上面任一件，这里看它的经过。'
-      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。' : '这一件的详情这次没读到，再点一次可以重试。'}</p></section>`;
+      : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。'
+      : pickedState?.offlineMissing ? offlineGap : '这一件的详情这次没读到，再点一次可以重试。'}</p></section>`;
     const events = list(pickedState?.data?.history).length ? list(pickedState.data.history) : list(d.history).filter(r => (r.issue || r.id) === (it.issue || it.id));
     const sorted = [...events].sort((a, b) => (stamp(a.at) || 0) - (stamp(b.at) || 0));
     const groups = merge(sorted);
@@ -316,7 +318,7 @@
       return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
-    const note = pickedState?.pending ? '经过正在读…' : pickedState?.failed
+    const note = pickedState?.pending ? '经过正在读…' : pickedState?.offlineMissing ? offlineGap : pickedState?.failed
       ? `逐轮经过这次没读到${oldAt ? `，下面先列 ${esc(oldAt)} 读到的` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
@@ -439,7 +441,8 @@
     if (pickedRead !== read) return;
     read.pending = null;
     pickedState = s?.data?.item?.id === id && T.viewerOf(s) === audience && !(s.meta?.status >= 400)
-      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at } : { ...previous, pending: false, failed: true, notFound: s?.meta?.status === 404 };
+      ? { data: s.data, shownAt: s.data.at || s.shownAt || s.meta?.at } : { ...previous, pending: false, failed: true,
+        notFound: s?.meta?.status === 404, offlineMissing: s?.phase === 'gone' && !(s.meta?.status >= 400 && s.meta?.status < 500) };
     draw();
   }
   async function readOlder() {

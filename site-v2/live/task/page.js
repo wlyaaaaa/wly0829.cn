@@ -165,7 +165,8 @@
   }
   $('root-link').href = route('/live/#tasks');
   for (const el of document.querySelectorAll('[data-icon-name]')) U.html(el, window.LiveBoard.icon(el.dataset.iconName), false);
-  const weekLabel = { ok: '有成功记录', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '有部分完成', none: '没有新启动', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '全天记录未读全' };
+  const weekLabel = { ok: '有成功记录', failed: '全部出错', 'observed-failed': '有出错记录，全天结果未确认', warn: '有部分完成', none: '那天结果没读到', 'observed-ok': '至少一轮成功', started: '跑过，结果未确认', unknown: '那天结果没读到' };
+  const dayReason = window.LiveBoard.taskDayReason;
   // 后台按当天成功、出错的次数分了档（days7[].outcome.state，M779）：全成功绿、有出错但大部分成功黄、部分成功橙、全出错红；
   // 旧包只有一次出错的证据时用黄格提醒，全天明确全出错才用红格。
   const TIER = { success: ['ok', '全部成功'], mostly_successful: ['mostly', '有出错，大部分成功'], partial_success: ['partial', '有出错，部分成功'],
@@ -173,7 +174,15 @@
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0
     ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   const dayMark = (state, key = false) => `<span class="task-mark${key ? '' : ' task-day'}" data-state="${state}" aria-hidden="true"></span>`;
-  function week(days, runs) {
+  const quietMissing = '近 7 天的运行记录这次没读到';
+  const quietPartial = '读到的这几天没跑过，其余没读到';
+  const quietEmpty = '近 7 天没跑过';
+  function week(days, runs, quiet) {
+    const head = '<strong>近 7 天</strong>';
+    const unavailable = `<div class="task-week">${head}<span>这 7 天的每日结果没读到</span></div>`;
+    if (quiet && !(Array.isArray(days) && days.some(dayReason))) {
+      return quiet === quietMissing ? unavailable : `<div class="task-week"><strong>${quiet}</strong></div>`;
+    }
     const dateKey = t => new Date(t + BJ).toISOString().slice(0, 10), evidence = new Map();
     for (const run of runs) {
       if (run.start == null) continue;
@@ -189,16 +198,18 @@
       const failed = day.state === 'failed' || outcome === 'failed';
       // 当天有部分完成（后台 days7 的 state=warn；旧包从已读到的轮次看出）：同一天先算出错，其次成功，再次部分完成（M676）
       const state = failed ? 'observed-failed' : day.state === 'ok' || outcome === 'ok'
-        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn' : day.state === 'none' && !sawRun ? 'none' : 'unknown';
+        ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn'
+          : day.state === 'none' && !sawRun ? 'none' : 'unknown';
       const started = day.started || sawRun;
-      const name = weekLabel[state === 'unknown' && started ? 'started' : state];
+      const reason = !started && ['none', 'unknown'].includes(state) ? dayReason(day) : '';
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
-      return { ...day, state: state === 'unknown' && started ? 'started' : state, name, started };
+      const shown = reason ? 'none' : state === 'unknown' && started ? 'started' : state;
+      return { ...day, state: shown, name: reason || weekLabel[shown], started };
     });
-    if (!cells.some(day => day.state !== 'unknown' || day.started)) return '<div class="task-week"><strong>近 7 天</strong><span>这 7 天的每日结果没读到</span></div>';
+    if (!cells.some(day => day.state !== 'unknown' || day.started)) return unavailable;
     const marks = cells.map(({ date, state, name, counts = '' }) => `<li title="${esc(date)} ${name}${counts}">${dayMark(state)}<time datetime="${esc(date)}" aria-label="${esc(date)} ${name}${counts}">${esc(date.slice(5))}</time></li>`).join('');
-    const legend = [...new Map(cells.map(day => [`${day.state}|${day.key || weekLabel[day.state]}`, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.key || weekLabel[day.state]}</span>`).join('');
-    return `<div class="task-week"><strong>近 7 天</strong><ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}</div></div>`;
+    const legend = [...new Map(cells.map(day => [day.name, day])).values()].map(day => `<span>${dayMark(day.state, true)}${day.name}</span>`).join('');
+    return `<div class="task-week">${head}<ol aria-label="最近七天每天的结果">${marks}</ol><div class="task-week__key">${legend}${quiet && quiet !== quietMissing ? `<span>${quiet}</span>` : ''}</div></div>`;
   }
   function count(n, exact) {
     return Number.isInteger(n) && n >= 0 && (exact || n > 0) ? `${exact ? '' : '<small>至少 </small>'}${n}<small> 次</small>` : '';
@@ -278,17 +289,21 @@
   function disabledStatus(d) {
     const cutoff = time(d.disabled_since), checked = Math.min(now, time(d.at ?? packetAt));
     return valid(cutoff) && cutoff <= checked
-      ? `已停用至少 ${duration(Math.floor((checked - cutoff) / 1000))}（${stamp(cutoff, true)} 记到停用）`
-      : '已停用';
+      ? `停用中，不用排 · 已停用至少 ${duration(Math.floor((checked - cutoff) / 1000))}（${stamp(cutoff, true)} 记到停用）`
+      : '停用中，不用排';
   }
   function quietWeek(d, runs, kind, covered) {
     const start = dayStart(now) - 6 * DAY;
-    if (kind !== 'plan' || !d.scheduler || runs.some(r => runTime(r) >= start || r.end >= start)
-      || d.days7?.some(day => day.started || ['ok', 'failed'].includes(day.state))) return '';
-    const last = time(d.windows_last_start), checked = time(d.at ?? packetAt);
-    if (covered || d.source_readable === true && valid(checked) && checked >= dayStart(now)
-      && (valid(last) && last < start || d.state === 'never')) return '近 7 天没有运行';
-    return '近 7 天没有读到运行记录';
+    const days = Array.isArray(d.days7) ? d.days7 : [], last = time(d.windows_last_start);
+    if (kind !== 'plan' || !d.scheduler || d.runs_summary?.total > 0 || runs.some(r => runTime(r) >= start || r.end >= start)
+      || days.some(day => day.started || day.reason === 'run_result_unknown' || ['ok', 'failed', 'warn'].includes(day.state))
+      || (d.source_readable === true && last >= start && last <= now)) return '';
+    const readDays = new Set(days.filter(day => {
+      const at = time(`${day.date}T00:00:00+08:00`);
+      return day.state === 'none' && day.coverage_complete === true && at >= start && at <= now;
+    }).map(day => day.date));
+    if (readDays.size === 7 || !days.some(day => typeof day.coverage_complete === 'boolean') && covered && time(d.coverage?.to) + 120000 >= now) return quietEmpty;
+    return readDays.size ? quietPartial : quietMissing;
   }
   // Windows 登记的触发方式：没有下次时间的任务写“登录时运行”“开机时运行”，没有触发条件的写“叫了才跑”
   function triggerLine(d) {
@@ -311,15 +326,16 @@
     const stateHtml = result(state, kind, showLast ? last : null), textLast = showLast ? `${kind === 'pickup' ? '最近' : '上次'} ${esc(stamp(runTime(last), true))}${last.start == null ? ' 结束' : ''} ` : '';
     const due = upcoming[0], original = valid(time(d.next_plan?.original_at)) ? time(d.next_plan.original_at) : kind === 'plan' ? pastNext(d) : NaN;
     const pending = kind === 'plan' && text(d.next_plan?.pending_text);
-    const stopped = ['disabled', 'paused'].includes(d.state);
+    const disabled = kind === 'plan' && (d.state === 'disabled' || d.enabled === false);
+    const stopped = disabled || ['disabled', 'paused'].includes(d.state);
     const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'stopped', 'warn'];
     const originalFinished = valid(original) && last?.start >= original && completed.includes(last.result);
     const resident = kind === 'plan' && ['resident', 'service_loop', 'on_demand', 'event'].includes(d.mode);
-    const planStatus = stopped ? kind === 'plan' && d.state === 'disabled' ? disabledStatus(d) : showLast && label(d.state, kind)
+    const planStatus = stopped ? disabled ? disabledStatus(d) : showLast && label(d.state, kind)
       : valid(due) ? `${offline ? '原定' : '下次'} ${stamp(due, true)}`
       : valid(original) && !originalFinished ? `原定 ${stamp(original, true)}，${pending || '结果待更新'}`
       : resident ? d.schedule ? '' : MODE[d.mode] : kind === 'plan' && triggerLine(d) ? triggerLine(d)
-      : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? '下次时间未读到' : '';
+      : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? kind === 'plan' ? '下次时间没读到' : '下次时间未读到' : '';
     const failed = kind === 'plan' && d.confirmed_failure === true && d.level === 'yellow' && d.last?.result === 'failed' && !protectedField(d.last);
     const failedAt = failed && time(d.last.end ?? d.last.start);
     const warning = failed && `<span class="task-result" data-state="warn"><i class="task-dot" data-state="warn" aria-hidden="true"></i>上次${valid(failedAt) ? ` ${esc(stamp(failedAt))} ` : ''}出错</span>`;
@@ -333,7 +349,7 @@
       : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', bjSchedule(d) ?? d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
     write($('task-purpose'), purpose(d, kind));
-    write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
+    write($('task-week'), kind === 'plan' ? week(d.days7, runs, quiet) : quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : '');
     // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
     const off = d.state === 'disabled' || d.enabled === false;
     const acts = U.actions(d, Array.isArray(d.actions) ? d.actions
@@ -419,7 +435,11 @@
     if (!open && !path && r.end == null && r.exit_code == null && !r.reason && !(!output && r.output)) return '';
     return `<details class="task-run-extra" data-fold-anchor${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
-  function history(d, rows, kind, open, heads = true) {
+  function history(d, rows, kind, open, heads = true, quiet = '') {
+    if (!rows.length && kind === 'plan') {
+      const summary = quiet !== quietMissing || d.days7?.length ? quiet : '';
+      return `<p>${summary || '这段时间的运行记录没读到'}</p>`;
+    }
     if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
@@ -523,7 +543,7 @@
     const open = [...$('rec').querySelectorAll('[data-time]:has(details[open])')].map(el => Number(el.dataset.time));
     if (old || detached) open.push(runTime(old || detached));
     const first = !cursor && total === runs.length && !U.shouldFold(total - 6) ? total : 6;
-    U.html($('runs'), history(d, runs.slice(0, first), kind, open), false);
+    U.html($('runs'), history(d, runs.slice(0, first), kind, open, true, quiet), false);
     $('more-runs').hidden = total <= first && !cursor && !detached;
     const earlier = Math.max(0, total - first);
     const countNote = earlier ? `（更早的 ${earlier} 次）` : '';
