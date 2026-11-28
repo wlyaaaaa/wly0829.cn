@@ -42,11 +42,22 @@
 .page--backups .backup-grid td[data-copy][data-state="waiting"] { color: #536896; }
 .page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
 /* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
-.page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
+.page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small),
+.page--backups .backup-grid :is(.backup-location, .backup-restore) { text-wrap: balance; }
 @media (min-width: 1100px) {
   .page--backups .backup-grid :is(th,td) { padding-inline: 4px; }
 }
-@media (min-width: 1280px) {
+@media (max-width: 1439px) {
+  .page--backups .backup-grid td:is([data-copy="g"], [data-copy="h"]) { padding-inline: 3px; }
+}
+@media (min-width: 1440px) {
+  /* 十列都留够短值的宽度。窄一些的横屏从两侧各借最多 50px。 */
+  .page--backups #backup-matrix {
+    --backup-table-width: min(1380px, 100% + 100px);
+    width: var(--backup-table-width);
+    margin-inline: calc((100% - var(--backup-table-width)) / 2);
+  }
+  .page--backups .backup-grid :is(th,td) { padding-inline: 3px; }
   .page--backups .backup-grid col { width: var(--backup-wide-col); }
 }
 .page--backups .backup-grid b { font-weight: 400; }
@@ -64,7 +75,6 @@
 .page--backups .row__title { display: -webkit-inline-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; max-width: 100%; vertical-align: bottom; }
 .page--backups .backup-grid .backup-location { background: transparent; border-radius: 0; font-size: 12px; }
 .page--backups .backup-grid .backup-restore a { display: block; white-space: nowrap; }
-.page--backups .backup-grid .backup-location { overflow-wrap: break-word; }
 .page--backups .backup-grid summary { cursor: pointer; color: var(--muted); font-size: 12px; }
 .page--backups .backup-note > summary { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; list-style-position: inside; }
 .page--backups .backup-note > div { font-size: 12px; font-weight: 400; }

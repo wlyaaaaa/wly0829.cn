@@ -55,14 +55,21 @@
     if (open) U.anchorFold(btn, set); else set();
   });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  // 数字连量词、日期连钟点，窄格只在说明词组之间折行。
-  const tableUnit = text => `<span class="backup-unit">${text}</span>`;
-  const tableText = value => esc(value).replace(/(^[^\s<\d][^<]{0,8}? )?((?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?[。，、；）]?)|(\d+ 类)(读到记录|本次没读到|未登记|不适用)|\d+ 项读数不完整|\d+(?:[.,]\d+)*[ \t]*(?:份|个|项)|· 按|上次(?:确认|仍有|核对)|还有|已确认|受管(?:源树|文件)|没有(?:副本|记录)?|没核实|没读到|未登记|未列出|不适用|恢复点|有(?:副本|原件)|副本(?:日期)?|原件|文件(?:待传|份数)?|待传|缺失|清单|照片(?:或视频)?|(?:备份|上传|读取)失败|(?:大)?部分成功/g,
-    (word, prefix, time, quantity, status) => {
-      if (time) return `${prefix ? `${tableUnit(prefix.trimEnd())} ` : ''}${tableUnit(time)}`;
-      if (quantity) return tableUnit(quantity) + tableUnit(status);
-      return tableUnit(word);
-    });
+  // 时刻、数字和量词先成组，其余中文在词之间折行。
+  const backupWords = new Intl.Segmenter('zh', { granularity: 'word' });
+  const tableUnit = text => `<span class="backup-unit">${esc(text)}</span>`;
+  const tableProse = text => Array.from(backupWords.segment(text), ({ segment, isWordLike }) =>
+    isWordLike && /\p{Script=Han}/u.test(segment) ? tableUnit(segment) : esc(segment)).join('');
+  const tableText = value => {
+    const text = String(value ?? '');
+    const units = /(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?(?: 清单|[。，、；）])?|\d+(?:[.,]\d+)*[ \t]*(?:份|个|项|类)|· 按|上次(?:确认|核对|仍有)|已确认|没核实|(?:本次)?没读到|读到记录|未登记|不适用|有(?:原件|副本)|(?:备份|上传|读取)失败|(?:大)?部分成功/g;
+    let html = '', start = 0;
+    for (const { 0: unit, index } of text.matchAll(units)) {
+      html += tableProse(text.slice(start, index)) + tableUnit(unit);
+      start = index + unit.length;
+    }
+    return html + tableProse(text.slice(start));
+  };
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
   const restoreText = (d, s) => {
@@ -118,7 +125,7 @@
       return html === esc(text) ? tableText(text) : html;
     };
     // 说明整句摆出来：不截成“…”，也不做成点开只是同一句话的展开。
-    const explain = (value, name) => `<small>${field(value, name)}</small>`;
+    const explain = (value, name) => `<small>${textField(value, name)}</small>`;
     const batchFailed = d.read_error === true;
     const local = d.columns?.local;
     const localNote = local?.note ?? (local?.has_inventory_gaps ? '现有备份记录没有完整的本机原件库存' : !local ? d.coverage?.local_note : '');
@@ -155,9 +162,9 @@
       if (!paths?.length) return textField(s.local_location_note || reason(s.missing?.local_paths || s.local?.missing?.location), '本地位置');
       const path = value => {
         const html = field(value, '本地位置'), plain = U.fieldText(value, viewer);
-        return html === esc(plain) && /^[a-z]:[\\/]/i.test(plain) ? html.replace(/([\\/])(?=[^\\/])/g, '$1<wbr>') : html;
+        return html === esc(plain) && /[\\/]/.test(plain) ? plain.split(/(?<=[\\/])(?=[^\\/])/).map(tableUnit).join('<wbr>') : html;
       };
-      return `${path(paths[0].path)}${paths.length > 1 ? `<details><summary>另有 ${paths.length - 1} 个</summary>${paths.slice(1).map(p => path(p.path)).join('<br>')}</details>` : ''}`;
+      return `${path(paths[0].path)}${paths.length > 1 ? `<details><summary>${tableText(`另有 ${paths.length - 1} 个`)}</summary>${paths.slice(1).map(p => path(p.path)).join('<br>')}</details>` : ''}`;
     };
     const copyCell = (s, key) => {
       const copy = s[key], retired = key === 'g' && copy?.retired === true;
@@ -203,7 +210,7 @@
         return why && copy[k] == null && (k === 'eligible_at' ? uploads || inQueue : copy.sent != null || copy.total != null) ? [`${name}：${field(reason(why), name)}`] : [];
       });
       // 点开“副本说明”要多给一句原因：取第一句真有内容的（停用的副本 gap 写“没有记录”时用停用原因），只剩“没有记录”“不适用”这种空话的不做成可展开的字。
-      const causes = [[copy?.why, copy?.gap, D.backupFailureReason(copy?.failure_reason), retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => field(value, '副本说明'))
+      const causes = [[copy?.why, copy?.gap, D.backupFailureReason(copy?.failure_reason), retired && copy.reason].find(value => value && !emptyWord(value))].filter(Boolean).map(value => textField(value, '副本说明'))
         .concat(details.filter(line => !emptyWord(line.replace(/<[^>]*>/g, '').replace(/^[^：]*：/, ''))));
       const lines = [cold && confirmed && anomaly && hLabel, uploadNote !== label && uploadNote, waitNote !== label && waitNote, unconfirmed,
         cloud && copy?.sent == null && copy?.total != null && `共 ${D.transferCount(copy, 'total', key)}`,
@@ -257,17 +264,16 @@
       if (s.private_count) return `<tr><td colspan="10">${U.privateSummary(s.private_count, { unit: '类资料' })}</td></tr>`;
       const state = U.status(s, { small: true, cover: d }), ps = points(d, s.id).sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
       const links = ps.map(pt => `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at) : '恢复点时间未登记')}</a>`);
-      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>${tableText(`共 ${links.length} 个，`)}<span class="backup-unit">查看其余</span></summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : textField(restoreText(d, s), '恢复点');
+      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>${tableText(`共 ${links.length} 个，`)}${tableUnit('查看其余')}</summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : textField(restoreText(d, s), '恢复点');
       const notes = [...new Set((d.restore || []).filter(g => g.set === s.id).flatMap(g => [g.restore_sessions?.text, g.gap]).filter(note => note && !emptyWord(note)))];
       const why = state.note && (s.why && state.note === field(s.why, '状态说明')
         ? explain(s.why, '备份说明') : `<small>${state.note}</small>`);
       const sizeAt = s.bytes == null ? '' : D.sizeEvidence(s, stamp);
-      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? textField(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${textField(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
+      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${textField(s.name, '备份资料')}&nbsp;›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? textField(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${textField(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
-    // 宽屏缩短位置列，给本机、盘符和云端的状态留出一整行。
-    const columns = [[15, 14], [9.25, 8], [10, 11], [8.25, 7.6], [11.25, 10.25], [9.25, 9.5], [8.5, 9.75], [8.5, 13.9], [12, 10], [8, 6]];
-    const colgroup = columns.map(([width, wide]) => `<col style="--backup-col:${width}%;--backup-wide-col:${wide}%">`).join('');
+    const columns = [[14, 174], [11.75, 210], [11.25, 132], [8.25, 87], [11.25, 125], [11.25, 123], [8, 121], [8, 171], [8.75, 123], [7.5, 70]];
+    const colgroup = columns.map(([width, wide]) => `<col style="--backup-col:${width}%;--backup-wide-col:${wide}px">`).join('');
     U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${colgroup}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
   }
   function summary(d) {
@@ -296,7 +302,7 @@
     const totals = D.backupTotals(sets.map(s => ({ ...s, name: U.fieldText?.(s.name, viewer) ?? sp(s.name) })), supplied), drive = totals.drive;
     const local = Object.hasOwn(supplied, 'local_only') ? supplied : { local_only: fromRows('local_copy_no_cloud'), q: unknown > 0 ? 'partial' : 'ok' };
     const stateNote = d.read_error === true ? state.note.split(' · ').filter(text => !U.isReadingCutoff(text)).join(' · ') : state.note;
-    U.html($('note'), wrapSummary([tableText(counts), stateNote.replace(/\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>')].filter(Boolean).join(' · '))); $('note').hidden = !counts && !stateNote;
+    U.html($('note'), wrapSummary([esc(counts), stateNote.replace(/\d+ 项读数不完整/g, '<span class="backup-unit">$&</span>')].filter(Boolean).join(' · '))); $('note').hidden = !counts && !stateNote;
     L.tone(hero, d); homeRead.done();
     const hConfirmed = copy => copy && copy.required !== false && copy.retired !== true && (
       Object.hasOwn(copy, 'confirmed_state') || Object.hasOwn(copy, 'confirmed_at')
