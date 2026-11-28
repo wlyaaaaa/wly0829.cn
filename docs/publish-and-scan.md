@@ -91,7 +91,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## 正式发布后回收 OSS 旧对象
 
-部署、公网回读和成功基线登记都通过后，发布器在同一把发布锁里回收旧对象。预演、仅上传以及发布失败时跳过回收。新版保留当前清单引用和在途发布占用。上一版独用的图和其他生成对象在本次回收时删除，只按核对过大小、ETag 和版本的精确对象名操作。
+部署、公网回读和成功基线登记都通过后，发布器在同一把发布锁里回收旧对象。预演、仅上传以及发布失败时跳过回收。回收保护当前版和紧邻上一成功版完整发布清单中的对象及其引用，也保护仍在途的发布占用。上一版沿用本次发布已冻结并核过的清单。超出保留范围的对象按核对过大小、ETag 和版本的精确对象名回收。
 
 选页发版保留未改页所需的旧资源，从保留的旧 HTML 及经核验的资源字节追到间接依赖。`publish-receipt.json` 的 `retained_reference_gaps` 如有条目，查看记录的页面或对象及原因。缺证据的上一版对象暂时保留，在本轮记录里记下这部分待查内容。
 
@@ -108,9 +108,9 @@ python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发�
 python -B -X utf8 site-astro/tools/publish_site.py --retention-only <正式发布输出目录> --retention-max-keys <数量>
 ```
 
-补跑结果为 `retention_complete`、`retention_incomplete` 或 `retention_dry_run`。补跑和回收预演各写新的子目录，终端输出 `receipt` 指向本次回执。只有显式传 `--skip-retention` 时，正式发布才会记为 `skipped_by_request`。
+补跑结果为 `retention_complete`、`retention_incomplete` 或 `retention_dry_run`。补跑和回收预演各写新的子目录，终端输出 `receipt` 指向本次回执。常规 QA 发布沿用上面的正式命令，上一版由回收器保留。显式传 `--skip-retention` 会跳过整次回收并记为 `skipped_by_request`。
 
-施工清单在 Git 共享目录 `wly-oss/pins/<pin-id>.json`，通过 `plan_snapshot`、`plan_sha256` 和回执 `oss_retention_pin` 定位。历史清单缺原文件时看 `pending_pins` 的具体保留原因。已获本人批准的精确退役对象，按原回滚记录的 `retired_objects` 保存原大小及内容指纹；不改原清单或其哈希。
+施工清单在 Git 共享目录 `wly-oss/pins/<pin-id>.json`，通过 `plan_snapshot`、`plan_sha256` 和回执 `oss_retention_pin` 定位。旧施工清单留在 `pending_pins` 时，先核发布已结案或明确放弃，再由发版线持同一把发布锁，调用 `scripts/oss-retention.py retire --lock-holder <持有人> --pin-id <完整登记编号> --plan-sha256 <原计划SHA256>` 结案。缺证据的继续保留。已核回收的精确对象，在历史回滚记录的 `retired_objects` 留原大小及内容指纹，原清单及其哈希照旧。
 
 沿用本机现有 `aliyun ossutil` 的 `website-images` 配置、OSS profile 和 `wly0829-publication` 短锁，不另建凭据。
 
@@ -147,4 +147,4 @@ gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
 
 ## 成品恢复
 
-发布回执保留源码 SHA、成品 SHA 和实际部署 ID，用于定位同一版。发现问题时先在源码修复，重新组装并发布，回读公网成品和涉及的页面。如确需恢复旧内容，从可用源码重建并确保本次成品含所需资源，再走同一发布入口。新版成功后会清理上一版独用素材，旧成品 SHA 只作追溯。
+发布回执保留源码 SHA、成品 SHA 和实际部署 ID，用于定位同一版。发现问题时先在源码修复，重新组装并发布，回读公网成品和涉及的页面。如确需恢复，紧邻上一版的对象由回收保留，可用该版已核的成品恢复。更早的版本可从可用源码重建，确认成品含所需资源后走同一发布入口。
