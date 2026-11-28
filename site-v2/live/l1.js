@@ -1443,7 +1443,6 @@
       [...el.querySelectorAll('.head__cutoff'), el].some(node => node.textContent.split(' · ').some(matchesCutoff))));
     const difference = Date.parse(home?.at ?? at) - Date.parse(end);
     const cutoff = endNote && !existing && (datedBackupCutoff || !cardCutoff(describedReading)) && data?.q !== 'warming' && difference >= 15 * 60 * 1000 ? esc(endNote) : '';
-    // 后台给了读不准的具体项（gray_items）就点名写出是哪几项、为什么（同一原因的并成一句），不再只写“N 项读不准”
     const gray = Array.isArray(data?.gray_items) && data.gray_items.length ? data.gray_items : null, grayWhy = new Map();
     const temperature = id === 'computer' && computerTemperature(data);
     const temperatureFresh = freshTemperature(temperature);
@@ -1461,6 +1460,9 @@
     const lackWhy = new Map();
     for (const g of gray || []) {
       const name = sp(U.fieldText(g?.name, viewer)).trim(), reason = U.fieldText(g?.reason, viewer) || '原因没记下';
+      // 事项的登记时间不代表读数过期。旧回包里只有名册整体的“事项状态”属于读取结果。
+      if (id === 'needs' && (name !== '事项状态' || data.items?.some(row =>
+        sp(U.fieldText(row.text ?? row.title, viewer)).trim() === name))) continue;
       if (name === 'CPU 温度' && temperatureFresh) continue;
       if (stutterMissing && name.startsWith('卡顿')) continue;
       const recorded = savedReading(reason), lack = lacking.find(label => name === label || name.startsWith(label));
@@ -1469,20 +1471,25 @@
       const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
       const repeatsReading = sameNote(recorded, describedReading) || datedBackupCutoff && U.sameCutoffNote(recorded, describedReading);
-      const detail = describedAt && repeatsReading ? '' : why;
-      grayWhy.set(detail, [...(grayWhy.get(detail) || []), g?.name]);
+      const detail = describedAt && repeatsReading ? '' : why
+        .replace('本轮没有读到可用记录', '本轮来源未返回可用记录')
+        .replace('这次没读到', '这次读取失败').replace('读不到', '无法读取');
+      if (!grayWhy.has(detail)) grayWhy.set(detail, []);
+      grayWhy.get(detail).push(g?.name);
     }
-    const grayNames = names => {
-      const format = name => readingLabel(U.fieldHtml(name, { name: '读数名称', kind: viewer }));
-      if (id !== 'needs') return names.slice(0, 3).map(format).join('、') + (names.length > 3 ? ` 等 ${names.length} 项` : '');
-      const counts = new Map();
-      for (const name of names.map(format)) counts.set(name, (counts.get(name) || 0) + 1);
-      const groups = [...counts];
-      return groups.slice(0, 3).map(([name, count]) => count > 1 ? `${name} ${count} 项` : name).join('、')
-        + (groups.length > 3 ? ` 等 ${names.length} 项` : '');
-    };
-    const grayNote = grayWhy.size > 0 && '读不准：' + [...grayWhy].map(([why, names]) => `${grayNames(names)}${why ? `（${esc(why)}）` : ''}`).join('；');
-    const state = U.status(['ledger', 'projects'].includes(id) ? null : gray ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
+    // 同一原因写一次，点名的数量按整个卡头算，避免每种原因都铺一段。
+    const grayTotal = [...grayWhy.values()].reduce((total, names) => total + names.length, 0);
+    let remaining = 2;
+    const graySummary = [];
+    for (const [why, names] of grayWhy) {
+      if (!remaining) break;
+      const shown = names.slice(0, remaining);
+      remaining -= shown.length;
+      const labels = shown.map(name => readingLabel(U.fieldHtml(name, { name: '读数名称', kind: viewer })));
+      graySummary.push(labels.join('、') + (why ? `（${esc(why)}）` : ''));
+    }
+    const grayNote = grayTotal > 0 && `读不准：${graySummary.join('；')}${grayTotal > 2 ? ` 等 ${grayTotal} 项` : ''}`;
+    const state = U.status(['ledger', 'projects'].includes(id) ? null : gray || id === 'needs' ? { ...data, gray_count: 0 } : data, { showZeroFixing: id === 'needs' });
     // M1010：电脑卡的“N 项要处理”写出是什么事；卡小，一件时写“要处理：”加那句说明（和电脑页页顶同一句，如“有防火墙配置未启用”），没说明写组名，几件时只列组名
     const sure = id === 'computer' && Array.isArray(data?.attention_summary?.confirmed) ? data.attention_summary.confirmed : [];
     if (sure.length && sure.length === data.attention_count && state.note) {
