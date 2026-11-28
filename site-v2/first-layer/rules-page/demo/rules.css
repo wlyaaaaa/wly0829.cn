@@ -203,6 +203,11 @@ body {
   border-top: 1px solid var(--line);
 }
 
+@media (min-width: 1440px) and (orientation: landscape) {
+  .rules-meta { width: max(100%, 22.75em); }
+  .rules-meta dl > div { grid-template-columns: min(6.6em, calc(100% - 18.35em)) 1fr; }
+}
+
 .rules-meta dt {
   color: var(--ink);
   font-weight: 500;
