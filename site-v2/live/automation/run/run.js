@@ -5,7 +5,7 @@
 // 另读这一类的列表找上一轮、下一轮和接着做的那一轮，读 automation 拿快讯条和类名。取数转换在 ../runs.js。
 (() => {
   'use strict';
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, R = window.AutomationRuns, P = window.AutomationPresentation, { esc } = U;
   const { list, known, int, link, when } = T;
   const params = new URLSearchParams(location.search);
   // 已撤类别的旧轮仍可点开。
@@ -200,8 +200,10 @@
   function watchChat(c) {
     const key = c.resource || '';
     if (chatWatch?.key === key) return;
-    chatWatch?.sub.stop(); chat = null; chatWatch = null;
-    if (key) chatWatch = { key, sub: Live.watch(key, null, { phase(st) { chat = st; if (state) draw(); } }) };
+    chatWatch?.sub?.stop(); chat = null; chatWatch = null;
+    if (!key) return;
+    const watch = chatWatch = { key };
+    watch.sub = Live.watch(key, null, { phase(st) { if (chatWatch === watch) { chat = st; if (state) draw(); } } });
   }
   // 钟点：和这一轮同一天只写几点，别的日子带上日子
   const clockOf = (r, at) => !T.stamp(at) ? '' : T.dayKey(at) === T.dayKey(r.startedAt || r.queuedAt || at) ? T.clock(at) : `${T.day(at)} ${T.clock(at)}`;
@@ -454,7 +456,7 @@
     let note = '', lastWords = '';
     if (program || waitingForConversation) note = '';
     else if (!c.available) note = hiddenFromVisitor ? esc(hiddenText) : '这一轮的对话没存下来，看下面派活程序收到的结论。';
-    else if (!d) note = chat?.phase === 'none' || chat?.meta?.status >= 400 ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
+    else if (!d) note = !P.retrying(chat) && (chat?.phase === 'none' || chat?.meta?.status >= 400) ? '这一轮的对话没读到。' : '正在读这一轮的对话…';
     else {
       const { out, gap, lastWords: previous } = middle(r, d, ai, locked);
       lastWords = previous;
@@ -477,7 +479,7 @@
     // 访客版对话藏着时后台不给 state，看 metadata 里记的状态
     const ended = ['done', 'stopped', 'failed', 'ended_unknown'];
     const conversationState = ended.includes(d?.state) ? d.state : c.state || c.meta?.state || d?.state;
-    const talkState = { running: '对话还在跑', done: '对话已结束', stopped: '对话已结束', failed: '对话出错停了',
+    const talkState = program || waitingForConversation && !c.resource && !c.meta ? '' : { running: '对话还在跑', done: '对话已结束', stopped: '对话已结束', failed: '对话出错停了',
       ended_unknown: '对话已结束', unknown: '对话状态不明' }[conversationState] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；标 rewritten 的挂“对外换了说法”（M684）
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
@@ -486,7 +488,9 @@
     const count = items.filter(x => x.html.startsWith('<li class="ar-msg')).length;
     let meta = '', plan = '';
     // 这一轮带入了哪些来源、各读到几点（回执的 scan）：从大标题挪到这里，单独一行（主控 11-26）
-    const scan = scanOf(r), scanLine = scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '';
+    const scan = scanOf(r), previousAt = when(P.staleAt(chat));
+    const scanLine = (previousAt ? `<p class="ar-talk__note">对话截至 ${esc(previousAt)}</p>` : '') +
+      (scan ? `<p class="ar-talk__note ar-talk__scan">${esc(scan)}</p>` : '');
     if (d && !program && c.available) {
       const m = CV.pageMeta({ automation: true, showElapsed: r.workedMinutes == null }), latest = locked ? '' : CV.workLine(d, m.rawReply).latest, note = locked ? '' : CV.headerNote(d, latest);
       // 后台写了缺因的照写一句：这场只留下逐步回复、没留下思考摘要（Claude 定时任务常这样），不画空的引用框
@@ -554,7 +558,7 @@
     page.tick.set(R.ticker(board?.data, others?.rows?.length ? others.rows : siblings?.rows || null, viewer), { off: !!board?.offline || !state?.data });
     const d = state?.data;
     if (!category || !id) { T.paint(page.root, '<p class="tp-placeholder" role="status">网址里没写是哪一轮。</p>'); return; }
-    if (!d) { T.paint(page.root, T.placeholder(state, '这一轮')); return; }
+    if (!d) { T.paint(page.root, T.placeholder(P.retrying(state) ? null : state, '这一轮')); return; }
     const r = R.detail(d, viewer);
     watchChat(r.who?.program ? {} : r.conversation);
     // 压缩次数和顶层页同一个画法（draw10.detail 挂在卡头信息后面）；整块重画时留住展开没有

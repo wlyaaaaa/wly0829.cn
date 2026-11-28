@@ -186,7 +186,7 @@
     const steps = list(guide.steps).map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
     const { common, specific } = data.repair_prompts || {};
     const note = (data.setting?.mode === 'off' && guide.off_prompt_note) || guide.prompt_note
-      || (common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到');
+      || (common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : specific ? '这一类的专用原话' : '这次没读到');
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
     const more = name => `<span class="aw-mechanism__more"><span class="disclosure-closed">展开看${name}全文</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span></span>`;
@@ -268,7 +268,7 @@
         ...list(run.facts).filter(fact => !['这轮交付', '验收人'].includes(fact.label))]);
       const latest = i + 1 === events.length;
       return `<li id="round-${esc(run.id)}" class="${step(latest)}">
-        <details data-fold-anchor${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
+        <details data-fold-anchor${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && run.executor !== '派活程序' && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }
@@ -315,7 +315,9 @@
     root.hidden = false;
     if (!data?.enabled) {
       delete root._html;
-      root.innerHTML = `<p class="glass aw-load">${state?.meta?.status === 404 ? '这件活或这一类没有读到' : field(state?.text || '正在读自动任务…')}</p>`;
+      const loading = !data && (P.retrying(state) || ['idle', 'wait', 'slow'].includes(state?.phase));
+      const missing = state?.meta?.status === 404 ? state.meta.withdrawn ? (work ? '没有找到这件活' : '没有找到这一类') : '这件活或这一类没有读到' : '';
+      root.innerHTML = `<p class="glass aw-load">${loading ? '正在读自动任务…' : field(missing || state?.text || '正在读自动任务…')}</p>`;
       return;
     }
     audience = state.meta?.viewer?.kind || data.audience || 'public';

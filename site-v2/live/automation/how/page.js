@@ -7,7 +7,7 @@
   const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/'); return; }
-  const T = window.LiveTape, U = window.LiveUI, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, P = window.AutomationPresentation, { esc } = U;
   const { list } = T;
   const repair = id === 'auto-repair';
   const category = d => list(d?.categories).find(x => x.id === id);
@@ -26,30 +26,42 @@
   };
   const card = (title, body, extra = '') => `<section class="tp-panel ah-card"${extra}><h2>${title}</h2>${body}</section>`;
   function timing(policy) {
-    const p = policy || {}, duration = T.duration;
-    if (id === 'auto-repair' && [p.ai_timeout_seconds, p.idle_seconds, p.daily_ai_seconds, p.workspace_lookback_seconds].every(T.known)) {
-      // construction_window_seconds 是“有没有人在修”看多久内的施工动静，后台给了才写
-      const busy = T.known(p.construction_window_seconds) ? `看有没有人在修时，查最近 ${duration(p.construction_window_seconds)}有没有施工动静；` : '';
-      return `一轮最多 ${duration(p.ai_timeout_seconds)}，${duration(p.idle_seconds)}没动静就停。${busy}开工后把最近 ${duration(p.workspace_lookback_seconds)}的对话和提交交给 AI 参考。每天和“AI 约好的事”合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
+    const p = policy || {}, { duration, known } = T, missing = '这一类最多跑多久，这次没读到。';
+    if (id === 'auto-repair') {
+      const limits = [known(p.ai_timeout_seconds) && `一轮最多 ${duration(p.ai_timeout_seconds)}`,
+        known(p.idle_seconds) && `${duration(p.idle_seconds)}没动静就停`].filter(Boolean).join('，');
+      const workspace = known(p.workspace_lookback_seconds);
+      return [
+        limits ? `${limits}。` : '',
+        !known(p.ai_timeout_seconds) ? missing : '',
+        known(p.construction_window_seconds) ? `看有没有人在修时，查最近 ${duration(p.construction_window_seconds)}有没有施工动静${workspace ? '；' : '。'}` : '',
+        workspace ? `开工后把最近 ${duration(p.workspace_lookback_seconds)}的对话和提交交给 AI 参考。` : '',
+        known(p.daily_ai_seconds) ? `每天和“AI 约好的事”合用 ${duration(p.daily_ai_seconds)} AI 时间。` : '',
+      ].join('');
     }
     if (id === 'ai-commitments' && T.known(p.daily_ai_seconds)) {
       return `每天和自动修理合用 ${duration(p.daily_ai_seconds)} AI 时间。`;
     }
     // reply_wait_seconds 是 AI 回复的手机通知最多等摘要多久（从回复结束算），后台给了才写
-    if (id === 'excerpt' && T.known(p.ai_timeout_seconds)) {
+    if (id === 'excerpt') {
       const reply = T.known(p.reply_wait_seconds) ? `AI 回复的手机通知，最多等摘要到回复结束后 ${duration(p.reply_wait_seconds)}；` : '';
-      return `${reply}每次叫 AI 摘最多等 ${duration(p.ai_timeout_seconds)}。`;
+      return reply + (known(p.ai_timeout_seconds) ? `每次叫 AI 摘最多等 ${duration(p.ai_timeout_seconds)}。` : missing);
     }
     if (T.known(p.ai_timeout_seconds)) return `一次最多等 AI ${duration(p.ai_timeout_seconds)}。`;
-    return '这一类最多跑多久，这次没读到。';
+    return missing;
   }
   function failurePolicy(p = {}) {
     if (id === 'auto-repair') {
       const {repair_limit, urgent_wait_seconds, normal_wait_seconds} = p;
-      if (![repair_limit, urgent_wait_seconds, normal_wait_seconds].every(T.known)) {
+      if (![repair_limit, urgent_wait_seconds, normal_wait_seconds].some(T.known)) {
         return '同一件最多修几轮、排队多久算没人接手，这次没读到。';
       }
-      return `同一件最多派 AI 修 ${repair_limit} 轮。只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
+      const limit = T.known(repair_limit) ? `同一件最多派 AI 修 ${repair_limit} 轮。` : '同一件最多修几轮，这次没读到。';
+      const wait = [[urgent_wait_seconds, '急件'], [normal_wait_seconds, '普通件']].filter(([seconds]) => T.known(seconds))
+        .map(([seconds, name]) => `${name} ${T.duration(seconds)}`).join('、');
+      const missing = !T.known(urgent_wait_seconds) && !T.known(normal_wait_seconds) ? '排队多久算没人接手，这次没读到。'
+        : !T.known(urgent_wait_seconds) ? '急件的接手时限，这次没读到。' : !T.known(normal_wait_seconds) ? '普通件的接手时限，这次没读到。' : '';
+      return `${limit}只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。${wait ? `${wait}还没人接手，会登记一件“有故障排队超过接手时限”。` : ''}${missing}`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
       ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';
@@ -59,7 +71,7 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     const c = category(d), g = c?.how_to;
-    if (!d || !g) { T.paint(page.root, !d ? T.placeholder(state, '这一类怎么干') : '<p class="tp-placeholder">这一类没读到。</p>'); return; }
+    if (!d || !g) { T.paint(page.root, !d ? T.placeholder(P.retrying(state) ? null : state, '这一类怎么干') : '<p class="tp-placeholder">这一类没读到。</p>'); return; }
     const name = F(cn(c.title || g.title), '类别'), m = c.setting?.mode;
     document.title = `${U.fieldText(cn(c.title || g.title), viewer)}怎么干 · 自动任务 · 实况`;
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
