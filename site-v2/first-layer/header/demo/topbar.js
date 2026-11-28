@@ -79,43 +79,31 @@
     fit();
   }
 
-  // 电脑窗口拉窄时，按这一页两边实际有几颗按钮量（实况页右边多“几点读到”“问情况”两颗）：
-  // 照常居中放得下就不动；居中放不下、站名还放得下，站名往空的一边让；站名放不下才只留小绿灯（仍是回首页）；
-  // 小绿灯也放不下，整条页眉按比例缩小，入口一个不丢。1440 宽和手机（按 1440 宽整页缩小）都放得下，不受影响。
+  // 栅格负责给两边按钮和站名留位置；三组加起来也放不下时，整条页眉才等比缩小。
   const groups = [...bar.querySelectorAll(':scope > .topbar__group')];
   const brand = bar.querySelector('.brand');
   const NAME_GAP = 11;   // 和 topbar.css 里 .brand__word 的 margin-left 一样
-  const across = el => {
-    const kids = [...el.children].filter(c => c.offsetWidth);
-    return kids.reduce((sum, c) => sum + c.offsetWidth, 0) + (parseFloat(getComputedStyle(el).columnGap) || 0) * Math.max(0, kids.length - 1);
-  };
   function fit() {
     const w = parseFloat(word.style.getPropertyValue('--w'));
     if (!w || groups.length !== 2 || !brand) return;
     const bs = getComputedStyle(bar), br = getComputedStyle(brand);
-    const frame = (parseFloat(bs.left) || 0) + (parseFloat(bs.right) || 0) + parseFloat(bs.paddingLeft) + parseFloat(bs.paddingRight);
-    const room = document.documentElement.clientWidth - frame - 4;
-    const gaps = 2 * 12;   // 让开时站名和两边按钮之间各留 12（topbar.css 里 data-fit 那几行的 column-gap）
-    const [left, right] = groups.map(across);
-    const lampOnly = parseFloat(br.paddingLeft) + parseFloat(br.paddingRight) + lamp.offsetWidth;
-    const named = lampOnly + NAME_GAP + w;
-    let next = 'center';
-    if (2 * Math.max(left, right) + named > room) next = left + named + right + gaps <= room ? 'tight' : left + lampOnly + right + gaps <= room ? 'lamp' : 'zoom';
-    if (next === 'zoom') bar.style.setProperty('--fit-zoom', Math.max(.5, (room + frame) / (left + lampOnly + right + gaps + frame)).toFixed(3));
-    else bar.style.removeProperty('--fit-zoom');
-    if (bar.dataset.fit === next) return;
-    // 打开页面时第一次摆好就是落定的样子，不演一遍字收进灯里；之后拉窗口照常有收放
-    if (!bar.dataset.fit) {
-      bar.setAttribute('data-fit-first', '');
-      requestAnimationFrame(() => requestAnimationFrame(() => bar.removeAttribute('data-fit-first')));
-    }
-    bar.dataset.fit = next;
+    const inset = (parseFloat(bs.left) || 0) + (parseFloat(bs.right) || 0);
+    const frame = inset + parseFloat(bs.paddingLeft) + parseFloat(bs.paddingRight);
+    const gaps = 2 * parseFloat(bs.columnGap);
+    const [left, right] = groups.map(group => parseFloat(getComputedStyle(group).width));
+    const named = parseFloat(br.paddingLeft) + lamp.offsetWidth + NAME_GAP + w + parseFloat(br.paddingRight);
+    const needed = Math.ceil(frame + left + named + right + gaps);
+    const zoom = parseFloat(bs.zoom);
+    // 按固定页眉实际拿到的窗口宽度算，包含两侧边距，但不把纵向滚动条的留白算进去。
+    const room = Math.round(bar.getBoundingClientRect().width + inset * zoom);
+    if (room >= needed) bar.style.removeProperty('--fit-zoom');
+    // 缩放会让字宽取整略有变化，忽略这点误差，避免来回缩放。
+    else if (Math.abs(needed * zoom - room) > 2) bar.style.setProperty('--fit-zoom', room / needed);
   }
-  // 按钮字变了（实况页“几点读到”会换）、加了按钮，都重量一次
-  const sized = new ResizeObserver(() => fit());
-  const watchKids = () => groups.forEach(g => [...g.children].forEach(c => sized.observe(c)));
-  new MutationObserver(watchKids).observe(bar, { childList: true, subtree: true });
-  watchKids();
+  // 按钮换字、增减时，整组的自然宽度跟着变。
+  const sized = new ResizeObserver(fit);
+  groups.forEach(group => sized.observe(group));
+  sized.observe(document.documentElement);
 
   const TOP = 12;     // 离顶上这么近都算“在最顶上”
   const JITTER = 6;   // 小于这个的抖动不算滑动
