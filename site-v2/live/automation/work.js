@@ -332,7 +332,9 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, work ? asOwner(workPage(data)) : kind ? asOwner(categoryPage(data, kind)) : typePage(data), false);
+    const old = when(P.staleAt(state));
+    const page = work ? asOwner(workPage(data)) : kind ? asOwner(categoryPage(data, kind)) : typePage(data);
+    U.html(root, `${old ? `<p class="row__sub">截至 ${esc(old)}</p>` : ''}${page}`, false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;
@@ -400,10 +402,16 @@
     if (access.status !== 'pass') { finishSetting(access); return; }
     configuration = { op, id };
     $('automation-setting-title').textContent = '暂停到几点';
-    settings.querySelector('[data-fields]').innerHTML = '<label>北京时间 <input required type="datetime-local" name="value"></label><p class="row__sub">已经在修的这一轮会先收尾。</p>';
+    settings.querySelector('[data-fields]').innerHTML = `<div class="aw-date"><label>北京时间 <input required name="value" placeholder="年-月-日 时:分"></label>
+      <button type="button" class="more" data-pick-date>选日期</button><input type="datetime-local" name="picker" tabindex="-1" aria-hidden="true"></div>
+      <p class="row__sub">已经在修的这一轮会先收尾。</p>`;
+    const { value: dateField, picker } = form.elements;
+    dateField.oninput = () => dateField.setCustomValidity('');
+    picker.onchange = () => { dateField.value = picker.value.replace('T', ' '); dateField.setCustomValidity(''); };
+    form.querySelector('[data-pick-date]').onclick = () => { picker.value = dateField.value.trim().replace(' ', 'T'); picker.showPicker(); };
     const current = instant(failedPause?.id === id ? failedPause.until : targetOf(id)?.setting?.until_at);
     if (Date.parse(current) > Date.now()) {
-      form.elements.value.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16);
+      dateField.value = new Date(Date.parse(current) + 8 * 3600000).toISOString().slice(0, 16).replace('T', ' ');
       configuration.until = current;
     }
     settings.showModal();
@@ -412,11 +420,18 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (busy || !configuration) return;
-    const { id } = configuration, value = form.elements.value.value;
+    const { id } = configuration, { value, picker } = form.elements;
+    const local = value.value.trim().replace(' ', 'T');
+    picker.value = local;
+    if (picker.value !== local || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(local)) {
+      value.setCustomValidity('请按年-月-日 时:分填写，例如 2026-11-29 13:00。');
+      value.reportValidity();
+      return;
+    }
     settings.close();
     notices.start(id);
     paint();
-    const selected = `${value}:00+08:00`;
+    const selected = `${local}:00+08:00`;
     const until = Math.floor(Date.parse(configuration.until) / 60000) === Date.parse(selected) / 60000 ? configuration.until : selected;
     const reply = await save('type-mode', id, { mode: 'paused', until_at: until }) || { status: 'unknown' };
     failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id, until };

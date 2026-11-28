@@ -389,6 +389,9 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-dialog h2 { margin: 0 0 14px; }
 .aw-dialog .aw-buttons { margin-top: 15px; justify-content: end; }
 .aw-dialog :is(select, input) { font: inherit; padding: 6px 9px; margin-left: 9px; border: 1px solid #c7c3ca; border-radius: 7px; background: #fff; }
+.aw-date { display: flex; align-items: center; gap: 8px; position: relative; }
+.aw-date input[name="value"] { width: 152px; }
+.aw-date input[name="picker"] { position: absolute; right: 0; width: 1px; opacity: 0; pointer-events: none; }
 /* 只留自己画的下拉箭头，不要浏览器自带的 */
 .aw-dialog select { appearance: none; padding-right: 32px; cursor: pointer;
   background: linear-gradient(45deg, transparent 50%, #6f6a78 50%) calc(100% - 17px) 55% / 6px 6px no-repeat,

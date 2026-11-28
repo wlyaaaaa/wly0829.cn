@@ -370,7 +370,11 @@
         const phase = readBody(s);
         if (phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
         else if (phase === 'none') empty('这一件暂时读不到');
-      } finally { [hero.querySelector('.card__body'), $('rest')].forEach(el => U.blockNote(el, s)); }
+      } finally {
+        const old = !ended && item && at && !s.offline && (s.warming || s.meta?.status >= 500) && !s.meta?.publicationRevoked;
+        U.blockNote(hero.querySelector('.card__body'), old && !s.fallbackNote ? { fallbackNote: `截至 ${when(at)}` } : s);
+        U.blockNote($('rest'), s);
+      }
     },
   });
   requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('is-ready')));

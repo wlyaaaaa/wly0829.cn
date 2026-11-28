@@ -72,7 +72,7 @@
     viewer = T.viewerOf(state);
     const c = category(d), g = c?.how_to;
     if (!d || !g) { T.paint(page.root, !d ? T.placeholder(P.retrying(state) ? null : state, '这一类怎么干') : '<p class="tp-placeholder">这一类没读到。</p>'); return; }
-    const name = F(cn(c.title || g.title), '类别'), m = c.setting?.mode;
+    const name = F(cn(c.title || g.title), '类别'), m = c.setting?.mode, old = T.when(P.staleAt(state));
     document.title = `${U.fieldText(cn(c.title || g.title), viewer)}怎么干 · 自动任务 · 实况`;
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const pill = m === 'on' ? ['on', '开着'] : m === 'off' ? ['off', '关着，不用排时间'] : m === 'paused' ? ['paused', pausedText(c.setting?.until_at)] : ['', '开没开这次没读到'];
@@ -106,6 +106,7 @@
     const cost = id === 'weekly-laptop' ? `<p>${esc(duration)}</p><p>${esc(g.cost)}</p>`
       : `<p>${esc(g.costFull ? g.cost : `${duration} ${g.cost}`)}</p>`;
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><a href="${esc(T.path('/live/automation/category/', { type: id }))}">${name}</a><strong aria-current="page">怎么干</strong></nav>
+      ${old ? `<p class="tp-note">截至 ${esc(old)}</p>` : ''}
       <div class="ah-head"><div><h1>${name}怎么干</h1><p>${esc(g.short || '')}${g.short ? '。' : ''}${schedule}</p></div>
         <p class="ah-pills">${model ? `<span class="ah-pill">${model}</span>` : ''}<span class="ah-pill" data-mode="${pill[0]}">${esc(pill[1])}</span></p></div>
       <div class="ah-grid"><div class="ah-main">
