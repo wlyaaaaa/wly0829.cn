@@ -52,9 +52,16 @@
     if (!['on', 'off', 'paused'].includes(mode) || mode === 'paused' && want.until && !until) return;
     const stamp = value => typeof value === 'number' ? value * 1000 : Date.parse(value);
     if (mode === want.mode && (!want.until || stamp(until) === stamp(want.until))) { update?.('ok', '已保存'); return; }
-    const current = mode === 'paused' ? `暂停到 ${when(typeof until === 'number' ? new Date(stamp(until)).toISOString() : until)}`
-      : { on: '开着', off: '关着' }[mode] || '没读到';
+    const current = mode === 'paused' ? until ? `暂停到 ${when(typeof until === 'number' ? new Date(stamp(until)).toISOString() : until)}` : '暂停中'
+      : { on: '开着', off: '关着' }[mode];
     update?.('fail', `最新读数还是${current}`);
   }
-  window.AutomationPresentation = { lamp, tag, kinds, keepWords, settingNotices, settingReadback };
+  function retrying(reading) {
+    const status = reading?.meta?.status;
+    return !!reading && !reading.offline && !reading.publicPaused && !reading.meta?.withdrawn && !reading.meta?.publicationRevoked
+      && (reading.warming || status === 0 || status === 408 || status === 429 || status >= 500
+        || status >= 200 && status < 400 && reading.fallbackNote && reading.meta?.source !== 'fallback');
+  }
+  const staleAt = reading => reading?.data && retrying(reading) ? reading.shownAt || reading.meta?.at : '';
+  window.AutomationPresentation = { lamp, tag, kinds, keepWords, settingNotices, settingReadback, retrying, staleAt };
 })();

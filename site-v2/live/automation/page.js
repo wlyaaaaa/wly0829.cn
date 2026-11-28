@@ -1,6 +1,6 @@
 window.LegacyAutomation = function (bar) {
   'use strict';
-  const U = window.LiveUI, L = window.LiveLight, { esc } = U;
+  const U = window.LiveUI, L = window.LiveLight, P = window.AutomationPresentation, { esc } = U;
   const $ = id => document.getElementById(id), params = new URLSearchParams(location.search);
   const project = params.get('project'), query = params.get('q');
   const groups = [
@@ -28,6 +28,7 @@ window.LegacyAutomation = function (bar) {
   const hidden = t => viewer !== 'owner' && (t.hidden || t.visibility === 'owner' || t.public === 'owner');
   const count = n => Number.isInteger(n) && n >= 0;
   const clock = () => !connection?.offline && connection?.now || new Date().toISOString();
+  const asOf = () => P.staleAt(connection) || clock();
   const bjDay = at => Math.floor((Date.parse(at) + 8 * 3600000) / 86400000);
   const raw = value => typeof value === 'string' ? value : U.fieldText(value, viewer);
   const time = (value, prefix = false) => {
@@ -37,10 +38,10 @@ window.LegacyAutomation = function (bar) {
     return esc([day, U.time(at)].filter(Boolean).join(' '));
   };
   function today(t) {
-    if (bjDay(t.runs_at) !== bjDay(clock()) || !count(t.today_runs) || !['ok', 'partial'].includes(t.today_runs_q)) return null;
+    if (bjDay(t.runs_at) !== bjDay(asOf()) || !count(t.today_runs) || !['ok', 'partial'].includes(t.today_runs_q)) return null;
     return t.today_runs || t.today_runs_q === 'ok' ? t.today_runs : null;
   }
-  const resultText = { ok: '跑完', failed: '没跑成', running: '正在跑', done: '已完成', unknown: '结果没读到' };
+  const resultText = { ok: '跑完', failed: '没跑成', running: '正在跑', done: '已完成', stopped: '已停止', unknown: '结果没读到' };
   const dot = (state, describe = false) => {
     const label = { warn: '要留意', disabled: '已停用', ...resultText }[state];
     return `<i class="automation-dot" data-result="${label ? esc(state) : 'unknown'}" ${describe ? `role="img" title="${label || resultText.unknown}" aria-label="${label || resultText.unknown}"` : 'aria-hidden="true"'}></i>`;
@@ -48,7 +49,7 @@ window.LegacyAutomation = function (bar) {
   const result = run => resultText[run?.result] || resultText.unknown;
   const nextAt = t => t.next_at ?? t.next;
   const nextTime = t => Date.parse(raw(nextAt(t)));
-  const future = t => !hidden(t) && nextTime(t) > Date.parse(clock());
+  const future = t => !hidden(t) && nextTime(t) > Date.parse(asOf());
   const scheduledAgain = t => t.enabled !== false && !['paused', 'disabled'].includes(t.state)
     && t.scheduled_again !== false && (future(t) || t.scheduled_again === true && raw(t.schedule) !== '单次运行');
   const missing = label => `<span class="automation-gap"><span class="live-unit">${label}</span><wbr><span class="live-unit">没读到</span></span>`;
@@ -88,7 +89,7 @@ window.LegacyAutomation = function (bar) {
   }
   function renderSummary(all, planned, known, waiting) {
     const activity = packet?.automation_activity, historical = activity?.recent;
-    const runs = Array.isArray(historical)
+    const runs = Array.isArray(historical) && (historical.length || activity.today_runs_q === 'ok')
       ? historical.filter(r => !hidden(r) && time(r.start || r.end)).map(run => ({ t: run, run }))
       : all.flatMap(t => hidden(t) ? [] : (t.recent || []).filter(r => time(r?.start || r?.end)).map(run => ({ t, run })));
     const display = runs.sort((a, b) => Date.parse(b.run.start || b.run.end) - Date.parse(a.run.start || a.run.end)).slice(0, 5);
@@ -108,10 +109,9 @@ window.LegacyAutomation = function (bar) {
       || known.reduce((total, g) => total + (g?.total ?? 0), 0) > all.length
       || reads.some((n, i) => n == null || all[i].today_runs_q === 'partial');
     const confirmed = reads.reduce((total, n) => total + (n ?? 0), 0);
-    const started = activity
-      ? today({ ...activity, runs_at: activity.at }) != null
-        ? `${activity.today_runs_q === 'partial' ? '至少 ' : ''}${activity.today_runs}` : null
-      : reads.some(count) && (!partial || confirmed > 0) ? `${partial ? '至少 ' : ''}${confirmed}` : null;
+    const activityCount = activity && today({ ...activity, runs_at: activity.at });
+    const started = activityCount != null ? `${activity.today_runs_q === 'partial' ? '至少 ' : ''}${activityCount}`
+      : confirmed > 0 ? `${partial || activity ? '至少 ' : ''}${confirmed}` : !activity && !partial && reads.some(count) ? '0' : null;
     const upcoming = planned.find(future);
     const quantity = g => count(g?.total) ? g.total : count(g?.known_total) && g.known_total > 0 ? `至少 ${g.known_total}` : null;
     const values = [quantity(known[0]), started, quantity(known[1]), upcoming ? next(upcoming) : null];
@@ -121,23 +121,25 @@ window.LegacyAutomation = function (bar) {
       const text = dated ? value.split(' ').map(part => `<span class="live-unit">${part}</span>`).join(' ') : value;
       return `<div><dt>${label}</dt><dd class="${value == null ? 'is-word' : dated ? 'is-dated' : ''}">${text ?? (waiting ? '正在读' : '未读到')}</dd></div>`;
     }).join(''));
-    const note = !display.length ? waiting ? '正在读' : '最近开工的时间和结果这次没读到。' : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';
+    const note = !display.length ? waiting ? '正在读' : activity?.today_runs_q === 'ok' && Array.isArray(historical) ? '最近没有开工记录。' : '最近开工的时间和结果这次没读到。'
+      : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';
     const readFrom = activity?.first_read_at, readTo = activity?.at;
     const readNote = time(readTo) && `开工回执读于 ${time(readFrom) && readFrom !== readTo ? `${time(readFrom)} 至 ` : ''}${time(readTo)}`;
     const summary = [note, readNote].filter(Boolean).join(' · ');
     U.html($('recent-note'), summary); $('recent-note').hidden = !summary;
   }
   function render() {
-    const waiting = packet?.q === 'warming' || !packet && ['idle', 'wait', 'slow'].includes(connection?.phase);
+    const old = P.staleAt(connection), waiting = packet?.q === 'warming' || !packet && (!connection || P.retrying(connection) || ['idle', 'wait', 'slow'].includes(connection.phase));
     const known = groups.map(({ id }) => packet?.groups?.find(g => g.id === id));
     const valid = known.every(Boolean);
     $('groups').dataset.audience = viewer;
-    const items = valid ? [...new Map([...(packet.items || []), ...known.flatMap(g => g.items || [])].map(t => [t.id, t])).values()] : [];
+    const items = [...new Map([...(packet?.items || []), ...known.flatMap(g => g?.items || [])].map(t => [t.id, t])).values()];
     const scope = items.filter(t => groups.some(g => g.id === t.automation_group) && (!project || t.project === project)
       && (!query || !hidden(t) && U.fieldText(t.display_name ?? t.name, viewer).toLowerCase().includes(query.toLowerCase())));
-    const issue = valid && (packet?.q === 'stale' || packet?.gray_reason === 'stale') ? '清单暂未更新' : '';
+    const rosterTime = time(shownAt || old);
+    const issue = valid && !rosterTime && (packet?.q === 'stale' || packet?.gray_reason === 'stale') ? '清单暂未更新' : '';
     const message = connection?.publicPaused || connection?.offline ? esc(connection.text)
-      : valid ? [issue, shownAt && `清单截至 ${time(shownAt)}`].filter(Boolean).join(' · ')
+      : old && rosterTime ? `${rosterTime} 的清单` : valid ? rosterTime ? `清单截至 ${rosterTime}` : issue
         : waiting ? '正在读' : 'AI 自动任务分组还没读到，等数据更新。';
     U.html($('notice'), message); $('notice').hidden = !message;
     const schedules = scope.filter(t => t.automation_group === 'ai-schedule');
@@ -168,7 +170,7 @@ window.LegacyAutomation = function (bar) {
     L.lightUp([$('groups')]);
   }
   const subscription = window.Live.watch('tasks', { scope: 'automation', project, q: query }, {
-    data(data, meta) { packet = data; shownAt = data?.source_at ?? data?.at ?? meta.at; viewer = meta.viewer?.kind || 'public'; render(); },
+    data(data, meta) { packet = data; shownAt = data?.roster_at ?? data?.source_at ?? data?.at ?? meta.at; viewer = meta.viewer?.kind || 'public'; render(); },
     link(state) { connection = state; bar?.set(state); L.offline(state.offline); render(); },
   });
   return () => { subscription.stop(); $('groups').replaceChildren(); };

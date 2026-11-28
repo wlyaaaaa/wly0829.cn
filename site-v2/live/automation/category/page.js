@@ -19,7 +19,7 @@
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   // 最近几轮：先摆 5 轮，“再看 N 轮”每次多摆 20 轮，读到的不够就往后翻一页（长列表全站一个规则，本人 11-26 02:12）
   const FIRST = 5, STEP = 20;
-  let shown = FIRST, more = [], cursor, paging = false, pageFailed = false;
+  let shown = FIRST, more = [], cursor, paging = false, pageFailed = false, pageRetry;
   const F = (v, name) => T.field(v, viewer, name);
   const said = v => R.asOwner(v, viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/u, '')
     .replace(/^原因[：:]\s*/u, '');
@@ -118,7 +118,7 @@
   // 派活程序超过两轮半没转：下次时间算不出来（和总表页头那句警告同一个判断）
   const stalled = d => {
     const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
-    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && (T.stamp(P.staleAt(state)) ?? Date.now()) - tick > 2.5 * x.interval_seconds * 1000;
   };
   function nowText(d, c, rows) {
     const p = pauseOf(d), pr = c.problem, st = c.state || {}, m = mode(c), live = rows.find(r => r.status === 'running');
@@ -140,7 +140,7 @@
     const last = rows.find(r => r.status !== 'running'), lt = last && tag(last);
     const lastAt = last ? last.finishedAt || last.lastAt : c.last_result?.at;
     const lastText = lastAt ? `上次 ${esc(when(lastAt))}${lt ? ` <span class="ak-dot" data-tone="${lt.tone}"></span><b data-tone="${lt.tone}">${lt.text}</b>` : ''}`
-      : '<span class="tp-muted">运行记录这次没读到</span>';
+      : `<span class="tp-muted">${runs?.data?.total === 0 ? '最近没有运行记录' : '运行记录这次没读到'}</span>`;
     const [tone, now] = nowText(d, c, rows);
     const title = F(cn(c.title), '类别');
     const status = title ? now.split(title).map(wordsIn).join(`<span class="au-nobr">${title}</span>`) : wordsIn(now);
@@ -165,7 +165,7 @@
     const repair = id === 'auto-repair';
     const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p>${tail ? `<p class="ak-stat__tail">${tail}</p>` : ''}</div>`;
     const basis = s.basis ? U.fieldText(s.basis.text, viewer) : '';
-    return `<section class="ak-stats">${cell(late ? `${esc(T.day(w.from))} 起` : '近 7 天', w.runs, '轮', known(w.average_seconds) ? `平均每轮 ${minutes(w.average_seconds)}` : '每轮多久没记下', 'plain')}
+    return `<section class="ak-stats">${cell(late ? `${esc(T.day(w.from))} 起` : '近 7 天', w.runs, '轮', known(w.average_seconds) ? `平均每轮 ${minutes(w.average_seconds)}` : w.runs > 0 ? '每轮多久没记下' : '', 'plain')}
       ${cell('做成', w.completed, '', repair ? '修好或核实已恢复' : '跑完、交出了结果', 'ok')}
       ${cell('没做成', w.incomplete, '', '报错、超时或没交回结论', 'bad')}
       ${cell('等下次检查', w.waiting, '', '', 'plain')}</section>
@@ -179,12 +179,14 @@
     const other = known(info.total) && ai != null ? info.total - ai - checks : 0;
     const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
-    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
-    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
+    const old = P.staleAt(runs) || (pageRetry ? runs?.meta?.at : '');
+    const hint = [total, when(old) && `${esc(when(old))} 的数`].filter(Boolean).join(' · ');
+    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${hint ? `<small>${hint}</small>` : ''}</div>`;
+    if (!runs?.data && (P.retrying(runs) || !runs || ['idle', 'wait', 'slow'].includes(runs.phase))) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
     if (!rows.length) {
       const next = catNext();
       const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
-      const empty = `运行记录这次没读到${nextText ? `，${nextText}` : ''}。`;
+      const empty = `${info.total === 0 ? '最近没有运行记录' : '运行记录这次没读到'}${nextText ? `，${nextText}` : ''}。`;
       return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '每一轮的记录这次没读到。'}</p></section>`;
     }
     const limit = !info.more && !U.shouldFold(rows.length - shown) ? rows.length : shown;
@@ -323,16 +325,16 @@
     const c = catOf(d);
     if (!c) {
       const phase = state?.phase;
-      const note = phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
+      const note = !d && P.retrying(state) ? '正在读这一类自动任务…' : phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
         : phase === 'idle' || phase === 'wait' ? '正在读这一类自动任务…' : d ? '这一类自动任务没读到。' : '';
       T.paint(page.root, note ? `<p class="tp-placeholder" role="status">${note}</p>` : T.placeholder(state, '这一类自动任务'));
       page.tick.set([], { off: true });
       return;
     }
     document.title = `${U.fieldText(cn(c.title), viewer)} · 自动任务 · 实况`;
-    const info = allRuns();
+    const info = allRuns(), old = P.staleAt(state);
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><strong aria-current="page">${F(cn(c.title), '类别')}</strong></nav>
-      ${T.stateNote(state)}${hero(d, c, info.rows)}${stats(c)}
+      ${T.stateNote(state)}${when(old) ? `<p class="tp-note" data-tone="off">${esc(when(old))} 的数。</p>` : ''}${hero(d, c, info.rows)}${stats(c)}
       <div class="ak-grid">${recent(info.rows, info)}<div class="ak-side">${upcoming(d, c)}${about(d, c)}</div></div>`);
     page.tick.set(R.ticker(d, info.rows, viewer), { off: state.offline });
   }
@@ -345,12 +347,15 @@
     const next = cursor !== undefined ? cursor : runs?.data?.next;
     if (next == null || paging) return;
     const first = runPageKey(runs);
-    paging = true; pageFailed = false; draw();
+    paging = true; pageFailed = false; pageRetry = null; draw();
     const s = await Live.get('automation/runs', { category: id, cursor: next }).catch(() => null);
     paging = false;
     if (first !== runPageKey(runs)) { draw(); return; }
     if (Array.isArray(s?.data?.items) && s.data.next !== next) {
       more.push(...s.data.items); cursor = s.data.next ?? null; shown += STEP;
+    } else if (P.retrying(s) && s.again) {
+      pageRetry = s;
+      s.again.then(() => { if (pageRetry === s) loadMore(); });
     } else pageFailed = true;
     draw();
   }
@@ -359,7 +364,7 @@
     ask: () => `请看实况自动任务里“${catOf(state?.data)?.how_to?.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
     onState(next) { state = next; schedule(); } });
   Live.watch('automation/runs', { category: id }, { phase(st) {
-    if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; }
+    if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; pageRetry = null; }
     runs = st; schedule();
   } });
   if (id === 'excerpt') Live.watch('automation/runs', { category: 'excerpt', date: today() }, { phase(st) { excerptToday = st; schedule(); } });

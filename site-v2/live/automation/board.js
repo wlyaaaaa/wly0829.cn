@@ -144,6 +144,7 @@
         while (job.next != null && !seen.has(String(job.next))) {
           seen.add(String(job.next));
           const s = await Live.get('automation/runs', { ...query, cursor: job.next }).catch(() => null);
+          job.retrying = !Array.isArray(s?.data?.items) && P.retrying(s);
           if (backPages.get(id) !== job || !Array.isArray(s?.data?.items)) break;
           job.rows.push(...s.data.items);
           job.next = s.data.next;
@@ -319,7 +320,7 @@
   // 各类下次时间沿用派活间隔判断。
   const stalled = d => {
     const x = d?.dispatch, tick = T.stamp(x?.last_tick_at || x?.heartbeat_at);
-    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && Date.now() - tick > 2.5 * x.interval_seconds * 1000;
+    return known(x?.interval_seconds) && x.interval_seconds > 0 && tick != null && (T.stamp(P.staleAt(state)) ?? Date.now()) - tick > 2.5 * x.interval_seconds * 1000;
   };
   // —— 页头右边：派活程序几点转过一圈 ——
   function dispatchText(d) {
@@ -328,10 +329,10 @@
     const interval = x.interval_seconds;
     const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
-    const pass = x.active_pass;
+    const pass = x.active_pass, now = T.stamp(P.staleAt(state)) ?? Date.now();
     if (pass && T.stamp(pass.started_at) != null) {
       const start = esc(when(pass.started_at)), progress = tick || pass.started_at;
-      const deadline = T.stamp(pass.deadline_at), now = Date.now();
+      const deadline = T.stamp(pass.deadline_at);
       if (deadline != null && now >= deadline) {
         const elapsed = Math.max(0, Math.floor((now - T.stamp(progress)) / 60000));
         return `<span class="au-warn">派活程序这一轮 ${start} 开始，已 ${elapsed} 分钟没有新进展</span>`;
@@ -339,7 +340,7 @@
       return `派活程序这一轮 ${start} 开始，还在跑（最后一次进展 ${esc(when(progress))}）`;
     }
     if (!T.stamp(tick)) return '<span class="au-warn"><span class="au-nobr">派活程序</span><wbr><span class="au-nobr">上次几点转的，</span><wbr><span class="au-nobr">这次没读到</span></span>';
-    const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
+    const late = every && now - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
     return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
       : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，多久转一圈没读到'}`;
   }
@@ -396,15 +397,27 @@
     if (filter.view === 'problems') return sec('trouble', '出毛病的', v.problems.length, problemList(d, v));
     const running = filter.view === 'running', status = running ? 'running' : 'finished';
     const affected = set => v.board ? set.has(status) : set.size > 0;
-    const cards = running ? v.live : v.done, reading = affected(v.waiting) || (!running && v.paging);
+    const cards = running ? v.live : v.done;
+    const sources = v.board ? [[status, board[status]]] : board ? Object.entries(board) : [...pages];
+    const loading = sources.some(([, s]) => !Array.isArray(s?.data?.items) && P.retrying(s));
+    const reading = affected(v.waiting) || (!running && v.paging) || loading && !cards.length;
     const missing = affected(v.missing) || (!running && v.pageFailed);
-    const legacy = v.legacy && cards.length
+    const stamps = [...new Set(sources.filter(([, st]) => Array.isArray(st?.data?.items))
+      .map(([key, st]) => P.staleAt(st) || (backPages.get(key)?.retrying ? st.meta?.at : '')).filter(T.stamp))];
+    if (!stamps.length && loading && v.legacy && cards.length && T.stamp(state?.meta?.at || d.at)) stamps.push(state?.meta?.at || d.at);
+    const datedRead = stamps.length ? `<p class="tp-note" data-tone="off">${stamps.length > 1 ? '其中有 ' : ''}${stamps.map(at => esc(when(at))).join('、')} 的数。</p>` : '';
+    const hardMissing = sources.some(([key, st]) => {
+      const job = backPages.get(key);
+      if (!Array.isArray(st?.data?.items)) return loaded(st) && !P.retrying(st);
+      return !running && st.data.next != null && !job?.done && !job?.busy && !job?.retrying;
+    });
+    const legacy = v.legacy && cards.length && hardMissing
       ? `<p class="tp-note" data-tone="off">每一轮的记录这次没读到：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
-    const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
+    const incomplete = hardMissing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
     if (filter.view === 'running') {
       const next = shownCats(d).filter(c => c.next_at).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
       const idle = `<p class="au-empty">这会儿没在跑${next ? ` · 下一个：${esc(when(next.next_at))} ${catLabel(d, next.id)}` : ''}</p>`;
-      return (legacy || incomplete) + sec('running', '进行中', v.counts.running, v.live.length ? v.live.map(c => card(d, v, c)).join('') : reading ? waiting : missing ? '' : idle);
+      return datedRead + (legacy || incomplete) + sec('running', '进行中', v.counts.running, v.live.length ? v.live.map(c => card(d, v, c)).join('') : reading ? waiting : missing ? '' : idle);
     }
     const day = filter.date ? (dayOf(filter.date) === today() ? '今天' : `${esc(dayOf(filter.date).slice(5))} 那天`) : '';
     // 这一节的名字和按钮同一个叫法“近 72 小时跑完的”（第一屏图上的叫法；复查 11-26：按钮和标题叫法要统一）。“跑完”指这一轮结束了，
@@ -425,7 +438,7 @@
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
     const content = v.done.length ? kindsNote + rounds + v.done.slice(0, limit).map(c => card(d, v, c)).join('') + more : '';
     const empty = !missing && !content ? `<p class="au-empty">${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}</p>` : '';
-    return (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading ? waiting : empty),
+    return datedRead + (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading && !content ? waiting : empty),
       filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
   }
   // 更早的：近 30 天每天跑了几轮（总表里各类的 30 天成坏加起来，摘一句不算），点一天只看那天
@@ -704,7 +717,7 @@
       const mine = rows.filter(r => r.producer === h).sort((a, b) => T.stamp(b.next_at || b.at) - T.stamp(a.next_at || a.at));
       const missing = gaps.filter(g => g.includes(h));
       const notes = missing.map(g => `<small>${esc(g)}</small>`).join('');
-      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '这次没读到' : '没有';
+      const content = mine.length ? `<ul class="au-recent">${mine.map(item).join('')}</ul>` : missing.length ? '' : '没有';
       return `<tr><th scope="row">${esc(h)}${mine.length ? `<small>${int(mine.length)} 个</small>` : ''}</th><td>${content}${notes}</td></tr>`;
     }).join('');
     const rest = gaps.filter(g => !hosts.some(h => g.includes(h))).map(g => `<p class="tp-small">${esc(g)}</p>`).join('');
@@ -717,7 +730,8 @@
 
   let drawn = false;
   function heading(d) {
-    const side = d ? [d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
+    const old = P.staleAt(state);
+    const side = d ? [old ? `${esc(when(old))} 的数` : d.at && `截至 ${esc(when(d.at))}`, dispatchText(d)].filter(Boolean).join(' · ') : '';
     return `<div class="tp-head"><div><h1>自动任务</h1><p>后台 AI 替${you()}干的${kinds(d)}活。在干什么、刚干完什么、几点跑、用谁、开没开。</p>
       <p class="au-crosslinks">也看：${link('/live/chats/', 'AI 对话 ›')} · ${link('/live/agents/', '智能体 ›')}</p></div>
       ${side ? `<p class="tp-head__side"><span>${side}</span></p>` : ''}</div>`;
@@ -726,7 +740,8 @@
     const d = state?.data;
     viewer = T.viewerOf(state);
     if (!d) {
-      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(state, '自动任务'));
+      const initial = P.retrying(state) ? undefined : state;
+      T.paint(page.root, heading(null) + buttons({}, { counts: {} }) + T.placeholder(initial, '自动任务'));
       page.tick.set([], { off: true });
       return;
     }
