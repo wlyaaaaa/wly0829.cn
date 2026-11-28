@@ -42,8 +42,8 @@
   let doneShown = STEP;
   const catPath = id => T.path('/live/automation/category/', { type: id }), howPath = id => T.path('/live/automation/how/', { type: id });
   const F = (v, name) => T.field(v, viewer, name);
-  // 类名是后台给的，“替你看新消息”在公开版改成“替本人”
-  const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
+  const cn = (v, id) => id === 'message-review' ? R.catName(id, viewer)
+    : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
   // 总表只列后台仍在提供的现役类别。
@@ -242,7 +242,7 @@
   }
 
   // —— 卡片 ——
-  const catLabel = (d, id) => F(cn(list(d.categories).find(c => c.id === id)?.title || R.catName(id, viewer)), '类别');
+  const catLabel = (d, id) => F(cn(list(d.categories).find(c => c.id === id)?.title || R.catName(id, viewer), id), '类别');
   const range = r => {
     const a = r.startedAt || r.queuedAt, b = r.finishedAt;
     if (!T.stamp(a)) return b ? esc(when(b)) : '';
@@ -503,7 +503,7 @@
   // 接上以后读 feed 里 kind=resumed 的那行（provider＋started_at 对上同一段等待），写“几点接上”，24 小时后不再出
   const checks = n => known(n) ? ` · 期间看了 ${int(n)} 次` : '';
   function pauses(d) {
-    const names = ids => list(d.categories).filter(c => list(ids).includes(c.id)).map(c => U.fieldText(cn(c.title), viewer)).join('、');
+    const names = ids => list(d.categories).filter(c => list(ids).includes(c.id)).map(c => U.fieldText(cn(c.title, c.id), viewer)).join('、');
     const now = list(d.provider_pauses).filter(p => list(p.categories).length).map(p =>
       `<p class="tp-note au-pause" data-tone="warn">${esc(names(p.categories))}停着：${pauseText(p)}${checks(p.check_count)}</p>`);
     const waiting = new Set(list(d.provider_pauses).map(p => `${p.provider}|${p.started_at}`));
@@ -550,7 +550,7 @@
     if (offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
     const fb = noteFor(c.id) || '<small role="status"></small>';
     // 访客版照样摆同一套开关和“暂停到…”（M716，定稿：公开版保留已定按钮）；点了由现成的可信设备弹框拦下，只提示本人才能操作，什么都不改
-    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
+    return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title, c.id), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
       <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
   }
   // 件数与账本“约好再查的”一致；已经在办的仍是未了结，但不参与下一件的排期。
@@ -647,9 +647,9 @@
       <tbody>${cats.map(c => {
         const g = c.how_to || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
-          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
+          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
-          <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title), viewer))}这一类">›</a></td></tr>`;
+          <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title, c.id), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>
       <p class="tp-small au-foot">点一行看这一类；不叫 AI 的备份、同步、守护在 ${link('/live/tasks/', '计划任务 ›')}；一件件修了什么、约了什么在 ${link('/live/ledger/', 'AI 自动任务账本 ›')}。摘一句每答完一次就跑一下、单独记数，不算在上面“进行中”“近 72 小时跑完的”里。</p>${scheduled(d)}</section>`;
   }

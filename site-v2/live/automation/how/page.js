@@ -16,7 +16,8 @@
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   const F = (v, name) => T.field(v, viewer, name);
-  const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
+  const cn = v => id === 'message-review' ? R.catName(id, viewer)
+    : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const pausedText = v => {
     const t = typeof v === 'number' ? v * 1000 : T.stamp(v);
     if (!Number.isFinite(t)) return '暂停中';

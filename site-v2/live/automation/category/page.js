@@ -22,7 +22,8 @@
   const said = v => R.asOwner(v, viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/u, '')
     .replace(/^原因[：:]\s*/u, '');
   const resultWords = v => said(v).replace(/^这(?:一轮|次)\s*/u, '').replace(/[！？；!?]$/u, '');
-  const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
+  const cn = v => id === 'message-review' ? R.catName(id, viewer)
+    : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
   const catOf = d => list(d?.categories).find(c => c.id === id);
