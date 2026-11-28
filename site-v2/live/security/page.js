@@ -253,18 +253,30 @@
       U.html(el, `${marker ? `<p class="vz-note">${marker}</p>` : ''}${shown.length ? `<dl class="security-protection${compact ? ' security-protection--summary' : ''}">${shown.map(([k, v]) => `<div><dt>${U.esc(k)}</dt><dd>${compact && k === '病毒库更新' && knownSignature ? `已更新<small>${v}</small>` : v}</dd></div>`).join('')}</dl>` : `<p class="vz-note">${missing()}</p>`}${older ? `<p class="vz-note">${U.esc(older)}</p>` : ''}`);
     }); } };
   }
+  const blockCutoff = block => block?.window?.to ?? block?.to ?? block?.at;
   function group(key, name, line, figures, present, rest) {
     const keys = key === 'impersonation' ? [key, 'audits.impersonation'] : key === 'audit' ? [key, 'audits'] : [key];
     const given = keys.map(key => data?.groups?.find(g => (g.key ?? g.id) === key)).find(Boolean);
+    const raw = data?.[key], block = data?.blocks?.[key] || raw;
+    const sampledAt = key === 'lifecycle' ? (Object.hasOwn(block ?? {}, 'source_at') ? block.source_at : blockCutoff(block))
+      : block?.window?.to ?? block?.source_at ?? block?.at;
+    const reading = ['protection', 'lifecycle'].includes(key) && Date.parse(sampledAt) === Date.parse(given?.at) && V.blockState(block, U.offline?.(), raw)?.text;
+    const sectionReason = reading && lastRead({ ...given, key }, data).reason;
+    const shown = key === 'protection' && reading ? U.status(given).note.split(' · ') : [];
+    const cutoff = key === 'lifecycle' && reading ? reading.replace(/^上次记录 /, '数据截至 ') : reading;
+    const readAt = blockCutoff(data?.blocks?.[key] || given) ?? given?.at;
+    const sameRead = key !== 'lifecycle' || Date.parse(sampledAt) === Date.parse(readAt);
+    const repeated = U.isCutoffNote(cutoff) && (shown.some(text => U.sameCutoffNote(text, cutoff)) ||
+      sameRead && sectionReason?.startsWith(`上次读到 ${stamp(sampledAt)}`) && [U.time(sampledAt), stamp(sampledAt)].some(time => U.sameCutoffNote(cutoff, `数据截至 ${time}`)));
     const pictures = { protection: '/live/img/card-security-protect.webp', impersonation: '/live/img/grp-cpu.webp', lifecycle: '/live/img/grp-network.webp', audit: '/live/img/card-security-audit.webp' };   // 图址写全，构建才认得出、换成云端地址
-    return { ...given, key, name, pic: pictures[key], line: present ? line : '', figures: figures.some((f) => f.value != null || f.line) ? figures : [], palette: ['teal', 'violet'], reason: U.sp(given?.reason || given?.why), grafana: data?.grafana?.href, ...rest };
+    return { ...given, key, name, pic: pictures[key], line: present ? line : '', figures: figures.some((f) => f.value != null || f.line) ? figures : [], palette: ['teal', 'violet'], reason: U.sp(given?.reason || given?.why), sourceNotes: !repeated, grafana: data?.grafana?.href, ...rest };
   }
   // 卡里还画着上一轮的读数时，卡头不写“没有记录”：写上次读到是几点、多久读一次，和图上的“最近实测”说同一个时刻（M451）
   const drawn = { lifecycle: d => d?.lifecycle?.series?.length > 0, audits: d => d?.audits != null, 'audits.impersonation': d => d?.audits?.impersonation != null };
   function lastRead(g, d) {
     const reason = U.sp(g.reason || g.why);
     if (!drawn[g.key]?.(d) || !/^(?:没有记录|还没读到|暂时读不到)$/.test(reason)) return g;
-    const block = d?.blocks?.[g.key] || g, at = block.window?.to ?? block.to ?? block.at ?? g.at, every = block.refresh_seconds ?? g.refresh_seconds;
+    const block = d?.blocks?.[g.key] || g, at = blockCutoff(block) ?? g.at, every = block.refresh_seconds ?? g.refresh_seconds;
     const cadence = every >= 3600 && every % 3600 === 0 ? `每${every === 3600 ? '' : ` ${every / 3600} 个`}小时读一次` : every > 0 ? `每 ${fmt(every, '秒')}读一次` : '';
     return at ? { ...g, reason: [`上次读到 ${stamp(at)}`, cadence].filter(Boolean).join(' · ') } : g;
   }

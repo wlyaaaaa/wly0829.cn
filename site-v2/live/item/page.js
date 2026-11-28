@@ -456,7 +456,7 @@
         return;
       }
       bar?.set(s); L.offline(s.offline);
-      U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
+
       if (s.meta?.status === 403) {
         viewer = s.viewer?.kind || 'public';
         stopArchive(); if (record) clearRecord();
