@@ -62,9 +62,7 @@ h1 .task-provider { margin-left: .6em; }
 .task-week__key { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px 12px; color: #505867; font-size: 12px; }
 .task-week__key > span { display: inline-flex; align-items: center; gap: 4px; }
 .task-week__key .task-mark { width: 10px; height: 10px; border-radius: 2px; }
-.task-dot { display: inline-block; width: 9px; height: 9px; flex: none; border: 1px solid #8a94a1; border-radius: 50%; }
-.task-dot[data-state="running"], .task-dot[data-state="accepted"] { background: #5c7e9b; border-color: transparent; }
-.task-result { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.task-dot[data-state="accepted"] { background: #5c7e9b; border-color: transparent; }
 .task-result[data-state="failed"] { color: #a83948; }
 .task-result[data-state="ok"], .task-result[data-state="done"] { color: #187041; }
 /* 部分完成的那一轮和那一天：沿用计划任务列表“要留意”的黄点和字色（M381、M676） */

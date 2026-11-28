@@ -267,7 +267,7 @@
     if (!rows) return '';
     return `<details class="dossier-card dossier-card--raw glass" id="raw" data-fold-anchor${$('raw')?.open ? ' open' : ''}>
       <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录
-        <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
+        <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-closed">展开看原始记录全文</span><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
       <dl class="rec-facts">${rows}</dl></details>`;
   }
 

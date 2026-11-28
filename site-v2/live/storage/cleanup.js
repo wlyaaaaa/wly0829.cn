@@ -202,13 +202,14 @@
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
       : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>近 7 天一直是 0${hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''}</span></div></li>`;
     const minutes = num(g.last?.duration_seconds) ?? (g.last && at(g.last.started_at) ? (at(g.last.finished_at) - at(g.last.started_at)) / 1000 : null);
-    const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} 跑完${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
+    const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} ${g.last.result === 'ok' ? '跑完' : '结束'}${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
-    const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
+    const runNote = g.running ? `<span class="task-result" data-state="running" data-result="running"><i class="task-dot" data-state="running" aria-hidden="true"></i>正在跑</span> · ${esc(hm(g.running.started_at))} 开始` : esc(lastNote);
+    const nextNote = [runNote, ...[
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,
-      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc).join('<br>');
+      !g.running && g.last && g.hours && `超过 ${lateHours(g.hours)} 小时没跑完一轮就标“没按时跑”`].filter(Boolean).map(esc)].filter(Boolean).join('<br>');
     const third = `<li${g.estimated || !g.next ? ' data-tone="gray"' : ''}>${ICON.clock}<div><b>${esc(nextText)}</b>${g.next ? '' : '<span class="cl-dash">—</span>'}${nextNote ? `<span>${nextNote}</span>` : ''}</div></li>`;
     // 按需更新快核（M928）核法：E:/PCConfig/tools/auto_cleanup_conversations.py 的 preserve_quotes，现 Codex、Claude 清前确认原话已存，缺时补存并回读，通过才继续；变了改下方提示
     const kept = num(g.last?.skipped_unsaved_conversations);

@@ -218,7 +218,7 @@
     const plan = kind === 'plan', exact = s.exact === true, span = exact && s.covered !== true, from = time(s.from);
     const n = v => Number.isInteger(v) && v >= 0 ? v : 0, total = n(s.total), ok = n(s.ok), failed = n(s.failed), running = n(s.running);
     const { warn, unread, mixed } = partialRuns(d, s, runs, n(s.unknown));
-    const why = v => v || !plan ? '' : running ? '还在跑' : total ? '已读部分没有' : '';
+    const why = v => !v && plan && total ? '已读部分没有' : '';
     const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果${mixed ? '或部分完成' : ''}`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const totalRow = ['total', `${span && valid(from) ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(s.total, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(s.ok, s.success_exact === true), '', why(ok)];
@@ -258,7 +258,7 @@
     const readsToday = lastSample <= now && dayStart(lastSample) === today && ['ok', 'partial'].includes(d.today_runs_q);
     const todayCount = readsToday ? count(d.today_runs, d.today_runs_q === 'ok')
       : count(recent.filter(r => r.start >= today).length, covered);
-    const plan = kind === 'plan', why = n => n || !plan ? '' : running ? '还在跑' : counted.length ? '已读部分没有' : '';
+    const plan = kind === 'plan', why = n => !n && plan && counted.length ? '已读部分没有' : '';
     const besides = plan && exact ? [warn && `${warn} 次部分完成`, unread && `${unread} 次没记到结果`, running && `${running} 次还在跑`].filter(Boolean).join('，') : '';
     const total = ['total', `${span ? `${stamp(from)} 起` : '近 7 天'}${besides ? `<small class="task-stat__note">${besides}</small>` : ''}`, count(counted.length, exact)];
     const success = ['success', kind === 'pickup' ? '处理完' : kind === 'schedule' ? '完成' : '成功', count(good.length, exact && (span || knownOutcomes)), '', why(good.length)];
