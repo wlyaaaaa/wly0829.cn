@@ -661,7 +661,7 @@
     const watching = guard?.state === 'watching' && guard.watching === true;
     row.toggleAttribute('data-watching', watching);
     if (!guard) {
-      U.html(row, '内存守护这次没读到', false);
+      U.html(row, '内存守护状态暂不可用', false);
       return;
     }
     const labels = {
