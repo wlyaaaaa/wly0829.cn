@@ -217,7 +217,7 @@
         const what = p.text && p.title && !p.text.includes(p.title)
           ? `<span${p.title === '摘一句' ? '' : ' class="b6-problem__kind"'}>${field(p.raw.title)}&nbsp;· </span>${detailHtml}` : detailHtml || field(p.raw.title);
         const who = esc(handled(p)) + (p.round && !/轮/.test(p.handler) ? `&nbsp;· <span class="live-unit">第 ${p.round} 轮</span>` : '');
-        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `<span class="b6-problem__label">出毛病的：</span>${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${offline ? '当时：' : ''}${who}</span></p>`;
+        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `<span class="b6-problem__label">出毛病的：</span>${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${offline ? '<span class="live-unit">当时：</span>' : ''}${who}</span></p>`;
       };
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');

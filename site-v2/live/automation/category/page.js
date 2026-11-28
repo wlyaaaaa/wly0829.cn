@@ -10,10 +10,11 @@
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/' + location.hash); return; }
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
-  const wordsIn = html => window.AutomationPresentation.keepWords(R.asOwner(html, viewer));
+  const P = window.AutomationPresentation, notices = P.settingNotices();
+  const wordsIn = html => P.keepWords(R.asOwner(html, viewer));
   const { list, known, int, link, when } = T;
   const heroArt = document.getElementById('ak-hero-art').innerHTML;
-  let state, viewer = 'public', busy = false, feedback = null, pausing = null, runs = null, excerptToday;
+  let state, viewer = 'public', busy = false, failedPause = null, pausing = null, runs = null, excerptToday;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
   // 最近几轮：先摆 5 轮，“再看 N 轮”每次多摆 20 轮，读到的不够就往后翻一页（长列表全站一个规则，本人 11-26 02:12）
@@ -220,7 +221,7 @@
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
-      return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}${noteFor(sub.id)}</span>`;
+      return `<span class="ak-sub" data-mode="${esc(m || '')}"><b>${F(sub.title, '小类')} · ${m === 'on' ? '开' : m === 'off' ? '关' : m === 'paused' ? '暂停' : '没读到'}</b>${off ? '' : `<button type="button" class="au-mini" data-toggle="${esc(sub.id)}" data-mode="${esc(m)}"${waitingOn(sub.id)}${ownerOnly('开关自动修理小类')}>${m === 'on' ? '关掉' : '打开'}</button>`}</span>`;
     }).join('')}</div>`]);
     if (id === 'translator' && list(c.projects).length) rows.push(['各工程', `<ul class="ak-list">${list(c.projects).map(p => `<li>${F(p.name, '工程')}：${[
       known(p.version) ? `第 ${int(p.version)} 版` : '版本没读到', when(p.published_at) ? esc(when(p.published_at)) : '发布时间没读到',
@@ -238,24 +239,14 @@
   // —— 开关和暂停：照自动任务页那份就地写一份一样的 ——
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
   const isoOf = v => typeof v === 'number' ? new Date(v * 1000).toISOString() : v;
-  const rowOf = x => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === x);
-  const noteFor = x => {
-    if (feedback?.id !== x) return '';
-    let { text, tone = '' } = feedback;
-    if (feedback.want && feedback.reread) {
-      const s = rowOf(x)?.setting || {}, m = s.mode, want = feedback.want, until = isoOf(s.until_at);
-      const same = m === want.mode && (!want.until || T.stamp(until) === T.stamp(want.until));
-      [text, tone] = same ? ['已保存', 'ok'] : [`最新读数还是${m === 'paused' ? `暂停到 ${when(until)}` : { on: '开着', off: '关着' }[m] || '没读到'}`, ''];
-    }
-    return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
-  };
-  const waitingOn = x => feedback?.id === x && feedback.pending ? ' aria-busy="true"' : '';
+  const rowOf = (x, data = state?.data) => list(data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === x);
+  const waitingOn = x => notices.waiting(x) ? ' aria-busy="true"' : '';
   function switchCell(c) {
     const m = mode(c), until = c.setting?.until_at, paused = esc(pausedText(until) || '暂停中');
     const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? paused : '没读到';
     if (state?.offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
-      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? paused : '暂停到…'}</button>${noteFor(c.id) || '<small role="status"></small>'}`;
+      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? paused : '暂停到…'}</button>`;
   }
   async function save(x, value) {
     if (busy) return null;
@@ -271,22 +262,22 @@
   const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: isoOf(cur.until_at) } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去，滑完再整块重画；没存上的留在原档写原因
   async function saved(x, reply, want) {
-    feedback = reply.status === 'saved' ? { id: x, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id: x, text: reply.message || '已撤' }
-      : { id: x, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad', want: reply.status === 'unknown' ? want : undefined };
+    const update = notices.finish(reply.status === 'saved' ? 'ok' : 'fail',
+      reply.error === 'cockpit_owner_required' ? '' : reply.status === 'saved' ? '已保存'
+        : reply.status === 'retired' ? reply.message || '已撤' : failText(reply));
     const row = rowOf(x);
     if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
     const el = page.root.querySelector(`.au-switch[data-toggle="${CSS.escape(x)}"]`), m = row && mode(row);
     if (el && m && el.dataset.mode !== m) {
       el.dataset.mode = m; el.setAttribute('aria-checked', String(m === 'on')); el.removeAttribute('aria-busy');
       el.querySelector('span').textContent = m === 'on' ? '开' : '关';
-      const note = el.parentElement.querySelector('small[role="status"]');
-      if (note) { note.textContent = feedback.text; note.dataset.tone = feedback.tone || ''; }
       await new Promise(r => setTimeout(r, 320));
     }
     draw();
-    const fb = feedback;
     Live.get('automation', {}).then(read => {
-      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+      if (reply.status === 'unknown' && want && read.data && read.meta.status >= 200 && read.meta.status < 400) {
+        P.settingReadback(update, rowOf(x, read.data)?.setting, want, when);
+      }
     });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
@@ -314,13 +305,12 @@
     const original = form.dataset.originalUntil;
     const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
-    result.textContent = '正在保存…';
-    feedback = { id: x, text: '正在保存…', pending: true };
+    dialog.close();
+    notices.start(x);
     draw();
     const reply = await save(x, { mode: 'paused', until_at: until });
     if (!reply) return;
-    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
-    else result.textContent = failText(reply);
+    failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id: x, until };
     saved(x, reply, { mode: 'paused', until });
   });
 
@@ -379,17 +369,21 @@
     if (toggle) {
       const x = toggle.dataset.toggle, next = toggle.dataset.mode === 'on' ? 'off' : 'on';
       if (busy) return;
-      feedback = { id: x, text: '正在保存…', pending: true };
+      notices.start(x);
       T.keep(page.root, `[data-toggle="${CSS.escape(x)}"]`, draw);
       saved(x, await save(x, { mode: next }) || { status: 'unknown' }, { mode: next });
       return;
     }
     if (pause) {
+      if (busy) return;
+      notices.clear();
+      busy = true;
       const access = await Live.automationSetting({ operation: 'access' });
-      if (access.status === 'unknown') { feedback = { id: pause.dataset.pause, text: '电脑没回话，再点一次' }; draw(); return; }
+      busy = false;
+      if (access.status === 'unknown') { notices.finish('fail', '电脑没回话，再点一次'); return; }
       if (access.status !== 'pass') { saved(pause.dataset.pause, access); return; }
       pausing = pause.dataset.pause;
-      fillWhen(rowOf(pausing)?.setting?.until_at);
+      fillWhen(failedPause?.id === pausing ? failedPause.until : rowOf(pausing)?.setting?.until_at);
       form.querySelector('[data-result]').textContent = '';
       dialog.showModal();
     }

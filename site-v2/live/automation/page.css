@@ -259,7 +259,6 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-type .aw-type__state.is-missing { font-weight: 400; color: var(--muted); }
 .aw-type .aw-type__model, .aw-type .aw-readonly { margin-top: 2px; font-size: 13.5px; color: var(--muted); }
 .aw-type .aw-switch { position: absolute; right: 12px; top: 13px; z-index: 2; padding: 4px; background: transparent; border: 0; }
-.aw-type .aw-update { position: relative; z-index: 2; }
 
 /* —— 某一类页 —— */
 .aw-type-hero { grid-template-columns: minmax(0, .3fr) minmax(0, 1fr); align-items: start; }
@@ -384,7 +383,6 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-owner__main > p { margin-top: 4px !important; color: var(--ink-soft); }
 .aw-foot-link { display: flex; justify-content: flex-end; }
 .aw-foot-link a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 4px; color: #00813f; font-size: 17px; font-weight: 650; }
-.aw .aw-update { margin: 5px 0; font-size: 14px; }
 .aw-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .aw-dialog { background: #faf8fc; width: 420px; max-width: calc(100% - 32px); padding: 22px 26px; color: var(--ink); }
 .aw-dialog::backdrop { background: #20202638; backdrop-filter: blur(2px); }

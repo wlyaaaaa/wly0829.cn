@@ -36,13 +36,14 @@
   }
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, dec, link, when, big, clock } = T;
-  let state, viewer = 'public', busy = false, feedback = null, landed = false, pausing = null, olderOpen = false;
+  let state, viewer = 'public', busy = false, failedPause = null, landed = false, pausing = null, olderOpen = false;
   // 长列表全站一个规则（本人 11-26 02:12）：先摆一部分，点一次再多摆一批，一直能摆到底
   const STEP = 20;
   let doneShown = STEP;
   const catPath = id => T.path('/live/automation/category/', { type: id }), howPath = id => T.path('/live/automation/how/', { type: id });
   const F = (v, name) => T.field(v, viewer, name);
-  const wordsIn = html => window.AutomationPresentation.keepWords(R.asOwner(html, viewer));
+  const P = window.AutomationPresentation, notices = P.settingNotices();
+  const wordsIn = html => P.keepWords(R.asOwner(html, viewer));
   const cn = (v, id) => id === 'message-review' ? R.catName(id, viewer)
     : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
@@ -531,29 +532,15 @@
   // —— 八行总表 ——
   // 只有本人能点的按钮：访客版加 data-need-trusted，现成的可信设备弹框（trust-modal.js）在捕获阶段拦下、弹“这一步只有可信设备能做”；本人版不加，照常
   const ownerOnly = action => viewer === 'owner' ? '' : ` data-need-trusted="${esc(action)}"`;
-  // 开关旁边那行小字：正在保存…／已保存／没存上：原因／还没确认存上（feedback 按开关的 id 记）
-  const noteFor = id => {
-    if (feedback?.id !== id) return '';
-    let { text, tone = '' } = feedback;
-    // 超时、断线以后又读到了新读数：照读数说，不再写“还没确认存上”（开关本身已经照读数显示）
-    // 暂停框连暂停到的时刻一起比：读数里的时刻和点的那个一样才算存上
-    if (feedback.want && feedback.reread) {
-      const s = rowOf(id)?.setting || {}, m = s.mode, want = feedback.want, until = isoOf(s.until_at);
-      const same = m === want.mode && (!want.until || T.stamp(until) === T.stamp(want.until));
-      [text, tone] = same ? ['已保存', 'ok'] : [`最新读数还是${m === 'paused' ? `暂停到 ${when(until)}` : { on: '开着', off: '关着' }[m] || '没读到'}`, ''];
-    }
-    return `<small role="status" data-tone="${tone}">${esc(text)}</small>`;
-  };
-  const waitingOn = id => feedback?.id === id && feedback.pending ? ' aria-busy="true"' : '';
+  const waitingOn = id => notices.waiting(id) ? ' aria-busy="true"' : '';
   function switchCell(c, offline) {
-    // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，旁边写“正在保存…”
+    // 开关只照读数和后台回包里的 current 显示：后台回之前留在原档，浮窗写“正在保存…”
     const m = mode(c), until = c.setting?.until_at, paused = esc(pausedText(until) || '暂停中');
     const text = m === 'on' ? '开着' : m === 'off' ? '关着' : m === 'paused' ? paused : '没读到';
     if (offline || !m) return `<span class="au-state" data-mode="${esc(m || '')}">${text}</span>`;
-    const fb = noteFor(c.id) || '<small role="status"></small>';
     // 访客版照样摆同一套开关和“暂停到…”（M716，定稿：公开版保留已定按钮）；点了由现成的可信设备弹框拦下，只提示本人才能操作，什么都不改
     return `<button type="button" class="au-switch" role="switch" aria-checked="${m === 'on'}" data-toggle="${esc(c.id)}" data-mode="${esc(m)}"${waitingOn(c.id)}${ownerOnly('开关自动任务')} aria-label="${esc(U.fieldText(cn(c.title, c.id), viewer))} · ${text}"><i></i><span>${m === 'on' ? '开' : '关'}</span></button>
-      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>${fb}`;
+      <button type="button" class="au-pausebtn" data-pause="${esc(c.id)}"${ownerOnly('暂停自动任务')}>${m === 'paused' ? esc(pausedText(until, '\n')).replace('\n', '<br>') || '暂停中' : '暂停到…'}</button>`;
   }
   // 件数与账本“约好再查的”一致；已经在办的仍是未了结，但不参与下一件的排期。
   function promised() {
@@ -631,7 +618,7 @@
     const hasCounts = known(s.success) || known(s.failed);
     const nums = hasCounts ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>`
       : '<span class="au-nobr">成了几轮、</span><wbr><span class="au-nobr">坏了几轮，</span><wbr><span class="au-nobr">这次没读到</span>';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起才开始记</span></small>` : ''}</span></div>`;
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))}</span> <span class="au-nobr">起才开始记</span></small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
@@ -763,14 +750,15 @@
   }
   // 时刻可能是秒数（后台回包）或时刻字符串（读数）：一律换成时刻字符串再比、再写
   const isoOf = v => typeof v === 'number' ? new Date(v * 1000).toISOString() : v;
-  const rowOf = id => list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
+  const rowOf = (id, data = state?.data) => list(data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(row => row.id === id);
   // 后台回包里的 until_at 是秒数，读数里是时刻字符串：并进来时换成时刻字符串，页面照常写“暂停到 几点”
   const asSetting = cur => ({ ...cur, ...(typeof cur.until_at === 'number' ? { until_at: isoOf(cur.until_at) } : {}) });
   // 回包到了才动开关：存上了照回包里的 current 滑过去；没存上但后台带回了电脑上读到的 current（读回和请求不一致），照它显示；
   // 别的没存上、还没确认的，开关留在原档，之后照新读数显示
   async function saved(id, reply, want) {
-    feedback = reply.status === 'saved' ? { id, text: '已保存', tone: 'ok' } : reply.status === 'retired' ? { id, text: reply.message || '已撤' }
-      : { id, text: failText(reply), tone: reply.status === 'unknown' ? '' : 'bad', want: reply.status === 'unknown' ? want : undefined };
+    const update = notices.finish(reply.status === 'saved' ? 'ok' : 'fail',
+      reply.error === 'cockpit_owner_required' ? '' : reply.status === 'saved' ? '已保存'
+        : reply.status === 'retired' ? reply.message || '已撤' : failText(reply));
     const row = rowOf(id);
     if (row && reply.current && typeof reply.current === 'object') row.setting = { ...row.setting, ...asSetting(reply.current) };
     // 主开关在原地滑到新档（圆钮滑、底色跟着变），滑完再整块重画
@@ -778,15 +766,13 @@
     if (el && m && el.dataset.mode !== m) {
       el.dataset.mode = m; el.setAttribute('aria-checked', String(m === 'on')); el.removeAttribute('aria-busy');
       el.querySelector('span').textContent = m === 'on' ? '开' : '关';
-      const note = el.parentElement.querySelector('small[role="status"]');
-      if (note) { note.textContent = feedback.text; note.dataset.tone = feedback.tone || ''; }
       await new Promise(r => setTimeout(r, 320));
     }
     draw();
-    // 还没确认的：等这次重读回来，开关旁那行改照新读数说（noteFor）
-    const fb = feedback;
     Live.get('automation', {}).then(read => {
-      if (feedback === fb && fb.want && read.data && read.meta.status >= 200 && read.meta.status < 400) { fb.reread = true; draw(); }
+      if (reply.status === 'unknown' && want && read.data && read.meta.status >= 200 && read.meta.status < 400) {
+        P.settingReadback(update, rowOf(id, read.data)?.setting, want, when);
+      }
     });
   }
   const dialog = document.getElementById('au-pause'), form = dialog.querySelector('form');
@@ -816,15 +802,12 @@
     const original = form.dataset.originalUntil;
     const until = Math.floor(Date.parse(original) / 60000) === Date.parse(selected) / 60000 ? original : selected;
     if (!(Date.parse(until) > Date.now())) { result.textContent = '要选比现在晚的时间'; return; }
-    // 等后台回话：框里和开关旁边都写“正在保存…”，开关和原来的暂停时间留着
-    result.textContent = '正在保存…';
-    feedback = { id, text: '正在保存…', pending: true };
+    dialog.close();
+    notices.start(id);
     draw();
     const reply = await save(id, { mode: 'paused', until_at: until });
     if (!reply) return;
-    // 存上了收框；明确没存上、还没确认的留着框写原因，开关旁边也写同一句
-    if (reply.status === 'saved' || reply.error === 'cockpit_owner_required') dialog.close();
-    else result.textContent = failText(reply);
+    failedPause = reply.status === 'saved' || reply.error === 'cockpit_owner_required' ? null : { id, until };
     saved(id, reply, { mode: 'paused', until });
   });
 
@@ -859,19 +842,23 @@
     if (toggle) {
       const id = toggle.dataset.toggle, next = toggle.dataset.mode === 'on' ? 'off' : 'on';
       if (busy) return;
-      // 后台回之前开关留在原档，旁边只写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
-      feedback = { id, text: '正在保存…', pending: true };
+      // 后台回之前开关留在原档，浮窗先写“正在保存…”；回包到了才照它滑过去或写原因（saved）。主开关、“怎么干”里的小类开关一个样
+      notices.start(id);
       T.keep(page.root, `[data-toggle="${CSS.escape(id)}"]`, draw);
       saved(id, await save(id, { mode: next }) || { status: 'unknown' }, { mode: next });
       return;
     }
     if (pause) {
+      if (busy) return;
+      notices.clear();
+      busy = true;
       const access = await Live.automationSetting({ operation: 'access' });
+      busy = false;
       // 只是先问一声能不能操作，还没保存什么：电脑没回话就照实说，不写“还没确认存上”
-      if (access.status === 'unknown') { feedback = { id: pause.dataset.pause, text: '电脑没回话，再点一次' }; draw(); return; }
+      if (access.status === 'unknown') { notices.finish('fail', '电脑没回话，再点一次'); return; }
       if (access.status !== 'pass') { saved(pause.dataset.pause, access); return; }
       pausing = pause.dataset.pause;
-      fillWhen(list(state?.data?.categories).flatMap(c => [c, ...list(c.subcategories)]).find(c => c.id === pausing)?.setting?.until_at);
+      fillWhen(failedPause?.id === pausing ? failedPause.until : rowOf(pausing)?.setting?.until_at);
       form.querySelector('[data-result]').textContent = '';
       dialog.showModal();
     }

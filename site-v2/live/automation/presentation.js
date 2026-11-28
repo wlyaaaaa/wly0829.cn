@@ -30,5 +30,30 @@
     }
     return words.map(keep).join('<wbr>');
   });
-  window.AutomationPresentation = { lamp, tag, kinds, keepWords };
+  function settingNotices() {
+    let current, pending;
+    const clear = () => { current?.close(); current = pending = null; };
+    return {
+      clear,
+      waiting: id => pending === id,
+      start(id) { clear(); pending = id; current = window.SiteNotice('正在保存…'); },
+      finish(state, text) {
+        pending = null;
+        if (!text) { clear(); return; }
+        const notice = current ||= window.SiteNotice(text);
+        notice.set(state, text);
+        return (next, heading) => { if (current === notice) notice.set(next, heading); };
+      },
+    };
+  }
+  // 没收到写入结果，只能等一次新读数来核对。暂停同时比对时刻。
+  function settingReadback(update, setting, want, when) {
+    const { mode, until_at: until } = setting || {};
+    const stamp = value => typeof value === 'number' ? value * 1000 : Date.parse(value);
+    if (mode === want.mode && (!want.until || stamp(until) === stamp(want.until))) { update?.('ok', '已保存'); return; }
+    const current = mode === 'paused' ? `暂停到 ${when(typeof until === 'number' ? new Date(stamp(until)).toISOString() : until)}`
+      : { on: '开着', off: '关着' }[mode] || '没读到';
+    update?.('fail', `最新读数还是${current}`);
+  }
+  window.AutomationPresentation = { lamp, tag, kinds, keepWords, settingNotices, settingReadback };
 })();
