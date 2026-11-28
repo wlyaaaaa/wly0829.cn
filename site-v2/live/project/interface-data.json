@@ -9,6 +9,14 @@
     ["/live/project/interfaces/passwordcenter/08-thumb.webp", "/live/project/interfaces/passwordcenter/08.webp", "用电脑上存的通行密钥验证，系统弹窗里也能改用手机确认（9 月 24 日）"],
     ["/live/project/interfaces/passwordcenter/07-thumb.webp", "/live/project/interfaces/passwordcenter/07.webp", "这次解锁多久：0.5～72 小时，无限制授权要不要一起开单独选（9 月 24 日）"]
   ],
+  "steam-millennium-config-backup": [
+    ["/live/project/interfaces/steam-millennium-config-backup/01-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/01.webp", "库首页：最近启动和已安装的游戏"],
+    ["/live/project/interfaces/steam-millennium-config-backup/02-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/02.webp", "库里的封面墙"],
+    ["/live/project/interfaces/steam-millennium-config-backup/03-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/03.webp", "游戏详情页：封面、启动按钮和动态"],
+    ["/live/project/interfaces/steam-millennium-config-backup/04-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/04.webp", "下载队列与已完成条目"],
+    ["/live/project/interfaces/steam-millennium-config-backup/05-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/05.webp", "个人资料页与自定义背景"],
+    ["/live/project/interfaces/steam-millennium-config-backup/06-thumb.webp", "/live/project/interfaces/steam-millennium-config-backup/06.png", "Steam 设置里的下载页面"]
+  ],
   "proxyclean": [
     ["/live/project/interfaces/proxyclean/01-thumb.webp", "/live/project/interfaces/proxyclean/01.webp", "首页：一句话说出现在的代理情况，这次是手动代理已关、还检测到代理隧道；下面一个按钮检查并修复（11 月 24 日本人截图）"],
     ["/live/project/interfaces/proxyclean/02-thumb.webp", "/live/project/interfaces/proxyclean/02.webp", "检查中：先查现在用的是哪个代理，能看到做到哪一步，也能取消；这一步不改网络（9 月 24 日）"],
