@@ -270,8 +270,16 @@
     return `<details class="dossier-card dossier-card--raw glass" id="raw" data-fold-anchor${$('raw')?.open ? ' open' : ''}>
       <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录
         <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-closed">展开看原始记录全文</span><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
-      <dl class="rec-facts">${rows}</dl></details>`;
+      <dl class="rec-facts">${rows}</dl>
+      <button type="button" class="more" data-close-raw>收起 <span class="more__chev" aria-hidden="true">‹</span></button></details>`;
   }
+  $('side').addEventListener('click', e => {
+    const summary = e.target.closest('[data-close-raw]')?.parentElement.querySelector('summary');
+    if (!summary) return;
+    summary.click();
+    summary.focus({ preventScroll: true });
+    summary.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  });
 
   // 单件的现行读口已带齐时，省掉对账本列表的补读。
   async function loadRepeat() {

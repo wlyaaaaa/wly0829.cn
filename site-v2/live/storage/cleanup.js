@@ -117,10 +117,11 @@
     const max = Math.max(...g.days.map(x => x.bytes), 1);
     const bars = g.days.map((x, i) => `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} 腾出 ${K.size(x.bytes)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(K.size(x.bytes))}</em>` : ''}</li>`).join('');
     const recent = num(g.last.freed_bytes);
-    const last = `最近一轮 ${when(g.last.finished_at)} ${recent == null ? '腾出量没读到' : `腾出 ${K.size(recent)}`}`;
+    const amount = recent == null ? K.field(g.last.freed_bytes_gap, '本轮腾出量缺因', viewer) : `腾出 ${K.size(recent)}`;
+    const last = [`最近一轮 ${when(g.last.finished_at)}`, amount].filter(Boolean).join(' ');
     const incomplete = g.week.some(run => num(run.freed_bytes) == null);
     const measured = g.week.some(run => num(run.freed_bytes) != null);
-    return `<p class="cl-k">近 7 天${incomplete ? '已知腾出' : '共腾出'}</p><p class="cl-big">${esc(K.size(measured ? g.total : null))}</p><p class="cl-sub">${esc(last)}</p><ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>${receipts(g, viewer)}`;
+    return `<p class="cl-k">近 7 天${incomplete ? '已知腾出' : '共腾出'}</p><p class="cl-big${measured ? '' : ' is-gray'}">${esc(K.size(measured ? g.total : null))}</p><p class="cl-sub">${esc(last)}</p>${measured ? `<ol class="cl-days" aria-label="近 7 天每天腾出">${bars}</ol>` : ''}${receipts(g, viewer)}`;
   }
 
   // 一根条 = 整块盘：灰蓝是已用，绿段是这轮刚腾出的，白色是其余空闲。没读到的盘（离线、还没接进读数）也留一行灰的写原因。

@@ -70,6 +70,7 @@
 .cl-rules li > i { width: 10px; height: 10px; border-radius: 50%; }
 .cl-rules b { font-weight: 500; font-variant-numeric: tabular-nums; }
 .cl-trend { min-height: 236px; }
+.cl-trend:has(> .cl-sub) { min-height: 0; }
 .cl-trend__svg { display: block; overflow: visible; font-family: inherit; }
 .cl-grid { stroke: rgb(30 30 20 / .07); }
 .cl-ytxt, .cl-xtxt { font-size: 12px; fill: var(--muted); }

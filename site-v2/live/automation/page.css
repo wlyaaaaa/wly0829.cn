@@ -142,6 +142,11 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-chev { margin-left: auto; color: #00a650; font-size: 24px; line-height: 1; font-weight: 500; }
 .aw-lines li + li { border-top: 1px solid var(--hair); }
 .aw-lines b { font-weight: 600; }
+@media (max-width: 1024px) {
+  .aw-type-pair .aw-lines .aw-line__body { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+  .aw-type-pair .aw-lines .aw-line__body > :is(.lamp, .aw-nolamp) { align-self: start; margin-top: .5em; }
+  .aw-type-pair .aw-lines small { grid-column: 2; }
+}
 
 /* 现在在跑 */
 .aw-now li + li { border-top: 1px solid var(--hair); }
