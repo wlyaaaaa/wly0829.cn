@@ -11,7 +11,7 @@
     PreToolUse: 'pre-tool', PermissionRequest: 'pre-tool', AutoReview: 'pre-tool', PostToolUse: 'post-tool', PreCompact: 'compact',
     SubagentStart: 'helper', SubagentStop: 'helper', Stop: 'stop', Notify: 'stop', Keepalive: 'idle', StopFailure: 'error' };
   const HOOK_GROUPS = [['in_use', '在用'], ['disabled', '停用'], ['unconfirmed', '未确认生效']];
-  const kTok = n => `${int(Math.round(n / 1000))}K 词元`;
+  const kTok = (n, scope) => `${int(Math.round(n / 1000))}K ${scope === 'total' ? '总' : ''}词元`;
   const REASONS = [['larger_orders', '单子比想的大'], ['rework', '返工'], ['missed_follow_up', '漏想的后续活'], ['long_tests', '长测试'], ['scope_added', '中途加需求']];
   const SIZES = [['small', '小单'], ['medium', '中单'], ['large', '大单']];
 
@@ -64,8 +64,16 @@
   const hostHooks = (d, h) => inventory(d)?.filter(hook => hook.host === h.name);
   const stationOf = hook => STATION_OF[hook.key?.split(':')[0]] || 'other';
   const compactLimit = x => Number.isFinite(x?.compact_tokens) && x.compact_tokens > 0
-    ? `${x.compact_tokens_basis === 'configured_estimate' ? '约 ' : ''}${kTok(x.compact_tokens)}` : '';
+    ? `${x.compact_tokens_basis === 'configured_estimate' ? '约 ' : ''}${kTok(x.compact_tokens, x.compact_scope)}` : '';
   const compactStamp = x => x?.compact_stale_at ? `<small>这是 ${esc(when(x.compact_stale_at))} 读到的</small>` : '';
+  function compactReadout(config, hook = false) {
+    const limit = compactLimit(config);
+    if (!limit) return F(config?.compact) || '宿主没公布';
+    if (config.compact_tokens_basis === 'configured_estimate') {
+      return `宿主没公布实际触发点 <small>按桌面设置${keep(limit)}</small> ${compactStamp(config)}`;
+    }
+    return hook ? `自动压缩线 ${keep(limit)}` : `${keep(limit)}就压缩`;
+  }
   const firstTime = id => { const fresh = !drawn.has(id); drawn.add(id); return fresh; };
 
   function checks(d, h) {
@@ -328,11 +336,7 @@
     const unlock = h => { const t = U.fieldText(d.unlock?.[h.name], viewer); return t ? esc(t.replace(/^已登记的 ?(Claude|Codex|Antigravity) ?桌面版/, '已登记的桌面版').replace(/^(Claude|Codex|Antigravity) ?/, '')).replace(/验证有效期/g, keep) : '没读到'; };
     const memory = h => h.id === 'antigravity' ? `这家没有${known(x(h).knowledge?.count) ? `<small>知识目录 ${int(x(h).knowledge.count)} 条${x(h).knowledge.latest_write_day ? '，最近 ' + esc(x(h).knowledge.latest_write_day) + ' 写' : ''}</small>` : ''}`
       : x(h).memory === false ? '关着' : x(h).memory === true ? '开着，和规矩不一样' : '没读到';
-    const compact = h => {
-      const limit = compactLimit(x(h));
-      return limit ? `${limit}就压缩${compactStamp(x(h)) || (known(x(h).context_window) ? `<small>配的窗口是 ${kTok(x(h).context_window)}</small>` : '')}`
-        : F(x(h).compact) || (h.id === 'claude' ? '这次读取压缩设置失败' : '没读到');
-    };
+    const compact = h => compactReadout(x(h));
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
     const rows = [
@@ -374,7 +378,7 @@
   function hookCard(d, hook, withSample = false) {
     const id = HOSTS.find(h => h.name === hook.host)?.id;
     const sample = withSample && list(d.latest_context).find(r => r.host === hook.host && r.hook === hook.key);
-    const preCompact = hook.key === 'PreCompact', config = d.hosts?.[hook.host], limit = preCompact && compactLimit(config);
+    const preCompact = hook.key === 'PreCompact';
     // 旧说明的开头抄了设置值。触发和动作继续用目录原文，自动压缩线随配置读口。
     const summary = preCompact && typeof hook.summary === 'string' ? hook.summary.replace(/^对话装到[^\n]*?(?=你也可以手动压缩)/, '') : hook.summary;
     const { install_state, metrics_state } = list(d.hooks).find(row => row.host === hook.host && row.key === hook.key) || {};
@@ -382,7 +386,7 @@
       hook.implementation?.evidence, metrics_state === '后台实现，未写入统一计时' && metrics_state, hook.reason];
     return `<article class="ag-hook${dim(id)}" data-host="${esc(id || '')}"><h4><span class="ag-truncate" title="${esc(U.fieldText(hook.name, viewer))}">${F(hook.name, '钩子名称')}</span><small class="tp-hostname">${F(hook.host)}</small></h4>
       <p class="tp-small">${keepWords(F(summary, '钩子说明') || '说明还没读到')}</p>
-      ${preCompact ? `<p class="ag-hook__num">${limit ? `自动压缩线 ${keep(limit)} ${compactStamp(config)}` : F(config?.compact) || '自动压缩线还没读到'}</p>` : ''}
+      ${preCompact ? `<p class="ag-hook__num">${compactReadout(d.hosts?.[hook.host], true)}</p>` : ''}
       ${notes.filter(Boolean).map(note => `<p class="ag-hook__num">${keepWords(F(note))}</p>`).join('')}
       ${sample?.text != null ? `<details class="tp-details" id="sample-${esc(hook.host + '-' + hook.key)}"><summary class="live-disclosure">最近一次塞给 AI 的原样 · ${esc(when(sample.at))}</summary><pre>${F(sample.text, '这次塞的内容')}</pre></details>` : ''}</article>`;
   }
