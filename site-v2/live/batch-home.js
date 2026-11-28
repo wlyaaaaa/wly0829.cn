@@ -215,7 +215,10 @@
       // 同一事项也可能随修理回执出现，首页选短标题，详情仍去原来的事项。
       const problemTitles = new Map(v.problems.filter(p => p.href && p.short).map(p => [p.href, p.short]));
       const problemLine = p => {
-        const short = p.short || problemTitles.get(p.href);
+        // 老回执把工作标题放在「核对后交修理」之后，紧接着才写过程。
+        const heading = typeof p.raw.headline === 'string'
+          ? /^核对后交修理\s*·\s*([^。！？\r\n]{1,64})[。！？]/u.exec(p.raw.headline)?.[1] : '';
+        const short = p.short || problemTitles.get(p.href) || heading;
         // 摘一句的故障回包有时把沿用的原回复当成原因给出；“这轮沿用原话”是退回原回复的结果。
         const detail = p.title === '摘一句' && /(?:这轮|本轮)沿用原话/.test(p.text)
           ? '摘要没能整理成可用文字，这次用了原来的回复' : short;

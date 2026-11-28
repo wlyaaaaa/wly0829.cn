@@ -384,7 +384,7 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-foot-link { display: flex; justify-content: flex-end; }
 .aw-foot-link a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 4px; color: #00813f; font-size: 17px; font-weight: 650; }
 .aw-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.aw-dialog { background: #faf8fc; width: 420px; max-width: calc(100% - 32px); padding: 22px 26px; color: var(--ink); }
+.aw-dialog { position: fixed; background: #faf8fc; width: 420px; max-width: calc(100% - 32px); padding: 22px 26px; color: var(--ink); }
 .aw-dialog::backdrop { background: #20202638; backdrop-filter: blur(2px); }
 .aw-dialog h2 { margin: 0 0 14px; }
 .aw-dialog .aw-buttons { margin-top: 15px; justify-content: end; }

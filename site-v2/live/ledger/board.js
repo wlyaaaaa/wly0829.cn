@@ -317,7 +317,8 @@
       const why = g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
       const hidden = g.rows.flatMap(r => list(r.rounds)).find(x => x?.visitor_labels?.conversation === 'hidden');
       // 访客版：那一轮标了只给本人看、访客页头已经发布时，后台另给页头读口 source_header_href（/computer-access/live/v1/chats/{访客别名}），照 HEADLINK A 挂“看对话页头 ›”（M1078）
-      const headerId = viewer === 'public' ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
+      const headerId = viewer === 'public' && !R.runPage(src)?.startsWith('/live/automation/run/')
+        ? g.rows.map(r => /\/chats\/([^/?#]+)/.exec(String(r.source_header_href || ''))?.[1]).find(Boolean) : '';
       const header = headerId ? ` · ${link(T.path('/live/chat/', { id: decodeURIComponent(headerId) }), '看对话页头 ›')}` : '';
       const go = `${src ? ` ${link(src, /^\/live\/chat\//.test(src) ? '那场对话 ›' : '那一轮 ›')}` : ''}${hidden ? vtag(hidden, 'conversation', '这一轮的对话') : ''}${why ? ` <small class="lg-why">${esc(why)}</small>` : ''}${header}`;
       return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
