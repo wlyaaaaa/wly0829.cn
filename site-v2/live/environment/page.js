@@ -56,8 +56,10 @@
   L.add(hero);
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a => { if (params.has('fixture') && !new URL(a.href).searchParams.has('fixture')) a.href += (a.href.includes('?') ? '&' : '?') + 'fixture=' + encodeURIComponent(params.get('fixture')); });
   const hosts = {}, boards = {};
+  let linkedSection;
   function addBoard(key) {
     const host = document.createElement('section');
+    host.id = resources[key] || `environment-${key}`;
     host.dataset.section = key; hosts[key] = host; $('board').append(host);
     boards[key] = V.board(host, { key: `environment-${key}`, collapsible: Object.hasOwn(resources, key) });
   }
@@ -123,10 +125,43 @@
   function limitedRows(rows, render, key) {
     return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
   }
+  const DAILY_STEP = 6, DAY = 86400000;
+  let daily = null, dailyPhase = null, dailyShown = DAILY_STEP;
+  const dayKey = at => new Date(at + 8 * 3600000).toISOString().slice(0, 10);
+  function dailyChange(change, d) {
+    const now = Date.parse(referenceTime('software') || new Date().toISOString());
+    const recent = at => Number.isFinite(at) && now - at < 7 * DAY;
+    const date = Date.parse(`${change?.at}T00:00:00+08:00`);
+    if (Number.isFinite(date)) return { text: `${U.date(date)} 起用这版`, recent: recent(date) };
+    if (validAt(change?.after) && validAt(change?.by)) {
+      const from = Date.parse(change.after), by = Date.parse(change.by);
+      const end = by - (new Date(by + 8 * 3600000).getUTCHours() < 6 ? DAY : 0);
+      const a = U.date(from), b = U.date(Math.max(from, end));
+      return { text: a === b ? `${a} 起用这版` : `${a} 到 ${b} 之间换成这版`, recent: recent(by) };
+    }
+    const start = Date.parse(d.started_at), seen = Date.parse(d.observed_at);
+    const days = Number.isFinite(start) && Number.isFinite(seen) ? Math.min(7, Math.round((Date.parse(dayKey(seen)) - Date.parse(dayKey(start))) / DAY)) : 0;
+    return { text: days > 0 ? `近 ${days} 天没换过` : '没有换版本的记录', recent: false };
+  }
+  function dailyBlock() {
+    const d = daily?.data, items = d?.items, kind = daily?.viewer;
+    const title = n => `<p class="env-sub"><b>日用软件</b>${n ? ` · ${esc(n)}` : ''}<span>这里记现在的版本和最近一次换版本</span></p>`;
+    if (!Array.isArray(items)) return d || ['none', 'gone'].includes(dailyPhase) ? `${title('')}<p class="env-note">${esc(missing('日用软件', d))}</p>` : '';
+    const cards = items.slice(0, dailyShown).map(row => {
+      const version = row.version ? esc(sp(row.version)) : row.installed === false ? '没装' : '版本这次没读到';
+      const change = row.version ? dailyChange(row.last_change ?? { at: row.installed_or_updated_on }, d) : null;
+      return `<li class="env-app"><b>${U.fieldHtml(row.name, { name: '软件', kind })}</b><span>${version}</span>${change ? `<span class="env-app__change${change.recent ? ' is-recent' : ''}">${esc(change.text)}</span>` : ''}</li>`;
+    }).join('');
+    const cutoff = validAt(d.observed_at) || validAt(d.at);
+    const notes = [cutoff && `截止 ${date(cutoff)}`, d.usage_gap, d.q === 'stale' && (d.gap || '旧读数')].filter(Boolean).map(sp);
+    const left = items.length - dailyShown;
+    return `${title(count(items.length, '个', d))}${notes.length ? `<p class="env-note">${esc(notes.join(' · '))}</p>` : ''}${cards ? `<ul class="env-apps">${cards}</ul>` : '<p class="env-note">这一轮没有日用软件条目</p>'}${left > 0 ? `<button type="button" class="more" data-daily-more>还有 ${left} 个 ›</button>` : ''}`;
+  }
   function software(el) {
-    el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div>';
+    el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div><div class="env-daily" id="daily-software"></div>';
     el.addEventListener('click', e => {
       if (e.target.closest('[data-latest-more]')) { latestShown += LATEST_STEP; if (e.isTrusted) window.Live.markOpened(softwareCard); repaint(); }
+      if (e.target.closest('[data-daily-more]')) { dailyShown += DAILY_STEP; repaint(); }
     });
     return { set() {
       const d = data.software, rows = list(d);
@@ -134,6 +169,7 @@
       note.hidden = !!rows;
       if (!rows) note.textContent = missing('软件版本', d);
       U.html(versions, !rows ? '' : rows.length ? versionTable(rows) : '<p class="env-note">这一轮没有软件条目</p>');
+      U.html(el.querySelector('.env-daily'), dailyBlock());
     } };
   }
 
@@ -230,6 +266,11 @@
       let say = card?.querySelector('[data-unread]');
       if (failed && !say) { say = document.createElement('p'); say.dataset.unread = ''; say.className = 'env-note'; card.querySelector('.card__body').append(say); }
       if (say) { say.hidden = !failed; say.textContent = failed ? `${g.name}暂时读不到` : ''; }
+      if (linkedSection !== location.hash && location.hash === `#${hosts[g.key].id}`) {
+        linkedSection = location.hash;
+        boards[g.key].open(g.key, true);
+        requestAnimationFrame(() => hosts[g.key]?.scrollIntoView());
+      }
     }
     const status = U.status(header);
     L.tone(hero, status.tone);
@@ -260,11 +301,16 @@
   }
   function repaint() { details().forEach(rememberFold); paint(); updateNotes(); }
   repaint();
+  window.addEventListener('hashchange', () => { linkedSection = null; repaint(); });
   readingRows();
   for (const [key, resource] of Object.entries(resources)) window.Live.watch(recordResource(key), { section: resource }, {
     phase(s) { phases[key] = s.phase; boards[key].phase(s); readingRows(); if (!s.data) { if (key === 'software') heroRead.set(s); if (s.phase === 'none' || s.phase === 'gone') repaint(); } },
     data(d, meta) { if (key === 'software') softwareViewer = meta?.viewer?.kind || 'public'; data[key] = d; clocks[key] = d && validAt(meta?.at); if (d) boards[key].data({ series: [] }); repaint(); },
     link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); } else if (s.offline) repaint(); else updateNotes(); },
+  });
+  window.Live.watch(params.has('fixture') ? 'projects/pcconfig/records-software_versions' : 'projects/pcconfig/records', { section: 'software_versions' }, {
+    phase(s) { dailyPhase = s.phase; if (!s.data && ['none', 'gone'].includes(s.phase)) repaint(); },
+    data(d, meta) { daily = { data: d, viewer: meta?.viewer?.kind }; repaint(); },
   });
   window.Live.watch('projects/pcconfig', null, { data(d) {
     // 后端 03:45：正式接入时这三组还在 registry 分组下、没有单独的 environment 分组，两种形状都给 data.environment，先读它

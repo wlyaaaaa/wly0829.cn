@@ -50,9 +50,9 @@
     const gap = d.gap && !(d.q === 'partial' && cover.late && !cover.inner) ? d.gap : '';
     return `${title}${head.join('')}${more}<p class="env-note">${U.esc(dateText([cover.late ? cover.note : d.text, d.q === 'stale' && '旧读数', cover.inner, gap].filter(Boolean).join(' · ')))}</p>`;
   }
-  const host = document.createElement('section'); host.className = 'card grp grp--quiet'; host.hidden = true; document.getElementById('board').after(host);
+  const host = document.createElement('section'); host.id = 'software-changes'; host.className = 'card grp grp--quiet'; host.hidden = true; document.getElementById('board').after(host);
   const shell = html => `<div class="card__glass glass"><div class="card__body"><div class="grp__chapter">${html}</div></div></div>`;
-  let read;
+  let read, linked;
   function unavailable(state) {
     if (Array.isArray(state.data?.items) || !(['none', 'gone'].includes(state.phase) || state.meta?.status >= 400)) return;
     if (!read) {
@@ -64,6 +64,10 @@
   }
   function draw() {
     const html = last ? changes(last.d, last.viewer, shown) : ''; host.hidden = !html; U.html(host, html ? shell(html) : '');
+    if (!linked && html && location.hash === '#software-changes') {
+      linked = true;
+      requestAnimationFrame(() => host.scrollIntoView());
+    }
   }
   // 要摆的条数超过手里已有的、后台还有下一页：照 next 游标接着取，接在后面（刷新回来第一页时也照这样补回已展开的）
   async function fill() {
