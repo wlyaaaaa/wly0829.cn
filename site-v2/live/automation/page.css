@@ -308,7 +308,7 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-sources span { color: var(--ink-soft); font-size: 15px; }
 .aw-sources small { grid-column: 1 / -1; margin-top: 4px; }
 .aw-results { display: flex; align-items: flex-end; gap: 20px; }
-.aw-results dl { flex: 1; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.aw-results dl { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); }
 .aw-results dl > div { padding: 4px 10px 6px; border-left: 1px solid var(--hair); }
 .aw-results dl > div:first-child { border-left: 0; padding-left: 0; }
 .aw-results dt { color: var(--ink-soft); font-size: 14px; white-space: nowrap; }
