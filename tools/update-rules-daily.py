@@ -151,7 +151,8 @@ def update(args, result, log):
                    WLY_OWNER_RULES_OUT=str(PRIVATE_OWNER_PAGES if args.publish else scratch / "owner"),
                    WLY_LIVE_FALLBACK_CMD=f'copy /b /y "{fallback}" "{{out}}"')
         env.pop("WLY_RULES_SIGNED_PAGES", None)
-        command(python_exe, "-B", "-X", "utf8", exporter, "--strict", "--out", fallback, env=env)
+        command(python_exe, "-B", "-X", "utf8", exporter, "--strict", "--wait-for-backups", "600",
+                "--out", fallback, env=env)
         command("git", "worktree", "add", "--detach", worktree, source)
         try:
             python(args.prepare, "prepare", "--worktree", worktree)
