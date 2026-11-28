@@ -213,7 +213,6 @@
   }
 
   function waiting(text, revoked = false) {
-    hero.removeAttribute('data-maintenance-partial');
     for (const s of sections.values()) {
       s.el.hidden = s.more.hidden = true;
       if (revoked) clearGroupRows(s);
@@ -355,10 +354,8 @@
     }
     board.layout(); pickGroup(); pickProjects();
     const rounds = maintenanceRounds(d);
-    const maintenancePartial = maintenance && !cards && Number.isInteger(rounds) && rounds > 0;
-    hero.toggleAttribute('data-maintenance-partial', maintenancePartial);
     const noTasks = maintenance && (d.q !== 'ok' || rounds !== 0)
-      ? (maintenancePartial ? '维护明细这次没读全' : '还没读到维护明细')
+      ? (Number.isInteger(rounds) && rounds > 0 ? '维护明细这次没读全' : '还没读到维护明细')
       : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
     let none = $('task-empty'); if (!none) { none = document.createElement('ul'); none.className = 'rows list'; none.id = 'task-empty'; $('groups').append(none); } none.hidden = cards > 0; U.list(none, empty(noTasks));
     const ranges = Array.isArray(d.coverage) ? d.coverage : [];
