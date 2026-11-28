@@ -15,9 +15,8 @@
 #frozen-archive { scroll-margin-top: 100px; }
 #frozen-archive .pj-viz { margin: 0; }
 .pj-archive-title, .pj-archive-body { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.pj-archive-title { align-items: baseline; }
 .pj-archive-title h2 { margin: 0; font-size: 23px; }
-.pj-archive-title p { flex: 0 0 17em; margin: 0; font-size: 14px; color: var(--muted); }
+.pj-archive-title p { margin: 0; font-size: 14px; color: var(--muted); }
 .pj-archive-body { margin-top: 22px; }
 .pj-archive-body dl { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
 .pj-archive-body dl > div + div { padding-left: clamp(10px, 2vw, 28px); border-left: 1px solid rgb(20 20 19 / .09); }

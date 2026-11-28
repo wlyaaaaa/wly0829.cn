@@ -6,15 +6,19 @@
 <style>
 #active { min-height: 182px; }
 #pj-summary { display: grid; gap: 5px; }
-.pj-summary__sizes { justify-self: start; border-collapse: collapse; margin-top: 4px; text-align: left; font-size: 14px; line-height: 1.25; font-variant-numeric: tabular-nums; }
-.pj-summary__sizes :is(th, td) { padding: 4px clamp(12px, 2vw, 30px) 4px 0; text-align: left; vertical-align: top; }
+/* 表格在插画淡入前收住，列位置只跟表宽走。 */
+.pj-summary__sizes { justify-self: start; width: min(740px, calc(100% - 60px)); table-layout: fixed; border-collapse: collapse; margin-top: 4px; text-align: left; font-size: 14px; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.pj-summary__sizes col:nth-child(1) { width: 15%; }
+.pj-summary__sizes col:nth-child(2) { width: 28%; }
+.pj-summary__sizes col:nth-child(3) { width: 35%; }
+.pj-summary__sizes :is(th, td) { padding: 4px 4px 4px 0; text-align: left; vertical-align: top; }
 .pj-summary__sizes thead th, .pj-summary__sizes small, .pj-summary__cutoff { color: var(--muted); font-size: 12px; font-weight: 400; }
 .pj-summary__sizes tbody th { color: var(--ink-soft); font-weight: 600; }
 .pj-summary__sizes tbody tr + tr > * { border-top: 1px solid rgb(20 20 19 / .09); }
 .pj-summary__sizes b { display: block; color: var(--ink); font-size: 17px; }
 .pj-summary__sizes small { display: block; margin-top: 2px; }
-.pj-summary__sizes b small { display: inline; margin: 0; }
-.pj-summary__sizes .pj-summary__cutoff { padding-right: 0; vertical-align: middle; }
+.pj-summary__sizes b small { display: inline-block; margin: 0; white-space: nowrap; }
+.pj-summary__sizes .pj-summary__cutoff { padding-right: 0; word-break: keep-all; overflow-wrap: anywhere; }
 /* 开场的字先各自走到位再显，收拢时先淡出再移动，保留逐字顺序及绿灯动效。 */
 #topbar .brand__word .ch {
   transition-duration: .30s, .14s, .30s;
