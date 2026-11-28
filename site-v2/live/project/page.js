@@ -152,10 +152,10 @@
     }
     const special = window.ProjectAdditions?.lowerBoundValue(m) || window.ProjectAdditions?.timestampObject(m, stamp) || window.ProjectAdditions?.structuredMetric(m, stamp, projectViewer)
       || window.ProjectAdditions?.rulesLengthReading?.(m);
-    if (special) return { html: `<span class="pj-text">${esc(special)}</span>`, plain: special, long: true };
+    if (special) return { html: `<span class="pj-text">${keepWords(esc(special))}</span>`, plain: special, long: true };
     if (m.rewrite === 'pending' && m.count == null && m.value == null && m.text == null || m.value?.hidden || m.value?.rewrite === 'pending' && m.value.count == null && !m.value.text) { const text = metricText(m.value && typeof m.value === 'object' ? m.value : m); return { html: `<span class="pj-text">${U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })}</span>`, plain: text, long: true }; }
     const reading = cardReading(m);
-    if (reading) return { html: `<span class="pj-text">${U.fieldHtml(reading, { name: '项目读数', kind: projectViewer })}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
+    if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
     if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">暂时读不到</span>', plain: '暂时读不到', long: false };
@@ -839,7 +839,7 @@
     const cuts = [...new Set(list.map(b => b.cut && !b.cut.hidden ? b.cut.textContent.trim() : '').filter(Boolean))];
     const parts = list.filter(b => b.explain && !b.explain.hidden && b.explain.innerHTML.trim()).map(b => { const n = name(b); return `${n ? `<b>${esc(n)}</b>：` : ''}${b.explain.innerHTML}`; });
     if (cuts.length > 1) parts.push(...cuts.map(esc));
-    const box = c.tail.querySelector('.pj-note'), html = parts.join('<br>');
+    const box = c.tail.querySelector('.pj-note'), html = keepWords(parts.join('<br>'));
     if (box.innerHTML !== html) box.innerHTML = html;
     c.tail.querySelector('.pj-notes').hidden = !parts.length;
     const cut = c.tail.querySelector('.pj-cut'); cut.hidden = cuts.length !== 1; cut.textContent = cuts.length === 1 ? cuts[0] : '';
@@ -1083,7 +1083,7 @@
     // 两周都没有任何记录：不画两个空框
     const chart = !two.some(w => w.published != null || w.rolled_back != null) ? '' : `<div class="pj-wk"><p class="pj-wk__cap"><span class="pj-wk__sum">近两周：发布 ${total('published')}、退回 ${total('rolled_back')}</span><span class="pj-wk__legend"><span><i class="is-pub"></i>发布</span><span><i class="is-back"></i>退回</span></span></p><div class="pj-wk__plot">${two.map(week).join('')}</div><div class="pj-wk__x">${two.map(w => `<span>${text(w.label)}</span>`).join('')}</div></div>`;
     // 逐版记录和更早没记录的缘由收在“逐版记录”里；打开先列 10 条，一次多露 10 条，露到底“收起”（R147）
-    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${keepWords(gaps.map(text).join(' · '))}</p>` : ''}</details>` : ''}`);
     // 最新的在上，和上面的逐版时间线、“最近改动”一样新的在前；先露最近 10 个版本，再往更早的露（主持 11-26 10:3x 定）
     host._ruleEvents = [...events].reverse();
     const opened = host.querySelector('.pj-rh-events');
@@ -1110,7 +1110,7 @@
     if (!box) return;
     const all = host._ruleEvents || [], asked = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0));
     const n = all.length - asked === 1 ? all.length : asked, left = all.length - n;   // 只剩一条一起露（M1190）
-    box.innerHTML = all.slice(0, n).map(e => `<p>${e}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
+    box.innerHTML = all.slice(0, n).map(e => `<p>${keepWords(e)}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
   }
   function ruleTimeline(kept, current, text) {
     const index = kept.findLastIndex(e => e.version === current);
