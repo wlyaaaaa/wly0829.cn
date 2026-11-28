@@ -132,14 +132,14 @@
   }
   const labels = { ...KIND, reports: '等你答的汇报', closed: '近 7 天下去的' };
   // know 怎么下去、later 什么时候转。按需更新快核（M928）核法：E:/.agents/skills/cockpit/SKILL.md 四种卡的表“要你知道”“你放着”两行，现“点我知道了就关，不按天数自己消失”“有日期的到点转成要你做（要拍板的转成要你选），只写日期按当天上午 10 点；没日期的一直放着”；变了改这句
-  const hints = { choose: '需要你选择、确认或提供结论的事项。', do: '需要你确认、操作或提供信息的事项。', later: '到时间转成要你做或要你选，并在手机上提醒你一次；只写了日期的按当天上午 10 点算，没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”或事情本身了结才下去，不会过几天自己消失（以前登记时写了期限的，照期限）。', closed: '已经从等你的清单下去的事项。', reports: '还有问题等你答的汇报。' };
+  const hints = { later: '到时间转成要你做或要你选，并在手机上提醒你一次；只写了日期的按当天上午 10 点算，没日期的一直放着。', know: '只需了解的进展与通知；点“我知道了”或事情本身了结才下去，不会过几天自己消失（以前登记时写了期限的，照期限）。', closed: '已经从等你的清单下去的事项。' };
   // 卡片头第二行同页头一样：访客版不把访客当“你”，写“本人”；本人版一字不改（M687）。第一次显示按配对标记定，回包到了按 viewer 再核一次
   const hintUnits = /要(?:你|本人)[做选]|提醒(?:你|本人)|到时间|转成|手机上|一次|只写了|没日期的|日期|当天|上午 10 点|一直放着|我知道了|只需|了解|进展|通知|事情本身|了结|下去的事项。|下去|过几天|自己|消失|以前|登记|期限|本人/g;
-  const hintHtml = (kind, as = viewer) => esc(addressed(hints[kind], as)).replace(hintUnits, '<span class="live-unit">$&</span>');
+  const hintHtml = (kind, as = viewer) => esc(addressed(hints[kind] || '', as)).replace(hintUnits, '<span class="live-unit">$&</span>');
   for (const kind of ['do', 'choose', 'later', 'know', 'reports', 'closed']) {
     const c = board.card(kind, { icon: ({ do: 'sparkle', choose: 'chat', closed: 'check', reports: 'chat' })[kind] || 'clock', art: kind, tint: ({do:'peach',choose:'lilac',later:'cyan',know:'blue',reports:'pink',closed:'green'})[kind], ids: { el: kind, main: kind+'-list', rest: kind+'-rest', more: kind+'-more', box: kind+'-box', next: kind === 'closed' ? 'closed-next' : kind+'-next' } });
     c.title.dataset.keep = ''; c.title.textContent = kind === 'reports' ? '' : addressed(labels[kind], pairedHere ? 'owner' : 'public');
-    U.html(c.sub, hintHtml(kind, pairedHere ? 'owner' : 'public'), false); cards.set(kind, c);
+    U.html(c.sub, hintHtml(kind, pairedHere ? 'owner' : 'public'), false); c.sub.hidden = !hints[kind]; cards.set(kind, c);
     const option = $('kind-pick').appendChild(new Option(labels[kind], kind));
     titleParts.push([option, labels[kind]]);
   }
@@ -188,7 +188,6 @@
   }
   function filterBoard() {
     const picked = $('kind-pick').value, status = $('state-pick').value;
-    cards.get('reports').sub.hidden = !reportCount;
     $('stats').querySelectorAll('[data-kind]').forEach(button => {
       button.setAttribute('aria-pressed', String(status !== 'closed' && button.dataset.kind === picked));
     });

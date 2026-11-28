@@ -43,10 +43,11 @@
     const runs = Array.isArray(today.runs_today)
       ? today.runs_today.filter(r => r && typeof r === 'object' && R.timed(r.finished_at)).map(r => ({ ...r, at: r.finished_at })) : null;
     const week = d.results_7d && typeof d.results_7d === 'object' ? d.results_7d : null;
-    const running = items(d.running).map(r => ({
-      what: [R.categoryName(r.category, viewer), r.title || r.summary].filter(Boolean),
-      round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href,
-    }));
+    const running = items(d.running).map(r => {
+      const category = R.categoryName(r.category, viewer), summary = r.title || r.summary;
+      return { what: [category, summary !== `${category}正在进行` && summary !== category && summary].filter(Boolean),
+        round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href };
+    });
     const problems = items(d.problems).map(p => {
       const title = U.fieldText(p.title, viewer), text = U.fieldText(p.text, viewer);
       const repairing = typeof p.repairing === 'boolean' ? p.repairing : p.handler !== '本人';   // 旧包没有 repairing：照原来，写明等本人的才不算在修
@@ -185,15 +186,18 @@
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
       const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
         : part.replace(/验收|太久|回复/g, '<span class="live-unit">$&</span>')).join('');
-      const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
+      const last = d.last_run;
+      const lastDone = last?.title && R.timed(last.finished_at) && typeof last.ok === 'boolean' && R.timed(next.at)
+        ? `上次 <span class="live-unit">${esc(U.time(last.finished_at))}</span> ${field(last.title, '任务名称')}${last.ok ? '跑完' : '没做成'}&nbsp;· ` : '';
+      const nextWhen = R.timed(next.at) ? `<span class="live-unit">${esc(lastDone ? U.time(next.at) : clock(next.at))}</span>` : keepWords(esc(next.wait || ''));
       // 大字：今天跑完几轮（点了到自动任务页今天跑完的）；下面“其中几轮没做成 ›”，0 轮照写 0、不带链接
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
       const fail = v.failed == null ? '' : `<p class="b6-fail">${v.failed > 0 ? go(v.failedHref, `其中 ${esc(v.failed)} 轮没做成`) : '其中 0 轮没做成'}</p>`;
       const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: R.runPage(r.href) || R.runHref(r),
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮') : '';
-      // 第一行：在干哪一轮；没在跑写“这会儿空着 · 下一个 几点 哪一类 ›”
+      // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${goWrap(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
+        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${go(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
       // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
       const problemLine = p => {
