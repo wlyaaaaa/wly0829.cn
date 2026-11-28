@@ -39,9 +39,10 @@
 .pj-board--copilot .cp-files { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .pj-board--copilot .cp-file { position: relative; text-align: center; border-radius: 12px; padding: 8px 5px; background: rgb(255 255 255 / .66); box-shadow: 0 3px 8px rgb(41 66 94 / .08); }
 .pj-board--copilot .cp-file > span { display: block; font-size: 14px; line-height: 20px; text-wrap: pretty; }
-.pj-board--copilot .cp-file button { display: inline; color: var(--cp-green); border: 0; background: none; box-shadow: none; padding: 0; min-height: 0; font: inherit; font-weight: 650; }
-.pj-board--copilot .cp-file button::after { content: ""; position: absolute; inset: 0; border-radius: 12px; }
-.pj-board--copilot .cp-file:has(button:hover), .pj-board--copilot .cp-file:focus-within { outline: 1px solid var(--pj-accent); background: rgb(0 166 80 / .1); }
+.pj-board--copilot .cp-file button[data-act] { display: inline; color: var(--cp-green); border: 0; background: none; box-shadow: none; padding: 0; min-height: 0; font: inherit; font-weight: 650; }
+.pj-board--copilot .cp-file button[data-act]::after { content: ""; position: absolute; inset: 0; border-radius: 12px; }
+.pj-board--copilot .cp-file > .trust-note { position: relative; z-index: 1; }
+.pj-board--copilot .cp-file:has(button[data-act]:hover), .pj-board--copilot .cp-file:focus-within { outline: 1px solid var(--pj-accent); background: rgb(0 166 80 / .1); }
 .pj-board--copilot .cp-change { display: grid; grid-template-columns: 12px max-content minmax(0, 1fr); align-items: baseline; gap: 12px; padding-block: 8px; margin: 0; }
 .pj-board--copilot .cp-change::before { content: ""; width: 8px; height: 8px; border: 2px solid var(--cp-green); border-radius: 50%; }
 .pj-board--copilot .cp-change time { color: var(--cp-green); font-weight: 700; }
@@ -55,12 +56,17 @@
 .pj-board--copilot .pj-card__tail .pj-cut { text-wrap: pretty; }
 .pj-board--copilot [data-card="copilot-delivery"] .cp-inset { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
 .pj-board--copilot [data-card="copilot-more"], .pj-board--copilot [data-card="changes"] { min-height: 360px; }
+.pj-board--copilot [data-card="changes"]:not(:has(.cp-foot nav)) { align-self: start; min-height: 0; }
+.pj-board--copilot [data-card="changes"]:not(:has(.cp-foot nav)) .cp-list { min-height: 0; }
 @media (min-width: 1200px) {
   .pj-copilot .pj-strip:has(.copilot-capability) { grid-template-columns: 1.25fr repeat(calc(var(--pj-cells) - 1), minmax(0, 1fr)); }
 }
 @media (max-width: 1100px) {
   .pj-copilot #pj-board.pj-board--copilot { grid-template-columns: minmax(0, 1fr); }
-  .pj-copilot .pj-strip:has(> :nth-child(6 of .pj-cell):nth-last-child(1 of .pj-cell)) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  .pj-copilot .pj-strip:has(> :nth-child(6 of .pj-cell)) { display: flex; flex-wrap: wrap; }
+  .pj-copilot .pj-strip:has(> :nth-child(7 of .pj-cell)):not(:has(> :nth-child(9 of .pj-cell))) { --cp-strip-columns: 4; }
+  .pj-copilot .pj-strip:has(> :nth-child(10 of .pj-cell)) { --cp-strip-columns: 5; }
+  .pj-copilot .pj-strip > .pj-cell { flex: 1 0 calc(100% / var(--cp-strip-columns, 3)); }
+  .pj-copilot .pj-strip > .pj-strip-note { flex-basis: 100%; }
+  .pj-copilot .pj-strip .pj-cell__v { white-space: normal; overflow-wrap: anywhere; }
 }

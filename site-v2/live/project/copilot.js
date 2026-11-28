@@ -61,10 +61,11 @@
       const pages = state.next ? Math.max(last + 1, project === groups ? 0 : Math.ceil((state.total || 0) / STEP)) : last;
       const next = start + STEP < items.length || state.next;
       const body = items.slice(start, start + STEP).map(rows).join('');
+      const pager = pages > 1 ? '<nav aria-label="分页"><button type="button" data-step="-1"' + (state.page ? '' : ' disabled') + '>‹ 上一页</button><span>' + (state.page + 1) + ' / ' + pages
+        + '</span><button type="button" data-step="1"' + (next ? '' : ' disabled') + '>下一页 ›</button></nav>' : '';
       U.html(b.viz, '<div class="cp-list">' + (body || '<p class="cp-empty">' + (packet?.items && !cutoff ? '没有记录' : MISSING) + '</p>')
         + '</div><div class="cp-foot"><span>' + esc([packet?.items && label(items, state), cutoff, state.failed && MISSING].filter(Boolean).join(' · '))
-        + '</span><nav aria-label="分页"><button type="button" data-step="-1"' + (state.page ? '' : ' disabled') + '>‹ 上一页</button><span>' + (state.page + 1) + ' / ' + pages
-        + '</span><button type="button" data-step="1"' + (next ? '' : ' disabled') + '>下一页 ›</button></nav></div>', false);
+        + '</span>' + pager + '</div>', false);
     };
     b.viz.onclick = async event => {
       const button = event.target.closest('[data-step]');
@@ -105,7 +106,8 @@
     const tiles = ordered.map((it, i) => {
       const target = U.artifactAction(it, viewer, route);
       const action = target ? pcActions({ id: ID + '-' + it.title + '-' + it.at + '-' + i }, [target]) : '<small>' + MISSING + '</small>';
-      return '<div class="cp-file"><span>' + esc(formats[it.kind] || U.fieldText(it.title, viewer)) + '</span>' + action + '</div>';
+      const mark = target && viewer === 'owner' ? U.visitorLabel(it, 'open', '这份成品的正文', viewer) : '';
+      return '<div class="cp-file"><span>' + esc(formats[it.kind] || U.fieldText(it.title, viewer)) + '</span>' + action + mark + '</div>';
     }).join('');
     return '<section class="cp-run"><header><b>' + esc(run.group) + '</b><time>' + esc(date(run.at, false)) + '</time></header><div class="cp-files">' + tiles + '</div></section>';
   }
