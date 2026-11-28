@@ -6,8 +6,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI;
-  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
-  // 各类的名字（笔记本每周巡检已取消，名字留着给旧记录用）：后台的 categories[].title 优先，没读到时用这份（和后台写法一致）
+  const CATS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-laptop', 'excerpt', 'ai-commitments'];
+  // 后台的 categories[].title 优先，已退役的每周实况核对保留旧轮的名字。
   const NAMES = { 'auto-repair': '自动修理', 'message-review': '替你看新消息', translator: '翻译官', 'weekly-rules': '每周规矩复核',
     'weekly-laptop': '笔记本每周巡检', 'weekly-live': '实况每周对一遍', excerpt: '摘一句', 'ai-commitments': 'AI 约好的事' };
   const FAMILIES = { claude: 'Claude', codex: 'Codex', antigravity: 'Antigravity' };
@@ -123,7 +123,10 @@
   }
 
   // 翻译官早先几轮的结果把同一版说了两遍（“写好了《他要什么》第 18 版。《他要什么》第18版已写好，还有……”），后半那遍去掉；后来的轮次后台只写一遍，不受影响
-  const oneVersion = s => typeof s === 'string' ? s.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u, '$1') : s;
+  const oneVersion = (s, withMessageCount = false) => typeof s === 'string'
+    ? s.replace(/(写好了(《[^》]+》)第\s*(\d+)\s*版)(，本次依据\s*\d+\s*条消息)?。\s*\2第\s*\3\s*版已写好(?=[，。！？；]|$)/u,
+      (match, lead, _title, _version, count) => count && !withMessageCount ? match : lead + (count || ''))
+    : s;
 
   // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
   function chatOf(conv) {
@@ -185,11 +188,15 @@
     const cut = Date.now() - 3 * 86400000, out = [], cats = list(d?.categories);
     const title = id => U.fieldText(catName(id, viewer, cats.find(c => c.id === id)?.title), viewer);
     const text = v => U.fieldText(v, viewer) || '';
+    const startBody = (body, actor) => {
+      const words = asOwner(body, viewer).trim().replace(/[。.]$/u, ''), name = asOwner(actor, viewer).trim();
+      return name && (words === name || words === `${name}正在进行`) ? '' : body;
+    };
     if (rows?.length) {
       for (const r of rows) {
         if (r.category === 'excerpt' || r.legacy) continue;
         const actor = title(r.category), what = r.subject ? `${text(r.subject.title)}${r.subject.round ? ` 第 ${r.subject.round} 轮` : ''}` : text(r.summary);
-        if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(what || '这一轮')}</span>`, href: r.href, tone: 'ok' });
+        if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(startBody(what || '这一轮', actor))}</span>`, href: r.href, tone: 'ok' });
         if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
         if (r.deferred && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>暂时不修</em>：${U.esc(text(r.summary).replace(/^暂时不修\s*[·:：]\s*/, '') || '等下一次检查')}</span>`, href: r.href, tone: 'info' });
         else if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
@@ -200,7 +207,8 @@
         const actor = text(r.actor);
         if (actor === excerpt || /[?&]type=excerpt\b/.test(r.href || '') || !/start|done|finish|fail|stop|pause|incomplete/.test(r.kind || '')) continue;
         const word = /start/.test(r.kind) ? '开始' : /done|finish/.test(r.kind) ? '跑完' : '停了';
-        out.push({ at: r.at, actor, html: `<span><em>${word}</em>：${U.esc(text(r.text).replace(/^(正在跑|已经?跑完|停了)[：:]\s*/, ''))}</span>`, href: r.href, tone: word === '停了' ? 'bad' : 'ok' });
+        const body = text(r.text).replace(/^(正在跑|已经?跑完|停了)[：:]\s*/, '');
+        out.push({ at: r.at, actor, html: `<span><em>${word}</em>：${U.esc(word === '开始' ? startBody(body, actor) : body)}</span>`, href: r.href, tone: word === '停了' ? 'bad' : 'ok' });
       }
     }
     for (const p of list(d?.provider_pauses)) out.push({ at: p.started_at, actor: list(p.categories).map(title).join('、'), html: `<span><em>停了</em>：${p.reason === 'login' ? '登录过期' : '额度用完'}</span>`, tone: 'bad' });
@@ -226,7 +234,10 @@
   // 访客版称呼：页面上指本人的“你”写“本人”（私事线 11-26：替本人看新消息、转给本人、等本人打开、需要本人操作）。
   // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
-  const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
+  const original = html => `<!--automation-original-->${html}<!--/automation-original-->`;
+  const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html
+    : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
+      .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人')).join('');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();

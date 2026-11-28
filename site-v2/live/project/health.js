@@ -1,4 +1,4 @@
-// 健康参谋（/live/project/?id=personal-health）自己的几块；page.js 只在几处接进来：adapt 改这一页的数据、board 加卡、columns 定卡放哪一栏、ownArtifacts 不画通用的“最近产物”。
+// 健康参谋（/live/project/?id=personal-health）自己的几块；page.js 只在几处接进来：adapt 改这一页的数据、board 加卡、columns 定卡放哪一栏、noArtifacts 不画通用的“最近产物”。
 // 本人 11-27 定的样子（甲）：读数下面通栏“手环记录齐不齐”（12 个小月历、图例、几天有记录）；
 // 下面左边“AI 答健康问题用到哪天”“更多数据”，中间“AI 能分析哪些数据”，右边“最近的简报”＋最近改动（page.js 画）。
 // 原来页上的每个数都还在：并进了这几张卡（攒了多少→月历下一排、几种数据的条数→排行、更多数据两组）。
@@ -386,5 +386,5 @@
   // 卡放哪一栏：照图固定；出现别的卡时交回 page.js 按高度摆；窗口窄时排成一栏，先后见 health.css
   const columns = keys => !keys.every(k => k in COLUMNS) ? null : window.matchMedia?.(NARROW).matches ? keys.map(() => 0) : keys.map(k => COLUMNS[k]);
 
-  window.ProjectPages = Object.assign(window.ProjectPages || {}, { 'personal-health': { adapt, board, columns, ownArtifacts: true } });
+  window.ProjectPages = Object.assign(window.ProjectPages || {}, { 'personal-health': { adapt, board, columns, noArtifacts: true } });
 })();

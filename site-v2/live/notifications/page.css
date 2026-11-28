@@ -10,13 +10,16 @@
 .delivery-table th,.delivery-table td { padding: 12px 16px; border-bottom: 1px solid var(--hair); vertical-align: top; }
 .delivery-table th:first-child,.delivery-table td:first-child { padding-left: 0; }
 .delivery-table th:nth-child(1) { width: 12%; }.delivery-table th:nth-child(2) { width: 24%; }.delivery-table th:nth-child(3) { width: 19%; }
+.delivery-table .notify-route { display: inline-block; white-space: nowrap; }
 .delivery-table details { font-size: 13px; color: var(--muted); }.delivery-table summary { cursor: pointer; }
 .delivery-note { margin: 0 0 18px; font-size: 14px; line-height: 24px; color: var(--muted); }
 .delivery-note:last-child { margin: 14px 0 0; }
 .delivery-detail { margin-top: 16px; padding: 14px 18px; border-radius: 16px; background: rgb(255 255 255 / .55); font-size: 14px; line-height: 24px; }
 #attention .stut { grid-template-columns: repeat(2,minmax(0,1fr)); }
-#attention .stut__card { min-height: 0; grid-template-columns: 80px 136px minmax(0,1fr); align-items: center; }
+#attention .stut__card { min-height: 0; grid-template-columns: 80px 136px minmax(0,1fr); grid-template-rows: 1fr auto; align-items: center; }
 #attention .stut__t { grid-row: auto; }
+#attention .stut__s { white-space: normal; overflow-wrap: anywhere; }
+#attention .notify-nw { white-space: nowrap; }
 #attention .grp__chapter { min-height: 0; }
 #attention .grp:not(.is-open) .grp__chapter { min-height: 0; }
 #attention .card__glow { opacity: .08; }
@@ -42,6 +45,7 @@
 #attention .stut__w { min-width: 0; overflow-wrap: anywhere; }
 .page--notifications .delivery-group + .delivery-group { margin-top: 20px; }
 .page--notifications .delivery-more { margin: 8px 0 0; padding-left: 0; color: var(--muted); font-size: 13px; }
+#attention [data-attention-more] > summary { translate: none; }
 .page--notifications summary.delivery-more { display: inline-flex; align-items: center; gap: 5px; list-style: none; }
 .page--notifications summary.delivery-more::-webkit-details-marker { display: none; }
 .page--notifications details[open] > .delivery-more .delivery-more__closed,
@@ -63,6 +67,7 @@
 .page--notifications .notify-link .more { margin-left: 0; padding-left: 0; translate: none; }
 .page--notifications .notify-private { color: var(--muted); }
 .page--notifications [data-status="failed"] :is(.stut__s, .notify-state) { color: #c2407f; }
+#attention [data-status="recovered"] .stut__s { color: #00A650; }
 .page--notifications :is([data-status="unsure"], [data-status="not_started"]) :is(.stut__s, .notify-state) { color: #a36a21; }
 .delivery-table th:nth-child(2) { width: 30%; }
 .notify-all { margin-top: 22px; }
@@ -85,7 +90,6 @@
 
 /* 没到的那几张卡：同一件事另一路怎样、点开看明细（M306） */
 #attention .notify-other { color: var(--ink-soft, #55524b); }
-#attention .stut { align-items: start; }
 #attention .notify-detail { grid-column: 1 / -1; margin-top: 4px; }
 #attention .notify-detail > summary { margin: 0 0 0 calc(80px + 136px + 24px); translate: none; }
 #attention .notify-detail .delivery-detail { margin-top: 8px; background: rgb(246 241 233 / .9); color: var(--ink-soft, #55524b); cursor: auto; }
@@ -96,4 +100,9 @@
 #attention .stut__card:has(.notify-detail[open]) { background: #fff; box-shadow: inset 0 0 0 1.5px rgb(163 106 33 / .3), 0 10px 24px -14px rgb(163 106 33 / .45); }
 .delivery-table .notify-other, .page--notifications #email-gaps .notify-other { color: var(--muted); font-size: 13px; }
 /* 窗口窄时一行一张，免得字挤成一长条 */
-@media (max-width: 1199px) { #attention .stut { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1199px) {
+  #attention { --notify-status-width: 124px; --notify-column-gap: 6px; }
+  #attention .stut { grid-template-columns: minmax(0, 1fr); }
+  #attention .stut__card { grid-template-columns: 80px minmax(min-content, var(--notify-status-width)) minmax(0,1fr); column-gap: var(--notify-column-gap); }
+  #attention .notify-detail > summary { margin-left: calc(80px + var(--notify-status-width) + 2 * var(--notify-column-gap)); }
+}

@@ -81,11 +81,19 @@ test('reject broken or old fallback packages', async () => {
 
 test('shutdown marker, OSS receipt and resource time stay independent', async t => {
   const value = {v: 1, seq: 1, metadata_only: true, at, publication: {policy, audience}, resources: {home: {at: '2026-11-17T11:50:00.000Z'}}};
-  t.mock.method(globalThis, 'fetch', async url => url === oss ? Response.json(value, {headers: {'Last-Modified': 'Tue, 17 Nov 2026 12:00:05 GMT'}}) : new Response('{}', {status: 502}));
-  for (const [marker, connection] of [[true, 'unreachable'], [at, 'host-off']]) {
-    value.host_off_at = marker;
+  let status = 502;
+  t.mock.method(globalThis, 'fetch', async url => url === oss ? Response.json(value, {headers: {'Last-Modified': 'Tue, 17 Nov 2026 12:00:05 GMT'}}) : new Response('{}', {status}));
+  for (const [marker, basis, originStatus, connection] of [
+    [undefined, undefined, 502, 'unreachable'], [true, 'windows_poweroff', 502, 'unreachable'],
+    [at, undefined, 502, 'unreachable'], [at, 'network_timeout', 502, 'unreachable'],
+    [at, 'windows_poweroff', 502, 'host-off'], [at, 'windows_poweroff', 503, 'service'],
+  ]) {
+    [value.host_off_at, value.host_off_basis, status] = [marker, basis, originStatus];
     const response = await call();
-    assert.deepEqual([response.headers.get('X-Live-Connection'), response.headers.get('X-Live-Offline-Since'), response.headers.get('X-Live-Last-Seen'), (await response.json()).at], [connection, marker === at ? at : null, '2026-11-17T12:00:05.000Z', value.resources.home.at]);
+    const body = await response.json(), confirmed = connection === 'host-off';
+    assert.equal(response.status, 503);
+    assert.deepEqual([response.headers.get('X-Live-Connection'), response.headers.get('X-Live-Offline-Since'), response.headers.get('X-Live-Last-Seen'), body.at], [connection, confirmed ? at : null, '2026-11-17T12:00:05.000Z', value.resources.home.at]);
+    assert.deepEqual([body.host_off_basis, body.host_off_at], confirmed ? ['windows_poweroff', at] : [undefined, undefined]);
   }
 });
 

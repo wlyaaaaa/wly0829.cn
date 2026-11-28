@@ -158,7 +158,7 @@
 
     // 三格
     const what = d.story?.what ?? d.progress_summary ?? d.outcome_text ?? d.text;
-    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', s.closed ? `已经了结：${s.label}，不再看了。` : next]]
+    const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
     put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
@@ -167,8 +167,9 @@
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
+      const repeated = r === rows.at(-1) && cells.some(([, v]) => nodot(T(r.text)) === nodot(T(v)));
       const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
-      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
+      return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${repeated ? '' : stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`
       : nextAt ? `<li class="run iss-step" data-dot="${s.late ? 'late' : 'next'}"><div class="run__main"><p><b class="iss-when">${esc(when(nextAt))}</b>${looked != null ? `第 ${esc(looked + 1)} 次看 · ` : ''}${s.late ? '到点了还没看' : '还没到'}</p></div></li>`
@@ -282,10 +283,12 @@
 
   // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
   let ended = false;
-  function empty(message) {
+  function empty(message, detail = '') {
     ended = true; delete hero.dataset.updating;
-    U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
-    part('state').hidden = part('src').hidden = true;
+    const head = part('head'), src = part('src');
+    U.html(head, `<span class="head__lead">${esc(message).replace(/\b\d{1,2}-\d{2} \d{2}:\d{2}\b/g, '<span class="iss-nowrap">$&</span>')}</span>`);
+    head.classList.toggle('is-long', Boolean(detail) && [...message].length > 40);
+    U.html(src, detail); src.hidden = !detail; part('state').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
   // 访客版读口撤回（503 live_publication_revoked，访客版正在重新生成）：这一件旧的标题、状态、三格、经过、右栏全清，
@@ -319,12 +322,21 @@
     },
     link(s) {
       try {
-        bar?.set(s); L.offline(s.offline);
-        U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
+        const missing = s.meta?.status === 404 ? s.link?.ledger_missing : null;
+        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen } : s);
+        L.offline(s.offline);
         if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
-        if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
+        if (s.meta?.status === 404) {
+          const { text, prefix, target, headline, original_title: originalTitle } = missing ?? {};
+          const titleLine = headline && typeof originalTitle === 'string' && [...originalTitle].length > 24;
+          const related = target ? (text ? `${esc(prefix)}<br>` : '') +
+            go(`/live/issue/?id=${encodeURIComponent(target.id)}`, esc(target.title)) +
+            U.visitorLabel(target, '$', '换号后的那件', 'owner') : '';
+          return empty((titleLine && headline) || text || prefix || '这一件暂时读不到',
+            [titleLine && `原题：${esc(originalTitle)}`, related].filter(Boolean).join('<br>'));
+        }
         if (ended) return;
         heroRead.set(s); restRead.set(s);
         if (s.phase === 'gone') empty('这块没存下来，连上后补上。');

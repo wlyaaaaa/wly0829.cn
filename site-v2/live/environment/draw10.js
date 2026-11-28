@@ -32,12 +32,12 @@
     const title = `<b>近 ${span(d)} 天变化</b>`;
     if (!d.items.length) return d.gap ? `${title}<p class="env-note">${U.fieldHtml(typeof d.gap === 'string' ? dateText(d.gap) : d.gap, { name: '软件变化记录', kind: viewer })}</p>` : '';
     const rows = visible(d, viewer).map(r => {
-      const kind = ({ installed: '新装', updated: '升级／版本变化', uninstalled: '卸载' })[r.kind] || r.kind;
       const versions = [...new Set([r.previous_version, r.version].filter(Boolean))];
+      const kind = r.kind === 'updated' && versions.length === 2 ? '' : ({ installed: '新装', updated: '升级／版本变化', uninstalled: '卸载' })[r.kind] || r.kind;
       const suffix = typeof r.name === 'string' && versions.map(v => ` ${v}`).find(v => r.name.endsWith(v));
       const name = suffix ? r.name.slice(0, -suffix.length) : r.name;
       const versionText = versions.map(U.esc).join(' → ');
-      return `<p class="row__sub">${U.esc(dateText(r.date))} · ${U.esc(kind)} ${U.fieldHtml(name, { name: '软件', kind: viewer })}${versionText ? ` ${versionText}` : ''}${r.drive ? ` · ${U.esc(r.drive)} 盘` : ''}</p>`;
+      return `<p class="row__sub">${U.esc(dateText(r.date))} · ${kind ? `${U.esc(kind)} ` : ''}${U.fieldHtml(name, { name: '软件', kind: viewer })}${versionText ? ` ${versionText}` : ''}${r.drive ? ` · ${U.esc(r.drive)} 盘` : ''}</p>`;
     });
     const head = rows.slice(0, limit);
     // 还没取的下一页：有总数就算进“还有几条”，没有总数也照样给“继续看”

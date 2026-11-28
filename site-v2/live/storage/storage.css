@@ -20,6 +20,7 @@
 .cl-pill[data-tone="gray"] { color: var(--muted); background: rgb(0 0 0 / .04); box-shadow: inset 0 0 0 1px var(--hair); }
 .cl-pill:not([data-tone="green"]) i { box-shadow: none; }
 .page--storage #cleanup-note { font-size: 13.5px; line-height: 20px; margin-top: 8px; }
+.cleanup-link-name { white-space: nowrap; }
 .cl-panel { display: grid; border-radius: 20px; background: rgb(255 255 255 / .5); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .7), 0 1px 2px rgb(40 40 30 / .03); }
 .cl-panel + .cl-panel { margin-top: 16px; }
 .cl-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.42fr) minmax(0, 1fr); }
@@ -36,6 +37,7 @@
 .cl-days .is-today b { background: linear-gradient(#20c06c, #00A650); box-shadow: 0 4px 14px rgb(0 166 80 / .25); }
 .cl-days li > span { order: 2; margin-top: 7px; font-size: 11.5px; line-height: 14px; color: var(--muted); white-space: nowrap; }
 #cleanup-total { container-type: inline-size; }
+#cleanup-total .cl-big:not(.is-gray) { font-size: min(68px, 23cqi); white-space: nowrap; }
 @container (max-width: 250px) {
   .cl-days { height: 136px; padding-bottom: 18px; }
   .cl-days li:nth-child(even) > span { transform: translateY(18px); }
@@ -162,7 +164,7 @@
 .dk-rest { margin-top: 4px; }
 .dk-rest__sum { cursor: pointer; padding: 4px 8px; font-size: 12.5px; line-height: 18px; color: var(--muted); list-style: none; }
 .dk-rest__sum::-webkit-details-marker { display: none; }
-.page--storage :is(.row__title,.dk-list li > span,.dk-cap,.dk-about,.cl-vol__t,.cl-rules span,.cl-tiles b,.cl-tiles li > div > span,.head__tail,.vz-rank__name,.vz-rank__label,#ssd-table .storage-path,#disk-health .vz-fig__v) {
+.page--storage :is(.row__title,.dk-list li > span,.dk-cap,.dk-about,.cl-vol__t,.cl-rules li > span,.cl-tiles b,.cl-tiles li > div > span,.head__tail,.vz-rank__name,.vz-rank__label,#ssd-table .storage-path,#disk-health .vz-fig__v) {
   white-space: normal; word-break: normal; overflow-wrap: anywhere; overflow: visible; text-overflow: clip;
 }
 .page--storage #hero-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

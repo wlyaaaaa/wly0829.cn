@@ -730,7 +730,7 @@
       for (const b of Object.values(vals)) b.textContent = '—';
       opts.onRead?.([], null);
     }
-    empty('正在读');
+    empty('加载中');
 
     function render(fade) {
       const byId = new Map((payload?.series || []).map((s) => [s.id, s]));
@@ -748,7 +748,7 @@
       const hasValues = Number.isFinite(lo);
       if (!hasValues) {
         if (!tiny && next.some(l => l.series.chart_window?.missing_intervals?.some(g => g[2]))) { lo = 0; hi = 1; }
-        else { empty([...new Set(next.map((l) => l.series.reason).filter(Boolean))].join('；') || (next.some((l) => l.series.state === 'computing') ? '正在读…' : '这段时间没有读数')); return true; }
+        else { empty([...new Set(next.map((l) => l.series.reason).filter(Boolean))].join('；') || (next.some((l) => l.series.state === 'computing') ? '加载中' : '这段时间没有读数')); return true; }
       }
       unit = view.unit || next[0].series.unit;
       const span = next[0].series.from ? next[0].series : payload;
