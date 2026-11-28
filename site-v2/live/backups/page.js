@@ -332,7 +332,7 @@
     const all = byImportance((d.sets || []).filter(s => s.name)), picked = all.filter(noticed);
     const sets = U.mergePrivateRows(picked, { value: s => s.name, kind: viewer });
     const others = all.length - picked.length, unchecked = all.filter(s => !noticed(s) && protection(s) === 'unknown').length;
-    const restLine = !all.length ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
+    const restLine = !others ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
     const tail = restLine ? [{ key: 'backup-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><p class="row__sub">${esc(restLine)}</p>` }] : [];
     const limit = U.shouldFold(sets.length - 5) ? 5 : sets.length;
     const rows = all.length ? sets.slice(0, limit).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));

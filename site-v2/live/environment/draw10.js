@@ -54,7 +54,12 @@
   const shell = html => `<div class="card__glass glass"><div class="card__body"><div class="grp__chapter">${html}</div></div></div>`;
   let read;
   function unavailable(state) {
-    if (Array.isArray(state.data?.items) || !(['none', 'gone'].includes(state.phase) || state.meta?.status >= 400)) return;
+    if (Array.isArray(state.data?.items)) return;
+    if (state.meta?.status === 204) {
+      read?.done(false); read = null; host.hidden = true;
+      return;
+    }
+    if (!(['none', 'gone'].includes(state.phase) || state.meta?.status >= 400)) return;
     if (!read) {
       U.html(host, shell(''));
       read = U.reading(host.querySelector('.grp__chapter'), { name: `近 ${days} 天变化`, ghost: '' });
