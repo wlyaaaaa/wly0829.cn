@@ -337,18 +337,25 @@
   const stampText = x => `${esc(T.day(x.at))} ${esc(T.clock(x.at))}`;
   const PHASES = { startup: '开场', first_message: '首条消息', resume: '接续', compact: '压缩后' };
   function contextHtml(m, h) {
-    const r = m.modes && modeOf(m).hosts[h.id];
+    const opened = m.modes && modeOf(m), r = opened?.hosts[h.id];
     const cell = (phase, role) => {
       const row = r?.samples.find(x => x.phase === phase && x.role === role), s = row?.sample;
-      if (s) return `<td><details><summary>${stampText(s)} · ${esc(s.version)} · ${words(s.characters)}</summary><pre>${esc(plain(s.text))}</pre></details></td>`;
+      if (s) {
+        const title = [stampText(s), esc(s.version || ''), words(s.characters)].filter(Boolean).join(' · ');
+        const key = esc(`sample-${h.id}-${opened.id}-${phase}-${role}`);
+        return `<td><details id="${key}"><summary>${title}</summary><pre>${esc(plain(s.text))}</pre></details></td>`;
+      }
       const date = row?.last_at && stampText({ at: row.last_at });
-      return `<td>这版规则还没样本${date ? ` · 上次 ${date}` : ''}</td>`;
+      return `<td>${date ? `这版规则还没样本 · 上次 ${date}` : '还没有'}</td>`;
     };
     const rows = Object.entries(PHASES).map(([id, name]) =>
       `<tr><th scope="row">${name}</th>${cell(id, 'root')}${cell(id, 'child')}</tr>`).join('');
     const last = r?.hostLast ? `这家最近一条钩子记录 ${stampText({ at: r.hostLast })}` : '这家还没有钩子记录';
+    const note = r?.samples.filter(row => row.sample).length === Object.keys(PHASES).length * 2 ? ''
+      : '<p class="op-ctx__when">11-28 19:38 起才按开法分开记，这以后没开过的格子写“还没有”。</p>';
     return `<section class="op-ctx" id="startup"><h2 id="op-context-title">开场和接续时补给 AI 的内容</h2>
       <p class="op-ctx__when">${esc(m.active || '当前版')} · ${last} · ${link('/live/agents/#hooks-message', '看钩子 ›')}</p>
+      ${note}
       <table class="op-ctx__samples" aria-labelledby="op-context-title"><thead><tr><th scope="col">阶段</th><th scope="col">主对话</th><th scope="col">子对话</th></tr></thead><tbody>${rows}</tbody></table>
       </section>`;
   }
