@@ -101,7 +101,7 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-hero-fold .pj-facts dt { padding-right: 16px; white-space: nowrap; }
 .pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
 .pj-no-split { display: inline-block; white-space: nowrap; }
-.pj-keep { white-space: nowrap; }   /* 色号这类只要自己不断开、前后照常折的 */
+.pj-run { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }   /* 路径、色号这类连着写的串：放得下整串换行，一整行都放不下才在里面断 */
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {

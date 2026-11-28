@@ -386,8 +386,11 @@
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
   // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
-  // 色号“#00A650”整个不断（只包一层不折行的字，不做成整块：后面的“，”不会被挤到下一行打头）
-  const glueDates = t => t.replace(/(?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-])/g, '<span class="pj-no-split">$&</span>').replace(/(?<![&\w])#[0-9A-Fa-f]{3,8}\b/g, '<span class="pj-keep">$&</span>');
+  // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
+  // 紧跟的“，”“。”和前面的“（”一起包进去，标点不单独落到行首。只认带字母或色号的，纯数字（3.5、1,234）照旧
+  const connected = run => /^#[0-9A-Fa-f]{3,8}$/.test(run) || /[A-Za-z]/.test(run) && /[\/\\._:#@+=-]/.test(run);
+  const glueDates = t => t.replace(/((?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-]))|[（「『“《]?(?<![&\w#\\\/.-])(#[0-9A-Fa-f]{3,8}\b|[A-Za-z0-9][\w.~@#%+=:\\\/-]*[A-Za-z0-9\/#%])[，。；：、！？）」』”》]{0,2}/g,
+    (m, date, run) => date ? `<span class="pj-no-split">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
   // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
   const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
   function keepWords(html) {
