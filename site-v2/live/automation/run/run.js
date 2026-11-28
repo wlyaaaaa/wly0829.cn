@@ -84,7 +84,9 @@
     const thing = r.subject ? F(r.subject.title, '这件活') : '';
     const lead = r.subject ? `${thing}${nth(r) ? ` · 第 ${int(nth(r))} 轮` : ''}` : '';
     // 暂缓的轮次标题一律短（“这件活 · 第 N 轮 · 暂时不修”），说明写在“这一轮做成了什么”（主控 11-25）；没有这件活的名字时用这一类的名字打头
-    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? `没做成：${F(r.reason, '原因') || '原因没记下'}` : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
+    const note = F(r.receipt.closingNote, '结局');
+    const failure = note ? F(r.reason || r.stop?.text, '原因') || note : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+    const tail = r.deferred ? (lead ? '暂时不修' : `${esc(name())} · 暂时不修`) : r.status === 'incomplete' ? failure : r.status === 'running' ? (r.subject ? '' : F(r.summary, '这一轮') || '正在跑')
       : firstSentence(withoutScan(R.withoutSubject(F(r.summary, '这一轮做了什么'), thing), r)) || '跑完了';
     // 暂缓、没做成的后半自己带着“暂时不修：”“没做成：”，前后用“ · ”接，免得一句里两个冒号（主控 11-25）
     return lead && tail ? `${lead}${r.deferred || r.status === 'incomplete' ? ' · ' : '：'}${tail}` : lead || tail;
@@ -291,8 +293,13 @@
   function closing(r, lastWords) {
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
+    const note = F(r.receipt.closingNote, '结局');
     let body, tone, original = '';
-    if (r.deferred) {
+    if (r.excerptFallback && r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
+    if (note) {
+      body = note + (original ? '<br>用的是：' : '');
+      tone = r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : 'ok';
+    } else if (r.deferred) {
       // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
       // 这一轮做了什么（summary）另起一行，和原因是同一句的不再写（公网复核 11-26：暂缓原因没显示）
       const why = F(r.reason, '为什么先放着'), whyPlain = plainOf(r.reason), note = R.deferredNote(r, F);
@@ -301,7 +308,6 @@
     } else if (r.excerptFallback) {
       const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
         .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
-      if (r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
       body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original ? '<br>用的是：' : ''}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';

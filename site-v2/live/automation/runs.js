@@ -75,9 +75,11 @@
     // 这不是失败：页面上灰点、写“暂时不修”，不写“没做成”、不标红（M674）。不管记的是跑完还是没做成，标了 deferred 的都照暂缓显示（主控 11-25 定）。
     // status 照后台原样；自动任务页“只看跑完的”“只看没做成的”两个筛选都不含暂缓的轮次（board.js）。
     const deferred = status !== 'running' && str(r.outcome) === 'deferred';
+    const checked = num(r.checked_messages) ?? num(r.messages);
+    const emptyCheck = status === 'completed' && r.check_only === true && r.outcome === 'no_new' && (checked == null || checked === 0);
     const subject = r.subject && (r.subject.id || r.subject.title) ? { id: r.subject.id || r.subject.title, title: r.subject.title, href: T.path(r.subject.href), round: num(r.subject.round) } : null;
     return {
-      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, trigger: r.trigger, who, family: familyOf(r.worker),
+      key: `${category}:${r.run_id}`, category, id: str(r.run_id), status, deferred, emptyCheck, trigger: r.trigger, who, family: familyOf(r.worker),
       excerptFallback: category === 'excerpt' && status === 'incomplete' && r.outcome === 'fallback',
       queuedAt: r.queued_at, startedAt: started, finishedAt: r.finished_at, lastAt: r.last_activity_at || r.finished_at || started,
       minutes, summary: r.summary, reason: r.reason, activity: r.activity, subject,
@@ -161,6 +163,7 @@
       timeline: list(d.timeline).map(t => ({ at: t.at, text: t.text, tone: base.deferred && typeof t.text === 'string' && t.text.includes('暂时不修') ? 'info' : ['ok', 'bad', 'info'].includes(t.tone) ? t.tone : 'info', href: t.run_id ? runPath(base.category, t.run_id) : T.path(t.href) })),
       conversation: chatOf(d.conversation),
       receipt: { available: receipt.available === true, href: site(receipt.href), recorded: list(receipt.recorded), told: receipt.told, scan: receipt.scan,
+        closingNote: receipt.closing_note,
         originalText: typeof receipt.original_text === 'string' && (viewer === 'owner' || !receipt.source?.content_locked) ? receipt.original_text : '' },
       prompt: d.prompt_text, prev: str(d.prev_run_id), next: str(d.next_run_id),
       // 一轮的页照“一轮的页-v1”：三格（发生了什么、有什么影响、接下来）、没做成的真原因（stop）、属于账本哪件（ledger_item，group 是欠着 owed／放着 parked）、

@@ -48,6 +48,7 @@
 
   // —— 一轮的样子：灯、几个字的结局 ——
   function tag(r) {
+    if (r.emptyCheck) return { text: '空查', tone: 'off' };
     if (r.excerptFallback) return { text: '没写成摘要', tone: 'bad' };
     const label = typeof r.statusLabel === 'string' && r.statusLabel.trim() ? F(r.statusLabel, '状态') : '';
     const [text, tone] = r.status === 'running' ? ['正在跑', 'run'] : r.deferred ? ['暂时不修', 'off'] : r.status === 'incomplete' ? ['没做成', 'bad']
@@ -68,9 +69,9 @@
     // 没有那件活的名字时：结果的第一句当标题，其余放下面小字；第一句太长就截一段当标题，整句照放小字里，不丢字
     const plain = R.oneVersion(U.fieldText(r.summary, viewer).trim()), first = plain.split(/(?<=[。；！？])/)[0] || '';
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
-    const title = r.excerptFallback ? '这次用了原来的回复。' : F(R.shortTitle(r.subject?.title), '这件活') || (r.status === 'incomplete' && reason ? F(R.shortTitle(r.statusReason || r.reason), '原因') : short || F(R.shortTitle(R.oneVersion(r.summary)), '这一轮做了什么')) || (r.status === 'running' ? F(R.shortTitle(r.activity), '正在干什么') || '正在跑' : '跑完了');
+    const title = r.emptyCheck ? '查过，没有新消息' : r.excerptFallback ? '这次用了原来的回复。' : F(R.shortTitle(r.subject?.title), '这件活') || (r.status === 'incomplete' && reason ? F(R.shortTitle(r.statusReason || r.reason), '原因') : short || F(R.shortTitle(R.oneVersion(r.summary)), '这一轮做了什么')) || (r.status === 'running' ? F(R.shortTitle(r.activity), '正在干什么') || '正在跑' : '跑完了');
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
-    const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
+    const detail = r.emptyCheck || r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
     const labelPrefix = `${t.text} · `, titlePrefix = `${title} · `;
     const originalNote = detail.startsWith(labelPrefix) ? detail.slice(labelPrefix.length) : detail;
@@ -92,7 +93,7 @@
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
-    const who = r.who?.text ? esc(r.who.text) : '';
+    const who = !r.emptyCheck && r.who?.text ? esc(r.who.text) : '';
     const segs = [[repeated ? '' : note, false], [nth, true], [who, true], [ran, true]].filter(([s]) => s);
     const noteHtml = wordsIn(note);
     const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${keep ? s : noteHtml}</span>`);

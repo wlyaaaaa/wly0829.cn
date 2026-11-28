@@ -592,20 +592,22 @@
     } else if (m === 'off') { tone = 'off'; main = '关着，不用排时间'; sub = waiting || sub; }
     else if (m === 'paused') { tone = 'off'; main = esc(pausedText(c.setting?.until_at) || '暂停中'); }
     else if (c.id === 'excerpt') main = excerptToday?.data && known(excerptToday.data.total) ? `今天摘了 ${int(excerptToday.data.total)} 句` : '空着';
-    else if (c.id === 'ai-commitments') {
-      const owed = promised();
-      main = owed?.next ? `空着 · 下一件 ${esc(when(owed.next))}` : '空着';
-      // 点了落到账本页“欠着 · AI 在修的”那块开头，并选好“约好再查的”筛选，进去列的就是这几件（主控 11-26 02:20 定）
-      if (owed) sub = link('/live/ledger/?kind=promised#kinds', owed.count ? `${int(owed.count)} 件在等 ›` : '没有在等的 ›');
-    } else {
+    else if (c.id === 'ai-commitments') main = '空着';
+    else {
       const next = st.next_at || c.next_at;
       main = T.stamp(next) != null ? `空着 · 下次 ${esc(when(next))}` : stalled(d) ? '空着 · 派活程序没按时跑，下次几点暂时算不出' : waiting ? `空着 · ${waiting}` : '空着';
       if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
       if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
+    if (c.id === 'ai-commitments') {
+      const owed = promised(), count = owed ? (owed.count ? `${int(owed.count)} 件在等` : '没有在等的') : '约好再查';
+      const entry = link('/live/ledger/?kind=promised#kinds', `${count} ›`, 'tp-link au-nobr');
+      sub = [main === '空着' ? '' : main, sub].filter(Boolean).join(' · ');
+      main = owed?.next ? `${entry} · <span class="au-nobr">下一件 ${esc(when(owed.next))}</span>` : entry;
+    }
     return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${wordsIn(main)}</b>${sub ? `<small>${wordsIn(sub)}</small>` : ''}</p></div>`;
   }
-  // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
+  // AI 约好的事先写今天的读数，再写上一次结果。
   function todayText(c) {
     if (c.id !== 'ai-commitments') return '';
     const n = c.result_today?.count, s = c.ai_usage?.today_seconds;
@@ -615,16 +617,16 @@
   const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
     part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
   function lastCell(c, problem) {
-    const r = c.last_result;
-    if (!r) return '<span class="tp-muted">运行记录这次没读到</span>';
+    const r = c.last_result, today = todayText(c);
+    if (!r) return `${today ? `<small>${today}</small>` : ''}<span class="tp-muted">运行记录这次没读到</span>`;
     const headline = problem?.headline || problem?.title || problem?.text;
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
     const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
-    const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
+    const clock = keepDates(esc(when(r.at)));
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
-    return `${text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : ''}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    return `${today ? `<small>${today}</small>` : ''}${text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : ''}${clock ? `<small>${clock}</small>` : duplicate && !today ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
