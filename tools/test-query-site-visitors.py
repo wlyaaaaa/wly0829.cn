@@ -383,6 +383,61 @@ class VisitorTests(unittest.TestCase):
             self.assertEqual(realtime.call_args.args[1:], (begin, now + timedelta(seconds=1)))
             self.assertEqual(sync["sources"][0]["from"], begin)
 
+    def test_snapshot_cursor_preserves_same_second_and_uses_adjacent_windows(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="store", sls_logstore="logs",
+                               snapshot_beacons=True)
+        start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)
+        stop = start + timedelta(days=2, minutes=1)
+        cursor = int(start.timestamp()) + 15
+        rows = [dict(self.sls_row(), request_id=key, __time__=cursor) for key in ("a", "b", "c")]
+        rows.append(dict(self.sls_row(), request_id="d", __time__=int((stop - timedelta(seconds=15)).timestamp())))
+
+        def page(records):
+            return json.dumps({"meta": {"count": len(records), "progress": "Complete"}, "data": records})
+
+        with patch.object(query, "SLS_SQL_PAGE", 2), patch.object(query, "source_windows", return_value=[
+                ("sls_realtime", start, stop)]), patch.object(query, "cli_run", side_effect=[
+                    page(rows[:2]), page(rows[:2]), page(rows[2:3]), page([]), page(rows[3:])]) as cloud:
+            _, records, sync, _ = query.sync_cloud(args, start.date(), stop.date(), stop)
+        self.assertEqual([row["identity"][1] for row in records], [row["request_id"] for row in rows])
+        bodies = [json.loads(call.args[0][-1]) for call in cloud.call_args_list]
+        edge = int((start + timedelta(days=2)).timestamp())
+        self.assertEqual([(p["from"], p["to"]) for p in bodies], [
+            (int(start.timestamp()), edge), (cursor, edge), (cursor, cursor + 1),
+            (cursor + 1, edge), (edge, int(stop.timestamp()))])
+        self.assertEqual([p["query"].split("LIMIT ")[-1] for p in bodies], ["2", "2", "2, 2", "2", "2"])
+        self.assertEqual([s["records"] for s in sync["sources"]], [3, 1])
+
+    def test_monitor_cv_keeps_two_day_results_when_seven_day_snapshot_fails(self):
+        snapshot = Mock()
+        cache = self.root
+        args = ["--cv", "--days", "2", "--monitor-sources", str(self.root / "sources.json"), "--cache-dir", str(cache)]
+        (cache / "internal-visitor-probes.txt").write_text("1a\n1b\n5a\n5b\n", "utf-8")
+        def visits(day):
+            at = datetime.now(query.TZ).replace(hour=12, minute=0, second=0) - timedelta(days=day)
+            entry = log(at.strftime("%d/%b/%Y:%H:%M:%S %z"), extra={"x-entry": "cv", "x-id": f"page-{day}", "x-cv-session": str(day)})
+            return [query.parse_line(line) for line in (self.probe(at - timedelta(minutes=1), f"{day}a"), entry, self.probe(at + timedelta(minutes=1), f"{day}b"))]
+        recent = ([], visits(1), {"sources": [{"query_complete": True}]}, None)
+        overview = (recent[0], visits(5) + recent[1], *recent[2:])
+        for succeeds in (False, True):
+            with self.subTest(succeeds=succeeds), patch.object(query, "DEFAULT_CACHE", cache), \
+                    patch.dict(query.os.environ, {"AGENTS_BACKGROUND_AUTOMATION": "1"}), patch.object(query, "send_exit_probe"), \
+                    patch.object(query, "OfflineNetworks", side_effect=ValueError), patch.object(query, "due_snapshot", return_value={"owner": "x"}), \
+                    patch.object(query, "live_producer", return_value=SimpleNamespace(visitors=snapshot)), \
+                    patch.object(query, "sync_cloud", side_effect=[recent, overview if succeeds else query.SnapshotQueryTimeout()]) as sync, \
+                    patch("builtins.print") as printed:
+                self.assertEqual(query.main(args), 0)
+            selected = json.loads(printed.call_args.args[0])
+            self.assertEqual((date.fromisoformat(selected["end"]) - date.fromisoformat(selected["start"])).days, 1)
+            self.assertEqual(selected["cv"]["count"], 1)
+            self.assertEqual([int((call.args[2] - call.args[1]).days) for call in sync.call_args_list], [1, 6])
+            self.assertEqual(selected.get("snapshot_refresh_error"), None if succeeds else "snapshot_query_timeout")
+            self.assertEqual(snapshot.call_count, int(succeeds))
+            if succeeds:
+                summary = snapshot.call_args.args[1]
+                self.assertEqual((date.fromisoformat(summary["end"]) - date.fromisoformat(summary["start"])).days, 6)
+                self.assertEqual((summary["total"]["unique_visitors"], summary["total"]["pageviews"]), (1, 2))
+
     def test_sls_deep_read_filters_both_beacon_forms_without_changing_window(self):
         args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store")
         start = datetime(2026, 10, 12, 10, tzinfo=query.TZ)

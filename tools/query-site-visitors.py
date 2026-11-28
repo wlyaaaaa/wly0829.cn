@@ -39,6 +39,8 @@ SOURCE = "wly0829-img-media-shanghai"
 PIXEL_URL = f"https://{SOURCE}.oss-cn-shanghai.aliyuncs.com/_v.gif"
 MAX_EXIT_INTERVAL = timedelta(minutes=45)
 SLS_ENDPOINT = "cn-shanghai.dualstack.log.aliyuncs.com"
+SLS_SQL_PAGE = 10000
+SNAPSHOT_QUERY_SECONDS = 210
 PREFIX = "access/" + SOURCE + "/"
 TOKEN = re.compile(r'"((?:\\.|[^"\\])*)"|\[([^\]]*)\]|([^\s"\[\]]+)')
 LOG_ESCAPE = re.compile(r'\\(["\\])')
@@ -440,6 +442,10 @@ def sync_logs(args, start, end):
     return paths, {"listed_objects": len(listed), "objects": len(paths), "downloaded": downloaded, "reused": len(paths) - downloaded}
 
 
+class SnapshotQueryTimeout(RuntimeError):
+    pass
+
+
 def sls_logs(args, start, end, legacy_fallback=False):
     if not args.sls_project:
         raise ValueError("SLS 项目未配置；请指定 --sls-project")
@@ -447,7 +453,10 @@ def sls_logs(args, start, end, legacy_fallback=False):
     cv_query = getattr(args, "cv", False) and not legacy_fallback and not snapshot
     deep_read = getattr(args, "deep_read", False)
     sql_paging = (deep_read or snapshot) and not cv_query
-    records, offset, page_size = [], 0, 10000 if cv_query or sql_paging else 100
+    records, offset, second_only = [], 0, False
+    left, right = int(start.timestamp()), int(end.timestamp())
+    page_size = SLS_SQL_PAGE if sql_paging else 10000 if cv_query else 100
+    deadline = getattr(args, "snapshot_deadline", None) if snapshot else None
     search = f"__topic__:oss_access_log AND bucket:{SOURCE}"
     if cv_query:
         search += (" | SELECT * WHERE regexp_like(request_uri, '(?i)x-cv-session(?:=|%3d)[A-Za-z0-9-]+"
@@ -456,9 +465,13 @@ def sls_logs(args, start, end, legacy_fallback=False):
         search += ' AND (request_uri: "/_v.gif" OR request_uri: "%2F_v.gif")'
     while True:
         # 原始查询每页最多 100 条；SQL 大页减少中断后补查积压的逐页开销。
-        page_query = (search + f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, {page_size}"
-                      if sql_paging else search)
-        body = {"from": int(start.timestamp()), "to": int(end.timestamp()),
+        page_query = search
+        if snapshot:
+            limit = f"{offset}, {page_size}" if second_only else str(page_size)
+            page_query += f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {limit}"
+        elif sql_paging:
+            page_query += f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, {page_size}"
+        body = {"from": left, "to": left + 1 if second_only else right,
                 "query": page_query,
                 "line": 0 if sql_paging else page_size,
                 "offset": 0 if sql_paging else offset, "reverse": False}
@@ -466,15 +479,19 @@ def sls_logs(args, start, end, legacy_fallback=False):
                    "--logstore", args.sls_logstore, "--region", "cn-shanghai",
                    "--endpoint", SLS_ENDPOINT, "--read-timeout", "20", "--connect-timeout", "10",
                    "--profile", args.profile, "--body", json.dumps(body)]
-        attempts, diagnostics = (2 if deep_read else 3), []
+        bounded = deep_read or deadline is not None
+        attempts, diagnostics = (2 if bounded else 3), []
         for attempt in range(attempts):
-            # 深读一页最多两次 25 秒调用；不叠加 CLI 的三次网络重试。
+            # 有截止的任务一页最多两次，每次最多 25 秒，不叠加 CLI 网络重试。
+            remaining = deadline - time.monotonic() if deadline is not None else 25
+            if remaining <= 0:
+                raise SnapshotQueryTimeout("SLS snapshot budget spent")
             try:
-                page = json.loads(cli_run(command, timeout=25, attempts=1) if deep_read else cli_run(command))
+                page = json.loads(cli_run(command, timeout=min(remaining, 25), attempts=1) if bounded else cli_run(command))
             except CloudCommandError as error:
                 diagnostics.extend(error.diagnostics)
                 error.diagnostics = diagnostics[-attempts:]
-                if not deep_read or error.category not in ("连接超时", "DNS 解析失败", "连接中断") or attempt == attempts - 1:
+                if not bounded or error.category not in ("连接超时", "DNS 解析失败", "连接中断") or attempt == attempts - 1:
                     raise
                 time.sleep(1)
                 continue
@@ -491,10 +508,32 @@ def sls_logs(args, start, end, legacy_fallback=False):
             raise RuntimeError("SLS 查询未完成；未将部分日志当作完整结果")
         if int(meta.get("count", -1)) != len(data) or len(data) > page_size:
             raise ValueError("Incomplete SLS page")
+        if snapshot and len(data) == page_size:
+            try:
+                timestamps = [int(row["__time__"]) for row in data]
+            except (KeyError, TypeError, ValueError):
+                raise ValueError("Incomplete SLS page") from None
+            edge = timestamps[-1]
+            if min(timestamps) < left or max(timestamps) != edge or edge >= body["to"]:
+                raise ValueError("Incomplete SLS page")
+            if edge > left:
+                # The lower API bound is inclusive. Reread the final second as a unit.
+                records.extend(parse_sls_row(row) for row, stamp in zip(data, timestamps) if stamp < edge)
+                left = edge
+            else:
+                records.extend(parse_sls_row(row) for row in data)
+                second_only = True
+                offset += len(data)
+                if offset >= 50000:
+                    raise RuntimeError("SLS snapshot second exceeds paging limit")
+            continue
         records.extend(parse_sls_row(row) for row in data)
         if cv_query and len(data) == page_size:
             raise RuntimeError("SLS 专用链接查询达到单次上限；未将截断日志当作完整结果")
         if len(data) < page_size:
+            if second_only and left + 1 < right:
+                left, offset, second_only = left + 1, 0, False
+                continue
             if cv_query and any(row["params"]["event"] == "entry" and row["params"]["p"].rstrip("/") == "/cv"
                                 and not row["params"]["cv-session"] for row in records):
                 return sls_logs(args, start, end, legacy_fallback=True)
@@ -530,10 +569,15 @@ def sync_cloud(args, start, end, now):
             sync.update(archive_sync)
             file_range = (begin, finish)
             segment.update({"delay": "最长约 48 小时", "objects": len(paths)})
+            sync["sources"].append(segment)
         else:
-            records = sls_logs(args, begin, finish)
-            segment.update({"delay": "约 3 分钟", "query_complete": True, "records": len(records)})
-        sync["sources"].append(segment)
+            while begin < finish:
+                stop = min(finish, begin + timedelta(days=2)) if getattr(args, "snapshot_beacons", False) else finish
+                page = sls_logs(args, begin, stop)
+                records.extend(page)
+                sync["sources"].append({"source": source, "from": begin, "to": stop, "delay": "约 3 分钟",
+                                        "query_complete": True, "records": len(page)})
+                begin = stop
     return paths, records, sync, file_range
 
 
@@ -1108,16 +1152,15 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
         probe_path = args.cache_dir / "internal-visitor-probes.txt"
         official_probe = (args.monitor_sources and args.cv and args.days == 2 and not local_only
                           and args.cache_dir.resolve() == DEFAULT_CACHE.resolve() and os.environ.get("AGENTS_BACKGROUND_AUTOMATION") == "1")
-        snapshot_paths = snapshot_error = None
+        snapshot_paths = snapshot_error = recent = None
+        snapshot_deadline = time.monotonic() + SNAPSHOT_QUERY_SECONDS
         if official_probe:
             send_exit_probe(probe_path)
             try:
                 snapshot_paths = due_snapshot(args.monitor_sources, checked_at)
             except (OSError, ValueError, TypeError, KeyError):
                 snapshot_error = "snapshot_registry_unavailable"
-        args.snapshot_beacons = bool(snapshot_paths) or beacon_only
-        if snapshot_paths:
-            start = end - timedelta(days=6)
+        args.snapshot_beacons = beacon_only
         exit_probes = set(probe_path.read_text("utf-8").splitlines()) if external_only and probe_path.is_file() else set()
         if args.legacy_archive:
             with gzip.open(args.legacy_archive, "rt", encoding="utf-8") as stream:
@@ -1140,6 +1183,20 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
             sync = {"mode": "local_only", "sources": [{"source": "local_logs"}]}
         else:
             paths, records, sync, file_range = sync_cloud(args, start, end, checked_at)
+            if snapshot_paths:
+                overview_start = end - timedelta(days=6)
+                args.snapshot_beacons = True
+                args.snapshot_deadline = snapshot_deadline
+                try:
+                    overview = sync_cloud(args, overview_start, end, checked_at)
+                except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
+                    snapshot_error = "snapshot_query_timeout" if isinstance(error, SnapshotQueryTimeout) else "snapshot_query_failed"
+                    snapshot_paths = None
+                    args.snapshot_beacons = beacon_only
+                else:
+                    recent = paths, records, sync, file_range, start
+                    paths, records, sync, file_range = overview
+                    start = overview_start
         if args.freeze_legacy:
             print(json.dumps(freeze_legacy(args.freeze_legacy, paths, records, file_range, args.launch_at, start, end, sync), ensure_ascii=False, default=lambda value: value.isoformat()))
             return 0
@@ -1160,10 +1217,18 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
                 sink = lambda events, locations, observations, archive: on_events(events, locations, observations, archive, args, sync, checked_at, start, end)
             if on_excluded_opens:
                 exclusions = lambda rows, archive, since: on_excluded_opens(rows, archive, since, args, sync, checked_at, start, end)
-        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since, args.cv, args.launch_at, args.page, args.entry,
+        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since, args.cv and recent is None, args.launch_at, args.page, args.entry,
                          external_only=external_only, exit_probes=exit_probes, on_events=sink, on_excluded_opens=exclusions)
         output["site_scope"] = {"mode": "frozen_legacy" if args.legacy_archive else "new_site" if args.launch_at else "all_observed", "launch_at": args.launch_at}
         output["offline_network_databases"] = networks.metadata if networks else database_state
+        cv_output = output
+        if recent:
+            cv_paths, cv_records, cv_sync, cv_range, cv_start = recent
+            cv_output = analyze(cv_paths, cv_start, end, args.include_self, args.include_monitor, cv_records, cv_range,
+                                networks, history, cv_only=True, launch_at=args.launch_at, page=args.page, entry=args.entry,
+                                external_only=external_only, exit_probes=exit_probes)
+            cv_output.update(site_scope=output["site_scope"], sync=cv_sync)
+            cv_output["log_coverage"]["sources"] = cv_sync["sources"]
         if not local_only and not args.page and not args.entry and external_only:
             args.cache_dir.mkdir(parents=True, exist_ok=True)
             temporary = history_path.with_suffix(f".{os.getpid()}.tmp")
@@ -1186,8 +1251,8 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
             live_producer().record('visitors', ROOT, output, checked_at.isoformat())
         if args.deep_read:
             output["deep_read"].update(checked_at=checked_at.isoformat(), **{key: output[key] for key in ("site_scope", "count_scope", "external_since")})
-        selected = output["deep_read"] if args.deep_read else {"start": output["start"], "end": output["end"],
-                    **{key: output[key] for key in ("cv", "site_scope", "count_scope", "external_since", "log_coverage", "sync")}} if args.cv else output
+        selected = output["deep_read"] if args.deep_read else {key: cv_output[key] for key in (
+            "start", "end", "cv", "site_scope", "count_scope", "external_since", "log_coverage", "sync")} if args.cv else output
         if snapshot_error:
             selected["snapshot_refresh_error"] = snapshot_error
         print(json.dumps(selected, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
