@@ -106,19 +106,23 @@
   function sizeLine(label, size, active = false) {
     const count = active ? size?.active : size?.total;
     const value = (key, unit) => {
-      if (Number.isFinite(size?.[key])) return `${size[key].toLocaleString('zh-CN')} ${unit}`;
+      if (Number.isFinite(size?.[key])) return { text: `${size[key].toLocaleString('zh-CN')} ${unit}`, coverage: '' };
       const observed = size?.[`observed_${key}`], covered = size?.coverage?.[key];
-      if (!Number.isFinite(observed)) return '';
+      if (!Number.isFinite(observed)) return { text: '', coverage: '' };
       const coverage = Number.isInteger(covered) && Number.isInteger(count) ? `（已读 ${covered}/${count} 个）` : '';
-      return `至少 ${observed.toLocaleString('zh-CN')} ${unit}${coverage}`;
+      return { text: `至少 ${observed.toLocaleString('zh-CN')} ${unit}`, coverage };
     };
     const docs = value('docs_chars', '字'), code = value('code_chars', '字'), lines = value('code_lines', '行');
-    const unavailable = !docs && !code && !lines;
+    const unavailable = !docs.text && !code.text && !lines.text;
     const at = active && stamp(size?.at || size?.collected_at || size?.date);
     const cutoff = at ? `${unavailable || U.isStale(size) || U.offline?.() ? '上次截止' : '截止'} ${at}` : '';
-    const reading = text => text ? `<b>${esc(text)}</b>` : '<small>暂时读不到</small>';
+    const reading = ({ text, coverage }) => {
+      if (!text) return '<small>暂时读不到</small>';
+      const note = coverage && active && viewer === 'public' ? `<small>${esc(coverage)}</small>` : esc(coverage);
+      return `<b>${esc(text)}${note}</b>`;
+    };
     return `<tr><th scope="row">${label}</th>${unavailable ? '<td colspan="2"><small>暂时读不到</small></td>'
-      : `<td>${reading(docs)}</td><td>${reading(code)}${lines || code ? `<small>${esc(lines || '行数暂时读不到')}</small>` : ''}</td>`}
+      : `<td>${reading(docs)}</td><td>${reading(code)}${lines.text || code.text ? `<small>${esc(lines.text + lines.coverage || '行数暂时读不到')}</small>` : ''}</td>`}
       <td class="pj-summary__cutoff">${esc(cutoff)}</td></tr>`;
   }
   function renderSummary(summary, activeSize, frozenSize) {
