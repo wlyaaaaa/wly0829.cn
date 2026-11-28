@@ -34,6 +34,7 @@ from urllib.request import Request, urlopen
 TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CACHE = Path(r"E:\Cache\wly-site-visitors")
+OPERATOR_SHORT_NAMES = {"中国电信": "电信", "中国联通": "联通", "中国移动": "移动"}
 BUCKET = "wly0829-access-logs-shanghai"
 SOURCE = "wly0829-img-media-shanghai"
 PIXEL_URL = f"https://{SOURCE}.oss-cn-shanghai.aliyuncs.com/_v.gif"
@@ -706,10 +707,12 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
         dwell[row["params"]["p"]].append(item)
         if row["params"]["v"]:
             visitor_dwell[row["params"]["v"]][row["params"]["p"]].append(item)
+        operator = OPERATOR_SHORT_NAMES.get(location["operator"], location["operator"])
+        speed_group = f'{location["province"]}/{operator}'
         for key in ("ttfb", "dom", "load"):
             samples = [value for r in rows if (value := metric(r["params"], key)) is not None]
             if samples:
-                speed[f'{location["province"]}/{location["operator"]}'][key].append(samples[-1])
+                speed[speed_group][key].append(samples[-1])
     def dwell_summary(items):
         known = [item["seconds"] for item in items if item["seconds"] is not None]
         return {"observed_seconds": round(sum(known), 2), "samples": len(known), "unknown_opens": len(items) - len(known),
