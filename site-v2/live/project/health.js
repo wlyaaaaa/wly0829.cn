@@ -133,7 +133,9 @@
       const body = !four.length ? '' : same
         ? `${four.map(([, n]) => n).join('、')}都是 <b>${esc(`${r[four[0][0]]}/${r.days}`)}</b> 天`
         : four.map(([k, n]) => `${n} <b>${esc(`${r[k]}/${r.days}`)}</b> 天`).join('、');
-      if (body) out.push(`<p class="hl-recent">最近两周${prose(span)}${body}</p>`);
+      const detail = v.recent?.expandable && v.recent.section
+        ? ` <a class="hl-recent__detail" href="${esc(RECORDS(v.recent.section))}">断档明细 <span class="more__chev" aria-hidden="true">›</span></a>` : '';
+      if (body) out.push(`<p class="hl-recent">最近两周${prose(span)}${body}${detail}</p>`);
     }
     const cut = md(s?.through) || md(r?.through);
     if (cut) out.push(`<span class="hl-cut">截止 ${esc(cut)}</span>`);
@@ -304,7 +306,8 @@
       // 两版同一颗“在电脑上打开”：本人版用现有打开程序；访客回包没有 open，按钮照摆，点了由共用拦截弹“不是可信设备”的弹窗
       const action = U.artifactAction({ open: x.open || { label: '在电脑上打开' } }, viewer, h => h);
       const act = action ? U.actions({ id: `personal-health-brief-${i}-${x.captured_at}`, title: `简报 ${x.captured_at}` }, [action]) : '';
-      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${chip}<span class="hl-brief__to">${to ? `资料到 ${esc(to)}` : ''}</span><span class="hl-brief__act">${act}</span></li>`;
+      const privacy = act ? U.visitorHiddenTag('这份简报的正文', '打开本人电脑上的简报需要可信设备', viewer) : '';
+      return `<li class="hl-brief"><span class="hl-brief__at">${esc(mdTime(x.captured_at))}</span>${chip}<span class="hl-brief__to">${to ? `资料到 ${keep(to)}` : ''}</span><span class="hl-brief__act">${act}${privacy}</span></li>`;
     }).join('');
     return rows ? `<ul class="hl-briefs">${rows}</ul>` : '';
   }
