@@ -615,7 +615,7 @@
     return [known(n) ? `今天做完 ${int(n)} 件` : '', known(s) ? `用了 ${s > 0 ? minutes(s) : '0 分钟'}` : ''].filter(Boolean).map(x => `<span class="au-nobr">${x}</span>`).join('，');
   }
   const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
-    part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
+    part => part.startsWith('<') ? part : `<span class="au-nobr au-date"><span class="au-nobr">${part.replace(/ +(?=\d{1,2}:\d{2})/u, '</span> <span class="au-nobr">')}</span></span>`);
   const sentenceSegments = new Intl.Segmenter('zh-CN', { granularity: 'sentence' });
   function lastCell(c, problem) {
     const r = c.last_result, today = todayText(c);

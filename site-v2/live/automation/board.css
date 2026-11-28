@@ -140,6 +140,7 @@
   .au-table tbody th, .au-model, .au-trend > span, .au-switchcell { white-space: normal; }
   .au-table td.au-model { padding-inline: 5px 0; }
   .au-last-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+  .au-last-summary .au-date { white-space: normal; }
   .au-trend { justify-items: stretch; }
   .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }
   .au-pausebtn { margin: 6px 0 0; }
