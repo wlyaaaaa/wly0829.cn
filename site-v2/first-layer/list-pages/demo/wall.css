@@ -59,6 +59,15 @@ body {
 .wall--skills .hang--small { margin-top: 0; }
 .wall--skills .piece { aspect-ratio: 3 / 1; }
 
+.wall__all-skills {
+  display: block;
+  width: fit-content;
+  margin: 0 0 12px;
+  color: inherit;
+  font-size: 14px;
+  text-underline-offset: .22em;
+}
+
 /* 一张画。注意：.piece 自己不能加 transform、opacity，不然后一张的光晕会盖到前一张画上 */
 .piece {
   position: relative;
