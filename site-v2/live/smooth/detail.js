@@ -28,7 +28,7 @@
     notes.hidden = !c.warn.length;
     U.html(notes, c.warn.map((g) => `<li><a href="#grp-${esc(g.key)}" data-goto="${esc(g.key)}"><b>${U.fieldHtml(g.name, { name: '分组', place: 'title' })}${g.reason ? '：' : ''}</b></a>${g.reason ? `<span>${U.fieldHtml(g.reason, { name: sp(g.name) })}</span>` : ''}</li>`).join(''));
   }
-  function mount({ resource, render, board, merge: combine, statusData = d => d }) {
+  function mount({ resource, render, board, merge: combine, statusData = d => d, statusNotes = true, extraLinks = '' }) {
     const hero = document.getElementById('hero'), notices = document.getElementById('notices');
     const part = (name) => hero.querySelector(`[data-part="${name}"]`);
     const heroRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: document.title.split(' · ')[0] });
@@ -46,14 +46,14 @@
       const head = part('head');
       head.querySelectorAll('.lamp').forEach(lamp => lamp.remove());
       if (state.lamp) head.insertAdjacentHTML('afterbegin', state.lamp);
-      if (state.note) { const note = document.createElement('span'); note.dataset.why = ''; note.className = 'stat-gap'; U.html(note, state.note); part('note').append(note); part('note').hidden = false; }
+      if (statusNotes && state.note) { const note = document.createElement('span'); note.dataset.why = ''; note.className = 'stat-gap'; U.html(note, state.note); part('note').append(note); part('note').hidden = false; }
     };
     Light.add(hero);
     for (const a of document.querySelectorAll('.stage a[href^="/live/"]')) a.href = route(a.getAttribute('href'));
     document.querySelector('[data-back]')?.addEventListener('click', U.restoreBack);
     function links() {
       const href = data?.grafana?.href;
-      U.html(part('links'), `<a class="more more--link" href="${esc(route('/live/computer/'))}">电脑 <span class="more__chev">›</span></a>` + (!href ? '' : `<a class="more more--link" data-needs-pc href="${esc(href)}" target="_blank" rel="noopener">Grafana <span class="more__chev">↗</span></a>`));
+      U.html(part('links'), `<a class="more more--link" href="${esc(route('/live/computer/'))}">电脑 <span class="more__chev">›</span></a>` + (!href ? '' : `<a class="more more--link" data-needs-pc href="${esc(href)}" target="_blank" rel="noopener">Grafana <span class="more__chev">↗</span></a>`) + extraLinks);
     }
     const bar = U.topbar({ ask: () => data ? `请看${document.title.split(' · ')[0]}${at ? `（${U.time(at)} 的数）` : ''}：${U.sp(data.text) || U.collectionText('', data)}。请说明现在的情况。` : '' });
     hero.addEventListener('click', (e) => {

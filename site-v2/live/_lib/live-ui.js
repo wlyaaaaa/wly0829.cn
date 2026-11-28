@@ -1880,7 +1880,7 @@
 
   // 电脑下面的八页：返回回电脑总览（各页 HTML 里写好），返回下面一排同层切换，这一页标出来（M016、M017）
   (() => {
-    const pages = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿与流畅'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
+    const pages = [['/live/storage/', '存储'], ['/live/traffic/', '海外流量'], ['/live/power/', '用电'], ['/live/smooth/', '卡顿和帧率'], ['/live/apps/', '谁在占'], ['/live/usage/', '使用时间'], ['/live/security/', '安全'], ['/live/environment/', '软件与环境']];
     const back = document.querySelector?.('main a.back[href="/live/computer/"]');
     if (!back || !pages.some(([path]) => path === location.pathname)) return;
     const fixture = new URLSearchParams(location.search).get('fixture'), nav = document.createElement('nav');
