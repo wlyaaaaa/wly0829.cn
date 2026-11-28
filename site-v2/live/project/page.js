@@ -1456,7 +1456,7 @@
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
       if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m
         : { ...m, label: '整理成主题卡的认识', unit: '张', scope: '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“根据什么”“材料攒了多少”。' }) }) };
-      // 识字放大镜：公开页不说“合成”（读着像数是编出来的，主持 11-28 09:52 按第 12 版看图定）。“正式版本合成质量案例”写成“正式版本质量案例”，两版一样；
+      // 识字放大镜：公开页不说“合成”（公开页措辞照 M1178，主持 11-28 09:52 按第 12 版看图定）。“正式版本合成质量案例”写成“正式版本质量案例”，两版一样；
       // 读数名来自 LocalOCR 的 docs/live.contract.json，那边改了以后这句可删
       if (raw && id === 'localocr' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => typeof m?.label === 'string' && m.label.includes('正式版本合成质量案例') ? { ...m, label: m.label.replace('正式版本合成质量案例', '正式版本质量案例') } : m) }) };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
