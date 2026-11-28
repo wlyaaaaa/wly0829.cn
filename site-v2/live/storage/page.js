@@ -38,7 +38,7 @@
   }
   rankMore.addEventListener('click', () => { rankShown += RANK_STEP; drawRank(); });
   const ssdRead = U.reading($('ssd-panel'), { ghost: loadingRow, name: '谁在大量写 SSD', slow: false });
-  U.fold($('ssd-more'), $('ssd-box'));
+  U.fold($('ssd-more'), $('ssd-box'), null, true);
   const ssdMoreLabel = () => U.html($('ssd-more'), $('ssd-more').getAttribute('aria-expanded') === 'true' ? '收起原表 ‹' : '展开原表 ›');
   $('ssd-more').addEventListener('click', ssdMoreLabel);
   const storageColumns = (table, rows) => table?.columns?.length && table.columns.every(key => typeof key === 'string')
@@ -258,7 +258,7 @@
   }
   function categoryRows(list, row, hidden) {
     // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）
-    const limit = 5;
+    const limit = U.shouldFold(list.length - 5) ? 5 : list.length;
     K.put($('categories'), list.length ? list.slice(0, limit).map(row).join('') : hidden ? '' :
       `<li class="pj-note">${U.offline?.() ? missed : '暂时读不到各用途的占用'}。</li>`);
     K.put($('categories-rest'), list.slice(limit).map(row).join(''));
@@ -267,7 +267,7 @@
   }
   const moreCategories = () => U.html($('categories-more'), $('categories-more').getAttribute('aria-expanded') === 'true' ?
     '收起 ‹' : `还有 ${$('categories-rest').children.length} 类 ›`);
-  U.fold($('categories-more'), $('categories-box'));
+  U.fold($('categories-more'), $('categories-box'), null, true);
   $('categories-more').addEventListener('click', moreCategories);
   function render(d) {
     const locked = viewer !== 'owner' && K.locked(d);

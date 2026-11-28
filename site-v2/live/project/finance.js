@@ -144,21 +144,22 @@
     const lines = step ? ticks.map(v => v / top) : [1, 2, 3, 4, 5, 6, 7, 8].map(i => i / 8);
     const yAxis = `<div class="fin-y" aria-hidden="true">${step ? ticks.map(v => `<span style="--y:${(v / top * 100).toFixed(2)}%">${v ? kilo(v) : '0'}</span>`).join('') : ''}</div>`;
     const grid = `<div class="fin-grid" aria-hidden="true">${lines.filter(y => y > 0).map(y => `<i style="--y:${(y * 100).toFixed(2)}%"></i>`).join('')}</div>`;
-    const bar = (m, isCur) => {
+    const bar = (m, isCur, i) => {
       const cats = (m.categories || []).filter(c => c?.name).map(c => {
         const share = finite(c.share) ? c.share : finite(c.amount) && finite(m.total) && m.total > 0 ? c.amount / m.total : 0;
         return { name: c.name, w: finite(c.amount) && c.amount < 0 ? 0 : Math.max(0, share) };   // 万一出现负数：按 0 画，面板里写原数
       }).filter(c => c.w > 0).sort((a, b) => pal.rank(a.name) - pal.rank(b.name));
       const sum = cats.reduce((n, c) => n + c.w, 0), gap = !cats.length && m.category_gap;   // 没法按类拆的月：一整根浅灰
       const segs = gap ? `<i style="--c:${GAP_COLOR};--s:100%" title="${esc(GAP)}"></i>` : cats.map(c => `<i style="--c:${pal.color[c.name]};--s:${(c.w / sum * 100).toFixed(2)}%" title="${esc(c.name)}"></i>`).join('');
-      const label = isCur ? `<span>${monthNo(m.month)}月</span><span>未过完</span>` : esc(m.month);   // 本月各处截止哪天写在卡底和点开的面板里
+      // 横轴写“11月”，第一根和每年 1 月下面再写年份（写“2025-11”在 900 宽一根柱子放不下，挤成一串）；本月各处截止哪天写在卡底和点开的面板里
+      const label = isCur ? `<span>${monthNo(m.month)}月</span><span>未过完</span>` : `${monthNo(m.month)}月${!i || monthNo(m.month) === 1 ? `<span class="fin-bar__year">${esc(m.month.slice(0, 4))}</span>` : ''}`;
       const said = isCur ? `${monthNo(m.month)}月到目前` : m.month;
       const amount = finite(m.total) ? `，${yuan(m.total)}` : '';
       return `<button type="button" class="fin-bar${isCur ? ' is-current' : ''}${gap ? ' is-gap' : ''}" data-month="${esc(m.month)}" aria-pressed="false" aria-label="${esc(said + amount)}">
         <span class="fin-bar__plot">${isCur ? '' : finite(m.total) ? `<span class="fin-bar__top">${kilo(m.total)}</span>` : viewer !== 'owner' ? `<span class="fin-bar__top">${DOTS}</span>` : ''}<span class="fin-bar__stack" style="--h:${(frac(m) * 100).toFixed(2)}%">${segs}</span></span>
         <span class="fin-bar__x">${label}</span></button>`;
     };
-    return `<div class="fin-chart${step ? '' : ' is-bare'}">${yAxis}<div class="fin-bars" style="--n:${all.length}">${grid}${months.map(m => bar(m, false)).join('')}${cur ? bar(cur, true) : ''}</div></div>`;
+    return `<div class="fin-chart${step ? '' : ' is-bare'}">${yAxis}<div class="fin-bars" style="--n:${all.length}">${grid}${months.map((m, i) => bar(m, false, i)).join('')}${cur ? bar(cur, true) : ''}</div></div>`;
   }
   // 选中一根：描边、右边面板换成这个月
   function pick() {

@@ -6,7 +6,7 @@ function showImage(image, url) {
   image.src = url;
 }
 
-export async function mountInterface(id, strip) {
+export async function mountInterface(id, strip, words = html => html) {
   const response = await fetch('/live/project/interface-data.json');
   if (!response.ok) throw new Error('界面图清单暂时读不到');
   const shots = (await response.json())[id];
@@ -25,13 +25,13 @@ export async function mountInterface(id, strip) {
   section.setAttribute('aria-labelledby', 'pj-interface-title');
   section.innerHTML = `
     <h2 id="pj-interface-title">界面</h2>
-    <p>这个软件真实的样子，点图看大图</p>
+    <p>点图看大图</p>
     <div class="pj-interface-grid">${shots.map(([, , label]) => `
       <figure>
         <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
           <img decoding="async" alt=""><span class="pj-interface-zoom" aria-hidden="true"></span>
         </button>
-        <figcaption>${esc(label)}</figcaption>
+        <figcaption>${words(esc(label))}</figcaption>
       </figure>`).join('')}
     </div>
     <dialog class="pj-interface-view" aria-label="界面大图">
@@ -79,7 +79,8 @@ export async function mountInterface(id, strip) {
   }, { rootMargin: '0px 0px 160px' });
   section.querySelectorAll('.pj-interface-thumb').forEach((button, index) => {
     const thumb = button.querySelector('img');
-    thumb.dataset.thumb = shots[index][0];
+    // 只有一张图时图放大到卡内六成，缩略图（560 像素宽）不够清楚，直接用原图
+    thumb.dataset.thumb = shots[index][shots.length === 1 ? 1 : 0];
     observer.observe(thumb);
     button.onclick = () => { show(index); dialog.showModal(); };
   });

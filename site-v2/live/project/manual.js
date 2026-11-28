@@ -98,8 +98,8 @@
     if (!btn) return;
     const note = btn.closest('.pj-sec')?.querySelector('.mn-note');
     if (!note) return;
-    note.hidden = !note.hidden;
-    btn.setAttribute('aria-expanded', String(!note.hidden));
+    const set = hide => { note.hidden = hide; btn.setAttribute('aria-expanded', String(!hide)); };
+    if (note.hidden) set(false); else U.anchorFold(btn, () => set(true));   // 收起时按钮留在原处（M1191）
   });
 
   // —— 左栏大卡：整理成主题卡的认识（六类） ——

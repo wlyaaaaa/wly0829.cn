@@ -79,6 +79,13 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .page--project .pj-title > .pj-hero-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 4px; margin: 0 0 0 -6px; }
 .pj-hero-acts .more { margin: 0; translate: none; }
 .pj-hero-acts .pj-acts { display: inline-flex; flex-wrap: wrap; align-items: center; margin-left: 2px; }
+/* 窄屏：名字单占一行，日用、访客看不到、项目介绍、问情况这几枚签一起排在下一行，不让最后一枚单独掉下去 */
+@media (max-width: 560px) {
+  .page--project .pj-title { row-gap: 0; }
+  .page--project .pj-title > .card__head { display: contents; }
+  .page--project .pj-title::after { content: ""; order: 1; flex-basis: 100%; }
+  .page--project .pj-title > .card__head > :is(.tag, .pj-phase-gap, .head__rewrite), .page--project .pj-title > .pj-hero-acts { order: 2; margin-top: 8px; }
+}
 /* 第一行“最近一次改动 · 详情 ›”，第二行一句话说明 */
 .pj-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin-top: 10px; }
 .pj-line .hero__note { display: contents; }
@@ -88,30 +95,25 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-line .pj-about { order: 4; flex-basis: 100%; margin-top: 6px; font-size: 15.5px; line-height: 26px; letter-spacing: .03em; color: #3d3c38; text-wrap: pretty; }
 .pj-hero-fold:not(.is-open) .trust-note { visibility: hidden; }
 .pj-hero-fold .pj-facts { margin: 10px 0 2px; }
-.pj-hero-fold .pj-facts .kv__row { grid-template-columns: 0 108px minmax(0, 1fr); }
+/* 名字一列按最长的那个名字（“近 7 天影响改动”）定宽，几行对齐，名字和内容之间固定留 16 像素 */
+.pj-hero-fold .pj-facts { grid-template-columns: 0 max-content minmax(0, 1fr); }
+.pj-hero-fold .pj-facts .kv__row { grid-column: 1 / -1; grid-template-columns: subgrid; }
+.pj-hero-fold .pj-facts dt { padding-right: 16px; white-space: nowrap; }
 .pj-facts dd > .pj-impact-note { flex-basis: 100%; color: var(--muted); }
 .pj-no-split { display: inline-block; white-space: nowrap; }
+.pj-nb { white-space: nowrap; }   /* 数字带单位、中文日期：自己不断开，前后照常折 */
+.pj-run { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }   /* 路径、色号这类连着写的串：放得下整串换行，一整行都放不下才在里面断 */
 
 /* ============ 头卡下一行读数：一条玻璃，格子用细线隔开；有逐日数据的那格带小折线 ============ */
 .pj-strip {
   display: grid;
   container-type: inline-size;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(106px, 100% / var(--pj-cells, 6))), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(50%, max(106px, 100% / var(--pj-cells, 6))), 1fr));
   align-items: stretch;
   row-gap: 6px;
   margin-top: 16px;
   padding: 14px 10px;
   border-radius: var(--pj-card-radius);
-}
-/* 刷新说明只在逗号后折行，首格按最长一段留宽度，第二格保持原宽。 */
-@media (min-width: 900px) and (max-width: 1279px) {
-  .pj-strip:has(> .pj-cell:first-child .pj-cadence--refresh) {
-    grid-template-columns: minmax(min-content, 1fr) minmax(calc(100% / var(--pj-cells, 6)), 1fr)
-      repeat(calc(var(--pj-cells, 6) - 2), minmax(0, 1fr));
-  }
-}
-@media (max-width: 899px) {
-  .pj-strip > .pj-cell:first-child:has(.pj-cadence--refresh) { grid-column: span 2; }
 }
 .pj-cell {
   position: relative;
@@ -139,11 +141,18 @@ body.page--project.pj-frozen::before { filter: saturate(.75); }   /* 冻结的�
 .pj-cell--wide { grid-column: span 2; }
 .pj-cell--wide .pj-cell__v.is-text { margin-top: 4px; font-size: 15px; font-weight: 500; line-height: 23px; }
 .pj-cell__sub { font-size: 12px; line-height: 17px; color: #68665f; overflow-wrap: anywhere; }
+/* 最后一格“规模 截止”：时刻照正文小字写，窄了只在日期和钟点之间折行；数旧了挂一个“旧了” */
+.pj-cell__v.is-scale { margin-top: 5px; font-size: 14px; line-height: 22px; color: #5d5c56; white-space: normal; }
+.pj-old { display: inline-block; padding: 0 8px; border-radius: 8px; background: #fbe3b5; color: #8a5a00; font-size: 12px; line-height: 18px; font-weight: 700; }
+.pj-cell__k .pj-old { margin-left: 6px; vertical-align: 1px; }   /* “规模 截止”旁边那枚 */
 .pj-change-field { white-space: nowrap; }
 .pj-spark { flex: none; width: 76px; height: 26px; overflow: visible; }
 .pj-spark polyline { fill: none; stroke: var(--pj-spark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .pj-spark circle { fill: var(--pj-spark); }
-.pj-cell--spark .pj-spark { display: block; width: 100%; max-width: 150px; height: 20px; margin-top: 3px; }
+/* “近 30 天提交”：小折线放在数字右边（900 宽一格 120 像素也放得下，最窄缩到 24 像素），再窄才折到数字下面 */
+.pj-cell--spark .pj-cell__row { flex-wrap: wrap; gap: 0 6px; }
+.pj-cell--spark .pj-cell__v { flex: none; }
+.pj-cell--spark .pj-spark { display: block; flex: 1 1 24px; min-width: 24px; max-width: 120px; height: 22px; }
 .pj-spark .pj-spark__area { fill: color-mix(in srgb, var(--pj-spark) 14%, transparent); stroke: none; }
 a.pj-cell { transition: background .2s ease; }
 a.pj-cell:hover { background: rgb(255 255 255 / .55); }
@@ -151,6 +160,12 @@ a.pj-cell:hover .pj-cell__k, a.pj-cell:focus-visible .pj-cell__k { color: var(--
 a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -2px; }
 .pj-cell .more__chev { margin-left: 3px; color: var(--pj-accent); }
 .pj-strip > .pj-strip-note { order: 1; grid-column: 1 / -1; padding: 6px 20px 0; font-size: 12px; color: #9c9a92; }
+
+/* 整页的字窄了折行时不让最后一行只剩一两个字（产物说明、卡底小字、读数名都算；只调折法，不动不折行的那些，写了 balance 的照 balance） */
+.page--project .stage { text-wrap-style: pretty; }
+/* 最近改动、页首简介、详情、单图说明、卡里读数名和读数条、额外的几张卡（这周新能办的事等）：page.js 按词插了可断点，只在词与词之间折，词长过一整行才从中间断 */
+.pj-words :is(.pj-moved-head, .pj-sec--chart > .pj-viz > :is(p.knowledge-prose, p.pj-note), .pj-sec--chart > .pj-viz .pj-device-table :is(td, th), .pj-rh-events :is(.pj-rh-list > p, .pj-note), .pj-card__tail .pj-note, #pj-board .pj-text, #artifacts .pj-item :is(.row__title, .row__sub), .pj-sec--chart > .pj-part b, .pj-sec--timeline .row__title, .pj-line .pj-about, .pj-hero-fold .pj-facts dd, .pj-interface figcaption, #pj-board :is(.pj-kv__k, .pj-fig__k, .pj-fig__sub, .pj-part > span),
+  .pj-strip :is(.pj-cell__k, .pj-cell__sub, .pj-cell__v.is-text, .pj-cell__v.is-wrap, .pj-cell__v.is-scale)) { word-break: keep-all; overflow-wrap: anywhere; text-wrap-style: pretty; }
 
 /* ============ 两栏卡片 ============ */
 .page--project #pj-board.pj-board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--pj-gap); margin-top: var(--pj-gap); align-items: start; }
@@ -220,6 +235,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card [data-clamp] { cursor: pointer; }
 .pj-card .pj-empty { border-bottom: 0; padding: 6px 0; }
 .pj-card .pj-kv { column-gap: 28px; }
+/* 卡窄（900 宽两栏时）两列小表改成一行一项：名字在左、数在右，名字不被挤成一两个字一行 */
+.pj-card .pj-sec--kv { container: pj-kv / inline-size; }
+@container pj-kv (width < 440px) { .pj-card .pj-kv { grid-template-columns: minmax(0, 1fr); } }
 .pj-card .pj-kv__row { padding: 8px 0; }
 /* 读数下面那句解释照全写，格子窄就折行，不截成“…”（M881） */
 .pj-card .pj-kv__sub { white-space: normal; overflow-wrap: break-word; }
@@ -234,7 +252,9 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card > .pj-sec.pj-sec--array > .pj-part { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 2px 12px; margin: 0; padding: 0; }
 .pj-card .pj-sec--array > .pj-part > b { grid-column: 1; min-width: 0; overflow-wrap: anywhere; }
 .pj-card .pj-sec--array > .pj-part > .pj-record-meta { display: block; grid-column: 1; color: var(--muted); line-height: 20px; font-size: 13px; white-space: normal; }
-.pj-card .pj-sec--array .pj-record-link { grid-area: 1 / 2 / span 2; align-self: center; margin: 0; translate: none; white-space: nowrap; }
+.pj-card .pj-sec--array .pj-record-link { grid-area: 1 / 2 / span 2; align-self: center; margin: 0 -10px 0 0; translate: none; white-space: nowrap; }
+/* “明细 ›”的字和上面读数的数字右边对齐：这一行占满整行（右边那格空着时不留空格距），按钮右边的内边距让到卡边里 */
+.pj-card .pj-sec--array:not(:has(> .pj-foot:not([hidden]))) > .pj-part:has(> .pj-record-link) { grid-column: 1 / -1; }
 .pj-card .pj-sec--array > .pj-reading { margin: 6px 0 0; font-size: 13.5px; }
 .pj-card .pj-foot { margin-top: 4px; }
 .pj-card .pj-foot .more { translate: -10px 0; }
@@ -250,7 +270,12 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-tail[hidden] { display: none; }
 .pj-notes { flex: 1; min-width: 0; font-size: 12.5px; color: #8f8d86; }
 .pj-notes[hidden] { display: none; }
-.pj-notes > summary { display: inline-flex; align-items: center; height: 26px; margin-left: -8px; padding: 0 8px; border-radius: 999px; font-size: 12.5px; color: #68665f; }
+/* 卡底“说明 ›”和右边“全部 N 条 ›”、各页自己画的“说明 ›”同一个样子：深字、绿箭头，看得出能点（QA 第 10 轮） */
+.pj-notes > summary { display: inline-flex; align-items: center; height: 28px; margin-left: -8px; padding: 0 8px; border-radius: 999px; font-size: 13.5px; letter-spacing: .04em; color: var(--ink-soft); }
+.pj-notes > summary .disclosure-chev { color: var(--pj-accent); }
+/* “展开（还有 N 条）›”“逐项明细 ›”“明细 ›”“再看 ›”也是深字、绿箭头，能点的地方一个样子 */
+.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"], .pj-step, .pj-rh-step) { color: var(--ink-soft); }
+.pj-card :is(.pj-foot > .more, .pj-record-link, .more[data-p="page"], .pj-step, .pj-rh-step) .more__chev { color: var(--pj-accent); }
 .pj-notes > summary:hover { background: rgb(255 255 255 / .55); color: var(--ink); }
 .pj-notes > .pj-note { margin: 4px 0 0; }
 .pj-notes > .pj-note b { font-weight: 600; color: #6f6e68; }
@@ -270,15 +295,20 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .pj-card > .pj-sec:first-of-type.pj-sec--array { padding-top: 0; }
 
 /* 记录类做成时间线：一串小圆点连成一条线，最新那一颗是绿的；时刻在前、说的事在后 */
-.pj-card .pj-sec--timeline .rows .row { position: relative; grid-template-columns: 0 minmax(0, 1fr) auto; padding: 6px 0 6px 24px; border-top: 0; }
+.pj-card .pj-sec--timeline .rows { container: pj-recent / inline-size; }
+/* 一行的和几行的条目之间一样宽：不按通用行的最小高度撑 */
+.pj-card .pj-sec--timeline .rows .row { position: relative; grid-template-columns: 0 minmax(0, 1fr) auto; min-height: 0; padding: 6px 0 6px 24px; border-top: 0; }
 .pj-card .pj-sec--timeline .rows .row::before { content: ""; position: absolute; left: 3px; top: 13px; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #bdbbb3; }
-.pj-card .pj-sec--timeline .rows .row::after { content: ""; position: absolute; left: 7px; top: 24px; bottom: -9px; border-left: 1.5px solid rgb(20 20 19 / .09); }
+.pj-card .pj-sec--timeline .rows .row::after { content: ""; position: absolute; left: 7px; top: 24px; bottom: -9px; border-left: 1.5px solid rgb(20 20 19 / .18); }   /* 竖线要看得出来：.09 在粉、绿底上几乎看不见，点像没连起来 */
 .pj-card .pj-sec--timeline .rows .row:last-child::after { display: none; }
 .pj-card .pj-sec--timeline .pj-list-group:first-child > .rows > .row:first-child::before { box-shadow: inset 0 0 0 2.5px var(--pj-accent), 0 0 0 3px rgb(0 166 80 / .14); }
 .pj-tl-at { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pj-card .pj-sec--timeline .row__main { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 12px; font-size: 14.5px; line-height: 22px; font-weight: 400; }
 .pj-tl-copy { overflow-wrap: anywhere; }
 .pj-card .pj-sec--timeline .row__title { display: inline; font-weight: 400; color: #3d3c38; }
+/* 卡窄（900 宽两栏时）或窗口不到 1100 宽（账房这类窄窗一栏的页，最近改动整行宽）：时刻放上面一行，说的事占满整行，各页同一个样子 */
+@container pj-recent (width < 420px) { .pj-card .pj-sec--timeline .row__main { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+@media (max-width: 1100px) { .pj-card .pj-sec--timeline .row__main { grid-template-columns: minmax(0, 1fr); gap: 0; } }
 
 /* 页头下：项目自己的大图（有的项目给了预览图） */
 .page--project .pj-cover { margin: var(--pj-gap) 0 0; border-radius: var(--pj-card-radius); }
@@ -327,7 +357,7 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 }
 
 /* 规则仓：搬到智能体页的几块，原处只留一行链过去 */
-.pj-moved-head { display: inline-flex; align-items: center; gap: 4px; color: var(--ink); font-weight: 700; text-decoration: none; }
+.pj-moved-head { display: inline; color: var(--ink); font-weight: 700; text-decoration: none; }   /* 行内排：字一折行，“›”跟着最后一个词，不在旁边单独居中 */
 .pj-moved-head:hover { color: var(--pj-accent); }
 .pj-moved-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 14.5px; line-height: 24px; color: #3d3d3a; }
 .pj-moved-line a { color: inherit; text-decoration: none; }
@@ -345,7 +375,6 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 #site-visitors .pj-note { overflow-wrap: anywhere; }
 .page--project .pj-card :is(.knowledge-prose small, .pj-viz > .pj-note) { color: #68665f; }
 .pj-cadence { margin-inline-start: 0.5em; color: #68665f; font-size: 12px; font-weight: 400; white-space: nowrap; }
-.pj-cadence--wrap { white-space: normal; word-break: keep-all; overflow-wrap: normal; }
 /* 卡里的排行长条（技能使用、被打开最多的页……）做成整行的胶囊：浅底槽＋按比例铺开的颜色，名字压在胶囊里（照样子图） */
 .page--project .pj-card .vz-rank--pill .vz-rank__row { padding: 7px 14px; margin: 5px 0; }
 .page--project .pj-card .vz-rank--pill .vz-rank__bar { inset: 0; height: auto; border-radius: 999px; overflow: hidden; background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 1px rgb(30 30 30 / .05); }

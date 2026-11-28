@@ -608,9 +608,12 @@
     if (!btn) return;
     archiveOpen = !archiveOpen;
     if (archiveOpen) watchRecords();
-    $('record-section').hidden = $('record-title').hidden = !archiveOpen;
-    btn.setAttribute('aria-expanded', String(archiveOpen));
-    btn.textContent = archiveOpen ? '收起逐份档案 ›' : '展开逐份档案 ›';
+    const set = () => {
+      $('record-section').hidden = $('record-title').hidden = !archiveOpen;
+      btn.setAttribute('aria-expanded', String(archiveOpen));
+      btn.textContent = archiveOpen ? '收起逐份档案 ›' : '展开逐份档案 ›';
+    };
+    if (archiveOpen) set(); else U.anchorFold(btn, set);
   });
   // 账簿的样子：技能用量带次数条和“用得最多”“很久没用”两张摘要卡；“认识”一行好几句话，用一整页；别的明细左右两页
   function bookSetup() {

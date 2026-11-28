@@ -38,6 +38,7 @@
 .fin-bar__stack { display: flex; flex-direction: column-reverse; width: min(100%, 64px); height: var(--h); min-height: 3px; border-radius: 7px 7px 2px 2px; overflow: hidden; background: rgb(255 255 255 / .4); transition: filter .2s ease, outline-color .2s ease; outline: 2.5px solid transparent; outline-offset: 3px; }
 .fin-bar__stack > i { display: block; flex: none; height: var(--s); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 88%, #fff), var(--c)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .5); }
 .fin-bar__x { margin-top: 8px; font-size: 12.5px; line-height: 17px; color: #5d5c56; text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fin-bar__year { display: block; font-size: 11.5px; color: #8f8d86; }
 .fin-bar:hover .fin-bar__stack { filter: saturate(1.15) brightness(1.03); }
 .fin-bar:hover .fin-bar__x { color: var(--ink); }
 .fin-bar:focus-visible { outline: none; }

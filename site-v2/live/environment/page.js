@@ -67,7 +67,7 @@
   }
   const envFolds = new Map();
   const foldAttrs = key => ` data-env-fold="${esc(key)}"${envFolds.get(key) ? ' open' : ''}`;
-  const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open);
+  const rememberFold = detail => envFolds.set(detail.dataset.envFold, detail.open && !detail.hasAttribute('data-fold-flat'));
   const details = () => [...$('board').querySelectorAll('details[data-env-fold]')].filter(d => !d.closest('.grp--private,.is-unread'));
   // 软件版本表按“要不要你管”分组（本人 11-26 选 ENV1 的 A，照图 ENV-1）：要你点头才更新的、会自动更新但还没更新上的、已是最新的。
   // 分组读后台每行的 update_mode（automatic／owner_approval）和自动项的 last_update；后台还没给 update_mode 时只分“落后／已是最新”，“怎么更新”写还没读到。
@@ -121,7 +121,7 @@
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
   }
   function limitedRows(rows, render, key) {
-    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
+    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details" data-fold-count="${rows.length - 5}"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
   }
   function software(el) {
     el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div>';

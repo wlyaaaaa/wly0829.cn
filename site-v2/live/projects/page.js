@@ -88,7 +88,7 @@
   const bar = U.topbar({ ask: () => `请看实况项目：${home?.text ? U.fieldText(home.text) : '请说明现在的情况'}。` });
   document.querySelectorAll('.stage a[href^="/live/"]').forEach(a => a.href = route(a.getAttribute('href')));
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  for (const key of ['active', 'frozen']) { U.fold($(`${key}-more`), $(`${key}-box`)); $(`${key}-more`).addEventListener('click', () => foldLabel(key)); }
+  for (const key of ['active', 'frozen']) { U.fold($(`${key}-more`), $(`${key}-box`), null, true); $(`${key}-more`).addEventListener('click', () => foldLabel(key)); }
   // 分批展开（R97“逐步展开”、R147）：名册各组、冻结名册、全部变化的组和组里的行，先露一批，点“展开（还有 N …）”一次多露一批，露到底变“收起”。
   // 露到第几批按块记着（名册约每分钟重画、变化翻页后重画都照着露）；切时间档时全部变化从头露。
   const STEP = { active: 6, frozen: 6, changes: 5, artifacts: 3 }, MORE = { active: 6, frozen: 6, changes: 5, artifacts: 5, artcards: 6 }, GROUPS = { first: 5, more: 4 }, CARDS = 9;
@@ -99,14 +99,23 @@
     const b = e.target.closest('button.pj-step[data-step-of]');
     if (!b) return;
     const key = b.dataset.stepOf, map = reveals[key], label = b.dataset.step, close = b.hasAttribute('data-open');
-    map.set(label, close ? 0 : (map.get(label) || 0) + MORE[key]);
-    U.anchor(() => redraw(key));
-    if (close) { const again = [...document.querySelectorAll(`button.pj-step[data-step-of="${key}"]`)].find(x => x.dataset.step === label); if (again && again.getBoundingClientRect().top < 0) again.scrollIntoView({ block: 'center' }); }
+    const paint = () => {
+      map.set(label, close ? 0 : (map.get(label) || 0) + MORE[key]);
+      redraw(key);
+    };
+    const find = () => [...document.querySelectorAll(`button.pj-step[data-step-of="${key}"]`)].find(x => x.dataset.step === label);
+    if (close && !(key === 'active' && label === '个人')) U.anchorFold(b, paint, find);
+    else if (close) {
+      U.anchor(paint);
+      const again = find();
+      if (again && again.getBoundingClientRect().top < 0) again.scrollIntoView({ block: 'center' });
+    }
+    else U.anchor(paint);
   });
   $('changes-more').addEventListener('click', () => {
-    groupsShown = $('changes-more').getAttribute('aria-expanded') === 'true' ? 0 : groupsShown + GROUPS.more;
-    U.anchor(renderChanges);
-    if (!groupsShown && $('changes').getBoundingClientRect().top < 0) $('changes').scrollIntoView({ block: 'start' });
+    const more = $('changes-more');
+    if (more.getAttribute('aria-expanded') === 'true') U.anchorFold(more, () => { groupsShown = 0; renderChanges(); });
+    else { groupsShown += GROUPS.more; U.anchor(renderChanges); }
   });
   function setRosterVisibility() {
     $(frozenOnly ? 'all-link' : 'frozen-link').removeAttribute('aria-current');
@@ -147,19 +156,48 @@
     U.html($('head'), status.lamp + U.head(title, { lamp: false }) + cutoff + (status.note ? ` <span class="row__meta">${status.note}</span>` : '') + (!frozenOnly && privateSummary ? ` <span class="row__meta">${U.fieldHtml(home.text, { name: '项目说明', kind: viewer })}</span>` : ''));
   }
   let changesPack = null;
+  let changesWidth;
+  new ResizeObserver(([entry]) => {
+    const width = entry.contentRect.width, resized = changesWidth && width !== changesWidth;
+    changesWidth = width;
+    if (width && resized && changesPack) renderChanges();
+  }).observe($('changes-list'));
+  function balancedChanges(rows) {
+    const first = GROUPS.first, gap = 24;
+    if (!U.shouldFold(rows.length - first)) return rows.length;
+    // 在原有收着的第二张清单里量同栏宽的卡，不打断第一张清单的排版和动画。
+    const probe = $('changes-rest');
+    Object.assign(probe.style, { columns: 'auto', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' });
+    U.list(probe, rows, { animate: false });
+    const sizes = [...probe.children].map(card => card.offsetHeight + gap);
+    U.list(probe, [], { animate: false });
+    for (const prop of ['columns', 'display', 'grid-template-columns']) probe.style.removeProperty(prop);
+    const heights = [0, 0];
+    let cut = 0;
+    for (const size of sizes) {
+      const col = heights[0] <= heights[1] ? 0 : 1;
+      const difference = heights[1 - col] - heights[col];
+      if (cut >= first && Math.abs(difference - size) >= difference) break;
+      heights[col] += size;
+      cut++;
+    }
+    return U.shouldFold(rows.length - cut) ? cut : rows.length;
+  }
   function fill(key, rows, none) {
-    const n = key === 'frozen' && !frozenOnly ? 0 : key === 'changes' ? GROUPS.first + groupsShown : Infinity; if (rows == null) { rows = []; none = U.offline?.() ? (key === 'frozen' && !frozenOnly ? '' : '这块没存下来，连上后补上。') : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
+    if (rows == null) { rows = []; none = U.offline?.() ? (key === 'frozen' && !frozenOnly ? '' : '这块没存下来，连上后补上。') : `${({ active: '在用的项目', frozen: '冻结的项目', changes: '项目变化' })[key]}暂时读不到`; $(`${key}`).style.minHeight = '0'; }
     rows = withLook(key, rows);
     const total = rows.length;
     if (key !== 'frozen' || rows.length > STEP.frozen) rows = groupedRows(rows, key);
+    const first = key === 'changes' ? balancedChanges(rows) : key === 'frozen' && !frozenOnly ? 0 : Infinity;
+    const limit = first + groupsShown, n = key !== 'changes' ? first : U.shouldFold(rows.length - limit) ? limit : rows.length;
     U.list($(`${key}-list`), rows.length ? rows.slice(0, n) : none ? [empty(none, key !== 'changes')] : []); U.list($(`${key}-rest`), key === 'changes' ? [] : rows.slice(n));
     watchBands($(key));
     // 项目变化：先列的几组和展开后的其余几组接着排两栏，展开后不在两块之间空一截（M486/M487）
     if (key === 'changes') (changesPack ||= window.LivePack.create([$('changes-list'), $('changes-rest')], { cols: 2, gap: 24 })).fit();
     if (key === 'changes') {
-      // 全部变化的项目组：先露 5 组，点一次再露 4 组（两栏各两组），露到底变“收起”
+      // 先露到两栏尽量齐平，点一次再露 4 组，露到底变“收起”。
       const more = $('changes-more'), left = Math.max(0, rows.length - n);
-      more.hidden = rows.length <= GROUPS.first; more.setAttribute('aria-expanded', String(!left));
+      more.hidden = rows.length <= first; more.setAttribute('aria-expanded', String(!left));
       U.html(more, `${left ? `展开（还有 ${left} 个项目组）` : '收起'} <span class="more__chev">›</span>`);
     } else { $(`${key}-more`).hidden = rows.length <= n; foldLabel(key, key === 'frozen' ? total : Math.max(0, rows.length - n)); }
     L.lightUp([hero, $('board'), $('notices')]);
@@ -171,8 +209,11 @@
     return [...groups].map(([label, items]) => {
       const first = items[0], title = key === 'changes' ? name({ name: first.groupLabel, href: first.href }, changeViewer) : U.fieldHtml(first.groupLabel ?? label, { name: '项目分类', kind: viewer });
       // 名册排三列，先露两整排、点一次再露两排；变化每组先 5 条、点一次再 5 条
-      const extra = Math.max(0, items.length - STEP[key]), open = Math.min(extra, reveals[key].get(label) || 0), left = extra - open;
-      const step = extra ? `<button class="more pj-step" type="button" data-step-of="${key}" data-step="${esc(label)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const extra = Math.max(0, items.length - STEP[key]), reveal = Math.min(extra, reveals[key].get(label) || 0);
+      const personal = key === 'active' && label === '个人';
+      const fold = personal ? extra > 0 : U.shouldFold(extra);
+      const open = (personal || U.shouldFold(extra - reveal)) && fold ? reveal : extra, left = extra - open;
+      const step = fold ? `<button class="more pj-step" type="button" data-step-of="${key}" data-step="${esc(label)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${label}`, cls: 'pj-list-group', html: `${key === 'changes' ? first.band || '' : ''}${label ? `<p class="part">${title}</p>` : ''}${list(items.slice(0, STEP[key] + open))}${step}` };
     });
   }
@@ -262,9 +303,9 @@
       ? html.replace(/<[^>]+>|一次|讲解页|收工|补跑一轮/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
       : html;
     const first = plain.match(/^[^。！？\n]*[。！？]?/)?.[0] || plain;
-    const preview = [...first].slice(0, 80).join('');
+    const preview = keepChangeWords ? first : [...first].slice(0, 80).join('');
     if (preview === plain) return full;
-    return `<details class="pj-short"><summary><span>${esc(preview)}${preview.length < first.length ? '…' : ''}</span><span class="more"><span class="disclosure-closed">展开全文</span><span class="disclosure-open">收起全文</span> <span class="more__chev" aria-hidden="true">›</span></span></summary><div class="row__sub">${full}</div></details>`;
+    return `<details class="pj-short" data-fold-anchor><summary><span>${esc(preview)}${preview.length < first.length ? '…' : ''}</span><span class="more"><span class="disclosure-closed">展开全文</span><span class="disclosure-open">收起全文</span> <span class="more__chev" aria-hidden="true">›</span></span></summary><div class="row__sub">${full}</div></details>`;
   }
   function renderFrozen(items) {
     fill('frozen', items?.filter(it => it.name || it.label).map(it => {
@@ -369,7 +410,7 @@
     if (rosterChanged && changeRows?.length) renderChanges();
     if (disconnected !== undefined && disconnected !== s.offline) for (const draw of repaints.values()) draw();
     disconnected = s.offline; L.offline([...states.values()].some(x => x.offline));
-    const notice = [...states].find(([name, x]) => x.offline || (!(name === 'home' && headerUpdating(x)) && !x.data && !x.warming && x.text));
+    const notice = [...states].find(([name, x]) => x.offline || (!(name === 'home' && headerUpdating(x)) && !x.data && !x.warming && x.text && (x.text !== '没有记录' || s.conn?.stage !== 'retrying')));
     const connection = notice?.[1].offline ? notice[1].text.split(' · ')[0] : notice?.[1].text;
     U.list($('notices'), notice ? [{ key: notice[0], cls: 'notice glass', html: `<span>${U.fieldHtml(connection, { name: '连接情况', kind: viewer })}</span>` }] : []);
     if (!s.data && ['none', 'gone'].includes(s.phase)) { if (key === 'home' || key === 'active') renderOverview(states.get('active')?.data || home); if (key === 'changes') { changes = changeRows = next = null; renderChanges(); } if (key === 'active') renderActive(null); else if (!['home', 'changes'].includes(key)) fill(key, null); }
@@ -489,8 +530,13 @@
     // 多了才分批（R147、X4 第 111 项）：一排四格，有没推提交的大卡占两格、排在前面；先露两排（八格），点“展开（还有 N 个项目）”再露两排，到底变“收起”。两排放得下就不出按钮，样子照旧。
     const UNITS = 8, units = it => it.commits > 0 ? 2 : 1, total = items.reduce((n, it) => n + units(it), 0);
     const shown = total <= UNITS ? UNITS : Number($('unpushed')?.dataset.shown) || UNITS;
-    let cut = 0;
-    for (let used = 0; cut < items.length && used + units(items[cut]) <= shown; cut++) used += units(items[cut]);
+    let first = 0, cut = 0;
+    for (let used = 0; cut < items.length && used + units(items[cut]) <= shown; cut++) {
+      used += units(items[cut]);
+      if (used <= UNITS) first++;
+    }
+    const fold = U.shouldFold(items.length - first);
+    if (!U.shouldFold(items.length - cut)) cut = items.length;
     // 读不到和真没有分开（页面说明第 12 条）：名册到了、这一块没给或标了读不到，又一项改动都没读到，就写“本地改动暂时读不到”和后台给的原因；真没有改动不留空卡
     const unread = !items.length && (!unpushed || unpushed.q === 'unknown' || unpushed.q === 'error' || isStale(unpushed) || !Array.isArray(unpushed.items)) && !U.offline?.();
     const note = unread ? ['本地改动暂时读不到', unpushed?.gap && field(unpushed.gap), unpushed?.at && `上次读到 ${stamp(unpushed.at)}`].filter(Boolean).join(' · ')
@@ -498,15 +544,16 @@
     section('unpushed', '本地还没推的改动', rows.slice(0, Math.max(cut, 1)), note);
     const box = $('unpushed');
     if (!box) return;
-    box.dataset.shown = shown;
+    box.dataset.shown = fold ? shown : UNITS;
     let more = box.querySelector(':scope > .pj-unpushed-more');
-    if (total <= UNITS) { more?.remove(); return; }
+    if (!fold) { more?.remove(); return; }
     if (!more) {
       more = document.createElement('button'); more.type = 'button'; more.className = 'more pj-unpushed-more';
       more.addEventListener('click', () => {
-        box.dataset.shown = more.getAttribute('aria-expanded') === 'true' ? UNITS : Number(box.dataset.shown) + UNITS;
-        box.redrawUnpushed();
-        if (more.getBoundingClientRect().top < 0) more.scrollIntoView({ block: 'center' });
+        const close = more.getAttribute('aria-expanded') === 'true';
+        const paint = () => { box.dataset.shown = close ? UNITS : Number(box.dataset.shown) + UNITS; box.redrawUnpushed(); };
+        if (close) U.anchorFold(more, paint);
+        else paint();
       });
     }
     box.redrawUnpushed = () => drawUnpushed(unpushed, section, field);
@@ -591,8 +638,9 @@
       const quiet = !!listed && U.visitorWholeHidden(listed, ['$', 'name']);
       const head = (g.secret ? `<span class="row__title">${name}</span>` : p?.href ? `<a class="row__title" href="${esc(route(p.href))}">${name} <span class="more__chev">›</span></a>` : `<span class="row__title">${name}</span>`) + (headTag ? ` ${headTag}` : '');
       // 卡里先 3 行，“展开（还有 N 条）”一次再露 5 行，露到底变“收起”（R97、R147；长列表表第 112 项）
-      const extra = Math.max(0, g.rows.length - SHOW), open = Math.min(extra, reveals.artifacts.get(g.key) || 0), left = extra - open;
-      const step = extra ? `<button class="more pj-step" type="button" data-step-of="artifacts" data-step="${esc(g.key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const extra = Math.max(0, g.rows.length - SHOW), reveal = Math.min(extra, reveals.artifacts.get(g.key) || 0);
+      const left = U.shouldFold(extra - reveal) ? extra - reveal : 0, open = extra - left;
+      const step = U.shouldFold(extra) ? `<button class="more pj-step" type="button" data-step-of="artifacts" data-step="${esc(g.key)}"${left ? '' : ' data-open'}>${left ? `展开（还有 ${left} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       const header = g.secret && audience === 'public' ? '' : `<div class="pj-art__head">${g.secret ? miniPic('', null) : miniPic(p?.id, p?.name)}${head}</div>`;
       return { key: g.key, cls: 'pj-art', html: `${header}<ul class="pj-art__rows">${g.rows.slice(0, SHOW + open).map(r => rowHtml(r, quiet)).join('')}</ul>${step}` };
     });
@@ -609,13 +657,14 @@
       // 近 30 天、全部一页没列完：写清列了几件、这一档一共几件，下面“更多成品 ›”接着翻
       recent.next && Number.isInteger(count) && `已列出 ${items.length} 件，${rangeLabel(range)}共 ${count} 件`, recent.page_gap,
     ].filter(Boolean).join(' · ') : '';
-    const cardsShown = Math.min(cards.length, CARDS + (reveals.artcards.get('') || 0)), cardsLeft = cards.length - cardsShown;
+    const cut = CARDS + (reveals.artcards.get('') || 0);
+    const cardsLeft = U.shouldFold(cards.length - cut) ? cards.length - cut : 0, cardsShown = cards.length - cardsLeft;
     section('recent-artifacts', '成品', cards.slice(0, cardsShown), note, []);
     const box = $('recent-artifacts');
     if (box) {
       // 项目卡先 9 张，“展开（还有 N 个项目）”一次再露 6 张（两排），露到底变“收起”；读到的都露完了才出“更多成品 ›”接着读。说法和同页活跃、未推那两颗一样，箭头前的空也一样
       let more = box.querySelector(':scope > .pj-art-more');
-      if (cards.length <= CARDS) more?.remove();
+      if (!U.shouldFold(cards.length - CARDS)) more?.remove();
       else {
         if (!more) { more = document.createElement('button'); more.type = 'button'; more.className = 'more pj-step pj-art-more'; more.dataset.stepOf = 'artcards'; more.dataset.step = ''; box.querySelector(':scope > .pj-extra__list').after(more); }
         more.toggleAttribute('data-open', !cardsLeft);

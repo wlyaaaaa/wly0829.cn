@@ -24,7 +24,7 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
-  const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents']);
+  const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
   // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡
   const custom = window.ProjectPages?.[id] || null;
@@ -60,7 +60,7 @@
   };
   const enc = encodeURIComponent;
   const missingText = (state, what = '项目') => state?.offline || U.offline?.() ? '这块没存下来，连上后补上。'
-    : [404, 503].includes(state?.meta?.status) ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
+    : [404, 503].includes(state?.meta?.status) || !(state?.meta?.status > 0) || state.meta.status >= 500 ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
 
   const hero = $('pj-hero');
   let coverSlug;
@@ -106,6 +106,8 @@
     return `${fields.year === '2026' ? '' : fields.year + '-'}${fields.month}-${fields.day} ${fields.hour}:${fields.minute}`;
   }
   const shortDate = stamp;
+  // 照本人定的写法写成“11月26日 13:30”（只给了日期的只写日期）
+  const dayStamp = at => stamp(at).replace(/^(?:(\d{4})-)?(\d\d)-(\d\d)/, (_, y, m, d) => `${y ? `${y}年` : ''}${+m}月${+d}日`);
   const isStamp = v => typeof v === 'string' && /^\d{4}-\d\d-\d\d(?:T|$)/.test(v);
   // 读数句子里夹着的机器时刻（2026-11-17T15:47:23.82+08:00）按北京时间写成“11-17 15:47”
   const isoText = t => typeof t === 'string' ? t.replace(/\b\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)?/g, x => { const at = /(?:Z|[+-]\d\d:\d\d)$/.test(x) ? x : `${x}+08:00`; return Number.isFinite(Date.parse(at)) ? stamp(x) : x; }) : t;
@@ -150,13 +152,14 @@
     }
     const special = window.ProjectAdditions?.lowerBoundValue(m) || window.ProjectAdditions?.timestampObject(m, stamp) || window.ProjectAdditions?.structuredMetric(m, stamp, projectViewer)
       || window.ProjectAdditions?.rulesLengthReading?.(m);
-    if (special) return { html: `<span class="pj-text">${esc(special)}</span>`, plain: special, long: true };
+    if (special) return { html: `<span class="pj-text">${keepWords(esc(special))}</span>`, plain: special, long: true };
     if (m.rewrite === 'pending' && m.count == null && m.value == null && m.text == null || m.value?.hidden || m.value?.rewrite === 'pending' && m.value.count == null && !m.value.text) { const text = metricText(m.value && typeof m.value === 'object' ? m.value : m); return { html: `<span class="pj-text">${U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })}</span>`, plain: text, long: true }; }
     const reading = cardReading(m);
-    if (reading) return { html: `<span class="pj-text">${U.fieldHtml(reading, { name: '项目读数', kind: projectViewer })}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
+    if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer }))}</span>`, plain: text, long: [...text].length > 12 }; }
+    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">暂时读不到</span>', plain: '暂时读不到', long: false };
+    if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
       const scalar = m.value.text ?? m.value.count ?? m.value.value;
@@ -239,25 +242,26 @@
   }
   // 后台在读数名上标了 visitor_labels.label 的（访客看到的名字换过说法，或看不到），名字旁挂现有的小签；名字能点时挂在链接外面
   const labelTag = m => U.visitorLabel(m, 'label', '这一项的名称', projectViewer);
-  const metricArrow = '<span class="more__chev">›</span>';
+  // 箭头前加不断行的连接符：读数名一长，“›”不单独掉到下一行，跟最后一个词一起走（Chrome 允许“›”和前面的汉字断开）
+  const metricArrow = '&#8288;<span class="more__chev">›</span>';
   // 数字格：读数在上（大）、名字在下，一格一个数；字长的占一整行，最多两行，点一下看全
   function figRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
-    const tag = labelTag(m), label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${U.fieldHtml(m.label, { name: '读数', place: 'label' })}${href ? '' : tag}${cadence}</span>`;
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? '&nbsp;' + metricArrow : '');
+    const tag = labelTag(m), label = `<span class="pj-fig__k" title="${esc(metricText(m.label))}">${keepWords(U.fieldHtml(m.label, { name: '读数', place: 'label' }))}${href ? '' : tag}${cadence}</span>`;
     return {
       key: m.id, extra, labelText,
       cls: `pj-fig${v.long ? ' pj-fig--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>${tag}` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
+      html: `${href ? `<a class="pj-fig__link" href="${esc(href)}">${label}</a>${tag}` : label}${href ? `<a class="pj-fig__link pj-fig__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-fig__v" title="${esc(v.plain)}"${v.long ? ' data-clamp' : ''}>${v.html}</span>`}${line ? `<small class="pj-fig__sub" title="${esc(plain(line))}">${keepWords(subText(line))}</small>` : ''}${moment ? `<small class="pj-fig__sub pj-moment">${moment}</small>` : ''}`,
     };
   }
   // 两列小表（“更多数据”）：名字左、数右，一项一行；名字下一句解释
   function kvRow(m) {
-    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? ' ' + metricArrow : '');
-    const label = U.fieldHtml(m.label, { name: '读数', place: 'label' }) + cadence, tag = labelTag(m);
+    const v = value(m), href = metricHref(m), { line, moment, extra, labelText, cadence } = lineOf(m, v, href ? '&nbsp;' + metricArrow : '');
+    const label = keepWords(U.fieldHtml(m.label, { name: '读数', place: 'label' })) + cadence, tag = labelTag(m);
     return {
       key: m.id, extra, labelText,
       cls: `pj-kv__row${v.long || v.plain.length > 9 ? ' pj-kv__row--wide' : ''}${isStale(m) ? ' is-stale' : ''}`,
-      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label}</a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${subText(line)}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
+      html: `<span class="pj-kv__k">${href ? `<a href="${esc(href)}">${label}</a>` : label}${tag}${line ? `<small class="pj-kv__sub" title="${esc(plain(line))}">${keepWords(subText(line))}</small>` : ''}${moment ? `<small class="pj-kv__sub pj-moment">${moment}</small>` : ''}</span>${href ? `<a class="pj-fig__link pj-kv__v" title="${esc(v.plain)}" href="${esc(href)}">${v.html}</a>` : `<span class="pj-kv__v" title="${esc(v.plain)}"${v.long || v.plain.length > 9 ? ' data-clamp' : ''}>${v.html}</span>`}`,
     };
   }
   // 状态文字沿用原说法，灯只照后端 level 画。
@@ -339,7 +343,7 @@
     return {
       key: item.id,
       cls: 'row row--flat pj-item',
-      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${name}</span>${nameTag}</p><p class="row__sub">${[explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · ')}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
+      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${keepWords(name)}</span>${nameTag}</p><p class="row__sub">${keepWords([explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · '))}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
     };
   }
 
@@ -357,8 +361,10 @@
     for (const row of rows) { const key = row.group || ''; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(row); }
     const list = items => `<ul class="rows list">${items.map(r => `<li class="${r.cls}" data-key="${esc(r.key)}">${r.html}</li>`).join('')}</ul>`;
     return [...groups].map(([key, items]) => {
-      const extra = Math.max(0, items.length - preview), open = Math.min(extra, reveal.get(key) || 0), left = extra - open;
-      const step = extra && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
+      const extra = Math.max(0, items.length - preview), asked = Math.min(extra, reveal.get(key) || 0);
+      // 只剩一条就直接摆出来，不让人为一条点“展开”（M1190）；自己没点过展开的，也不出“收起”
+      const open = extra - asked === 1 ? extra : asked, left = extra - open;
+      const step = (left || asked) && !(!left && more?.(key)) ? `<button class="more pj-step" type="button" data-step="${esc(key)}"${left ? '' : ' data-open'}>${left ? label?.(left, open) || `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '';
       return { key: `group:${key}`, cls: 'pj-list-group', html: `${key ? `<p class="part">${U.fieldHtml(STATE[key] || key)}</p>` : ''}${list(items.slice(0, preview + open))}${step}` };
     });
   }
@@ -374,6 +380,44 @@
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
+  // 窄屏折行不拆词、不留单字行（本人看图 11-28）：分词后只在两字以上的词前面插可断点（<wbr>），单字跟着前一个词走（分词常把“动效”“读数”切成两个单字），副词、介词、否定这类单字跟后一个词走（“真干活”不断成“真／干活”），
+  // 书名号和短引号里、“这”“每”这类字后面不断；最后一个断点后不足三个字、并上前一段也不超过五个字就不断（并完太长，窄格里会被硬拆）；“ · ”后面、数字和后面的单位、月和日之间换成不断行空格，折行时圆点跟着下一段走、日期不拆。在拼好的 HTML 上做、不改 DOM，实况刷新时照原样比对，不闪。
+  // look.css 让这几块只在这些点、空格和标点后折行，一段比一整行还长才从中间断（不横向溢出）
+  const wordCut = typeof Intl === 'object' && Intl.Segmenter ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
+  if (wordCut) document.documentElement.classList.add('pj-words');
+  // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
+  // 单字的副词、介词、否定词：分词常把它单切出来（真|干活、还|没读|到），它属于后面的词
+  const lead = s => /^[真很太最更都也还就才再又只先刚正越别不没未在把被给对向从往跟和与比让新旧]$/.test(s.segment);
+  const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
+  // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
+  // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
+  // 紧跟的“，”“。”和前面的“（”一起包进去，标点不单独落到行首。只认带字母或色号的，纯数字（3.5、1,234）照旧
+  const connected = run => /^#[0-9A-Fa-f]{3,8}$/.test(run) || /[A-Za-z]/.test(run) && /[\/\\._:#@+=-]/.test(run);
+  // 数字带单位（7天、3 份、38357 行、53.1 KB）和中文日期时刻（11月25日 01:31）整块不拆：只包一层不折行的字，前后照常折
+  const glueDates = t => t.replace(/((?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-]))|((?<![&#\w.])(?:\d{4}年)?\d{1,2}月\d{1,2}日(?:(?: |&nbsp;)\d{1,2}:\d{2})?|(?<![&#\w.])\d[\d,.]*(?: |&nbsp;)?(?:分钟|小时|万字|万行|万条|万|亿|KB|MB|GB|TB|%|[天条份行次个字项件种套张页位台秒周年月号岁元块篇首段轮批代句幅处格类样]))|[（「『“《]?(?<![&\w#\\\/.-])(#[0-9A-Fa-f]{3,8}\b|[A-Za-z0-9][\w.~@#%+=:\\\/-]*[A-Za-z0-9\/#%])[，。；：、！？）」』”》]{0,2}/g,
+    (m, date, unit, run) => date ? `<span class="pj-no-split">${m}</span>` : unit ? `<span class="pj-nb">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
+  // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
+  const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
+  function keepWords(html) {
+    if (!html) return html;
+    return String(html).split(/(<[^>]*>)/).map((t, i) => {
+      if (i % 2 || !t) return t;
+      t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
+      if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
+      const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
+      const open = at => !quoted.some(([a, b]) => at > a && at < b), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
+      segs.forEach((s, j) => { const next = segs[j + 1], prev = segs[j - 1];
+        // 单字的副词、介词、否定词（真干活、很快、都用、把它、不改、新模型）跟后面的词走：断在它前面，它和后面的词之间不断
+        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
+        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
+      const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
+      const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
+      if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
+      let out = '', from = 0;
+      for (const at of cuts) { out += t.slice(from, at) + '<wbr>'; from = at; }
+      return glueDates(out + t.slice(from));
+    }).join('');
+  }
   function syncPage(b) {
     if (!b.changes && !b.artifacts) return;
     const left = Math.max(0, (b.groupSrc?.length || 0) - (b.groupPreview || 0) - (b.reveal?.get('') || 0));
@@ -382,7 +426,9 @@
   }
   // 卡里收着的读数（数字格、两列小表）：同样一批一批露
   function drawRest(b, animate) {
-    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0, n = Math.min(all.length, b.restShown || 0), left = all.length - n;
+    const all = b.restRows || [], unread = b.unread || [], open = (b.restShown || 0) > 0;
+    if (open && all.length - Math.min(all.length, b.restShown) === 1) b.restShown = all.length;   // 只剩一条一起露（M1190）
+    const n = Math.min(all.length, b.restShown || 0), left = all.length - n;
     U.list(b.rest, [...all.slice(0, n), ...(open && !left ? unread : [])], { animate });
     b.box.classList.toggle('is-open', open); b.box.inert = !open; b.box.setAttribute('aria-hidden', String(!open));
     b.more.setAttribute('aria-expanded', String(open && !left));
@@ -405,14 +451,16 @@
       <p class="pj-note" data-p="note" hidden></p>
       <p class="pj-hidden" data-p="hidden" hidden></p>
       <button class="more" type="button" data-needs-pc data-p="page" hidden>再看 ›</button>
-      <div class="pj-tail"><details class="pj-notes"><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
+      <div class="pj-tail"><details class="pj-notes" data-fold-anchor><summary class="live-disclosure"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary><p class="pj-note" data-p="explain" hidden></p></details><span class="pj-cut" data-p="cut" hidden></span></div>`;
     b = { key, kind, el, ...Object.fromEntries([...el.querySelectorAll('[data-p]')].map((n) => [n.dataset.p, n])) };
     b.box.inert = true; b.box.setAttribute('aria-hidden', 'true');
     b.more.setAttribute('aria-expanded', 'false');
     b.more.addEventListener('click', () => {
       const all = b.restRows?.length || 0, shown = Math.min(all, b.restShown || 0);
-      b.restShown = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
-      drawRest(b, true);
+      const next = shown < all ? shown + (BATCH[b.kind] || BATCH.rows) : !all && !b.restShown ? 1 : 0;
+      // 收起：先记下这颗按钮在屏幕上的位置，收完把它放回原处，不跳（M1191）
+      const go = () => { b.restShown = next; drawRest(b, true); };
+      if (!next && b.restShown) U.anchorFold(b.more, go, () => b.more, b.el); else go();
     });
     b.page.addEventListener('click', () => b.changes ? loadChanges(b) : loadArtifacts(b));
     blocks.set(key, b);
@@ -456,14 +504,15 @@
     if (b.main) b.main.hidden = headOnly;
     b.headOnly = headOnly;
     b.head.hidden = !label && !about;
-    U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${U.fieldHtml(about)}</span>` : ''}`);
+    U.html(b.head, `${label ? `<b>${U.fieldHtml(label, { name: '项目资料', place: 'label' })}</b>` : ''}${about ? `<span>${keepWords(U.fieldHtml(about))}</span>` : ''}`);
     const rowCount = rows.length;
     if (b.kind === 'rows') {
       b.groupSrc = rows; b.groupPreview = b.changes ? b.preview : b.artifacts && id === 'work-delivery-copilot' ? 6 : SHOW.rows;
       b.groupMore = (b.changes || b.artifacts) ? () => !!b.hasNext : null; b.reveal ??= new Map();
       if (rows.length) rows = groupedRows(rows, b.groupPreview, b.reveal, b.groupMore, b.stepLabel);
     }
-    const show = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
+    const fit = limit ?? (b.kind === 'rows' ? rows.length : b.kind === 'figs' && rows.length - SHOW.figs <= 2 ? rows.length : SHOW[b.kind]);
+    const show = rows.length - fit === 1 ? rows.length : fit;   // 收起的只剩一条就不收（M1190）
     const shown = rows.length ? rows.slice(0, show) : unread.length || (hidden && !hiddenText) ? [] : [{ key: 'none', cls: b.kind === 'rows' ? 'row row--flat row--empty' : 'pj-empty', html: `${b.kind === 'rows' ? '<span></span>' : ''}<p class="row__sub">${U.fieldHtml(metricText(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|正在读/.test(empty || '') ? '这块没存下来，连上后补上。' : hiddenText || empty))}</p>` }];
     if (b.artifacts && rows.length) clearArtifactEmpty(b);
     U.list(b.main, shown, { animate });
@@ -640,7 +689,7 @@
     const note = field === it ? '' : marker(it, projectViewer, it.hidden_what || '改动说明');
     const title = U.fieldHtml(field, { name: '改动说明', kind: projectViewer });
     const count = Number.isFinite(it.count) && (it.count > 1 || locked) ? `<span class="row__meta">${esc(num(it.count))} 次提交</span>` : '';
-    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${title}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
+    return { key: it.id || `change-${index}`, cls: 'row row--flat pj-item', html: `<span></span><div class="row__text"><p class="row__main"><span class="pj-tl-at">${esc(stamp(it.at))}</span><span class="pj-tl-copy"><span class="row__title">${keepWords(title)}</span>${count}${note ? ` ${note}` : ''}</span></p></div><span></span>` };
   }
   async function loadChanges(b) {
     const cursor = changeLog?.next, epoch = changeEpoch, label = b.page.innerHTML;
@@ -665,9 +714,10 @@
   }
   function changeCounts(b) {
     const { loaded, preview } = b, total = changeLog?.total;
-    const shown = Math.min(loaded, preview + (b.reveal?.get('') || 0));
-    // 展开按钮已写“全部 N 条”的（项目自己定的，见 custom.changes），不再另写一行条数
-    const count = loaded && !custom?.changes?.step ? [Number.isFinite(total) && `共 ${num(total)} 条`, `当前显示 ${num(shown)} 条`, `已载入 ${num(loaded)} 条`].filter(Boolean).join('，') : '';
+    const asked = Math.min(loaded, preview + (b.reveal?.get('') || 0)), shown = loaded - asked === 1 ? loaded : asked;
+    // 三个数都一样时只写一次（“共 3 条”），有一个不一样就三个都写；展开按钮已写“全部 N 条”的（项目自己定的，见 custom.changes），不再另写一行条数
+    const counts = [[total, '共'], [shown, '当前显示'], [loaded, '已载入']].filter(([n]) => Number.isFinite(n));
+    const count = loaded && !custom?.changes?.step ? counts.slice(0, new Set(counts.map(([n]) => n)).size === 1 ? 1 : 3).map(([n, k]) => `${k} ${num(n)} 条`).join('，') : '';
     // 还能展开几条由卡底“展开（还有 N 条）”说，这里不重复，只写还没取来的
     const available = Number.isFinite(total) && total > loaded ? `另有 ${num(total - loaded)} 条待取` : '';
     const status = changeIssue || (!changeLog && '加载中');
@@ -706,7 +756,7 @@
   }
   function graphBlock(key, label) {
     const b = block(key, 'figs'); b.el.classList.add('pj-sec--chart');
-    U.html(b.head, `<b>${esc(label)}</b>`); b.main.hidden = true;
+    U.html(b.head, `<b>${keepWords(esc(label))}</b>`); b.main.hidden = true;
     if (!b.viz) { b.viz = document.createElement('div'); b.viz.className = 'pj-viz'; b.cutoff.after(b.viz); }
     drawRecordCutoff(b); return b;
   }
@@ -796,7 +846,7 @@
     const cuts = [...new Set(list.map(b => b.cut && !b.cut.hidden ? b.cut.textContent.trim() : '').filter(Boolean))];
     const parts = list.filter(b => b.explain && !b.explain.hidden && b.explain.innerHTML.trim()).map(b => { const n = name(b); return `${n ? `<b>${esc(n)}</b>：` : ''}${b.explain.innerHTML}`; });
     if (cuts.length > 1) parts.push(...cuts.map(esc));
-    const box = c.tail.querySelector('.pj-note'), html = parts.join('<br>');
+    const box = c.tail.querySelector('.pj-note'), html = keepWords(parts.join('<br>'));
     if (box.innerHTML !== html) box.innerHTML = html;
     c.tail.querySelector('.pj-notes').hidden = !parts.length;
     const cut = c.tail.querySelector('.pj-cut'); cut.hidden = cuts.length !== 1; cut.textContent = cuts.length === 1 ? cuts[0] : '';
@@ -840,10 +890,19 @@
     // 摆齐的算法在 layout.js；那个文件没取到时卡片留在原来那一栏，不让整页出错
     const PL = window.ProjectLayout;
     if (!PL) return;
-    const gap = parseFloat(getComputedStyle(main).rowGap) || 20, heights = seq.map(g => g.card.el.offsetHeight), prev = seq.map(g => g.card.col);
+    // 按卡里有几段、几行、几格、几张图估分量来摆，不按像素高度：两版的字长短不一样（访客版换了说法、挂的签不同），按高度摆会一版一个样，
+    // 同一张卡两版要放在同一栏同一处（本人定的两版前后端一套）。收着没露的行不算
+    const shown = (el, sel) => [...el.querySelectorAll(sel)].filter(n => !n.closest('[hidden], .fold:not(.is-open)')).length;
+    const weight = el => 3 + shown(el, '.pj-part') + 1.4 * shown(el, '.row:not(.row--empty)') + 1.6 * shown(el, '.pj-fig') + shown(el, '.pj-kv__row')
+      + 2 * shown(el, '.knowledge-prose') + 6 * shown(el, '.pj-viz:not(:empty), .fin-chart') + shown(el, '.pj-note, .pj-hidden');
+    const weights = seq.map(g => weight(g.card.el));
     // 项目自己定了哪张卡放哪一栏的（说明书照本人定的图：左栏大卡＋最近改动，右栏最近改过的 5 张＋材料和依据），照它摆
     const fixed = custom?.columns?.(seq.map(g => g.key));
-    const cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : prev.every(c => c === 0 || c === 1) && PL.keep(prev, heights, gap) ? prev : PL.split(heights, gap);
+    // 最近改动钉在左栏、最近产物钉在右栏：两版卡片高度不一样，不钉会一版改动在左、一版产物在左（本人定的两版前后端一套）
+    const pins = seq.map(g => g.blocks.some(b => b.changes) ? 0 : g.blocks.some(b => b.artifacts) ? 1 : undefined);
+    let cols = Array.isArray(fixed) && fixed.length === seq.length ? fixed : PL.split(weights, 0, pins);
+    // 钉完以后全落在左栏、右半边空着的（账房只有“钱现在大概多少”和“最近改动”两张），最近改动不钉，放到右栏并排
+    if (cols !== fixed && cols.every(c => c === 0)) cols = PL.split(weights, 0, pins.map(p => p === 0 ? undefined : p));
     inOrder(main, seq.filter((_, i) => cols[i] === 0).map(g => g.card.el));
     inOrder(side, seq.filter((_, i) => cols[i] === 1).map(g => g.card.el));
     seq.forEach((g, i) => g.card.col = cols[i]);
@@ -858,7 +917,7 @@
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
       if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board));
-      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, U.html, window.LiveViz.bars); left.push(b); }
+      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
       if (id === 'pcconfig' && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
       for (const s of proj.sections || []) {
@@ -866,7 +925,7 @@
         // 规则仓的“后台提醒程序”整块在智能体页的钩子表里，这里只留一行链过去
         if (id === 'agents' && s.id === 'hooks') {
           const b = graphBlock(s.id, ''); b.group = s.id;
-          U.html(b.head, '<a class="pj-moved-head" href="/live/agents/#hooks">后台提醒程序跑多久、有没有出错，都在智能体页的钩子表 <span class="more__chev">›</span></a>');
+          U.html(b.head, `<a class="pj-moved-head" href="/live/agents/#hooks">${keepWords('后台提醒程序跑多久、有没有出错，都在智能体页的钩子表')}&nbsp;<span class="more__chev">›</span></a>`);
           U.html(b.viz, ''); into.push(b);
           continue;
         }
@@ -1033,13 +1092,20 @@
     // 两周都没有任何记录：不画两个空框
     const chart = !two.some(w => w.published != null || w.rolled_back != null) ? '' : `<div class="pj-wk"><p class="pj-wk__cap"><span class="pj-wk__sum">近两周：发布 ${total('published')}、退回 ${total('rolled_back')}</span><span class="pj-wk__legend"><span><i class="is-pub"></i>发布</span><span><i class="is-back"></i>退回</span></span></p><div class="pj-wk__plot">${two.map(week).join('')}</div><div class="pj-wk__x">${two.map(w => `<span>${text(w.label)}</span>`).join('')}</div></div>`;
     // 逐版记录和更早没记录的缘由收在“逐版记录”里；打开先列 10 条，一次多露 10 条，露到底“收起”（R147）
-    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${gaps.map(text).join(' · ')}</p>` : ''}</details>` : ''}`);
+    U.html(host, `${line || chart ? `<div class="pj-rh pj-rh--narrow">${line}${chart}</div>` : ''}${events.length || gaps.length ? `<details class="pj-rh-events"><summary class="live-disclosure"><span class="disclosure-closed">逐版记录（${events.length} 条）</span><span class="disclosure-open">收起逐版记录</span><span class="disclosure-chev">›</span></summary><div class="pj-rh-list"></div>${gaps.length ? `<p class="pj-note">${keepWords(gaps.map(text).join(' · '))}</p>` : ''}</details>` : ''}`);
     // 最新的在上，和上面的逐版时间线、“最近改动”一样新的在前；先露最近 10 个版本，再往更早的露（主持 11-26 10:3x 定）
     host._ruleEvents = [...events].reverse();
     const opened = host.querySelector('.pj-rh-events');
     if (opened && !opened._stepBound) { opened._stepBound = true; opened.addEventListener('toggle', () => { if (!opened.open) { host._ruleShown = 0; drawRuleEvents(host); } }); }
     drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
+    if (axis && !axis._whole) {
+      axis._whole = new ResizeObserver(() => {
+        const edge = axis.getBoundingClientRect().right, off = [...axis.children].map(li => li.getBoundingClientRect().right - edge).reduce((a, b) => Math.abs(b) < Math.abs(a) ? b : a, Infinity);
+        if (Number.isFinite(off) && Math.abs(off) > 1) axis.scrollLeft += off;
+      });
+      axis._whole.observe(axis);
+    }
     if (axis && left < 0) axis.scrollLeft = left;
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
       const current = axis.querySelector('.is-now');
@@ -1051,8 +1117,9 @@
   function drawRuleEvents(host) {
     const box = host.querySelector('.pj-rh-list');
     if (!box) return;
-    const all = host._ruleEvents || [], n = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0)), left = all.length - n;
-    box.innerHTML = all.slice(0, n).map(e => `<p>${e}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
+    const all = host._ruleEvents || [], asked = Math.min(all.length, Math.max(RULE_STEP, host._ruleShown || 0));
+    const n = all.length - asked === 1 ? all.length : asked, left = all.length - n;   // 只剩一条一起露（M1190）
+    box.innerHTML = all.slice(0, n).map(e => `<p>${keepWords(e)}</p>`).join('') + (all.length > RULE_STEP ? `<button class="more pj-rh-step" type="button"${left ? '' : ' data-open'}>${left ? `展开（还有 ${num(left)} 条）` : '收起'} <span class="more__chev">›</span></button>` : '');
   }
   function ruleTimeline(kept, current, text) {
     const index = kept.findLastIndex(e => e.version === current);
@@ -1078,7 +1145,7 @@
     const c = d.counts || {};
     const out = [];
     const partial = key => c.q === 'partial' && lower(c, key);
-    const cell = (label, n, unit, href, title, atLeast) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell" title="${esc(title)}"><span class="pj-cell__k">${esc(label)}${href ? '<span class="more__chev">›</span>' : ''}</span><span class="pj-cell__v">${atLeast ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(n)}</b><small>${unit}</small></span></${href ? 'a' : 'div'}>`;
+    const cell = (label, n, unit, href, title, atLeast) => `<${href ? `a href="${esc(href)}"` : 'div'} class="pj-cell" title="${esc(title)}"><span class="pj-cell__k">${esc(label)}${href ? metricArrow : ''}</span><span class="pj-cell__v">${atLeast ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(n)}</b><small>${unit}</small></span></${href ? 'a' : 'div'}>`;
     const go = (n, label, unit, href, key) => { if (n || (n === 0 && partial(key))) out.push(cell(label, n, unit, href ? route(href) : '', `${label} ${partial(key) ? '至少 ' : ''}${n} ${unit}`, partial(key))); };
     go(c.tasks, '名下计划任务', '项', d.tasks_href || `/live/tasks/?project=${enc(d.id)}`, 'tasks');
     go(c.skills, '名下技能', '个', d.skills_href || ((d.sections || []).some((s) => s.id === 'skills') ? '#skills' : ''), 'skills');
@@ -1132,11 +1199,20 @@
     if (size?.text) tail.push(cell('有多大', esc(size.text), { kind: 'text' }));
     else {
       if (size?.docs_chars != null) tail.push(cell('文档', bigCell(size.docs_chars, '字'), { title: `文档 ${big(size.docs_chars, '字')}` }));
-      if (size?.code_lines != null) {
-        const chars = size.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
-        tail.push(cell('代码', bigCell(size.code_lines, '行'), { title: `代码 ${big(size.code_lines, '行')}${chars ? ` · ${chars}` : ''}`, sub: esc(chars || '') }));
+      // 代码：量了字数的，字数写成大数、行数用小字放在下面（本人 11-28 05:31「先写代码XX字，下面再有代码XX行」）；还没量字数的照旧只写行数，不留空格子
+      const codeChars = Number.isFinite(size?.code_chars);
+      if (codeChars || size?.code_lines != null) {
+        const least = key => lower(size, key) ? '至少 ' : '', lines = size.code_lines != null ? `${least('code_lines')}${big(size.code_lines, '行')}` : '';
+        const value = codeChars ? `${least('code_chars') ? '<small class="pj-atleast">至少</small>' : ''}${bigCell(size.code_chars, '字')}` : bigCell(size.code_lines, '行');
+        tail.push(cell('代码', value, { title: `代码 ${codeChars ? [`${least('code_chars')}${big(size.code_chars, '字')}`, lines].filter(Boolean).join('、') : lines}`, sub: codeChars ? esc(lines) : '' }));
       }
     }
+    // 最后一格“规模 截止”：文档字数、代码行数是哪天量的（写成“11月26日 13:30”），数旧了再挂“旧了”（本人 11-28 SP1）
+    // 写实际量出来的时刻（size.at）；夜里核对的时刻（source_at）只在没有 size.at 时顶上
+    const sizeAt = size && (size.at || size.source_at), sizeDay = sizeAt && dayStamp(sizeAt), old = isStale(size);
+    // “旧了”签挂在格名“规模 截止”旁边（设计图在右上角），不压在日期下面
+    if (sizeDay && (size.text || size.docs_chars != null || size.code_lines != null || Number.isFinite(size.code_chars))) tail.push(cell(old ? '规模 截止<span class="pj-old">旧了</span>' : '规模 截止', sizeDay.split(' ').map(t => `<span class="pj-no-split">${esc(t)}</span>`).join(' '),
+      { kind: 'scale', title: `文档、代码的规模截止 ${sizeDay}${old ? '，旧了' : ''}` }));
     return { head, tail };
   }
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
@@ -1159,16 +1235,35 @@
     const from = a.days?.[0], to = a.days?.at?.(-1);
     const svg = `<svg class="pj-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" preserveAspectRatio="none">${line}</svg>`;
     const title = `近 30 天提交 ${unknown ? '至少 ' : ''}${num(total)} 次${from && to ? `（${shortDate(from)}～${shortDate(to)}）` : ''}`;
-    // 小折线放在数字下面，占满这一格的宽（一行九格时数字旁边放不下）
-    return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title }).replace(/<\/div>$/, `${svg}</div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
+    // 小折线放得下就在数字右边，格子太窄才折到数字下面（look.css 的 .pj-cell--spark）
+    return cell('近 30 天提交', `${unknown ? '<small class="pj-atleast">至少</small>' : ''}<b>${esc(num(total))}</b><small>次</small>`, { title })
+      .replace(/(<span class="pj-cell__v[^"]*">[\s\S]*<\/span>)<\/div>$/, `<span class="pj-cell__row">$1${svg}</span></div>`).replace('class="pj-cell"', 'class="pj-cell pj-cell--spark"');
+  }
+  // 一排最多 10 格、每格至少 106 像素（同 look.css），窄到一排放不下两格也排两列（不一格占一整行）；一排放不下时按排数均分，不让最后一格单独占一排、右边空一大片
+  function fitStrip() {
+    const strip = part('links'), n = +strip.dataset.units || 0, css = getComputedStyle(strip);
+    const room = Math.min(10, Math.max(2, Math.floor((strip.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight)) / 106)));
+    strip.style.setProperty('--pj-cells', String(n <= room ? Math.max(n, 4) : Math.ceil(n / Math.ceil(n / room))));
+    // 折成几排、最后一排还空着格位：最后一格往右占满（各页自己改了列数的也照实际排出来的量）
+    const cells = strip.querySelectorAll(':scope > .pj-cell'), last = cells[cells.length - 1];
+    if (!last) return;
+    last.style.gridColumnEnd = '';
+    const track = parseFloat(getComputedStyle(strip).gridTemplateColumns), box = last.getBoundingClientRect();
+    const rest = track > 0 ? Math.round((strip.getBoundingClientRect().right - parseFloat(css.paddingRight) - box.right) / track) : 0;
+    if (rest > 0 && last.offsetTop > cells[0].offsetTop) last.style.gridColumnEnd = `span ${Math.round(box.width / track) + rest}`;
+    // 同一排有格的名字折成两行：这一排的名字都按最高的留高，数字落在同一条水平线上
+    const names = [...cells].map(c => c.querySelector(':scope > .pj-cell__k')), tallest = new Map();
+    names.forEach(k => k && (k.style.minHeight = ''));
+    names.forEach((k, i) => k && tallest.set(cells[i].offsetTop, Math.max(tallest.get(cells[i].offsetTop) || 0, k.offsetHeight)));
+    names.forEach((k, i) => { const h = k && tallest.get(cells[i].offsetTop); if (h > k.offsetHeight) k.style.minHeight = `${h}px`; });
   }
   function renderStrip(d) {
     const strip = part('links'), { head, tail } = heroCells(d), html = (custom?.strip?.(d, projectViewer) || '') + head.join('') + links(d) + tail.join('');
     const n = (html.match(/class="pj-cell[ "]/g) || []).length + (html.match(/class="pj-cell pj-cell--wide"/g) || []).length;
-    strip.hidden = !html; strip.style.setProperty('--pj-cells', String(Math.min(Math.max(n, 4), 10)));
-    U.html(strip, html);
+    strip.hidden = !html; strip.dataset.units = n;
+    U.html(strip, keepWords(html)); fitStrip();
     if (interfaceProjects.has(id) && !interfaceLoad) {
-      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip))
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip, keepWords))
         .catch(() => { interfaceLoad = null; });
     }
   }
@@ -1213,25 +1308,30 @@
     const repo = !d.size && (d.sections || []).find(sec => sec?.id === 'repository')?.metrics || [], metric = key => repo.find(m => m?.id === key && Number.isFinite(m.value));
     const repoSize = (metric('docs_chars') || metric('code_lines')) && { docs_chars: metric('docs_chars')?.value, code_lines: metric('code_lines')?.value, at: (metric('docs_chars') || metric('code_lines')).at };
     const ch = d.changed, size = d.size || repoSize, stale = staleText(d, d.at || at), say = d.about || d.note;
-    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(stamp(ch.at))}</span>`, say && `<span class="pj-about">${U.fieldHtml(say, { name: '项目说明', kind: projectViewer })}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
+    const line = [ch?.at && `<span class="pj-when">最近一次提交：${esc(dayStamp(ch.at))}</span>`, say && `<span class="pj-about">${keepWords(U.fieldHtml(say, { name: '项目说明', kind: projectViewer }))}</span>`, stale && `<small class="pj-stale">${esc(stale)}</small>`, status.note && `<small class="pj-stale">${status.note}</small>`].filter(Boolean).join('');
     part('about').hidden = !line; U.html(part('about'), line);
     // 详情（收起）：最近改动写了什么、近 7 天影响改动、有多大，以及后端给的说明和缺口
-    const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : `<span class="pj-when">${esc(stamp(ch.at))}</span>${ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : ''}`;
-    const chars = size?.code_chars != null && id === 'agents' ? window.ProjectAdditions?.codeCharacters(size, lower) : '';
-    const sizeText = size && [size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, size.code_lines != null && `代码 ${big(size.code_lines, '行')}`].filter(Boolean).join(' · '), chars].filter(Boolean).join(' · ');
+    // 提交时刻页头那行已写，这里只写这次改了什么
+    const changed = !ch ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>` : ch.text && !/^这次改动没有说明记录[。]?$/.test(U.fieldText(ch.text, projectViewer)) ? `<span>${U.fieldHtml(restricted(ch) ? ch : ch.text, { name: '提交说明', kind: projectViewer })}</span>` : '';
+    // 一行字里同一字号，代码先写字数、再写行数；没量字数的只写行数
+    const codeText = !size ? '' : Number.isFinite(size.code_chars) ? `代码 ${[big(size.code_chars, '字'), big(size.code_lines, '行')].filter(Boolean).join('、')}` : size.code_lines != null ? `代码 ${big(size.code_lines, '行')}` : '';
+    const sizeText = size && (size.text || [size.docs_chars != null && `文档 ${big(size.docs_chars, '字')}`, codeText].filter(Boolean).join(' · '));
     const sized = !size ? U.offline?.() ? '' : `<span class="pj-none">${U.collectionText()}</span>`
       : `${esc(sizeText || U.collectionText())}${size.at ? `<small>${esc(U.offline?.() || isStale(size) ? staleText(size, size.at) : size.moment || `${shortDate(size.at)} 取的`)}</small>` : ''}`;
     part('facts').hidden = false;
     // 后台没给近 7 天改动数、而最近一次提交在 7 天以前：近 7 天就是 0 次
     const quiet = d.changes7 == null && Number.isFinite(Date.parse(ch?.at)) && (Date.parse(d.at || at) || Date.now()) - Date.parse(ch.at) > 7 * 86400000;
     // 后台说了为什么没数（changes7_gap）就只写原因，不再前面摆“没有记录”；数没核全（changes7_complete 为 false）写“至少”
-    const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : `${d.changes7_complete === false ? '至少 ' : ''}${num(d.changes7)} 次`, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).join(' · ');
+    // 次数已在页头下那一条的“近 7 天影响改动”格里，这里不再写一遍，只留口径和缺口
+    const changes = [d.changes7 == null ? quiet ? `0 次（最近一次提交在 ${shortDate(ch.at)}）` : d.changes7_gap ? null : U.collectionText() : null, d.changes7_missing_note != null && `另有 ${num(d.changes7_missing_note)} 次提交没有填写变化说明`, d.changes7_at && `截至 ${stamp(d.changes7_at)}`, d.changes7_gap].filter(v => v !== false && v != null && v !== '').map(v => U.fieldHtml(v, { name: '近 7 天影响改动数', kind: projectViewer })).map((h, i) => /^截至 /.test(h) ? `${i ? ' ' : ''}<span class="pj-no-split">${i ? '· ' : ''}${h}</span>` : `${i ? ' · ' : ''}${h}`).join('');
     const impactNote = !window.ProjectAdditions?.personalDetail(id) && Number.isFinite(d.changes7) && Number.isFinite(d.changes7_missing_note)
-      ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在<span class="pj-no-split">下面。</span></small>' : '';
+      ? '<small class="pj-impact-note">从这次读数往前数 7 天。只数写了“变化：”、而且不是“无”的提交；没写这一行的另算在<span class="pj-no-split">上面。</span></small>' : '';
+    // 读数条已画出文档、代码和“规模 截止”的，这里整行不再画；读数条没有的（冻结项目借“仓库”卡的数）照画
+    const sizeInStrip = !!d.size && (d.size.text || d.size.docs_chars != null || d.size.code_lines != null || Number.isFinite(d.size.code_chars));
     // “还缺”一格照后台逐项列的写（“缺少：A、B”去掉打头的“缺少：”，不和格名重复）
     const missing = typeof d.gap === 'string' ? d.gap.replace(/^缺少[：:]\s*/, '') : d.gap;
     const extra = [d.about && d.note && ['说明', d.note], d.gap && d.gap !== d.stale_text && !/数据截止/.test(U.fieldText(d.gap)) && ['还缺', missing]].filter(Boolean).map(([k, v]) => `<div class="kv__row"><span></span><dt>${k}</dt><dd>${U.fieldHtml(v, { name: '项目说明', kind: projectViewer })}</dd></div>`).join('');
-    U.html(part('facts'), `${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${impactNote}${changes}</dd></div>${sized ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`);
+    U.html(part('facts'), keepWords(`${changed ? `<div class="kv__row"><span></span><dt>最近一次提交</dt><dd>${changed}</dd></div>` : ''}${impactNote || changes ? `<div class="kv__row"><span></span><dt>近 7 天影响改动</dt><dd>${changes && `<span>${changes}</span>`}${impactNote}</dd></div>` : ''}${sized && !sizeInStrip ? `<div class="kv__row"><span></span><dt>有多大</dt><dd>${sized}</dd></div>` : ''}${extra}`));
     part('detail').hidden = false;
     renderStrip(d);
     let cover = $('pj-cover');
@@ -1295,25 +1395,28 @@
     const btn = e.target.closest?.('.pj-rh-step'), host = btn?.closest('.pj-viz');
     if (!host) return;
     if (btn.hasAttribute('data-open')) {
+      // 收起：“逐版记录”那个开关落在刚才按钮的位置，不滚到块头（M1191）
       const details = btn.closest('details');
-      details.open = false;
-      if (details.getBoundingClientRect().top < 0) details.scrollIntoView({ block: 'start', behavior: 'instant' });
+      U.anchorFold(btn, () => { details.open = false; }, () => details.querySelector(':scope > summary'), details);
     } else { host._ruleShown = Math.max(RULE_STEP, host._ruleShown || 0) + RULE_STEP; drawRuleEvents(host); }
   });
   // 分组底下的“展开（还有 N 条）／收起”
   board.addEventListener('click', (e) => {
     const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
     if (!b) return;
-    const close = btn.hasAttribute('data-open'), sec = b.el;
-    stepGroup(b, btn.dataset.step, close);
-    // 收起后卡头跑到屏幕上面去了：滚回这一块的开头，不让人找不到刚才看的地方
-    if (close && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ block: 'start', behavior: 'instant' });
+    const close = btn.hasAttribute('data-open'), sec = b.el, key = btn.dataset.step;
+    // 收起：重画出来的同一颗按钮放回刚才的位置，接着往下看，不跳到块头（M1191）
+    if (close) U.anchorFold(btn, () => stepGroup(b, key, true), () => [...sec.querySelectorAll('.pj-step')].find(x => x.dataset.step === key), sec);
+    else stepGroup(b, key, false);
   });
   // 卡里两行收着的长读数：点一下看全，再点收回（是链接、按钮的不管）
   document.addEventListener('click', (e) => { const v = e.target.closest?.('.pj-card [data-clamp]'); if (v && !e.target.closest('a,button')) v.classList.toggle('is-full'); });
   // 字体到了、窗口变了，卡的高度会变：重新摆齐两栏
-  document.fonts?.ready?.then(() => balance());
-  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(balance, 200); });
+  document.fonts?.ready?.then(() => { fitStrip(); balance(); });
+  let resized; window.addEventListener('resize', () => { clearTimeout(resized); resized = setTimeout(() => { fitStrip(); balance(); }, 200); });
+  // 读数条自己变宽变窄（例如各页窄屏样式在数据到后才套上）也重排格子，不只等窗口改大小
+  let stripWidth = 0; const stripBox = part('links');
+  if (stripBox && window.ResizeObserver) new ResizeObserver(([e]) => { const w = Math.round(e.contentRect.width); if (w && w !== stripWidth) { stripWidth = w; fitStrip(); } }).observe(stripBox);
 
   if (!id) {
     await lookReady;
@@ -1350,6 +1453,9 @@
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
       if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m
         : { ...m, label: '整理成主题卡的认识', unit: '张', scope: '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“根据什么”“材料攒了多少”。' }) }) };
+      // 识字放大镜：公开页不说“合成”（读着像数是编出来的，主持 11-28 09:52 按第 12 版看图定）。“正式版本合成质量案例”写成“正式版本质量案例”，两版一样；
+      // 读数名来自 LocalOCR 的 docs/live.contract.json，那边改了以后这句可删
+      if (raw && id === 'localocr' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => typeof m?.label === 'string' && m.label.includes('正式版本合成质量案例') ? { ...m, label: m.label.replace('正式版本合成质量案例', '正式版本质量案例') } : m) }) };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
       if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
       // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”
