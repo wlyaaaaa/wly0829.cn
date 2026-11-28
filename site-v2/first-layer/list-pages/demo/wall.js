@@ -5,27 +5,11 @@
 // 4. 右下角的小面板：调大画高矮（一屏几张）和光晕浓淡。只是试看用的；两页记同一组数。
 // 原来想让“画里的景比画框走得慢一点”，试了不行：封面上的字贴着画的边，画一挪字就被裁掉，去掉了。
 (() => {
-  let pieces = [...document.querySelectorAll('.piece')];
+  const pieces = [...document.querySelectorAll('.piece')];
   if (!pieces.length) return;
   const params = new URLSearchParams(location.hash.slice(1));
   const root = document.documentElement;
   const wall = document.getElementById('wall');
-  if (wall?.classList.contains('wall--skills')) {
-    const project = new URLSearchParams(location.search).get('project');
-    const matches = project ? pieces.filter((piece) => piece.dataset.group === project) : [];
-    if (matches.length) {
-      for (const piece of pieces) {
-        if (piece.dataset.group !== project) piece.remove();
-      }
-      pieces = matches;
-
-      const link = document.createElement('a');
-      link.className = 'wall__all-skills';
-      link.href = '/skills/';
-      link.textContent = '看全部技能';
-      wall.prepend(link);
-    }
-  }
   const revealAll = params.get('reveal') === 'all'; // 截图自查用：不等滑到，全部直接显示，也不放过渡
   if (revealAll) root.classList.add('no-anim');
 
