@@ -336,6 +336,8 @@ html.mo-vt-uncover::view-transition-new(root) { animation: none; }
 html.mo-vt:not(.mo-vt-uncover)::view-transition-old(mo-cover) { animation-duration: calc(var(--mo-page-out) * var(--mo-speed)); }
 
 /* 2.2 整个页面（含页眉）进出首页玻璃，几何动画由脚本读取真实玻璃位置（等比缩放、按玻璃裁切，不压扁）。 */
+html.mo-vt-home-in { view-transition-name: none; }
+html.mo-vt-home-in::view-transition { pointer-events: none; }
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-group(root) { animation: none; }
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-old(root),
 html:is(.mo-vt-home-in,.mo-vt-home-out)::view-transition-new(root) { animation: none; transform-origin: 0 0; mix-blend-mode: normal; }
