@@ -388,6 +388,8 @@
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
   // 单字的副词、介词、否定词：分词常把它单切出来（真|干活、还|没读|到），它属于后面的词
   const lead = s => /^[真很太最更都也还就才再又只先刚正越别不没未在把被给对向从往跟和与比让新旧]$/.test(s.segment);
+  // 中文标点后面打头的单字（“、换对话”的“换”）前面没有词可跟，也跟后面的词走；数字后面的量词（3 条）照旧跟数字
+  const orphan = (t, s) => [...s.segment].length === 1 && /[\u3400-\u9fff]/.test(s.segment) && !/^[的了着过地得吗呢吧啊]$/.test(s.segment) && /[，。、；：！？（）《》“”「」…—]$/.test(t.slice(0, s.index));
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
   // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
   // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
@@ -408,8 +410,8 @@
       const open = at => !quoted.some(([a, b]) => at > a && at < b), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
       segs.forEach((s, j) => { const next = segs[j + 1], prev = segs[j - 1];
         // 单字的副词、介词、否定词（真干活、很快、都用、把它、不改、新模型）跟后面的词走：断在它前面，它和后面的词之间不断
-        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
-        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
+        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !(prev && orphan(t, prev)) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
+        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !orphan(t, s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
       const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
@@ -674,7 +676,9 @@
       if (!sameViewer(meta)) return;
       const a = data?.activity, row = a?.items?.find(x => x.id === id);
       const next = Array.isArray(a?.days) && Array.isArray(row?.commits)
-        ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial } : null;
+        ? { days: a.days, commits: row.commits, q: row.q, partial: row.partial }
+        // 提交表没回来（读失败、连不上）记 false，和“回来了、里面没有这个项目”（null）分开；还在准备（202）照旧算在读
+        : data == null && !meta?.warming && (meta?.offline || !(meta?.status > 0) || meta.status >= 400) ? false : data == null ? undefined : null;
       if (!next && activity || JSON.stringify(activity) === JSON.stringify(next)) return;
       activity = next; if (!first) renderStrip(proj);
     };
@@ -1100,16 +1104,18 @@
     drawRuleEvents(host);
     const axis = host.querySelector('.pj-tl');
     if (axis && !axis._whole) {
-      axis._whole = new ResizeObserver(() => {
+      // 对齐到整格：离右边框最近的那一颗的右边对上右边框（r6 拍到过整条轴偏了约 18 像素，右端时间被裁、左端露出上一颗的残字）
+      axis._snap = () => {
         const edge = axis.getBoundingClientRect().right, off = [...axis.children].map(li => li.getBoundingClientRect().right - edge).reduce((a, b) => Math.abs(b) < Math.abs(a) ? b : a, Infinity);
         if (Number.isFinite(off) && Math.abs(off) > 1) axis.scrollLeft += off;
-      });
+      };
+      axis._whole = new ResizeObserver(() => axis._snap());
       axis._whole.observe(axis);
     }
-    if (axis && left < 0) axis.scrollLeft = left;
+    if (axis && left < 0) { axis.scrollLeft = left; axis._snap?.(); }
     else if (axis && !axis.firstElementChild?.matches('.is-now')) requestAnimationFrame(() => {
       const current = axis.querySelector('.is-now');
-      if (current && axis.isConnected && axis.scrollLeft === 0) axis.scrollLeft = current.getBoundingClientRect().right - axis.getBoundingClientRect().right;
+      if (current && axis.isConnected && axis.scrollLeft === 0) { axis.scrollLeft = current.getBoundingClientRect().right - axis.getBoundingClientRect().right; axis._snap?.(); }
     });
   }
 
@@ -1218,8 +1224,11 @@
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
   function commitsCell(cell) {
     const a = activity;
-    const unavailable = () => id === 'agents' ? `<small class="pj-strip-note">${a === undefined ? '加载中' : '提交记录暂时读不到。'}</small>` : '';
-    if (!a) return unavailable();
+    // 表还没回来写“加载中”、读失败写“这次没读到”，每个项目页都写（主持 11-28 10:42：照智能体页；智能体页的“正在读提交记录…”已随 main 的实况离线定稿改成“加载中”）；表回来了但里面没有这个项目，照原来（智能体页写原句，别的页不写）
+    const note = text => `<small class="pj-strip-note">${text}</small>`, unavailable = () => note('提交记录这次没读到。');
+    if (a === undefined) return note('加载中');
+    if (a === false) return unavailable();
+    if (!a) return id === 'agents' ? note('提交记录暂时读不到。') : '';
     if (!a.commits.length) return '';
     const vals = a.commits.map(n => (typeof n === 'number' && Number.isFinite(n) ? n : null));
     const known = vals.filter(n => n != null), total = known.reduce((s, n) => s + n, 0);
@@ -1453,9 +1462,6 @@
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
       if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m
         : { ...m, label: '整理成主题卡的认识', unit: '张', scope: '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“根据什么”“材料攒了多少”。' }) }) };
-      // 识字放大镜：公开页不说“合成”（读着像数是编出来的，主持 11-28 09:52 按第 12 版看图定）。“正式版本合成质量案例”写成“正式版本质量案例”，两版一样；
-      // 读数名来自 LocalOCR 的 docs/live.contract.json，那边改了以后这句可删
-      if (raw && id === 'localocr' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => typeof m?.label === 'string' && m.label.includes('正式版本合成质量案例') ? { ...m, label: m.label.replace('正式版本合成质量案例', '正式版本质量案例') } : m) }) };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
       if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
       // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”
