@@ -75,9 +75,10 @@
 .smooth-sync-cursor { position: absolute; inset: 0 auto 0 0; border-left: 1px solid #79756c; pointer-events: none; }
 .frame-sync .vz-tl__label { font-size: 11px; }
 .frame-sync .vz-tl__row[data-row="day"] .vz-tl__plot { height: 15px; }
-.smooth-frame-sources { position: absolute; inset: 0 0 auto 58px; height: 16px; z-index: 2; pointer-events: none; }
+.smooth-frame-sources { position: absolute; inset: 0 0 auto 58px; height: 16px; overflow: clip; z-index: 2; pointer-events: none; }
 .smooth-frame-sources:has(.smooth-frame-point:not([hidden])) > div { visibility: hidden; }
 .smooth-frame-sources :is(div > span, .smooth-frame-point) { position: absolute; top: 0; box-sizing: border-box; padding-inline: 3px; text-align: center; white-space: nowrap; overflow: hidden; color: #5b5752; font-size: 12px; line-height: 16px; }
+.smooth-frame-sources > div > span { width: max-content; }
 .smooth-frame-point { inset: 0 0 auto; }
 .smooth-term { white-space: nowrap; }
 .smooth-frame-sources span[data-game] { color: #00A650; font-weight: 700; }

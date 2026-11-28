@@ -237,15 +237,26 @@
       const visible = labels.filter(s => s.game || (s.end - s.start) * width / span > 20);
       U.html(stack, visible.map(s => `<span${s.game ? ' data-game' : ''}>${U.nowrap(label(s))}</span>`).join(''), false);
       const occupied = [];
-      const items = [...stack.children].map((item, i) => ({ item, source: visible[i] }));
-      items.sort((a, b) => Number(b.source.game) - Number(a.source.game) || b.source.end - b.source.start - (a.source.end - a.source.start));
-      for (const { item, source } of items) {
-        const allocation = (source.end - source.start) * width / span;
-        const size = item.offsetWidth;
-        const middle = ((source.start + source.end) / 2 - from) * width / span;
-        const left = Math.max(0, Math.min(width - size, middle - size / 2));
-        item.hidden = size > width || !source.game && size > allocation || occupied.some(([a, b]) => left < b && a < left + size);
-        if (!item.hidden) { item.style.left = `${left}px`; occupied.push([left, left + size]); }
+      const inset = 3, toX = time => (time - from) * width / span;
+      const items = [...stack.children].map((item, i) => {
+        item.hidden = false;
+        const source = visible[i];
+        const start = Math.max(inset, toX(source.start)), end = Math.min(width - inset, toX(source.end));
+        return { item, game: source.game, start, end, atRight: end >= width - 16 };
+      });
+      items.sort((a, b) => Number(b.atRight) - Number(a.atRight) || Number(b.game) - Number(a.game) ||
+        (b.end - b.start) - (a.end - a.start));
+      for (const { item, game, start, end, atRight } of items) {
+        const size = item.getBoundingClientRect().width;
+        const target = atRight ? end - size : (start + end - size) / 2;
+        const min = atRight ? target : game ? Math.max(inset, start - size / 2 - 16) : start;
+        const max = atRight ? target : game ? Math.min(width - inset - size, end - size / 2 + 16) : end - size;
+        const left = min > max || atRight && size > end - start ? undefined :
+          [target, ...occupied.flatMap(([a, b]) => [a - size, b])].map(x => Math.max(min, Math.min(max, x)))
+            .filter(x => occupied.every(([a, b]) => x + size <= a + .01 || x >= b - .01))
+            .sort((a, b) => Math.abs(a - target) - Math.abs(b - target))[0];
+        item.hidden = left === undefined;
+        if (left !== undefined) { item.style.left = `${left}px`; occupied.push([left, left + size]); }
       }
     }
     new ResizeObserver(draw).observe(plot);
@@ -337,6 +348,18 @@
     new ResizeObserver(draw).observe(plot);
     return (row, paints) => { day = row; colors = paints; draw(); };
   }
+  function sparkCurve(coords) {
+    const slopes = coords.slice(1).map(([x, y], i) => (y - coords[i][1]) / (x - coords[i][0]));
+    const tangent = i => {
+      const before = slopes[i - 1], after = slopes[i];
+      return before * after > 0 ? Math.sign(before) * Math.min(Math.abs(before), Math.abs(after)) : 0;
+    };
+    return coords.map(([x, y], i) => {
+      if (!i) return `M${x},${y}${coords.length === 1 ? 'h.01' : ''}`;
+      const [px, py] = coords[i - 1], dx = (x - px) / 3;
+      return `C${px + dx},${py + dx * tangent(i - 1)} ${x - dx},${y - dx * tangent(i)} ${x},${y}`;
+    }).join('');
+  }
   function shapeSparks(card) {
     for (const key of ['frametime', 'jitter']) {
       const svg = card.querySelector(`.vz-chip-cell[data-key="${key}"] .chart__svg`);
@@ -352,27 +375,21 @@
         const top = 4, bottom = Number(svg.getAttribute('height')) - 4;
         const toX = t => Math.min(width - 3, Math.max(3, (t - from) / span * width));
         const toY = v => bottom - (v - floor) / (cap - floor || 1) * (bottom - top) * .8;
+        const peakSpacing = Math.max(16, width / 10);
         const runs = [], peaks = [], path = svgTag('path'), spark = svgTag('g');
         let run, peak;
         for (const [t, value] of points) {
-          if (!finite(value) || t < from || t > from + span) { run = peak = null; continue; }
-          if (!run || t - run.at(-1)[0] > FRAME_MINUTE_SECONDS * 1.5) { run = []; runs.push(run); peak = null; }
-          run.push([t, Math.min(value, cap)]);
+          if (!finite(value) || t < from || t > from + span) { run = null; continue; }
+          if (!run || t - run.at(-1)[0] > FRAME_MINUTE_SECONDS * 1.5) { run = []; runs.push(run); }
+          run.push([t, value]);
           if (value <= cap) continue;
           const x = toX(t);
-          if (!peak || x - peak.last >= 8) { peak = { x, value, last: x }; peaks.push(peak); }
+          if (!peak || x - peak.last >= peakSpacing) { peak = { x, value, last: x }; peaks.push(peak); }
           if (value > peak.value) { peak.x = x; peak.value = value; }
           peak.last = x;
         }
-        const d = runs.map(run => {
-          const coords = C.buckets(run, toX, 6).map(([time, value]) => [toX(time), toY(value)]);
-          return coords.map(([x, y], i) => {
-            const previous = coords[i - 1];
-            if (!previous) return `M${x},${y}${coords.length === 1 ? 'h.01' : ''}`;
-            const [px, py] = previous, mid = (px + x) / 2;
-            return `C${mid},${py} ${mid},${y} ${x},${y}`;
-          }).join('');
-        }).join('');
+        const d = runs.map(run => sparkCurve(C.buckets(run.filter(([, value]) => value <= cap), toX, 6)
+          .map(([time, value]) => [toX(time), toY(value)]))).join('');
         spark.setAttribute('class', 'smooth-spark');
         path.setAttribute('class', 'chart__stroke'); path.setAttribute('d', d); spark.append(path);
         for (const { x } of peaks) {
@@ -579,8 +596,10 @@
     const stutterLine = end && (data.stutters.classified_read_error ? `这块最后统计到 ${end}` : `近 24 小时 · 截至 ${end}`);
     const frameSeries = framePack.series.filter(s => s.unit === 'FPS');
     const latest = Math.max(...frameSeries.map(s => s.points.at(-1)?.[0] ?? -Infinity));
-    const lastReading = sourceAt >= latest && sourceAt < latest + FRAME_MINUTE_SECONDS ? `最后一帧于 ${cutoff(sourceAt)}` : finite(latest) && `帧率读到 ${cutoff(latest)}`;
-    const fpsLine = join(readingLine('fps', framePack.series.length > 0), lastReading);
+    const exactFrame = sourceAt >= latest && sourceAt < latest + FRAME_MINUTE_SECONDS;
+    const lastTime = cutoff(exactFrame ? sourceAt : latest);
+    const fpsCutoff = readingLine('fps', framePack.series.length > 0);
+    const fpsLine = join(fpsCutoff, lastTime && !fpsCutoff.endsWith(` ${lastTime}`) && `${exactFrame ? '最后一帧于' : '帧率读到'} ${lastTime}`);
     const first = data?.apps?.[0], front = first && U.sp(program(first.display_label ?? first.app));
     const peak = Math.max(...frameSeries.map(s => C.sum(s)?.max ?? 0));
     const options = chips.filter(c => !data || c.lines.some(l => framePack.series.some(s => s.id === l.id && measured(s))))
