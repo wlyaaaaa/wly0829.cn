@@ -58,6 +58,17 @@ See [Project expansion gate](docs/design/panel-content-contract.md#project-expan
 - Product Design QA updates `design-qa.md` with current evidence references and
   final status; stale prior QA is replaced rather than accumulated.
 
+## 每页的页内说明
+
+`site-v2/` 下每个页面文件夹有一份 `AGENTS.md`（同目录的 `CLAUDE.md` 只有一行 `@AGENTS.md`），写这页已定的、不许做的和还没定的。
+
+- 改页面前，从要改的文件所在目录往上找，读完最近的那份。
+- 改共用代码（组装脚本、共用样式、动效、几页共用的部件）前，先找出会受影响的页面，读那几页的说明。
+- 已定的照做，不再问本人；还没定的才问。
+- 本人对哪页说了新决定，同一轮改那页说明里对应的那一行。
+- 公开措辞另照[本机私有内容规则](docs/design/private-content-rules.md)（存在时）。
+- 从仓库根开局的工具不会自动读子目录里的说明，要照上面自己去找。
+
 ## 更新网站
 
 先读 [网站怎么更新](docs/update.md)；开头四行说明本仓库是什么、入口、不做什么、改了留一句。
