@@ -12,8 +12,17 @@
   const kinds = Object.keys(types);
   const narrow = matchMedia('(max-width: 620px)');
   const twoColumns = matchMedia('(min-width: 1101px)');
+  const scopeWords = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
+  const keepScopeWord = word => `<span class="media-compact">${esc(word)}</span>`;
+  const scopeHtml = text => text.split(/(时间戳|更新)/).map((part, i) => {
+    if (i % 2) return keepScopeWord(part);
+    if (!scopeWords) return esc(part);
+    return Array.from(scopeWords.segment(part), ({ segment, isWordLike }) =>
+      isWordLike && /^[\u3400-\u9fff]{2,}$/.test(segment) ? keepScopeWord(segment) : esc(segment)).join('');
+  }).join('');
   const num = n => Number.isFinite(n) ? n.toLocaleString('zh-CN') : '—';
   const gb = (n, digits = 2) => Number.isFinite(n) ? `${n.toFixed(digits)} GB` : '—';
+  const beijingYear = (at = Date.now()) => new Date(new Date(at).getTime() + 8 * 3600000).getUTCFullYear();
   const day = (at, year = false) => {
     if (!at || !Number.isFinite(Date.parse(at))) return '';
     const date = at.length === 10 ? at : new Date(Date.parse(at) + 8 * 3600000).toISOString().slice(0, 10);
@@ -21,11 +30,13 @@
     return `${year ? `${y}年` : ''}${m}月${d}日`;
   };
   const missing = '<p class="pj-note media-missing">暂时读不到</p>';
-  const cutoff = m => {
+  const cutoff = (m, includePastYear = false) => {
     const at = m?.source_at || m?.at;
-    if (!day(at)) return '';
+    const date = day(at, includePastYear && beijingYear(at) !== beijingYear());
+    if (!date) return '';
+    const stamp = [date, U.time(at, m.at_precision)].filter(Boolean).join(' ');
     const old = U.isStale(m);
-    return `<small class="media-cut">${m.value == null ? '上次' : ''}截止 ${day(at)} ${U.time(at)}${old ? ' · 旧了' : ''}</small>`;
+    return `<small class="media-cut">${m.value == null ? '上次' : ''}截止 ${stamp}${old ? ' · 旧了' : ''}</small>`;
   };
   const icon = name => `<svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${{
     book: 'M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-4-1-7-1-10 1v15',
@@ -52,7 +63,7 @@
     const y = m.yearly?.value, typesRead = m.types?.value, capacity = m.capacity?.value;
     const width = narrow.matches ? 5 : 10;
     const knownYears = Object.keys(y?.years || {}).map(Number);
-    const newest = Math.max(new Date(Date.now() + 8 * 3600000).getUTCFullYear(), ...knownYears), oldest = Math.min(newest, ...knownYears);
+    const newest = Math.max(beijingYear(), ...knownYears), oldest = Math.min(newest, ...knownYears);
     yearPage = Math.min(yearPage, Math.floor((newest - oldest) / width));
     const end = newest - yearPage * width, start = end - width + 1;
     const years = Array.from({ length: width }, (_, i) => start + i);
@@ -61,7 +72,8 @@
     const peak = Math.max(1, ...Object.values(y?.years || {}).map(all));
     const counts = [typesRead?.image, typesRead?.video, m.audio_total?.value, m.total?.value];
     const sizes = [gb(m.image_gb?.value, 1), gb(capacity?.video_gb, 1), gb(m.audio_gb?.value, 1), gb(capacity?.gb)];
-    const audio = typesRead ? [`录音 ${num(typesRead.recordings)}`, `音乐铃声 ${num(typesRead.music)}`] : [];
+    const recordings = typesRead?.recordings;
+    const audio = typesRead ? [`录音 ${num(recordings)}`, `音乐铃声 ${num(typesRead.music)}`] : [];
     const subtitles = [[], [], audio, m.days?.value == null ? [] : [`有东西的日子 ${num(m.days.value)} 天`]];
     const segments = parts => parts.filter(Boolean).map((text, i) => `<span class="media-compact">${i ? '· ' : ''}${text}</span>`).join(' ');
     const rows = [...kinds, 'layers'].map((kind, row) => {
@@ -75,10 +87,21 @@
     }).join('');
     const gaps = [m.undated?.value != null && `没日期 ${num(m.undated.value)} 件`, m.undescribed?.value != null && `没写说明 ${num(m.undescribed.value)} 件`].filter(Boolean);
     const range = segments([day(m.earliest?.value, true) && `最早一件 ${day(m.earliest.value, true)}`, day(m.latest?.value, true) && `最新一件 ${day(m.latest.value, true)}`]);
-    const extra = ['audio_locatable', 'phone_actual', 'cloud_actual'].map(key => m[key]).filter(Boolean).map(item => `${esc(item.label)} · ${esc(item.value == null ? item.unknown_text || item.scope || '暂时读不到' : num(item.value))}`).join('<br>');
+    const extra = ['audio_locatable', 'phone_actual', 'cloud_actual'].map(key => {
+      const item = m[key];
+      if (!item) return '';
+      const label = esc(item.label);
+      if (item.value == null) return `<p>${label} · ${esc(item.unknown_text || item.scope || '暂时读不到')}</p>`;
+      if (key === 'audio_locatable' && Number.isFinite(recordings)) {
+        return `<p>${label} · <strong class="media-compact">${num(recordings)} 段里 ${num(item.value)} 段</strong><small class="media-reading-note">${scopeHtml('只算转写里带每句话时间的录音。')}</small>${cutoff(item, true)}</p>`;
+      }
+      const unit = key === 'audio_locatable' ? '段' : item.unit;
+      const scope = item.scope || (key === 'phone_actual' ? item.note : '');
+      return `<p>${label} · <strong class="media-compact">${num(item.value)}${unit ? ` ${esc(unit)}` : ''}</strong>${scope ? `<br>${scopeHtml(scope)}` : ''}${cutoff(item, true)}</p>`;
+    }).join('');
     return `<table class="media-years"><colgroup><col class="media-type-col"><col span="${width + 1}"></colgroup><thead><tr><td></td>${years.map(year => `<th scope="col">${year}</th>`).join('')}<th scope="col" class="media-undated">没日期</th></tr></thead><tbody>${rows}</tbody></table>
       ${!y || !typesRead || !capacity ? missing : ''}${gaps.length ? `<p class="media-gaps">还缺：${gaps.join(' · ')}</p>` : ''}
-      <div class="media-foot media-archive-foot"><div>${extra ? `<details class="media-pop"><summary class="more">说明 <span class="more__chev">›</span></summary><div>${extra}</div></details>` : ''}<span>${range}</span></div>${nav('year', y && start > oldest, yearPage > 0)}${cutoff(m.yearly?.at ? m.yearly : m.total)}</div>`;
+      <div class="media-foot media-archive-foot"><div>${extra ? `<details class="media-pop"><summary class="more">说明 <span class="more__chev">›</span></summary><div class="media-extra">${extra}</div></details>` : ''}<span>${range}</span></div>${nav('year', y && start > oldest, yearPage > 0)}${cutoff(m.yearly?.at ? m.yearly : m.total)}</div>`;
   }
 
   const bar = (items, total) => `<div class="media-bar" aria-hidden="true">${items.map(([value, ink]) => `<i style="width:${total ? value / total * 100 : 0}%;--segment:${ink}"></i>`).join('')}</div>`;
