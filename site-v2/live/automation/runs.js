@@ -15,10 +15,9 @@
   const str = v => typeof v === 'string' ? v.trim() : '';
   const num = v => typeof v === 'number' && Number.isFinite(v) ? v : null;
 
-  // “替你看新消息”是固定任务名，两版同名。
+  // 这类任务的“你”指本人，访客版换称呼。
   function catName(id, viewer, title) {
-    if (id === 'message-review') return NAMES[id];
-    const name = typeof title === 'string' && title ? title : NAMES[id] || id || '';
+    const name = id === 'message-review' ? NAMES[id] : typeof title === 'string' && title ? title : NAMES[id] || id || '';
     return viewer === 'owner' ? name.replace(/^替本人/, '替你') : name.replace(/^替你/, '替本人');
   }
   // 哪一家：worker.host 优先；没给就按型号猜（GPT 走 Codex，Gemini 走 Antigravity）
@@ -240,13 +239,13 @@
     return title.includes(`第${v}版`) ? '' : ` 第 ${U.esc(String(o.version))} 版`;
   }
 
-  // 访客版称呼：页面上指本人的“你”写“本人”（如转给本人、等本人打开、需要本人操作）。固定任务名照原样。
+  // 访客版称呼：页面上指本人的“你”写“本人”（如替本人看新消息、等本人打开、需要本人操作）。
   // 接口里的字后台不改，由页面在画之前换；只换指本人的那几种说法（前面是替、转给、等、需要……，或后面跟着的、来、定、操作……），引号里别人说的“你好”这类不碰
-  const YOU = /替你看新消息|(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
+  const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const original = html => `<!--automation-original-->${html}<!--/automation-original-->`;
   const asOwner = (html, viewer) => viewer === 'owner' || typeof html !== 'string' ? html
     : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
-      .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => m === NAMES['message-review'] ? m : verb ? `${verb}本人` : '本人')).join('');
+      .map((part, i) => i % 2 ? part : part.replace(YOU, (_, verb) => verb ? `${verb}本人` : '本人')).join('');
 
   window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, shortTitle, agentsPath, minutesBetween, runningTime, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();
