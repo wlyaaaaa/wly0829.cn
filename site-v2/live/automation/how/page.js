@@ -81,7 +81,7 @@
       return `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${caption}</span></p><p class="ah-flow__text">${body}</p></li>`;
     }).join('')}</ol>`;
     const promptIntro = `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
-    const words = (id, title, text) => `<details class="ah-prompt" id="${id}"><summary>${title}</summary><pre>${R.original(esc(text))}</pre></details>`;
+    const words = (id, title, text) => `<details class="ah-prompt" id="${id}" data-fold-anchor><summary>${title}</summary><pre>${R.original(esc(text))}</pre></details>`;
     const prompt = c.prompt_template ? `<p>${promptIntro}</p>
         ${words('prompt', '看交给 AI 的原话', c.prompt_template)}`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';

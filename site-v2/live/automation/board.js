@@ -404,9 +404,10 @@
     const rounds = v.doneRounds != null && v.doneRounds === (v.counts.finished ?? -1) && v.done.length < v.doneRounds
       ? `<p class="tp-small au-roundsnote">${int(v.doneRounds)} 是轮数：自动修理同一件修了几轮的，收在同一张卡里，所以下面是 ${int(v.done.length)} 张卡。</p>` : '';
     const excerpt = excerptToday?.data && known(excerptToday.data.total) ? `摘一句不在这里列，今天摘了 ${int(excerptToday.data.total)} 句。` : '';
-    const left = v.done.length - doneShown;
+    const limit = !reading && !missing && !U.shouldFold(v.done.length - doneShown) ? v.done.length : doneShown;
+    const left = v.done.length - limit;
     const more = left > 0 ? `<button type="button" class="au-more-btn" data-more-done>再看 ${int(Math.min(STEP, left))} 张 <span aria-hidden="true">›</span><small>还有 ${int(left)} 张</small></button>` : '';
-    const content = v.done.length ? kindsNote + rounds + v.done.slice(0, doneShown).map(c => card(d, v, c)).join('') + more : '';
+    const content = v.done.length ? kindsNote + rounds + v.done.slice(0, limit).map(c => card(d, v, c)).join('') + more : '';
     const empty = !missing && !content ? `<p class="au-empty">${filter.date ? '这天' : '这 72 小时'}没有${doneWhat}</p>` : '';
     return (legacy || incomplete) + sec('done', `${filter.date ? day : '近 72 小时'}${doneWhat}`, v.counts.finished, content + (reading ? waiting : empty),
       filter.date ? `<button type="button" class="au-sec__back" data-clear="date">回到近 72 小时 ›</button>` : '') + (excerpt ? `<p class="tp-small au-capped">${excerpt}</p>` : '') + older(d);
@@ -833,7 +834,12 @@
     if (clear) { setFilter({ [clear.dataset.clear]: null }); return; }
     if (day) { setFilter({ view: 'done', date: day.dataset.day === today() ? 'today' : day.dataset.day }); T.reveal('done'); return; }
     if (e.target.closest('[data-more-done]')) { T.keep(page.root, '[data-more-done]', () => { doneShown += STEP; draw(); }); return; }
-    if (e.target.closest('[data-older]')) { T.keep(page.root, '[data-older]', () => { olderOpen = !olderOpen; draw(); }); return; }
+    const older = e.target.closest('[data-older]');
+    if (older) {
+      if (olderOpen) U.anchorFold(older, () => { olderOpen = false; draw(); }, () => page.root.querySelector('[data-older]'));
+      else T.keep(page.root, '[data-older]', () => { olderOpen = true; draw(); });
+      return;
+    }
     // 整行都能点：点在开关、暂停、链接以外的地方，等于点了这一行，到这一类的页
     const row = !e.target.closest('a, button, input, select') && e.target.closest('tr[data-row]');
     if (row) { location.href = catPath(row.dataset.row); return; }

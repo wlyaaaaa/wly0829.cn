@@ -35,6 +35,7 @@
     words(run).map(keepUnit).join('<wbr>'));
   const keepFactWords = html => html.replace(/<[^>]+>|\p{Script=Han}{2,}/gu, run => run.startsWith('<') ? run :
     words(run).map(word => word.length > 1 ? `<span class="task-fact-word">${word}</span>` : word).join(''));
+  const keepSchedule = html => html.replace(/<[^>]+>|每(?:[ \t]*\d+[ \t]*)?分钟/g, word => word.startsWith('<') ? word : keepUnit(word));
   const text = v => U.fieldText(v, viewer);
   const time = v => typeof v === 'number' ? v : Date.parse(text(v));
   const stamp = (t, relative = false) => !Number.isFinite(t) ? '' : [
@@ -381,7 +382,10 @@
       typeof d.ledger_id === 'string' && ['关联账本', link(route('/live/issue/', { id: d.ledger_id }), '看这件事')],
     ].filter(row => row?.[1]);
     $('about-title').textContent = kind === 'pickup' ? '这个动作' : '这个任务';
-    U.html($('facts'), rows.map(([k, v, css]) => `<div><dt>${k}</dt><dd${css ? ` class="${css}"` : ''}>${kind === 'plan' && !css ? keepFactWords(v) : v}</dd></div>`).join('') || '<p>说明未读到</p>', false);
+    U.html($('facts'), rows.map(([k, v, css]) => {
+      const body = kind === 'plan' && !css ? keepFactWords(k === '时间安排' ? keepSchedule(v) : v) : v;
+      return `<div><dt>${k}</dt><dd${css ? ` class="${css}"` : ''}>${body}</dd></div>`;
+    }).join('') || '<p>说明未读到</p>', false);
   }
   const timeCell = r => `<time datetime="${new Date(runTime(r)).toISOString()}">${stamp(runTime(r))}${r.start == null ? ' 结束' : ''}</time>`;
   const endStamp = r => r.start != null && dayStart(r.start) === dayStart(r.end) ? U.time(r.end) : stamp(r.end);
@@ -404,7 +408,7 @@
   function extra(d, r, output = false, open = false) {
     const path = runPath(d, r), info = [times(r), marked(field(r.reason, '运行说明'), r, 'reason', '运行说明'), !output && marked(field(r.output, '运行成果'), r, 'output', '运行成果')].filter(Boolean);
     if (!open && !path && r.end == null && r.exit_code == null && !r.reason && !(!output && r.output)) return '';
-    return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
+    return `<details class="task-run-extra" data-fold-anchor${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
   function history(d, rows, kind, open, heads = true) {
     if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
@@ -509,16 +513,21 @@
     if (legacyRun && !old && page && cursor && !pickAsked) askPicked();
     const open = [...$('rec').querySelectorAll('[data-time]:has(details[open])')].map(el => Number(el.dataset.time));
     if (old || detached) open.push(runTime(old || detached));
-    U.html($('runs'), history(d, runs.slice(0, 6), kind, open), false);
-    $('more-runs').hidden = total <= 6;
-    const earlier = Math.max(0, total - 6), moreLabel = `<span class="disclosure-closed">展开（更早的 ${earlier} 次）</span><span class="disclosure-open">收起（更早的 ${earlier} 次）</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
+    const first = !cursor && total === runs.length && !U.shouldFold(total - 6) ? total : 6;
+    U.html($('runs'), history(d, runs.slice(0, first), kind, open), false);
+    $('more-runs').hidden = total <= first && !cursor && !detached;
+    const earlier = Math.max(0, total - first);
+    const countNote = earlier ? `（更早的 ${earlier} 次）` : '';
+    const moreLabel = `<span class="disclosure-closed">展开${countNote}</span><span class="disclosure-open">收起${countNote}</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
     if ($('more-runs').querySelector('summary').innerHTML !== moreLabel) $('more-runs').querySelector('summary').innerHTML = moreLabel;
     // 更早的一次只摆一批，底下“再看 50 次”接着摆；几千次一次全写进来会把页面卡死（M632）。要看的那一次在后面时摆到它为止。
     // 后台分页时已取的都摆出来，“再看”向后台取下一批；老回包一次带全的照旧本地分批摆
-    const rest = runs.slice(6), target = old ? rest.indexOf(old) : -1;
+    const rest = runs.slice(first), target = old ? rest.indexOf(old) : -1;
     if (!page && target >= restShown) restShown = Math.ceil((target + 1) / RUN_BATCH) * RUN_BATCH;
-    const shown = page ? rest : rest.slice(0, restShown), left = Math.max(0, total - 6 - shown.length - (detached ? 1 : 0));
-    const more = left && (!page || cursor) ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›`}</button>` : '';
+    const shown = page || !U.shouldFold(rest.length - restShown) ? rest : rest.slice(0, restShown);
+    const left = Math.max(0, total - first - shown.length - (detached ? 1 : 0));
+    const readMore = left ? `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›` : '再读更早的记录 ›';
+    const more = cursor || !page && left ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || readMore}</button>` : '';
     U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
     if (target >= 0 || detached) $('more-runs').open = true;
     write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));

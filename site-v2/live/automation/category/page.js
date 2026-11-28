@@ -183,9 +183,10 @@
       const empty = `还没跑过${nextText ? `，${nextText}` : ''}。`;
       return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
     }
-    const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
+    const limit = !info.more && !U.shouldFold(rows.length - shown) ? rows.length : shown;
+    const left = rows.length - limit, rest = left > 0 ? left : info.more ? null : 0;
     const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '正在读…' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
-    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}
+    return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, limit).map(runRow).join('')}</ol>${btn}
       ${pageFailed ? '<p class="tp-small" role="status">这一批没读到，可以再点一次。</p>' : ''}</section>`;
   }
   const catNext = () => { const c = catOf(state?.data); return c?.state?.next_at || c?.next_at || list(c?.upcoming)[0]?.at; };

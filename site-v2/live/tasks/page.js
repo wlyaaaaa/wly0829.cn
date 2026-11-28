@@ -213,6 +213,7 @@
   }
 
   function waiting(text, revoked = false) {
+    hero.removeAttribute('data-maintenance-partial');
     for (const s of sections.values()) {
       s.el.hidden = s.more.hidden = true;
       if (revoked) clearGroupRows(s);
@@ -238,9 +239,15 @@
   function drawGroup(s) {
     if (!s.groupRows) return;
     const all = [...new Map([...s.groupRows, ...(s.loadedRows || [])].map(t => [t.id, t])).values()].filter(t => !s.preview.has(t.id));
-    const shown = maintenance ? all : all.slice(0, s.step), local = all.length > shown.length;
-    const left = Math.max(all.length, s.size - s.preview.size) - shown.length;
-    U.list(s.rest, shown.map(s.rowOf));
+    const remaining = Math.max(all.length, s.size - s.preview.size);
+    const remote = s.remote && (s.loadedRows == null || s.cursor != null);
+    const flat = !remote && all.length === 1 && !U.shouldFold(remaining);
+    const shown = maintenance || !remote && !U.shouldFold(remaining - s.step) ? all : all.slice(0, s.step);
+    const local = all.length > shown.length, left = remaining - shown.length;
+    const main = s.groupRows.slice(0, s.preview.size);
+    U.list(s.main, (flat ? main.concat(all) : main).map(s.rowOf));
+    U.list(s.rest, flat ? [] : shown.map(s.rowOf));
+    s.more.hidden = !remaining || flat;
     s.localMore = local;
     s.next.hidden = !local && (!s.remote || s.cursor == null && s.loadedRows != null);
     s.next.toggleAttribute('data-needs-pc', !local);
@@ -289,7 +296,7 @@
   function render(d, append = false) {
     function changeDetail(c) {
       if (typeof c.owner_detail !== 'string' || !c.owner_detail.trim()) return '';
-      return `<details><summary>变更详情</summary><p class="row__sub">${esc(c.owner_detail)}</p></details>`;
+      return `<details data-fold-anchor><summary>变更详情</summary><p class="row__sub">${esc(c.owner_detail)}</p></details>`;
     }
     if (d?.q === 'warming') { page = d; waiting('正在准备'); taskHead(); groupsRead.done(); changesRead.done(); return; }
     if (d && !maintenance && !scheduledPacket(d)) {
@@ -311,7 +318,7 @@
       const visible = Math.min(5, list.length);
       if (!sections.has(id)) {
         const c = board.card(id, look(id)); c.step = backSteps?.[id] || GROUP_STEP; sections.set(id, c);
-        U.fold(c.more, c.box, () => loadGroup(id));
+        U.fold(c.more, c.box, () => loadGroup(id), true);
         c.more.addEventListener('click', () => { if (c.more.getAttribute('aria-expanded') === 'false') { c.step = GROUP_STEP; drawGroup(c); saveGroupSteps(); } });
         c.next.addEventListener('click', async () => { await moreGroup(id); saveGroupSteps(); });
       }
@@ -333,8 +340,7 @@
       const row = t => task(t, page.coverage);
       const remaining = Math.max(0, Math.max(size, list.length) - visible);
       s.groupRows = list; s.size = size; s.rowOf = row;
-      U.list(s.main, list.slice(0, visible).map(row)); drawGroup(s);
-      s.more.hidden = remaining === 0;
+      drawGroup(s);
       U.html(s.more, `<span class="lb-more__open">${incomplete && group?.total == null ? '展开' : `展开（还有 ${remaining} 条）`}</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
     }
     for (const [id, s] of sections) if (!groups.has(id)) s.el.hidden = true;
@@ -349,8 +355,10 @@
     }
     board.layout(); pickGroup(); pickProjects();
     const rounds = maintenanceRounds(d);
+    const maintenancePartial = maintenance && !cards && Number.isInteger(rounds) && rounds > 0;
+    hero.toggleAttribute('data-maintenance-partial', maintenancePartial);
     const noTasks = maintenance && (d.q !== 'ok' || rounds !== 0)
-      ? (Number.isInteger(rounds) && rounds > 0 ? '维护明细这次没读全' : '还没读到维护明细')
+      ? (maintenancePartial ? '维护明细这次没读全' : '还没读到维护明细')
       : query ? '没有这个名字的任务' : maintenance ? `${project ? '这个项目' : ''}今天没有 AI 后台自动维护` : '没有任务';
     let none = $('task-empty'); if (!none) { none = document.createElement('ul'); none.className = 'rows list'; none.id = 'task-empty'; $('groups').append(none); } none.hidden = cards > 0; U.list(none, empty(noTasks));
     const ranges = Array.isArray(d.coverage) ? d.coverage : [];
@@ -405,11 +413,12 @@
     box.hidden = false;
     box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
     const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
-    const firstRows = list.length ? list.slice(0, 6).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间');
+    const split = U.shouldFold(list.length - 6) ? 6 : list.length;
+    const firstRows = list.length ? list.slice(0, split).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间');
     if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace('下次运行时间', '<span class="task-phrase">$&</span>');
     U.list(box.querySelector('ul'), firstRows, { animate: false });
-    U.list(box.querySelector('details ul'), list.slice(6).map(entry), { animate: false });
-    box.querySelector('details').hidden = list.length <= 6;
+    U.list(box.querySelector('details ul'), list.slice(split).map(entry), { animate: false });
+    box.querySelector('details').hidden = list.length === split;
     const moreLabel = `<span class="disclosure-closed">再看 ${list.length - 6} 个</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
     const summary = box.querySelector('summary'); if (summary.innerHTML !== moreLabel) summary.innerHTML = moreLabel;
   }

@@ -218,10 +218,10 @@
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
     const more = '<span class="aw-mechanism__more">展开看全文 ›</span>';
-    const shared = common ? `<details id="aw-repair-common"><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
+    const shared = common ? `<details id="aw-repair-common" data-fold-anchor><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
     const lines = specific ? specific.split('\n') : [];
     const ownPrompt = lines.length > 12
-      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific"><summary>${more}</summary>${pre(lines.slice(5).join('\n'))}</details>`
+      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific" data-fold-anchor><summary>${more}</summary>${pre(lines.slice(5).join('\n'))}</details>`
       : specific ? pre(specific) : '';
     const commitment = id === 'acceptance';
     const guide = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
@@ -245,7 +245,7 @@
       <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${esc(description)}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
       ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
-      ? `<details class="aw-past"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
+      ? `<details class="aw-past" data-fold-count="${past.length}"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
     // 后台读不到来源时只给一行占位（label 就是“这里还看不到”、别的都没有），不当成一个来源画（M843：原来左右各写一遍）。
     // 已撤的类不再收活，照实说；没撤的照常写这里还看不到
     const sources = list(data.sources).filter(row => row && (row.label ?? row.title) !== '这里还看不到');
@@ -295,7 +295,7 @@
         ...list(run.facts).filter(fact => !['这轮交付', '验收人'].includes(fact.label))]);
       const latest = i + 1 === events.length;
       return `<li id="round-${esc(run.id)}" class="${step(latest)}">
-        <details${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
+        <details data-fold-anchor${latest ? ' open' : ''}><summary class="aw-step"><time>${when(run.at)}</time><span>${words(run.label, !run.end_at && (run.chat_state_text || '会话状态未读到'), ...chatActivity(run), outcome || host)}</span></summary>
         ${labels ? `<dl class="aw-facts">${labels}</dl>` : empty('还没有本轮结果')}</details></li>`;
     }).join('')}${coming.map(name => `<li class="is-future"><p class="aw-step"><span>${name}</span></p></li>`).join('')}</ol>`;
   }

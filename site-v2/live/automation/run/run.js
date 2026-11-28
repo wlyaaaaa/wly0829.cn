@@ -21,7 +21,10 @@
   const listLabel = retired || fromList && fromList.searchParams.get('category') !== category ? '自动任务' : '';
   let state, viewer = 'public', board = null, siblings = null, others = null, fromReferrer = false;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
-  const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
+  const paint = (root, html) => {
+    T.paint(root, R.asOwner(html, viewer));
+    U.fitNativeFolds(root);
+  };
   const F = (v, name) => T.field(v, viewer, name);
   // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（相邻或上下级的两处字一样只显示一次，主控 11-26 10:02）
   const said = v => U.fieldText(v ?? '', viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
@@ -230,7 +233,8 @@
     }).filter(Boolean);
     if (!items.length) return '';
     const rest = items.slice(3);
-    return `<blockquote class="ar-quote">${items.slice(0, 3).join('')}${rest.length ? `<details class="ar-quote__more" id="ar-q-${esc(key)}"><summary class="live-disclosure"><span class="ar-open">再看 ${rest.length} 句思考摘要 ›</span><span class="ar-shut">收起 ‹</span></summary>${rest.join('')}</details>` : ''}</blockquote>`;
+    if (!U.shouldFold(rest.length)) return `<blockquote class="ar-quote">${items.join('')}</blockquote>`;
+    return `<blockquote class="ar-quote">${items.slice(0, 3).join('')}<details class="ar-quote__more" id="ar-q-${esc(key)}" data-fold-count="${rest.length}"><summary class="live-disclosure"><span class="ar-open">再看 ${rest.length} 句思考摘要 ›</span><span class="ar-shut">收起 ‹</span></summary>${rest.join('')}</details></blockquote>`;
   }
   // 回复是一段程序原文（JSON）时不照摆：取里面的中文句子，一句一行（施工稿第三节第 9 条：不给看 JSON 和英文字段）
   function readable(words) {
@@ -277,7 +281,7 @@
     const asTitle = !r.prompt && !d?.task_prompt && d && CV.visibleText(d.title) ? `<div class="ar-prompt">${bodyOf(d.title, '交给 AI 的原话')}</div>` : '';
     const promptText = r.prompt ? `<pre class="ar-prompt">${F(r.prompt, '提示词')}</pre>` : d?.task_prompt ? `<div class="ar-prompt">${bodyOf(d.task_prompt, '任务原文')}</div>` : asTitle;
     const promptTag = asTitle && !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'title', '交给 AI 的原话', viewer) : '';
-    const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt"><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${R.original(promptText)}</details>`
+    const prompt = program ? '' : !promptText && retired ? '' : promptText ? `<details class="ar-say-fold" id="ar-prompt" data-fold-anchor><summary class="live-disclosure"><span class="ar-open">交给 AI 的原话 ›</span><span class="ar-shut">收起交给 AI 的原话 ‹</span>${promptTag}</summary>${R.original(promptText)}</details>`
       : `<p class="ar-msg__more"><a href="${esc(T.path('/live/automation/', { type: category }) + `#prompt-${category}`)}">这一类交给 AI 的原话 ›</a></p>`;
     return { at: start, html: say({ who: 'dispatcher', name: '派活程序', at: clockOf(r, start), body: `排上这一轮：${reason}${look}${program ? '这一轮由程序直接办，没叫 AI。' : ''}`, after: resumes + prompt }) };
   }
@@ -420,7 +424,7 @@
       const own = messages.map(m => say({ who: 'ai', name: esc(row.model || '帮手'), at: clockOf(r, m.at), body: m.body, after: quotes(m.quotes, m.key) })).join('');
       const line = [row.state && `<b class="ar-helper__state">${esc(row.state)}</b>`, row.name || (row.state ? '' : row.head)].filter(Boolean).join('：');
       const inside = `${own ? `<ol class="ar-chat ar-chat--sub">${own}</ol>` : ''}<p class="ar-helper__meta">${U.fieldHtml(row.meta, { name: '对话内容', kind: viewer })}</p>${row.detail}${row.more}${row.canOpen ? `<div class="ar-helper__acts">${CV.actions(h)}</div>` : ''}`;
-      out.push({ at: h.at, html: `<li class="ar-msg ar-helper" data-who="helper"><details class="ar-helper__fold" id="ar-h-${esc(row.key)}"><summary class="live-disclosure"><span class="ar-helper__hook" aria-hidden="true"></span><span class="ar-ava" data-who="helper" aria-hidden="true"></span><b class="ar-helper__who">帮手${row.model ? ` · ${esc(row.model)}` : ''}</b>${T.stamp(h.at) ? `<time>${esc(clockOf(r, h.at))}</time>` : ''}<span class="ar-helper__line">${line}</span><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><div class="ar-helper__body">${inside}</div></details></li>` });
+      out.push({ at: h.at, html: `<li class="ar-msg ar-helper" data-who="helper"><details class="ar-helper__fold" id="ar-h-${esc(row.key)}" data-fold-anchor><summary class="live-disclosure"><span class="ar-helper__hook" aria-hidden="true"></span><span class="ar-ava" data-who="helper" aria-hidden="true"></span><b class="ar-helper__who">帮手${row.model ? ` · ${esc(row.model)}` : ''}</b>${T.stamp(h.at) ? `<time>${esc(clockOf(r, h.at))}</time>` : ''}<span class="ar-helper__line">${line}</span><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><div class="ar-helper__body">${inside}</div></details></li>` });
     });
     out.sort((a, b) => (T.stamp(a.at) ?? Infinity) - (T.stamp(b.at) ?? Infinity));
     return { out, gap, lastWords };
@@ -436,7 +440,7 @@
     const now = p.plan[p.current];
     const head = [p.count, now && (ended ? `停在${p.label}` : p.label), now && !ended && CV.stepWord(U.chatFields.stepState(now))].filter(Boolean).join(' · ');
     const tag = !U.visitorWholeHidden(d) ? U.visitorLabel(d, 'plan', '执行计划', viewer) : '';
-    return `<details class="ar-fold ar-planfold" id="ar-plan"><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
+    return `<details class="ar-fold ar-planfold" id="ar-plan" data-fold-anchor><summary class="live-disclosure"><span class="ar-planfold__h">计划${tag}</span><small>${esc(head)}</small><span class="ar-open">展开 ›</span><span class="ar-shut">收起 ‹</span></summary><ol class="ar-plan">${steps.map(s => `<li data-step="${s.state}">${s.lamp}<span>${s.label || ''}</span>${s.word ? `<small>${s.word}</small>` : ''}</li>`).join('')}</ol>${marks ? `<p class="ar-none">${marks}</p>` : ''}</details>`;
   }
 
   function conversation(r) {

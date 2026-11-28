@@ -106,7 +106,7 @@ with service as server, sync_playwright() as pw:
             expect(page.locator('#recent')).to_contain_text('已退出清单的一次任务')
             expect(page.locator('#groups')).not_to_contain_text('已退出清单的一次任务')
             expect(page.locator('#groups')).not_to_contain_text('夹具 Codex 日程')
-            page.get_by_role('button', name='展开（还有 1 项）').click()
+            expect(page.get_by_role('button', name='展开（还有 1 项）')).to_have_count(0)
             expect(page.get_by_role('link', name='平台日程4', exact=True)).to_be_visible()
             assert ('夹具本人动作' in page.locator('#groups').inner_text()) == (audience == 'owner')
             page.locator('#recent').get_by_role('link', name='夹具 Codex 日程', exact=True).click()

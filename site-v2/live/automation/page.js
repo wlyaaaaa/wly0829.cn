@@ -12,7 +12,7 @@ window.LegacyAutomation = function (bar) {
       cols: 1, columns: columns.map((label, i) => ({ label, width: `minmax(0, ${widths[i]}fr)` })),
     });
     const card = board.card(id, { icon, tint: 'lilac', art });
-    U.fold(card.more, card.box);
+    U.fold(card.more, card.box, null, true);
     return { id, name, intro, board, card };
   });
   const route = (path, query) => {
@@ -145,7 +145,7 @@ window.LegacyAutomation = function (bar) {
       U.html(card.title, `<b>${name}</b>${qty ? `<span class="lb-card__count">${qty}</span>` : ''}`);
       const gap = field(group?.gap, '采集缺口') || (!count(n) && !waiting ? '这组的完整名册还没读到。' : '');
       U.html(card.sub, [intro, gap].filter(Boolean).join(' · '));
-      const limit = pickup ? shown.length : 4, remaining = Math.max(0, shown.length - limit);
+      const limit = pickup || !U.shouldFold(shown.length - 4) ? shown.length : 4, remaining = shown.length - limit;
       U.list(card.main, shown.length ? shown.slice(0, limit).map(t => row(t, pickup)) : [{ key: 'empty', cls: 'row lb-row--empty automation-note',
         html: waiting ? '正在读' : n === 0 ? '这组没有任务' : query ? '没有符合筛选的已读任务' : '这组任务明细还没读到' }]);
       U.list(card.rest, shown.slice(limit).map(t => row(t, pickup)));
