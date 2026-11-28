@@ -127,20 +127,20 @@
     const device = row.devices?.[key];
     const last = device?.last_success_at ? `<small>上次读到 ${e(stamp(device.last_success_at).slice(-11))}</small>` : '';
     const app = key === 'phone' && row.name === 'Claude 桌面版' ? '<small>（Claude 手机应用）</small>' : '';
-    return e(device?.version ?? noRecord) + last + app;
+    return e(device?.version ?? '版本没读到') + last + app;
   }
   function softwareTable(rows, stamp) {
     const headers = ['软件', '台式机', ...deviceColumns.map(c => c.label)];
     return `<table class="pj-device-table"><thead><tr>${headers.map(h => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => {
       const installed = r.installed_or_updated_on ? stamp(r.installed_or_updated_on, 'date') : noRecord;
-      const cells = [e(r.version ?? noRecord) + `<small>安装或更新：${e(installed)}</small>`, ...deviceColumns.map(c => deviceCell(r, c.id, stamp))];
+      const cells = [e(r.version ?? '版本没读到') + `<small>安装或更新：${e(installed)}</small>`, ...deviceColumns.map(c => deviceCell(r, c.id, stamp))];
       return `<tr><th scope="row">${e(r.name)}</th>${cells.map(c => `<td>${c}</td>`).join('')}</tr>`;
     }).join('')}</tbody></table>`;
   }
   function software(data, stamp) {
     if (!data?.items?.length) return null;
     if (hasDevices(data.items)) return { key: 'software-versions', title: '日用工具现在在用哪一版', html: softwareTable(data.items, stamp) + paragraph(data.at && `数据截至 ${stamp(data.at)}`) + paragraph(data.gap) };
-    return { key: 'software-versions', title: '日用工具现在在用哪一版 · 台式机', html: data.items.map(r => `<p class="knowledge-prose">${e(r.name)} · ${e(r.version ?? '没有记录')}<small>安装或更新：${e(r.installed_or_updated_on ? stamp(r.installed_or_updated_on, 'date') : '没有记录')}</small></p>`).join('') + paragraph(data.at && `数据截至 ${stamp(data.at)}`) + paragraph(data.gap) + paragraph('只采到了台式机，笔记本和手机还没采到') };
+    return { key: 'software-versions', title: '日用工具现在在用哪一版 · 台式机', html: data.items.map(r => `<p class="knowledge-prose">${e(r.name)} · ${e(r.version ?? '版本没读到')}<small>安装或更新：${e(r.installed_or_updated_on ? stamp(r.installed_or_updated_on, 'date') : '没有记录')}</small></p>`).join('') + paragraph(data.at && `数据截至 ${stamp(data.at)}`) + paragraph(data.gap) + paragraph('只采到了台式机，笔记本和手机还没采到') };
   }
   const hasSkillUsage = data => !!data && (['top7', 'top30', 'unrecorded30'].some(key => Object.hasOwn(data, key)) || data.items?.some(row => 'antigravity_d30' in row));
   function batchProgress(data, id, stamp) {

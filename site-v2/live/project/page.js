@@ -60,7 +60,7 @@
   };
   const enc = encodeURIComponent;
   const missingText = (state, what = '项目') => state?.offline || U.offline?.() ? '这块没存下来，连上后补上。'
-    : [404, 503].includes(state?.meta?.status) || !(state?.meta?.status > 0) || state.meta.status >= 500 ? `${U.fieldText(what) || '项目'}暂时读不到` : `${U.fieldText(what) || '项目'}没有记录`;
+    : `${U.fieldText(what) || '项目'}这次没读到`;   // 读失败、服务出错、没给这一块都算没读到（M1198 B66）；成功读到空的由各块自己写，比如“还没有产物”
 
   const hero = $('pj-hero');
   let coverSlug;
@@ -158,7 +158,7 @@
     if (reading) return { html: `<span class="pj-text">${keepWords(U.fieldHtml(reading, { name: '项目读数', kind: projectViewer }))}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
-    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">暂时读不到</span>', plain: '暂时读不到', long: false };
+    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">这次没读到</span>', plain: '这次没读到', long: false };
     if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
@@ -621,7 +621,7 @@
     if (view !== changeView) { changeView = view; if (!first) U.anchor(() => renderBoard(true)); }
   }
   // 没读到时写从几点起读不到（这一页先读到过才有，M982）；手上那份截至几点另由“上次改动记录截至”那句写
-  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${what}自 ${stamp(result.failingSince)} 起暂时读不到。` : `${what}暂时读不到。`;
+  const unreadText = (result, what = '改动记录') => result?.failingSince ? `${stamp(result.failingSince)} 起的${what}这次没读到。` : `${what}这次没读到。`;
   async function readChanges() {
     const read = ++changeRead;
     const result = await getChanges();
@@ -693,7 +693,7 @@
       if (epoch !== changeEpoch || cursor !== changeLog?.next) return;
       const page = result?.meta?.status < 400 && changePacket(result);
       if (!page?.items.length) {
-        publishChanges('下一页暂时读不到，已读到的留在这里。');
+        publishChanges('已读到一部分，后面的接着读。');
         // 本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
         result?.again?.then(() => { if (epoch === changeEpoch && cursor === changeLog?.next && !changeRefill) loadChanges(b); });
         return;
@@ -728,7 +728,7 @@
       // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
       if (result.data) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...(result.data.items || [])] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else {
-        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "下一页暂时读不到，已读到的留在这里。", { name: '项目内容', kind: projectViewer }));
+        b.note.hidden = false; U.html(b.note, U.fieldHtml([403, 404].includes(result.meta?.status) ? missingText(result) : "已读到一部分，后面的接着读。", { name: '项目内容', kind: projectViewer }));
         // 同改动记录的下一页：本页主数据确认接通后用同一个翻页位置自己再取一次（M982）
         result.again?.then(() => { if (generation === audience && cursor === arts?.next) loadArtifacts(b); });
       }
@@ -1007,7 +1007,7 @@
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         const reading = missingArts && proj.artifacts && (!artsState || ['idle', 'wait', 'slow'].includes(artsState.phase));
-        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? '暂时没有读到这版的改动记录' : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
+        const empty = reading ? '正在读最近产物' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? (b.versionFailed || missingArts ? '这版的改动记录这次没读到' : '暂时没有读到这版的改动记录') : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
         fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);

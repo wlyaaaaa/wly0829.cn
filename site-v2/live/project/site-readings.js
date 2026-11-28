@@ -99,7 +99,7 @@
     btn.disabled = true; btn.textContent = '正在读…';
     const got = await state.load().catch(() => null);
     btn.disabled = false;
-    note.hidden = !!got; note.textContent = got ? '' : '下一页暂时读不到，已读到的留在这里。';
+    note.hidden = !!got; note.textContent = got ? '' : '已读到一部分，后面的接着读。';
     if (got) Object.assign(state, { shown: Math.min(state.shown, state.rows.length) + RANK_STEP, rows: [...state.rows, ...got.rows], load: got.load });
     drawRank(host);
   }
