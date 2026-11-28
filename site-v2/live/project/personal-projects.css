@@ -103,6 +103,17 @@
 .pp-bubbles { grid-column: 1 / -1; }
 .pp-wallpaper { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: rgb(255 255 255 / .52); border-radius: 9px; }
 .pp-mobile-wallpaper > .pp-wallpaper { aspect-ratio: 9 / 20; object-fit: cover; }
+[data-personal-project="typora"] #more-data .pj-viz {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; overflow: clip visible;
+}
+[data-personal-project="typora"] #more-data .pp-row {
+  position: relative; flex: none; flex-wrap: nowrap; margin: 0; padding: 0; border: 0; gap: 6px; white-space: nowrap;
+}
+[data-personal-project="typora"] #more-data .pp-row > span { flex: none; }
+/* 折到新一行时，竖线落在容器左边，随容器裁掉。 */
+[data-personal-project="typora"] #more-data .pp-row + .pp-row::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: -16px; border-inline-start: 1px solid var(--hair);
+}
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pp-wallpapers:has(> .pp-bubbles) {
@@ -121,10 +132,6 @@
   [data-personal-project="emerald"] #changes .rows > .row::after { top: 32px; bottom: -17px; }
   [data-personal-project="typora"] .pp-preview-tools { margin-top: -42px; margin-bottom: 20px; }
   [data-personal-project="typora"] :is([data-card="artifacts"], [data-card="changes"]) { align-self: stretch; }
-  [data-personal-project="typora"] #more-data .pj-viz { display: flex; align-items: baseline; gap: 16px; }
-  [data-personal-project="typora"] #more-data .pp-row { margin: 0; padding: 0; border: 0; gap: 6px; }
-  [data-personal-project="typora"] #more-data .pp-row > span { flex: none; }
-  [data-personal-project="typora"] #more-data .pp-row + .pp-row { padding-inline-start: 16px; border-inline-start: 1px solid var(--hair); }
 }
 @media (max-width: 1100px) {
   .page--project #pj-board[data-personal-project] { grid-template-columns: minmax(0, 1fr); }
