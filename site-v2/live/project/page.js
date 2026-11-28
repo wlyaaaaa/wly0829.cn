@@ -916,7 +916,7 @@
     // 还没有数：页头那一句已经说了（正在读／还没读到／连不上），下面整块先不摆
     if (proj) {
       if (custom?.board) left.push(...custom.board(proj, projectViewer, graphBlock, board));
-      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, U.html, window.LiveViz.bars); left.push(b); }
+      for (const card of window.ProjectAdditions?.cards(id, proj, projectViewer, additions, stamp) || []) { const b = graphBlock(card.key, card.title); b.group = card.key; window.ProjectAdditions.render(card, b, (el, h, ...rest) => U.html(el, keepWords(h), ...rest), window.LiveViz.bars); left.push(b); }
       if (id === 'pcconfig' && additions.softwareRead) left.push(softwareUnavailable(additions.softwareRead));
       const headId = typeof proj.headline === 'string' ? proj.headline : proj.headline?.id;
       for (const s of proj.sections || []) {
