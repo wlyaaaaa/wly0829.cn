@@ -213,20 +213,21 @@
       const state = data.states.findIndex(s => s.id === li.dataset.state), values = rows.map(k => data.states.reduce((n, s, i) => n + (s.label === data.states[state]?.label ? totals[k][i] || 0 : 0), 0));
       // 使用记录的关机（两台）、睡眠（只有电脑）这段没有也照样列出，写明没记录到，不让人以为没加（本人 11-24 20:34）
       const always = key === 'usage' && ['shutdown', 'sleep'].includes(li.dataset.state);
-      const visible = values.some(v => v > 0) || always;
+      const fixedNetwork = key === 'network' && ['wifi', 'sim1', 'sim2', 'unrecorded'].includes(li.dataset.state);
+      const visible = values.some(v => v > 0) || always || fixedNetwork;
       li.style.display = visible ? '' : 'none';
       if (marked(data.states[state]?.label)) li.querySelector('.vz-legend__name b').textContent = '';
       li.querySelectorAll('.vz-legend__vals > span').forEach((cell, i) => {
         const value = values[i], label = rows.length > 1 && cell.querySelector('small')?.textContent;
         if (/没记录|没读到|缺口|下一轮/.test(data.states[state]?.label || '')) cell.className = 'row__sub';
         const none = always && label && !value && (li.dataset.state === 'shutdown' || rows[i] === 'computer');
-        cell.style.display = value > 0 || none ? '' : 'none';
+        cell.style.display = value > 0 || none || fixedNetwork ? '' : 'none';
         if (none) {
           const text = li.dataset.state === 'sleep' ? '未记录到睡眠'
             : Array.isArray(data.rows[rows[i]].off_spans) ? '未记录到关机'
             : rows[i] === 'phone' ? '关机记录这次没读到' : '关机记录读不到';
           cell.innerHTML = `<small>${esc(label)}</small> ${text}`;
-        } else if (value > 0) {
+        } else if (value > 0 || fixedNetwork) {
           cell.innerHTML = cell.classList.contains('row__sub') ? `${rows.length > 1 && label ? `<small>${esc(label)}</small> ` : ''}${V.dur(value)}` : rows.length === 1 ? value >= 360000 ? `<b>${Math.round(value / 3600)}</b><small>小时</small>` : V.durHtml(value)
             : `${label ? `<small>${esc(label)}</small> ` : ''}${value >= 360000 ? `${Math.round(value / 3600)} 小时` : V.dur(value)}`; }
       });
