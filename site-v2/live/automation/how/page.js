@@ -4,12 +4,13 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/'); return; }
-  const T = window.LiveTape, U = window.LiveUI, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, G = window.LiveAutomationGuide || {}, { esc } = U;
   const { list } = T;
-  const g = G[id] || {}, repair = id === 'auto-repair', weekly = id === 'weekly-live';
+  const g = G[id] || {}, repair = id === 'auto-repair';
+  const promptNames = { website: '网站交接', projects: '仓库清理' };
   let state, viewer = 'public', landed = false;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
@@ -47,7 +48,7 @@
         return '同一件最多修几轮、排队多久算没人接手，这次没读到。';
       }
       // 按需更新快核：修满轮数和反复坏怎么办，核 PCConfig automation/scheduler.py（14:00 起反复坏照常交 AI，不再按次数转本人；转本人只限花钱、删唯一数据、亲手做或登录、补只有他知道的、做取舍）
-      return `同一件最多派 AI 修 ${repair_limit} 轮，修到这个数还没好，由做事的 AI 判断接着查、先放下，还是转给本人；只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
+      return `同一件最多派 AI 修 ${repair_limit} 轮。只有要本人花钱、删只有一份的数据、亲手做或登录、补只有他知道的、做取舍的，才转给本人。同一处修好后又坏，照常交 AI 修，修的时候写明这是第几次坏、之前怎么修的，查为什么修不住。急件 ${T.duration(urgent_wait_seconds)}、普通件 ${T.duration(normal_wait_seconds)}还没人接手，会登记一件“有故障排队超过接手时限”。`;
     }
     if (id === 'ai-commitments') return T.known(p.check_limit)
       ? `同一件约定最多复看 ${p.check_limit} 次。` : '同一件最多复看几次，这次没读到。';
@@ -73,31 +74,35 @@
     const steps = list(g.steps);
     // “15–20 句”这种区间整块不折行（看图 14：第一步标题在横线后断开）；标题包成一个块，绿底是弹性排布，不包会拆成几块、伸出卡外
     const keepRange = html => html.replace(/\d+[–-]\d+\s*[句次轮天件]?/g, m => `<span class="ah-keep">${m}</span>`);
-    const stepWords = /认清|哪一处|检查|有没有|人在修|急缓|开工|改完|原条件|跑一次|原件|结果|修理|上限|还没好|反复/g;
-    const wrapSteps = repair || weekly;
-    const flow = `<ol class="ah-flow${wrapSteps ? ' ah-flow--words' : ''}${weekly ? ' ah-flow--weekly' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => {
+    const stepWords = /认清|哪一处|检查|有没有|人在修|急缓|开工|交给 AI|副本|验过|再合|原件|结果|修理|上限|还没好|反复/g;
+    const flow = `<ol class="ah-flow${repair ? ' ah-flow--words' : ''}" style="--n:${Math.min(steps.length, 4)}">${steps.map(([title, text], i) => {
       const caption = keepRange(esc(title)).replace(repair ? stepWords : /急缓/g, '<span class="ah-keep">$&</span>');
       const body = repair && i === 1 ? esc(text).replace(/下一轮/g, '<span class="ah-keep">$&</span>') : esc(text);
       return `<li><p class="ah-flow__box"><span>${i + 1}</span><span class="ah-flow__title">${caption}</span></p><p class="ah-flow__text">${body}</p></li>`;
     }).join('')}</ol>`;
-    const promptIntro = id === 'weekly-live' && off ? '这一类关着。下面是关掉以前每一轮交给 AI 的原话，照原样留着。'
-      : `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
+    const promptIntro = `${off ? '打开后，派活程序每一轮会把' : '派活程序每一轮把'}下面这段固定的话交给 AI，再附上这一轮要办的那件事和材料。`;
+    const words = (id, title, text) => `<details class="ah-prompt" id="${id}"><summary>${title}</summary><pre>${R.original(esc(text))}</pre></details>`;
     const prompt = c.prompt_template ? `<p>${promptIntro}</p>
-        <details class="ah-prompt" id="prompt"><summary>看交给 AI 的原话</summary><pre>${F(c.prompt_template, '交给 AI 的话')}</pre></details>`
+        ${words('prompt', '看交给 AI 的原话', c.prompt_template)}`
       : '<p>交给 AI 的那段固定的话这次没读到，下一轮会自动再读。</p>';
+    const specifics = list(c.prompt_sections).filter(s => promptNames[s.id] && s.text)
+      .map(s => words(`prompt-${s.id}`, promptNames[s.id], s.text)).join('');
     const why = list(g.why).map(([q, a]) => `<p><b>${esc(q)}</b>${esc(a)}</p>`).join('');
     const failure = esc([failurePolicy(c.execution_policy || {}), g.failure].filter(Boolean).join(' '));
+    const duration = timing(c.execution_policy);
+    const cost = id === 'weekly-laptop' ? `<p>${esc(duration)}</p><p>${esc(g.cost)}</p>`
+      : `<p>${esc(g.costFull ? g.cost : `${duration} ${g.cost}`)}</p>`;
     paint(page.root, `<nav class="ak-crumb" aria-label="当前位置"><a href="/live/">实况</a><a href="/live/automation/">自动任务</a><a href="${esc(T.path('/live/automation/category/', { type: id }))}">${name}</a><strong aria-current="page">怎么干</strong></nav>
       <div class="ah-head"><div><h1>${name}怎么干</h1><p>${esc(g.short || '')}${g.short ? '。' : ''}${schedule}</p></div>
         <p class="ah-pills">${model ? `<span class="ah-pill">${model}</span>` : ''}<span class="ah-pill" data-mode="${pill[0]}">${esc(pill[1])}</span></p></div>
       <div class="ah-grid"><div class="ah-main">
         ${card('什么时候开始', `<p>${esc(start)}</p>`)}
         ${steps.length ? card(off ? '打开后一轮这样走' : '一轮怎么走', flow) : ''}
-        ${card('交给 AI 的话', prompt, ' id="words"')}
+        ${card('交给 AI 的话', prompt + specifics, ' id="words"')}
         ${why ? card('为什么这样设计', `<div class="ah-why">${why}</div>`) : ''}
         ${g.failure ? card('坏了会怎样', `<p>${failure}</p>`) : ''}
         ${g.off ? card('关了会怎样', `<p>${esc(g.off)}${/[。！？]$/.test(g.off) ? '' : '。'}</p>`) : ''}
-        ${g.cost ? card('花多少时间', `<p>${esc(g.costFull ? g.cost : `${timing(c.execution_policy)} ${g.cost}`)}</p>`) : ''}
+        ${g.cost ? card('花多少时间', cost) : ''}
         ${g.result ? card('结果去哪', `<p>${esc(g.result)}</p>`) : ''}
       </div><aside class="tp-panel ah-side"><a href="${esc(T.path('/live/automation/category/', { type: id }))}">这一类的页 <i>›</i></a><a href="/live/automation/">自动任务 <i>›</i></a><a href="/live/ledger/">AI 自动任务账本 <i>›</i></a></aside></div>
       <p class="ah-foot">用谁：${esc(g.who || '')}${model ? `${off ? '打开后用' : '现在是'} ${model}，换代跟着模型清单走。` : ''}</p>`);

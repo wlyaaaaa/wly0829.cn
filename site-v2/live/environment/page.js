@@ -106,16 +106,17 @@
     const what = u.status === 'unknown' || !u.status ? '还没有自动更新的记录' : `${when}${({ deferred: '被推迟：', failed: '没更新成功：' })[u.status] || ''}${sp(u.reason || '')}`;
     return { level: 'yellow', text: what };
   }
-  function versionRow(r) {
+  function versionRow(r, group) {
     const now = nowState(r), way = updateWay(r);
+    const visibleState = group === 'behind' && now.text === '落后' ? '' : now.text;
     const wayText = esc(way).replace(/^(?:每周[日一二三四五六]自动|(?:你|本人)说一声，)|AI 来更新/g, '<span class="env-nw">$&</span>');
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${value(r.current_version)}">${r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r)}</td><td title="${value(r.target_version)}">${value(r.target_version, 'software', '最新版本', r)}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${visibleState.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
     const body = versionGroups(rows).map(g => {
       const list = g.key === 'latest' && g.rows.length > LATEST_FIRST + 1 ? g.rows.slice(0, latestShown) : g.rows, left = g.rows.length - list.length;
       const more = left > 0 ? `<tr class="env-more-row"><td colspan="5"><button type="button" class="more" data-latest-more>${left > LATEST_STEP ? `再看 ${LATEST_STEP} 个（还有 ${left} 个）` : `再看剩下 ${left} 个`} ›</button></td></tr>` : '';
-      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span> · ${count(g.rows.length, '个', data.software)}</th></tr>${list.map(versionRow).join('')}${more}</tbody>`;
+      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span>${g.key === 'behind' ? '' : ` · ${count(g.rows.length, '个', data.software)}`}</th></tr>${list.map(r => versionRow(r, g.key)).join('')}${more}</tbody>`;
     }).join('');
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
   }
@@ -263,7 +264,7 @@
   for (const [key, resource] of Object.entries(resources)) window.Live.watch(recordResource(key), { section: resource }, {
     phase(s) { phases[key] = s.phase; boards[key].phase(s); readingRows(); if (!s.data) { if (key === 'software') heroRead.set(s); if (s.phase === 'none' || s.phase === 'gone') repaint(); } },
     data(d, meta) { if (key === 'software') softwareViewer = meta?.viewer?.kind || 'public'; data[key] = d; clocks[key] = d && validAt(meta?.at); if (d) boards[key].data({ series: [] }); repaint(); },
-    link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${esc(sp(s.text))}</span>` }] : []); } else if (s.offline) repaint(); else updateNotes(); },
+    link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); } else if (s.offline) repaint(); else updateNotes(); },
   });
   window.Live.watch('projects/pcconfig', null, { data(d) {
     // 后端 03:45：正式接入时这三组还在 registry 分组下、没有单独的 environment 分组，两种形状都给 data.environment，先读它

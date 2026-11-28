@@ -68,7 +68,10 @@
     const b = blockMeta(d, 'carbon'), w = b.window, from = dayOf(w?.from), to = dayOf(w?.to);
     const range = has && w?.label === '当月' && from && to;
     const offset = from.slice(0, 4) === to.slice(0, 4) ? 5 : 0;
-    return [range && `统计时段 ${from.slice(offset)} ${window.LiveUI.time(w.from)} 至 ${to.slice(offset)} ${window.LiveUI.time(w.to)}`, readingNote(b, '月碳排', has)].filter(Boolean).join(' · ');
+    const U = window.LiveUI, until = stamp(w?.to);
+    const notes = readingNote(b, '月碳排', has).split(' · ').filter(note => !range ||
+      note !== `截至 ${until}` && !U.sameCutoffNote(note, `数据截至 ${until}`) && !U.sameCutoffNote(note, `数据截至 ${stamp(w.to, '')}`));
+    return [range && `统计时段 ${from.slice(offset)} ${U.time(w.from)} 至 ${to.slice(offset)} ${U.time(w.to)}`, ...notes].filter(Boolean).join(' · ');
   }
   const appName = (a) => a?.display_label || a?.name || (a?.hidden || a?.hidden_block || a?.visibility === 'owner' ? a : undefined);
   const appEnergy = (v) => `${v.toFixed(Math.abs(v) < 10 ? 2 : 1)} 度`;
@@ -229,7 +232,6 @@
         ], '和功耗曲线是两种估法，数对不上正常。'),
       }, !!(ac || rails || five)),
       group({ key: 'carbon', name: `${carbonMonth(d)}碳排足迹`, pic: '/live/img/grp-long.webp', palette: ['teal', 'blue'],
-        line: `${carbonMonth(d)}的碳排折合`,
         figures: [{ ...fig('co2', '碳排估算', carbon?.co2_kg, 'kg CO₂', carbon, 'co2_kg'), gap: carbonNote(d, carbon?.co2_kg != null) }, fig('tree', '树木折合', carbon?.co2_kg == null ? null : carbon?.trees, '棵', carbon, 'trees')],
         build: buildCarbon,
       }, !!carbon),

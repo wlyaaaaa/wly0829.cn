@@ -119,11 +119,10 @@
     return n > 0 ? n : w.complete[h.id] && n !== null ? 0 : null;
   };
   const readSkillCount = (n, lower) => n == null ? '没采到' : `${n > 0 && lower ? '至少 ' : ''}${int(n)}`;
-  const displaySkill = name => /\p{Script=Han}/u.test(name) ? name : '技能名称待同步';
   function skillName(name, s, w) {
     const { id, kind } = s.labels.get(name) || {}, tag = kind ? U.visitorLabel({ visitor_labels: { label: kind } }, 'label', '这个技能名', viewer) : '';
     const guide = viewer === 'public' && kind ? null : window.AgentSkillGuides?.[id];
-    const label = esc(displaySkill(name)), href = Array.isArray(guide) ? T.path(guide[0]) : '';
+    const label = esc(name), href = Array.isArray(guide) ? T.path(guide[0]) : '';
     const title = href ? `<a class="tp-link ag-skill-guide" href="${esc(href)}" data-guide-tip="${esc(guide[1])}">${label}</a>` : label;
     return `<details id="skill-${esc(encodeURIComponent(name))}"><summary class="ag-hrow__name">${tag ? `<span class="ag-hrow__label">${title}</span>${tag}` : title}</summary>
       ${HOSTS.map(h => `<div>${h.name} ${readSkillCount(skillCount(name, h, w), s.lower[h.id])}</div>`).join('')}</details>`;
@@ -133,7 +132,10 @@
     return `<div class="ag-hrows">${rows.map(r => {
       const all = sum(r.v, keys), missing = keys.some(h => skillCount(r.name, h, w) == null);
       const right = `<b${f ? ` style="color:${fam(f).color}"` : ''}>${readSkillCount(all || (missing ? null : 0), missing || keys.some(h => lower[h.id]))}</b>${f && (all || !missing) ? '<small>次</small>' : ''}`;
-      const segs = keys.filter(k => r.v?.[k.id] > 0).map(k => `<button type="button" class="ag-hseg${lower[k.id] ? ' is-lower' : ''}" data-pick="${k.id}" style="flex:${r.v[k.id]};--fill:${k.color}" title="${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次" aria-label="${esc(displaySkill(r.name))} · ${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次"></button>`).join('');
+      const segs = keys.filter(k => r.v?.[k.id] > 0).map(k => {
+        const tip = esc(`${r.name} · ${k.name} ${readSkillCount(r.v[k.id], lower[k.id])} 次`);
+        return `<button type="button" class="ag-hseg${lower[k.id] ? ' is-lower' : ''}" data-pick="${k.id}" style="flex:${r.v[k.id]};--fill:${k.color}" title="${tip}" aria-label="${tip}"></button>`;
+      }).join('');
       return `<div class="ag-hrow">${skillName(r.name, s, w)}
         <span class="ag-hrow__track"><span class="ag-hrow__fill" style="width:${all / max * 100}%">${segs}</span></span><span class="ag-hrow__num">${right}</span></div>`;
     }).join('')}</div>`;

@@ -110,7 +110,7 @@
     const basis = table?.basis?.replace(/^今日|^今天/, period) || `${period}已记录的海外代理流量`;
     $('program-title').textContent = [basis, '按代理计数归到程序'].join(' · ');
     $('program-window').textContent = cutoff ? `数据截至 ${U.date(cutoff).slice(-5)} ${U.time(cutoff)}` : d ? '没有记录采集时间' : '';
-    if (!source.length && !separate) { programs.wait(d ? '按程序暂时读不到' : '正在读'); return; }
+    if (!source.length && !separate) { programs.wait(d ? '按程序暂时读不到' : '加载中'); return; }
     const rows = source.map(p => {
       const total = Number.isFinite(p.upload) && Number.isFinite(p.download) ? p.upload + p.download : null;
       const original = U.fieldText(p.detail?.process_name ?? p.name, viewer).trim();

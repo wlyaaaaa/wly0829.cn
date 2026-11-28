@@ -165,6 +165,10 @@ def build(published, site=SITE, output=OUTPUT):
     names["pages"] = make_pages("\n\n".join(raw), site)
     meta = (f'<dl><div><dt>发布</dt><dd>{escape(published)}</dd></div><div><dt>作者</dt><dd>吴乐阳</dd></div>'
             f'<div><dt>字数</dt><dd>{word_count:,} 字</dd></div></dl>')
+    # 页顶一句（本人 11-28 PRINCIPLE1128 选 B：照旧冻结，页顶写明是哪天定稿的版本，之后的变化看实况）。
+    # 日子跟右栏“发布”取同一个值，不另手写；放在题目块外面，body_text 只核对 .rules-title 和 .rules-body，这句不算正文。
+    _, month, day = published.split("-")
+    frozen = f'<p class="principles-frozen" data-mo-rise>这是 {int(month)} 月 {int(day)} 日定稿的版本，之后的变化看<a href="/live/">实况</a>。</p>'
     meta += '<p class="publication-note">本文记录的是 2026 年 11 月的样子，之后不再更新；现行规矩见<a href="/rules/">规则页</a>。</p><dl>'
     # 右栏先列页面，再列项目、技能（本人 11-24 13:00）
     for kind, label in (("pages", "文中提到的页面"), ("projects", "文中提到的项目"), ("skills", "文中提到的技能")):
@@ -185,7 +189,7 @@ def build(published, site=SITE, output=OUTPUT):
     html = f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><link rel="icon" href="data:,">
 <title>原理</title><link rel="stylesheet" href="/header/topbar.css"><link rel="stylesheet" href="/rules/rules.css"><link rel="stylesheet" href="principles.css"><link rel="stylesheet" href="viz.css">{preload}{motion}</head>
-<body>{header}<main class="rules-page principles-page"><div class="rules-title" data-mo-rise><h1>{escape(heading)}</h1><p class="principles-subtitle">{escape(subtitle)}</p></div>
+<body>{header}<main class="rules-page principles-page"><div class="rules-title" data-mo-rise><h1>{escape(heading)}</h1><p class="principles-subtitle">{escape(subtitle)}</p></div>{frozen}
 <div class="rules-layout"><nav class="rules-toc" aria-label="本篇目录" data-mo-rise><ol>{''.join(toc)}</ol></nav>
 <article class="rules-body" data-mo-rise>{article}</article><aside class="rules-meta" aria-label="文章信息" data-mo-rise>{meta}</aside></div></main>
 <script src="/header/topbar.js"></script><script src="/rules/rules.js"></script><script src="viz.js"></script></body></html>

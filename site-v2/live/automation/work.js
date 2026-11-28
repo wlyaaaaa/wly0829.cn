@@ -29,6 +29,7 @@
   // 访客版称呼：后台字里指本人的“你”换成“本人”（和 runs.js 的 asOwner 同一套说法；私事线 11-26），引号里别人说的“你好”这类不碰
   const YOU = /(替|转给|交给|发给|留给|给|等|需要|要|请|提醒|告诉|让|帮|问|叫|找)你(?!们)|你(?!们)(?=的|来|定|选|看|点|操作|确认|打开|处理|拍板|验证|登录|决定|知道|过目|回复|手动|亲自)/g;
   const asOwner = html => audience === 'owner' || typeof html !== 'string' ? html : html.replace(YOU, (m, verb) => verb ? `${verb}本人` : '本人');
+  const guideCopy = text => audience === 'owner' || !text ? text : text.replace(/你本人/g, '本人').replace(/你(?!们)/g, '本人');
   const field = (value, name) => U.fieldHtml(value, { kind: audience, name });
   // 两处字一样不一样：去掉首尾空白、多余空格和句末句号再比（同一句只显示一次，主控 11-26 10:02）
   const said = v => U.fieldText(v ?? '', audience).trim().replace(/\s+/g, ' ').replace(/[。.]$/, '');
@@ -103,9 +104,9 @@
     'backup': ["各份备份（个人资料和照片视频、开发配置、微信、电脑使用记录、文档等）报失败或好久没更新；系统镜像的恢复点、恢复包的完整性检查没过", "本地和传云的补跑撞在一起，云那份抢不到锁就退出 → AI 改成排队等 → 换着先后顺序重演都过才算好", "备份照常跑，坏了页面上看得到，但没人修，一直缺着一份", "从备份里真把文件或整台电脑还原回来，这里不做"],
     'website': ["实况打不开、读数出错或停更、访客版露出不该露的字、网站发布失败", "实况时不时把在跑的任务数清零 → 查出名单刚好过期被作废，放宽有效期 → 线上连读多次都齐才算好", "照样记着、看得到，只是不派 AI 自动修；没人接手的话，你和访客看到的可能一直是旧数、错数"],
     'projects': ["各项目夜里自动跑的测试没过；冻结的、登记过的已知失败不算", "本地文字识别夜测报失败 → AI 拿样图实际识一遍字能用 → 之后夜测通过才关，原因没查到", "测试红着照样记着，没人查是程序坏了还是测试过时", "规则仓库的夜测归“规则和技能”"],
-    'testing': ["规则仓库夜测里超时的分项，交 AI 分清是真坏、电脑忙还是测试过时；还有到期后夜测确认仍失败的已知失败", "夜测里回收临时目录那项超时了 → 递给 AI 分辨；真坏就转去修，测试过时就改测试", "夜测递来的超时分项过一天作废。到期后仍失败的测试留着，没人处理"],
-    'acceptance': ["登记里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的事项到期也在这里先办", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
-    'ai-review': ["对话压缩后的复核、Claude 自动验收、Claude 出方案，最近一次跑得怎样", "有一回压缩后复核自己报错、结果文件坏了 → 这里亮黄灯，点开看最近几轮的记录", "", "复核挑出的错交回原对话，验收结论留在原事项，不在这里修"],
+    'testing': ["规则仓库正式夜测里新出的失败，和到期后夜测确认仍失败的已知失败；由程序分出来交规则线，不派 AI", "规则仓夜测有几项没过 → 程序交给规则线修 → 下一轮夜测这几项都过了，程序自己划掉", "到期后仍失败的测试留着，没人处理"],
+    'acceptance': ["AI 在账本里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的到期事项不在这里，在“等你的事”", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
+    'ai-review': ["以前对话压缩后的复核、Claude 自动验收、Claude 出方案留下的记录；这几样都已撤，不会再有新的", "想知道以前某次 Claude 自动验收是怎么判的 → 点开这里看那一轮的记录", "", "复核挑出的错交回原对话，验收结论留在原事项，不在这里修"],
     'ai-stalled': ["别的类里放太久没人领的活，和 AI 干着干着没动静、跑太久被收回重排的活，集中到这里给你看", "一件活排了很久没人领，或 AI 干到一半没动静被收回 → 都汇总到这里亮黄灯，一眼看到没人在管", "", "派活程序自己停了不归这里，首页卡直接亮黄灯"],
     'rules': ["规则和技能仓库的夜测没过的项、每周体检和规则复核的结论，还有 AI 递来的规则、技能毛病", "自检把历史汇报的日期目录当断链、把技能简介长短当错 → AI 改了这几项检查 → 隔夜自检这几项过了", "夜测红着照样记着，只是不派 AI 自动修；没人接手的话，AI 照旧按有毛病的规则和工具干活", "夜测超时的分项归“待测”；AI 定时任务没跑成归“计划任务和后台程序”；每周结论里只是“待关注”的不建活"],
     'materials': ["照片视频的云端维护、手机照片视频收进电脑，跑完报失败或没跑完", "手机照片视频收进电脑那步报失败 → AI 查出原因修好 → 下次自动收取正常结束才算好", "照常整理，坏了没人修，手机里的可能一直没收进电脑", "只是“待关注”的不建活"],
@@ -202,10 +203,36 @@
     if (!rows.length) return empty('还没改过设置');
     return `<ul class="aw-log">${rows.map(row => `<li><time>${when(row.at)}</time><span>${field(row.text)}</span><small>${words(row.device, row.result)}</small></li>`).join('')}</ul>`;
   }
+  function mechanism(data) {
+    const id = data.id, notes = window.LiveRepairTypeGuide?.[id] || [];
+    const labels = ['什么时候派', '怎么修', '怎么算修好', '修不好'];
+    const steps = notes.map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
+    const { common, specific } = data.repair_prompts || {};
+    const rulesRoute = id === 'testing' || id === 'rules';
+    const note = rulesRoute ? '这一类现在不派 AI：程序把毛病交给规则线（上线收尾以后交每周规矩复核）'
+      : readonly(id) || retired(id) ? '这一类不派 AI'
+      : id === 'website' && data.setting?.mode === 'off' ? '这一类现在关着；打开后派给 AI 的是共用原话，前面加下面这段网站交接'
+      : id === 'projects' ? '夜测失败用共用原话；仓库清理用下面这段专用原话'
+      : id === 'acceptance' ? '用 AI 约好的事那一份原话'
+      : common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到';
+    const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
+    const pre = text => `<pre>${esc(text)}</pre>`;
+    const more = '<span class="aw-mechanism__more">展开看全文 ›</span>';
+    const shared = common ? `<details id="aw-repair-common"><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
+    const lines = specific ? specific.split('\n') : [];
+    const ownPrompt = lines.length > 12
+      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific"><summary>${more}</summary>${pre(lines.slice(5).join('\n'))}</details>`
+      : specific ? pre(specific) : '';
+    const commitment = id === 'acceptance';
+    const guide = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
+    return panel('怎么干', `<ul class="aw-mechanism__rows">${steps}</ul><div class="aw-mechanism__words">
+      ${shared}${link(guide, commitment ? 'AI 约好的事怎么干 ›' : '自动修理怎么干 ›', 'aw-mechanism__link')}${ownPrompt}</div>`,
+    { cls: 'aw-mechanism', extra: '<span class="aw-head-note">自动修理怎么处理这一类</span>' });
+  }
   function typePage(data) {
     const c = data.counts || {}, rows = list(data.works);
     // 四句是本人审定的原句，本人版照写；访客版里指本人的“你”都称“本人”（M1141：“你自己的事项”“你和访客”整页换称呼接不住，“要你本人”会成“要本人本人”）
-    const [description, example, off, boundary] = (descriptions[data.id] || []).map(s => audience === 'owner' || !s ? s : s.replace(/你本人/g, '本人').replace(/你(?!们)/g, '本人'));
+    const [description, example, off, boundary] = (descriptions[data.id] || []).map(guideCopy);
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));
@@ -225,7 +252,7 @@
     const noSource = retired(data.id) ? '这一类已撤，不再收新活；撤之前从哪里收的活，这里没留记录' : '这里还看不到这一类从哪里收活';
     const lower = `<div class="aw-pair aw-type-pair">${panel('这一类的活', work)}${panel('从哪里发现', sources.length ? `<ul class="aw-sources">${sources.map(sourceRow).join('')}</ul>` : empty(noSource), { symbol: 'search' })}
       ${panel('结果和趋势 · 近 7 天', results(data, rows), { symbol: 'check', cls: readOnly ? 'aw-wide' : '' })}${readOnly ? '' : panel('设置记录', settingLog(data), { symbol: 'gear' })}</div>`;
-    return head + lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : '');
+    return asOwner(head) + mechanism(data) + asOwner(lower + (boundary ? `<p class="glass aw-type-boundary"><b>不管：</b>${esc(boundary)}</p>` : ''));
   }
   // 新八类的一页：照类型页的样子摆开关、暂停、型号档位，现在怎样（暂停原因、下次、在等什么），最近几次和设置记录。
   function categoryPage(data, c) {
@@ -315,7 +342,8 @@
     root.hidden = false;
     if (!data?.enabled) {
       delete root._html;
-      root.innerHTML = `<p class="glass aw-load">${state?.meta?.status === 404 ? '这件活或这一类没有读到' : field(state?.text || '正在读自动任务…')}</p>`;
+      const reading = !state || ['idle', 'wait', 'slow'].includes(state.phase);
+      root.innerHTML = `<p class="glass aw-load">${reading ? '加载中' : state.meta?.status === 404 ? '这件活或这一类没有读到' : field(state.text)}</p>`;
       return;
     }
     audience = state.meta?.viewer?.kind || data.audience || 'public';
@@ -330,7 +358,7 @@
       root.innerHTML = '<p class="glass aw-load">这件活或这一类没有读到</p>';
       return;
     }
-    U.html(root, asOwner(work ? workPage(data) : kind ? categoryPage(data, kind) : typePage(data)), false);
+    U.html(root, work ? asOwner(workPage(data)) : kind ? asOwner(categoryPage(data, kind)) : typePage(data), false);
     for (const [id, open] of folds) {
       const item = $(id), fold = item?.matches('details') ? item : item?.querySelector('details');
       if (fold) fold.open = open;
