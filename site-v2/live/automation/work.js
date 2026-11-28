@@ -96,22 +96,6 @@
   // 已撤的类（M802）：后台不再收它的开关和暂停，点了只回“已撤”，所以旧链接打开时不摆这两个按钮，只写已撤
   const retired = id => id === 'improvements';
   const retiredNote = '<p class="aw-readonly">这一类已撤，开关和暂停不再起作用，下面是撤之前的记录</p>';
-  // 每类四句：管、比如、关了、不管（本人审定的原句，备份、软件和工具、规则和技能按定稿第六轮⑤改成白话）。
-  const descriptions = {
-    'computer': ["硬盘空间突然往下掉，内存守护没压住内存上涨，系统记录里的蓝屏、非正常关机、致命硬件和磁盘错误", "内存守护碰到打不开的进程就整轮停摆 → AI 改成跳过它接着查 → 重载后真跑不再报错才算好", "守护照常报警，页面上看得到，只是没人去查谁在狂写盘、吃内存", "电脑卡顿不派人修，只用来让不急的重活错开"],
-    'programs': ["Windows 定时任务跑失败，AI 定时任务跑失败或没按时跑，守护没按时报到", "开机后代理守护退出了 → AI 修好它一碰文件占用就退出的毛病 → 等下次自然开机它自己起来才算好", "失败、停了照样记着、看得到，只是没人去查去修", "备份没有按时跑，归“备份”"],
-    'software': ["每周软件检查没过的项、现有网站登录检查发现的失效和工具启动报错", "周检保存时被文案检查挡住，提示里带了程序名 → AI 把程序名挪走 → 之后的周检这项过了才算好", "周检照跑，没过的项照样记着，没人修", "要你本人登录的，挂到“等你的事”等你登"],
-    'backup': ["各份备份（个人资料和照片视频、开发配置、微信、电脑使用记录、文档等）报失败或好久没更新；系统镜像的恢复点、恢复包的完整性检查没过", "本地和传云的补跑撞在一起，云那份抢不到锁就退出 → AI 改成排队等 → 换着先后顺序重演都过才算好", "备份照常跑，坏了页面上看得到，但没人修，一直缺着一份", "从备份里真把文件或整台电脑还原回来，这里不做"],
-    'website': ["实况打不开、读数出错或停更、访客版露出不该露的字、网站发布失败", "实况时不时把在跑的任务数清零 → 查出名单刚好过期被作废，放宽有效期 → 线上连读多次都齐才算好", "照样记着、看得到，只是不派 AI 自动修；没人接手的话，你和访客看到的可能一直是旧数、错数"],
-    'projects': ["各项目夜里自动跑的测试没过；冻结的、登记过的已知失败不算", "本地文字识别夜测报失败 → AI 拿样图实际识一遍字能用 → 之后夜测通过才关，原因没查到", "测试红着照样记着，没人查是程序坏了还是测试过时", "规则仓库的夜测归“规则和技能”"],
-    'testing': ["规则仓库正式夜测里新出的失败，和到期后夜测确认仍失败的已知失败；由程序分出来交规则线，不派 AI", "规则仓夜测有几项没过 → 程序交给规则线修 → 下一轮夜测这几项都过了，程序自己划掉", "到期后仍失败的测试留着，没人处理"],
-    'acceptance': ["AI 在账本里约好日期再看的事到期了，多是以前修完、约好过几天再验的；你自己的到期事项不在这里，在“等你的事”", "副屏仪表盘修过几轮，约好隔天看日志 → 到点发现还会整套重启，接着修 → 再查只短暂断屏、自己恢复", "这一类的复查到期没人看，修好没修好一直悬着", "自动任务自己修完等验的，留在原来那一类"],
-    'ai-review': ["以前对话压缩后的复核、Claude 自动验收、Claude 出方案留下的记录；这几样都已撤，不会再有新的", "想知道以前某次 Claude 自动验收是怎么判的 → 点开这里看那一轮的记录", "", "复核挑出的错交回原对话，验收结论留在原事项，不在这里修"],
-    'ai-stalled': ["别的类里放太久没人领的活，和 AI 干着干着没动静、跑太久被收回重排的活，集中到这里给你看", "一件活排了很久没人领，或 AI 干到一半没动静被收回 → 都汇总到这里亮黄灯，一眼看到没人在管", "", "派活程序自己停了不归这里，首页卡直接亮黄灯"],
-    'rules': ["规则和技能仓库的夜测没过的项、每周体检和规则复核的结论，还有 AI 递来的规则、技能毛病", "自检把历史汇报的日期目录当断链、把技能简介长短当错 → AI 改了这几项检查 → 隔夜自检这几项过了", "夜测红着照样记着，只是不派 AI 自动修；没人接手的话，AI 照旧按有毛病的规则和工具干活", "夜测超时的分项归“待测”；AI 定时任务没跑成归“计划任务和后台程序”；每周结论里只是“待关注”的不建活"],
-    'materials': ["照片视频的云端维护、手机照片视频收进电脑，跑完报失败或没跑完", "手机照片视频收进电脑那步报失败 → AI 查出原因修好 → 下次自动收取正常结束才算好", "照常整理，坏了没人修，手机里的可能一直没收进电脑", "只是“待关注”的不建活"],
-    'improvements': ["AI 和程序递来的毛病、可改进处，别的类不收的都落在这", "网站后台改写程序几次没生成公开说明 → 汇总成一条递来 → AI 核实后并成一件跟进", "递来的照样记下，只是没人判断、没人做", "只是记一笔的、已经恢复的、过期的，不进这里"],
-  };
   function control(action, id, label, config = {}) {
     // 后台回话之前开关留在原档，标上 aria-busy；旁边那行写“正在保存…”（message）
     const attrs = (config.checked == null ? '' : ` role="switch" aria-checked="${config.checked}"`) + (feedback?.pending && feedback.id === id ? ' aria-busy="true"' : '');
@@ -204,17 +188,12 @@
     return `<ul class="aw-log">${rows.map(row => `<li><time>${when(row.at)}</time><span>${field(row.text)}</span><small>${words(row.device, row.result)}</small></li>`).join('')}</ul>`;
   }
   function mechanism(data) {
-    const id = data.id, notes = window.LiveRepairTypeGuide?.[id] || [];
+    const id = data.id, guide = data.how_to || {};
     const labels = ['什么时候派', '怎么修', '怎么算修好', '修不好'];
-    const steps = notes.map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
+    const steps = list(guide.steps).map((text, i) => `<li><b>${labels[i]}：</b>${esc(guideCopy(text))}</li>`).join('');
     const { common, specific } = data.repair_prompts || {};
-    const rulesRoute = id === 'testing' || id === 'rules';
-    const note = rulesRoute ? '这一类现在不派 AI：程序把毛病交给规则线（上线收尾以后交每周规矩复核）'
-      : readonly(id) || retired(id) ? '这一类不派 AI'
-      : id === 'website' && data.setting?.mode === 'off' ? '这一类现在关着；打开后派给 AI 的是共用原话，前面加下面这段网站交接'
-      : id === 'projects' ? '夜测失败用共用原话；仓库清理用下面这段专用原话'
-      : id === 'acceptance' ? '用 AI 约好的事那一份原话'
-      : common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到';
+    const note = (data.setting?.mode === 'off' && guide.off_prompt_note) || guide.prompt_note
+      || (common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到');
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
     const more = name => `<span class="aw-mechanism__more"><span class="disclosure-closed">展开看${name}全文</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span></span>`;
@@ -225,15 +204,15 @@
       ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific" data-fold-anchor><summary class="live-disclosure"><span class="disclosure-open">${specificName}</span>${more(specificName)}</summary>${pre(lines.slice(5).join('\n'))}</details>`
       : specific ? pre(specific) : '';
     const commitment = id === 'acceptance';
-    const guide = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
+    const guideHref = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });
     return panel('怎么干', `<ul class="aw-mechanism__rows">${steps}</ul><div class="aw-mechanism__words">
-      ${shared}${link(guide, commitment ? 'AI 约好的事怎么干 ›' : '自动修理怎么干 ›', 'aw-mechanism__link')}${ownPrompt}</div>`,
+      ${shared}${link(guideHref, commitment ? 'AI 约好的事怎么干 ›' : '自动修理怎么干 ›', 'aw-mechanism__link')}${ownPrompt}</div>`,
     { cls: 'aw-mechanism', extra: '<span class="aw-head-note">自动修理怎么处理这一类</span>' });
   }
   function typePage(data) {
     const c = data.counts || {}, rows = list(data.works);
     // 四句是本人审定的原句，本人版照写；访客版里指本人的“你”都称“本人”（M1141：“你自己的事项”“你和访客”整页换称呼接不住，“要你本人”会成“要本人本人”）
-    const [description, example, off, boundary] = (descriptions[data.id] || []).map(guideCopy);
+    const [description, example, off, boundary] = list(data.how_to?.description).map(guideCopy);
     const readOnly = readonly(data.id);
     const active = rows.filter(row => row.group !== 'done' && row.group !== 'decided');
     const past = rows.filter(row => !active.includes(row));

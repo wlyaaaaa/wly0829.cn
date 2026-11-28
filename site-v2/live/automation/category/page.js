@@ -9,10 +9,9 @@
   const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/' + location.hash); return; }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, link, when } = T;
   const heroArt = document.getElementById('ak-hero-art').innerHTML;
-  const g = G[id] || {};
   let state, viewer = 'public', busy = false, feedback = null, pausing = null, runs = null, excerptToday;
   // 访客版称呼：画之前把指本人的“你”换成“本人”（runs.js 的 asOwner；私事线 11-26）
   const paint = (root, html) => T.paint(root, R.asOwner(html, viewer));
@@ -142,7 +141,7 @@
     const [tone, now] = nowText(d, c, rows);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
-    const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
+    const description = [esc(c.how_to?.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     const result = F(c.last_result?.text, '上次结果');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
@@ -208,7 +207,8 @@
 
   // —— 这一类：做什么、谁来做、什么时候跑、各小类开关、各工程的《他要什么》、开关改动 ——
   function about(d, c) {
-    // 关着的类：页头已经说了关着，“什么时候跑”写打开后几点跑（mechanisms.js 的 offWhen），不再抄一遍页头那句
+    // 关着的类：页头已经说了关着，“什么时候跑”写打开后几点跑，不再抄一遍页头那句
+    const g = c.how_to || {};
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const rows = [['做什么', esc(g.purpose || g.short || '')], ['谁来做', model ? model + '（跟着模型清单走）' : '这一类用哪个型号没读到'],
       ['什么时候跑', (mode(c) === 'off' && g.offWhen ? esc(g.offWhen) : F(c.schedule_text, '排期说明')) || '这次没读到，下一轮会自动再读。']];
@@ -362,7 +362,7 @@
   }
 
   const page = T.boot({ resource: 'automation', back: '/live/automation/',
-    ask: () => `请看实况自动任务里“${g.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
+    ask: () => `请看实况自动任务里“${catOf(state?.data)?.how_to?.title || id}”这一类：最近几轮做成了什么、现在怎样、要不要我出面。先用大白话说，别动手。`,
     onState(next) { state = next; schedule(); } });
   Live.watch('automation/runs', { category: id }, { phase(st) {
     if (runPageKey(st) !== runPageKey(runs)) { more = []; cursor = undefined; pageFailed = false; }

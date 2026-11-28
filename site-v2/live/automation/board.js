@@ -9,7 +9,6 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  // 按需更新快核（总表分类次序）核法：对照 AUTOPAGES1126 选 A 的《页面说明·自动任务》总表和 /automation 的 categories，再核 E:/PCConfig/tools/remote-computer-mcp/automation/core.py 的 CATEGORIES。
   const R = window.AutomationRuns, IDS = R.CATS;
   // 已取消的类：总表和分类按钮里不再有它，但以前跑过的那几轮照旧列在近 72 小时、按天看里（本人要自动任务保留每轮，R44）
   const PAST = ['weekly-live'];
@@ -35,7 +34,7 @@
     location.replace(path.pathname + path.search + path.hash);
     return;
   }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
   const { list, known, int, dec, link, when, big, clock } = T;
   let state, viewer = 'public', busy = false, feedback = null, landed = false, pausing = null, olderOpen = false;
   // 长列表全站一个规则（本人 11-26 02:12）：先摆一部分，点一次再多摆一批，一直能摆到底
@@ -634,7 +633,7 @@
     return `<section class="tp-panel au-board" id="types">
       <table class="tp-table au-table"><thead><tr><th scope="col">任务</th><th scope="col">现在</th><th scope="col">上次结果</th><th scope="col">近 30 天</th><th scope="col">用谁</th><th scope="col">开关</th><th scope="col" aria-label="进这一类"></th></tr></thead>
       <tbody>${cats.map(c => {
-        const g = G[c.id] || {}, p = pauseOf(d, c.id);
+        const g = c.how_to || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
           <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
