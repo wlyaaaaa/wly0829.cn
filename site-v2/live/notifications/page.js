@@ -164,6 +164,10 @@
   const rates=V.figures($('delivery-rates'));
   let page=null,all=null,issues=[],history=[],payload=null,viewer='public',now=null,cutoff=null,phase='idle',first=true,headline='',attentionScope='',historyScope='';
   let reading=null,shown_=null,collecting=false,redraw=false,emailScope=null,emailOpenScope=null;
+  let historyPending = location.hash === '#history' && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward';
+  for (const event of ['wheel', 'touchmove', 'pointerdown', 'keydown']) {
+    addEventListener(event, () => { historyPending = false; }, { passive: true });
+  }
   const bar=U.topbar({ask:()=>`帮我看看通知发送回执：${headline||U.collectionText()}，没到的是哪几次、为什么。`});
   function hourReading(id,point,t,surface){
     if(surface!=='hero'||point?.value==null||!Number.isFinite(point.at)||!payload)return null;
@@ -526,6 +530,13 @@
     const weekEnd=Number.isFinite(parse(d.delivery7?.to))?`（截至 ${stamp(d.delivery7.to)}）`:'';
     U.html($('all-sub'),weekSent?`近 7 天${weekEnd}${weekSent[1]} 次，到了 ${weekSent[0]} 次 · 里面有每小时的走势和每一次的明细`:'近 7 天的比例、每小时的走势和每一次的明细');
     L.tone(hero,header.tone);paint();updateHistoryControl();if(first){first=false;boards.attention.open('attention',true);boards.overview.open('overview',true);boards.history.open('history',true);}
+    // 统计和历史一起画完后再定位，前面的明细和曲线占好位置才不会把落点推走。
+    if (historyPending && Array.isArray(d.rows)) requestAnimationFrame(() => {
+      if (!historyPending || location.hash !== '#history') return;
+      historyPending = false;
+      $('history').scrollIntoView({ block: 'start', behavior: 'instant' });
+      $('topbar').dispatchEvent(new Event('live:anchor-landed'));
+    });
   }
   paint();boards.attention.open('attention',true);
   window.Live.watch(resource,null,{
