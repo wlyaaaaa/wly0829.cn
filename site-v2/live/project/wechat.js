@@ -160,7 +160,7 @@
       const sec = v.sec('media');
       const notes = notesOf([sec?.about, sec?.note, media?.note && `出现过的：${media.note}`, media?.scope, saved?.note && `真存下来的：${saved.note}`, miss?.note && `没能留住的：${miss.note}`]);
       out.push(`<section class="pj-card glass wc-card wc-mini wc-media"><div class="wc-head"><b>存档里的图片语音留住多少</b></div>
-        <div class="wc-media__body">${ring}<div><p class="wc-media__k">真存下来 <b>${esc(int(kept))}</b> 项</p>${gap ? `<p class="wc-sub">${esc(gap)} · 含已存的缩略图</p>` : ''}</div></div>${noteBox(notes)}${foot(notes, mdTime(saved.at || media?.at) && `截止 ${mdTime(saved.at || media?.at)}`)}</section>`);
+        <div class="wc-media__body">${ring}<div><p class="wc-media__k">真存下来 <b>${esc(int(kept))}</b> 项</p>${gap ? `<p class="wc-sub">${esc(gap)} <span class="wc-nw">· 含已存的缩略图</span></p>` : ''}</div></div>${noteBox(notes)}${foot(notes, mdTime(saved.at || media?.at) && `截止 ${mdTime(saved.at || media?.at)}`)}</section>`);
     }
     return out.length ? `<div class="wc-row wc-row--3" style="--n:${out.length}">${out.join('')}</div>` : '';
   }
@@ -213,11 +213,12 @@
     const table = rows ? `<div class="wc-table"><div class="wc-tr wc-tr--head"><span>档案</span><span>存下的消息</span><span>最新到</span><span>图片语音留住</span><span>检查</span><span>完成于</span><span>打开</span></div>${rows}</div>` : '';
     if (!left && !right && !table) return '';
     const total = finite(lists.total) ? lists.total : lists.rows?.length;
+    const hasValidation = lists.arts?.some(a => a?.kind === 'validation');
     const notes = notesOf([v.sec('archives')?.note, archives?.scope, msgs?.note && `存档条数：${msgs.note}`, local?.note && `本机一共：${local.note}`, m(lists.section || 'owner_archives')?.note]);
     const sectionMetric = m(lists.section || 'owner_archives'), tags = sectionMetric?.note ? { [sectionMetric.note]: U.visitorLabel(sectionMetric, 'note', '这一句说明', viewer) } : {};
     const all5 = total ? `<a class="more wc-all" href="${esc(records(lists.section || 'owner_archives'))}">全部 ${esc(int(total))} 份 ${chev}</a>` : '';
     return `<section class="pj-card glass wc-card wc-arch" id="artifacts"><div class="wc-head"><b>AI 存过档的聊天</b></div>
-      <p class="wc-lead">只算本人点名、AI 存成档案的这几份，不是本机微信的全部聊天。</p>
+      <p class="wc-lead">只算本人点名、AI 存成档案的这几份，不是本机微信的全部聊天。${hasValidation ? ' 页头「最近产物」按项目登记统计，包含<span class="wc-nw">下方测速卡</span>的真机验收成品。' : ''}</p>
       ${left || right ? `<div class="wc-sum${left && right ? '' : ' is-one'}">${left}${right}${bar}</div>` : ''}${table}${noteBox(notes, tags)}
       <div class="wc-foot">${all5}${explainBtn(notes)}<span class="wc-cut">${esc(mdTime(lists.at) ? `截止 ${mdTime(lists.at)}` : '')}</span></div></section>`;
   }
