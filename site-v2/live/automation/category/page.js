@@ -176,7 +176,7 @@
     const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
     const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
-    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
+    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">加载中</p></section>`;
     if (!rows.length) {
       const next = catNext();
       const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
@@ -184,7 +184,7 @@
       return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
     }
     const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
-    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '正在读…' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
+    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '加载中' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
     return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}
       ${pageFailed ? '<p class="tp-small" role="status">这一批没读到，可以再点一次。</p>' : ''}</section>`;
   }
@@ -329,7 +329,7 @@
     if (!c) {
       const phase = state?.phase;
       const note = phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
-        : phase === 'idle' || phase === 'wait' ? '正在读这一类自动任务…' : d ? '这一类自动任务没读到。' : '';
+        : phase === 'idle' || phase === 'wait' ? '加载中' : d ? '这一类自动任务没读到。' : '';
       T.paint(page.root, note ? `<p class="tp-placeholder" role="status">${note}</p>` : T.placeholder(state, '这一类自动任务'));
       page.tick.set([], { off: true });
       return;

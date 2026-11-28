@@ -17,8 +17,9 @@
     return text && !K.isPlaceholder(text) && Number.isFinite(raw) ? format(raw) : text;
   }
   const missed = '这块没存下来，连上后补上。';
-  const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '存储' });
-  const storageReads = [homeRead, U.reading($('cleanup-body'), { ghost: U.ghost.rows(4), name: '自动清理', slow: false }), U.reading($('disks-box'), { ghost: U.ghost.rows(5), name: '每块盘', slow: false }), U.reading($('categories'), { ghost: U.ghost.rows(4), name: '按用途', slow: false })];
+  const loadingRow = '<p class="pj-note">加载中</p>';
+  const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: '', slow: false });
+  const storageReads = [homeRead, U.reading($('cleanup-body'), { ghost: loadingRow, name: '自动清理', slow: false }), U.reading($('disks-box'), { ghost: loadingRow, name: '每块盘', slow: false }), U.reading($('categories'), { ghost: loadingRow, name: '按用途', slow: false })];
   const rank = document.createElement('ul');
   rank.className = 'vz-rank__list';
   $('ssd-rank').classList.add('vz-rank', 'vz-rank--pill');
@@ -36,7 +37,7 @@
     U.html(rankMore, left > RANK_STEP ? `再看 ${RANK_STEP} 个（还有 ${left} 个） <span class="more__chev">›</span>` : `再看剩下 ${left} 个 <span class="more__chev">›</span>`);
   }
   rankMore.addEventListener('click', () => { rankShown += RANK_STEP; drawRank(); });
-  const ssdRead = U.reading($('ssd-panel'), { ghost: U.ghost.rows(3), name: '谁在大量写 SSD', slow: false });
+  const ssdRead = U.reading($('ssd-panel'), { ghost: loadingRow, name: '谁在大量写 SSD', slow: false });
   U.fold($('ssd-more'), $('ssd-box'), null, true);
   const ssdMoreLabel = () => U.html($('ssd-more'), $('ssd-more').getAttribute('aria-expanded') === 'true' ? '收起原表 ‹' : '展开原表 ›');
   $('ssd-more').addEventListener('click', ssdMoreLabel);
@@ -173,7 +174,7 @@
     const fails = g.last?.result === 'error' && window.StorageCleanup.failures?.(g.last, viewer), restFails = fails ? fails.slice(2).reduce((n, f) => n + f.n, 0) : 0;
     const why = fails ? fails.slice(0, 2).map(f => f.text).join('；') + (restFails ? `；还有 ${restFails} 项` : '') : K.field(g.last?.error, '清理出错原因', viewer) || '这一轮没写原因';
     const reason = g.deleted > 0 ? '看被删的是哪几件' : g.last?.result === 'error' ? `出错原因：${why}` : `每 ${g.hours} 小时该跑一轮，上次是 ${when(g.last.finished_at)}`;
-    return `<a href="#cleanup-card">${esc(reason)}，看下面“自动清理” ›</a>`;
+    return `<a href="#cleanup-card">${esc(reason)}，看下面<span class="cleanup-link-name">“自动清理”</span> ›</a>`;
   }
   function attention(d) {
     const volumes = d?.volumes || [];
@@ -253,8 +254,7 @@
   }
   function link(state) {
     bar?.set({ ...state, shownAt: readAt, cutoffAt: null }); Light.offline(state.offline);
-    const copy = state.meta?.source === 'fallback' ? '已切到静态副本 · ' : '';
-    U.list($('notices'), state.offline ? [{ key: 'storage', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${copy}${esc(sp(state.text))}</span>` }] : []);
+
   }
   function categoryRows(list, row, hidden) {
     // 本人版也先露 5 类，其余收进“还有 N 类”，免得这张卡比旁边两张长出一大截（M460）
@@ -330,6 +330,7 @@
       realtimeTimer = setInterval(() => window.Live.get(resource), seconds * 1000);
     }
   }
+  U.connection({ conn: { stage: 'loading', say: '加载中' } });
   window.Live.watch(resource, null, {
     phase(s) { if (s.data == null) { ssdRead.set(s); storageReads.forEach(r => r.set(s)); } },
     data(d, meta) {

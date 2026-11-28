@@ -109,8 +109,8 @@ window.LegacyAutomation = function (bar) {
     const quantity = g => count(g?.total) ? g.total : count(g?.known_total) && g.known_total > 0 ? `至少 ${g.known_total}` : null;
     const values = [quantity(known[0]), started, quantity(known[1]), upcoming ? next(upcoming) : null];
     const labels = ['种 AI 自动接活', '今天开工次数', '项 AI 定时任务', '下一次开工'];
-    U.html($('stats'), labels.map((label, i) => `<div><dt>${label}</dt><dd class="${values[i] == null ? 'is-word' : i === 3 && values[i].includes(' ') ? 'is-dated' : ''}">${values[i] ?? (waiting ? '正在读' : '未读到')}</dd></div>`).join(''));
-    const note = !display.length ? waiting ? '正在读' : '最近开工的时间和结果还没读到。' : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';
+    U.html($('stats'), labels.map((label, i) => `<div><dt>${label}</dt><dd class="${values[i] == null ? 'is-word' : i === 3 && values[i].includes(' ') ? 'is-dated' : ''}">${values[i] ?? (waiting ? '加载中' : '未读到')}</dd></div>`).join(''));
+    const note = !display.length ? waiting ? '加载中' : '最近开工的时间和结果还没读到。' : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';
     const readFrom = activity?.first_read_at, readTo = activity?.at;
     const readNote = time(readTo) && `开工回执读于 ${time(readFrom) && readFrom !== readTo ? `${time(readFrom)} 至 ` : ''}${time(readTo)}`;
     const summary = [note, readNote].filter(Boolean).join(' · ');
@@ -127,7 +127,7 @@ window.LegacyAutomation = function (bar) {
     const issue = valid && (packet?.q === 'stale' || packet?.gray_reason === 'stale') ? '清单暂未更新' : '';
     const message = connection?.publicPaused || connection?.offline ? esc(connection.text)
       : valid ? [issue, shownAt && `清单截至 ${time(shownAt)}`].filter(Boolean).join(' · ')
-        : waiting ? '正在读' : 'AI 自动任务分组还没读到，等数据更新。';
+        : waiting ? '加载中' : 'AI 自动任务分组还没读到，等数据更新。';
     U.html($('notice'), message); $('notice').hidden = !message;
     const schedules = scope.filter(t => t.automation_group === 'ai-schedule');
     const planned = schedules.filter(scheduledAgain)
@@ -147,7 +147,7 @@ window.LegacyAutomation = function (bar) {
       U.html(card.sub, [intro, gap].filter(Boolean).join(' · '));
       const limit = pickup ? shown.length : 4, remaining = Math.max(0, shown.length - limit);
       U.list(card.main, shown.length ? shown.slice(0, limit).map(t => row(t, pickup)) : [{ key: 'empty', cls: 'row lb-row--empty automation-note',
-        html: waiting ? '正在读' : n === 0 ? '这组没有任务' : query ? '没有符合筛选的已读任务' : '这组任务明细还没读到' }]);
+        html: waiting ? '加载中' : n === 0 ? '这组没有任务' : query ? '没有符合筛选的已读任务' : '这组任务明细还没读到' }]);
       U.list(card.rest, shown.slice(limit).map(t => row(t, pickup)));
       U.html(card.more, `<span class="lb-more__open">展开（还有 ${remaining} 项）</span><span class="lb-more__shut">收起</span> <span class="more__chev">›</span>`);
       card.more.hidden = !remaining;
