@@ -242,6 +242,10 @@
   };
   const recent = it => !it.changed?.at ? '' : `<small class="pj-recent" title="${esc(stamp(it.changed?.at))}">${esc(window.LiveProjectViz.ago(it.changed?.at, window.Live.now?.() || Date.now()))}</small>`;
   const rosterStat = text => display(text).replace(/(?<![\d.,])\d{4,}(?=\s*(?:笔|件))/g, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')).split(/(\d[\d,.]*\s*(?:万)?\s*(?:项|份|个|字|行|次|笔|件))/).filter(Boolean).map(part => `<span class="pj-stat-piece">${dateHtml(U.fieldHtml(part, { name: '项目读数', kind: viewer }))}</span>`).join('');
+  // 只包读数里的文字，像“共 77 分钟”这样一整块换行。
+  const rosterUnit = /(?<![\d.,:])(?:(?:至少|大约|共|约)\s*)?[+-]?\d+(?:[.,]\d+)*(?:\/\d+)?\s*(?:(?:万|亿)?\s*(?:毫秒|分钟|小时|[项份个字行次笔件部天秒分条页期倍万亿])|(?:TB|GB|MB|KB|B)(?:\/s)?|[%％])(?![a-z])/gi;
+  const keepRosterUnits = html => html.replace(/(^|>)([^<]+)/g, (_, prefix, text) =>
+    prefix + text.replace(rosterUnit, '<span class="live-unit">$&</span>'));
   function newProjectLabel(it) { return it.new === true ? '<span class="tag tag--new">新项目</span> ' : ''; }
   // 名册按组排：日用、个人（带 group: "personal" 的在用项目，本人 11-27 批准）、偶用，读不到分档的放最后；组内照旧按最近改动
   const PHASE_GROUPS = { daily: '日用', personal: '个人', occasional: '偶用' };
@@ -256,7 +260,9 @@
       const note = (hidden ? U.fieldHtml(it.name, { name: '项目名', kind: viewer }) : U.visibilityNote(it, viewer, it.hidden_what || '这个项目')) || projectTag(it);
       const h = it.headline, marked = [h?.text, h?.value?.text, h?.value, h].find(v => v && typeof v === 'object' && (v.hidden || v.hidden_block || ['owner', 'pending', 'rewritten'].includes(v.visibility) || v.public === 'owner' || v.public === 'rewrite' || v.rewrite));
       const remote = it.id === 'pcconfig' && (h?.id === 'remote' || h?.value?.window);
-      const hasText = !!(text || marked), valueHtml = marked || remote ? dateHtml(U.fieldHtml(marked || text, { name: '项目读数', kind: viewer })) : rosterStat(text);
+      const hasText = !!(text || marked);
+      const readingHtml = marked || remote ? dateHtml(U.fieldHtml(marked || text, { name: '项目读数', kind: viewer })) : rosterStat(text);
+      const valueHtml = keepRosterUnits(readingHtml);
       let label = h?.label, scope = h?.scope;
       if (typeof scope === 'string') scope = dateWords(scope);
       const observed = typeof h?.at === 'string' && stamp(h.at), through = h?.data_through && stamp(h.data_through);
