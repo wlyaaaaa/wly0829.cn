@@ -557,7 +557,7 @@ def source_windows(start, end, now, begin_at=None, padding=timedelta()):
 
 def snapshot_slice(args, begin, stop, now):
     # A failed weekly refresh keeps only the closed, successfully queried slices.
-    if args.snapshot_chunks is None or stop > now - timedelta(hours=1):
+    if stop > now - timedelta(hours=1):
         return sls_logs(args, begin, stop)
     folder = args.cache_dir / "snapshot-sls-slices"
     key = (SOURCE, args.sls_project, args.sls_logstore, args.launch_at, begin, stop)
@@ -569,7 +569,6 @@ def snapshot_slice(args, begin, stop, now):
         for row in rows:
             row["time"] = datetime.fromisoformat(row["time"])
             row["identity"] = tuple(row["identity"])
-        args.snapshot_chunks.add(path)
         return rows
     except (OSError, ValueError, TypeError, KeyError, EOFError):
         pass
@@ -580,7 +579,6 @@ def snapshot_slice(args, begin, stop, now):
         with gzip.open(temporary, "wt", encoding="utf-8", compresslevel=1) as stream:
             json.dump(rows, stream, ensure_ascii=False, separators=(",", ":"), default=datetime.isoformat)
         temporary.replace(path)
-        args.snapshot_chunks.add(path)
     except OSError:
         remove_snapshot_slices((temporary,))
     return rows
@@ -611,9 +609,10 @@ def sync_cloud(args, start, end, now):
             sync["sources"].append(segment)
         else:
             while begin < finish:
-                if getattr(args, "snapshot_chunks", None) is not None:
-                    day_end = datetime.combine(begin.date() + timedelta(days=1), datetime.min.time(), TZ)
-                    stop = min(finish, day_end)
+                if getattr(args, "snapshot_cache", False):
+                    hour = begin.replace(minute=0, second=0, microsecond=0)
+                    boundary = hour + timedelta(hours=6 - hour.hour % 6)
+                    stop = min(finish, boundary)
                     page = snapshot_slice(args, begin, stop, now)
                 else:
                     stop = min(finish, begin + timedelta(days=2)) if getattr(args, "snapshot_beacons", False) else finish
@@ -1231,7 +1230,7 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
                 overview_start = end - timedelta(days=6)
                 args.snapshot_beacons = True
                 args.snapshot_deadline = snapshot_deadline
-                args.snapshot_chunks = set()
+                args.snapshot_cache = True
                 older = (overview_start - timedelta(days=1)).strftime("%Y%m%d")
                 folder = args.cache_dir / "snapshot-sls-slices"
                 remove_snapshot_slices(path for path in folder.glob("*.json.gz")
@@ -1288,7 +1287,6 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
         if snapshot_paths:
             try:
                 live_producer().visitors(ROOT, output, checked_at.isoformat(), require_registered=True, registered_paths=snapshot_paths)
-                remove_snapshot_slices(args.snapshot_chunks)
             except (OSError, ValueError, TypeError, KeyError):
                 snapshot_error = "snapshot_write_failed"
         if require_live:

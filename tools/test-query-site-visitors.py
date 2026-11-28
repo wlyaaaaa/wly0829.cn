@@ -390,19 +390,17 @@ class VisitorTests(unittest.TestCase):
         record = query.parse_sls_row(dict(self.sls_row(), __time__=int(start.timestamp())+60))
         with tempfile.TemporaryDirectory() as temporary:
             args = SimpleNamespace(cache_dir=Path(temporary), sls_project="test", sls_logstore="one",
-                                   snapshot_chunks=set(), launch_at=start)
+                                   launch_at=start)
             with patch.object(query, "sls_logs", side_effect=([record], query.SnapshotQueryTimeout())) as first:
                 self.assertEqual(query.snapshot_slice(args, start, stop, now), [record])
                 with self.assertRaises(query.SnapshotQueryTimeout):
                     query.snapshot_slice(args, stop, now, now)
             self.assertEqual(first.call_count, 2)
-            args.snapshot_chunks = set()
             with patch.object(query, "sls_logs", return_value=[]) as retry:
                 self.assertEqual(query.snapshot_slice(args, start, stop, now), [record])
                 self.assertEqual(query.snapshot_slice(args, stop, now, now), [])
             retry.assert_called_once_with(args, stop, now)
-            query.remove_snapshot_slices(args.snapshot_chunks)
-            self.assertFalse(list((args.cache_dir / "snapshot-sls-slices").glob("*.json.gz")))
+            self.assertEqual(len(list((args.cache_dir / "snapshot-sls-slices").glob("*.json.gz"))), 1)
 
     def test_snapshot_cursor_preserves_same_second_and_uses_adjacent_windows(self):
         args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="store", sls_logstore="logs",
