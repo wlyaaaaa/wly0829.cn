@@ -1325,7 +1325,7 @@
       const words = metricText(remote.text || m?.text || h?.text || '');
       const total = lower(m, 'value') || lower(remote, 'total') ? '<small class="pj-atleast">至少</small>' : '';
       const { cadence, desktop } = m ? lineOf(m) : {};
-      head.push(cell(readingLabel(m?.label || 'AI 远程用电脑') + (cadence || ''), `${total}<b>${esc(num(remote.total))}</b><small>次</small>`, { href: m && metricHref(m), sub: esc([words, desktop].filter(Boolean).join(' · ')) }));
+      head.push(cell(readingLabel(m?.label || 'AI 远程用电脑') + (cadence || ''), `${total}<b>${esc(num(remote.total))}</b><small>次</small>`, { wide: true, href: m && metricHref(m), sub: esc([words, desktop].filter(Boolean).join(' · ')) }));
     } else if (h && typeof h === 'object' && h.text) {
       const { cadence, desktop } = m ? lineOf(m) : {};
       const words = headline({ ...d, headline: { ...h, at: null } });
