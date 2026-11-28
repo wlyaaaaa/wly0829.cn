@@ -231,7 +231,9 @@
     const tiles = [['samples24', '留下'], ['covered24', '有记录'], ['empty24', '没记录'], ['max_gap', '最长空段']].map(([id, k]) => ({ k, m: p.m(id) })).filter(t => t.m && (finite(t.m.value) || hidden(t.m)));
     const more = MORE.map(([id, k, text]) => { const m = p.m(id); return m && { k, m, text: text(m) }; }).filter(x => x && x.text);
     if (!tiles.length && !more.length) return '';
-    const fold = more.length ? `${foldOpen ? `<ul class="ta-more">${more.map(x => `<li><span>${esc(x.k)}</span><b>${esc(x.text)}</b></li>`).join('')}</ul>` : ''}<button type="button" class="more ta-go ta-fold" data-ta-fold aria-expanded="${foldOpen}">${foldOpen ? '收起' : `展开（还有 ${more.length} 项）`} <span class="more__chev">›</span></button>` : '';
+    // 只多一项就直接摆出来，不出“展开（还有 1 项）”（M1190）
+    const single = more.length === 1;
+    const fold = more.length ? `${foldOpen || single ? `<ul class="ta-more">${more.map(x => `<li><span>${esc(x.k)}</span><b>${esc(x.text)}</b></li>`).join('')}</ul>` : ''}${single ? '' : `<button type="button" class="more ta-go ta-fold" data-ta-fold aria-expanded="${foldOpen}">${foldOpen ? '收起' : `展开（还有 ${more.length} 项）`} <span class="more__chev">›</span></button>`}` : '';
     const body = (tiles.length ? `<ul class="ta-tiles">${tiles.map(t => `<li><span>${esc(t.k)}</span><b>${hidden(t.m) ? DOTS + ownerTag(t.m, t.k) : esc(t.m.id === 'max_gap' ? one(t.m.value) : int(t.m.value))}</b><small>${esc(t.m.unit || '')}</small></li>`).join('')}</ul>` : '') + fold;
     return card('samples', 'pulse', '近 24 小时整机测量', body, { note: notes(...tiles.map(t => metricNotes(t.m, t.m.label || t.k)), ...more.map(x => metricNotes(x.m, x.k))), at: (tiles[0] || more[0]).m.at });
   }
@@ -305,7 +307,8 @@
       window.TrustModal?.show();
       return;
     }
-    if (e.target.closest?.('[data-ta-fold]')) { foldOpen = !foldOpen; draw(); return; }
+    const foldBtn = e.target.closest?.('[data-ta-fold]');
+    if (foldBtn) { if (foldOpen) U.anchorFold(foldBtn, () => { foldOpen = false; draw(); }, () => document.querySelector('[data-ta-fold]')); else { foldOpen = true; draw(); } return; }
     const step = e.target.closest?.('[data-ta-page]');
     if (step) { pageAt = Math.max(0, pageAt + Number(step.dataset.taPage)); draw(); }
   });
