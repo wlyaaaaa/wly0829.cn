@@ -55,21 +55,18 @@
     if (open) U.anchorFold(btn, set); else set();
   });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
-  // 时刻、数字和量词先成组，其余中文在词之间折行。
+  // 先保住时刻、数量和备份术语，通用分词只处理剩下的文字。
   const backupWords = new Intl.Segmenter('zh', { granularity: 'word' });
   const tableUnit = text => `<span class="backup-unit">${esc(text)}</span>`;
   const tableProse = text => Array.from(backupWords.segment(text), ({ segment, isWordLike }) =>
     isWordLike && /\p{Script=Han}/u.test(segment) ? tableUnit(segment) : esc(segment)).join('');
-  const tableText = value => {
-    const text = String(value ?? '');
-    const units = /(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?(?: 清单|[。，、；）])?|\d+(?:[.,]\d+)*[ \t]*(?:份|个|项|类)|· 按|上次(?:确认|核对|仍有)|已确认|没核实|(?:本次)?没读到|读到记录|未登记|不适用|有(?:原件|副本)|(?:备份|上传|读取)失败|(?:大)?部分成功/g;
-    let html = '', start = 0;
-    for (const { 0: unit, index } of text.matchAll(units)) {
-      html += tableProse(text.slice(start, index)) + tableUnit(unit);
-      start = index + unit.length;
-    }
-    return html + tableProse(text.slice(start));
-  };
+  const tableUnits = new RegExp('(' + [
+    String.raw`(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?(?: 清单|[。，、；）])?|\d+(?:[.,]\d+)*[ \t]*(?:个(?:文件|目录)?|项(?:照片)?|份|类)|· 按`,
+    '副本(?:内容)?日期|原件记录日期|本机原件|恢复点(?:清单)?|恢复集(?:发布)?|保留旧副本|镜像|未?备入|删除|整组|回退|受管(?:源树|文件)?|份数|或视频|待传',
+    '上次(?:确认|核对|仍有)|已确认|没核实|(?:本次)?没读到|读到记录|未登记|不适用|没有(?:副本|记录)?|有(?:原件|副本)|(?:备份|上传|读取)失败|(?:大)?部分成功',
+  ].join('|') + ')');
+  const tableText = value => String(value ?? '').split(tableUnits)
+    .map((part, i) => i % 2 ? tableUnit(part) : tableProse(part)).join('');
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
   const restoreText = (d, s) => {
@@ -95,7 +92,7 @@
   const noticed = s => !s.private_count && (hasBackupProblem(protection(s)) || ['g', 'h', 'drive', 'photos'].some(k => BAD.includes(cellOf(s.id, k)?.state)));
   // 一句为什么：先说出问题的去处，再说哪里已备好、哪里没核实；字和总表那一格同一个说法
   function whyLine(s) {
-    const problems = [], fine = [], unchecked = [];
+    const problems = [], fine = [], confirmed = [], unchecked = [];
     for (const key of ['g', 'h', 'drive', 'photos']) {
       const c = cellOf(s.id, key); if (!c) continue;
       const copy = s[key] || {}, o = copy.outcome || {}, where = names[key], n = v => o.exact === true && Number.isInteger(v);
@@ -104,10 +101,11 @@
       else if (c.state === 'partial') problems.push(`${where}这轮部分成功${n(o.ok) && n(o.failed) ? `，备上 ${o.ok} 份、没备上 ${o.failed} 份` : ''}`);
       else if (c.state === 'failed') problems.push(`${where}这轮备份失败`);
       else if (c.state === 'gap') problems.push(`${where}${c.label}`);
+      else if (c.state === 'complete' && c.label.startsWith('上次确认')) confirmed.push(`${where}${c.label}`);
       else if (c.state === 'complete') fine.push(where);
       else if (c.state === 'unknown' && (key === 'g' || key === 'h')) unchecked.push(where);
     }
-    const tail = [fine.length && `${fine.join('、')}已备好`, unchecked.length && `${unchecked.join('、')}没核实`].filter(Boolean);
+    const tail = [fine.length && `${fine.join('、')}已备好`, ...confirmed, unchecked.length && `${unchecked.join('、')}没核实`].filter(Boolean);
     return problems.length ? esc(problems.join('；') + (tail.length ? `，${tail.join('；')}` : '')) : '';
   }
   function setRow(s, d) {
@@ -272,7 +270,7 @@
       return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${textField(s.name, '备份资料')}&nbsp;›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? textField(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${textField(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
-    const columns = [[14, 174], [11.75, 210], [11.25, 132], [8.25, 87], [11.25, 125], [11.25, 123], [8, 121], [8, 171], [8.75, 123], [7.5, 70]];
+    const columns = [[12.25, 174], [11.75, 210], [11.25, 132], [10, 87], [11.25, 125], [11.25, 123], [8, 121], [8, 171], [8.75, 123], [7.5, 70]];
     const colgroup = columns.map(([width, wide]) => `<col style="--backup-col:${width}%;--backup-wide-col:${wide}px">`).join('');
     U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${colgroup}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
   }
