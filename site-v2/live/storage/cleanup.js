@@ -205,7 +205,7 @@
     const second = g.deleted ? `<li data-tone="red">${ICON.shield}<div><b>保护名单被删 ${g.deleted} 件</b><span>近 7 天 · 要马上看</span></div></li>`
       : `<li>${ICON.shield}<div><b>保护名单被删 0 件</b><span>${cleanupWords('近 7 天一直是 0' + (hits ? ` · 碰到保护名单 ${hits} 次，都跳过了` : ''))}</span></div></li>`;
     const minutes = num(g.last?.duration_seconds) ?? (g.last && at(g.last.started_at) ? (at(g.last.finished_at) - at(g.last.started_at)) / 1000 : null);
-    const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} 跑完${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
+    const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} ${g.last.result === 'ok' ? '跑完' : '结束'}${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
     const nextNote = [g.running ? `正在跑 · ${hm(g.running.started_at)} 开始` : lastNote,
