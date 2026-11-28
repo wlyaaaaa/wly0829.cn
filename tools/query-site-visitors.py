@@ -40,6 +40,8 @@ PIXEL_URL = f"https://{SOURCE}.oss-cn-shanghai.aliyuncs.com/_v.gif"
 MAX_EXIT_INTERVAL = timedelta(minutes=45)
 SLS_ENDPOINT = "cn-shanghai.dualstack.log.aliyuncs.com"
 SLS_SQL_PAGE = 10000
+SLS_SNAPSHOT_FIELDS = ("__time__, client_ip, request_uri, request_id, http_method, "
+                       "http_status, operation, bucket, user_agent")
 SNAPSHOT_QUERY_SECONDS = 210
 PREFIX = "access/" + SOURCE + "/"
 TOKEN = re.compile(r'"((?:\\.|[^"\\])*)"|\[([^\]]*)\]|([^\s"\[\]]+)')
@@ -468,7 +470,7 @@ def sls_logs(args, start, end, legacy_fallback=False):
         page_query = search
         if snapshot:
             limit = f"{offset}, {page_size}" if second_only else str(page_size)
-            page_query += f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {limit}"
+            page_query += f" | SELECT {SLS_SNAPSHOT_FIELDS} ORDER BY __time__ ASC, request_id ASC LIMIT {limit}"
         elif sql_paging:
             page_query += f" | SELECT * ORDER BY __time__ ASC, request_id ASC LIMIT {offset}, {page_size}"
         body = {"from": left, "to": left + 1 if second_only else right,
