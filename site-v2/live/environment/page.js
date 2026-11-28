@@ -149,7 +149,9 @@
     if (!Array.isArray(items)) return d || ['none', 'gone'].includes(dailyPhase) ? `${title('')}<p class="env-note">${esc(missing('日用软件', d))}</p>` : '';
     const cards = items.slice(0, dailyShown).map(row => {
       const version = row.version ? esc(sp(row.version)) : row.installed === false ? '没装' : '版本这次没读到';
-      const change = row.version ? dailyChange(row.last_change ?? { at: row.installed_or_updated_on }, d) : null;
+      const change = row.version && (Object.hasOwn(row, 'last_change') ? dailyChange(row.last_change, d)
+        : row.installed_or_updated_on ? dailyChange({ at: row.installed_or_updated_on }, d)
+        : { text: '没有换版本的记录', recent: false });
       return `<li class="env-app"><b>${U.fieldHtml(row.name, { name: '软件', kind })}</b><span>${version}</span>${change ? `<span class="env-app__change${change.recent ? ' is-recent' : ''}">${esc(change.text)}</span>` : ''}</li>`;
     }).join('');
     const cutoff = validAt(d.observed_at) || validAt(d.at);
