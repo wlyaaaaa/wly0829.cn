@@ -39,7 +39,7 @@
   const keepFactWords = html => html.replace(/<[^>]+>|\p{Script=Han}{2,}/gu, run => run.startsWith('<') ? run :
     run.split(/(断线|中转|接回|照开)/u).flatMap((part, i) => i % 2 ? [part] : words(part))
       .map(word => word.length > 1 ? `<span class="task-fact-word">${word}</span>` : word).join(''));
-  const keepSchedule = html => html.replace(/<[^>]+>|每(?:[ \t]*\d+[ \t]*)?分钟/g, word => word.startsWith('<') ? word : keepUnit(word));
+  const keepSchedule = html => html.replace(/<[^>]+>|每(?:[ \t]*\d+[ \t]*)?(?:分钟|小时)/g, word => word.startsWith('<') ? word : keepUnit(word));
   const text = v => U.fieldText(v, viewer);
   const time = v => typeof v === 'number' ? v : Date.parse(text(v));
   const stamp = (t, relative = false) => !Number.isFinite(t) ? '' : [
