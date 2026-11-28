@@ -44,9 +44,20 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
 .topbar[data-style="float"] {
   /* --side：玻璃离窗口左右两边各留多少。本人 14:40 在试看页上调的是 16 */
   --side: 16px;
-  inset: 12px var(--side) auto var(--side);
+  --bar-top: 12px;
+  inset: var(--bar-top) var(--side) auto var(--side);
   border-radius: 26px;
   --pad-x: 19px;
+}
+
+/* 滚动后铺平上沿和玻璃后面的正文，再从页眉下沿渐隐。 */
+.topbar[data-style="float"][data-state="compact"]::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--bar-top)) calc(-1 * var(--side)) -20px;
+  z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--paper, #faf9f5) calc(100% - 20px), transparent);
 }
 
 /* —— 玻璃 —— */
