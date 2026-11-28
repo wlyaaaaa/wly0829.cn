@@ -11,21 +11,15 @@
   'use strict';
   const T = window.LiveTape, U = window.LiveUI, { esc } = U;
   const { HOSTS, list, known, int, when, link } = T;
-  const HOOK_NAMES = { SessionStart: '开场给项目指路', Rules: '核对规则版本', PostCompactRewake: '压缩后接着办', PreInvocation: '叫模型前补状态' };
   const pick = id => HOSTS.some(h => h.id === id) ? id : 'claude';
   const query = new URLSearchParams(location.search);
   let family = pick(String(query.get('family') || query.get('host') || '').toLowerCase());   // 后台旧链接带 ?host= 的也认
   let mode = String(query.get('mode') || 'no_project'), fresh = false;
   let state, viewer = 'public', landed = false;
 
-  // —— 取数：后台给什么，都在这一段转成页面要的样子；约定改了只改这一段 ——
-  // 后台形状（数据约定第 7 节）：data = { active_version, charter_href, hosts:{Claude|Codex|Antigravity:{version,current,characters,
-  //   files:[{name,text,characters,version,paragraphs:[{first_line,last_line,kind,shared_with}]}]}}, startup_context:[{at,host,hook,event,text,trigger}] }
-  // trigger：startup 开对话 · resume 恢复 · compact 压缩后（旧记录没有）。另有 compact_context（每家最近一次压缩后补的那组）、
-  // message_context（每家最近一次收到消息时补的，Antigravity 是叫模型前那条，带 characters）：这两样现在只取时刻和字数写进一句话，原文不另摆
-  // kind：charter 和约法（规则页）一样 · shared 和别家入口共用 · host_only 只这一家有 · unverified 材料不全没比对
   const plain = v => T.plain(v, viewer);
   const num = v => known(v) ? v : null;
+  const characters = r => num(r && Object.hasOwn(r, 'non_whitespace_characters') ? r.non_whitespace_characters : r?.characters);
   const serial = v => { const m = /(\d+)\s*$/.exec(String(v || '')); return m ? Number(m[1]) : null; };
   const hostOf = v => HOSTS.find(h => h.name === v || h.id === String(v || '').toLowerCase());
   function model(d) {
@@ -38,12 +32,11 @@
       const behind = r?.current === false && serial(active) != null && serial(version) != null ? serial(active) - serial(version) : null;
       const only = files.flatMap(f => f.blocks.filter(b => b.kind === 'host_only').map(b => b.label)).filter(Boolean);
       return { ...h, present: Boolean(r), version, current: typeof r?.current === 'boolean' ? r.current : null, behind,
-        characters: num(r?.characters), files, only, context: opening(list(d.startup_context), h),
-        compact: latest(d.compact_context, h), message: latest(d.message_context, h),
-        triggers: list(d.context_triggers).filter(r => hostOf(r.host) === h && r.enabled === true) };
+        characters: characters(r), nonblank: Boolean(r && Object.hasOwn(r, 'non_whitespace_characters')), files, only };
     });
     const c = d.charter && typeof d.charter === 'object' ? d.charter : null, ref = d.charter_href || c?.href || '';
     return { active, hosts, hasHosts: Boolean(raw), charter: c && { version: plain(c.version) || null },
+      settingsSample: d.antigravity_settings_sample,
       rulesHref: T.path(ref) ? ref : '/rules/', modes: modesOf(d) };
   }
   function file(f, h) {
@@ -53,7 +46,7 @@
       const a = Math.max(1, Math.round(p.first_line)), b = Math.min(lines.length, Math.round(p.last_line));
       for (let i = a; i <= b; i++) marks[i] = { kind: String(p.kind || ''), shared: list(p.shared_with) };
     }
-    return { name: plain(f?.name), path: plain(f?.path) || null, characters: num(f?.characters), tokens: num(f?.tokens),
+    return { name: plain(f?.name), path: plain(f?.path) || null, characters: characters(f), tokens: num(f?.tokens),
       readable: text != null, blocks: blocks(lines, marks, h), rewritten: f?.visitor_text_rewritten === true };
   }
   // 三种开法：data.opening_modes.{no_project|website|agents} = { project_path, hosts:{Claude|Codex|Antigravity:{available, files:[{name,path,
@@ -84,33 +77,14 @@
     if (!r || typeof r !== 'object' || r.available === false) return null;
     const files = list(r.files).map(f => {
       const row = { path: plain(f.path) || plain(f.name), resolved: plain(f.resolved_path) || null,
-        bytes: num(f.bytes), characters: num(f.characters), tokens: num(f.tokens), project: f.scope === 'project', read: f.file_evidence !== 'unavailable',
-        load: String(f.load_evidence || ''), importedBy: plain(f.imported_by) || null,
+        bytes: num(f.bytes), characters: characters(f), tokens: num(f.tokens), project: f.scope === 'project', read: f.file_evidence !== 'unavailable',
+        load: String(f.load_evidence || ''), importedBy: plain(f.imported_by) || null, importSource: f.import_source === true,
         counted: num(f.counted_bytes), header: num(f.excluded_header_bytes) };
       return { ...row, doc: Object.hasOwn(f, 'text') ? file(f) : null };
     });
-    return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens), characters: num(r.characters),
+    return { files, count: num(r.file_count) ?? files.length, bytes: num(r.bytes), tokens: num(r.tokens), characters: characters(r),
+      nonblank: Object.hasOwn(r, 'non_whitespace_characters'), samples: list(r.context_samples), hostLast: r.context_host_last_at,
       method: String(r.count_method || ''), limit: num(r.token_limit), left: num(r.tokens_remaining), staleAt: staleAt(r) };
-  }
-  // 开场时补的几行：这一家最近一次开场（同一次开场的几条钩子前后差不到 2 分钟），按先后接起来原样给
-  function opening(rows, h) {
-    const mine = rows.filter(r => hostOf(r.host) === h && T.stamp(r.at)).sort((a, b) => T.stamp(b.at) - T.stamp(a.at));
-    if (!mine.length) return null;
-    const last = T.stamp(mine[0].at), group = mine.filter(r => last - T.stamp(r.at) <= 120000).reverse();
-    const text = group.map(r => plain(r.text)).filter(s => s.trim()).join('\n');
-    // 补了多少字：后台给了 characters 就用它，没给就数这一组原文的字（本人版就是原样补进去的那几行；访客版数的是换过说法的那份）
-    const chars = group.reduce((s, r) => s + (num(r.characters) ?? plain(r.text).length), 0);
-    return text ? { at: mine[0].at, text, chars, hooks: group.map(r => r.hook || r.event).filter(Boolean),
-      triggers: [...new Set(group.map(r => TRIGGERS[r.trigger]).filter(Boolean))] } : null;
-  }
-  const TRIGGERS = { startup: '开对话时', resume: '恢复时', compact: '压缩后' };
-  // 压缩后、收到消息时补的那几行：只要这一家最近一次的时刻和字数（字段不在就是 null，那句话照不带数的写）
-  function latest(rows, h) {
-    const mine = list(rows).filter(r => hostOf(r.host) === h && T.stamp(r.at)).sort((a, b) => T.stamp(b.at) - T.stamp(a.at));
-    if (!mine.length) return null;
-    const at = mine[0].at, group = mine.filter(r => T.stamp(at) - T.stamp(r.at) <= 120000);
-    const chars = group.reduce((s, r) => s + (num(r.characters) ?? plain(r.text).length), 0);
-    return { at, chars };
   }
 
   // —— 把一份入口原文切成段：按一、二级标题切，同一段里再按“和规则页一样／只这家有／共用”分开 ——
@@ -234,8 +208,9 @@
   // —— 开法：一排胶囊切换；下面“读哪几份”一份一行 ——
   const modeOf = m => m.modes.find(x => x.id === mode) || m.modes[0];
   const whenOpen = o => o.id === 'no_project' ? `${o.name}时` : `选${/^[A-Za-z0-9]/.test(o.name) ? ' ' : ''}${o.name}时`;
-  const approx = r => r?.method === 'o200k_base_estimate';
-  const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> token` : 'token 没算出';
+  const agyEstimate = r => r.method === 'antigravity_settings_estimate' || r.method === 'antigravity_settings';
+  const approx = r => r?.method === 'o200k_base_estimate' || Boolean(r && agyEstimate(r));
+  const tokens = (n, r) => known(n) ? `${approx(r) ? '约 ' : ''}<b>${int(n)}</b> 词元` : '词元未算出';
   const staleNote = x => x?.staleAt ? `<small class="op-stale">上次估算于 ${esc(when(x.staleAt))}</small>` : '';
   const EV = { observed: '看到的', inferred: '按加载规则推算', unavailable: '读不到' };
   const ev = kind => `<span class="op-ev" data-ev="${EV[kind] ? kind : 'unavailable'}">${EV[kind] || '没标'}</span>`;
@@ -250,7 +225,9 @@
   function fileNote(f, r) {
     const at = p => { const i = r.files.findIndex(x => x.path === p); return i >= 0 ? `第 ${i + 1} 份` : `<code>${esc(p)}</code>`; };
     const pulls = r.files.filter(x => x.importedBy && x.importedBy === f.path);
-    return [!f.read ? '<span class="op-warn">这份读不到</span>' : known(f.bytes) ? `${int(f.bytes)} 字节` : '大小没读到',
+    return [f.importSource && '导入来源',
+      !f.read ? '<span class="op-warn">这份读不到</span>' : known(f.bytes) ? `${int(f.bytes)} 字节` : '大小没读到',
+      f.read && words(f.characters),
       f.resolved && f.resolved !== f.path && `链到 <code>${esc(f.resolved)}</code>`,
       ...pulls.map(x => `用 @${esc(baseName(x.path))} 把${at(x.path)}引进来`),
       f.importedBy && `由${at(f.importedBy)}引进来`,
@@ -259,19 +236,19 @@
   }
   function fileRow(f, i, r) {
     return `<div class="op-fr"${f.project ? ' data-scope="project"' : ''}><span class="op-fr__no">第 ${i + 1} 份</span>
-      <div class="op-fr__path"><code>${esc(f.path || '没写路径')}</code><small>${fileNote(f, r)}</small></div>
+      <code class="op-fr__path">${esc(f.path || '没写路径')}</code><small class="op-fr__note">${fileNote(f, r)}</small>
       <span class="op-fr__num">${tokens(f.tokens, r)}</span>${ev(f.load)}</div>`;
   }
-  function howCounted(r, h) {
-    if (r.method === 'antigravity_settings') {
+  function howCounted(r) {
+    if (agyEstimate(r)) {
       const cut = new Map();
       r.files.forEach((f, i) => { if (f.header > 0) cut.set(f.header, [...(cut.get(f.header) || []), i + 1]); });
       const heads = [...cut].map(([n, at]) => `第 ${at.join('、')} 份开头 ${int(n)} 字节`).join('，');
       const cap = known(r.limit) ? (r.limit % 10000 === 0 ? `${r.limit / 10000} 万` : int(r.limit)) : '';
-      return `按 Antigravity 设置页自己的算法：每份按 UTF-8 字节数 ÷ 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
+      return `每份按字节数除以 3 向上取整${heads ? `，${heads}的触发设置不算` : ''}。${cap ? `${cap}是全局和项目规则合用的上限，超了大的几份改成用到时再读。` : ''}`;
     }
-    if (r.method === 'o200k_base_estimate') return `token 是用 GPT 的分词表估的，${h.name} 自己的计数没拿到，所以都写“约”。`;
-    return 'token 是怎么算出来的这一轮没读到，下一轮会自动再读。';
+    if (r.method === 'o200k_base_estimate') return '词元按 GPT 的分词表估算。';
+    return '词元的计数方法暂缺。';
   }
   function filesCard(m, h) {
     const o = modeOf(m), r = o.hosts[h.id];
@@ -279,26 +256,31 @@
     if (!r) return `<section ${attrs}><div class="op-files__head"><h2>${esc(whenOpen(o))}读哪几份</h2></div><p class="tp-empty">${h.name} ${esc(whenOpen(o))}读哪几份，这一轮没读到。</p></section>`;
     let sum;
     if (known(r.limit)) {
-      const over = known(r.tokens) && r.tokens > r.limit, load = r.files.length && r.files.every(f => f.load === 'observed') ? 'observed' : 'inferred';
+      const over = known(r.tokens) && r.tokens > r.limit;
       const left = over ? `<em data-tone="over">超了 ${int(r.tokens - r.limit)}</em>` : known(r.left) ? `<em>还剩 ${T.big(r.left, `op-left-${h.id}`)}</em>` : '';
-      sum = `<p class="op-files__sum">规则 <b>${known(r.tokens) ? T.big(r.tokens, `op-tok-${h.id}`) : '没算出'}</b> / ${int(r.limit)} token${left}${ev(load)}</p>
+      const budget = known(r.tokens) ? `约 <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> / ${int(r.limit)} 词元` : '词元未算出';
+      sum = `<p class="op-files__sum"><span>${budget}</span>${left}</p>
         ${known(r.tokens) ? `<div class="op-gauge"${over ? ' data-tone="over"' : ''}><i style="width:${Math.min(100, r.tokens / r.limit * 100).toFixed(1)}%"></i></div>` : ''}`;
     } else {
       const base = m.modes.find(x => x.id === 'no_project')?.hosts[h.id], more = o.id !== 'no_project' && base ? r.count - base.count : null;
-      sum = `<p class="op-files__sum">合计${known(r.tokens) ? `${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> token${staleNote(r)}` : ' token 没算出'}${known(more) ? `<em>${more > 0 ? `比无项目多读 ${int(more)} 份` : '和无项目读的一样'}</em>` : ''}</p>`;
+      const delta = known(more) ? `<em>${more > 0 ? `比无项目多读 ${int(more)} 份` : '和无项目读的一样'}</em>` : '';
+      sum = `<p class="op-files__sum"><span>${known(r.tokens) ? `合计${approx(r) ? '约' : ''} <b>${T.big(r.tokens, `op-tok-${h.id}`)}</b> 词元` : '词元未算出'}</span>${staleNote(r)}${delta}</p>`;
     }
     const own = r.files.filter(f => !f.project).length, extra = r.files.length - own;
     const rows = r.files.map((f, i) => (extra && i === 0 ? '<h3 class="op-files__group">全局入口</h3>' : '')
       + (extra && i === own ? `<h3 class="op-files__group">${esc(o.name)}多读的 ${int(extra)} 份</h3>` : '') + fileRow(f, i, r)).join('');
-    const total = [`合计 ${int(r.count)} 份`, known(r.bytes) ? `${int(r.bytes)} 字节` : '字节数没读全', known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} token` : 'token 没算全'];
+    const total = [`合计 ${int(r.count)} 份`, words(r.characters), known(r.bytes) ? `${int(r.bytes)} 字节` : '字节数没读全',
+      known(r.tokens) ? `${approx(r) ? '约 ' : ''}${int(r.tokens)} 词元` : '词元未算全'];
     const onlyFile = r.files.length === 1 && r.count === 1 ? r.files[0] : null;
     const repeatsTotal = onlyFile?.read && known(r.bytes) && known(r.tokens) && r.bytes === onlyFile.bytes && r.tokens === onlyFile.tokens;
     // 签的说明只写这一家这种开法里真出现的那几种（Claude 全是“按加载规则推算”时，不再列一条用不上的“看到的”）
-    const SAYS = { observed: `${h.id === 'antigravity' ? 'Antigravity 设置页' : `${h.name} 自己的界面`}上列着这一份，数也对得上。`,
+    const SAYS = { observed: `${h.id === 'antigravity' ? '设置页取样时列过这些文件。' : `${h.name} 自己的界面上列着这一份。`}`,
       inferred: '文件和大小是磁盘上的实数，开对话读不读，是照厂商写的加载规则推的。' };
     const used = Object.keys(SAYS).filter(k => r.files.some(f => f.load === k));
+    const sample = agyEstimate(r) && m.settingsSample;
     return `<section ${attrs}><div class="op-files__head"><h2>${esc(whenOpen(o))}读这 ${int(r.count)} 份</h2>${sum}</div>
-      <p class="op-files__how">${howCounted(r, h)}</p>
+      <p class="op-files__how">${agyEstimate(r) ? '<b>按 Antigravity 设置口径估算</b> · ' : ''}${howCounted(r)}${r.nonblank ? '字数按非空白字符计。' : '旧字数含空格、换行和文件头。'}</p>
+      ${sample ? `<p class="op-files__how">设置截图 ${stampText(sample)} 收到 · ${esc(sample.version || '规则版本未记')} · ${int(sample.tokens)} 词元</p>` : ''}
       ${r.files.length ? rows : `<p class="tp-empty">${esc(whenOpen(o))}，${h.name} 没有要读的规矩文件。</p>`}
       ${repeatsTotal ? '' : `<p class="op-files__total">${total.join(' · ')}</p>`}
       ${used.length ? `<ul class="op-files__legend">${used.map(k => `<li>${used.length > 1 ? ev(k) : ''}<span>${SAYS[k]}</span></li>`).join('')}</ul>` : ''}</section>`;
@@ -308,18 +290,20 @@
   }
   function metaRow(m, h) {
     const read = state?.meta?.at && when(state.meta.at);
-    const base = m.modes?.find(x => x.id === 'no_project')?.hosts[h.id];
-    return `<div class="op-meta"><p>${[versionText(m, h), words(base?.characters ?? h.characters), read && `${esc(read)} 读到`].filter(Boolean).join('<span class="op-dot">·</span>')}</p>${link(m.rulesHref, '看规则页 ›')}</div>`;
+    const selected = m.modes && modeOf(m).hosts[h.id];
+    const size = words(m.modes ? selected?.characters : h.characters);
+    const old = !m.modes && known(h.characters) && !h.nonblank ? '<small>旧字数含空格、换行和文件头。</small>' : '';
+    return `<div class="op-meta"><p>${[versionText(m, h), size + old, read && `${esc(read)} 读到`].filter(Boolean).join('<span class="op-dot">·</span>')}</p>${link(m.rulesHref, '看规则页 ›')}</div>`;
   }
   function sharedTag(shared, h) {
     const names = list(shared).map(n => hostOf(n)).filter(x => x && x !== h).map(x => x.name);
     if (!names.length) return '';
-    return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家都有' : `${names.join('、')} 也有`}</span>`;
+    return `<span class="op-tag">${names.length === HOSTS.length - 1 ? '三家同文' : `与 ${names.join('、')} 同文`}</span>`;
   }
   function blockHtml(b, h, key) {
     const body = md(b.rows.map(r => r.text));
     if (b.kind === 'charter') {
-      return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> —— 和规则页一样</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
+      return `<details class="op-same" id="${esc(key)}"><summary class="live-disclosure"><span class="op-same__title"><b>${esc(b.label || '这一段')}</b><span> · 与约法同文</span></span><span class="op-same__open" aria-hidden="true"></span></summary><div class="op-md op-same__body">${body}</div></details>`;
     }
     if (b.kind === 'host_only') return `<section class="op-only" data-host="${h.id}"><span class="op-only__tag">只有 ${h.name} 有</span><div class="op-md">${body}</div></section>`;
     const tag = b.kind === 'shared' ? sharedTag(b.shared, h) : b.kind === 'unverified' ? '<span class="op-tag" data-tone="off">材料不全，没比对</span>' : '';
@@ -343,7 +327,7 @@
       const file = (on && f.path) || f.name || '没写文件名';
       const path = pathParts(esc(file));
       const top = many || on ? `<p class="op-file"><b>第 ${i + 1} 份 · ${path}</b><span>${f.rewritten ? U.visitorRewrittenTag('这一份', '', viewer) : ''}${[words(f.characters),
-        on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} token`].filter(Boolean).join(' · ')}</span></p>` : '';
+        on && known(f.tokens) && `${near ? '约 ' : ''}${int(f.tokens)} 词元`].filter(Boolean).join(' · ')}</span></p>` : '';
       if (!f.readable) return `${top}<p class="tp-empty">这一份读不到原文。</p>`;
       if (!f.blocks.length) return `${top}<p class="tp-empty">这一份是空的。</p>`;
       return top + f.blocks.map((b, j) => blockHtml(b, h, `same-${key}-${j}`)).join('');
@@ -351,29 +335,28 @@
     return files.map((f, i) => one(f, i, f.project ? `${h.id}-${mode}-${i}` : `${h.id}-${i}`)).join('');
   }
   const stampText = x => `${esc(T.day(x.at))} ${esc(T.clock(x.at))}`;
-  function refillText(h) {
-    const when = station => [...new Set(h.triggers.filter(r => r.station === station)
-      .map(r => plain(r.when).trim().replace(/。$/, '')).filter(Boolean))].map(esc).join('，');
-    const start = when('start'), message = when('message');
-    const configured = [start && `${start}时补这几行`, message && `${message}时另补几行状态`].filter(Boolean);
-    const sample = [
-      h.compact && `压缩后最近一次在 ${stampText(h.compact)}，补了 ${int(h.compact.chars)} 字`,
-      h.message && `另补状态最近一次在 ${stampText(h.message)}，补了 ${int(h.message.chars)} 字`,
-    ].filter(Boolean);
-    return [...configured, ...sample, link('/live/agents/#hooks-message', '原样在智能体页 ›')].join(' · ');
-  }
-  function contextHtml(h) {
-    const c = h.context, refill = refillText(h);
-    const what = c?.triggers?.length ? `（${c.triggers.join('、')}）` : '';
-    return `<section class="op-ctx" id="startup"><h2>开场时程序另外补的几行</h2>${c
-      ? `<p class="op-ctx__when">最近一次 ${stampText(c)}${what}，补了 ${int(c.chars)} 字，下面是原样${refill ? ` · ${refill}` : ''}</p><pre>${esc(c.text)}</pre>`
-      : `<p class="tp-empty">${h.name} 最近没采到开场时补的几行${refill ? `；${refill}` : ''}。</p>`}</section>`;
+  const PHASES = { startup: '开场', first_message: '首条消息', resume: '接续', compact: '压缩后' };
+  function contextHtml(m, h) {
+    const r = m.modes && modeOf(m).hosts[h.id];
+    const cell = (phase, role) => {
+      const row = r?.samples.find(x => x.phase === phase && x.role === role), s = row?.sample;
+      if (s) return `<td><details><summary>${stampText(s)} · ${esc(s.version)} · ${words(s.characters)}</summary><pre>${esc(plain(s.text))}</pre></details></td>`;
+      const date = row?.last_at && stampText({ at: row.last_at });
+      return `<td>本版无样本${date ? ` · 上次 ${date}` : ''}</td>`;
+    };
+    const rows = Object.entries(PHASES).map(([id, name]) =>
+      `<tr><th scope="row">${name}</th>${cell(id, 'root')}${cell(id, 'child')}</tr>`).join('');
+    const last = r?.hostLast ? `这家最近一条钩子记录 ${stampText({ at: r.hostLast })}` : '这家暂无钩子记录';
+    return `<section class="op-ctx" id="startup"><h2 id="op-context-title">开场和接续时补的内容</h2>
+      <p class="op-ctx__when">${esc(m.active || '当前版')} · ${last} · ${link('/live/agents/#hooks-message', '看钩子 ›')}</p>
+      <table class="op-ctx__samples" aria-labelledby="op-context-title"><thead><tr><th scope="col">阶段</th><th scope="col">主对话</th><th scope="col">子对话</th></tr></thead><tbody>${rows}</tbody></table>
+      </section>`;
   }
   // 有开法时：几份、多少 token 跟着选的开法变；“只它有的几段”是全局入口原文里的，不跟开法变
   function cmpNum(m, h) {
     if (!m.modes) return `<span class="op-cmp__num">${h.present ? `${words(h.characters)} · 只它有的 ${h.only.length} 段` : '这一轮没读到'}</span>`;
     const r = modeOf(m).hosts[h.id];
-    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? 'token 没算出' : known(r.limit) ? `${int(r.tokens)} / ${int(r.limit)} token` : `${approx(r) ? '约 ' : ''}${int(r.tokens)} token${staleNote(r)}`}`;
+    const size = !r ? '这种开法没读到' : `${int(r.count)} 份 · ${!known(r.tokens) ? '词元未算出' : `${approx(r) ? '约 ' : ''}${int(r.tokens)}${known(r.limit) ? ` / ${int(r.limit)}` : ''} 词元${staleNote(r)}`}`;
     return `<span class="op-cmp__num">${size}</span>${h.present ? `<span class="op-cmp__num">只它有的 ${h.only.length} 段</span>` : ''}`;
   }
   function compare(m) {
@@ -390,9 +373,6 @@
   }
   function feed(m) {
     const rows = [];
-    for (const h of m.hosts) if (h.context) rows.push({ at: h.context.at, actor: h.name,
-      text: `开场时补了 ${int(h.context.chars)} 字${h.context.hooks.length ? `（${[...new Set(h.context.hooks.map(k => HOOK_NAMES[k] || k))].join('、')}）` : ''}`,
-      href: T.path('/live/agents/opening/', { family: h.id }) + '#startup', tone: 'info' });
     for (const h of m.hosts) if (h.present) rows.push({ actor: h.name, html: h.current === false ? `<em>不是当前版</em> · ${esc(h.version || '')}` : `<em>${esc(h.version || '')}</em> · ${words(h.characters)} · 只它有的 ${h.only.length} 段`,
       href: T.path('/live/agents/opening/', { family: h.id }), tone: h.current === false ? 'repair' : 'ok' });
     return rows.sort((a, b) => (T.stamp(b.at) || 0) - (T.stamp(a.at) || 0));
@@ -408,7 +388,7 @@
     }
     const m = model(d), h = m.hosts.find(x => x.id === family);
     if (m.modes && !m.modes.some(x => x.id === mode)) mode = m.modes[0].id;
-    const main = `<div class="tp-panel op-main" data-host="${h.id}">${body(m, h)}${contextHtml(h)}</div>`;
+    const main = `<div class="tp-panel op-main" data-host="${h.id}">${contextHtml(m, h)}${body(m, h)}</div>`;
     T.paint(page.root, `${head(m)}${T.stateNote(state)}${m.hasHosts || m.modes
       ? `${tabs(m)}${metaRow(m, h)}${m.modes ? modeRow(m, h) : ''}<div class="op-grid">${m.modes ? `<div class="op-col">${filesCard(m, h)}${main}</div>` : main}${compare(m)}</div>`
       : charterOnly(m)}`);

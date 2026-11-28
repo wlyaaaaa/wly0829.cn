@@ -45,7 +45,7 @@
 .op-files__sum b { font-weight: inherit; }
 .op-files__sum em { padding-left: 12px; border-left: 1px solid var(--tp-line); font-style: normal; color: var(--tp-green); }
 .op-files__sum em[data-tone="over"] { color: var(--tp-amber); }
-.op-files__sum .op-ev { font-family: var(--sans); }
+.op-files__sum > span, .op-files__sum > em { white-space: nowrap; }
 .op-gauge { position: absolute; left: 18px; right: 18px; bottom: 7px; height: 6px; border-radius: 3px; background: rgb(20 20 19 / .08); overflow: hidden; }
 .op-gauge i { display: block; height: 100%; border-radius: 3px; background: var(--host); transform-origin: left; animation: tp-growx .9s cubic-bezier(.3, .7, .3, 1) both; }
 .op-gauge[data-tone="over"] i { background: var(--tp-amber); }
@@ -53,13 +53,12 @@
 .op-files[data-fresh] .op-gauge i { animation: tp-growx .7s cubic-bezier(.3, .7, .3, 1) both; }
 .op-files__how { margin: 0 0 8px; font-size: 13.5px; line-height: 22px; color: #6c6b64; }
 .op-files__group { margin: 14px 0 2px; font-size: 15px; font-weight: 700; line-height: 22px; color: #6c6b64; }
-.op-fr { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto 122px; align-items: center; gap: 4px 14px; padding: 9px 10px; border-bottom: 1px solid var(--tp-hair); }
+.op-fr { display: grid; grid-template-columns: max-content minmax(0, 1fr) auto max-content; align-items: center; gap: 4px 12px; padding: 9px 10px; border-bottom: 1px solid var(--tp-hair); }
 .op-fr[data-scope="project"] { box-shadow: inset 3px 0 0 var(--host); padding-left: 18px; }
-.op-fr__no { font-size: 13.5px; color: #6c6b64; white-space: nowrap; }
-.op-fr__path { display: grid; gap: 1px; min-width: 0; }
-.op-fr__path > code { font-family: var(--mono); font-size: 14px; line-height: 21px; color: var(--ink); overflow-wrap: anywhere; }
-.op-fr__path small { font-size: 12.5px; line-height: 19px; color: #6c6b64; overflow-wrap: anywhere; }
-.op-fr__path small code { font-family: var(--mono); font-size: 12px; }
+.op-fr__no { grid-row: 1 / span 2; font-size: 13.5px; color: #6c6b64; white-space: nowrap; }
+.op-fr__path { grid-column: 2 / -1; font-family: var(--mono); font-size: 14px; line-height: 21px; color: var(--ink); overflow-wrap: anywhere; }
+.op-fr__note { font-size: 12.5px; line-height: 19px; color: #6c6b64; overflow-wrap: anywhere; }
+.op-fr__note code { font-family: var(--mono); font-size: 12px; }
 .op-fr__num { font-size: 14.5px; color: #2f2f2b; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
 .op-fr__num b { font-size: 16px; font-weight: 800; color: var(--ink); }
 .op-fr .op-ev { justify-self: end; }
@@ -133,9 +132,14 @@
 /* 项目自己的那几份没登原文：说一声 */
 
 /* 开场时程序另外补的几行 */
-.op-ctx { margin: 28px 0 0; padding: 24px 0 0; border-top: 1px solid var(--tp-line); scroll-margin-top: calc(var(--bar-bottom) + 16px); }
+.op-ctx { margin: 0 0 26px; padding: 0 0 20px; border-bottom: 1px solid var(--tp-line); scroll-margin-top: calc(var(--bar-bottom) + 16px); }
 .op-ctx h2 { margin: 0; font-family: var(--black); font-size: 28px; line-height: 36px; }
 .op-ctx__when { margin: 4px 0 12px; font-size: 15px; color: #6c6b64; }
+.op-ctx__samples { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; font-size: 14px; }
+.op-ctx__samples th, .op-ctx__samples td { padding: 7px 8px; vertical-align: top; border-bottom: 1px solid var(--tp-hair); }
+.op-ctx__samples th:first-child { width: 76px; }
+.op-ctx__samples td { color: var(--muted); font-variant-numeric: tabular-nums; }
+.op-ctx__samples summary { cursor: pointer; color: var(--ink); }
 .op-ctx pre { margin: 0; padding: 16px 20px; border-radius: 10px; background: #f4f4f1; font-family: var(--mono); font-size: 14.5px; line-height: 26px; color: #2f2f2b; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto; }
 
 /* 右栏：三家比一比，点一家就切过去 */
