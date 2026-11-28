@@ -13,8 +13,6 @@
 <script src="/live/_lib/live-motion.js"></script>
 <style>
 .live-first-read .board { visibility: hidden; }
-.live-first-status { display: none; }
-.live-first-read .live-first-status { display: block; position: absolute; margin: 14px 0; }
 /* 和电脑页一样，滚过正文时底色随顶栏移动，只淡出导航字。 */
 #topbar[data-state="compact"] .topbar__glass { background-color: var(--paper); }
 #topbar[data-state="compact"] { opacity: 1; }
@@ -143,8 +141,7 @@
 .live-unreadable.live-empty-home .board { grid-auto-rows: 1fr; align-items: stretch; }
 .page--live.live-unreadable.live-empty-home .board .card .card__glass { height: 100%; min-height: 80px; display: flex; align-items: center; padding: 12px 32px; }
 .page--live.live-unreadable.live-empty-home .board .card .head__lead { font: 900 24px/32px var(--black); color: var(--ink); }
-.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail),
-.live-empty-home .live-conn__wait:has(.live-conn__why:empty) { display: none !important; }
+.live-empty-home .board .card__body > :not([data-part="head"]), .live-empty-home .board .card__head :is(.lamp,.head__tail) { display: none !important; }
 .live-empty-home.live-home-summary .board #tasks[data-has-readings="yes"] [data-part="status"] { display: block !important; }
 .l1-unreadable-note { font-size: 17px; line-height: 26px; color: var(--ink-soft); }
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
@@ -470,7 +467,6 @@ a.b6-tb__dot:hover, a.b6-tb__dot:focus-visible { box-shadow: 0 0 0 4px rgb(0 166
 
   <ul class="notices" id="notices" aria-live="polite"></ul>
   <ul class="site-notices" id="item-action-receipts"></ul>
-  <p class="live-first-status row__sub" role="status">正在读实况…</p>
 
   <div class="board">
     <div class="board__col">

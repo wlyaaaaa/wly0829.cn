@@ -108,7 +108,7 @@
     },
     link(s) {
       bar?.set(s); L.offline(s.offline);
-      U.list($('notices'), s.offline ? [{ key: 'link', cls: 'notice glass', html: esc(s.text) }] : []);
+
       if (linkOff !== !!s.offline) { linkOff = !!s.offline; if (data) render(); }
       if (s.data == null && ['none', 'gone'].includes(s.phase)) {
         render(); headRead.done(); listRead.done(); L.tone(hero, data); lightUp();

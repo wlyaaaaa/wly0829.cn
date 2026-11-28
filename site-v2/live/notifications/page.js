@@ -38,10 +38,11 @@
     if(k==='sent')return '';
     if(k==='not_started')return e==='start'?'没开始发：发信程序没启动起来':'还没开始发：还在排队';
     const step=mail?'卡在交给 Gmail 那一步':'卡在推到手机那一步';
+    const noMailConfirmation='Gmail 没回确认';
     const why={interrupted:'正发的时候通知程序重启了，没等到回话',timeout:mail?'发信程序超时，没等到 Gmail 回话':'等手机回话超时',auth:mail?'Gmail 登录验证没通过':'手机那边验证没通过',
       start:'发送程序没启动起来',invalid:mail?'Gmail 的回话看不懂，不知道发出去没有':'手机的回话看不懂',exception:'发送程序出错了'}[e]
-      ||(mail?(k==='failed'?'Gmail 没收下':'Gmail 没回确认，不知道发出去没有'):(k==='failed'?'手机没回“已弹出”':'没等到手机回话'));
-    return `${step}：${why}`;
+      ||(mail?(k==='failed'?'Gmail 没收下':noMailConfirmation):(k==='failed'?'手机没回“已弹出”':'没等到手机回话'));
+    return why===noMailConfirmation?why:`${step}：${why}`;
   }
   const shortWhy=r=>{const s=stuck(r);return s.slice(s.indexOf('：')+1).split('，')[0];};
   const sec=v=>{if(v&&typeof v==='object')return v;if(v==null)return '';const [n,unit]=v>=3600?[v/3600,'小时']:v>=60?[v/60,'分钟']:v>0&&v<1?[v*1000,'毫秒']:[v,'秒'];return `${Number(n.toFixed(n<10?1:0))} ${unit}`;};
@@ -54,12 +55,12 @@
   const marked=o=>o?.visibility==='owner'||o?.public==='owner',provided=field=>field&&typeof field==='object'&&!Array.isArray(field)?field.text??field.value:field;
   // 本人版原样给全；访客版藏起来的地方写“〈哪一样〉仅本人可见”。
   const lock=what=>`<span class="notify-private">${esc(what)}仅本人可见</span>`;
-  function shown(v,what){
+  function shown(v,what,format=esc){
     if(v&&typeof v==='object'){
       if((v.hidden||v.hidden_block||marked(v))&&viewer!=='owner')return lock(what);
-      const t=provided(v);return t==null?'':esc(String(t));
+      const t=provided(v);return t==null?'':format(String(t));
     }
-    return v==null?'':esc(String(v));
+    return v==null?'':format(String(v));
   }
   const hiddenBatch=r=>viewer!=='owner'&&(r.hidden||marked(r));
   // 标题在本人版的 reminders[].title 里（一次可能含几件事）；开头和类别重名的那段去掉，免得写两遍（M306）
@@ -74,7 +75,16 @@
     }
     return Array.from(seen,([title,reminder])=>[title,reminderTag(reminder)]);
   };
-  const titleOf=r=>{const v=r.title??r.text??r.body;if(v!=null&&v!=='')return shown(v,'提醒标题');const c=className(r);return reminderTitles(r).map(([t,tag])=>{const s=shown(bare(t,c),'提醒标题');return s&&s+tag;}).filter(Boolean).join('；');};
+  function titleOf(r,format){
+    const value=r.title??r.text??r.body;
+    if(value!=null&&value!=='')return shown(value,'提醒标题',format);
+    const category=className(r);
+    const titles=reminderTitles(r).map(([text,tag])=>[shown(bare(text,category),'提醒标题',format),tag]).filter(([text])=>text);
+    return titles.map(([text,tag],i)=>{
+      const divider=i<titles.length-1?'；':'';
+      return text+(format&&tag&&divider?`<span class="notify-nw">${tag}${divider}</span>`:tag+divider);
+    }).join('');
+  }
   // 同一件事走另一路（邮件那次看手机，手机那次看邮件）怎样：后台在 reminders[].other_channel 给；没给就写没有记录（M306）
   const channelName=c=>['mail','email'].includes(c)?'邮件':c==='phone'?'手机':typeof c==='string'?c:'';
   function others(r){
@@ -89,6 +99,31 @@
     if(list.length===1)return `同一件事走${name}：${[list[0].at&&stamp(list[0].at),list[0].state].filter(Boolean).join(' ')}`;
     const counts=new Map();for(const o of list)counts.set(o.state,(counts.get(o.state)??0)+1);
     return `这 ${list.length} 件事走${name}：${counts.size===1?`都${list[0].state}`:[...counts].map(([s,n])=>`${s} ${n} 件`).join('、')}`;
+  }
+  const keepWords=text=>`<span class="notify-nw">${esc(text)}</span>`;
+  const keepTitleWords=text=>text.split(/(（[^（）]+）|\([^()]+\)|对话|前端 QA)/g).map((part,i)=>i%2?keepWords(part):esc(part)).join('');
+  function attentionResult(r){
+    if(r.channel!=='phone')return {};
+    const reminders=Array.isArray(r.reminders)?r.reminders:[];
+    const {sent,total,at:batchRecoveredAt}=r.recovery||{};
+    const recoveredAt=total===1?reminders[0]?.recovered_at??batchRecoveredAt:batchRecoveredAt;
+    const recovered=validCount(sent)&&validCount(total)&&sent>0&&sent<=total&&Number.isFinite(parse(recoveredAt));
+    const firstQueues=reminders.map(item=>item.first_queue_seconds);
+    const firstQueue=r.is_retry===true&&firstQueues.length&&firstQueues.every(n=>Number.isFinite(n)&&n>=0)?Math.max(...firstQueues):null;
+    const queued=parse(r.queued_at),elapsed=(parse(r.at)-queued)/1000;
+    const retry=firstQueue!==null&&firstQueue<60&&elapsed>0?(elapsed>=60?`${Math.floor(elapsed/60)} 分钟`:sec(elapsed)):'';
+    const duration=r.is_retry===true?took({...r,queue_seconds:firstQueue>=60?firstQueue:null}):undefined;
+    const delivered=recovered?`${keepWords('补送到了')}<br>${keepWords(`${U.time(recoveredAt)} 到手机`)}`:'';
+    if(recovered&&sent===total){
+      const classes=[].concat(r.class??[]),untilPhone=(parse(recoveredAt)-queued)/1000;
+      const skipMail=classes.length===1&&classes[0]==='ai_done'&&r.app_channel!=='shell'&&untilPhone>=0&&untilPhone<=120
+        &&reminders.length===total&&reminders.every(item=>item.other_channel===null);
+      return {statusHtml:`${retry?`${keepWords(`重试 ${retry}后`)}<wbr>`:''}${delivered}`,recovered:true,duration:retry?'':duration,
+        otherHtml:skipMail?`${keepWords('没寄邮件：')}<wbr>${keepWords('2 分钟内已到手机，')}按规矩不寄`:undefined};
+    }
+    if(recovered)return {statusHtml:`${keepWords(`其中 ${sent} 件`)}<wbr>${delivered}`,duration:retry?`重试了 ${retry}`:duration};
+    if(retry&&r.status==='failed')return {statusHtml:`${keepWords(`重试了 ${retry}，`)}<wbr>${keepWords('没送到')}`,duration:''};
+    return {duration:retry?`重试了 ${retry}`:duration};
   }
   // 原始原因代码的人话；没收录的只给代码
   const detailWords={effect_unknown:'Gmail 发信接口没回“已发出”，也没给邮件编号，可能发出去了也可能没有',provider_response_invalid:'发信程序的回话看不懂',provider_response_oversize:'发信程序的回话太长，没法读',
@@ -122,7 +157,7 @@
       return `<a class="more" href="${esc(url.pathname+url.search+url.hash)}">回到原事${ids.length>1?` ${index+1}`:''}，看现在的状态 ›</a>`;
     }).join(' · ');
   }
-  const what=r=>{const t=titleOf(r),c=className(r);return [c?`「${esc(c)}」那条`:'一条提醒',t].filter(Boolean).join('：');};
+  const what=(r,format)=>{const t=titleOf(r,format),c=className(r);return [c?`「${esc(c)}」那条`:'一条提醒',t].filter(Boolean).join('：');};
   const hero=$('hero'),heroRead=U.reading(hero.querySelector('.card__body'),{ghost:U.ghost.card(2),name:'通知发送回执'});
   const boards=Object.fromEntries(['attention','overview','history'].map(k=>[k,V.board($(k),{key:`notifications-v3-${k}`,sync,
     ...(k==='overview'?{reading:hourReading}:{})})]));
@@ -148,7 +183,14 @@
     if(e.target.open)batchFolds.add(key);else batchFolds.delete(key);
   }
   function attentionChapter(el){
-    el.innerHTML='<div data-attention-groups></div><p class="delivery-note" data-attention-private hidden></p>';
+    const firstCount=4;
+    el.innerHTML='<div data-attention-groups></div>'
+      +'<details data-attention-more hidden><summary class="more live-disclosure delivery-more">'
+      +'<span class="delivery-more__closed"></span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span>'
+      +'</summary><div class="stut"></div></details>'
+      +'<p class="delivery-note" data-attention-private hidden></p>';
+    const more=el.querySelector('[data-attention-more]');
+    const moreLabel=more.querySelector('.delivery-more__closed'),rest=more.querySelector('.stut');
     // 明细开着的那几张，数据刷新重画后照样开着；点卡片空白处也能开合明细
     el.addEventListener('toggle',e=>{const key=e.target.dataset?.detailKey;if(!key)return;if(e.target.open)detailOpen.add(key);else detailOpen.delete(key);},true);
     el.addEventListener('click',e=>{
@@ -156,13 +198,21 @@
       const detail=e.target.closest('.stut__card')?.querySelector('.notify-detail');if(detail)detail.open=!detail.open;
     });
     function draw(){
-      const cards=issues.map(r=>r.private_count||hiddenBatch(r)?`<div class="delivery-private">${privateLine(r)}</div>`
-        :`<div class="stut__card" data-status="${esc(kindOf(r))}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
-          +`<span class="stut__s">${shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r)} · 走${shown(channel(r),'渠道')}</b>`
-          +`<span class="notify-why">${esc(stuck(r))}</span><span class="notify-other">${esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
-          +`${took(r)?`<small class="notify-took">${shown(took(r),'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`);
-      U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.join('')}</div>`
+      const cards=issues.map(r=>{
+        if(r.private_count||hiddenBatch(r))return `<div class="delivery-private">${privateLine(r)}</div>`;
+        const result=attentionResult(r),duration=result.duration??took(r),why=result.recovered?'':stuck(r);
+        return `<div class="stut__card" data-status="${result.recovered?'recovered':kindOf(r)}"><span class="stut__t"><small>${at(r)&&typeof at(r)==='object'?'':U.date(at(r))===U.date(new Date().toISOString())?'':esc(U.date(at(r)))}</small>${at(r)&&typeof at(r)==='object'?shown(at(r),'时刻'):esc(U.time(at(r)))}</span>`
+          +`<span class="stut__s">${result.statusHtml??shown(stateWord(r),'到没到')}</span><span class="stut__w"><b class="notify-what">${what(r,keepTitleWords)}<span class="notify-nw">&nbsp;· 走${shown(channel(r),'渠道')}</span></b>`
+          +`${why?`<span class="notify-why">${esc(why)}</span>`:''}<span class="notify-other">${result.otherHtml??esc(otherLine(r))}</span>${notificationLinks(r)?`<span class="notify-link">${notificationLinks(r)}</span>`:''}`
+          +`${duration?`<small class="notify-took">${shown(duration,'耗时')}</small>`:''}</span>${detailHtml(r)}</div>`;
+      });
+      U.html(el.querySelector('[data-attention-groups]'),issues.length?`<div class="stut">${cards.slice(0,firstCount).join('')}</div>`
         :`<p class="delivery-note">${Array.isArray(page?.attention_rows)?page.attention_window?.complete===false?`有记录的部分里，给${you()}的提醒都到了`:`近 24 小时给${you()}的提醒都到了`:page?.attention_rows===null?'没到的清单这次没读到':'已读到的记录里，提醒都到了'}</p>`);
+      const remaining=cards.slice(firstCount);
+      more.hidden=!remaining.length;
+      if(more.hidden)more.open=false;
+      moreLabel.textContent=remaining.length?`展开其余 ${remaining.length} 条`:'';
+      U.html(rest,remaining.join(''));
       const note=el.querySelector('[data-attention-private]'),count=issues.filter(r=>!r.private_count&&!hiddenBatch(r)).length;
       // 新私事规则（本人 11-24 02:56）：程序写的提醒原样给，不再写“各是哪件事，仅本人可见”。
       note.hidden=true;note.textContent='';void count;
@@ -358,7 +408,7 @@
     try {
       while(reading?.audience===viewerKey&&reading.next&&reading.sources.length<depth&&!complete?.(reading)){
         const batch=reading,cursor=batch.next;
-        const response=fixture?{data:batch.first.pages?.[cursor]}:await window.Live.get(resource,{cursor},undefined,{fallbackOnFailure:true}).catch(()=>null);
+        const response=fixture?{data:batch.first.pages?.[cursor]}:await window.Live.get(resource,{cursor}).catch(()=>null);
         if(batch!==reading)continue;
         const data=response?.data;
         const saved=response?.meta?.source==='fallback';
@@ -492,7 +542,7 @@
     },
     link(s){
       const fallback=s.fallbackNote||s.meta?.fallbackNote;
-      bar?.set(s.offline?{...s,cutoffAt:null}:s);L.offline(s.offline);U.list($('notices'),s.offline?[{key:'offline',cls:'notice glass',html:`<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(fallback?s.text.split(' · ',1)[0]:s.text,{name:'连接状态',place:'body',kind:viewer})}</span>`}]:[]);
+      bar?.set(s.offline?{...s,cutoffAt:null}:s);L.offline(s.offline);
       const draw=redraw||now!==s.now||cutoff!==s.cutoffAt;
       now=s.now;cutoff=s.cutoffAt;
       if(redraw&&!reading){phase='none';clearDelivery();}
