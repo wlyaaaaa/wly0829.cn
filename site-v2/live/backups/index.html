@@ -31,8 +31,9 @@
 .page--backups .backup-grid th:first-child { width: auto; }
 .page--backups .backup-grid th:not(:first-child) { width: auto; color: var(--ink); }
 .page--backups .backup-grid { font-size: 13px; border-spacing: 4px; }
+.page--backups .backup-grid col { width: var(--backup-col); }
 .page--backups .backup-grid :is(th,td) { vertical-align: top; padding: 4px 7px; overflow-wrap: anywhere; line-height: 1.4; }
-.page--backups .backup-grid thead tr > th { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--hair); white-space: normal; }
+.page--backups .backup-grid thead tr > th { padding-inline: 4px; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--hair); white-space: normal; }
 .page--backups .backup-grid caption { padding: 0 7px 6px; text-align: left; }
 .page--backups .backup-grid caption > span { display: block; }
 .page--backups .backup-grid small { margin-top: 2px; font-size: 11.5px; line-height: 1.35; }
@@ -42,13 +43,12 @@
 .page--backups .backup-grid td[data-copy="drive"] { padding-inline: 2px; }
 /* 窄格里的短标签不让最后一个字单独掉一行（“副本日期未登 / 记”“上次确认有副 / 本”）：多行时各行排匀，一行放得下的不变 */
 .page--backups .backup-grid td:is([data-copy], :nth-child(3)) > :is(b, small) { text-wrap: balance; }
-.page--backups .backup-at > span { white-space: nowrap; }
-@media (min-width: 1280px) {
-  .page--backups .backup-grid col:nth-child(-n+2) { width: 15.25% !important; }
-  .page--backups .backup-grid col:nth-child(3) { width: 11.5% !important; }
+@media (min-width: 1100px) {
+  .page--backups .backup-grid :is(th,td) { padding-inline: 4px; }
 }
-/* 窗口不到 1440 宽：大小列放不下整个时刻（“11-16 07:38”伸出灰底），日期和钟点分两行；1440 宽不变（M781） */
-@media (max-width: 1439px) { .page--backups .backup-grid td:nth-child(3) .backup-at { white-space: normal; } }
+@media (min-width: 1280px) {
+  .page--backups .backup-grid col { width: var(--backup-wide-col); }
+}
 .page--backups .backup-grid b { font-weight: 400; }
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
 /* G、H 盘这一轮按备上多少分档，和计划任务同一套颜色（M780、M806）：大部分成功黄、部分成功橙、备份失败红；字用深一点的同色，格底一条粗色线 */
@@ -58,13 +58,6 @@
 .page--backups .backup-grid td[data-state="failed"] { color: #a8362c; box-shadow: inset 0 -3px #d9443a; }
 .page--backups .backup-grid th[scope="row"] { color: var(--ink); font-size: 14px; font-weight: 500; }
 .page--backups .backup-grid th[scope="row"] small { font-weight: 400; }
-/* 窗口不到 1280 宽：五个副本列加宽一点（资料名、本地位置让出），表头的记录时间在日期和钟点之间换行，不再横着串到隔壁列（M497）；1440 宽不变 */
-@media (max-width: 1279px) {
-  .page--backups .backup-grid col:nth-child(1) { width: 16% !important; } .page--backups .backup-grid col:nth-child(2) { width: 14% !important; }
-  .page--backups .backup-grid col:is(:nth-child(4), :nth-child(5), :nth-child(6)) { width: 8.5% !important; } .page--backups .backup-grid col:nth-child(10) { width: 8.5% !important; }
-  .page--backups .backup-grid thead th { padding-inline: 4px; }
-  .page--backups .backup-grid thead .backup-unit { white-space: normal; }
-}
 .page--backups .backup-name { display: flex; align-items: center; gap: 6px; }
 .page--backups .backup-name .lamp { flex: none; margin: 0; }
 .page--backups .backup-unit { white-space: nowrap; }
@@ -111,7 +104,6 @@
   .page--backups .backup-grid tbody tr { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hair); }
   .page--backups .backup-grid :is(.backup-failure-long, .backup-failure-long ~ .backup-note) { display: none; }
   .page--backups .backup-grid .backup-narrow-detail { display: inline-block; color: var(--muted); font-size: 12px; text-decoration: underline; }
-  .page--backups .backup-grid tr[data-set="devconfig"] td[data-copy="h"] .backup-at { display: inline-block; overflow-wrap: normal; }
 }
 </style>
 <script src="/trust-modal/trust-modal.js"></script><script src="/live/_lib/live-view-switch.js"></script><script src="/live/_lib/live-client.js"></script><script src="/live/_lib/live-ui.js"></script><script src="/header/topbar.js"></script><script src="/live/_lib/live-light.js"></script><script src="/live/_lib/live-viz-grid.js"></script><script src="/live/backups/page.js"></script></body></html>
