@@ -147,6 +147,7 @@
 .page--live.live-unreadable #ledger [data-part="head"] > .row__sub { flex-basis: auto; margin-left: 0; }
 .page--live.live-unreadable .topbar .live-at { background: none; border-color: transparent; box-shadow: none; color: var(--muted); cursor: default; }
 .page--live.live-unreadable .topbar .live-at::before { display: none; }
+.page--live.live-unreadable:has(.live-conn__row[data-key="link"][data-stage="loading"]) .topbar:has(#wly-preview-view.is-switching) .live-at:empty::before { display: grid; }
 
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row { padding: 6px 0; }
 .page--live :is(#needs,#chats,#tasks,#backups,#ledger) .row__text { display: block; min-width: 0; overflow: hidden; }
