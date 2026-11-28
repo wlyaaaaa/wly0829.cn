@@ -18,6 +18,8 @@
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
+  const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后/g, word =>
+    word.startsWith('<') ? word : `<span class="iss-nowrap">${word}</span>`);
   const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
   // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
   function publicHtml(html, viewer) {
@@ -125,7 +127,7 @@
     const titleText = document.createElement('template');
     titleText.innerHTML = shownTitle;
     document.title = `${titleText.content.textContent.trim() || '账本一件'} · 实况`;
-    U.html(head, `<span class="head__lead">${shownTitle}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
+    U.html(head, `<span class="head__lead">${keepTitleWords(shownTitle)}</span>${(t => t ? ` ${t}` : '')(U.visitorLabel(d, ['$', 'title', 'plain_title', 'text'], '这件事的说法', viewer))}`);
     head.classList.toggle('is-long', [...T(title)].length > 40);
 
     // 状态一行：灯和欠着／放着 · 在等什么（和“接下来”那句一样时不重复）· 下次几点看 · 第几次看
@@ -287,10 +289,12 @@
 
   // 定了说法（不在账上、读不到、没权限）以后，读数状态再报一遍也不把这句盖回“这件事暂时读不到”；真读到这一件再照常画
   let ended = false;
-  function empty(message) {
+  function empty(message, detail = '') {
     ended = true; delete hero.dataset.updating;
-    U.html(part('head'), `<span class="head__lead">${esc(message)}</span>`);
-    part('state').hidden = part('src').hidden = true;
+    const head = part('head'), src = part('src');
+    U.html(head, `<span class="head__lead">${keepTitleWords(esc(message).replace(/\b\d{1,2}-\d{2} \d{2}:\d{2}\b/g, '<span class="iss-nowrap">$&</span>'))}</span>`);
+    head.classList.toggle('is-long', Boolean(detail) && [...message].length > 40);
+    U.html(src, detail); src.hidden = !detail; part('state').hidden = true;
     $('rest').hidden = true; L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
   // 访客版读口撤回（503 live_publication_revoked，访客版正在重新生成）：这一件旧的标题、状态、三格、经过、右栏全清，
@@ -310,6 +314,7 @@
     L.tone(hero, 'gray'); heroRead.done(); restRead.done(); L.lightUp([hero]);
   }
 
+  let checkedViewer = false;
   if (!id) empty('没有说是哪一件');
   else window.Live.watch(`ledger/${encodeURIComponent(id)}`, null, {
     phase(s) { if (!item && !ended) { heroRead.set(s); restRead.set(s); } },
@@ -324,12 +329,27 @@
     },
     link(s) {
       try {
-        bar?.set(s); L.offline(s.offline);
+        const missing = s.meta?.status === 404 ? s.link?.ledger_missing : null;
+        bar?.set(missing?.text || missing?.prefix ? { ...s, shownAt: s.link.seen } : s);
+        L.offline(s.offline);
         U.list($('notices'), s.offline ? [{ key: 'offline', cls: 'notice glass', html: `<span class="lamp" aria-hidden="true"></span><span>${U.fieldHtml(s.text)}</span>` }] : []);
         if (s.meta?.publicationRevoked) { updating(); return; }
         if (s.meta?.status === 403) { item = null; empty(s.text || '没有权限读这一件'); return; }
         if (item) { if (s.offline) render(); return; }
-        if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
+        if (s.meta?.status === 404) {
+          // 缺件回包没有 viewer；沿用授权读口核对设备，由 Live 更新版本切换。
+          if (!checkedViewer && !window.LiveView?.isPublic()) {
+            checkedViewer = true;
+            void window.Live.get('access');
+          }
+          const { text, prefix, target, headline, original_title: originalTitle } = missing ?? {};
+          const titleLine = headline && typeof originalTitle === 'string' && [...originalTitle].length > 24;
+          const related = target ? (text ? `${esc(prefix)}<br>` : '') +
+            go(`/live/issue/?id=${encodeURIComponent(target.id)}`, keepTitleWords(esc(target.title))) +
+            U.visitorLabel(target, '$', '换号后的那件', 'owner') : '';
+          return empty((titleLine && headline) || text || prefix || '这一件暂时读不到',
+            [titleLine && `原题：${esc(originalTitle)}`, related].filter(Boolean).join('<br>'));
+        }
         if (ended) return;
         heroRead.set(s); restRead.set(s);
         if (s.phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
