@@ -213,6 +213,11 @@ body {
   color: var(--muted);
 }
 
+.rules-page[data-rule-page="index"] [data-rule-count] {
+  min-width: 0;
+  white-space: nowrap;
+}
+
 .rules-meta ul {
   list-style: none;
   margin: 0;
