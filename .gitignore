@@ -66,3 +66,5 @@ site-v2/**/*.png
 /site-v2/site-assembly/素材/字体/*.ttf
 /site-v2/site-assembly/素材/字体/*.ttc
 /site-v2/site-assembly/素材/字体/*.otf
+# 访客版整项不显示的项目，各自定好的事项只留本机。
+/docs/design/private-decided/
