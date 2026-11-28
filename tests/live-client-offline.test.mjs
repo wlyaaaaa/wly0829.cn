@@ -112,29 +112,49 @@ test('conversation wait labels require an explicit visible waiting state', () =>
   assert.equal(progress('asking', {...question, visibility: 'owner'}, 'public'), 'asking');
 });
 
-test('offline in-page data uses the displayed generation and Beijing date', async () => {
-  for (const [now, at, expected] of [['2026-11-15T22:16:00Z', '2026-11-15T22:14:00Z', '06:14'], ['2026-11-15T16:01:00Z', '2026-11-15T14:40:00Z', '11-15 22:40']]) {
-    let packet = {v: 1, seq: 2, rev: 'new', at, now, data: {screen: {}}, viewer: {kind: 'owner', device: 'ok'}, link: {state: 'online', basis: 'response'}};
-    let broken = false;
-    const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
-    const sandbox = {window: {}, location: new URL('https://example.test/live/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
-      setTimeout: (fn, ms) => ms === 10000 ? (waits.push(fn), 0) : setTimeout(fn, ms),
-      document: {addEventListener() {}}, localStorage: {getItem() {return null;}, setItem() {}, removeItem() {}},
-      fetch: async () => {if (broken) throw Error('network'); return {ok: true, status: 200, headers: new Headers(), json: async () => packet};}};
-    vm.runInNewContext(source, sandbox); const client = sandbox.window.Live;
-    await client.get('home');
-    packet = {...packet, seq: 1, rev: 'old', at: '2026-11-14T00:00:00Z', data: {screen: {old: true}},
-      link: {state: 'offline', basis: 'heartbeat', heartbeat: 'live', text: '电脑不在线 · 数据截止 11-14 08:00'}};
-    const state = await client.get('home');
-    assert.equal(state.text, `连不上电脑 · 下面是 ${expected} 的数据。`); assert.equal(state.shownAt, at);
-    assert.equal(state.meta.seq, 2); assert.equal(state.data.screen.old, undefined);
-    broken = true;
-    // 读不到新的：10 秒内照旧；满 10 秒仍按后台最后说的（连不上电脑），只标上是几点的数（M587、M588）
-    assert.equal((await client.get('home')).text, `连不上电脑 · 下面是 ${expected} 的数据。`);
-    lapse();
-    const slow = await client.get('home');
-    assert.equal(slow.text, `连不上电脑 · 下面是 ${expected} 的数据。`);
+test('live home uses the site package only after consecutive failures and then reads the computer again', async () => {
+  const at = '2026-11-26T21:44:00Z', packedAt = '2026-11-26T22:23:00Z', now = '2026-11-27T14:00:00Z';
+  const viewer = {kind: 'public', device: 'none'};
+  const packet = (text, seq) => ({seq, rev: String(seq), at, now, viewer, data: {text}});
+  const waits = new Map();
+  let nextTimer = 0;
+  let failures = 0, mode = 'online';
+  const window = {};
+  vm.runInNewContext(source, {window, location: new URL('https://example.test/live/'), URLSearchParams, Intl, Date, AbortSignal,
+    document: {hidden: false, addEventListener() {}}, localStorage: {getItem() {return null;}, setItem() {}},
+    setInterval: () => 0, setTimeout(fn, ms) { const id = ++nextTimer; if (ms === 10000) waits.set(id, fn); return id; },
+    clearTimeout(id) { waits.delete(id); },
+    fetch: async url => {
+      if (url.startsWith('/release-identity.json')) return Response.json({live_fallback: {path: '/live/_fallback.json'}});
+      if (url === '/live/_fallback.json') return Response.json({at: packedAt, seq: 1, metadata_only: false,
+        publication: {policy: 'policy-11', audience: 'a'.repeat(64)}, resources: {home: packet('随站内容', 1)}});
+      if (mode === 'online') return Response.json(packet('实时内容', 2));
+      if (mode === 'recovered') return Response.json(packet('新内容', 3));
+      failures++;
+      return Response.json({...packet('边缘旧内容', 1), link: {state: 'offline'}},
+        {status: 503, headers: {'X-Live-Source': 'oss', 'X-Live-Connection': 'unreachable'}});
+    }});
+  const shown = [], live = window.Live;
+  live.watch('home', null, {data: d => shown.push(d?.text)});
+  assert.equal((await live.get('home')).data.text, '实时内容');
+  mode = 'broken';
+  for (let count = 1; count <= 3; count++) {
+    const state = await live.get('home');
+    assert.equal(failures, count);
+    assert.equal(state.offline, false);
   }
+  waits.values().next().value();
+  const saved = await live.get('home');
+  assert.equal(saved.conn.stage, 'lost');
+  assert.equal(saved.conn.say, '连不上电脑，这是 27日 05:44 的数据');
+  assert.equal(saved.shownAt, at.replace('Z', '.000Z'));
+  assert.equal(saved.data.text, '随站内容');
+  assert.ok(!shown.includes('边缘旧内容'));
+  mode = 'recovered';
+  const current = await live.get('home');
+  assert.equal(current.conn.stage, 'online');
+  assert.equal(current.data.text, '新内容');
+  assert.equal(shown.at(-1), '新内容');
 });
 
 test('offline screen holds readings only in its current page and drops them after device rejection', async () => {
@@ -235,88 +255,67 @@ test('owner originals stay in the current page, and opening the client removes o
   assert.equal((await open('?fixture=sample').get('chats/sample')).data, null);
 });
 
-test('offline subpages can use packaged metadata, while the live home and a public pause use no saved body', async () => {
-  const at = new Date().toISOString(), viewer = {kind: 'public', device: 'none'};
-  const packet = {seq: 1, rev: 'one', at, data: {text: 'old'}, viewer};
-  const normal = 'wly-live-v2:net:none:public:', forced = 'wly-live-v2:net:public:none:public:';
-  const owner = 'wly-live-v2:net:none:owner:home', token = 'wly-cockpit-device';
-  const stored = new Map([[normal+'home', JSON.stringify(packet)], [forced+'policy-9:home', JSON.stringify(packet)], [normal+'policy-9:home', JSON.stringify(packet)], [owner, 'owner'], [token, 'example']]);
-  const localStorage = {get length() {return stored.size;}, key: i => [...stored.keys()][i],
-    getItem: key => stored.get(key), setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
+test('only a validated site package paints an offline subpage, and public pause clears it', async () => {
+  const at = '2026-11-26T22:00:00Z', packedAt = '2026-11-26T22:23:00Z', viewer = {kind: 'public', device: 'none'};
+  const packet = {seq: 1, rev: 'one', at, data: {text: 'stored in browser'}, viewer};
+  const prefix = 'wly-live-v2:net:none:public:', stored = new Map([[prefix + 'backups', JSON.stringify(packet)]]);
+  const localStorage = {get length() {return stored.size;}, key: i => [...stored.keys()][i], getItem: key => stored.get(key),
+    setItem: (key, value) => stored.set(key, value), removeItem: key => stored.delete(key)};
   const audience = 'a'.repeat(64);
-  let paused = false, offline = false, hostOff = false, fallbackRead, packagedPolicy = 'policy-9';
-  const waits = [], lapse = () => waits.splice(0).forEach(fn => fn());
+  let paused = false, offline = false, hostOff = false, packagedPolicy = 'policy-9', metadataOnly = true;
   const requested = [];
   const sandbox = {window: {}, location: new URL('https://wly0829.cn/live/backups/'), URLSearchParams, Intl, Date, AbortSignal, clearTimeout,
-    setTimeout(fn, ms) { if (ms === 15000) fallbackRead = fn; if (ms === 10000) waits.push(fn); return 0; },
-    setInterval: () => 0, document: {addEventListener() {}}, localStorage,
+    setTimeout: () => 0, setInterval: () => 0, document: {addEventListener() {}}, localStorage,
     fetch: async url => {
       requested.push(url);
-      if (url === '/release-identity.json') {
+      if (url.startsWith('/release-identity.json')) {
         return Response.json({live_fallback: {origin: 'https://assets.example.test', key: packagedPolicy + '.json'}});
       }
       if (url === 'https://assets.example.test/' + packagedPolicy + '.json') {
-        const saved = {...packet, data: {text: packagedPolicy}};
-        return Response.json({at, publication: {policy: packagedPolicy, audience}, metadata_only: true,
-          resources: {projects: saved, 'tasks?scope=scheduled': saved}});
+        return Response.json({at: packedAt, seq: 1, publication: {policy: packagedPolicy, audience}, metadata_only: metadataOnly,
+          resources: {backups: {...packet, data: {text: 'from site package'}}}});
       }
       if (paused) return Response.json({error: 'live_public_paused'}, {status: 503});
-      if (!offline) return Response.json({...packet, data: {text: 'safe'}});
-      const off = hostOff ? {'X-Live-Connection': 'host-off', 'X-Live-Offline-Since': at} : {};
-      if (url.endsWith('/projects')) {
-        return Response.json({...packet, data: {text: 'stale-edge-body'}},
-          {headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', ...off}});
-      }
-      return Response.json({error: 'snapshot_metadata_only', at, data: {text: 'stale-edge-body'}}, {status: 503,
-        headers: {'X-Live-Source': 'oss', 'X-Live-Fallback-Policy': 'policy-11', 'X-Live-Fallback-Audience': audience, ...off}});
+      if (!offline) return Response.json({...packet, data: {text: 'from computer'}});
+      const headers = {'X-Live-Source': 'oss', 'X-Live-Connection': 'host-off'};
+      const marker = hostOff ? {host_off_basis: 'windows_poweroff', host_off_at: '2026-11-27T08:00:00Z'} : {host_off_at: at};
+      return Response.json({...packet, ...marker, data: {text: 'from edge'}}, {status: 503, headers});
     }};
   vm.runInNewContext(source, sandbox);
   const client = sandbox.window.Live, shown = [];
   client.watch('backups', null, {data: data => shown.push(data?.text)});
-  assert.equal((await client.get('backups')).data.text, 'safe');
-  assert.deepEqual(shown, ['safe']);
+  assert.equal((await client.get('backups')).data.text, 'from computer');
   assert.equal(requested[0], 'https://live.wly0829.cn/computer-access/live/v1/backups');
-  assert.equal([...stored.keys()].filter(key => key.startsWith(normal) || key.startsWith(forced)).length, 0);
+  assert.equal(stored.has(prefix + 'backups'), false);
   offline = true;
-  // 本页主数据等满 10 秒还没有新的：本页已读正文保留，写采时，暂不判连不上。
-  await client.get('backups'); lapse();
-  const slow = await client.get('backups');
-  assert.equal(slow.data.text, 'safe'); assert.equal(slow.offline, false); assert.match(slow.fallbackNote, /这次刷新慢了，正在重读/);
-  // 浏览器真断网才算整页连不上：已经显示的访客数据留着、标上是几点的（本人 R12，M741）；
-  // 没确认关机时，子页没读到正文的块可取随站包；只有时刻仍不画正文。
   sandbox.navigator = {onLine: false};
-  await client.get('backups');
-  assert.equal((await client.get('projects')).data, null);
-  await fallbackRead();
-  assert.equal((await client.get('projects')).meta.at, null);
+  const unverified = await client.get('backups');
+  assert.equal(unverified.data, null);
+  assert.equal(unverified.conn.say, '连不上电脑');
   packagedPolicy = 'policy-11';
-  assert.equal((await client.get('projects')).data, null);
-  await fallbackRead();
-  const packaged = await client.get('projects');
-  assert.equal(packaged.data, null);
-  assert.equal(packaged.meta.rev, 'metadata-' + audience);
+  const metadata = await client.get('backups');
+  assert.equal(metadata.data, null);
+  assert.equal(metadata.shownAt, null);
+  assert.equal(metadata.conn.say, '连不上电脑，这页的数据没存下来');
   assert.ok(requested.includes('https://assets.example.test/policy-9.json'));
   assert.ok(requested.includes('https://assets.example.test/policy-11.json'));
-  const edge = await client.get('backups');
-  assert.equal(edge.offline, true); assert.equal(edge.data.text, 'safe');
-  assert.match(edge.text, / · 下面是 .+ 的数据。$/);
-  assert.equal(edge.conn.stage, 'lost'); assert.ok(edge.conn.at.includes(client.stamp(edge.shownAt).slice(-5)));
-  // 确认关机后保留本次打开时读到的子页内容，并报关机起点。
-  delete sandbox.navigator; hostOff = true;
-  const off = await client.get('backups');
-  assert.equal(off.data.text, 'safe'); assert.equal(off.conn.stage, 'off'); assert.equal(off.conn.from, 'memory');
-  assert.equal(off.link.offSince, at);
-  assert.deepEqual(shown, ['safe']);
-  const reopened = {...sandbox, window: {}, location: new URL('https://wly0829.cn/live/')};
-  const packagedReads = requested.filter(url => url.includes('assets.example.test')).length;
+  delete sandbox.navigator;
+  hostOff = true;
+  metadataOnly = false;
+  const reopened = {...sandbox, window: {}};
   vm.runInNewContext(source, reopened);
-  const cold = await reopened.window.Live.get('home');
-  assert.equal(cold.conn.emptyHome, true); assert.equal(cold.data, null);
-  assert.equal((await reopened.window.Live.get('tasks', {scope: 'scheduled'})).data, null);
-  assert.equal(requested.filter(url => url.includes('assets.example.test')).length, packagedReads);
+  const off = await reopened.window.Live.get('backups');
+  assert.equal(off.data.text, 'from site package');
+  assert.equal(off.conn.stage, 'off');
+  assert.equal(off.conn.say, '电脑关机了，这是 27日 06:00 的数据');
+  assert.equal(off.link.offSince, '2026-11-27T08:00:00.000Z');
+  hostOff = false;
+  const noMarker = await reopened.window.Live.get('backups');
+  assert.equal(noMarker.conn.say, '连不上电脑，这是 27日 06:00 的数据');
   paused = true;
+  assert.equal((await reopened.window.Live.get('backups')).data, null);
   assert.equal((await client.get('backups')).publicPaused, true);
-  assert.deepEqual([stored.get(owner), stored.get(token)], [undefined, 'example']);
+  assert.deepEqual(shown, ['from computer', undefined]);
 });
 
 test('authority clears a withdrawn detail and never fills it from a saved public body', async () => {

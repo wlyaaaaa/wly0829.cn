@@ -473,7 +473,7 @@
       link(state) {
         bundleSource = state.meta?.source; disconnected = state.offline; bar?.set(state); Light.offline(state.offline);
         mainRevoked = state.meta?.publicationRevoked;
-        U.list($('notices'), state.offline ? [{ key: 'link', cls: 'notice glass', html: esc(state.text) }] : []);
+
         if (mainRevoked) showUnavailable(updating('一类备份'));
         else if (!state.offline && [404, 503].includes(state.meta?.status) && state.data == null) showUnavailable();
         else if (set) renderSet();

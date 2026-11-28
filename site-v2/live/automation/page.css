@@ -266,6 +266,8 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-covers b, .aw-off b { color: var(--ink); }
 .aw-off { flex: 1; max-width: 470px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
 .aw-type-settings { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.aw-offwhy { max-width: 660px; margin: 2px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); }
+.aw-offwhy b { color: #00a650; }
 .aw-settingbar, .aw-buttons { display: flex; flex-wrap: nowrap; align-items: center; gap: 10px; }
 .aw-settingbar .more, .aw-dialog .more, .aw-buttons .more, .aw-control { margin: 0; }
 /* 型号和档位跟模型清单走，只显示不能改 */
@@ -284,6 +286,18 @@ a.aw-line:hover { background: #f5f0fb; color: inherit; }
 .aw-example-tag { flex: none; padding: 1px 9px; border-radius: 6px; background: #6a4cb2; color: #fff; font-size: 13.5px; font-weight: 650; line-height: 22px; }
 .aw .aw-readonly { color: var(--muted); font-size: 14.5px; }
 .aw-type-pair { align-items: stretch; }
+.aw-mechanism > header { background: linear-gradient(100deg, #efe4f7b8, #f4f1f780); }
+.aw-mechanism .aw-head-note { margin-right: 0; }
+.aw-mechanism__rows li { padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid var(--hair); }
+.aw-mechanism__rows li::before { content: ''; position: absolute; left: 7px; top: 15px; width: 9px; height: 9px; border-radius: 50%; background: #ad98ec; }
+.aw-mechanism__words { position: relative; padding-top: 12px; }
+.aw-mechanism__words summary { display: flex; justify-content: space-between; gap: 12px; padding-right: 170px; cursor: pointer; }
+.aw-mechanism__words summary::-webkit-details-marker { display: none; }
+.aw-mechanism__words summary::after { content: none; }
+.aw-mechanism__words > p { padding-right: 170px; }
+.aw-mechanism__words .aw-mechanism__link { position: absolute; top: 12px; right: 0; color: #00813f; font-weight: 700; }
+.aw-mechanism__more { color: #00813f; font-weight: 700; white-space: nowrap; }
+.aw-mechanism__words pre { margin: 8px 0 0; padding: 10px 14px; border-radius: 8px; background: #f6f3fa; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .aw-wide { grid-column: 1 / -1; }
 .aw-past { margin-top: 4px; }
 .aw-sources li { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr); column-gap: 14px; align-items: baseline;

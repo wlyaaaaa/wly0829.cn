@@ -1,7 +1,7 @@
 // 账房先生（/live/project/?id=personal-finance）自己的几块；page.js 只在三处接进来：adapt 改这一页的数据、strip 加关键数字第一格、board 加卡。
 // 本人 11-27 批准的样子：第一格“〈最近整月〉花了”；通栏“每月花多少、花在哪”（12 个整月堆叠柱＋本月一根虚线柱，点柱子看这个月）；
 // 左下“钱现在大概多少”（三个大数、五行账户、长期分期、对账）；右下照旧“最近改动”（page.js 画）。原来“各部分新到哪天”“账上管着什么”“更多数据”三张卡不画。
-// 来源不同、新到日子不一样的数，每个都写“截止 X月X日”。访客版同一套页面、同一份接口：后台给访客的金额是 null，这里在原位画“••••”；
+// 来源不同、新到日子不一样的数，每个都写“截止 X月X日”。访客版同一套页面、同一份接口：后台给访客的金额是 null，这里在原位画“••••”（柱顶金额也是，本人 11-27 22:55；纵轴照旧不写数）；
 // 三处挂全站同一个紫色“访客看不到”小签（本人版、访客版都挂）。
 // 数在哪：项目详情 sections 里 id="spending" 那一节的 spending、headline 两项的 value；id="balance" 那一节的 balance 一项的 value（字段见单子）。
 (() => {
@@ -36,7 +36,7 @@
   // —— 类别颜色：彩色但柔和；同一类在每根柱子、图例、面板里一个颜色；“没分清”灰色、总在最上面 ——
   const ORDER = ['餐饮', '交通', '休闲娱乐', '旅行住宿', '购物', 'AI 订阅和海外', '医疗', '分期每月还的'];
   const COLOR = { 餐饮: '#f2a1a7', 交通: '#92b7ee', 休闲娱乐: '#b9a3ef', 旅行住宿: '#f4cf73', 购物: '#f2afd3', 'AI 订阅和海外': '#85d5bd', 医疗: '#8ed0e6', 分期每月还的: '#dcc2a2', 没分清: '#cccbd3' };
-  const SPARE = ['#f0b98a', '#a8d08d', '#6fc2bd', '#c79fc8', '#a9b3c9', '#d9c38a', '#e6a28f', '#9bc7a6'];   // 后台新出的类（学习培训、房租水电……）按出现先后配
+  const SPARE = ['#f0b98a', '#a8d08d', '#6fc2bd', '#c79fc8', '#a9b3c9', '#d9c38a', '#e6a28f', '#9bc7a6'];   // 后台新出的类（课程、房租水电……）按出现先后配
   const GAP = '这个月有一笔信用卡账单分期，对不上原来的几笔，暂时没法按类拆。';
   const GAP_COLOR = '#d9d8de';
   function palette(months) {
@@ -155,7 +155,7 @@
       const said = isCur ? `${monthNo(m.month)}月到目前` : m.month;
       const amount = finite(m.total) ? `，${yuan(m.total)}` : '';
       return `<button type="button" class="fin-bar${isCur ? ' is-current' : ''}${gap ? ' is-gap' : ''}" data-month="${esc(m.month)}" aria-pressed="false" aria-label="${esc(said + amount)}">
-        <span class="fin-bar__plot">${!isCur && finite(m.total) ? `<span class="fin-bar__top">${kilo(m.total)}</span>` : ''}<span class="fin-bar__stack" style="--h:${(frac(m) * 100).toFixed(2)}%">${segs}</span></span>
+        <span class="fin-bar__plot">${isCur ? '' : finite(m.total) ? `<span class="fin-bar__top">${kilo(m.total)}</span>` : viewer !== 'owner' ? `<span class="fin-bar__top">${DOTS}</span>` : ''}<span class="fin-bar__stack" style="--h:${(frac(m) * 100).toFixed(2)}%">${segs}</span></span>
         <span class="fin-bar__x">${label}</span></button>`;
     };
     return `<div class="fin-chart${step ? '' : ' is-bare'}">${yAxis}<div class="fin-bars" style="--n:${all.length}">${grid}${months.map(m => bar(m, false)).join('')}${cur ? bar(cur, true) : ''}</div></div>`;

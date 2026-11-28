@@ -6,10 +6,10 @@
 (() => {
   'use strict';
   const params = new URLSearchParams(location.search);
-  const IDS = ['auto-repair', 'message-review', 'translator', 'weekly-rules', 'weekly-live', 'excerpt', 'ai-commitments'];
+  const R = window.AutomationRuns, IDS = R.CATS;
   const id = IDS.includes(params.get('type')) ? params.get('type') : null;
   if (!id) { location.replace('/live/automation/' + location.hash); return; }
-  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, R = window.AutomationRuns, { esc } = U;
+  const T = window.LiveTape, U = window.LiveUI, Live = window.Live, G = window.LiveAutomationGuide || {}, { esc } = U;
   const { list, known, int, link, when } = T;
   const heroArt = document.getElementById('ak-hero-art').innerHTML;
   const g = G[id] || {};
@@ -20,6 +20,9 @@
   const FIRST = 5, STEP = 20;
   let shown = FIRST, more = [], cursor, paging = false, pageFailed = false;
   const F = (v, name) => T.field(v, viewer, name);
+  const said = v => R.asOwner(v, viewer).trim().replace(/\s+/g, ' ').replace(/[。.]$/u, '')
+    .replace(/^原因[：:]\s*/u, '');
+  const resultWords = v => said(v).replace(/^这(?:一轮|次)\s*/u, '').replace(/[！？；!?]$/u, '');
   const cn = v => viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
   const mode = c => c?.setting?.mode;
@@ -65,16 +68,38 @@
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
     const title = r.excerptFallback ? '这次用了原来的回复。' : thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
-    const note = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
+    const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
+    const labelPrefix = `${t.text} · `, titlePrefix = `${title} · `;
+    const originalNote = detail.startsWith(labelPrefix) ? detail.slice(labelPrefix.length) : detail;
+    let note = originalNote.startsWith(titlePrefix) ? originalNote.slice(titlePrefix.length) : originalNote;
+    // 只去掉末尾单独一段的重复结局，保留中间的任务说明。
+    const ending = /(?:^|(?<=[。！？；])\s*|\s+·\s+)([^。！？；·]+[。！？；]?)$/u.exec(note);
+    if (ending && resultWords(ending[1]) && resultWords(ending[1]) === resultWords(title)) {
+      note = note.slice(0, ending.index);
+    }
+    const words = said(note);
+    const repeated = words && [t.text, title].map(said).some(earlier => {
+      const at = earlier.indexOf(words);
+      return at === 0 || at > 0 && /[。！？；：:·]\s*$/u.test(earlier.slice(0, at));
+    });
     const nth = r.subject && known(r.subject.round) && r.subject.round > 0 ? `第 ${int(r.subject.round)} 轮` : '';
     const ran = r.status === 'running' ? (T.stamp(r.startedAt) ? `<span class="au-nw">跑了 ${minutes((Date.now() - T.stamp(r.startedAt)) / 1000)}</span>` : '') : known(r.minutes) ? `<span class="au-nw">用了 ${minutes(r.minutes * 60)}</span>` : '';
     // 本人版：整轮对访客藏着的挂“访客看不到”、换了说法的挂“对外换了说法”（私事线 11-26）
     const why = (T.path(r.statusHref) ? ` ${link(r.statusHref, '去那张卡 ›')}` : '') + R.roundTag(r, viewer);
     // 下面那句几段（交代、第几轮、谁做的、用了多久）用“·”隔开，放不下时只在段与段之间折，短的几段整段走；
     // 点画在每段左边让开的那一截里（page.css 的 .ak-seg），折到行首那个点被裁掉，行尾不悬“·”；段与段之间零宽空格，能在这里折（和账本列表第二行同一个办法，主控 11-26）
-    const segs = [[note, false], [nth, true], [r.who?.text ? esc(r.who.text) : '', true], [ran, true]].filter(([s]) => s);
-    const meta = segs.length ? `<span class="ak-line">${segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${s}</span>`).join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
+    const who = r.who?.text ? esc(r.who.text) : '';
+    const segs = [[repeated ? '' : note, false], [nth, true], [who, true], [ran, true]].filter(([s]) => s);
+    // 说明末尾至少三个汉字一起折，避免句号前一两个字单独占一行。
+    const noteHtml = R.asOwner(note, viewer).replace(/(?:\p{Script=Han}\p{P}*){3}(?=\s*$)/u, '<span class="au-nobr">$&</span>');
+    const parts = segs.map(([s, keep], i) => `<span class="ak-seg${keep ? ' is-keep' : ''}${/[。！？；]$/u.test(segs[i - 1]?.[0]) ? ' is-after-stop' : ''}">${keep ? s : noteHtml}</span>`);
+    // 说明删短后，执行方式和用时一起换行；整组比栏还宽时，内部仍可折开。
+    if (note && !repeated && note !== originalNote && who && ran) {
+      const footer = parts.splice(-2).join('&#8203;');
+      parts.push(`<span style="display:inline-block;max-width:100%">${footer}</span>`);
+    }
+    const meta = parts.length ? `<span class="ak-line">${parts.join('&#8203;')}${why ? `<span class="ak-tail">${why}</span>` : ''}</span>` : '';
     return `<li class="ak-run" data-tone="${t.tone}"><span class="ak-run__node" aria-hidden="true"></span><time>${range(r)}</time>
       <span class="ak-run__tag"><i aria-hidden="true"></i>${t.text}</span>
       <div class="ak-run__body"><b>${r.href ? `<a href="${esc(r.href)}">${title}</a>` : title}</b>${meta ? `<small>${meta}</small>` : why ? `<small>${why}</small>` : ''}</div>
@@ -118,10 +143,11 @@
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
     const description = [esc(g.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
+    const result = F(c.last_result?.text, '上次结果');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
         <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
         <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
-        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${F(c.last_result.text, '上次结果')}</p>` : ''}
+        ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${id === 'translator' ? R.oneVersion(result, true) : result}</p>` : ''}
         <p class="ak-hero__what">${description}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>
       </div>${heroArt}</section>`;
@@ -129,17 +155,16 @@
 
   // —— 四个数：近 7 天几轮、做成、没做成、等下次检查（后台 week，三格加起来就是近 7 天） ——
   function stats(c) {
-    const w = c.week;
+    const w = c.week, s = c.recent_stats || {};
     if (!w || !known(w.runs)) return `<section class="ak-stats"><p class="tp-empty">这一类近 7 天跑了几轮，这次没读到。</p></section>`;
     const from = T.stamp(w.from), late = from && from > Date.now() - 6.5 * 86400000;
     const repair = id === 'auto-repair';
-    const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p><p class="ak-stat__tail">${tail}</p></div>`;
-    const s = c.recent_stats || {};
+    const cell = (label, value, unit, tail, tone) => `<div class="ak-stat" data-tone="${tone}"><p>${label}</p><p class="tp-big">${T.big(value, `ak-${label}`)}${unit ? `<small>${unit}</small>` : ''}</p>${tail ? `<p class="ak-stat__tail">${tail}</p>` : ''}</div>`;
     const basis = s.basis ? U.fieldText(s.basis.text, viewer) : '';
     return `<section class="ak-stats">${cell(late ? `${esc(T.day(w.from))} 起` : '近 7 天', w.runs, '轮', known(w.average_seconds) ? `平均每轮 ${minutes(w.average_seconds)}` : '每轮多久没记下', 'plain')}
       ${cell('做成', w.completed, '', repair ? '修好或核实已恢复' : '跑完、交出了结果', 'ok')}
       ${cell('没做成', w.incomplete, '', '报错、超时或没交回结论', 'bad')}
-      ${cell('等下次检查', w.waiting, '', '跑过了，还要等下次再查', 'plain')}</section>
+      ${cell('等下次检查', w.waiting, '', '', 'plain')}</section>
       <p class="tp-small ak-basis">三格加起来就是${late ? '这几天' : '近 7 天'}的轮数。等下次检查只算实际跑过、还要等下次检查的轮次；登录过期、额度用完或暂停期间，没叫 AI 的检查不算一轮。转给${you()}的那一轮，交接办完算做成。${known(w.checks) && w.checks > 0 ? `另外程序自己看了 ${int(w.checks)} 次，没叫 AI，不算一轮。` : ''}${known(s.success) ? `近 30 天成 ${int(s.success)} · 坏 ${int(s.failed)}${basis ? `：${esc(basis)}` : ''}` : ''}</p>`;
   }
 
@@ -151,13 +176,15 @@
     const total = !known(info.total) ? '' : ai == null || ai === info.total ? `一共 ${int(info.total)} ${ai == null ? '条' : '轮'}`
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
     const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${total ? `<small>${total}</small>` : ''}</div>`;
-    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
+    if (!runs?.data && !['none', 'gone', 'paused'].includes(runs?.phase) && !(runs?.meta?.status >= 400)) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">加载中</p></section>`;
     if (!rows.length) {
       const next = catNext();
-      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? `还没跑过${next ? `，${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : ''}。` : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
+      const nextText = next ? `${mode(state?.data && catOf(state.data)) === 'off' ? '打开后' : ''}下一次 ${esc(when(next))}` : '';
+      const empty = `还没跑过${nextText ? `，${nextText}` : ''}。`;
+      return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">${runs?.data ? empty : '这会儿读不到这一类每一轮的记录。'}</p></section>`;
     }
     const left = rows.length - shown, rest = left > 0 ? left : info.more ? null : 0;
-    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '正在读…' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
+    const btn = rest === 0 ? '' : `<button type="button" class="ak-more" data-more${paging ? ' aria-busy="true"' : ''}>${paging ? '加载中' : `再看 ${int(info.more ? STEP : Math.min(STEP, rest))} 轮`} <span aria-hidden="true">›</span></button>`;
     return `<section class="tp-panel ak-panel ak-recent">${head}<ol class="ak-runs">${rows.slice(0, shown).map(runRow).join('')}</ol>${btn}
       ${pageFailed ? '<p class="tp-small" role="status">这一批没读到，可以再点一次。</p>' : ''}</section>`;
   }
@@ -184,6 +211,7 @@
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const rows = [['做什么', esc(g.purpose || g.short || '')], ['谁来做', model ? model + '（跟着模型清单走）' : '这一类用哪个型号没读到'],
       ['什么时候跑', (mode(c) === 'off' && g.offWhen ? esc(g.offWhen) : F(c.schedule_text, '排期说明')) || '这次没读到，下一轮会自动再读。']];
+    if (id === 'weekly-laptop' && g.off) rows.push(['关了会怎样', esc(g.off)]);
     const subs = list(c.subcategories);
     if (subs.length) rows.push(['各小类', `<div class="ak-subs">${subs.map(sub => {
       const m = mode(sub), off = state?.offline || !m;
@@ -301,7 +329,7 @@
     if (!c) {
       const phase = state?.phase;
       const note = phase === 'slow' ? (state.warming ? '后台还在准备这一类的任务，准备好了这里会自己换上。' : '这一类自动任务要多读一会儿，读到后会自动显示。')
-        : phase === 'idle' || phase === 'wait' ? '正在读这一类自动任务…' : d ? '这一类自动任务没读到。' : '';
+        : phase === 'idle' || phase === 'wait' ? '加载中' : d ? '这一类自动任务没读到。' : '';
       T.paint(page.root, note ? `<p class="tp-placeholder" role="status">${note}</p>` : T.placeholder(state, '这一类自动任务'));
       page.tick.set([], { off: true });
       return;

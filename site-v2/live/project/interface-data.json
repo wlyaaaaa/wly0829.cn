@@ -6,6 +6,7 @@
     ["/live/project/interfaces/passwordcenter/04-thumb.webp", "/live/project/interfaces/passwordcenter/04.png", "已连接的手机：能批准绑定、解除绑定、删除记录（演示数据）"],
     ["/live/project/interfaces/passwordcenter/05-thumb.webp", "/live/project/interfaces/passwordcenter/05.webp", "解锁个人资料前先选怎么验证：通行密钥、动态验证码、恢复码、账号验证四选一（9 月 24 日）"],
     ["/live/project/interfaces/passwordcenter/06-thumb.webp", "/live/project/interfaces/passwordcenter/06.webp", "用手机验证器上的 6 位动态码验证（9 月 24 日）"],
+    ["/live/project/interfaces/passwordcenter/08-thumb.webp", "/live/project/interfaces/passwordcenter/08.webp", "用电脑上存的通行密钥验证，系统弹窗里也能改用手机确认（9 月 24 日）"],
     ["/live/project/interfaces/passwordcenter/07-thumb.webp", "/live/project/interfaces/passwordcenter/07.webp", "这次解锁多久：0.5～72 小时，无限制授权要不要一起开单独选（9 月 24 日）"]
   ],
   "proxyclean": [
@@ -21,11 +22,6 @@
   "pc-panel-hub": [
     ["/live/project/interfaces/pc-panel-hub/01-thumb.webp", "/live/project/interfaces/pc-panel-hub/01.png", "机箱竖屏这一刻的画面：时间天气、CPU、显卡、内存、硬盘读写和最忙的几个程序（11 月 26 日 10:54，程序自己写出的那一帧）"],
     ["/live/project/interfaces/pc-panel-hub/02-thumb.webp", "/live/project/interfaces/pc-panel-hub/02.webp", "曲面屏平时的样子：没事时只在壁纸上显示手机电量和时间（11 月 26 日晚上，AI 在后台截）"]
-  ],
-  "video-scaffold": [
-    ["/live/project/interfaces/video-scaffold/01-thumb.webp", "/live/project/interfaces/video-scaffold/01.webp", "有声预览页：左边选场，点一个字跳到那一秒，能调动画跟哪句词（测试样片）"],
-    ["/live/project/interfaces/video-scaffold/02-thumb.webp", "/live/project/interfaces/video-scaffold/02.webp", "自动做出来的封面（测试样片，标题是测试名）"],
-    ["/live/project/interfaces/video-scaffold/03-thumb.webp", "/live/project/interfaces/video-scaffold/03.webp", "成片里的一帧：字叠在循环的玻璃背景上（测试样片）"]
   ],
   "localocr": [
     ["/live/project/interfaces/localocr/01-thumb.webp", "/live/project/interfaces/localocr/01.webp", "原图：一张合成的采购单，有标题、六列表格和合计"],

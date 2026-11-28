@@ -46,6 +46,10 @@
   const marked = (html, row, keys, what) => html ? html + mark(row, keys, what) : html;
   const protectedField = d => viewer === 'public' && (d?.visibility === 'owner' || d?.public === 'owner' || d?.hidden === true);
   const variantOf = d => d.automation_group === 'ai-pickup' ? 'pickup' : d.automation_group === 'ai-schedule' ? 'schedule' : 'plan';
+  const purpose = (d, kind) => {
+    const value = d.purpose ?? d.text;
+    return kind === 'schedule' && text(value).trim() === '按设定周期运行 AI 任务' ? '' : marked(field(value, '用途'), d, ['purpose', 'text'], '用途');
+  };
   const failureResult = value => value === 'failed' || value === 'stopped';
   // 平台名：三家都认（Antigravity 的定时详情 11-25 起也走这一页，M921）
   const PROVIDERS = { codex: 'Codex', claude: 'Claude', antigravity: 'Antigravity' };
@@ -114,7 +118,7 @@
     const groupLink = $('crumb-group');
     groupLink.hidden = !group;
     if (group) { groupLink.textContent = group; groupLink.href = route(list, { group: groupId }); }
-    write($('crumb-name'), marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
+    write($('crumb-name'), kind === 'schedule' ? '' : marked(field(d.display_name ?? d.name, '任务名'), d, ['display_name', 'name'], '任务名'));
   }
   back.addEventListener('click', U.restoreBack);
   $('runs-rest').addEventListener('click', e => {
@@ -310,7 +314,7 @@
     const info = kind === 'plan' ? [mode, d.scheduler === 'windows' && 'Windows 计划任务', group && `分组为${group}`]
       : kind === 'pickup' ? ['AI 自动接活', d.trigger_text, d.executor] : ['AI 定时任务', bjSchedule(d) ?? d.schedule];
     write($('task-meta'), info.filter(Boolean).map(v => field(v, '任务说明')).join(' · '));
-    write($('task-purpose'), marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途'));
+    write($('task-purpose'), purpose(d, kind));
     write($('task-week'), quiet ? `<div class="task-week"><strong>${quiet}</strong></div>` : kind === 'plan' ? week(d.days7, runs) : '');
     // 后台给了这条任务能做的事（actions）就照它画，空的就不画；老包没有这个字段时照原来两个按钮，停用的不画“问停法”
     const off = d.state === 'disabled' || d.enabled === false;
@@ -328,6 +332,25 @@
     const roll = t => valid(t) && t < now && !offline && period > 0 ? t + Math.ceil((now - t) / period) * period : t;
     return [...new Set([next, ...known].map(time).map(roll).filter(t => valid(t) && (offline || t >= now)))].sort((a, b) => a - b).slice(0, 3);
   }
+  function schedulePrompt(d, kind) {
+    $('scheduled-prompt').hidden = kind !== 'schedule';
+    const facts = $('task-prompt-facts');
+    if (kind !== 'schedule') { U.html(facts, '', false); return; }
+    const { text: raw, delivery, model } = d.scheduled_prompt || {};
+    const source = PROVIDERS[text(d.scheduler).toLowerCase()];
+    const displayModel = model === 'gemini-4-hydrogen-low' ? 'Gemini 4 Hydrogen（low）' : esc(model);
+    const send = { wake: '叫醒原来那场对话，不新开', new: '新开一场对话' };
+    const rows = [
+      ['发给 AI 的原话', '<div class="task-prompt__text"></div>'],
+      Object.hasOwn(send, delivery) && ['怎么发', send[delivery]],
+      delivery === 'wake' && ['型号', '用原来那场对话的型号，这条定时自己不指定'],
+      delivery === 'new' && ['型号', displayModel || '型号没读到'],
+      raw && typeof source === 'string' && ['改了会怎样', `<span class="task-prompt__source">原话从 ${source} 的定时定义里直接读，改了定时，这里下一次刷新就跟着变</span>`],
+    ];
+    U.html(facts, rows.filter(Boolean).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join(''), false);
+    const prompt = facts.querySelector('.task-prompt__text'), value = raw || '这类读不到原话';
+    if (prompt.textContent !== value) prompt.textContent = value;
+  }
   function facts(d, kind) {
     const link = (url, value) => value ? `<a href="${esc(url)}">${value} ›</a>` : '';
     const project = typeof d.project === 'string' && d.project !== 'project-b9c775111c7c33539ba1941c'
@@ -335,7 +358,9 @@
     // M767：所属项目在访客版看不到的（后台标 visitor_labels.project_name），本人版在项目名后挂签
     const projectCell = marked(project, d, 'project_name', '所属项目');
     const rows = [
-      ['做什么', marked(field(d.purpose ?? d.text, '用途'), d, ['purpose', 'text'], '用途')],
+      ['做什么', purpose(d, kind)],
+      kind === 'plan' && Object.hasOwn(d, 'expected_result') && ['怎么算做完', marked(field(d.expected_result, '怎么算做完'), d, 'expected_result', '怎么算做完')
+        || '<span class="task-fact-missing">登记时没写怎么算做完</span>'],
       ['成果', marked(field(d.output, '成果'), d, 'output', '成果')],
       kind === 'pickup' ? ['什么时候触发', field(d.trigger_text, '触发条件')]
         : ['时间安排', kind === 'plan' && d.state === 'disabled' ? esc(disabledStatus(d)) : field((kind === 'schedule' ? bjSchedule(d) : null) ?? d.schedule ?? (kind === 'plan' ? triggerLine(d) || null : null), '时间安排')],
@@ -374,7 +399,7 @@
     return `<details class="task-run-extra"${open ? ' open' : ''}${path ? ` data-results="${esc(path)}"` : ''}><summary>这次的记录</summary>${info.map(v => `<p>${v}</p>`).join('')}${path ? '<div data-result-content>正在读逐项结果</div>' : ''}</details>`;
   }
   function history(d, rows, kind, open, heads = true) {
-    if (!rows.length) return neverRan(d, kind) ? '<p>还没跑过，跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
+    if (!rows.length) return neverRan(d, kind) ? '<p>跑过以后每一次都列在这里</p>' : d.coverage?.complete && Array.isArray(d.runs) && !d.runs.length
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
@@ -454,8 +479,9 @@
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
     const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
-    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? `还没跑过${upcoming[0] ? `，第一次在 ${stamp(upcoming[0], true)}` : ''}` : '');
+    const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? '还没跑过' : '');
     crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
+    schedulePrompt(d, kind);
     // 统计格用同一批次的结果；旧包按格里使用的次数分档。
     $('task-stats').dataset.outcome = kind === 'plan' ? outcome : '';
     // “已读部分没有”要和格名连着读：合成一整句（“已读部分没有出错”）写在一行，格名不再另起一行（主控 11-26 看 07a、07b：原来拆成“已读部分没有／出错”两行）。
@@ -516,6 +542,7 @@
   }
   function empty(message, denied = false, revoked = false) {
     stopChecks(); task = null; document.title = '任务详情 · 实况';
+    U.html($('task-prompt-facts'), '', false);
     for (const key of ['task-body', 'task-status', 'task-meta', 'task-purpose', 'task-week', 'task-acts', 'crumb-name', 'crumb-group']) $(key).hidden = true;
     const text = esc(message);
     U.html($('name'), denied ? field({ visibility: 'owner' }, '这个任务的内容')
@@ -539,7 +566,7 @@
         offline = !!state.offline;
         document.body.classList.toggle('task-offline', offline);
         if (valid(time(state.now))) now = time(state.now);
-        U.list($('notices'), offline ? [{ key: 'offline', cls: 'notice glass', html: field(state.text, '连接情况') }] : [], { animate: false });
+
         if (state.meta?.status === 403 || protectedField(task)) empty('这项任务仅本人可见', true);
         else if (task?.q === 'warming') empty('正在准备任务记录');
         else if (task && (changed || before !== offline)) { render(task); reading.done(); }

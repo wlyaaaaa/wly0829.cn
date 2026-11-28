@@ -204,12 +204,11 @@
     return { root, tick };
   }
   const viewerOf = state => state?.meta?.viewer?.kind === 'owner' || state?.viewer?.kind === 'owner' ? 'owner' : 'public';
-  // 连不上时不在标题下再写一遍：页顶那张卡（全站同一个，live-ui）已经写了几点起连不上、下面是几点的数据，
-  // 这里再写就是同一句话两处（D6；同本人 R11 实况首页断线和灰提醒合成一条）。暂停公开照旧写。
+  // 连接状态统一由页顶横幅显示。暂停公开仍在这里说明。
   const stateNote = (state, label) => state?.publicPaused ? `<p class="tp-note" data-tone="off">${esc(state.text)}</p>` : '';
   // 整页没存下来时直接说哪一块没存下来：“自动任务没存下来，连上后补上。”（这一页没有别的标题；首页有卡名的卡照旧写“这块没存下来，连上后补上。”）
   const placeholder = (state, label) => `<p class="tp-placeholder" role="status">${esc(state?.offline ? `${label}没存下来，连上后补上。`
-    : ['none', 'gone', 'error'].includes(state?.phase) || state?.meta?.status >= 400 ? `${label}暂时没读到。` : `正在读${label}…`)}</p>`;
+    : ['none', 'gone', 'error'].includes(state?.phase) ? `${label}暂时没读到。` : '加载中')}</p>`;
   // 保留展开、收起状态后整块重画
   function paint(root, html) {
     const open = new Map([...root.querySelectorAll('details[id]')].map(el => [el.id, el.open]));
