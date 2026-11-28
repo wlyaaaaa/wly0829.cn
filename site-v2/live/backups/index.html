@@ -12,6 +12,9 @@
 <div class="fold" id="rest-box"><div><ul class="rows list" id="rest"></ul></div></div><button class="more" type="button" id="more" hidden></button><p class="pj-note" id="coverage"></p></section>
 <section class="l2-col" id="restore" data-mo-rise><p class="part" data-keep>恢复点与最近一次恢复</p><ul class="rows list" id="points"></ul></section></div></main>
 <style>
+.page--backups #backup-matrix { isolation: isolate; }
+/* 恢复区在页尾，内容短时也要有足够的滚动距离让标题停在页眉下。 */
+.page--backups #restore:target { min-height: calc(84vh - var(--live-anchor-gap)); }
 .page--backups :is(#sets, #rest) > .notice-target { outline: none; box-shadow: inset 2px 0 0 #00a650; }
 .page--backups #more[aria-expanded="true"] .more__shut, .page--backups #more:not([aria-expanded="true"]) .more__open { display: none; }
 .page--backups #more[aria-expanded="true"] .more__chev { rotate: -90deg; }

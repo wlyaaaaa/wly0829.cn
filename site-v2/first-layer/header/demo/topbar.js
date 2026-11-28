@@ -90,19 +90,20 @@
     const inset = (parseFloat(bs.left) || 0) + (parseFloat(bs.right) || 0);
     const frame = inset + parseFloat(bs.paddingLeft) + parseFloat(bs.paddingRight);
     const gaps = 2 * parseFloat(bs.columnGap);
-    const [left, right] = groups.map(group => parseFloat(getComputedStyle(group).width));
+    const zoom = parseFloat(bs.zoom);
+    const [left, right] = groups.map(group => group.getBoundingClientRect().width / zoom);
     const named = parseFloat(br.paddingLeft) + lamp.offsetWidth + NAME_GAP + w + parseFloat(br.paddingRight);
     const needed = Math.ceil(frame + left + named + right + gaps);
-    const zoom = parseFloat(bs.zoom);
     // 按固定页眉实际拿到的窗口宽度算，包含两侧边距，但不把纵向滚动条的留白算进去。
-    const room = Math.round(bar.getBoundingClientRect().width + inset * zoom);
+    const room = Math.floor(bar.getBoundingClientRect().width + inset * zoom + .01);
     if (room >= needed) bar.style.removeProperty('--fit-zoom');
-    // 缩放会让字宽取整略有变化，忽略这点误差，避免来回缩放。
-    else if (Math.abs(needed * zoom - room) > 2) bar.style.setProperty('--fit-zoom', room / needed);
+    // 放大时才容许取整误差。内容一旦超宽就重算，页眉连同站名一起缩。
+    else if (needed * zoom > room + .01 || needed * zoom < room - 2) bar.style.setProperty('--fit-zoom', room / needed);
   }
   // 按钮换字、增减时，整组的自然宽度跟着变。
   const sized = new ResizeObserver(fit);
   groups.forEach(group => sized.observe(group));
+  sized.observe(bar);
   sized.observe(document.documentElement);
 
   const TOP = 12;     // 离顶上这么近都算“在最顶上”

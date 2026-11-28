@@ -9,6 +9,7 @@
 .page--live {
   --col: min(1360px, calc(100vw - 160px));
   --pad: calc(var(--bar-bottom) + 34px);
+  --live-anchor-gap: calc(var(--bar-bottom) + 20px);
   --gut: 25px;                      /* 第一行灯的位置：灯 12 + 间距 13；下面各行的字和第一行的字对齐 */
   --sp: var(--mo-speed, 1);
   --t-lamp: calc(200ms * var(--sp));
@@ -17,6 +18,8 @@
 }
 .page--live .stage { padding-bottom: 16vh; opacity: 1; transition: none; }
 .page--live [hidden] { display: none !important; }
+/* 已有专用落点间距的段落仍沿用自己的间距。 */
+:where(.page--live .stage [id]) { scroll-margin-top: var(--live-anchor-gap); }
 
 /* 玻璃后面的光场：长页从上到下都铺一点，玻璃才有东西可透；左右只铺到窗口边，不撑出横向滚动 */
 html:has(.page--live) { overflow-x: clip; }

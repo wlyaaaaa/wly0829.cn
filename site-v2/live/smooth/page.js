@@ -1,7 +1,12 @@
 (() => {
   'use strict';
   const V = window.LiveViz, C = window.LiveChart, U = window.LiveUI, S = window.LiveStat;
-  const sync = C.sync(), board = V.board(document.getElementById('board'), { key: 'smooth', sync, quiet: true });
+  const host = document.getElementById('board');
+  const sync = C.sync(), board = V.board(host, { key: 'smooth', sync, quiet: true });
+  let boardPending = location.hash === '#board' && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward';
+  for (const event of ['wheel', 'touchmove', 'pointerdown', 'keydown']) {
+    addEventListener(event, () => { boardPending = false; }, { passive: true });
+  }
   const hero = document.getElementById('hero'), part = name => hero.querySelector(`[data-part="${name}"]`);
   const line = (id, label, hue) => ({ id, label, hue });
   const chips = [
@@ -658,6 +663,12 @@
       document.getElementById('smooth-thresholds').textContent = thresholds ? join('近 24 小时', thresholds) : '';
       renderHero();
       board.set(groups());
+      // 首批读数会改变明细上方的高度，画完后再对齐链接落点。
+      if (d && boardPending) requestAnimationFrame(() => {
+        if (!boardPending || location.hash !== '#board') return;
+        boardPending = false;
+        host.scrollIntoView({ block: 'start', behavior: 'instant' });
+      });
     } });
   window.Live.watch('computer/hardware', null, { data(d) {
     hardwareStatus = d?.game_status || null;

@@ -28,6 +28,11 @@
   const BAD = ['stale', 'gap', 'mostly', 'partial', 'failed'];
   const plain = text => { const note = D.backupRestoreNote(text); return note !== text ? note : ''; };
   let data = null, headline = '', lit = false, viewer = 'public';
+  let restorePending = location.hash === '#restore' && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward';
+  addEventListener('hashchange', () => { restorePending = location.hash === '#restore' && !$('points').childElementCount; });
+  for (const event of ['wheel', 'touchmove', 'pointerdown', 'keydown']) {
+    addEventListener(event, () => { restorePending = false; }, { passive: true });
+  }
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
   const bar = U.topbar({ ask: () => `请看实况备份：${headline || U.collectionText()}。请说明现在的情况。` });
@@ -388,6 +393,12 @@
     const coverage = [d.coverage?.local_note, d.columns?.local?.note].some(note => note && sp(note) === sp(d.coverage)) ? '' : U.fieldHtml(d.coverage, { name: '备份范围', place: 'body', kind: viewer });
     U.html($('coverage'), coverage); $('coverage').hidden = !coverage;
     if (!lit) { lit = true; L.lightUp([hero, $('backup-matrix'), $('sets'), $('points')]); }
+    // 表格和恢复点到齐后再落一次，避免打开链接时停在未填满的表格位置。
+    if (restorePending) requestAnimationFrame(() => {
+      if (!restorePending || location.hash !== '#restore') return;
+      restorePending = false;
+      $('restore').scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
     U.land({ keepOnBack: true });
   }
   window.Live.watch('backups', null, { phase(s) { if (s.data == null && !s.meta?.publicationRevoked) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },
