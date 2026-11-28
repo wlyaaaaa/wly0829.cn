@@ -7,8 +7,8 @@
   const stats = ['submission_pdf_versions', 'formal_files', 'signed_records', 'case_dirs',
     'matter_dirs', 'docs_files', 'code_files', 'tracked_files'];
   const moreLabels = {
-    signed_records: '定稿记录（上方按 PDF 内容去重，这里含副本）',
-    docs_files: 'Git 跟踪的 Markdown 文档',
+    signed_records: '定稿留存记录（含重复）',
+    docs_files: '仓库里的 Markdown 文档',
   };
   const files = stats.slice(5);
   const consumed = new Set(['made', 'recent', 'more-data']);
@@ -62,11 +62,16 @@
   }
 
   function moreData(metrics, section, size, viewer) {
+    const versions = metrics.signed_versions?.value;
+    const signedNote = Number.isFinite(versions)
+      ? `同一份定稿存过几次都算；上面的 ${count(versions)} 版是去掉重复后的数。`
+      : '同一份定稿存过几次都算。';
     const render = key => {
       const m = metrics[key];
       if (!m) return '';
       const label = moreLabels[key] || m.label;
-      return `<div><dt>${esc(label)} ${U.visitorLabel(m, 'label', label, viewer)}</dt><dd>${qty(m.value, esc(m.unit))}</dd></div>`;
+      const detail = key === 'signed_records' ? `<small class="docs-metric-detail">${esc(signedNote)}</small>` : '';
+      return `<div><dt>${esc(label)} ${U.visitorLabel(m, 'label', label, viewer)}${detail}</dt><dd>${qty(m.value, esc(m.unit))}</dd></div>`;
     };
     const through = metrics.signed_records?.at || metrics.case_dirs?.at;
     const fileAt = files.map(key => metrics[key]?.at).find(Boolean);

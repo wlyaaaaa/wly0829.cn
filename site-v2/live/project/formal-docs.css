@@ -68,6 +68,7 @@
 .docs-metrics { margin: 0; font-size: 15px; }
 .docs-metrics > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--hair); }
 .docs-metrics dd { font-weight: 600; }
+.docs-metric-detail { display: block; margin-top: 2px; color: var(--muted); }
 .docs-unavailable { margin: 10px 0; font-size: 13.5px; }
 .docs-foot { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; align-items: start; margin-top: auto; padding-top: 16px; }
 .docs-foot:has(> .docs-pager) { align-items: baseline; }
