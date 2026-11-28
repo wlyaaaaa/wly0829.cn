@@ -570,7 +570,7 @@
     const status = U.status?.(r, { small: true }) || {}, lamp = ['amber', 'red', 'blue', 'gray'].includes(status.tone);
     if (lamp && status.note) cells[0] += `<small>${status.note}</small>`;
     // 技能：只有一列次数的表把 Claude、Codex 各自的数摆在名字下面；三家分列的用量表（skillUsageTable）另取 nameCell、skillMore，各家的数有自己的列
-    const nameCell = cells[0], skillMore = skills ? detailOf(r) : '';
+    const nameCell = cells[0], skillMore = skills ? detailOf(r, /\blive-mark--(?:reworded|rewritten)\b/.test(label + mark)) : '';
     if (skills) cells[0] += skillMore;
     // 技能一次也没用过（M747，本人 11-24 16:13 选 A，例 personal-profile）：没有最近一次、近 30 天 0 次、各家累计也是 0；只是没读到的不算。
     // “很久没用”卡把它排最前、写“没用过”，表里“最近使用日期”也写“没用过”
@@ -586,15 +586,16 @@
     };
   }
   // 点开一行看到的：接口给的那句说明，以及各家已有的技能次数和最近一次
-  function detailOf(r) {
+  function detailOf(r, nameMarked) {
     // 接口那句只是“名字：近 30 天（有）N 次（记录）”、和次数那一列同一个数时不再重复写；空格、冒号写法不同也算同一句
     const squash = s => U.sp(String(s)).replace(/\s+/g, '').replace(/：/g, ':');
     const duplicate = skills && typeof r.text === 'string' && typeof (r.name || r.label) === 'string' && r.count != null &&
       [String(r.count), Number(r.count).toLocaleString('zh-CN')]
         .some(value => [`近30天${value}次`, `近30天有${value}次记录`].some(tail => squash(r.text) === squash(`${r.name || r.label}:${tail}`)));
-    // 标了改写的说明两版都留原位，即使其中一版与次数列重合。
-    const rewritten = U.visitorRewrittenField(r, 'text', '这个技能的说明', recordViewer);
-    const body = (!duplicate || rewritten) && r.text && (r.name || r.label) ? text(r.text) : '';
+    // 同处标一次：名字已有签时，说明沿用次数去重；有单独内容则照常显示。
+    const rewritten = !nameMarked && U.visitorRewrittenField(r, 'text', '这个技能的说明', recordViewer);
+    let body = (!duplicate || rewritten) && r.text && (r.name || r.label) ? text(r.text) : '';
+    if (nameMarked && body.includes('live-mark--reworded')) body = esc(U.fieldText(r.text, recordViewer));
     const tag = body.includes('live-mark--reworded') ? '' : rewritten;
     const say = body && body !== marker(r, recordViewer) ? `<p>${body}${tag ? ` ${tag}` : ''}</p>` : '';
     if (!skills) return say;

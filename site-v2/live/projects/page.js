@@ -334,7 +334,7 @@
       const valueLine = rule ? `<a class="pj-fig__link pj-fig__v" title="${esc(text)}" href="/rules/">${valueHtml}</a>`
         : `<span class="pj-fig__v${/还没读到|还在采集|开始记|没有记录/.test(text) ? ' row__sub' : ''}${[...text].length > 11 ? ' is-long' : ''}" title="${esc(marked ? '' : text)}">${valueHtml}</span>`;
       const valueTag = !valueHtml.includes('live-mark--reworded') && U.visitorRewrittenField(h, ['$', 'value', 'text'], '这个读数', viewer);
-      const valueMark = valueTag ? `<small class="pj-fig__mark">${valueTag}</small>` : '';
+      const valueMark = valueTag ? `<small class="pj-fig__mark">${valueTag.replace('<button ', '<button style="margin-left:0" ')}</small>` : '';
       const reading = (hasText ? labelLine + labelMark + valueLine + valueMark : '') + (hasText || through ? scopeHtml + readAt : '');
       return { key: it.id, href: it.href, secret: hidden, group: PHASE_GROUPS[groupOf(it)] || '未分档', cls: 'pj-fig', html: `${status.lamp}${it.href ? `<a class="pj-fig__link" title="${esc(it.name || it.label || it.title || it.id)}" href="${esc(route(it.href))}">${shown} ›</a>` : `<span class="pj-fig__k">${shown}</span>`}${reading}${hasText && window.LiveProjectViz.lower(h, 'value') && window.LiveProjectViz.gap(h) ? `<small class="pj-fig__sub">${dateHtml(U.fieldHtml(window.LiveProjectViz.gap(h), { name: '读数说明', kind: viewer }))}</small>` : ''}${recent(it)}${phase ? `<small class="pj-fig__sub">${U.fieldHtml(phase, { name: '项目分档', kind: viewer })}</small>` : ''}${status.note ? `<small class="pj-fig__sub">${dateHtml(status.note)}</small>` : ''}${note ? `<small class="pj-fig__mark">${note}</small>` : ''}` };
     }), '没有在用的项目');
