@@ -2,8 +2,6 @@ img[data-image-state] {background:#eee9df;color:transparent}
 img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !important}
 .picture:has(> img[data-image-state]),.piece__frame:has(> img[data-image-state]) {background:linear-gradient(110deg,#eee9df,#faf7ef,#eee9df)}
 .picture:has(> img[data-image-state="pending"])::after,.picture:has(> img[data-image-state="retry"])::after,.piece__frame:has(> img[data-image-state="pending"])::after,.piece__frame:has(> img[data-image-state="retry"])::after {content:'';position:absolute;left:50%;top:50%;width:1.5rem;height:1.5rem;margin:-.75rem;border:2px solid #b4aa97;border-top-color:transparent;border-radius:50%;pointer-events:none}
-/* 手机“桌面版”会忽略 viewport；只给小屏触控的导航留足原宽，电脑窗口和触屏笔记本不变。 */
-@media (pointer:coarse) and (max-device-width:1024px) {.topbar#topbar {grid-template-columns:minmax(max-content,1fr) auto minmax(max-content,1fr)}}
 /* 页眉（除首页外各页共用）
    排法和比例照 Anthropic 官网的页眉；材质是一层半透明的磨砂玻璃。
    会动的三件事：往下滑收起、往上滑出现；离开页面顶上时，中间那行字收进小绿灯里。
@@ -27,7 +25,6 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
   height: var(--bar-h);
   padding-inline: var(--pad-x);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   color: var(--ink);
   font-family: "SiteSans", "HarmonyOS Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
@@ -113,7 +110,7 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
+  width: max-content;
 }
 
 .topbar__group--right { justify-self: end; }
@@ -268,16 +265,18 @@ img[data-image-state="retry"],img[data-image-state="failed"] {opacity:0 !importa
   html:has(.wall),body:has(.wall) {overflow-x:clip}
 }
 
-/* 电脑窗口拉窄：topbar.js 按这一页两边实际的按钮量出放不放得下，写在 data-fit 上（1440 宽、手机都是 center，不受影响）。
-   tight：居中放不下，站名往空的一边让，两边按钮不压到站名底下；
-   lamp：站名放不下，像往下滑时那样只留小绿灯（仍是回首页）；
-   zoom：小绿灯也放不下（实况页右边多两颗），整条页眉按比例缩小，入口一个不丢。
-   用 :where 压低优先级，实况项目页自己那套窄窗排法照旧。不到 680 宽时按钮再收紧一点（只对鼠标设备）。 */
-:where(.topbar):is([data-fit="tight"], [data-fit="lamp"], [data-fit="zoom"]) { grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); column-gap: 12px; }
-:where(.topbar):is([data-fit="lamp"], [data-fit="zoom"]) .brand__word { width: 0; margin-left: 0; overflow: clip; }
-:where(.topbar):is([data-fit="lamp"], [data-fit="zoom"]) .brand .ch { opacity: 0; }
-:where(.topbar)[data-fit="zoom"] { zoom: var(--fit-zoom, 1); }
-:where(.topbar)[data-fit-first] :is(.brand__word, .ch) { transition: none; }
+/* 两边够宽就平分余量，站名居中；某组按钮过长时，先给它留足宽度，再摆站名。 */
+.topbar, .page--live #topbar.topbar[data-state] {
+  grid-template-columns: minmax(max-content, 1fr) max-content minmax(max-content, 1fr);
+  column-gap: 12px;
+  zoom: var(--fit-zoom, 1);
+}
+/* 实况项目页的窄窗样式会裁去站名，这里让站名和其他页面一样按自然字宽摆放。 */
+.page--live #topbar.topbar[data-state] > .brand {
+  width: auto;
+  padding-inline: 12px;
+  container-type: normal;
+}
 @media (max-width:679.98px) and (pointer:fine) {
   .topbar .topbar__group { gap: 6px; }
   .topbar .pill { padding: 0 10px; }
