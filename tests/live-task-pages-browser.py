@@ -94,7 +94,7 @@ with service as server, sync_playwright() as pw:
             expect(page.get_by_text(text, exact=False).and_(page.locator(':visible')).first).to_be_visible()
             assert page.get_by_role('link', name='夹具 Windows 备份', exact=True).count() == int(label == '计划任务' and not old)
             if label == '计划任务' and not old:
-                expect(page.locator('#changes')).to_contain_text('任务变更记录没读到')
+                expect(page.locator('#changes')).to_contain_text('任务变更记录这次没读到')
                 expect(page.locator('.task-compact [data-state="unknown"]').first).to_be_visible()
             if len(sys.argv) > 2 and not old: page.screenshot(path=Path(sys.argv[2]) / f'{audience}-{path.split("/")[2]}.png')
         if not old:

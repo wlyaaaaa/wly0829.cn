@@ -330,7 +330,7 @@
         if (s.meta?.status === 404) { empty('这件不在账上了，可能已经并进别的一件'); return; }
         if (ended) return;
         heroRead.set(s); restRead.set(s);
-        if (s.phase === 'gone') empty('这块没存下来，连上后补上。');
+        if (s.phase === 'gone') empty(s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这一件暂时读不到');
         else if (s.phase === 'none') empty('这一件暂时读不到');
       } finally { [hero.querySelector('.card__body'), $('rest')].forEach(el => U.blockNote(el, s)); }
     },

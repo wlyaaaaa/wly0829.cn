@@ -35,7 +35,7 @@
   // 今天没做成几轮（results_today.failed_runs，和 finished_runs 同一个数法：每轮真实结束记录算一轮，跨夜那轮归结束那天）、
   // 今天每一轮的点（results_today.runs_today=[{finished_at, ok, href}]）：读到了但今天还没跑完一轮给 0 和空列表，照画（空时间条只有“现在”）；
   // 读不到轮次给 null，这一行和时间条都不画。
-  function automationView(d, { viewer }) {
+  function automationView(d, { viewer, now }) {
     const today = d.results_today && typeof d.results_today === 'object' ? d.results_today : {};
     // 今天跑完了几轮：后台 results_today.finished_runs，和自动任务页“今天跑完的”同一口径
     const finished = count(today.finished_runs) ? today.finished_runs : null;
@@ -54,7 +54,9 @@
       return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: R.runPage(p.href) };
     });
     const aiSeconds = count(today.ai_seconds) ? today.ai_seconds : count(d.today?.ai_minutes) ? d.today.ai_minutes * 60 : null;
+    const zeroAt = today.at || d.at;
     return { finished, failed, runs, week, running, problems, aiSeconds,
+      noAiWork: today.ai_seconds === 0 && today.ai_coverage_complete === true && Number.isFinite(Date.parse(zeroAt)) && dayStart(zeroAt) === dayStart(now),
       todayHref: R.listHref({ date: 'today' }), failedHref: R.listHref({ date: 'today', status: 'incomplete' }) };
   }
 
@@ -174,7 +176,7 @@
     const attention = path => typeof path === 'string' && /^\/live\/(?:items?\/|[?#])/.test(path);
     const d = data || {};
     if (id === 'automation') {
-      const v = automationView(d, { viewer }), toOwner = !offline && attention(d.attention?.href);
+      const v = automationView(d, { viewer, now }), toOwner = !offline && attention(d.attention?.href);
       const problem = !offline && v.problems.length > 0;
       const repairing = v.problems.filter(p => p.repairing).length;
       const tone = offline ? 'off' : toOwner ? 'owner' : problem ? (repairing ? 'repair' : 'owner') : d.health?.state_code === 'lost' ? 'off' : Array.isArray(d.problems) ? 'ok' : 'off';
@@ -198,7 +200,7 @@
       // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
         : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${go(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
-          : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个没读到'}</p>`;
+          : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
       // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
       const problemLine = p => {
         // 摘一句的故障回包有时把沿用的原回复当成原因给出；“这轮沿用原话”是退回原回复的结果。
@@ -212,7 +214,7 @@
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
       const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 <span class="live-unit">${num(w.repaired)} 件</span>&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
       return { tone, head, body: publicHtml(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
-        <p class="b6-muted b6-foot">${v.aiSeconds != null ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时还没读到'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
+        <p class="b6-muted b6-foot">${v.noAiWork ? '今天后台 AI 还没干活' : v.aiSeconds > 0 ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时<span class="live-unit">这次没读到</span>'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
     }
     if (id === 'agents') {
       const v = agentsView(d, { viewer, now });

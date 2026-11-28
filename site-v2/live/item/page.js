@@ -75,7 +75,7 @@
     const attempted = !privateItem && d.kind === 'ledger' && d.event === 'attempt' && latest?.event === 'attempt' && d.at && latest.at === d.at
       && d.outcome == null && d.state == null && !d.closed_at && !d.outcome_text;
     const confirmed = !issue && viewer === 'owner' ? U.confirmedItemState(d) : '';
-    const label = issue ? outcomeLabel(d.outcome) || STATE[d.state] || (attempted ? '已尝试处理，结果未记录' : '')
+    const label = issue ? outcomeLabel(d.outcome) || STATE[d.state] || (attempted ? '已尝试处理，回执没写结果' : '')
       : d.closed ? CLOSED[d.closed.kind] || '已了结'
       : confirmed || (d.verifying ? '待 AI 核实' : Date.parse(d.snoozed_until) > Date.now() ? '晚点再提醒' : KIND[d.kind]);
     const kindLabel = !issue && label ? addressed(label, viewer) : label;
@@ -280,7 +280,7 @@
     hero.classList.toggle('is-unavailable', !U.offline?.() && /暂时读不到$/.test(message));
     const noteClass = title ? 'rec-none item-read-note' : 'rec-none';
     // 档案卡的“现在怎样”在下面那栏里，整栏收起时这句话改写在页头正文的位置（part lead）。
-    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="${noteClass}">${esc(issue ? '这块没存下来，连上后补上。' : message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
+    if (U.offline?.() && !denied && !/没有说|未找到|暂时读不到$/.test(message)) { const box = part('lead') || part('say'); for (const k of ['say', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; } U.html(part('head'), U.head(issue ? '这条账本' : '这件事', { lamp: false })); U.html(box, `<span class="${noteClass}">${esc(message)}</span>`); box.hidden = false; part('meta').hidden = part('acts').hidden = $('rec').hidden = true; L.tone(hero, 'off'); heroRead.done(); detailsRead.done(); return; }
     U.html(part('head'), denied ? marker({ visibility: 'owner' }, viewer, issue ? '这条账本的内容' : '这件事的内容') : U.head(message, { lamp: !issue }));
     for (const k of ['meta', 'say', 'acts', 'lead', 'state', 'note']) { const el = part(k); if (el) el.hidden = true; }
     if (title) {
@@ -470,7 +470,7 @@
       if (revoked) { clearRecord(); empty(revoked, false, '这件事'); return; }
       if (record || searching && s.phase !== 'gone') { if (record && s.offline) render(); return; }
       heroRead.set(s); detailsRead.set(s);
-      if (s.phase === 'gone') empty(s.say || '这块没存下来，连上后补上。');
+      if (s.phase === 'gone') empty(issue ? s.viewer?.kind === 'owner' ? '离线时没存这件的详情' : '这条账本暂时读不到' : s.say || '这块没存下来，连上后补上。');
       else if (s.phase === 'none') empty(`${issue ? '这条账本' : '这件事'}暂时读不到`);
       } finally { [hero.querySelector('.card__body'), $('rec')].forEach(el => U.blockNote(el, s)); }
     },

@@ -326,7 +326,7 @@
     const interval = x.interval_seconds;
     const every = known(interval) && interval > 0 ? interval % 60 === 0 ? `${int(interval / 60)} 分钟` : `${int(interval)} 秒` : '';
     const tick = x.last_tick_at || x.heartbeat_at;
-    if (!T.stamp(tick)) return '<span class="au-warn">派活程序几点转的没读到</span>';
+    if (!T.stamp(tick)) return '<span class="au-warn"><span class="au-nobr">派活程序</span><wbr><span class="au-nobr">上次几点转的，</span><wbr><span class="au-nobr">这次没读到</span></span>';
     const late = every && Date.now() - T.stamp(tick) > 2.5 * x.interval_seconds * 1000;
     return late ? `<span class="au-warn">派活程序 ${esc(when(tick))} 以后没再转（该每 ${every}一次）</span>`
       : `派活程序 ${esc(when(tick))} 转过一圈${every ? `，每 ${every}一次` : '，多久转一圈没读到'}`;
@@ -383,7 +383,7 @@
     const cards = running ? v.live : v.done, reading = affected(v.waiting) || (!running && v.paging);
     const missing = affected(v.missing) || (!running && v.pageFailed);
     const legacy = v.legacy && cards.length
-      ? `<p class="tp-note" data-tone="off">这会儿读不到每一轮的记录：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
+      ? `<p class="tp-note" data-tone="off">每一轮的记录这次没读到：下面先用${kinds(d)}各自最近几次拼出来，点不开经过。</p>` : '';
     const incomplete = missing && !legacy ? `<p class="tp-note" data-tone="off">这会儿${cards.length ? '有一部分' : ''}${running ? '进行中' : '跑完'}的记录没读到，下一轮会自动再读。</p>` : '';
     if (filter.view === 'running') {
       const next = shownCats(d).filter(c => c.next_at).sort((a, b) => T.stamp(a.next_at) - T.stamp(b.next_at))[0];
@@ -433,10 +433,10 @@
   // —— 下半部：近 7 天替你做成了（和右边“近 7 天后台 AI 共用了”同一个说法）——
   function results(d) {
     const r = d.results_7d || {};
-    // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句，不写“还没采上”
+    // 没有数时后台说了为什么空（如翻译官没登记项目），就照写那句。
     const cell = (label, value, unit, tail, key, why) => `<div class="au-win"><p class="au-win__label">${label}</p>
       ${known(value) ? `<p class="tp-big">${big(value, 'win-' + key)}<small>${unit}</small></p>${tail ? `<p class="au-win__tail">${tail}</p>` : ''}`
-        : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">还没采上</p>'}</div>`;
+        : why ? `<p class="tp-big tp-fog">空着</p><p class="au-win__tail">${why}</p>` : '<p class="tp-big tp-fog">没采到</p>'}</div>`;
     const translatorWhy = F(r.translator_versions_missing ?? list(d.categories).find(c => c.id === 'translator')?.result_7d?.missing_reason, '为什么空着');
     return `<section class="tp-panel au-wins" id="results"><div class="tp-panel__head"><h2>近 7 天替${you()}做成了</h2><span class="tp-asof">截至 ${esc(when(r.at || d.at))}</span></div>
       <div class="tp-grid au-wins__grid tp-divide">${cell('修好', r.repaired, '件', basis(r.repaired_basis), 'repaired')}${cell('记下', r.messages_logged, '件', `消息给${you()}`, 'messages')}
@@ -467,13 +467,13 @@
     const days = list(d.ai_usage?.total?.days_7);
     const u = d.ai_usage || {}, since = T.stamp(u.covered_since), weekStart = T.stamp(d.results_7d?.from) || Date.now() - 7 * 86400000;
     const short = known(seconds) && spent(seconds);
-    const number = !known(seconds) ? '<span class="tp-fog">还没采上</span>'
+    const number = !known(seconds) ? '<span class="tp-fog">没采到</span>'
       : short ? `<span class="tp-mid">${big(short[0], 'use-m')}<small>${short[1]}</small></span>`
       : `<span class="tp-mid">${big(Math.floor(seconds / 3600), 'use-h')}<small>小时</small> ${big(Math.round(seconds % 3600 / 60), 'use-m')}<small>分</small></span>`;
     // 合计和“三家各干了多少”点了都到智能体页“三家干了多少”那块，先选好“近 7 天”（这个数本来就是从 6 天前 0 点算到现在，和那边“近 7 天”同一段时间；
     // 两边算法不同：这里只算自动任务各类登记的每次调用，那边按三家日志里实际干活的时间算，所以数会不一样，数旁边写明这里的口径）
     const label = known(seconds) ? `<a class="au-use__go" href="${esc(T.path(WEEK_HOURS))}">${number}<span class="au-use__chev" aria-hidden="true">›</span></a>` : number;
-    const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的没有记录</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
+    const covered = `<small class="au-use__since">${known(seconds) && since && since > weekStart ? `<span>从 ${esc(when(u.covered_since))} 起记，更早的还没开始记</span>` : ''}${link(WEEK_HOURS, '三家各干了多少 ›', 'tp-link au-use__more')}</small>`;
     // 星期照上面日期格子的取法，按北京日期本身算，不用浏览器本机时区
     const names = ['日', '一', '二', '三', '四', '五', '六'];
     const chart = days.some(x => known(x.seconds)) ? T.columns({ rows: days.map((x, i) => ({ label: i === days.length - 1 ? '今天' : names[new Date(x.date + 'T12:00:00Z').getUTCDay()],
@@ -573,7 +573,7 @@
       const ran = since ? `<span data-since="${since}">已 ${minutes((Date.now() - since) / 1000)}</span>` : known(st.elapsed_seconds) ? `已 ${minutes(st.elapsed_seconds)}` : '';
       const doing = live && (F(live.activity, '正在干什么') || (live.subject ? F(live.subject.title, '这件活') : ''));
       main = `正在跑${ran ? ` · ${ran}` : ''}`; sub = doing ? `${doing.replace(/^正在/, '')}` : sub;
-    } else if (m === 'off') { tone = 'off'; main = '关着'; sub = waiting || sub; }
+    } else if (m === 'off') { tone = 'off'; main = '关着，不用排时间'; sub = waiting || sub; }
     else if (m === 'paused') { tone = 'off'; main = esc(pausedText(c.setting?.until_at) || '暂停中'); }
     else if (c.id === 'excerpt') main = excerptToday?.data && known(excerptToday.data.total) ? `今天摘了 ${int(excerptToday.data.total)} 句` : '空着';
     else if (c.id === 'ai-commitments') {
@@ -600,8 +600,8 @@
   const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
     part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
   function lastCell(c, problem) {
-    const r = c.last_result, since = c.recent_stats?.recorded_since;
-    if (!r) return `<span class="tp-muted">${since ? `${esc(when(since))} 起还没跑过` : '还没有运行记录'}</span>`;
+    const r = c.last_result;
+    if (!r) return '<span class="tp-muted">运行记录这次没读到</span>';
     const headline = problem?.headline || problem?.title || problem?.text;
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
@@ -614,11 +614,13 @@
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
     const days = list(c.daily_30d), s = c.recent_stats || {};
-    if (!days.length) return '<span class="tp-fog">还没采上</span>';
+    if (!days.length) return '<span class="tp-fog">没采到</span>';
     const since = T.stamp(s.recorded_since), late = since && since > (T.stamp(s.from) || 0) + 86400000;
     // 颜色跟柱图一样：成是绿字，坏了才是红字（M1096：原来整行一坏就全红，成也成了红字）
-    const nums = known(s.success) || known(s.failed) ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>` : '成了几轮、坏了几轮<span class="au-nobr">没读到</span>';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span>${nums}${late ? `<small><i> · </i>${esc(T.day(s.recorded_since))} 起记</small>` : ''}</span></div>`;
+    const hasCounts = known(s.success) || known(s.failed);
+    const nums = hasCounts ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>`
+      : '<span class="au-nobr">成了几轮、</span><wbr><span class="au-nobr">坏了几轮，</span><wbr><span class="au-nobr">这次没读到</span>';
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起才开始记</span></small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
@@ -629,7 +631,7 @@
   // 七类表（照第一屏图）：任务和怎么干、现在、上次结果、近 30 天、用谁、开关、›。点一行到这一类的页，“怎么干 ›”到怎么干页（本人 11-24：八类卡点进去是另一页，怎么干看机制）
   function table(d, v) {
     const cats = shownCats(d);
-    if (!cats.length) return `<section class="tp-panel" id="types"><p class="tp-empty">${d.types ? '这一版后台还没给各类的读数。' : '各类自动任务没读到。'}</p></section>`;
+    if (!cats.length) return `<section class="tp-panel" id="types"><p class="tp-empty">${d.types ? '各类的读数这次没读到。' : '各类自动任务这次没读到。'}</p></section>`;
     const offline = state?.offline;
     return `<section class="tp-panel au-board" id="types">
       <table class="tp-table au-table"><thead><tr><th scope="col">任务</th><th scope="col">现在</th><th scope="col">上次结果</th><th scope="col">近 30 天</th><th scope="col">用谁</th><th scope="col">开关</th><th scope="col" aria-label="进这一类"></th></tr></thead>

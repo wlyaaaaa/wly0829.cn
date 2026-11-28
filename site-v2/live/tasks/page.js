@@ -100,13 +100,19 @@
     : day?.state === 'ok' && day.partial ? 'observed-ok' : day?.state);
   const observedFailure = '有出错记录，全天结果未确认';
   const dayTrouble = day => ['mostly', 'partial', 'failed', 'observed-failed'].includes(dayTier(day));
+  const dayReason = window.LiveBoard.taskDayReason, dayMissing = '那天结果没读到';
   const tierCounts = o => Number.isInteger(o?.ok) && Number.isInteger(o?.failed) && o.ok + o.failed > 0 && o.state !== 'none'
     ? `（${o.exact ? '' : '已读到'}成功 ${o.ok} 次、出错 ${o.failed} 次）` : '';
   function week(d) {
     if (U.offline?.() && !Array.isArray(d.days7)) return '';
-    const labels = { ok: '跑成了', 'observed-ok': '至少一轮成功', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '全部出错', 'observed-failed': observedFailure, warn: '部分完成', none: '没跑' }, days = d.days7;
+    const labels = { ok: '跑成了', 'observed-ok': '至少一轮成功', mostly: '有出错，大部分成功', partial: '有出错，部分成功', failed: '全部出错', 'observed-failed': observedFailure, warn: '部分完成' }, days = d.days7;
     if (!Array.isArray(days) || days.every(day => dayTier(day) == null || dayTier(day) === 'unknown')) return '';
-    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${Array.isArray(days) ? [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => { const state = dayTier(day), label = `${U.date(day.date)} ${labels[state] || U.collectionText()}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`; return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`; }).join('') : `<span class="rec-none">${U.collectionText()}</span>`}</div></div>`;
+    const marks = [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => {
+      const state = dayTier(day);
+      const label = `${U.date(day.date)} ${labels[state] || (day.started ? '跑过，结果未确认' : dayReason(day) || dayMissing)}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`;
+      return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`;
+    });
+    return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${marks.join('')}</div></div>`;
   }
   function taskName(t) {
     if (viewer === 'public' && (t.visibility === 'owner' || t.public === 'owner' || t.hidden || t.hidden_block || t.content_locked)) return { visibility: 'owner' };
@@ -192,7 +198,7 @@
     const status = U.status(t, { small: true });
     const unreliable = Array.isArray(coverage) && coverage.some(c => c?.id === t.id && c.reliable === false);
     const note = (!description.length || ['red', 'amber', 'blue'].includes(status.tone)) && status.note !== outcome && !/^(?:数据截止|这次没读到|没有记录)/.test(status.note) && status.note;
-    const extra = [nameNote && `<span class="row__meta">${nameNote}</span>`, maintenance && Number.isInteger(t.rounds) && `已观察到 ${t.rounds} 次`, t.source_readable === false && '已登记，本轮没读到运行状态', note, unreliable && '这段运行记录不可靠', t.ledger_id && `<a class="lb-link" href="${esc(route(`/live/issue/?id=${encodeURIComponent(t.ledger_id)}`))}">关联账本 ›</a>`].filter(Boolean).join(' · ');
+    const extra = [nameNote && `<span class="row__meta">${nameNote}</span>`, maintenance && Number.isInteger(t.rounds) && `已观察到 ${t.rounds} 次`, t.source_readable === false && '已登记，这次没读到运行状态', note, unreliable && '这段运行记录不可靠', t.ledger_id && `<a class="lb-link" href="${esc(route(`/live/issue/?id=${encodeURIComponent(t.ledger_id)}`))}">关联账本 ›</a>`].filter(Boolean).join(' · ');
     const rawName = t.name && !hidden && t.name !== name && (viewer === 'owner' || typeof name === 'string' && name.trim() && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
     const facts = [rawName && `原名称：${field(t.name, '原名称')}`, plan && `原调度：${plan}`, t.at && `明细采集：${stamp(t.at)}`, t.duration && taskDuration(t.duration)].filter(Boolean);
     return { key: t.id, cls: `row row--flat lb-row${attention(t) ? ' is-attention' : ''}`, html: `<span class="lb-row__lamp">${status.lamp}</span><div class="lb-cell lb-cell--name"><p class="lb-clip"><a class="row__title" href="${esc(detail)}">${title}</a></p>${projectCell ? `<p class="lb-sub lb-clip1">${projectCell}</p>` : ''}</div><p class="lb-cell lb-clip"${typeof text === 'string' && !privateField(t.text) ? ` title="${esc(text)}"` : ''}>${description.join(' ')}</p><div class="lb-cell lb-cell--time">${lastCell.filter(Boolean).join('')}</div><div class="lb-cell lb-cell--time">${nextText ? `<span>${nextText}</span>` : ''}</div><div class="row__acts">${U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }])}</div>${extra ? `<p class="lb-row__extra row__sub">${extra}</p>` : ''}${facts.length ? `<details class="lb-row__extra"><summary class="lb-link">运行详情</summary><p>${facts.join(' · ')}</p></details>` : ''}` };
@@ -295,7 +301,7 @@
     if (d && !maintenance && !scheduledPacket(d)) {
       page = null; rows = []; dataAt = null;
       waiting('当前数据还不能单独核对 Windows 登记，等任务名册更新。');
-      U.html($('head'), U.head('Windows 计划任务名册未读到')); groupsRead.done(false); changesRead.done(false); heroRead.done(false); return;
+      U.html($('head'), U.head('Windows 计划任务名册这次没读到')); groupsRead.done(false); changesRead.done(false); heroRead.done(false); return;
     }
     page = append ? { ...page, next: d.next } : d; const received = fixture && scope === 'ai-today' && d?.ai_today ? d.ai_today : d?.items ?? (d?.groups?.some(g => Array.isArray(g.items)) ? d.groups.flatMap(g => g.items || []) : null);
     $('groups').dataset.audience = viewer;
@@ -370,7 +376,7 @@
     U.html(changesTitle, moved?.title || '任务变化');
     const detailLock = viewer === 'public' && Array.isArray(d.changes7) && d.changes7.length && !d.changes7.some(c => typeof c.owner_detail === 'string')
       ? [{ key: 'detail-lock', cls: 'row row--flat', html: `<span></span><p class="row__sub">${U.fieldHtml({ value: null, visibility: 'owner', hidden_what: '每条变化的详情（任务在电脑上的原名和最近运行时间）' }, { place: 'body', kind: viewer })}</p>` }] : [];
-    const changeEmpty = !Array.isArray(d.changes7) ? '任务变更记录没读到' : !d.changes7.length ? moved.empty : '';
+    const changeEmpty = !Array.isArray(d.changes7) ? '任务变更记录这次没读到' : !d.changes7.length ? moved.empty : '';
     showChangeEmpty(changeEmpty);
     U.list($('changes'), changeEmpty ? empty(changeEmpty) : [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
@@ -406,8 +412,8 @@
     box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
     const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
     const split = U.shouldFold(list.length - 6) ? 6 : list.length;
-    const firstRows = list.length ? list.slice(0, split).map(entry) : empty(complete ? '没有排定运行的任务' : '还没读全下次运行时间');
-    if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace('下次运行时间', '<span class="task-phrase">$&</span>');
+    const firstRows = list.length ? list.slice(0, split).map(entry) : empty(complete ? '没有排定运行的任务' : '下次运行时间这次没读全');
+    if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace(/下次运行时间|这次没读全/g, '<span class="task-phrase">$&</span>');
     U.list(box.querySelector('ul'), firstRows, { animate: false });
     U.list(box.querySelector('details ul'), list.slice(split).map(entry), { animate: false });
     box.querySelector('details').hidden = list.length === split;
@@ -573,14 +579,26 @@
     // 新私事规则（本人 11-24 02:56）：访客版不再按项藏，总数旁边不再写“另有 N 项仅本人可见”。
     const ownerOnly = 0;
     headline = revoked ? updating : maintenance ? observed ? `已观察到 ${rounds} 次` : '维护记录未读到'
-      : total != null ? `登记 ${total} 项${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册未读到';
+      : total != null ? `登记 ${total} 项${ownerOnly ? ` · 另有 ${ownerOnly} 项仅本人可见` : ''}` : 'Windows 计划任务名册这次没读到';
     const cutoff = /^数据截止 /;
     const status = U.status(page && { ...page, why: cutoff.test(page.why) ? '任务名册暂时没更新' : page.why, stale_text: cutoff.test(page.stale_text) ? null : page.stale_text }, { showZeroFixing: false });
     const title = U.head(headline, { lamp: false });
     U.html($('head'), status.lamp + (revoked ? title.replace(/(计划任务正在更新|访客版，|稍后自动补上。)/g, '<span class="task-phrase">$&</span>') : title));
     if (project) U.html($('project-label'), [linkedProject(project) && typeof page?.project_name === 'string' ? `<a href="${esc(route(`/live/project/?id=${encodeURIComponent(project)}`))}">${U.fieldHtml(page.project_name, { name: '项目筛选', kind: viewer })} ›</a>` : U.fieldHtml(page?.project_name || page?.project_name_gap || U.collectionText('项目名称', page), { name: '项目筛选', kind: viewer }), !maintenance && U.fieldHtml(total != null ? `${String(total).startsWith('至少') ? '' : '共 '}${total} 件` : U.collectionText('任务总数', page), { name: '项目筛选', kind: viewer })].filter(Boolean).join(' · '));
     // 小方块黄橙怎么分。按需更新快核（M928）核法：E:/PCConfig/tools/remote-computer-mcp/run_outcomes.py 的 run_outcome，现出错次数不超过成功次数算大部分成功；变了改这句
-    const note = [...[coverageNote].flat(), scope === 'ai-today' && '今天 AI 后台自动维护', rows.some(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)) && `近 7 天出过事的任务画小方块。灰格是那天没记录。黄格“大部分成功”是出错次数不超过成功次数，旧记录的黄格也可能是“${observedFailure}”。橙格“部分成功”是出错多于成功`, ...new Set(rows.map(t => t.days7_gap).filter(Boolean))].filter(Boolean).map(value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer })).join(' · ');
+    const markedDays = rows.filter(t => Array.isArray(t.days7) && t.days7.some(dayTrouble)).flatMap(t => t.days7);
+    const emptyDays = markedDays.filter(day => dayTier(day) == null || ['none', 'unknown'].includes(dayTier(day)));
+    const reasons = [...new Set(emptyDays.map(dayReason).filter(Boolean))].map(label => label === '这天不用跑' ? '不用跑' : label);
+    const legend = markedDays.length && ['近 7 天出过事的任务画小方块',
+      emptyDays.some(day => !day.started && !dayReason(day)) && `灰格：${dayMissing}`,
+      ...reasons, `黄格“大部分成功”是出错次数不超过成功次数，旧记录的黄格也可能是“${observedFailure}”。橙格“部分成功”是出错多于成功`,
+    ].filter(Boolean).join(' · ');
+    const noteField = value => U.fieldHtml(value, { name: '任务说明', place: 'body', kind: viewer });
+    const note = [
+      ...[coverageNote, scope === 'ai-today' && '今天 AI 后台自动维护'].flat().filter(Boolean).map(noteField),
+      legend && esc(legend).replace(/灰格：那天结果没读到|不用跑|停用中|这天没跑|等下一轮跑/g, '<span class="task-phrase">$&</span>'),
+      ...[...new Set(rows.map(t => t.days7_gap).filter(Boolean))].map(noteField),
+    ].filter(Boolean).join(' · ');
     const rosterOld = Date.now() - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
     const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册停在 ${U.time(dataAt)}，之后没更新` : ''
       : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
