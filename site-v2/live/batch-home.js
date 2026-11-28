@@ -201,14 +201,14 @@
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
         : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${go(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
-      // 每处毛病和接手状态各占一行，关着的类沿用灰点和灰字。
+      // 只收住毛病的说明，接手状态和轮次继续显示。
       const problemLine = p => {
         // 摘一句的故障回包有时把沿用的原回复当成原因给出；“这轮沿用原话”是退回原回复的结果。
         const detail = p.title === '摘一句' && /(?:这轮|本轮)沿用原话/.test(p.text)
           ? '摘要没能整理成可用文字，这次用了原来的回复' : p.raw.text;
         const what = p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)}&nbsp;· ${field(detail)}` : field(detail || p.raw.title);
         const who = [handled(p), p.round && !/轮/.test(p.handler) && `第 ${p.round} 轮`].filter(Boolean).map(esc).join('&nbsp;· ');
-        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}${goWrap(p.href, `出毛病的：${keepWords(what)}`)}&nbsp;· <span class="b6-muted">${who}</span></p>`;
+        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `出毛病的：${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${who}</span></p>`;
       };
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
