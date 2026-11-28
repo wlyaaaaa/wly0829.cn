@@ -437,7 +437,8 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
 .page--live:not(.live-unreadable) .b6-card .b6-lines > p > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
 @media (max-width: 1024px) {
   .page--live .board #automation.b6-card[data-pic="right"] .card__body { padding-right: 18px; }
-  #automation.b6-card .card__pic { bottom: auto; height: 205px; mask-image: linear-gradient(270deg, #000, transparent), linear-gradient(#000 55%, transparent); mask-composite: intersect; }
+  #automation.b6-card .card__pic { right: -24px; bottom: auto; height: 205px; mask-image: linear-gradient(270deg, #000, transparent), linear-gradient(#000 55%, transparent); mask-composite: intersect; }
+  #automation .b6-doing-word { white-space: nowrap; }
   #automation .b6-problem { position: relative; }
   .page--live #automation .b6-problem > .b6-dot:first-child { position: absolute; inset: .58em auto auto -25px; margin: 0; }
   #automation .b6-problem__summary { display: -webkit-box; }

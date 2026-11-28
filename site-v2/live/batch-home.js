@@ -211,7 +211,8 @@
       const idle = offline ? '当时没任务在跑' : '这会儿空着';
       const readRunning = Array.isArray(d.running);
       const prefix = readRunning ? `${idle}&nbsp;· ` : next.title || d.next === null ? '在跑的这次没读到&nbsp;· ' : '';
-      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
+      const runningTitle = w => field(w).replaceAll('下载目录', '<span class="b6-doing-word">下载目录</span>');
+      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(runningTitle).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
         : `<p>${dot('off')}${prefix}${next.title ? `${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : d.next === null ? '没有排定的运行' : `${readRunning ? '下一个' : '在跑的和下一个'}<span class="live-unit">这次没读到</span>`}</p>`;
       // 同一事项也可能随修理回执出现，首页选短标题，详情仍去原来的事项。
