@@ -235,8 +235,14 @@ def net(*args, timeout=None):
     run = (lambda: command(*args)) if timeout is None else (lambda: command(*args, timeout=timeout))
     return retrying(run, connection_level)
 
-retention.command = lambda *args: (net(*args, timeout=GH_TIMEOUT) if args[0] in ('git', 'gh')
-                                  else command(*args, timeout=120))  # 删除失败须先回读，不能按网络错误重放写操作
+def retention_command(*args, timeout=None):
+    if args[0] in ('git', 'gh'):
+        return net(*args, timeout=GH_TIMEOUT if timeout is None else timeout)
+    return command(*args, timeout=120 if timeout is None else timeout)
+
+
+# 删除失败须先回读，不能按网络错误重放写操作。
+retention.command = retention_command
 
 def delta(current, previous, include_url=True):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
