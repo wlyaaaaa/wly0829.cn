@@ -31,14 +31,22 @@
   const homeRead = U.reading(hero.querySelector('.card__body'), { ghost: U.ghost.card(1), name: '备份' });
   const detailReads = [U.reading($('sets').closest('.l2-col'), { ghost: U.ghost.rows(4) }), U.reading($('restore'), { ghost: U.ghost.rows(3), slow: false })];
   const bar = U.topbar({ ask: () => `请看实况备份：${headline || U.collectionText()}。请说明现在的情况。` });
-  L.add(hero); U.fold($('more'), $('rest-box')); document.querySelector('[data-back]').href = route('/live/#backups');
+  L.add(hero); U.fold($('more'), $('rest-box'), null, true); document.querySelector('[data-back]').href = route('/live/#backups');
   // 右栏每类小标题右边的“展开／收起”：状态记在按钮的 aria-expanded 上，刷新重画时保留
-  $('points').addEventListener('click', e => { const btn = e.target.closest('.backup-toggle'); if (btn) btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true')); });
+  $('points').addEventListener('click', e => {
+    const btn = e.target.closest('.backup-toggle');
+    if (!btn) return;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    const set = () => btn.setAttribute('aria-expanded', String(!open));
+    if (open) U.anchorFold(btn, set); else set();
+  });
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”“没核实”连在一起（M781）；
   // 时刻里的日期和钟点各包一层，窄窗口的大小列放不下整个时刻时只在两者之间折行（见页内样式）；时刻后面紧跟的句号、逗号等一起包进去，折行时不剩一个“。”在下一行开头
-  const tableText = value => esc(value).replace(/(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|不适用|没有记录|\d+ 项读数不完整/g, m => /^(?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?$/.test(m) ? `<span class="backup-unit backup-at"><span>${m.replace(' ', '</span> <span>')}</span></span>` : `<span class="backup-unit">${m}</span>`)
-    .replace(/^([^\s<\d][^<]{0,8}?) (?=<span class="backup-unit[^"]*">(?:<span>)?\d)/, '<span class="backup-unit">$1</span> ').replace(/ (份 · 按) /, ' <span class="backup-unit">$1</span> ').replace(/没核实/g, '<span class="backup-unit">$&</span>').replace(/ 清单$/, ' <span class="backup-unit">清单</span>');
+  const tableText = value => esc(value).replace(/(^[^\s<\d][^<]{0,8}? )?((?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?)|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|\d+ 项读数不完整|份 · 按|已确认|没有(?:副本|记录)?|没核实|没读到|未登记|未列出|不适用|恢复点|副本(?:日期)?|原件|缺失|清单|(?:备份|上传|读取)失败|(?:大)?部分成功/g,
+    (word, prefix, time) => time
+      ? `${prefix ? `<span class="backup-unit">${prefix.trimEnd()}</span> ` : ''}<span class="backup-unit backup-at"><span>${time.replace(' ', '</span> <span>')}</span></span>`
+      : `<span class="backup-unit">${word}</span>`);
   const wrapSummary = html => html.replace(/ · (?![^<]*>)/g, '&nbsp;· ');
   const points = (d, id) => (d.restore || []).filter(r => r.set === id).flatMap(r => (r.points || []).map(pt => ({ ...pt, kind: r.kind })));
   const restoreText = (d, s) => {
@@ -89,6 +97,10 @@
   }
   function mergedTable(d, confirmedH, emptySets) {
     const field = (value, name) => U.fieldHtml(value, { name, place: 'body', kind: viewer });
+    const textField = (value, name) => {
+      const html = field(value, name), text = U.fieldText(value, viewer);
+      return html === esc(text) ? tableText(text) : html;
+    };
     // 说明整句摆出来：不截成“…”，也不做成点开只是同一句话的展开。
     const explain = (value, name) => `<small>${field(value, name)}</small>`;
     const batchFailed = d.read_error === true;
@@ -124,7 +136,7 @@
     };
     const localPaths = s => {
       const paths = s.local_paths?.length ? s.local_paths : s.local?.location?.paths;
-      if (!paths?.length) return field(s.local_location_note || reason(s.missing?.local_paths || s.local?.missing?.location), '本地位置');
+      if (!paths?.length) return textField(s.local_location_note || reason(s.missing?.local_paths || s.local?.missing?.location), '本地位置');
       const path = value => {
         const html = field(value, '本地位置'), plain = U.fieldText(value, viewer);
         return html === esc(plain) && /^[a-z]:[\\/]/i.test(plain) ? html.replace(/([\\/])(?=[^\\/])/g, '$1<wbr>') : html;
@@ -229,12 +241,12 @@
       if (s.private_count) return `<tr><td colspan="10">${U.privateSummary(s.private_count, { unit: '类资料' })}</td></tr>`;
       const state = U.status(s, { small: true, cover: d }), ps = points(d, s.id).sort((a, b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
       const links = ps.map(pt => `<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}&point=${encodeURIComponent(pt.id)}`))}">${esc(pt.at ? stamp(pt.at) : '恢复点时间未登记')}</a>`);
-      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>共 ${links.length} 个，<span class="backup-unit">查看其余</span></summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : field(restoreText(d, s), '恢复点').replace(/清单(?![^<]*>)/g, '<span class="backup-unit">清单</span>');
+      const restore = links.length ? links[0] + (links.length > 1 ? `<details><summary>共 ${links.length} 个，<span class="backup-unit">查看其余</span></summary>${links.slice(1).join('')}</details>` : '<small>共 1 个</small>') : textField(restoreText(d, s), '恢复点');
       const notes = [...new Set((d.restore || []).filter(g => g.set === s.id).flatMap(g => [g.restore_sessions?.text, g.gap]).filter(note => note && !emptyWord(note)))];
       const why = state.note && (s.why && state.note === field(s.why, '状态说明')
         ? explain(s.why, '备份说明') : `<small>${state.note}</small>`);
       const sizeAt = s.bytes == null ? '' : D.sizeEvidence(s, stamp);
-      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? field(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${field(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
+      return `<tr data-set="${esc(s.id)}"><th scope="row"><span class="backup-name">${state.tone === 'green' ? '' : state.lamp}<a href="${esc(route(`/live/backup/?id=${encodeURIComponent(s.id)}`))}">${field(s.name, '备份资料')} ›</a></span>${why}</th><td class="backup-location">${localPaths(s)}</td><td>${s.bytes == null ? textField(s.missing?.bytes === 'read_failed' ? '这次没读到大小' : s.missing?.bytes ? reason(s.missing.bytes) : U.collectionText('大小', s, null, 'bytes'), '大小') : U.nowrap(D.count(s, 'bytes', U.gb))}${sizeAt ? `<small>${tableText(sizeAt)}</small>` : ''}</td>${Object.keys(names).map(key => copyCell(s, key)).join('')}<td class="backup-restore">${restore}${notes.map(note => `<small>${textField(D.backupRestoreNote(note), '恢复说明')}</small>`).join('')}</td><td>${actionHtml(s)}</td></tr>`;
     });
     if (!rows.length) return U.html($('backup-matrix'), `<p class="pj-note">${esc(emptySets ? '没有备份资料' : missing('各类资料在各去处的副本'))}</p>`);
     U.html($('backup-matrix'), `<table class="backup-grid">${caption()}<colgroup>${[18,18,6,7,7,7,9,9,12,7].map(width => `<col style="width:${width}%">`).join('')}</colgroup><thead><tr><th scope="col">资料名</th><th scope="col">本地位置</th><th scope="col">大小</th>${Object.entries(names).map(([key, name]) => columnHead(key, name)).join('')}<th scope="col">恢复点</th><th scope="col">操作</th></tr></thead><tbody>${rows.join('')}</tbody></table>`);
@@ -326,11 +338,12 @@
     const all = byImportance((d.sets || []).filter(s => s.name)), picked = all.filter(noticed);
     const sets = U.mergePrivateRows(picked, { value: s => s.name, kind: viewer });
     const others = all.length - picked.length, unchecked = all.filter(s => !noticed(s) && protection(s) === 'unknown').length;
-    const restLine = !all.length ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
+    const restLine = !others ? '' : (picked.length ? `其余 ${others} 类见上面大表` : `现在没有要留意的；${others} 类见上面大表`) + (unchecked ? `；其中 ${unchecked} 类的副本还没核实过` : '');
     const tail = restLine ? [{ key: 'backup-rest', cls: 'row row--flat row--empty backup-rest', html: `<span></span><p class="row__sub">${esc(restLine)}</p>` }] : [];
-    const rows = all.length ? sets.slice(0, 5).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));
+    const limit = U.shouldFold(sets.length - 5) ? 5 : sets.length;
+    const rows = all.length ? sets.slice(0, limit).map(s => setRow(s, d)) : empty(emptySets ? '没有备份资料' : missing('要留意的几类'));
     if (d.verification && !all.some(s => s.id === 'recovery-kit')) rows.push({ key: 'verification', cls: 'row row--flat', html: `<span></span><a class="row__title" href="${esc(route('/live/backup/?id=recovery-kit'))}">恢复材料校验 ›</a>` });
-    U.list($('sets'), sets.length > 5 ? rows : [...rows, ...tail]); U.list($('rest'), sets.length > 5 ? [...sets.slice(5).map(s => setRow(s, d)), ...tail] : []); $('more').hidden = sets.length <= 5; U.html($('more'), `<span class="more__shut">还有 ${Math.max(sets.length - 5, 0)} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
+    U.list($('sets'), sets.length > limit ? rows : [...rows, ...tail]); U.list($('rest'), sets.length > limit ? [...sets.slice(limit).map(s => setRow(s, d)), ...tail] : []); $('more').hidden = sets.length <= limit; U.html($('more'), `<span class="more__shut">还有 ${Math.max(sets.length - 5, 0)} 条</span><span class="more__open">收起</span> <span class="more__chev">›</span>`);
     // 右栏：最上面写最近一次恢复；每类一个小标题（右边“展开／收起”），下面只列能退回的日期；末尾说其余几类没有恢复点和恢复记录的去向（样子见 B2）
     const kindText = kind => kind === 'system' ? '整机恢复' : '文件恢复';
     const groups = byImportance((d.restore || []).filter(g => g.points?.length || g.restore_sessions?.last_at), g => g.set);
@@ -360,7 +373,7 @@
       // 一条恢复记录都没有时，最上面“最近一次恢复：没有恢复过的记录”已经说了，各类下面不再各写一遍
       const line = own ? (latest?.[0] === g ? '' : `最近一次恢复 ${esc(stamp(own[0]).trim())}`) : from ? `从 ${esc(U.date(from))} 起没有恢复过` : latest ? '没有恢复过的记录' : '';
       const stale = ['g', 'h'].some(k => cellOf(g.set, k)?.state === 'stale') ? '<span class="tag backup-tag-stale">副本旧了</span>' : '';
-      const toggle = folded ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
+      const toggle = U.shouldFold(folded) ? `<button class="more backup-toggle" type="button" aria-expanded="false"><span class="more__shut">展开（还有 ${folded} 条）</span><span class="more__open">收起</span> <span class="more__chev" aria-hidden="true">›</span></button>` : '';
       const subs = [scopes.length && `范围：${scopes.join('、')}`, line, oldNote(g)].filter(Boolean).map(text => `<p class="row__sub">${text}</p>`).join('');
       restored.push({ key: `restore:${g.set}:${g.kind}`, cls: 'row row--flat backup-group', html: `<span></span><div class="row__text"><p class="row__main backup-group__head"><a class="row__title" href="${esc(route(`/live/backup/?id=${encodeURIComponent(g.set)}`))}">${nameHtml(g, 'title')}</a><span class="row__meta">${kindText(g.kind)}</span>${stale}${toggle}</p>${dates ? `<ul class="backup-dates">${dates}</ul>` : ''}${subs}</div>` });
     }

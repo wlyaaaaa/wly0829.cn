@@ -520,10 +520,10 @@
   function renderProjectGroups(data) {
     projectExtraLinks(data);
     const limit = defaultCounts.projectGroup;
-    const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more')?.open ? ' open' : '';
+    const moreOpen = key => parts.projects.main.querySelector?.('.project-group--' + key + ' .project-more[open]:not([data-fold-flat])') ? ' open' : '';
     const person = '<svg class="project-group__icon" viewBox="0 0 24 24" width="1.3em" height="1.3em" fill="none" stroke="#e8913a" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-4 3.9-6.5 7.5-6.5s6.7 2.5 7.5 6.5"/></svg>';
     const groups = projectGroups(data.items), labels = { daily: ['日用', '🖥️'], personal: ['个人', person], occasional: ['偶用', '🌐'], unknown: ['分档还没读到', ''] };
-    paintHTML(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
+    paintHTML(parts.projects.main, Object.entries(labels).filter(([key]) => groups[key].length).map(([key, [label, icon]]) => `<section class="project-group project-group--${key}"><h3><span aria-hidden="true">${icon}</span>${label}</h3><ul class="project-grid">${groups[key].slice(0, limit).map(projectTile).join('')}</ul>${groups[key].length > limit ? `<details class="project-more" data-fold-count="${groups[key].length - limit}"${moreOpen(key)}><summary>展开（还有 ${groups[key].length - limit} 个）</summary><ul class="project-grid">${groups[key].slice(limit).map(projectTile).join('')}</ul></details>` : ''}</section>`).join(''));
     const count = Number.isFinite(data.frozen) ? quantity(data, 'frozen') : null;
     paintHTML(parts.projects.frozen, `${count == null ? '看冻结项目' : `冻结 ${count} 个`} ›`);
     parts.projects.frozen.href = route('/live/projects/?state=frozen');

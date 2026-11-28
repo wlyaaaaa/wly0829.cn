@@ -452,7 +452,7 @@
     [...$('points').children].find(li => li.dataset.key === next)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
   if (filesButton && filesFold) {
-    U.fold(filesButton, filesFold, watchFiles);
+    U.fold(filesButton, filesFold, watchFiles, true);
     filesButton.addEventListener('click', () => { if (filesOpen()) watchFiles(); else stopFiles(); });
   }
   $('files-target').addEventListener('change', e => {

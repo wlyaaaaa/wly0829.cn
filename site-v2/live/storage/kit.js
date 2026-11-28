@@ -84,8 +84,9 @@
   // 只在内容真变了才重写；重写后把展开着的保持展开。
   function put(el, html) {
     if (!el || el._storageHtml === html) return false;
-    const open = new Set([...el.querySelectorAll('details[open][data-key]')].map(d => d.dataset.key));
+    const open = new Set([...el.querySelectorAll('details[open][data-key]:not([data-fold-flat])')].map(d => d.dataset.key));
     el.innerHTML = html; el._storageHtml = html;
+    if (html.includes('data-fold-count=')) window.LiveUI.fitNativeFolds(el);
     el.querySelectorAll('details[data-key]').forEach(d => { if (open.has(d.dataset.key)) d.open = true; });
     return true;
   }

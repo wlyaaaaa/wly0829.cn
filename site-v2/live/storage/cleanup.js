@@ -198,7 +198,7 @@
     // 最近出错那一轮写出原因：先露 3 条，其余收进“还有 N 项”（M328）
     const fails = err ? failures(g.errors[0], viewer) || [] : [], restFails = fails.slice(3);
     const failRow = f => `<span>${cleanupWords(f.text)}</span>`;
-    const failHtml = fails.slice(0, 3).map(failRow).join('') + (restFails.length ? `<details class="cl-fail-more"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(failRow).join('')}</details>` : '');
+    const failHtml = fails.slice(0, 3).map(failRow).join('') + (restFails.length ? `<details class="cl-fail-more" data-fold-count="${restFails.length}"><summary class="more live-disclosure"><span class="disclosure-closed">还有 ${restFails.reduce((n, f) => n + f.n, 0)} 项</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary>${restFails.map(failRow).join('')}</details>` : '');
     const first = err ? `<li data-tone="amber">${ICON.warn}<div><b>出错 ${err} 次</b><span>${esc(K.field(g.errors[0].error, '清理出错原因', viewer) || '最近一次出错没有写原因')}</span>${failHtml}</div></li>`
       : `<li>${ICON.ok}<div><b>出错 0 次</b><span>近 7 天 ${n} 轮都跑完</span></div></li>`;
     const hits = g.week.reduce((s, r) => s + (num(r.protected_hits) || 0), 0);
@@ -231,7 +231,7 @@
     const row = (r, i) => `<li><i style="background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i><span>${cleanupWords(name(r))}</span><b>${esc(K.size(r.freed_bytes))}</b></li>`;
     // 规则多时先列腾出最多的 5 条，其余收进“展开”，免得这一栏比右边的走势图长出一大截、右边空着（M503）
     const shown = list.length > 6 ? 5 : list.length, rest = list.slice(shown);
-    const more = rest.length ? `<details class="cl-rules-more" data-key="rules-more"><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="cl-rules">${rest.map((r, i) => row(r, i + shown)).join('')}</ul></details>` : '';
+    const more = rest.length ? `<details class="cl-rules-more" data-fold-count="${rest.length}" data-key="rules-more"><summary class="more live-disclosure"><span class="disclosure-closed">展开（还有 ${rest.length} 条）</span><span class="disclosure-open">收起</span> <span class="more__chev" aria-hidden="true">›</span></summary><ul class="cl-rules">${rest.map((r, i) => row(r, i + shown)).join('')}</ul></details>` : '';
     return `<span class="cl-rulebar" role="img" aria-label="${esc(list.map(r => `${name(r)} ${K.size(r.freed_bytes)}`).join('，'))}">${list.map((r, i) => `<i style="width:${(r.freed_bytes / sum * 100).toFixed(2)}%;background:${RULE_HUES[Math.min(i, RULE_HUES.length - 1)]}"></i>`).join('')}</span><ul class="cl-rules">${list.slice(0, shown).map(row).join('')}</ul>${more}${withheld ? `<p class="cl-sub">${esc(withheld)}</p>` : ''}`;
   }
 
