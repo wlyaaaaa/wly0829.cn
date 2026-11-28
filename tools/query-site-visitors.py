@@ -555,6 +555,45 @@ def source_windows(start, end, now, begin_at=None, padding=timedelta()):
     return windows
 
 
+def snapshot_slice(args, begin, stop, now):
+    # A failed weekly refresh keeps only the closed, successfully queried slices.
+    if args.snapshot_chunks is None or stop > now - timedelta(hours=1):
+        return sls_logs(args, begin, stop)
+    folder = args.cache_dir / "snapshot-sls-slices"
+    key = (SOURCE, args.sls_project, args.sls_logstore, args.launch_at, begin, stop)
+    tag = hashlib.sha256(str(key).encode()).hexdigest()[:20]
+    path = folder / f"{stop:%Y%m%d}-{tag}.json.gz"
+    try:
+        with gzip.open(path, "rt", encoding="utf-8") as stream:
+            rows = json.load(stream)
+        for row in rows:
+            row["time"] = datetime.fromisoformat(row["time"])
+            row["identity"] = tuple(row["identity"])
+        args.snapshot_chunks.add(path)
+        return rows
+    except (OSError, ValueError, TypeError, KeyError, EOFError):
+        pass
+    rows = sls_logs(args, begin, stop)
+    temporary = path.with_suffix(f".{os.getpid()}.tmp")
+    try:
+        folder.mkdir(parents=True, exist_ok=True)
+        with gzip.open(temporary, "wt", encoding="utf-8", compresslevel=1) as stream:
+            json.dump(rows, stream, ensure_ascii=False, separators=(",", ":"), default=datetime.isoformat)
+        temporary.replace(path)
+        args.snapshot_chunks.add(path)
+    except OSError:
+        remove_snapshot_slices((temporary,))
+    return rows
+
+
+def remove_snapshot_slices(paths):
+    for path in paths:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
 def sync_cloud(args, start, end, now):
     paths, records, file_range = [], [], None
     sync = {"mode": "hybrid", "listed_objects": 0, "objects": 0, "downloaded": 0, "reused": 0, "sources": []}
@@ -572,8 +611,13 @@ def sync_cloud(args, start, end, now):
             sync["sources"].append(segment)
         else:
             while begin < finish:
-                stop = min(finish, begin + timedelta(days=2)) if getattr(args, "snapshot_beacons", False) else finish
-                page = sls_logs(args, begin, stop)
+                if getattr(args, "snapshot_chunks", None) is not None:
+                    day_end = datetime.combine(begin.date() + timedelta(days=1), datetime.min.time(), TZ)
+                    stop = min(finish, day_end)
+                    page = snapshot_slice(args, begin, stop, now)
+                else:
+                    stop = min(finish, begin + timedelta(days=2)) if getattr(args, "snapshot_beacons", False) else finish
+                    page = sls_logs(args, begin, stop)
                 records.extend(page)
                 sync["sources"].append({"source": source, "from": begin, "to": stop, "delay": "约 3 分钟",
                                         "query_complete": True, "records": len(page)})
@@ -1187,6 +1231,11 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
                 overview_start = end - timedelta(days=6)
                 args.snapshot_beacons = True
                 args.snapshot_deadline = snapshot_deadline
+                args.snapshot_chunks = set()
+                older = (overview_start - timedelta(days=1)).strftime("%Y%m%d")
+                folder = args.cache_dir / "snapshot-sls-slices"
+                remove_snapshot_slices(path for path in folder.glob("*.json.gz")
+                                       if path.name[:8].isdigit() and path.name[:8] < older)
                 try:
                     overview = sync_cloud(args, overview_start, end, checked_at)
                 except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
@@ -1239,6 +1288,7 @@ def main(argv=None, *, require_live=False, on_events=None, beacon_only=False, on
         if snapshot_paths:
             try:
                 live_producer().visitors(ROOT, output, checked_at.isoformat(), require_registered=True, registered_paths=snapshot_paths)
+                remove_snapshot_slices(args.snapshot_chunks)
             except (OSError, ValueError, TypeError, KeyError):
                 snapshot_error = "snapshot_write_failed"
         if require_live:
