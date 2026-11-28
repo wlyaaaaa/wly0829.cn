@@ -23,8 +23,10 @@
     const late = Number.isFinite(start) && Number.isFinite(first) && first - start >= DAY;
     const firstDay = late ? dayKey(first) : '';
     const inner = (Array.isArray(d?.missing_dates) ? d.missing_dates : []).filter(x => typeof x === 'string' && (!late || x > firstDay));
-    return { late, note: late ? `软件变化记录从 ${U.date(d.coverage.from)} 起才有，近 ${span(d)} 天里 ${U.date(d.window.from)} 到 ${U.date(d.coverage.from)} 没有记录` : '',
-      inner: inner.length ? `${ranges(inner).join('、')} 没有记录` : '' };
+    const note = !late ? '' : first === Date.parse(d.started_at) ? `${U.date(d.started_at)} 起才开始记`
+      : `软件变化记录从 ${U.date(d.coverage.from)} 起才有，近 ${span(d)} 天里 ${U.date(d.window.from)} 到 ${U.date(d.coverage.from)} 没有记录`;
+    return { late, note,
+      inner: inner.length ? `${ranges(inner).join('、')} 那几天没抓到` : '' };
   }
   const visible = (d, viewer) => d.items.filter(r => r.visibility !== 'owner' || viewer === 'owner');
   function changes(d, viewer, limit = Infinity) {

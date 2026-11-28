@@ -46,7 +46,7 @@
     const programs = review.filter(x => /impersonation/.test(x.key || '') && Number.isInteger(x.programs)).reduce((n, x) => n + x.programs, 0);
     return [confirmed ? `已确认异常 ${confirmed} 组` : '没发现确认的异常',
       review.length && `${review.length} 组要核实${programs ? `（${programs} 个程序待筛查）` : ''}`,
-      unread.length && `${unread.length} 组读数暂缺`].filter(Boolean).join('，');
+      unread.length && `${unread.length} 组这次没读到，结果不全`].filter(Boolean).join('，');
   }
   function serviceRows(rows) {
     const merged = new Map();
@@ -341,7 +341,7 @@
     queueMicrotask(() => V.cardLineTitle(status.parentElement));
   }
   const board = V.board(document.getElementById('board'), { key: 'security', sync, reading(id, point, t) {
-    if (id === 'start' || id === 'exit') return point?.value != null ? { ...point, caption: t == null ? '最近实测' : '' } : t != null ? { text: '没记录' } : null;
+    if (id === 'start' || id === 'exit') return point?.value != null ? { ...point, caption: t == null ? '最近实测' : '' } : t != null ? { text: '没测到' } : null;
   }, onCount(c) {
     const seen = new Set();
     c = { ...c, warn: c.warn.flatMap(g => { const reason = U.sp(g.reason).split('；').filter(s => s && !seen.has(s) && seen.add(s)).join('；'); return reason || !g.reason ? [{ ...g, reason }] : []; }) };
@@ -384,7 +384,7 @@
       let figures = hero.querySelector('[data-part="figures"]');
       if (verdict && !figures) { figures = document.createElement('p'); figures.className = 'hero__count'; figures.dataset.part = 'figures'; head.after(figures); }
       if (figures) { figures.hidden = !verdict; U.html(figures, verdict ? `<span>${counted(U.nowrap(title))}</span>` : ''); }
-      const words = verdict ? U.head(verdict, { lamp: false }).replaceAll('，', '，<br>')
+      const words = verdict ? U.head(verdict, { lamp: false }).replace(/，(?!结果不全)/g, '，<br>')
         .replace('程序待筛查）', '<span class="security-count">$&</span>')
         : counted(U.head(title, { lamp: false })).replace(/(，)(?=提权)/, '$1<br>');
       U.html(head, U.status(data).lamp + words);
@@ -429,7 +429,7 @@
       for (const v of values) {
         const cell = el.querySelector(`.chart__val[data-line="${v.id}"] b`);
         if (t == null && v.at != null) cell.innerHTML = `${U.esc(v.text)}<small class="stat-gap">最近实测 ${U.esc(stamp(new Date(v.at * 1000).toISOString()))}</small>`;
-        if (t != null && v.value == null) cell.textContent = '没记录';
+        if (t != null && v.value == null) cell.textContent = '没测到';
       }
     } });
     return { set() { chart.set(lifecycleData(data)); } };

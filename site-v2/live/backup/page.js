@@ -190,7 +190,7 @@
     const reasons = runs.map(run => {
       const reason = D.backupFailureReason(run.reason_code);
       const detail = reason && reason !== run.reason_code ? reason
-        : reason ? `记录的原因代码是 ${reason}` : run.status === 'failed' ? '没有记录失败原因' : '';
+        : reason ? `记录的原因代码是 ${reason}` : run.status === 'failed' ? '失败了，回执没写原因' : '';
       return detail && `<p class="fe-l3b-note">${time(run)} · ${result(run)}：${said(detail, '备份原因')}</p>`;
     }).join('');
     return `<div class="dossier-card__part backup-history"><p class="dossier-card__sub">最近几次备份</p><ul aria-label="最近几次备份">${tags.join('')}</ul>${reasons}</div>`;

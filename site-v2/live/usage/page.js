@@ -327,7 +327,7 @@
     }, pic: '/live/img/s1900-usage-notebook-v1.webp', palette: ['apricot', 'violet'],
       line: () => '',
       build(el) {
-        el.innerHTML = `<div class="year-row"><div><div data-x="cal"></div><div class="vz-heat__key" data-x="cal-key" hidden><span class="use-key__part"><span>用得少</span>${[35, 51, 67, 84, 100].map((p) => `<i style="background:color-mix(in srgb, #ce557f ${p}%, #fff)"></i>`).join('')}<span>用得多</span></span><span class="use-key__part"><i class="vz-cal__dot is-zero"></i><span>灰点：那天有记录、没用</span></span><span class="use-key__part"><i class="vz-cal__dot is-none"></i><span>空心圈：那天没有记录</span></span></div><p class="use-note" data-x="cal-span"></p></div><div class="year-sum"><div class="year-sum__k">累计在用</div><div class="year-sum__v" data-x="total"></div><div class="year-sum__sub" data-x="best"></div></div></div>`;
+        el.innerHTML = `<div class="year-row"><div><div data-x="cal"></div><div class="vz-heat__key" data-x="cal-key" hidden><span class="use-key__part"><span>用得少</span>${[35, 51, 67, 84, 100].map((p) => `<i style="background:color-mix(in srgb, #ce557f ${p}%, #fff)"></i>`).join('')}<span>用得多</span></span><span class="use-key__part"><i class="vz-cal__dot is-zero"></i><span>灰点：那天有记录、没用</span></span><span class="use-key__part"><i class="vz-cal__dot is-none"></i><span>空心圈：那天缺记录，不是没用</span></span></div><p class="use-note" data-x="cal-span"></p></div><div class="year-sum"><div class="year-sum__k">累计在用</div><div class="year-sum__v" data-x="total"></div><div class="year-sum__sub" data-x="best"></div></div></div>`;
         const calHost = el.querySelector('[data-x="cal"]'), cal = block('year', calHost, V.calendar(calHost, {
           unit: '秒', weekdays: ['一', '二', '三', '四', '五', '六', '日'],
           color: value => `color-mix(in srgb, #ce557f ${Math.round(35 + 65 * Math.min(value / 86400, 1))}%, #fff)`,
@@ -342,7 +342,7 @@
             : '旧读数只含部分日期。');
           const yearState = usage?.deferred?.year && usage.blocks?.year?.state;
           const unread = yearState === 'computing' ? '加载中' : yearState === 'unavailable' ? '暂时读不到' : usage?.year ? '没有使用记录' : missing();
-          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `<b>${k.lower ? '至少 ' : ''}${Math.round(k.total / 3600)}</b> <small>小时</small>` : `<span class="vz-none">${unread}</span>`);
+          U.html(el.querySelector('[data-x="total"]'), k.total != null ? `${k.lower ? '<b>至少</b> ' : ''}<span class="year-sum__amount"><b>${Math.round(k.total / 3600)}</b> <small>小时</small></span>` : `<span class="vz-none">${unread}</span>`);
           U.html(el.querySelector('[data-x="best"]'), k.best ? `最长的一天 ${k.lower ? '至少 ' : ''}${U.fieldHtml(dur(k.best.value))} · ${U.fieldHtml(k.best.day)}` : '');
         } };
       } },

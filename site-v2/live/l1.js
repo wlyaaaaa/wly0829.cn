@@ -377,7 +377,7 @@
     const card = cards[id], p = parts[id], warming = d?.q === 'warming';
     card.classList.add('card--empty'); card.classList.toggle('card--warming', warming);
     const named = id === 'chats', name = addressed(NAME[id]);
-    const caption = id === 'needs' && d ? `${name} · 没有记录` : d?.text || `${name}暂时读不到`;
+    const caption = id === 'needs' && d ? `${name} · 这次没读全` : d?.text || `${name}暂时读不到`;
     // 电脑连不上、这块又没存下来：标题照常写卡名，下面一行灰色小字说没存下来；卡名不在这句里再写一遍，每张卡同一个字号（r83 返修）
     const gone = !warming && !!lastState?.offline, text = warming ? '正在准备' : gone ? '这块没存下来，连上后补上。' : caption;
     paintHTML(p.head, named ? chatCardHead({ marker: typeof text === 'object' && text }) + `<br><span class="row__sub">${U.fieldHtml(typeof text === 'string' ? text : '', { name })}</span>`
@@ -701,7 +701,7 @@
       count += Math.max(listed, known ? value : 0);
       exact = exact && known && value >= listed && !isLower(counts, kind);
     }
-    const text = count || exact ? `等你 ${exact ? '' : '至少 '}${count} 件` : '等你的事 · 没有记录';
+    const text = count || exact ? `等你 ${exact ? '' : '至少 '}${count} 件` : '等你的事 · 这次没读全';
     return { count: count || exact ? count : null, exact, text };
   }
   function oldestWait(d, rows, end) {
