@@ -167,6 +167,34 @@ def cached_tree(name, key, destination, build):
         marker.write_text(key, encoding='ascii')
 
 
+def keep_recent_trees(root, name_pattern, current=None, *, marker):
+    """Record a successful use before pruning the other generated trees."""
+    if not root.is_dir():
+        return
+    resolved = root.resolve()
+    if resolved != root.parent.resolve() / root.name:
+        return
+    try:
+        entries = {p.name: p for p in resolved.iterdir()
+                   if re.fullmatch(name_pattern, p.name) and p.is_dir() and p.resolve() == p}
+        recent = resolved / '.recent'
+        if recent.is_file():
+            previous = recent.read_text(encoding='ascii').splitlines()
+        else:
+            # Older caches only recorded when the tree was created.
+            dates = {name: path / marker for name, path in entries.items()}
+            previous = sorted((name for name, date in dates.items() if date.exists()),
+                              key=lambda name: dates[name].stat().st_mtime_ns, reverse=True)
+        keep = list(dict.fromkeys(name for name in [current, *previous] if name in entries))[:2]
+        pending = resolved / '.recent.tmp'
+        pending.write_text('\n'.join(keep), encoding='ascii')
+        pending.replace(recent)
+        for name in entries.keys() - set(keep):
+            shutil.rmtree(entries[name])
+    except OSError as error:
+        print(f'清理旧缓存失败：{root}：{error}', file=sys.stderr)
+
+
 def step(function, *args):
     started = time.perf_counter()
     result = function(*args)
@@ -1436,6 +1464,7 @@ def main():
     ap.add_argument('--不检查', action='store_true', help='交整站构建叠入实况后统一检查')
     ap.add_argument('--full', action='store_true', help='重跑组装和生成页，图与字体仍按内容缓存')
     ap.add_argument('--cache-dir', type=Path, default=CACHE, help='可指定空目录测全冷构建')
+    ap.add_argument('--defer-cache-prune', action='store_true', help=argparse.SUPPRESS)
     args = ap.parse_args()
     OUT = args.output.resolve()
     CACHE, FULL = args.cache_dir.resolve(), args.full
@@ -1444,6 +1473,15 @@ def main():
         policy = load_public_policy()
     except (ValueError, OSError) as error:
         sys.exit(str(error))
+
+    def finish_cache():
+        if args.只检查:
+            return
+        if args.defer_cache_prune:
+            (OUT / '.assembly-cache-key').write_text(key, encoding='ascii')
+        else:
+            keep_recent_trees(CACHE / 'assembled', r'[0-9a-f]{64}', key, marker='.complete')
+
     if not args.只检查:
         step(font_sources)
         if SITE.exists():
@@ -1465,6 +1503,7 @@ def main():
         report('删了', removed)
         shutil.rmtree(SITE)
     if args.不检查:
+        finish_cache()
         return
     baseline = word_policy.scan_baseline(OUT, policy=policy)
     print('公开底线检查：' + json.dumps(baseline, ensure_ascii=False))
@@ -1501,6 +1540,7 @@ def main():
         print('站内资源和按钮检查通过')
     if bad:
         sys.exit(1)
+    finish_cache()
 
 
 if __name__ == '__main__':
