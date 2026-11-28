@@ -18,7 +18,7 @@
 [data-personal-project] [data-card="changes"] { grid-area: changes; }
 [data-personal-project] [data-card="pp-more"] { grid-area: more; }
 #pj-board[data-personal-project="steam"] { grid-template-areas: "comparison comparison" "wardrobe artifacts" "wardrobe history" "changes more"; }
-#pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles background" "artifacts more" "artifacts changes"; }
+#pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles background" "artifacts artifacts" "more changes"; }
 #pj-board[data-personal-project="github"] { grid-template-areas: "snake profile" "artifacts changes"; }
 #pj-board[data-personal-project="typora"] { grid-template-areas: "samples samples" "theme artifacts" "changes artifacts" "more more"; }
 [data-personal-project] .pj-card { display: flex; flex-direction: column; }
@@ -105,8 +105,17 @@
 .pp-mobile-wallpaper > .pp-wallpaper { aspect-ratio: 9 / 20; object-fit: cover; }
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  #pj-board[data-personal-project="emerald"] { grid-template-rows: auto max-content 1fr; }
-  [data-personal-project="emerald"] [data-card="changes"] { align-self: stretch; }
+  .pp-wallpapers:has(> .pp-bubbles) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 2.8fr) minmax(246px, 1.9fr);
+    align-items: stretch;
+  }
+  #artifacts .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card { grid-template-rows: auto auto auto 1fr auto; }
+  .pp-wallpapers > .pp-bubbles { grid-column: auto; }
+  .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card:not(.pp-bubbles) > .pp-wallpaper {
+    block-size: clamp(162px, 15vw, 224px);
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
   [data-personal-project="typora"] .pp-preview-tools { margin-top: -42px; margin-bottom: 20px; }
   [data-personal-project="typora"] :is([data-card="artifacts"], [data-card="changes"]) { align-self: stretch; }
   [data-personal-project="typora"] #more-data .pj-viz { display: flex; align-items: baseline; gap: 16px; }

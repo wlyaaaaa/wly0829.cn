@@ -223,7 +223,7 @@
       <div class="row__text"><p class="row__main"><span class="row__title">泡泡屏保 · 画面</span></p>
       <p class="row__sub">雨林壁纸上的彩色泡泡。</p>
       <div class="acts"><a class="btn btn--sm" href="${bubbleImage}" target="_blank" rel="noopener" data-mo-press>打开画面</a></div></div>
-      <time class="pj-at" datetime="2026-11-28T04:54:53+08:00">制作于 11-28 04:54</time>` });
+      <time class="pj-at" datetime="2026-11-28T04:54:53+08:00">11-28 04:54</time>` });
     b.main.classList.add('pp-wallpapers');
     return shown;
   }
