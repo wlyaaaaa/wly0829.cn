@@ -51,6 +51,7 @@
   // 要留意的任务：写后台给的原因；后台只标了要留意、没给具体原因的，照实说
   function warnWhy(t) {
     const pick = v => typeof v === 'string' ? v.trim() : typeof v?.text === 'string' ? v.text.trim() : '';
+    if (t.last?.result === 'warn' && t.last.reason_code === 'time_limit' && pick(t.last.reason)) return pick(t.last.reason);
     const said = [pick(t.problem?.reason), t.last?.result === 'warn' && pick(t.last.output), pick(t.output), pick(t.status_note), pick(t.why)].find(v => v && !/^(?:任务有当前问题|运行有异常|有 \d+ 件事要留意)$/.test(v));
     return said || '后台只标了要留意，没给具体原因，点进去看最近几次';
   }
