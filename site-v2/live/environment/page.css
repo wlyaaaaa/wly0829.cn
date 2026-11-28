@@ -103,7 +103,6 @@
 .env-table.env-table--versions th:last-child { width: auto; }
 .env-table--versions td:last-child { white-space: normal; overflow: visible; }
 .env-nw { white-space: nowrap; }
-.env-missing { color: var(--muted); }
 .env-table .env-group__head th, .env-table .env-group__head th:first-child { padding: 10px 18px; font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; background: rgb(0 166 80 / .07); box-shadow: inset 5px 0 0 rgb(0 166 80 / .5); border-top: 6px solid transparent; background-clip: padding-box; }
 .env-table .env-group__head th span { letter-spacing: .02em; }
 .env-group[data-group="approval"] .env-group__head th { background-color: rgb(0 166 80 / .13); box-shadow: inset 5px 0 0 #00A650; }

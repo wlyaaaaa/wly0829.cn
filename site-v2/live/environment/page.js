@@ -5,6 +5,22 @@
   let header = null, softwareViewer = 'public';
   const offline = () => !!U.offline?.();
   const missing = (label = '', meta) => offline() ? '这块没存下来，连上后补上。' : U.collectionText(label, meta);
+  const fieldFallback = (label, meta, key) => {
+    const text = U.collectionText(label, meta, null, key);
+    return offline() || /(?:还没读到|尚未采集)$/.test(text) ? '—' : text;
+  };
+  const unit = html => `<span class="live-unit">${html}</span>`;
+  const keepWords = (html, words) => html.replace(words, unit);
+  function wrapCardLine(card, words) {
+    // 牌面组件先把纯文字写入，保留其余标记和淡入，只包首个文字节点里的词。
+    const node = card?.querySelector('.grp__said')?.firstChild;
+    if (node?.nodeType !== Node.TEXT_NODE) return;
+    const plain = esc(node.textContent), wrapped = keepWords(plain, words);
+    if (wrapped === plain) return;
+    const template = document.createElement('template');
+    template.innerHTML = wrapped;
+    node.replaceWith(template.content);
+  }
   const resources = { software: 'software', runtime: 'runtimes', startup: 'startup' }, observed = {};
   const recordResource = (key, cursor) => params.has('fixture') ? `projects/pcconfig/records-${resources[key]}${cursor ? '-2' : ''}` : 'projects/pcconfig/records';
   const names = { software: '软件版本', runtime: '命令环境', startup: '开机启动' };
@@ -21,7 +37,7 @@
       : Object.hasOwn(d || {}, 'source_at') ? null : d?.at ?? observed[key];
     return [d?.checked_at, d?.source_at, sampled].find(validAt);
   };
-  const plain = (v, key, label = names[key] || '', meta = data[key]) => v == null || v === '' ? (offline() ? '—' : U.collectionText(label, meta)) : typeof v === 'object' ? sp(v) : String(v);
+  const plain = (v, key, label = names[key] || '', meta = data[key]) => v == null || v === '' ? fieldFallback(label, meta) : typeof v === 'object' ? sp(v) : String(v);
   const value = (v, key, label, meta) => esc(sp(plain(v, key, label, meta)));
   const list = d => d?.items, runtime = d => d?.items && Object.assign({ windows: d.items[0]?.windows }, Object.fromEntries(d.items.map(r => [r.runtime_id || r.name, r])));
   // 两边版本都没读到、或比较结果不是“相同／落后／更新”的，算没法比，不算进“0 个落后”（M436）。
@@ -31,7 +47,6 @@
   const inactive = r => isDisabled(r) || isUninstalled(r);
   const compared = r => !inactive(r) && ['equal', 'behind', 'ahead'].includes(r.relation) && !(noVersion(r.current_version) && noVersion(r.target_version));
   const uncomparable = r => !inactive(r) && !compared(r);
-  const comparisonNote = rows => { const n = rows.filter(uncomparable).length; return n ? `${n} 个软件没法直接比版本` : ''; };
   const count = (n, unit, meta, key = 'total') => window.ComputerStat.text(n, unit, meta, key);
   const indicator = (row, level) => U.status({
     ...row, level: level && (!row.level || ['green', 'ok'].includes(row.level)) ? level : row.level,
@@ -39,7 +54,7 @@
   // 保留可换行的说明文字，把日期和钟点连在一起。
   const stamp = at => [U.date(at).replace('-', '\u2011'), U.time(at)].filter(Boolean).join('\u00a0');
   function snapshot(at, key) {
-    if (!at) return offline() ? '' : U.collectionText('快照日期', data[key]);
+    if (!at) return '';
     const days = Math.max(0, Math.floor((Date.parse(offline() ? referenceTime(key) || at : new Date().toISOString()) - Date.parse(at)) / 86400000));
     return `${U.isStale(data[key]) ? '上次 ' : ''}${stamp(at)} 查的${days > 7 ? `（${days} 天前）` : ''}`;
   }
@@ -123,7 +138,7 @@
       const w = Number(seconds) === 604800 && weekday(next);
       return `${w ? `每周${w}自动` : '自动更新'}${isBehind(r) && validAt(next) ? `，下次 ${U.date(next)}` : ''}`;
     }
-    return '还没读到';
+    return fieldFallback('', r, 'update_mode');
   }
   // “现在”：落后的自动项写上次自动更新的结果和原因（后台 last_update）
   function nowState(r) {
@@ -136,20 +151,20 @@
     const what = u.status === 'unknown' || !u.status ? '还没有自动更新的记录' : `${when}${({ deferred: '被推迟：', failed: '没更新成功：' })[u.status] || ''}${sp(u.reason || '')}`;
     return { level: 'yellow', text: what };
   }
-  function versionRow(r, group, timing) {
+  function versionRow(r, timing) {
     const now = nowState(r), way = updateWay(r, timing);
-    const visibleState = group === 'behind' && now.text === '落后' ? '' : now.text;
     const wayText = esc(way).replace(/^(?:每周[日一二三四五六]自动|(?:你|本人)说一声，)|AI 来更新/g, '<span class="env-nw">$&</span>');
     const current = r.installed === false ? '没装' : value(r.current_version, 'software', '装的版本', r);
     const target = inactive(r) && noVersion(r.target_version) ? '—' : value(r.target_version, 'software', '最新版本', r);
-    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${current}">${current}</td><td title="${target}">${target}</td><td>${way === '还没读到' ? '<span class="env-missing">还没读到</span>' : wayText}</td><td title="${esc(now.text)}">${visibleState.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
+    const versionCell = text => r.component_id === 'git' ? text.replace(/\b\d+(?:\.[\da-z]+)+\b/gi, word => word.match(/[^.]+\.?/g).map(unit).join('<wbr>')) : text;
+    return `<tr><td title="${value(r.name || r.component_id)}">${value(r.name || r.component_id, 'software', '软件名', r)}</td><td title="${current}">${versionCell(current)}</td><td title="${target}">${versionCell(target)}</td><td>${wayText}</td><td title="${esc(now.text)}">${now.text.split('，').map((s, i, all) => `<span class="env-nw">${i || !now.level ? '' : indicator({}, now.level)}${esc(s)}${i < all.length - 1 ? '，' : ''}</span>`).join('')}</td></tr>`;
   }
   function versionTable(rows) {
     const timing = softwareTiming(data.software, rows);
     const body = versionGroups(rows).map(g => {
       const list = g.key === 'latest' && g.rows.length > LATEST_FIRST + 1 ? g.rows.slice(0, latestShown) : g.rows, left = g.rows.length - list.length;
       const more = left > 0 ? `<tr class="env-more-row"><td colspan="5"><button type="button" class="more" data-latest-more>${left > LATEST_STEP ? `再看 ${LATEST_STEP} 个（还有 ${left} 个）` : `再看剩下 ${left} 个`} ›</button></td></tr>` : '';
-      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span>${g.key === 'behind' ? '' : ` · ${count(g.rows.length, '个', data.software)}`}</th></tr>${list.map(r => versionRow(r, g.key, timing)).join('')}${more}</tbody>`;
+      return `<tbody class="env-group" data-group="${g.key}"><tr class="env-group__head"><th colspan="5" scope="rowgroup"><span>${esc(g.name)}</span>${g.key === 'behind' ? '' : ` · ${count(g.rows.length, '个', data.software)}`}</th></tr>${list.map(r => versionRow(r, timing)).join('')}${more}</tbody>`;
     }).join('');
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
   }
@@ -210,7 +225,7 @@
       const r = runtime(data.runtime);
       if (!r) { U.html(el, `<p class="env-note">${missing('命令环境', data.runtime)}</p>`); return; }
       const w = r.windows;
-      U.html(el, `<p class="env-note">${window.ComputerStat.gap(data.runtime, 'risk') || window.ComputerStat.gap(data.runtime, 'shells') ? ` · ${esc(window.ComputerStat.gap(data.runtime, 'risk') || window.ComputerStat.gap(data.runtime, 'shells'))}` : ''}</p><ul class="env-differences">${commandRows(r).map(x => `<li>${x.lamp}<span>${esc(x.text)}</span></li>`).join('')}</ul><details class="env-details"${foldAttrs('runtime-details')}><summary>版本、来源和编码明细</summary><p class="env-note">Windows 语言 ${cultures[w?.culture] ? esc(cultures[w.culture]) : value(w?.culture, 'runtime')} · ANSI 代码页 ${value(w?.ansi_code_page, 'runtime')} · OEM 代码页 ${value(w?.oem_code_page, 'runtime')}</p><div class="env-runtime">${[['powershell_core', 'PowerShell 7'], ['windows_powershell', 'Windows PowerShell']].map(([key, name]) => {
+      U.html(el, `<p class="env-note">${window.ComputerStat.gap(data.runtime, 'risk') || window.ComputerStat.gap(data.runtime, 'shells') ? ` · ${esc(window.ComputerStat.gap(data.runtime, 'risk') || window.ComputerStat.gap(data.runtime, 'shells'))}` : ''}</p><ul class="env-differences">${commandRows(r).map(x => `<li>${x.lamp}<span>${keepWords(esc(x.text), /UTF-8）/g)}</span></li>`).join('')}</ul><details class="env-details"${foldAttrs('runtime-details')}><summary>版本、来源和编码明细</summary><p class="env-note">Windows 语言 ${cultures[w?.culture] ? esc(cultures[w.culture]) : value(w?.culture, 'runtime')} · ANSI 代码页 ${value(w?.ansi_code_page, 'runtime')} · OEM 代码页 ${value(w?.oem_code_page, 'runtime')}</p><div class="env-runtime">${[['powershell_core', 'PowerShell 7'], ['windows_powershell', 'Windows PowerShell']].map(([key, name]) => {
         const p = r[key];
         return `<section><p>${name} ${value(p?.version, 'runtime')}</p><dl>${[['来源', sources[p?.install_source] || p?.install_source || (p && key === 'windows_powershell' ? 'Windows 自带' : null)], ['输入编码', encoding(p?.console_input_code_page)], ['输出编码', encoding(p?.console_output_code_page)], ['管道编码', encoding(p?.pipeline_output_code_page)], ['.NET 默认编码', encoding(p?.dotnet_default_code_page)]].map(([label, v]) => `<dt>${label}</dt><dd>${value(v, 'runtime')}</dd>`).join('')}</dl></section>`;
       }).join('')}</div></details>`);
@@ -223,7 +238,7 @@
     return sources[r.source] || r.source;
   }
   function startupRows(rows) {
-    return `<ul class="env-startup">${rows.map(r => `<li><span class="env-program">${value(r.name, 'startup')}</span><span title="${value(r.source_location, 'startup')}">${value(source(r), 'startup')}</span><span>${esc(r.state_text || ({ enabled: '启用', disabled: '停用', true: '启用', false: '停用' })[r.enabled] || U.collectionText('启停状态', r))}</span><details class="env-path"${foldAttrs('startup-path-' + JSON.stringify([r.id ?? r.name, r.source, r.source_location]))}><summary>来源位置</summary><span class="env-path-text">${value(sources[r.source_location] || r.source_location, 'startup')}</span></details></li>`).join('')}</ul>`;
+    return `<ul class="env-startup">${rows.map(r => `<li><span class="env-program">${value(r.name, 'startup')}</span><span title="${value(r.source_location, 'startup')}">${value(source(r), 'startup')}</span><span>${esc(r.state_text || ({ enabled: '启用', disabled: '停用', true: '启用', false: '停用' })[r.enabled] || fieldFallback('启停状态', r))}</span><details class="env-path"${foldAttrs('startup-path-' + JSON.stringify([r.id ?? r.name, r.source, r.source_location]))}><summary>来源位置</summary><span class="env-path-text">${value(sources[r.source_location] || r.source_location, 'startup')}</span></details></li>`).join('')}</ul>`;
   }
   function startupGroups(rows) {
     const groups = new Map(), labels = { enabled: '启用', disabled: '停用', unknown: '启停状态未知' };
@@ -282,7 +297,7 @@
     }
     if (key === 'startup' && rows) {
       const enabled = rows.filter(r => r.enabled === 'enabled' || r.enabled === true).length, disabled = rows.filter(r => r.enabled === 'disabled' || r.enabled === false).length;
-      line = [snapshot(checkedAt(key), key), schedule(d.refresh_interval_seconds ?? d.refresh_seconds, d.next_run_at), count(d.total, '项', d), ['yellow', 'red'].includes(d.level) ? sp(d.why || d.reason) : ''].filter(Boolean).join(' · ');
+      line = [snapshot(checkedAt(key), key), schedule(d.refresh_interval_seconds ?? d.refresh_seconds, d.next_run_at), d.total != null && count(d.total, '项', d), ['yellow', 'red'].includes(d.level) ? sp(d.why || d.reason) : ''].filter(Boolean).join(' · ');
       figures = [{ ...figures[0], text: count(enabled, '项', d, 'enabled') }, { ...figures[1], text: count(disabled, '项', d, 'disabled') }];
     }
     if (!d && !waiting) figures = [];
@@ -297,6 +312,8 @@
       boards[g.key].set([g]);
       if (g.adaptive) boards[g.key].data(g);
       const card = boards[g.key].cards()[0], failed = !offline() && !g.wait && !g.adaptive && !Array.isArray(data[g.key]?.items);
+      if (g.key === 'software') wrapCardLine(card, /官网最新版|没开机|开机后|补查|装机登记|每天刷新|最近/g);
+      if (g.key === 'startup') wrapCardLine(card, /[^\s·][^·]* · (?:至少 )?\d[\d,.]* 项/g);
       card?.classList.toggle('is-unread', failed);
       let say = card?.querySelector('[data-unread]');
       if (failed && !say) { say = document.createElement('p'); say.dataset.unread = ''; say.className = 'env-note'; card.querySelector('.card__body').append(say); }
@@ -314,16 +331,21 @@
     if (!$('board').matches(':hover,:focus-within')) groups.sort((a, b) => (Number(!!a.adaptive) - Number(!!b.adaptive)) || ((({ red: 0, yellow: 1, blue: 2, gray: 3, none: 4, green: 5, ok: 5 })[a.level] ?? 4) - (({ red: 0, yellow: 1, blue: 2, gray: 3, none: 4, green: 5, ok: 5 })[b.level] ?? 4))).forEach(g => $('board').append(hosts[g.key]));
     const rows = list(data.software);
     hero.classList.toggle('is-unread', !offline() && !rows && Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p)));
-    // 页顶大字先说有几个要你点头才更新，小字说其余的（照图 ENV-1）；后台还没给 update_mode 时照旧写“几个软件 · 几个版本落后”
-    if (rows && hasMode(rows)) {
-      const n = Object.fromEntries(versionGroups(rows).map(g => [g.key, count(g.rows.length, '个', data.software)]));
-      $('note').textContent = [n.auto && `${n.approval ? '另有 ' : ''}${n.auto}会自动更新，还没更新上`, n.behind && `${n.behind}版本落后`, n.latest && `${n.latest}已是最新`, n.other && `${n.other}没法比新旧`, n.uninstalled && `${n.uninstalled}未安装`, n.disabled && `${n.disabled}已停用`].filter(Boolean).join(' · ');
+    // 页头和表共用分组，旧回包无法判断要谁更新时仍显示软件总数和落后数。
+    if (rows) {
+      const d = data.software, modeKnown = hasMode(rows);
+      const n = Object.fromEntries(versionGroups(rows).map(g => [g.key, count(g.rows.length, '个', d)]));
+      const behind = n.other && !n.behind && !n.latest ? '版本没法比新旧' : `${n.behind ?? count(0, '个', d, 'behind')}版本落后`;
+      const headline = modeKnown
+        ? (n.approval ? `${n.approval}要${you()}点头才更新` : `没有要${you()}点头才更新的软件`)
+        : `${count(d.total ?? rows.length, '个', d)}软件 · ${behind}`;
+      $('note').textContent = [n.auto && `${n.approval ? '另有 ' : ''}${n.auto}会自动更新，还没更新上`, modeKnown && n.behind && behind, n.latest && `${n.latest}已是最新`, n.other && `${n.other}没法比新旧`, n.uninstalled && `${n.uninstalled}未安装`, n.disabled && `${n.disabled}已停用`].filter(Boolean).join(' · ');
       $('note').hidden = !$('note').textContent;
-      U.html($('head'), status.lamp + U.head(n.approval ? `${n.approval}要${you()}点头才更新` : `没有要${you()}点头才更新的软件`, { lamp: false })); heroRead.done();
-    } else if (rows) { $('note').textContent = comparisonNote(rows); $('note').hidden = !$('note').textContent; }
-    else { $('note').textContent = ''; $('note').hidden = true; }
-    if (rows && !hasMode(rows)) { const behind = rows.filter(isBehind).length, none = rows.some(uncomparable) && !rows.some(compared); U.html($('head'), status.lamp + U.head(`${window.ComputerStat.text(data.software.total ?? rows.length, '个', data.software, 'total')}软件 · ${none ? '还没读到版本，没法比新旧' : `${count(behind, '个', data.software, 'behind')}版本落后`}`, { lamp: false })); heroRead.done(); }
-    else if (!rows && Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
+      U.html($('head'), status.lamp + U.head(headline, { lamp: false })); heroRead.done();
+    } else {
+      $('note').textContent = ''; $('note').hidden = true;
+      if (Object.keys(phases).length === 3 && Object.values(phases).every(p => ['none', 'gone', 'ready'].includes(p))) { U.html($('head'), status.lamp + U.head(offline() ? '软件与环境' : '软件与环境暂时读不到', { lamp: false })); heroRead.done(); }
+    }
     if (!lit && Object.keys(data).length) { lit = true; L.lightUp([hero, ...Object.values(boards).flatMap(b => b.cards())]); }
   }
   // 两版同一套：访客也照本人版看各卡自己的截止说明，不再另写一行“公开数据读于 …”把它们换掉（同一接口原时刻照给）
