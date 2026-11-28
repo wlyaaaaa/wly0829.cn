@@ -36,3 +36,7 @@
 .pj-interface-view .is-scrollable + .pj-interface-controls { flex: none; }
 .pj-interface-view figcaption { text-align: center; }
 .pj-interface-controls { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+
+.pj-interface-pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.pj-interface-pages > span { color: var(--muted); font-size: 13px; }
+.pj-interface-pages .more:disabled { visibility: hidden; }

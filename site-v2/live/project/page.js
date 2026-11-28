@@ -30,10 +30,13 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
-  if (id === 'pcconfig') {
-    const style = Object.assign(document.createElement('link'), { rel: 'stylesheet', href: '/live/project/pcconfig.css' });
+  const plugin = id === 'pcconfig' ? ['/live/project/pcconfig.js', '/live/project/pcconfig.css']
+    : id === 'agents' ? ['/live/project/agents.js', '/live/project/agents.css'] : null;
+  if (plugin) {
+    const [script, href] = plugin;
+    const style = Object.assign(document.createElement('link'), { rel: 'stylesheet', href });
     document.head.append(style);
-    await import('/live/project/pcconfig.js').catch(() => style.remove());
+    await import(script).catch(() => style.remove());
   }
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
@@ -335,7 +338,9 @@
     const brief = canShorten ? trim(it.display_title) || null : null, version = canShorten && /^(E\d+)\s*[｜|：:]/.exec(title)?.[1];
     const display = typeof brief === 'string' && brief && version && !/^E\d+\b/.test(brief) ? `${version}｜${brief}` : brief ?? (legacy ? `${legacy[1]}｜${legacy[2]}` : title);
     const nameHidden = projectViewer === 'public' && [it.recent_title, it.title].some(v => restricted(v) || /(?:仅本人可见|可信设备可见)$/.test(sp(v)));
-    const name = nameHidden ? '成品名称仅本人可见' : titleVisible ? [proj?.name && text(proj.name), text(it.recent_title || '已登记的成品')].filter(Boolean).join(' · ') : '';
+    const rulesVersion = it.kind === 'rules' && version;
+    const caption = rulesVersion ? `${rulesVersion} 规则更新` : it.recent_title || (canShorten ? title : '已登记的成品');
+    const name = nameHidden ? '成品名称仅本人可见' : titleVisible ? [!canShorten && proj?.name && text(proj.name), text(caption)].filter(Boolean).join(' · ') : '';
     // M684：本人版成品名称旁按后台 visitor_labels.title 挂签；后台还没标、但访客版另有名字（public_title 和本人版的名字不一样）的，就是成品改了名字，挂第二种签。
     const renamed = projectViewer === 'owner' && typeof it.public_title === 'string' && it.public_title.trim() && it.public_title.trim() !== U.fieldText(it.recent_title || it.title, projectViewer).trim();
     // 整条只给本人的成品（visibility: 'owner'，或后台标了整块 hidden）：本人版名称后挂“访客看不到”，点开写访客版看不到这份成品的标题和内容
@@ -352,17 +357,24 @@
     // M684：访客那边正文看不到（整块写成“这里是……，所以不予展示”），挂“访客看不到”；后台给了 visitor_labels.open 时照它挂哪种。
     const openNote = U.fieldText(it.open_note, projectViewer).trim();
     // 两版同一套：访客版正文那句（open_note）照写，打开按钮也照摆，不再让那句把按钮压掉
-    const target = !artifactVersion && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
-    const action = target ? projectViewer === 'public' && typeof target.href === 'string'
+    const target = (!artifactVersion || projectViewer === 'owner') && U.artifactAction({ ...it, web_open: publicLink }, projectViewer, route);
+    const versionUrl = rulesVersion && route(`/live/project/?id=agents&artifact=${rulesVersion}#artifacts`);
+    const openTag = quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer);
+    const versionButton = versionUrl && !artifactVersion && (projectViewer === 'owner'
+      ? `<a class="btn btn--sm" href="${esc(versionUrl)}" data-mo-press>看这版改动</a>${openTag}`
+      : '<button type="button" class="btn btn--sm" data-rule-trust data-mo-press>看这版改动</button>');
+    const action = versionButton || (target ? projectViewer === 'public' && typeof target.href === 'string'
       ? `<a class="btn btn--sm" href="${esc(target.href)}"${/^https?:/i.test(target.href) ? ' target="_blank" rel="noopener"' : ''} data-mo-press>${esc(target.label)}</a>${U.visitorLabel(it, 'open', '这份成品的正文', projectViewer)}`
-      : pcActions(item, [target]) + (quiet || whole ? '' : U.visitorLabel(it, 'open', '这份成品的正文', projectViewer) || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '';
+      : pcActions(item, [target]) + (quiet || whole ? '' : openTag || (openNote ? U.visitorHiddenTag('这份成品的正文', `访客版在打开链接的位置写：${openNote}`, projectViewer) : '')) : '');
     const noteLine = !artifactVersion && openNote && projectViewer === 'public' ? `<p class="row__sub">${esc(openNote)}</p>` : '';
-    const canOpen = projectViewer === 'owner' && !!target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id);
+    const canOpen = projectViewer === 'owner' && (versionButton || target && (typeof target.href === 'string' || !!target.href?.target && !!target.href?.item_id));
     const note = canOpen ? '' : marker(it, projectViewer, it.hidden_what || '产物文件');
     // 没写说明就不写这一行（原来的兜底句“这项成品已有登记，内容说明待补充。”两版读着都像没写）
     const explanation = titleVisible ? it.recent_detail || '' : '';
     const solution = canShorten && typeof it.solves === 'string' ? it.summary_zh || it.solves : it.solves;
-    const knownSolution = solution && !/^(?:没有|未)记录(?:解决)?(?:[。.]|$)/.test(sp(solution));
+    const distinctSolution = id !== 'agents' || ![explanation, ...changes].some(value =>
+      U.fieldText(value, projectViewer).trim() === U.fieldText(solution, projectViewer).trim());
+    const knownSolution = solution && distinctSolution && !/^(?:没有|未)记录(?:解决)?(?:[。.]|$)/.test(sp(solution));
     const solves = knownSolution ? `<p class="row__sub">解决：${U.fieldHtml(solution, { name: '解决', kind: projectViewer })}</p>` : '';
     return {
       key: item.id,
@@ -713,7 +725,7 @@
     publishChanges(missing ? quiet ? true : hint || unreadText(result) : '');
   }
   function readSide(d, reads, watch) {
-    if (id === 'agents' && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
+    if (id === 'agents' && !custom?.ownsSections && !correctionsWatch) correctionsWatch = watch('chats', null, { data(d, meta) {
       if (sameViewer(meta) && d?.stats?.owner_corrections) { additions.corrections = d.stats.owner_corrections; if (!first) renderBoard(false); }
     } });
     reads.push(readChanges());
@@ -783,6 +795,34 @@
     const state = b.pageWaiting ? { ...artsState, data: arts, fallbackNote: true } : artsState;
     showRefreshCutoff(b.el, state);
   }
+  function artifactPage(b, items, size) {
+    if (!b.artifactPager) {
+      const pager = b.artifactPager = document.createElement('nav');
+      pager.className = 'pj-artifact-pages';
+      pager.setAttribute('aria-label', '产物分页');
+      b.page.after(pager);
+      pager.onclick = async e => {
+        const button = e.target.closest('[data-artifact-step]');
+        if (!button || b.artifactLoading) return;
+        const index = b.artifactPage + Number(button.dataset.artifactStep), epoch = audience;
+        b.artifactLoading = true;
+        try {
+          if (index * size >= arts?.items?.length && arts?.next) await loadArtifacts(b);
+          if (epoch === audience && index >= 0 && index * size < (arts?.items?.length || 0)) {
+            b.artifactPage = index;
+            renderBoard(false);
+          }
+        } finally { b.artifactLoading = false; }
+      };
+    }
+    const count = Math.max(1, Math.ceil((arts?.next ? Math.max(arts.total || 0, items.length + 1) : items.length) / size));
+    const index = b.artifactPage = Math.min(b.artifactPage || 0, Math.max(0, Math.ceil(items.length / size) - 1));
+    b.artifactPager.hidden = !items.length;
+    U.html(b.artifactPager, `<button type="button" class="more" data-artifact-step="-1"${index === 0 ? ' disabled' : ''}>‹ 上一页</button>
+      <span aria-live="polite">${index + 1} / ${count}</span>
+      <button type="button" class="more" data-artifact-step="1"${index + 1 === count ? ' disabled' : ''}>下一页 ›</button>`, false);
+    return items.slice(index * size, (index + 1) * size);
+  }
   async function loadArtifacts(b) {
     const generation = audience, cursor = arts?.next, label = b.page.innerHTML;
     if (!cursor) return;
@@ -794,7 +834,7 @@
         () => { b.pageWaiting = true; showArtifactCutoff(b); });
       if (!current() || !sameViewer(result?.meta)) return;
       // 接着读到的一页：露出新来的头一批（这颗按钮只在已读到的都露完时才出）
-      if (result?.meta?.status < 400 && Array.isArray(result.data?.items)) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...result.data.items] }; if (!artifactVersion) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
+      if (result?.meta?.status < 400 && Array.isArray(result.data?.items)) { const before = arts.items.length; arts = { ...result.data, items: [...arts.items, ...result.data.items] }; if (!artifactVersion && !b.artifactPager) { b.reveal ??= new Map(); b.reveal.set('', Math.max(0, before - (b.groupPreview || 0)) + (b.step || BATCH.rows)); } renderBoard(true); }
       else {
         b.note.hidden = false; U.html(b.note, U.fieldHtml(missingText(result, '下一页'), { name: '项目内容', kind: projectViewer }));
       }
@@ -1086,17 +1126,20 @@
       if (!custom?.noArtifacts && (artifactsTarget || proj.artifacts?.count || (proj.artifacts?.count === 0 && lower(proj.artifacts, 'count')) || (projectViewer === 'public' && (proj.artifacts?.hidden || arts?.hidden)))) {
         const b = block('artifacts', 'rows');
         b.el.classList.add('pj-sec--flat'); b.artifacts = true; b.group = 'artifacts';
-        // 产物一行高（标题、说明、打开按钮），一批 5 行；已读到的露完了才出“再看”接着读
-        b.step = 5; b.hasNext = !artifactVersion && !!arts?.next;
+        const pageSize = !artifactVersion && custom?.artifactPageSize;
+        // 默认仍逐批展开。项目自己指定每页大小时，用前后页。
+        b.step = 5; b.hasNext = !artifactVersion && !pageSize && !!arts?.next;
         const missingArts = !Array.isArray(arts?.items) && !(arts?.hidden || proj.artifacts?.hidden);
-        const items = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const loadedItems = (arts?.items || []).filter(it => !artifactVersion || versionHit(it));
+        const items = pageSize ? artifactPage(b, loadedItems, pageSize) : loadedItems;
         const versionMore = !!artifactVersion && !items.length && !!arts?.next && !b.versionFailed;
         const sharedAt = items.length > 1 && items[0].at && items.every(it => it.at === items[0].at && it.at_precision === items[0].at_precision);
         // 连接层还可能重读，但已经收到了失败响应，先照实写这次没读到。
         const reading = missingArts && proj.artifacts && (!artsState || (artsState.meta?.status < 400 && ['idle', 'wait', 'slow'].includes(artsState.phase)));
         const empty = reading ? '加载中' : versionMore ? '正在往后读这版的改动记录…' : artifactVersion ? (b.versionFailed || missingArts ? '这版的改动记录这次没读到' : '这版没有改动记录') : arts?.hidden || proj.artifacts?.hidden ? '' : missingArts ? missingText(artsState, '最近产物') : '还没有产物';
         const label = artifactVersion ? `${artifactVersion} 规则改动` : missingArts && !artifactsTarget && !U.offline?.() ? '' : '最近产物';
-        fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i, sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
+        if (pageSize) b.preview = pageSize;
+        fill(b, { label, about: sharedAt ? stamp(items[0].at, items[0].at_precision) : '', rows: items.map((it, i) => artifactRow(it, i + (b.artifactPage || 0) * (pageSize || 0), sharedAt)), total: artifactVersion ? items.length : arts?.total, note: arts?.text, hidden: !artifactVersion && projectViewer === 'public' ? arts?.hidden || proj.artifacts?.hidden : 0, hiddenWhat: arts?.hidden_what || proj.artifacts?.hidden_what, empty }, animate);
         syncPage(b);
         if (versionMore) readVersion(b);
         showArtifactCutoff(b);
@@ -1135,7 +1178,7 @@
     const gallery = custom?.interfaceCard && blocks.get(custom.interfaceCard)?.viz;
     if (gallery && !interfaceLoad) {
       interfaceLoad = import('/live/project/interface.js')
-        .then(module => module.mountInterface(id, gallery, keepWords, { embedded: true, note: custom.interfaceNote }))
+        .then(module => module.mountInterface(id, gallery, keepWords, { embedded: true, note: custom.interfaceNote, pageSize: custom.interfacePageSize }))
         .catch(() => { interfaceLoad = null; });
     }
     // 首次跳到分段后，晚到的项目数据可能把卡片移到另一栏。
@@ -1497,6 +1540,7 @@
   });
   // 分组底下的“展开（还有 N 条）／收起”
   board.addEventListener('click', (e) => {
+    if (e.target.closest?.('[data-rule-trust]')) { U.guard(e); return; }
     const btn = e.target.closest?.('.pj-step'), b = btn && blocks.get(btn.closest('.pj-sec')?.id);
     if (!b) return;
     const close = btn.hasAttribute('data-open'), sec = b.el, key = btn.dataset.step;

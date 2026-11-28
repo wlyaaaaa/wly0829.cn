@@ -397,3 +397,6 @@ a.pj-cell:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: -
 .page--project.pj-sparse #pj-hero .card__glass { min-height: 300px; padding-top: 56px; }
 .page--project.pj-sparse #pj-hero.card[data-pic] { --win: clamp(460px, 64%, 900px); }
 .page--project.pj-sparse .pj-line .pj-about { font-size: 16.5px; line-height: 28px; }
+
+.pj-artifact-pages { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+.pj-artifact-pages .more:disabled { opacity: .45; cursor: default; }

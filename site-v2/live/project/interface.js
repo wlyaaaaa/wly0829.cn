@@ -6,7 +6,7 @@ function showImage(image, url) {
   image.src = url;
 }
 
-export async function mountInterface(id, host, words = html => html, { embedded = false, note = '' } = {}) {
+export async function mountInterface(id, host, words = html => html, { embedded = false, note = '', pageSize } = {}) {
   const response = await fetch('/live/project/interface-data.json');
   if (!response.ok) throw new Error('界面图清单暂时读不到');
   const shots = (await response.json())[id];
@@ -25,14 +25,12 @@ export async function mountInterface(id, host, words = html => html, { embedded 
   if (!embedded) section.setAttribute('aria-labelledby', 'pj-interface-title');
   section.innerHTML = `
     ${embedded ? '' : '<h2 id="pj-interface-title">界面</h2><p>点图看大图</p>'}
-    <div class="pj-interface-grid">${shots.map(([, , label, , caption = label]) => `
-      <figure>
-        <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
-          <img decoding="async" alt=""><span class="pj-interface-zoom" aria-hidden="true"></span>
-        </button>
-        <figcaption>${words(esc(embedded ? caption : label))}</figcaption>
-      </figure>`).join('')}
-    </div>
+    <div class="pj-interface-grid"></div>
+    ${pageSize && shots.length > pageSize ? `<nav class="pj-interface-pages" aria-label="截图分页">
+      <button type="button" class="more" data-page-step="-1">‹ 上一页</button>
+      <span aria-live="polite"></span>
+      <button type="button" class="more" data-page-step="1">下一页 ›</button>
+    </nav>` : ''}
     ${embedded && note ? `<p>${esc(note)}</p>` : ''}
     <dialog class="pj-interface-view" aria-label="界面大图">
       <figure><img decoding="async" alt=""><figcaption></figcaption></figure>
@@ -77,13 +75,41 @@ export async function mountInterface(id, host, words = html => html, { embedded 
       observer.unobserve(target);
     }
   }, { rootMargin: '0px 0px 160px' });
-  section.querySelectorAll('.pj-interface-thumb').forEach((button, index) => {
-    const thumb = button.querySelector('img');
-    // 只有一张图时图放大到卡内六成，缩略图（560 像素宽）不够清楚，直接用原图
-    thumb.dataset.thumb = shots[index][shots.length === 1 ? 1 : 0];
-    observer.observe(thumb);
-    button.onclick = () => { show(index); dialog.showModal(); };
-  });
+  const grid = section.querySelector('.pj-interface-grid');
+  const pager = section.querySelector('.pj-interface-pages');
+  const size = pager ? pageSize : shots.length;
+  const pages = Math.ceil(shots.length / size);
+  let galleryPage = 0;
+  function draw() {
+    const start = galleryPage * size;
+    observer.disconnect();
+    grid.innerHTML = shots.slice(start, start + size).map(([, , label, , short = label]) => `
+      <figure>
+        <button type="button" class="pj-interface-thumb" aria-haspopup="dialog" aria-label="看大图：${esc(label)}">
+          <img decoding="async" alt=""><span class="pj-interface-zoom" aria-hidden="true"></span>
+        </button>
+        <figcaption>${words(esc(embedded ? short : label))}</figcaption>
+      </figure>`).join('');
+    grid.querySelectorAll('.pj-interface-thumb').forEach((button, offset) => {
+      const index = start + offset, thumb = button.querySelector('img');
+      // 只有一张图时放大摆，直接用原图。
+      thumb.dataset.thumb = shots[index][shots.length === 1 ? 1 : 0];
+      observer.observe(thumb);
+      button.onclick = () => { show(index); dialog.showModal(); };
+    });
+    if (pager) {
+      pager.querySelector('span').textContent = `${galleryPage + 1} / ${pages} · 共 ${shots.length} 张`;
+      pager.firstElementChild.disabled = galleryPage === 0;
+      pager.lastElementChild.disabled = galleryPage === pages - 1;
+    }
+  }
+  if (pager) pager.onclick = e => {
+    const button = e.target.closest('[data-page-step]');
+    if (!button) return;
+    galleryPage += Number(button.dataset.pageStep);
+    draw();
+  };
+  draw();
   if (embedded) host.append(section);
   else host.after(section);
 }
