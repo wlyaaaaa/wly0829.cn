@@ -146,6 +146,7 @@
   .page--project #pj-board[data-personal-project] { grid-template-columns: minmax(0, 1fr); }
   #pj-board[data-personal-project="steam"] { grid-template-areas: "comparison" "wardrobe" "artifacts" "history" "changes" "more"; }
   #pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles" "background" "artifacts" "more" "changes"; }
+  [data-personal-project="emerald"] #artifacts .pp-wallpaper-card:not(.pp-bubbles, .pp-mobile-wallpaper) .row__sub { text-wrap: pretty; }
   #pj-board[data-personal-project="github"] { grid-template-areas: "snake" "profile" "artifacts" "changes"; }
   #pj-board[data-personal-project="typora"] { grid-template-areas: "samples" "theme" "artifacts" "changes" "more"; }
   .pp-samples figcaption strong { gap: 4px; font-size: 12px; }
