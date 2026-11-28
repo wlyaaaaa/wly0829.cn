@@ -16,6 +16,8 @@
   const back = document.querySelector('[data-back]');
   const from = document.referrer ? new URL(document.referrer) : null;
   const hero = $('hero'), stage = $('stage');
+  const runsFold = $('runs-fold'), runsToggle = $('runs-toggle');
+  U.fold(runsToggle, runsFold, null, true);
   if (from?.origin === location.origin && from.pathname === '/live/automation/') {
     back.href = from.pathname + from.search; back.textContent = '自动任务';
   }
@@ -520,8 +522,8 @@
     $('more-runs').hidden = total <= first && !cursor && !detached;
     const earlier = Math.max(0, total - first);
     const countNote = earlier ? `（更早的 ${earlier} 次）` : '';
-    const moreLabel = `<span class="disclosure-closed">展开${countNote}</span><span class="disclosure-open">收起${countNote}</span><span class="disclosure-chev" aria-hidden="true">›</span>`;
-    if ($('more-runs').querySelector('summary').innerHTML !== moreLabel) $('more-runs').querySelector('summary').innerHTML = moreLabel;
+    const moreLabel = `<span class="disclosure-closed">展开${countNote}</span><span class="disclosure-open">收起${countNote}</span><span class="more__chev" aria-hidden="true">›</span>`;
+    U.html(runsToggle, moreLabel, false);
     // 更早的一次只摆一批，底下“再看 50 次”接着摆；几千次一次全写进来会把页面卡死（M632）。要看的那一次在后面时摆到它为止。
     // 后台分页时已取的都摆出来，“再看”向后台取下一批；老回包一次带全的照旧本地分批摆
     const rest = runs.slice(first), target = old ? rest.indexOf(old) : -1;
@@ -531,7 +533,7 @@
     const readMore = left ? `再看 ${Math.min(RUN_BATCH, left)} 次（还有 ${left} 次） ›` : '再读更早的记录 ›';
     const more = cursor || !page && left ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || readMore}</button>` : '';
     U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
-    if (target >= 0 || detached) $('more-runs').open = true;
+    if (target >= 0 || detached) runsFold._liveOpen();
     write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
     $('future').hidden = kind !== 'schedule';
     if (kind === 'schedule') {

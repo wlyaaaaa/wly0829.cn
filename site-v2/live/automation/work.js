@@ -217,7 +217,7 @@
       : common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到';
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
-    const more = '<span class="aw-mechanism__more">展开看全文 ›</span>';
+    const more = '<span class="aw-mechanism__more"><span class="disclosure-closed">展开看全文 ›</span><span class="disclosure-open">收起 ‹</span></span>';
     const shared = common ? `<details id="aw-repair-common" data-fold-anchor><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
     const lines = specific ? specific.split('\n') : [];
     const ownPrompt = lines.length > 12

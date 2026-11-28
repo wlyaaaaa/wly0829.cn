@@ -225,6 +225,7 @@
     U.html($('coverage'), revoked ? '' : U.fieldHtml(text, { name: '读取情况', place: 'body', kind: viewer }));
     U.html(changesTitle, '任务变化');
     if (revoked) $('changes').replaceChildren(); else U.list($('changes'), empty(text));
+    showChangeEmpty(revoked ? '' : text);
     $('next').hidden = true;
     const upcoming = $('upcoming'); if (upcoming) upcoming.hidden = true;
   }
@@ -234,34 +235,28 @@
   const updating = '计划任务正在更新访客版，稍后自动补上。';
   const nextPage = $('next'), nextLabel = nextPage.textContent;
   const GROUP_STEP = 10;
-  const backSteps = performance.getEntriesByType('navigation')[0]?.type === 'back_forward' ? history.state?.taskGroupSteps : null;
+  function showChangeEmpty(text) {
+    const show = maintenance && !!text, panel = $('changes-empty');
+    panel.hidden = !show;
+    $('changes-box').hidden = show;
+    if (show) U.list(panel.querySelector('ul'), empty(text));
+  }
   function drawGroup(s) {
     if (!s.groupRows) return;
     const all = [...new Map([...s.groupRows, ...(s.loadedRows || [])].map(t => [t.id, t])).values()].filter(t => !s.preview.has(t.id));
     const remaining = Math.max(all.length, s.size - s.preview.size);
     const remote = s.remote && (s.loadedRows == null || s.cursor != null);
     const flat = !remote && all.length === 1 && !U.shouldFold(remaining);
-    const shown = maintenance || !remote && !U.shouldFold(remaining - s.step) ? all : all.slice(0, s.step);
-    const local = all.length > shown.length, left = remaining - shown.length;
+    const left = remaining - all.length;
     const main = s.groupRows.slice(0, s.preview.size);
     U.list(s.main, (flat ? main.concat(all) : main).map(s.rowOf));
-    U.list(s.rest, flat ? [] : shown.map(s.rowOf));
+    U.list(s.rest, flat ? [] : all.map(s.rowOf));
     s.more.hidden = !remaining || flat;
-    s.localMore = local;
-    s.next.hidden = !local && (!s.remote || s.cursor == null && s.loadedRows != null);
-    s.next.toggleAttribute('data-needs-pc', !local);
-    if (!s.next.disabled) s.next.textContent = !local && s.failed ? s.failed === updating ? updating : '这批没读到，再试一次 ›'
+    s.next.hidden = !remote;
+    if (!s.next.disabled) s.next.textContent = s.failed ? s.failed === updating ? updating : '这批没读到，再试一次 ›'
       : left > 0 ? `再看 ${Math.min(GROUP_STEP, left)} 条（还有 ${left} 条） ›` : '继续看 ›';
   }
-  function moreGroup(id) {
-    const s = sections.get(id);
-    if (s.localMore) { s.step += GROUP_STEP; drawGroup(s); L.lightUp([s.el]); taskWords(); }
-    else return loadGroup(id, s.loadedRows != null, s.cursor != null);
-  }
-  function saveGroupSteps() {
-    history.replaceState({ ...history.state, taskGroupSteps: Object.fromEntries([...sections].map(([id, s]) => [id, s.step])) }, '');
-  }
-  async function loadGroup(id, advance = false, append = false) {
+  async function loadGroup(id, append = false) {
     const s = sections.get(id), ticket = generation;
     if (!s.remote) return true;
     if (s.next.disabled) return false;
@@ -281,7 +276,6 @@
       if (!Array.isArray(r.data?.items)) return false;
       s.loadedRows = [...new Map([...(append ? s.loadedRows : []), ...(taskGroups({ task_purpose_catalog: page?.task_purpose_catalog }, r.data.items).get(id) || [])].map(t => [t.id, t])).values()];
       s.cursor = r.data.next !== s.cursor ? r.data.next : null;
-      if (advance) s.step += GROUP_STEP;
       loaded = s.box._loaded = true;
       return true;
     } finally {
@@ -316,10 +310,9 @@
     for (const [id, list] of groups) {
       const visible = Math.min(5, list.length);
       if (!sections.has(id)) {
-        const c = board.card(id, look(id)); c.step = backSteps?.[id] || GROUP_STEP; sections.set(id, c);
+        const c = board.card(id, look(id)); sections.set(id, c);
         U.fold(c.more, c.box, () => loadGroup(id), true);
-        c.more.addEventListener('click', () => { if (c.more.getAttribute('aria-expanded') === 'false') { c.step = GROUP_STEP; drawGroup(c); saveGroupSteps(); } });
-        c.next.addEventListener('click', async () => { await moreGroup(id); saveGroupSteps(); });
+        c.next.addEventListener('click', () => loadGroup(id, c.cursor != null));
       }
       const group = registeredGroup((page.groups || []).find(g => g.id === id));
       const groupName = group?.name || group?.label || group?.title || group?.text;
@@ -377,10 +370,12 @@
     U.html(changesTitle, moved?.title || '任务变化');
     const detailLock = viewer === 'public' && Array.isArray(d.changes7) && d.changes7.length && !d.changes7.some(c => typeof c.owner_detail === 'string')
       ? [{ key: 'detail-lock', cls: 'row row--flat', html: `<span></span><p class="row__sub">${U.fieldHtml({ value: null, visibility: 'owner', hidden_what: '每条变化的详情（任务在电脑上的原名和最近运行时间）' }, { place: 'body', kind: viewer })}</p>` }] : [];
-    U.list($('changes'), !Array.isArray(d.changes7) ? empty('任务变更记录没读到') : d.changes7.length ? [...detailLock, ...d.changes7.map(c => ({
+    const changeEmpty = !Array.isArray(d.changes7) ? '任务变更记录没读到' : !d.changes7.length ? moved.empty : '';
+    showChangeEmpty(changeEmpty);
+    U.list($('changes'), changeEmpty ? empty(changeEmpty) : [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
       html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
-    }))] : empty(moved.empty));
+    }))]);
     taskHead(moved);
     cursor = d.next; nextPage.hidden = !cursor; nextPage.textContent = nextLabel; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
     if (!maintenance) drawUpcoming(listedTasks(groups)); U.land(); taskWords();
@@ -506,14 +501,14 @@
   }
   function load() {
     generation++; watch?.stop();
-    for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.step = GROUP_STEP; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
+    for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
     page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('正在读'); taskHead();
     watch = window.Live.watch('tasks', { scope, project, q: query || null }, {
       phase(s) { if (!page && !s.meta?.publicationRevoked) { groupsRead.set(s); changesRead.set(s); } },
       data(d, meta) {
         const ticket = ++generation, kind = meta.viewer?.kind || 'public';
         if (meta.publicationRevoked) { rows = []; runningReading = null; coverageNote = ''; $('sources').replaceChildren(); }
-        if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.step = GROUP_STEP; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
+        if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
         const paint = packet => {
           if (viewer !== kind) runningReading = null;
           viewer = kind; batchAt = meta.at; now = meta.now || meta.at;

@@ -131,9 +131,9 @@ h1 .task-provider { margin-left: .6em; }
   .task-fact-word { white-space: nowrap; }
 }
 /* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
-#more-runs { position: relative; }
-#more-runs[open] { padding-bottom: 30px; }
-#more-runs[open] > summary { position: absolute; left: 0; bottom: 0; }
+#runs-toggle { margin: 0; padding: 0; translate: none; color: var(--ink-soft); }
+#runs-toggle[aria-expanded="true"] .disclosure-closed { display: none; }
+#runs-toggle[aria-expanded="true"] .disclosure-open { display: inline; }
 .task-card dl { margin: 0; }
 .task-card dl > div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid rgb(37 42 65 / .07); }
 .task-card dl dt { color: #505565; }
@@ -167,7 +167,7 @@ h1 .task-provider { margin-left: .6em; }
   #facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 30px; }
 }
 
-.page--task[data-variant="plan"] .task-columns:not(:has(details[open])) .task-aside { align-self: stretch; }
+.page--task[data-variant="plan"] .task-columns:not(:has(details[open], #runs-fold.is-open)) .task-aside { align-self: stretch; }
 .page--task[data-variant="plan"] .task-about { display: flex; flex-direction: column; }
 .page--task[data-variant="plan"] #facts { flex: 1; display: grid; }
 .page--task[data-variant="plan"] #facts > div { align-items: center; }
