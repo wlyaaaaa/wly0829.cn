@@ -217,11 +217,12 @@
       : common ? (specific ? '共用修理原话' : '共用修理原话 · 这一类没有专用段') : '这次没读到';
     const title = `<span><b class="aw-example-tag">派给 AI 的原话：</b> ${esc(note)}</span>`;
     const pre = text => `<pre>${esc(text)}</pre>`;
-    const more = '<span class="aw-mechanism__more"><span class="disclosure-closed">展开看全文 ›</span><span class="disclosure-open">收起 ‹</span></span>';
-    const shared = common ? `<details id="aw-repair-common" data-fold-anchor><summary>${title}${more}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
+    const more = name => `<span class="aw-mechanism__more"><span class="disclosure-closed">展开看${name}全文</span><span class="disclosure-open">收起</span><span class="disclosure-chev" aria-hidden="true">›</span></span>`;
+    const shared = common ? `<details id="aw-repair-common" data-fold-anchor><summary class="live-disclosure">${title}${more('共用修理原话')}</summary>${pre(common)}</details>` : `<p>${title}</p>`;
     const lines = specific ? specific.split('\n') : [];
+    const specificName = id === 'website' ? '网站交接' : id === 'projects' ? '仓库清理' : '专用原话';
     const ownPrompt = lines.length > 12
-      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific" data-fold-anchor><summary>${more}</summary>${pre(lines.slice(5).join('\n'))}</details>`
+      ? pre(lines.slice(0, 5).join('\n')) + `<details id="aw-repair-specific" data-fold-anchor><summary class="live-disclosure"><span class="disclosure-open">${specificName}</span>${more(specificName)}</summary>${pre(lines.slice(5).join('\n'))}</details>`
       : specific ? pre(specific) : '';
     const commitment = id === 'acceptance';
     const guide = route('/live/automation/how/', { type: commitment ? 'ai-commitments' : 'auto-repair' });

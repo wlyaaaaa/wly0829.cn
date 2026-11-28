@@ -235,11 +235,16 @@
   const updating = '计划任务正在更新访客版，稍后自动补上。';
   const nextPage = $('next'), nextLabel = nextPage.textContent;
   const GROUP_STEP = 10;
+  const keepGroupWords = html => html.replace(/<[^>]+>|计划任务|计划|任务/g, word =>
+    word.startsWith('<') ? word : `<span class="task-phrase">${word}</span>`);
   function showChangeEmpty(text) {
     const show = maintenance && !!text, panel = $('changes-empty');
     panel.hidden = !show;
     $('changes-box').hidden = show;
-    if (show) U.list(panel.querySelector('ul'), empty(text));
+    if (show) {
+      panel.querySelector('.part').textContent = changesTitle.textContent;
+      U.list(panel.querySelector('ul'), empty(text));
+    }
   }
   function drawGroup(s) {
     if (!s.groupRows) return;
@@ -324,11 +329,11 @@
       const bare = (maintenance || group?.total === 0) && !list.length; s.el.hidden = bare; if (!bare) cards++;
       const name = (typeof LOOK === 'undefined' || !Object.hasOwn(LOOK, id) ? null : LOOK[id].name) || groupName || groups.labels?.get(id) || labels.get(id) || (id === 'ai-today' ? '今天 AI 后台自动维护' : id === 'other' ? '其他' : id), status = U.status(group);
       s.label = `${sp(name)}（${count}）`;
-      U.html(s.title, `<b>${U.fieldHtml(name, { name: '任务分组', place: 'label', kind: viewer })}</b><span class="lb-card__count">${U.fieldHtml(count, { kind: viewer })}</span>${status.lamp}`);
+      U.html(s.title, `<b>${keepGroupWords(U.fieldHtml(name, { name: '任务分组', place: 'label', kind: viewer }))}</b><span class="lb-card__count">${U.fieldHtml(count, { kind: viewer })}</span>${status.lamp}`);
       // 卡头第二行：有缺口、有灯的原因先写；都没有就写这一组排在前面的几件
       const names = list.slice(0, 3).filter(t => viewer === 'owner' || !(t.hidden || t.hidden_block || t.content_locked)).map(t => U.fieldText(taskName(t), viewer)).filter(name => name && !/(?:仅本人可见|可信设备可见|正在换说法)$/.test(name.trim()));
       const about = [gap && U.fieldHtml(gap, { kind: viewer }), status.note, groupHidden && U.fieldHtml(groupName, { name: '任务分组', place: 'body', kind: viewer }), scope === 'ai-today' && group?.project_name && U.fieldHtml(group.project_name, { name: '项目', place: 'body', kind: viewer })].filter(Boolean);
-      U.html(s.sub, about.length ? about.join(' · ') : names.length ? `${U.fieldHtml(names.join('、'), { kind: viewer })}${size > names.length ? ' 等' : ''}` : '');
+      U.html(s.sub, keepGroupWords(about.length ? about.join(' · ') : names.length ? `${U.fieldHtml(names.join('、'), { kind: viewer })}${size > names.length ? ' 等' : ''}` : ''));
       const row = t => task(t, page.coverage);
       const remaining = Math.max(0, Math.max(size, list.length) - visible);
       s.groupRows = list; s.size = size; s.rowOf = row;
@@ -596,7 +601,8 @@
     const modern = Object.hasOwn(d, 'changes_window');
     const window = modern ? d.changes_window : Array.isArray(d.coverage) && d.coverage.find(c => c?.id === 'identity-changes');
     const start = Date.parse(window?.from), end = Date.parse(window?.to);
-    const since = modern && end - start >= 7 * 864e5 ? '近 7 天' : Number.isFinite(start) ? `${U.date(window.from)} 起` : modern && Number.isFinite(end) ? `截至 ${U.date(window.to)}` : '已读';
+    const from = Number.isFinite(start) ? U.date(window.from).replace(/(\d+)-(\d+)/, (_, month, day) => `${Number(month)} 月 ${Number(day)} 日`) : '';
+    const since = modern && end - start >= 7 * 864e5 ? '近 7 天' : from ? `${from}起` : modern && Number.isFinite(end) ? `截至 ${U.date(window.to)}` : '已读';
     const title = since === '已读' ? '已读变化' : `${since}的变化${modern && Number.isFinite(start) && Number.isFinite(end) ? `（截至 ${U.date(window.to)} ${U.time(window.to)}）` : ''}`;
     const empty = `${since === '已读' ? '已读范围内' : since}没有任务变化`;
     const countable = list.every(c => Object.hasOwn(kinds, c?.kind));

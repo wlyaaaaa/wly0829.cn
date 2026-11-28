@@ -261,11 +261,13 @@
   }
 
   function rawCard(d) {
-    const rows = fact('原文', F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项'))
-      + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
+    const raw = F(d.text ?? (d.rewrite === 'pending' ? d : null), '事项')
+      .replace(/<[^>]+>|数据/g, word => word === '数据' ? '<span class="live-unit">数据</span>' : word);
+    const rows = fact('原文', raw) + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
     if (!rows) return '';
     return `<details class="dossier-card dossier-card--raw glass" id="raw" data-fold-anchor${$('raw')?.open ? ' open' : ''}>
-      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录<span class="dossier-fold__chev" aria-hidden="true">›</span></summary>
+      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录
+        <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
       <dl class="rec-facts">${rows}</dl></details>`;
   }
 
