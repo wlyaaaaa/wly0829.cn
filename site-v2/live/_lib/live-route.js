@@ -54,7 +54,7 @@
     const b = batches.get(key) || { shown: 0 };
     Object.assign(b, { first, step });
     batches.set(key, b);
-    const shown = Math.min(total, b.shown || first), left = total - shown, btns = [];
+    const cut = Math.min(total, b.shown || first), shown = total - cut <= 1 ? total : cut, left = total - shown, btns = [];
     if (left > 0) btns.push(b.shown
       ? `<button type="button" class="route-more" data-route-act="more" data-route-key="${esc(key)}">再看 ${Math.min(step, left)} ${unit}<span class="route-more__left">还有 ${left} ${unit}</span>${ico('chev')}</button>`
       : `<button type="button" class="route-more" data-route-act="more" data-route-key="${esc(key)}">看全部 ${total} ${unit}${what}${ico('arrow')}</button>`);
@@ -96,7 +96,7 @@
     if (c) {
       const key = c.dataset.clipFor, open = !opened.has(key);
       if (open) opened.add(key); else opened.delete(key);
-      clip();
+      if (open) clip(); else window.LiveUI.anchorFold(c, clip);
       if (open && e.isTrusted && c.dataset.liveOpened) window.Live?.markOpened?.(c.dataset.liveOpened);
       return;
     }
@@ -104,8 +104,9 @@
     if (!b) return;
     const key = b.dataset.routeKey, act = b.dataset.routeAct;
     if (act === 'more') grow(key);
-    else if (act === 'less') { batches.get(key).shown = 0; const box = b.closest('section'); if (box && box.getBoundingClientRect().top < 0) box.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
-    again(key);
+    if (act === 'less') window.LiveUI.anchorFold(b, () => { batches.get(key).shown = 0; again(key); }, () =>
+      [...document.querySelectorAll('[data-route-act="more"]')].find(button => button.dataset.routeKey === key));
+    else again(key);
     reclip();
   });
 

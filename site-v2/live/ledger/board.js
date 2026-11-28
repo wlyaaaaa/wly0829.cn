@@ -182,8 +182,8 @@
     const legend = '<p class="tp-legend lg-key"><span><i class="lg-key__bar"></i>记下到现在</span><span><i class="lg-key__check"></i>看过</span><span><i class="lg-key__next"></i>下次看</span><span><i class="lg-key__over"></i>到了日子还没看</span></p>';
     const keyIn = blocks.parked.length ? 'parked' : 'owed';
     const board = (group, empty) => {
-      const items = blocks[group], shown = showAll[group] ? items : items.slice(0, 10);
-      const more = items.length > 10 ? `<button type="button" class="lg-more" data-more="${group}" aria-expanded="${showAll[group]}"><span class="tp-chev">${showAll[group] ? '收起' : `再看 ${items.length - 10} 件`}</span></button>` : '';
+      const items = blocks[group], fold = U.shouldFold(items.length - 10), shown = showAll[group] || !fold ? items : items.slice(0, 10);
+      const more = fold ? `<button type="button" class="lg-more" data-more="${group}" aria-expanded="${showAll[group]}"><span class="tp-chev">${showAll[group] ? '收起' : `再看 ${items.length - 10} 件`}</span></button>` : '';
       return items.length ? `<div class="lg-board"><div class="lg-head"><span></span>${axis}</div><div class="lg-tracks"><ul class="lg-list">${shown.map(it => row(it, group)).join('')}</ul><div class="lg-now" style="--x:${x(now)}" data-from="${from}" data-span="${span}"><span>现在</span></div></div></div>${more}${keyIn === group ? legend : ''}`
         : `<p class="tp-empty">${kind ? `“${KINDS.find(([k]) => k === kind)[1]}”里` : 'AI 手上'}${empty}</p>`;
     };
@@ -478,7 +478,13 @@
       T.keep(page.root, `[data-kind="${kind}"]`, draw); return;
     }
     const more = e.target.closest('[data-more]');
-    if (more) { showAll[more.dataset.more] = !showAll[more.dataset.more]; T.keep(page.root, `[data-more="${more.dataset.more}"]`, draw); return; }
+    if (more) {
+      const key = more.dataset.more, selector = `[data-more="${key}"]`, close = showAll[key];
+      showAll[key] = !close;
+      if (close) U.anchorFold(more, draw, () => page.root.querySelector(selector));
+      else T.keep(page.root, selector, draw);
+      return;
+    }
     if (e.target.closest('[data-older]')) readOlder();
     if (e.target.closest('[data-viewmore]')) readViewMore();
   });
