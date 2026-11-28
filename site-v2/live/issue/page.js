@@ -16,7 +16,7 @@
   const route = href => { const u = new URL(href, location.origin); if (u.origin !== location.origin) return href; if (p.has('fixture')) u.searchParams.set('fixture', p.get('fixture')); return u.pathname + u.search + u.hash; };
   const site = h => typeof h === 'string' && h.startsWith('/live/') ? R.runPage(h) : '';
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
-  const { keepWords } = window.AutomationPresentation;
+  const { keepRowWords: keepWords } = window.AutomationPresentation;
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
   const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后|超时/g, word =>
@@ -163,7 +163,7 @@
     const cells = [['发生了什么', what], ['有什么影响', d.story?.impact], ['接下来', next]]
       .filter(([, v]) => T(v));
     $('three').style.setProperty('--cells', String(Math.max(1, cells.length)));
-    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
+    put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${keepWords(F(v, h))}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
     const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href)), anyRun = rows.some(r => r.href && !isChat(r.href));
@@ -196,7 +196,7 @@
   const faults = d => hasWindowCount(d) ? d : repeat ?? d;
   function repeatCard(d) {
     if (!faultOf(d)) return '';
-    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${body}</p>${basisOf(d)}</section>`;
+    const card = body => `<section class="dossier-card glass iss-side iss-repeat"><h2>反复出现</h2><p>${keepWords(body)}</p>${basisOf(d)}</section>`;
     const f = faults(d), windowDays = policy?.repeat_window_days;
     const newCount = Number.isInteger(d.faults_in_window) ? d.faults_in_window : null;
     const range = positive(windowDays) ? `近 ${esc(windowDays)} 天` : newCount != null ? '当前统计期内' : '近 30 天';

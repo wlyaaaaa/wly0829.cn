@@ -68,7 +68,12 @@
 .automation-provider { display: inline-block; padding: 2px 9px; border-radius: 999px; background: #eee8f7; color: #514368; white-space: nowrap; overflow-wrap: normal; }
 @media (max-width: 1399px) {
   .automation-provider { padding-inline: 4px; }
-  .automation-groups .lb-card__cols > span { white-space: normal; }
+  .automation-groups > .lb:has([data-key="ai-schedule"]) { --lb-row-cols: 10px minmax(74px, 1.35fr) minmax(80px, .72fr) minmax(52px, 1.08fr) minmax(80px, 1fr) 62px; }
+  .automation-groups > .lb:has([data-key="ai-pickup"]) { --lb-row-cols: 10px minmax(0, 1.25fr) minmax(84px, 1.2fr) minmax(30px, .68fr) minmax(56px, 1.2fr) 62px; }
+  .automation-groups .lb-card__cols { padding-inline: 12px; column-gap: 5px; }
+  .automation-groups .lb-card .lb-rows { padding-inline: 4px; }
+  .automation-groups .lb-card .lb-rows > .lb-row { padding-inline: 8px; column-gap: 5px; }
+  .automation-groups .lb-card[data-key="ai-schedule"] .lb-cell:nth-child(5):not(:has(.automation-gap)) { font-variant-numeric: tabular-nums; }
   .automation-recent header img { width: min(88px, 24%); }
 }
 .automation-provider[data-provider="codex"] { background: #e8f0ec; color: #2b5143; }

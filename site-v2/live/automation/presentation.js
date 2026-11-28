@@ -23,10 +23,15 @@
   const dates = /\d{1,2}[ \t]*月[ \t]*\d{1,2}[ \t]*日(?:[ \t]*(?:北京时间[ \t]*)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\w-])(?:[ \t]+(?:周[一二三四五六日][ \t]+)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w:])\d{1,2}:\d{2}(?::\d{2})?(?![\w:])/;
   const amounts = /第[ \t]*\d+[ \t]*轮|\d+(?:[.,]\d+)?[ \t]*(?:小时(?:[ \t]*\d+[ \t]*分(?:钟)?)?|分钟|分|秒|轮|次|件|条|项|份|天|处|个|[KMG]i?B)|\b[A-Z][ \t]*盘/;
   const phrases = /这次(?:没读到|读不到)|不完整|看得到|几点跑|随时派|备份|完成|自己开工|下一次开工|自动接活|定时任务|自己|收到|当时|采集|软件|下载目录|验收|太久|回复/;
-  const units = new RegExp(`(${[markup, dates, amounts, phrases, /（[^（）\n]{1,10}）/].map(part => part.source).join('|')})`, 'gu');
+  const unitsFor = parts => new RegExp(`(${parts.map(part => part.source).join('|')})`, 'gu');
+  const baseUnits = [markup, dates, amounts, phrases, /（[^（）\n]{1,10}）/];
+  const units = unitsFor(baseUnits);
+  const rowUnits = unitsFor([...baseUnits, /入口核对|要(?:你|本人)定|修不住/, /(?<![\w/\\:.-])[A-Za-z]{2,12}(?![\w/\\:.-])/, /[ \t]+›/]);
   // 先保护完整日期和短语，再切普通中文。长英文、地址和路径仍由原容器换行。
-  const keepWords = html => html.split(units).map((part, index) => index % 2
-    ? (/^[<&]/.test(part) ? part : keep(part)) : part.replace(/\p{Script=Han}{2,}/gu, wordsIn)).join('');
+  const wrap = (html, pattern) => html.split(pattern).map((part, index) => index % 2
+    ? (/^[<&]/.test(part) ? part : part.endsWith('›') ? '&nbsp;›' : keep(part)) : part.replace(/\p{Script=Han}{2,}/gu, wordsIn)).join('');
+  const keepWords = html => wrap(html, units);
+  const keepRowWords = html => wrap(html, rowUnits);
   function wordsIn(part) {
     if (part.length <= 4) return keep(part);
     const words = [];
@@ -70,5 +75,5 @@
         || status >= 200 && status < 400 && reading.fallbackNote && reading.meta?.source !== 'fallback');
   }
   const staleAt = reading => reading?.data && retrying(reading) ? reading.shownAt || reading.meta?.at : '';
-  window.AutomationPresentation = { lamp, tag, kinds, keepWords, settingNotices, settingReadback, retrying, staleAt };
+  window.AutomationPresentation = { lamp, tag, kinds, keepWords, keepRowWords, settingNotices, settingReadback, retrying, staleAt };
 })();

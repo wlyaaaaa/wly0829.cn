@@ -75,6 +75,7 @@
 /* 任务名下面那行用途整句显示，放不下就换行，不截成“…”（M760） */
 .page--tasks .task-compact .task-purpose { white-space: normal; overflow: visible; text-overflow: clip; text-wrap: pretty; }
 .task-compact .lb-cell--time > * { overflow: visible; }
+.task-compact .lb-cell--time > :is(time, small, [data-task-state]) { white-space: normal; overflow-wrap: normal; }
 .task-compact .task-last > span { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; }
 /* 已停用的下次运行只有“停用”，把多余列宽留给完整的上次结果。 */
 .page--tasks:not(.tasks--ai-today) .lb-card[data-key="disabled"] { --lb-row-cols: 10px minmax(0, 1fr) minmax(94px, .42fr) minmax(60px, .42fr) 64px; }

@@ -85,7 +85,7 @@ window.LegacyAutomation = function (bar) {
     // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
     const actions = U.actions(t, [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
     const state = pickup ? last?.result : { running: 'running', failed: 'failed', warn: 'warn' }[t.state] || t.last?.result;
-    return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${P.keepWords(title)}</a></div>${cells.map(value => `<p class="lb-cell">${P.keepWords(value)}</p>`).join('')}<div class="row__acts">${actions}</div>` };
+    return { key: t.id, cls: 'row row--flat lb-row', html: `<span class="lb-row__lamp">${dot(state, true)}</span><div class="lb-cell lb-cell--name"><a class="row__title" href="${esc(href)}">${P.keepRowWords(title)}</a></div>${cells.map(value => `<p class="lb-cell">${P.keepWords(value)}</p>`).join('')}<div class="row__acts">${actions}</div>` };
   }
   function renderSummary(all, planned, known, waiting) {
     const activity = packet?.automation_activity, historical = activity?.recent;

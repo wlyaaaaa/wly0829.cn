@@ -20,7 +20,7 @@
   let board = null, dataAt = null, batchAt = null, pick = p.get('group') || '', projectList = null, projectKey = '', generation = 0;
   let runningReading = null;
   const taskLiveWords = new WeakMap();
-  const { keepWords: keepTaskWords } = window.AutomationPresentation;
+  const { keepRowWords: keepTaskWords } = window.AutomationPresentation;
   function taskWords() {
     for (const el of document.querySelectorAll('[data-task-state]')) {
       const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), off = U.offline?.();
@@ -432,7 +432,7 @@
     const complete = dataAt && page?.unreadable_total === 0 && (Array.isArray(page?.upcoming) || !page?.next && page?.total != null);
     box.hidden = false;
     box.querySelector('.part').textContent = dataAt ? `${complete ? '24 小时排程' : '已读到的排程'} · ${nextAt(dataAt)} 起${complete ? '' : ' 24 小时'}` : '24 小时排程';
-    const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer })}</a>` });
+    const entry = t => ({ key: t.id, cls: 'row row--flat', html: `<time class="row__meta" datetime="${esc(taskNext(t))}">${nextAt(taskNext(t))}</time><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(t.id)}`))}">${keepTaskWords(U.fieldHtml(taskName(t), { name: '自动任务', place: 'title', kind: viewer }))}</a>` });
     const split = U.shouldFold(list.length - 6) ? 6 : list.length;
     const firstRows = list.length ? list.slice(0, split).map(entry) : empty(complete ? '没有排定运行的任务' : '下次运行时间这次没读全');
     if (!list.length && !complete) firstRows[0].html = firstRows[0].html.replace(/下次运行时间|这次没读全/g, '<span class="task-phrase">$&</span>');

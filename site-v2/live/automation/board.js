@@ -637,13 +637,13 @@
     const hasCounts = known(s.success) || known(s.failed);
     const nums = hasCounts ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>`
       : '<span class="au-nobr">成了几轮、</span><wbr><span class="au-nobr">坏了几轮，</span><wbr><span class="au-nobr">这次没读到</span>';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))}</span> <span class="au-nobr">起才开始记</span></small>` : ''}</span></div>`;
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起记</span></small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
     const text = [c.model, c.model_effort].filter(Boolean).map(v => `<span class="au-nobr">${esc(v)}</span>`).join('&#8239;·<wbr> ');
     const family = text && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
-    return !text ? '<span class="au-nobr">没读到</span>' : family ? link(family, `${text} ›`) : text;
+    return !text ? '<span class="au-nobr">没读到</span>' : family ? link(family, `${text}&nbsp;›`) : text;
   }
   // 七类表（照第一屏图）：任务和怎么干、现在、上次结果、近 30 天、用谁、开关、›。点一行到这一类的页，“怎么干 ›”到怎么干页（本人 11-24：八类卡点进去是另一页，怎么干看机制）
   function table(d, v) {
@@ -655,7 +655,7 @@
       <tbody>${cats.map(c => {
         const g = c.how_to || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
-          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${wordsIn(esc(g.short || ''))}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
+          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${wordsIn(esc(g.short || ''))}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干&nbsp;›</a></th>
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
           <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title, c.id), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>
