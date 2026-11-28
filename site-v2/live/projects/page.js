@@ -303,7 +303,7 @@
       ? html.replace(/<[^>]+>|一次|讲解页|收工|补跑一轮/g, word => word.startsWith('<') ? word : `<span class="pj-change-word">${word}</span>`)
       : html;
     const first = plain.match(/^[^。！？\n]*[。！？]?/)?.[0] || plain;
-    const preview = [...first].slice(0, 80).join('');
+    const preview = keepChangeWords ? first : [...first].slice(0, 80).join('');
     if (preview === plain) return full;
     return `<details class="pj-short" data-fold-anchor><summary><span>${esc(preview)}${preview.length < first.length ? '…' : ''}</span><span class="more"><span class="disclosure-closed">展开全文</span><span class="disclosure-open">收起全文</span> <span class="more__chev" aria-hidden="true">›</span></span></summary><div class="row__sub">${full}</div></details>`;
   }
