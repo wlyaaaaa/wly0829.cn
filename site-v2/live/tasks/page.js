@@ -34,7 +34,8 @@
   const MODE = { event: '有事才跑', on_demand: '叫了才跑', resident: '一直开着', service_loop: '一直开着' };
   const empty = text => [{ key: 'empty', cls: 'row row--flat row--empty lb-row--empty', html: `<span></span><p class="row__sub">${U.fieldHtml(U.offline?.() && /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|维护明细这次没读全|正在读|正在准备/.test(sp(text)) ? '这块没存下来，连上后补上。' : text, { name: '自动任务', place: 'body', kind: viewer })}</p>` }];
   // 上次出错、这次没读到运行状态的任务，后台标 scheduled_issue 并算进“项要处理”，表里也按要处理排前面
-  const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
+  const confirmedFailure = t => t.confirmed_failure === true && t.level === 'yellow' && t.last?.result === 'failed';
+  const attention = t => maintenance ? ['red', 'amber'].includes(U.status(t).tone) : confirmedFailure(t) || ['failed', 'warn'].includes(taskState(t)) || t.scheduled_issue === true;
   // 没有下次时间的任务：按 Windows 登记的触发方式写“登录时”“开机时”这类，不写“没读到”
   function triggerWhen(t) {
     if (!Array.isArray(t.trigger_types)) return '';
@@ -159,6 +160,7 @@
     const name = taskName(t), title = U.fieldHtml(name || '自动任务', { name: '自动任务', place: 'title', kind: viewer });
     if (!maintenance) {
       const state = taskState(t), lastState = lastAt ? last?.result || 'unknown' : state === 'never' ? 'never' : '';
+      const failed = confirmedFailure(t), shownAt = failed ? last.end || lastAt : lastAt;
       const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next)
         : MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到');
       const triggerTitle = !next && Array.isArray(t.trigger_types) && t.trigger_types.length ? ` title="${esc(`触发方式：${t.trigger_types.join('、')}`)}"` : '';
@@ -168,7 +170,7 @@
       const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? lastState === 'warn' ? '部分完成' : shortStatus.warn
         : lastState === 'unknown' ? state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
       const lastTitle = shown === 'warn' ? ` title="${esc(warnWhy(t))}"` : (shown === 'unread' || lastState === 'unknown') && typeof t.status_text === 'string' ? ` title="${esc(t.status_text)}"` : '';
-      const why = shown === 'warn' && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
+      const why = (failed || shown === 'warn') && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(failed ? t.problem_reason ?? last.reason ?? t.why : warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
       const registeredPurpose = t.purpose ?? sentence;
       const purposeText = typeof registeredPurpose === 'string' ? registeredPurpose.split(/[。；，]/u, 1)[0].trim() : registeredPurpose;
       const purpose = !hidden && purposeText && (typeof purposeText !== 'string' || !/^(?:在跑|正在跑|到点没跑|已停用|停用|所需状态未读到)$/u.test(purposeText))
@@ -182,9 +184,11 @@
       const fixNote = fixing ? `<p class="lb-sub task-fixing">AI 在修${fixAt ? ` · ${esc(nextAt(fixAt))} 接着修` : ''}</p>` : '';
       // 两版同一套按钮（本人禁令 11-24 14:16）：访客也摆“问情况”，点了由共用拦截弹可信设备说明框
       const actions = U.actions(t, t.actions || [{ kind: 'copy', label: '问情况', intent: 'ask' }]);
+      const outcomeDot = failed ? stateDot('warn') : stateDot(shown === 'unread' ? 'unknown' : shown);
+      const running = failed && state === 'running' ? `<span data-task-state>${stateDot('running')}${shortStatus.running}</span>` : '';
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
-        `<span class="lb-row__lamp">${fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
-        <div class="lb-cell lb-cell--time task-last">${lastAt ? `<time>${stamp(lastAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${stateDot(shown === 'unread' ? 'unknown' : shown)}${esc(lastWord)}</span>` : '—'}${trouble ? week(t) : ''}</div>
+        `<span class="lb-row__lamp">${failed ? stateDot('warn', '上次运行失败') : fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
+        <div class="lb-cell lb-cell--time task-last">${shownAt ? `<time>${stamp(shownAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${outcomeDot}${esc(failed ? shortStatus.failed : lastWord)}</span>` : '—'}${running}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }
     const nameBody = U.fieldHtml(name, { name: '自动任务', kind: viewer, marker: true });

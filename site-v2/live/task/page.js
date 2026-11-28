@@ -320,7 +320,12 @@
       : valid(original) && !originalFinished ? `原定 ${stamp(original, true)}，${pending || '结果待更新'}`
       : resident ? d.schedule ? '' : MODE[d.mode] : kind === 'plan' && triggerLine(d) ? triggerLine(d)
       : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? '下次时间未读到' : '';
-    write($('task-status'), [showLast || !planStatus ? textLast + stateHtml : '', esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
+    const failed = kind === 'plan' && d.confirmed_failure === true && d.level === 'yellow' && d.last?.result === 'failed' && !protectedField(d.last);
+    const failedAt = failed && time(d.last.end ?? d.last.start);
+    const warning = failed && `<span class="task-result" data-state="warn"><i class="task-dot" data-state="warn" aria-hidden="true"></i>上次${valid(failedAt) ? ` ${esc(stamp(failedAt))} ` : ''}出错</span>`;
+    const why = failed && field(d.problem_reason ?? d.last.reason ?? d.why, '出错原因');
+    const summary = failed ? d.state === 'running' && result('running', kind) : showLast || !planStatus ? textLast + stateHtml : '';
+    write($('task-status'), [warning, why, summary, esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
     // Windows 名册记“还没运行过”、日志里却有运行的（任务后来重新登记过），说一句，免得和列表的“没跑过”对不上
     if (kind === 'plan' && d.state === 'never' && showLast) U.html($('task-status'), `${$('task-status').innerHTML}<small class="task-status__note">Windows 名册记的是“还没运行过”（列表照这个写“没跑过”），上面是 Windows 日志里读到的运行</small>`, false);
     const group = GROUP[d.group], mode = stopped ? '' : d.schedule ?? (kind === 'plan' && !resident && triggerLine(d) || MODE[d.mode]);
