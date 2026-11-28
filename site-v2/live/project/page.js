@@ -1174,6 +1174,7 @@
         left.push(b);
       }
     }
+    if (proj) custom?.lists?.({ blocks, left, right, block, arts, changeLog, changeIssue, viewer: projectViewer, artifactRow, loadArtifacts, loadChanges, keepWords });
     arrange(left, right);
     const gallery = custom?.interfaceCard && blocks.get(custom.interfaceCard)?.viz;
     if (gallery && !interfaceLoad) {
@@ -1348,7 +1349,7 @@
   }
   // 近 30 天提交：总数＋一条小折线（后端 projects 的 activity，按天；读不到的天不画、总数写“至少”）
   function commitsCell(cell) {
-    const a = activity;
+    const a = custom?.activity?.(proj) ?? activity;
     // 表还没回来写“加载中”、读失败写“这次没读到”，每个项目页都写（主持 11-28 10:42：照智能体页；智能体页的“正在读提交记录…”已随 main 的实况离线定稿改成“加载中”）；表回来了但里面没有这个项目，照原来（智能体页写原句，别的页不写）
     const note = text => `<small class="pj-strip-note">${text}</small>`, unavailable = () => note('提交记录这次没读到。');
     if (a === undefined) return note('加载中');
@@ -1398,7 +1399,7 @@
     strip.hidden = !html; strip.dataset.units = n;
     U.html(strip, keepWords(html)); fitStrip();
     if (interfaceProjects.has(id) && !custom?.interfaceCard && !interfaceLoad) {
-      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, strip, keepWords))
+      interfaceLoad = import('/live/project/interface.js').then(module => module.mountInterface(id, custom?.interfaceAnchor?.() || strip, keepWords))
         .catch(() => { interfaceLoad = null; });
     }
   }
@@ -1653,7 +1654,7 @@
       else if (!documents && state.data && state.meta.source === 'net' && state.viewer.kind === 'owner' &&
           !state.offline && !window.LiveView?.isPublic()) {
         documents = import('/live/project/documents.js').then(module => {
-          documents = module.mount(id, board, () => projectLink);
+          documents = module.mount(id, custom?.documentsAnchor?.() || board, () => projectLink);
         }).catch(() => { documents = null; });
       }
       const notFound = projectNotFound(state.meta);
