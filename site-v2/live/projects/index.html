@@ -20,11 +20,11 @@
 .pj-summary__sizes b small { display: inline-block; margin: 0; white-space: nowrap; }
 .pj-summary__sizes .pj-summary__cutoff { padding-right: 0; word-break: keep-all; overflow-wrap: anywhere; }
 @media (max-width: 1279px) {
-  .pj-summary__sizes { width: min(740px, calc(100% - 52px)); }
+  .pj-summary__sizes { width: min(740px, calc(100% - 12px)); }
   .pj-summary__sizes col:nth-child(1) { width: 22%; }
-  .pj-summary__sizes col:nth-child(2) { width: 27.5%; }
+  .pj-summary__sizes col:nth-child(2) { width: 28.5%; }
   .pj-summary__sizes col:nth-child(3) { width: 37.5%; }
-  .pj-summary__sizes td:nth-child(3) { padding-right: 0; }
+  .pj-summary__sizes :is(th, td):not(:last-child) { padding-right: 14px; }
   .pj-summary__sizes td:nth-child(3) b small { display: block; }
 }
 /* 开场的字先各自走到位再显，收拢时先淡出再移动，保留逐字顺序及绿灯动效。 */
