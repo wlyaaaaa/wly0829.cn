@@ -121,7 +121,7 @@
     return `<table class="env-table env-table--versions"><thead><tr><th>软件</th><th>装的版本</th><th>最新版本</th><th>怎么更新</th><th>现在</th></tr></thead>${body}</table>`;
   }
   function limitedRows(rows, render, key) {
-    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details" data-fold-count="${rows.length - 5}"${foldAttrs(key)}><summary>展开（还有 ${rows.length - 5} 条）</summary>${render(rows.slice(5))}</details>` : '');
+    return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details" data-fold-count="${rows.length - 5}"${foldAttrs(key)}><summary><span class="disclosure-closed">展开（还有 ${rows.length - 5} 条）</span><span class="disclosure-open">收起</span></summary>${render(rows.slice(5))}</details>` : '');
   }
   function software(el) {
     el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div>';
