@@ -134,25 +134,33 @@
 
   // —— 每天的明细：项目详情里 daily_exact 指的那份逐项明细，一次取一页（后台一页最多 50 行），往前翻不够了再取下一页 ——
   const params = new URLSearchParams(location.search);
-  const state = { key: '', rows: [], next: null, total: null, offset: 0, loading: false, failed: false };
-  async function fetchPage(section, cursor) {
+  const state = { key: '', viewer: '', rows: [], next: null, total: null, offset: 0, loading: false, paging: false, failed: false };
+  async function fetchPage(section, cursor, key) {
     const path = `projects/phone-collector/records${params.has('fixture') ? `-${encodeURIComponent(section)}` : ''}`;
     try {
-      const r = await window.Live.get(path, cursor ? { section, cursor } : { section });
-      return r?.data && Array.isArray(r.data.items) ? r.data : null;
+      const read = () => window.Live.get(path, cursor ? { section, cursor } : { section });
+      let r = await read();
+      while (state.key === key && r?.again) {
+        await r.again;
+        if (state.key !== key) return null;
+        r = await read();
+      }
+      return r?.meta?.status < 400 && (r.meta.viewer?.kind || 'public') === state.viewer && Array.isArray(r.data?.items)
+        ? { ...r.data, at: r.data.source_at || r.data.at || r.meta.at } : null;
     } catch { return null; }
   }
   const byDay = rows => { const seen = new Map(); for (const r of rows) if (r && /^\d{4}-\d\d-\d\d$/.test(r.date || '')) seen.set(r.date, r); return [...seen.values()].sort((a, b) => b.date.localeCompare(a.date)); };
   async function loadDays(daily) {
-    const key = JSON.stringify([daily.section, daily.at, daily.count]);
+    const key = JSON.stringify([state.viewer, daily.section, daily.at, daily.count]);
     if (state.key === key) return;
-    state.key = key; state.loading = true;
-    const first = await fetchPage(daily.section);
+    state.key = key; state.loading = true; state.paging = false;
+    draw();
+    const first = await fetchPage(daily.section, null, key);
     if (state.key !== key) return;
     state.loading = false;
     if (!first) { state.failed = !state.rows.length; draw(); return; }
     state.failed = false;
-    state.rows = byDay(first.items); state.next = first.next || null; state.total = finite(first.total) ? first.total : null; state.at = first.at;
+    state.rows = byDay(first.items); state.next = first.next || null; state.total = finite(first.total) ? first.total : null; state.at = first.at || daily.at; state.section = daily.section;
     state.offset = Math.min(state.offset, Math.max(0, state.rows.length - 1));
     draw();
   }
@@ -161,10 +169,10 @@
     if (state.loading) return;
     const want = state.offset + PAGE * 2;
     if (state.rows.length < want && state.next) {
-      state.loading = true; draw();
-      const key = state.key, page = await fetchPage(shown.v.daily.section, state.next);
+      state.loading = state.paging = true; draw();
+      const key = state.key, page = await fetchPage(state.section, state.next, key);
       if (state.key !== key) return;
-      state.loading = false;
+      state.loading = state.paging = false;
       if (page) { state.rows = byDay([...state.rows, ...page.items]); state.next = page.next || null; if (finite(page.total)) state.total = page.total; }
     }
     state.offset = Math.min(state.offset + PAGE, Math.max(0, state.rows.length - PAGE));
@@ -185,9 +193,9 @@
     const grid = window.matchMedia?.(NARROW).matches && days.length > 7 ? gridHtml(days.slice(0, half), rowKeys) + gridHtml(days.slice(half), rowKeys) : gridHtml(days, rowKeys);
     const gapDay = v.gapDay?.value?.date, gap = v.gap?.value?.text || (typeof v.gap?.text === 'string' ? v.gap.text : '');
     const gapText = gap && !locked(v.gap, viewer) ? `${gapDay ? gapDay === todayDay() ? '今天' : md(gapDay) : '当天'}定位最长隔了 ${gap}` : '';
-    const cut = mdTime(v.daily?.at || state.at);   // daily_exact.at 是日记四类数据自己的截止时刻
+    const cut = mdTime(state.at || v.daily?.at);   // 旧格里的数配它实际那一批的截止时间
     // ‹ 更早 往前翻 14 天，翻到有记录的第一天变灰；翻过以后右边出“更晚 ›”翻回来
-    const nav = days.length ? `<div class="ph-nav"><button type="button" class="ph-earlier more"${canEarlier() ? '' : ' disabled'}><span class="ph-chev-l">‹</span>${state.loading ? '正在读…' : '更早'}</button>${state.offset > 0 ? `<button type="button" class="ph-later more">更晚 <span class="more__chev">›</span></button>` : ''}</div>` : '';
+    const nav = days.length ? `<div class="ph-nav"><button type="button" class="ph-earlier more"${canEarlier() ? '' : ' disabled'}><span class="ph-chev-l">‹</span>${state.paging ? '正在读…' : '更早'}</button>${state.offset > 0 ? `<button type="button" class="ph-later more">更晚 <span class="more__chev">›</span></button>` : ''}</div>` : '';
     const open = wide.querySelector('.ph-explain')?.open;
     const explain = v.notes.length ? `<details class="pj-notes ph-explain"${open ? ' open' : ''}><summary class="live-disclosure" aria-controls="ph-diary-note"><span class="disclosure-closed">说明</span><span class="disclosure-open">收起说明</span><span class="disclosure-chev">›</span></summary></details>` : '<span></span>';
     const note = v.notes.length ? `<div class="ph-note" id="ph-diary-note"${open ? '' : ' hidden'}>${v.notes.map(wrapShort).join('<br>')}</div>` : '';
@@ -212,6 +220,7 @@
       }, true);
     }
     if (wide.nextElementSibling !== boardEl || wide.parentNode !== boardEl.parentNode) boardEl.before(wide);
+    if (state.viewer !== viewer) Object.assign(state, { key: '', viewer, rows: [], next: null, total: null, offset: 0, loading: false, paging: false, failed: false, at: null, section: null });
     shown = { v, viewer };
     draw();
     if (v.daily) loadDays(v.daily);
