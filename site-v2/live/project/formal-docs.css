@@ -10,7 +10,8 @@
   flex-direction: column;
   background: linear-gradient(135deg, rgb(255 255 255 / .53), rgb(255 249 248 / .31));
 }
-.pj-board--formal-docs :is([data-card="docs-made"], [data-card="artifacts"]) { min-height: 555px; }
+.pj-board--formal-docs [data-card="docs-made"] { min-height: 500px; }
+.pj-board--formal-docs [data-card="artifacts"] { min-height: 555px; }
 .pj-board--formal-docs [data-card="docs-more"] { min-height: 406px; }
 .pj-board--formal-docs [data-card="docs-changes-unavailable"] { min-height: 158px; }
 .pj-board--formal-docs .docs-card { display: flex; flex: 1; flex-direction: column; }
@@ -77,6 +78,7 @@
 .docs-times > span, .docs-pager, .docs-pager button { white-space: nowrap; }
 .docs-old { margin-left: 3px; padding: 2px 7px; border-radius: 6px; color: #563c05; background: #ffd471; font-size: 12px; }
 .docs-pager { display: flex; align-items: baseline; gap: 10px; font-size: 14px; }
+.docs-pager small { color: var(--muted); font-size: inherit; }
 .docs-pager .more, .docs-items .more { margin: 0; padding: 0; translate: none; color: #007d39; font-weight: 650; }
 .docs-pager .more:disabled { color: var(--muted); opacity: .55; cursor: default; }
 .docs-items { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 9px; }

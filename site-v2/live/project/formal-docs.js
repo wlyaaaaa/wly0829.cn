@@ -6,6 +6,10 @@
   const U = window.LiveUI, { esc } = U;
   const stats = ['submission_pdf_versions', 'formal_files', 'signed_records', 'case_dirs',
     'matter_dirs', 'docs_files', 'code_files', 'tracked_files'];
+  const moreLabels = {
+    signed_records: '定稿记录（上方按 PDF 内容去重，这里含副本）',
+    docs_files: 'Git 跟踪的 Markdown 文档',
+  };
   const files = stats.slice(5);
   const consumed = new Set(['made', 'recent', 'more-data']);
   const count = n => Number.isFinite(n) ? n.toLocaleString('zh-CN') : '—';
@@ -60,7 +64,9 @@
   function moreData(metrics, section, size, viewer) {
     const render = key => {
       const m = metrics[key];
-      return m ? `<div><dt>${esc(m.label)} ${U.visitorLabel(m, 'label', m.label, viewer)}</dt><dd>${qty(m.value, esc(m.unit))}</dd></div>` : '';
+      if (!m) return '';
+      const label = moreLabels[key] || m.label;
+      return `<div><dt>${esc(label)} ${U.visitorLabel(m, 'label', label, viewer)}</dt><dd>${qty(m.value, esc(m.unit))}</dd></div>`;
     };
     const through = metrics.signed_records?.at || metrics.case_dirs?.at;
     const fileAt = files.map(key => metrics[key]?.at).find(Boolean);
@@ -97,7 +103,8 @@
     list.setAttribute('aria-busy', String(pending));
     const rows = Array.isArray(packet?.items) ? packet.items : null;
     const time = cutoff(packet?.at || snapshot?.at, U.isStale(packet) || U.isStale(snapshot));
-    const pager = `<div class="docs-pager"><button type="button" class="more" data-docs-page="prev" ${!offset ? 'disabled' : ''}>‹ 上一页</button>
+    const total = Number.isFinite(packet?.total) ? `<small>共 ${count(packet.total)} 份</small>` : '';
+    const pager = `<div class="docs-pager">${total}<button type="button" class="more" data-docs-page="prev" ${!offset ? 'disabled' : ''}>‹ 上一页</button>
       <span>第 ${offset / step + 1} 页</span>
       <button type="button" class="more" data-docs-page="next" ${!packet?.next ? 'disabled' : ''}>下一页 ›</button></div>`;
     const body = rows?.length ? rows.map(finalRow).join('') : `<li>${rows ? '没有定稿' : missing}</li>`;
