@@ -238,6 +238,10 @@ class PublishTests(unittest.TestCase):
                             self.assertEqual(result['uploaded_files'], 1)
                             self.assertEqual(sum(call.args[1:3] == ('ossutil', 'cp') for call in commands.call_args_list), 1)
                 attempt = publisher.retention.read(shared/'last-attempt.json')
+                history, = (shared/'attempts').glob('publish-*.json')
+                self.assertEqual(publisher.retention.read(history), attempt)
+                version = publisher.retention.read(folder/'run/publish-receipt.json')['release_id'][:12]
+                self.assertIn(f'-{version}-', history.name)
                 self.assertEqual(attempt['status'], 'failed' if fail_page else result['status'])
                 self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
                 self.assertTrue(attempt['completed_at_beijing'].endswith('+08:00'))
