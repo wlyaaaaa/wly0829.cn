@@ -169,6 +169,7 @@ class PublishTests(unittest.TestCase):
                     source_commit=None, dry_run=False, upload_only=False, lock_holder='fixture', upload_workers=1, pages_timeout=1,
                     skip_retention=skip_retention)
                 shared = folder/'shared'
+                bucket_sample = {'bytes': 1024, 'objects': 7, 'provider_updated_at': 1234}
                 def proof(item, dist):
                     rel, row = item
                     return rel, {'status': 'pass', 'http': 200, 'bytes': row['bytes'], 'sha256': row['sha256'], 'headers': {'ETag': '"'+'a'*32+'"'}}
@@ -185,7 +186,8 @@ class PublishTests(unittest.TestCase):
                     registered = publisher.retention.read(shared/'managed.json')['objects']
                     self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
                     if fail_cleanup: raise OSError('cloud delete failed')
-                    publisher.retention.write(args.report, {'status': 'complete', 'deleted_objects': 0, 'deleted_bytes': 0})
+                    publisher.retention.write(args.report, {'status': 'complete', 'deleted_objects': 0, 'deleted_bytes': 0,
+                                                            'bucket_after': bucket_sample})
                     return 0
                 previous = None
                 if recovered:
@@ -198,6 +200,7 @@ class PublishTests(unittest.TestCase):
                      unittest.mock.patch.object(publisher.retention, 'retired_predecessor_keys',
                         return_value={source['oss']['objects']['a.js']['key']} if revive else set()), \
                      unittest.mock.patch.object(publisher.retention, 'shared', return_value=shared), \
+                     unittest.mock.patch.object(publisher.retention, 'bucket_stat', return_value=bucket_sample), \
                      unittest.mock.patch.object(publisher.retention, 'collect', side_effect=collect) as cleanup, \
                      unittest.mock.patch.object(publisher, 'head', side_effect=probe), \
                      unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, \
@@ -223,6 +226,7 @@ class PublishTests(unittest.TestCase):
                         self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
                         if skip_retention:
                             cleanup.assert_not_called()
+                            self.assertEqual(result['oss_retention']['bucket_after'], bucket_sample)
                         else:
                             cleanup.assert_called_once()
                             self.assertEqual(result['oss_retention']['receipt'], str(folder/'run/oss-retention.json'))
@@ -234,10 +238,15 @@ class PublishTests(unittest.TestCase):
                             self.assertEqual(result['uploaded_files'], 1)
                             self.assertEqual(sum(call.args[1:3] == ('ossutil', 'cp') for call in commands.call_args_list), 1)
                 attempt = publisher.retention.read(shared/'last-attempt.json')
+                history, = (shared/'attempts').glob('publish-*.json')
+                self.assertEqual(publisher.retention.read(history), attempt)
+                version = publisher.retention.read(folder/'run/publish-receipt.json')['release_id'][:12]
+                self.assertIn(f'-{version}-', history.name)
                 self.assertEqual(attempt['status'], 'failed' if fail_page else result['status'])
                 self.assertEqual((attempt['dry_run'], attempt['source_commit']), (False, 'Unknown'))
                 self.assertTrue(attempt['completed_at_beijing'].endswith('+08:00'))
                 self.assertNotIn('head', attempt)
+                if not fail_page and not fail_cleanup: self.assertEqual(attempt['last_bucket_stat'], bucket_sample)
                 if fail_page: self.assertIn('https://example.invalid/', attempt['error'])
     def test_standalone_retention_uses_success_receipt_and_releases_its_own_lock(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -245,13 +254,20 @@ class PublishTests(unittest.TestCase):
             publisher.retention.write(root/'publish-receipt.json', receipt)
             original_report = root/'oss-retention.json'
             publisher.retention.write(original_report, {'status': 'incomplete'})
+            latest = root/'shared/last-attempt.json'
+            publisher.retention.write(latest, {'status': 'failed', 'source_commit': 'b'*40})
+            sample = {'bytes': 11, 'objects': 1, 'provider_updated_at': 1234}
             args = types.SimpleNamespace(retention_only=root, lock_holder='cleanup', dry_run=False, retention_max_keys=1000)
             def finish(options):
-                publisher.retention.write(options.report, {'status': 'complete'})
+                publisher.retention.write(options.report, {'status': 'complete', 'bucket_after': sample})
                 return 0
-            with unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, unittest.mock.patch.object(publisher.retention, 'collect', side_effect=finish) as collect:
+            with unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}') as commands, \
+                 unittest.mock.patch.object(publisher.retention, 'collect', side_effect=finish) as collect, \
+                 unittest.mock.patch.object(publisher.retention, 'shared', return_value=latest.parent), \
+                 unittest.mock.patch.object(publisher, 'prune_publish_runs', return_value={}):
                 result = publisher.collect_after_publication(args)
                 self.assertEqual(result['status'], 'retention_complete')
+                self.assertEqual(publisher.retention.read(latest), {'status': 'failed', 'source_commit': 'b'*40, 'last_bucket_stat': sample})
                 self.assertEqual(publisher.retention.read(original_report)['status'], 'incomplete')
                 self.assertTrue(Path(result['receipt']).parent.name.startswith('oss-retention-retry-'))
                 self.assertEqual(collect.call_args.args[0].commit, receipt['commit'])

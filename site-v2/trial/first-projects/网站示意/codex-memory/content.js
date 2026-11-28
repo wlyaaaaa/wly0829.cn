@@ -440,7 +440,7 @@ window.PAGE_DATA = {
         "一个好文件都没有：也只立一份写明零个文件的存档，不报成全部存好。",
         "原来那份不改：热备盘上原来那一份一个字不改；临时立的那份，以后挪进回收站收走。",
         "文件名什么时候出现：平时的记录不写对话文件的名字；有文件被拦下时，才写出它的位置，好知道缺的是谁。",
-        "出处：`CONVERSATION_BACKUP.md`“单文件告警与可恢复点”一节；`tools/test-conversation-file-warnings.ps1`、`tools/test-conversation-cold-file-warnings.ps1`、`tools/test-conversation-cold-partial-point.ps1`（只用编出来的文件演练这几种情况）"
+        "出处：`CONVERSATION_BACKUP.md`“单文件告警与可恢复点”一节；`tools/test-conversation-file-warnings.ps1`、`tools/test-conversation-cold-file-warnings.ps1`、`tools/test-conversation-cold-partial-point.ps1`（只用测试用的文件演练这几种情况）"
       ],
       "buttons": [],
       "imageText": "一个文件出了岔子，也不连累整份存档\n存的时候，偶尔会有个别文件抄不下来。这一份照样不作废，也不装作齐全。\n这个文件能用上一份里核对过的旧内容顶上，就顶上，注明是旧的；缺了什么、为什么，都记清楚，下一轮再试。这一轮旧存档一份都不删，免得把还能用的那份丢了。\n冷备盘那头碰上这种事也一样：不全的那份先不抄过去，冷备盘上原来那份完整的接着守住。\n等那个文件能抄了，就重新立起完整的一份。"

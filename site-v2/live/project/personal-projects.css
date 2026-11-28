@@ -103,6 +103,20 @@
 .pp-bubbles { grid-column: 1 / -1; }
 .pp-wallpaper { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: rgb(255 255 255 / .52); border-radius: 9px; }
 .pp-mobile-wallpaper > .pp-wallpaper { aspect-ratio: 9 / 20; object-fit: cover; }
+[data-personal-project="emerald"] .pp-wallpapers:has(> .pp-bubbles) {
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) minmax(0, 1.05fr);
+  align-items: stretch;
+}
+[data-personal-project="emerald"] #artifacts .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card {
+  grid-template-rows: auto auto auto 1fr auto;
+}
+[data-personal-project="emerald"] .pp-wallpapers > .pp-bubbles { grid-column: auto; }
+[data-personal-project="emerald"] .pp-wallpapers:has(> .pp-bubbles) .pp-wallpaper {
+  block-size: clamp(145px, 16vw, 242px);
+  aspect-ratio: auto;
+  object-fit: contain;
+  background: transparent;
+}
 [data-personal-project="typora"] #more-data .pj-viz {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; overflow: clip visible;
 }
@@ -116,16 +130,11 @@
 }
 @media (min-width: 1101px) {
   #pj-board[data-personal-project="steam"] + .pj-interface .pj-interface-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .pp-wallpapers:has(> .pp-bubbles) {
+  [data-personal-project="emerald"] .pp-wallpapers:has(> .pp-bubbles) {
     grid-template-columns: minmax(0, 3.7fr) minmax(0, 3fr) minmax(246px, 2fr);
-    align-items: stretch;
   }
-  #artifacts .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card { grid-template-rows: auto auto auto 1fr auto; }
-  .pp-wallpapers > .pp-bubbles { grid-column: auto; }
-  .pp-wallpapers:has(> .pp-bubbles) > .pp-wallpaper-card:not(.pp-bubbles) > .pp-wallpaper {
-    block-size: clamp(162px, 16vw, 242px);
-    aspect-ratio: auto;
-    object-fit: contain;
+  [data-personal-project="emerald"] :is([data-card="bubbles"], [data-card="background"], [data-card="pp-more"], [data-card="changes"]) {
+    align-self: stretch;
   }
   [data-personal-project="emerald"] #changes .rows > .row { padding-block: 14px; }
   [data-personal-project="emerald"] #changes .rows > .row::before { top: 21px; }
@@ -137,6 +146,7 @@
   .page--project #pj-board[data-personal-project] { grid-template-columns: minmax(0, 1fr); }
   #pj-board[data-personal-project="steam"] { grid-template-areas: "comparison" "wardrobe" "artifacts" "history" "changes" "more"; }
   #pj-board[data-personal-project="emerald"] { grid-template-areas: "bubbles" "background" "artifacts" "more" "changes"; }
+  [data-personal-project="emerald"] #artifacts .pp-wallpaper-card:not(.pp-bubbles, .pp-mobile-wallpaper) .row__sub { text-wrap: pretty; }
   #pj-board[data-personal-project="github"] { grid-template-areas: "snake" "profile" "artifacts" "changes"; }
   #pj-board[data-personal-project="typora"] { grid-template-areas: "samples" "theme" "artifacts" "changes" "more"; }
   .pp-samples figcaption strong { gap: 4px; font-size: 12px; }

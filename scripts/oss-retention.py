@@ -26,8 +26,8 @@ BASE = oss_origins.configured_base()
 LOCK = r'E:\.agents\tools\Invoke-ShortLock.ps1'
 
 
-def command(*args):
-    return subprocess.check_output(args, cwd=ROOT, text=True, encoding='utf-8').strip()
+def command(*args, timeout=None):
+    return subprocess.check_output(args, cwd=ROOT, text=True, encoding='utf-8', timeout=timeout).strip()
 
 
 def read(path):
@@ -278,7 +278,7 @@ def exact_versions(cli, profile, keys):
 
 def bucket_stat(cli, profile):
     raw = command(cli, 'ossutil', 'api', 'get-bucket-stat', '--bucket', BUCKET, '--profile', profile,
-                  '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com')
+                  '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com', timeout=20)
     root = ElementTree.fromstring(raw)
     return {field: int(root.findtext(f'{{*}}{tag}')) for field, tag in
             (('objects', 'ObjectCount'), ('bytes', 'Storage'), ('provider_updated_at', 'LastModifiedTime'))}
