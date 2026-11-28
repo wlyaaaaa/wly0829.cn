@@ -612,7 +612,7 @@
     return { set: draw };
   }
 
-  let exits = null, drawExits = () => {}, exitJump = "";
+  let exits = null, drawExits = () => {}, exitJump = "", exitsSettled = false, exitGuardOld = false;
   function exitRows(items, state) {
     const names = { bilibili: '哔哩哔哩', claude: 'Claude', openai: 'OpenAI' };
     return [...new Set([...Object.keys(names), ...(items || []).map(x => x.id)])].map((id) => {
@@ -629,25 +629,17 @@
     });
   }
   function exitGuard(guard) {
-    let label = '读不到', tone = 'gray', note = '';
+    let label = '读不到', tone = 'gray';
     switch (guard?.mode) {
-      case 'observe':
-        label = '只观察'; tone = 'amber';
-        note = ' · 两个代理软件撞了只记下，不替你关；住宅出口的程序没在跑会<span class="exit-word">自动拉起</span>';
-        break;
+      case 'observe': label = '只观察'; tone = 'amber'; break;
       case 'enforce': label = '会自己动手'; tone = 'green'; break;
       case 'off': case 'disabled': case 'stopped': label = '没开'; break;
     }
-    const at = guard?.last_action_at, action = typeof at === 'string' ? Date.parse(at) : NaN;
-    let last = '';
-    if (Number.isFinite(action)) {
-      const date = beijingDay(action / 1000) === beijingDay(Date.now() / 1000) ? '' : `${U.date(at)} `;
-      last = `上次动手 ${date}${U.time(at)}`;
-    } else if (at === null && Number.isFinite(Date.parse(guard.observed_at))) {
-      last = '还没动过手';
-    }
+    // 后台以 120 秒判定守护回执是否新鲜；停用取计划任务状态，守护回执早于停用不代表停用时刻。
+    const at = guard?.observed_at, stale = exitGuardOld || U.isStale(guard) || Date.now() - Date.parse(at) > 120000;
+    const stamp = tone !== 'gray' && U.staleText({ at, stale }).replace(/^数据截止 /, '');
     const detail = route('/live/task/?id=task-da408b6346691a43dbb3d55c');
-    return `代理守护　<span class="exit-guard__mode" data-tone="${tone}">${label}</span>${note}${last ? ' · ' : ' '}<span class="exit-guard__action">${last}<a class="exit-guard__detail more__chev" href="${esc(detail)}" aria-label="查看代理守护详情">›</a></span>`;
+    return `代理守护　<span class="exit-guard__mode" data-tone="${tone}">${label}</span>${stamp ? ` · ${esc(stamp)}` : ''} <a class="exit-guard__detail more__chev" href="${esc(detail)}" aria-label="查看代理守护详情">›</a>`;
   }
   function renderMemoryGuard(card) {
     let row = card.querySelector('.memory-guard');
@@ -694,10 +686,11 @@
     return typeof value === 'string' ? html.replace(/出口(?:是固定 IP ✓|不是固定 IP)/g, '<span class="exit-word">$&</span>') : html;
   }
   function exitsChapter(el) {
-    el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><p class="grp-split__k">连得上吗</p><p class="exit-guard"></p><div data-exits></div><div data-draw10-network></div></section>';
+    el.innerHTML = '<div data-host-readings></div><section class="vz-exits" id="exits"><div class="exit-head"><p class="grp-split__k">连得上吗</p><p class="exit-guard" hidden></p></div><div data-exits></div><div data-draw10-network></div></section>';
     const guard = el.querySelector('.exit-guard');
     drawExits = () => {
-      U.html(guard, exitGuard(exits?.guard));
+      guard.hidden = !exitsSettled && (!exits || exits.state === 'probing' && !exits.guard);
+      if (!guard.hidden) U.html(guard, exitGuard(exits?.guard), false);
       U.html(el.querySelector('[data-draw10-network]'), window.ComputerDraw10?.network(computer, netViewer) || '');
       const rows = exitRows(exits?.items || computer?.exits, exits?.state).filter(r => !offline() || !['还没读到', '没有记录'].includes(r.status));
       // 块已经说没存下来，下面不再列一串“没有记录”（r83 返修第二轮）。
@@ -724,17 +717,18 @@
   }
   async function readExits(get, paint, active = () => true) {
     const until = Date.now() + 60000;
-    let first = true, last = null;
+    let first = true, last = null, result;
     while (Date.now() < until && active()) {
       let timeout;
       const query = first ? { probe: 1 } : null; first = false;
-      const result = await Promise.race([get(query), new Promise((resolve) => { timeout = setTimeout(() => resolve(null), until - Date.now()); })]);
+      result = await Promise.race([get(query), new Promise((resolve) => { timeout = setTimeout(() => resolve(null), until - Date.now()); })]);
       clearTimeout(timeout);
       if (result?.data && active()) { last = result.data; paint(last); }
       if (last?.state !== 'probing') break;
       await new Promise((resolve) => setTimeout(resolve, Math.min(2000, Math.max(0, until - Date.now()))));
     }
     if (last?.state === 'probing' && active()) paint({ ...last, state: 'ok' });
+    return result;
   }
 
   let grafana = null, gfOff = false;
@@ -1632,7 +1626,18 @@
   }
   watchCharts();
   let exitsGeneration = 0;
-  const probeExits = () => { const generation = ++exitsGeneration; return readExits(async (query) => { let r = await window.Live.get('computer/exits', query); if (r?.meta?.source === 'copy') r = await window.Live.get('computer/exits', query); return r; }, (d) => { exits = d; if (!computer) refresh(); drawExits(); }, () => generation === exitsGeneration); };
+  const probeExits = async () => {
+    const generation = ++exitsGeneration, active = () => generation === exitsGeneration;
+    const result = await readExits(async (query) => {
+      let r = await window.Live.get('computer/exits', query);
+      if (r?.meta?.source === 'copy') r = await window.Live.get('computer/exits', query);
+      return r;
+    }, (d) => { exits = d; if (!computer) refresh(); drawExits(); }, active);
+    if (!active()) return;
+    exitsSettled = true;
+    exitGuardOld = !result?.data || result.meta?.source === 'copy' || result.meta?.status >= 400;
+    drawExits();
+  };
   probeExits(); document.querySelector('.live-at')?.addEventListener('click', probeExits);
   function finishExitAnchor(target) {
     if (exitJump !== 'waiting' || !target) return;
