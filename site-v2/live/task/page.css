@@ -130,7 +130,7 @@ h1 .task-provider { margin-left: .6em; }
   .page--task[data-variant="plan"] .task-row > .task-link { grid-column: 4; }
   .task-fact-word { white-space: nowrap; }
 }
-/* 展开更早的记录后，“收起”放到最后，不夹在第 6、第 7 次中间 */
+/* 展开和收起共用列表开头的位置，短页收起时也能保住按钮。 */
 #runs-toggle { margin: 0; padding: 0; translate: none; color: var(--ink-soft); }
 #runs-toggle[aria-expanded="true"] .disclosure-closed { display: none; }
 #runs-toggle[aria-expanded="true"] .disclosure-open { display: inline; }
