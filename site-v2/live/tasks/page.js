@@ -120,7 +120,7 @@
     if (!Array.isArray(days) || days.every(day => dayTier(day) == null || dayTier(day) === 'unknown')) return '';
     const marks = [...days].sort((a, b) => a.date.localeCompare(b.date)).map(day => {
       const state = dayTier(day);
-      const label = `${U.date(day.date)} ${labels[state] || (day.started ? '跑过，结果未确认' : dayReason(day) || dayMissing)}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`;
+      const label = `${U.date(day.date)} ${labels[state] || (day.started ? '跑过，结果未确认' : dayReason(day) || (state === 'none' && day.coverage_complete === true ? '这天没跑' : dayMissing))}${['mostly', 'partial'].includes(state) ? tierCounts(day.outcome) : ''}`;
       return state == null || state === 'unknown' ? `<span class="rec-none" data-state="unknown" aria-label="${esc(label)}" title="${esc(label)}">—</span>` : `<button class="task-day" type="button" data-state="${esc(state)}" aria-label="${esc(label)}"><span class="task-day-tip">${esc(label)}</span></button>`;
     });
     return `<div class="task-week"><div class="task-days" role="group" aria-label="近 7 天${d.days7_from ? `，记录从 ${U.date(d.days7_from)} ${U.time(d.days7_from)} 起` : ''}" data-from="${esc(d.days7_from || '')}">${marks.join('')}</div></div>`;
@@ -301,7 +301,7 @@
         return false;
       }
       if (ticket !== generation || r.meta?.viewer?.kind !== viewer || r.meta?.at !== batchAt || !maintenance && !scheduledPacket(r.data)) return false;
-      U.blockNote(s.el, r);
+      U.blockNote(s.el, { fallbackNote: readingNote(r) });
       if (!Array.isArray(r.data?.items)) return false;
       s.loadedRows = [...new Map([...(append ? s.loadedRows : []), ...(taskGroups({ task_purpose_catalog: page?.task_purpose_catalog }, r.data.items).get(id) || [])].map(t => [t.id, t])).values()];
       s.cursor = r.data.next !== s.cursor ? r.data.next : null;
@@ -399,7 +399,8 @@
     U.html(changesTitle, moved?.title || '任务变化');
     const detailLock = viewer === 'public' && Array.isArray(d.changes7) && d.changes7.length && !d.changes7.some(c => typeof c.owner_detail === 'string')
       ? [{ key: 'detail-lock', cls: 'row row--flat', html: `<span></span><p class="row__sub">${U.fieldHtml({ value: null, visibility: 'owner', hidden_what: '每条变化的详情（任务在电脑上的原名和最近运行时间）' }, { place: 'body', kind: viewer })}</p>` }] : [];
-    const changeEmpty = !Array.isArray(d.changes7) ? '任务变更记录这次没读到' : !d.changes7.length ? moved.empty : '';
+    const changeEmpty = maintenance && !Object.hasOwn(d, 'changes7') ? '任务变化在计划任务页查看。'
+      : !Array.isArray(d.changes7) ? '任务变更记录这次没读到' : !d.changes7.length ? moved.empty : '';
     showChangeEmpty(changeEmpty);
     U.list($('changes'), changeEmpty ? empty(changeEmpty) : [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
@@ -505,6 +506,14 @@
     sel.value = project || '';
   }
   $('project-pick').addEventListener('change', e => { const u = new URL(location.href); e.target.value ? u.searchParams.set('project', e.target.value) : u.searchParams.delete('project'); u.searchParams.delete('group'); location.assign(u.pathname + u.search + u.hash); });
+  function readingNote(s, alreadyAt) {
+    const note = s.fallbackNote || s.meta?.fallbackNote || '';
+    const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
+    if (note && s.data && s.meta?.source !== 'fallback' && Number.isFinite(Date.parse(source))) {
+      return Date.parse(source) === Date.parse(alreadyAt) ? '' : `清单来源截至 ${stamp(source)}`;
+    }
+    return note.replace(/^数据截止 /, '清单来源截至 ');
+  }
   function link(s) {
     const dayChanged = s.now && U.date(s.now) !== U.date(now);
     now = s.now || now; if (dayChanged && page) render(page);
@@ -519,23 +528,24 @@
       if (projectList !== null) pickProjects();
     } else if (!page && !s.data) {
       $('coverage').hidden = true;
-      waiting(s.warming ? '正在读' : s.text || U.collectionText());
+      const pending = s.warming || ['idle', 'wait', 'slow'].includes(s.phase);
+      waiting(pending ? '正在读' : s.text || U.collectionText());
+      if (!pending) { taskHead(); heroRead.done(false); }
     }
-    let note = s.fallbackNote || s.meta?.fallbackNote || '';
-    const source = s.data?.source_at ?? s.data?.at ?? s.shownAt ?? s.meta?.at;
-    if (note.startsWith('数据截止 ')) note = Date.parse(source) === Date.parse(dataAt) ? '' : note.replace('数据截止 ', '清单来源截至 ');
-    U.blockNote($('groups'), { fallbackNote: note });
+    U.blockNote($('groups'), { fallbackNote: readingNote(s, dataAt) });
     if (page && !maintenance) drawUpcoming(listedTasks(taskGroups(page, rows)));
     taskWords();
   }
   function load() {
     generation++; watch?.stop();
     for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
-    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('正在读'); taskHead();
+    page = null; rows = []; dataAt = null; runningReading = null; coverageNote = ''; waiting('正在读'); taskHead(null, false, true);
     watch = window.Live.watch('tasks', { scope, project, q: query || null }, {
-      phase(s) { if (!page && !s.meta?.publicationRevoked) { groupsRead.set(s); changesRead.set(s); } },
+      phase(s) { if (!page && !s.meta?.publicationRevoked) { if (['idle', 'wait', 'slow'].includes(s.phase)) heroRead.set(s); groupsRead.set(s); changesRead.set(s); } },
       data(d, meta) {
-        const ticket = ++generation, kind = meta.viewer?.kind || 'public';
+        const kind = meta.viewer?.kind || 'public';
+        if (kind === viewer && page && page.q !== 'warming' && d?.q === 'warming' && !meta.publicationRevoked) return;
+        const ticket = ++generation;
         if (meta.publicationRevoked) { rows = []; runningReading = null; coverageNote = ''; $('sources').replaceChildren(); }
         if (kind !== viewer) for (const s of sections.values()) { s.loadedRows = null; s.cursor = null; s.failed = false; s.box._loaded = false; s.next.hidden = true; }
         const paint = packet => {
@@ -594,9 +604,9 @@
       : items.filter(t => (!pageOnly || t.source_readable === true) && taskState(t) === 'running').length;
     return count || !partial ? { count, at: dataAt, partial, pageOnly } : null;
   }
-  function taskHead(moved, revoked = false) {
+  function taskHead(moved, revoked = false, pending = false) {
     hero.toggleAttribute('data-publication-revoked', revoked);
-    if (page?.q === 'warming') { headline = '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); heroRead.done(); return; }
+    if (pending || page?.q === 'warming') { headline = pending ? '正在读' : '正在准备'; U.html($('head'), U.head(headline)); $('note').hidden = true; $('asof').hidden = true; U.html($('stats'), ''); L.tone(hero, 'off'); if (!pending) heroRead.done(); return; }
     const total = page?.total, rounds = maintenanceRounds(page);
     const observed = Number.isInteger(rounds) && (rounds > 0 || rounds === 0 && page?.q === 'ok');
     // 新私事规则（本人 11-24 02:56）：访客版不再按项藏，总数旁边不再写“另有 N 项仅本人可见”。
@@ -622,8 +632,7 @@
       legend && esc(legend).replace(/灰格：那天结果没读到|不用跑|停用中|这天没跑|等下一轮跑/g, '<span class="task-phrase">$&</span>'),
       ...[...new Set(rows.map(t => t.days7_gap).filter(Boolean))].map(noteField),
     ].filter(Boolean).join(' · ');
-    const rosterOld = Date.parse(now) - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
-    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册仍沿用 ${U.time(dataAt)} 的读数` : ''
+    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? ''
       : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
     U.html($('note'), keepTaskWords([note, statusNote].filter(Boolean).join(' · '))); $('note').hidden = !note && !statusNote;
     drawStats(moved);

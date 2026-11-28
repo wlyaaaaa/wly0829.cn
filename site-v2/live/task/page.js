@@ -215,7 +215,7 @@
         ? day.partial || day.state !== 'ok' ? 'observed-ok' : 'ok' : day.state === 'warn' || outcome === 'warn' ? 'warn'
           : day.state === 'none' && !sawRun ? 'none' : 'unknown';
       const started = day.started || sawRun;
-      const reason = !started && ['none', 'unknown'].includes(state) ? dayReason(day) : '';
+      const reason = !started && ['none', 'unknown'].includes(state) ? dayReason(day) || (state === 'none' && day.coverage_complete === true ? '这天没跑' : '') : '';
       // 那天表里列着运行、只是没确认结果的，格子说“跑过，结果未确认”，不说“全天记录未读全”
       const shown = reason ? 'none' : state === 'unknown' && started ? 'started' : state;
       return { ...day, state: shown, name: reason || weekLabel[shown], started };
@@ -462,7 +462,7 @@
       ? '<p>已读区间内没有运行记录</p>' : '<p>这段时间的运行记录未读到</p>';
     const value = (v, name) => field(v, name) || '未读到';
     if (kind === 'pickup') return `<table><thead><tr><th>时刻</th><th>起因</th><th>谁接的</th><th>结果</th><th></th></tr></thead><tbody>${rows.map(r =>
-      `<tr data-time="${runTime(r)}"><td>${timeCell(r)}${r.length == null ? "" : `<small class="task-run-duration">用了 ${duration(r.length)}</small>`}</td><td>${value(r.cause ?? r.trigger_text, '起因')}${extra(d, r, false, open.includes(runTime(r)))}</td><td>${provider(r.executor) || '未读到'}</td><td>${result(r.result, kind, r)}</td><td>${chatLink(r)}</td></tr>`).join('')}</tbody></table>`;
+      `<tr data-time="${runTime(r)}"><td>${timeCell(r)}${r.length == null ? "" : `<small class="task-run-duration">用了 ${duration(r.length)}</small>`}</td><td>${value(r.cause ?? r.trigger_text ?? (r.trigger === 'automation' ? d.trigger_text : null), '起因')}${extra(d, r, false, open.includes(runTime(r)))}</td><td>${provider(r.executor) || '未读到'}</td><td>${result(r.result, kind, r)}</td><td>${chatLink(r)}</td></tr>`).join('')}</tbody></table>`;
     const last = kind === 'plan' && d.state === 'running' && d.last?.result === 'running' && !protectedField(d.last) ? asRun(d.last) : null;
     const checkedAt = time(d.runs_at ?? d.source_at ?? d.at ?? packetAt);
     const logFrom = time(d.coverage?.from), logTo = time(d.coverage?.to);
@@ -505,18 +505,29 @@
     }
     return field(body.text ?? body.note, '检查记录');
   }
+  function readingNote(target, state, at) {
+    const note = state.fallbackNote || state.meta?.fallbackNote;
+    const sample = time(at);
+    U.blockNote(target, { fallbackNote: state.data && state.meta?.source !== 'fallback' && valid(sample)
+      && (note || state.warming || state.data.q === 'warming') ? `截至 ${stamp(sample)}` : note });
+  }
   function readChecks(resource, target) {
     if (!resource) return;
     const expected = viewer;
+    let resultAt = null;
     detailWatches.push(window.Live.watch(resource, null, {
       data(d, meta) {
         if (!target.isConnected) return;
-        U.html(target, d && meta.viewer?.kind === expected && viewer === expected ? checks(d) || '逐项结果未读到' : '', false);
+        const current = d && meta.viewer?.kind === expected && viewer === expected;
+        if (current && d.q === 'warming') return;
+        const body = current && checks(d);
+        resultAt = body ? meta.at : null;
+        U.html(target, current ? body || '逐项结果未读到' : '', false);
       },
       link(state) {
         if (!target.isConnected) return;
         if (!state.data && ['none', 'gone'].includes(state.phase)) U.html(target, state.offline ? '这块没存下来，连上后补上。' : '逐项结果未读到', false);
-        U.blockNote(target, state);
+        readingNote(target, state, resultAt);
       },
     }));
   }
@@ -530,7 +541,8 @@
     const output = marked(field(runOutput(d, r), '本次运行结果'), r.output != null ? r : d, 'output', '本次运行结果');
     U.html($('failure-text'), [times(r), why || (r.exit_code != null ? '只读到退出码，没有出错原因的记录' : '没有出错原因的记录'), output].filter(Boolean).map(v => `<p>${v}</p>`).join(''), false);
     const target = $('failure-checks');
-    U.html(target, '', false); readChecks(runPath(d, r), target);
+    const resource = runPath(d, r);
+    U.html(target, resource ? '正在读逐项结果' : '', false); readChecks(resource, target);
   }
   const bar = U.topbar({ ask: () => task ? `请看实况的任务「${text(task.name)}」，说明怎么跑、最近结果及该关注什么。` : '' });
   const stopChecks = () => { detailWatches.forEach(w => w.stop()); detailWatches = []; };
@@ -628,7 +640,9 @@
     window.Live.watch(`tasks/${encodeURIComponent(id)}`, null, {
       phase(state) { if (!task && !state.meta?.publicationRevoked) reading.set(state); },
       data(d, meta) {
-        viewer = meta.viewer?.kind || 'public'; packetAt = meta.at; changed = true;
+        const kind = meta.viewer?.kind || 'public';
+        if (kind === viewer && task && task.q !== 'warming' && d?.q === 'warming' && !meta.publicationRevoked) return;
+        viewer = kind; packetAt = meta.at; changed = true;
         if (olderViewer !== viewer || meta.publicationRevoked) { olderRuns = new Map(); deepCursor = undefined; pickedRun = null; pickAsked = pageFailed = false; olderViewer = viewer; }
         else if (pageOf(task)) keepRuns(task.runs);
         task = d;
@@ -653,7 +667,7 @@
           reading.done();
         }
         changed = false;
-        U.blockNote(stage, state);
+        readingNote(stage, state, task && task.q !== 'warming' ? task.source_at ?? task.at ?? packetAt : null);
       },
     });
   }
