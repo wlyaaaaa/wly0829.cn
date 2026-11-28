@@ -60,7 +60,7 @@
   }
 
   // 每看一次（待本人定的 A：每一轮都列一行）：自动修理那几件按每一轮列（修理、验收各一行，写型号档位，点进那一轮）；AI 约好的事每一轮就是到点去看一次。
-  // 这次看记在哪一轮里（那一轮开始以后、结束后 10 分钟内记下的，取结束得最近的）就并进那一轮那一行，不另起一行；那一轮缺的型号档位、地址拿这次看的补上，那场对话另挂一个链接。
+  // 并入同一轮的核对记录时，直接用这一轮的详情地址。
   // 后台“经过”里另有的一步（没修好、先放着、了结）同一时刻有那一轮的，挂在那一轮的“修理”“验收”后面；没有的才另补一行。每次写的话常把前几次的也带着，只摆这一次新写的那一行，其余收着。
   // 对话被藏的那一轮（visitor_labels.conversation 是 hidden）：本人版挂“访客看不到”；访客版时刻、型号档位照给，那一轮的页后台给了链接就照给，原位写后台给的原因。
   function steps(d, repair) {
@@ -76,12 +76,11 @@
       const chat = site(c.source_href), own = site(c.run_href), who = [c.model, c.effort].filter(Boolean).join(' · '), hit = roundOf(c.at);
       if (hit) {
         hit.who ||= who;
-        if (!hit.href && (own || chat)) Object.assign(hit, { href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
-        else if (chat && chat !== hit.href) hit.chat = chat;
+        if (!hit.href && (own || chat) || own && /^\/live\/chat\//.test(hit.href)) Object.assign(hit, { href: own || chat, why: c.source_unavailable_reason });
         hit.checkAt = c.at;
         continue;
       }
-      rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, chat: own && chat !== own ? chat : '', why: c.source_unavailable_reason });
+      rows.push({ at: c.at, text: c.text, kind: '', who, href: own || chat, why: c.source_unavailable_reason });
     }
     const hits = t => x => x && Math.abs(ms(x) - ms(t)) < 2000, near = t => rows.some(r => [r.at, r.checkAt].some(hits(t)));
     const start = timed(d.accepted) && history.find(e => e && hits(d.accepted)(e.at)
@@ -97,7 +96,7 @@
       }
       if (near(e.at)) continue;
       rows.push({ at: e.at, text: e.outcome_text ?? e.text, kind, outcome: out,
-        who: '', href: site(e.source_href) || site(e.automation_run?.href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
+        who: '', href: site(R.runHref(e.automation_run)) || site(e.source_href), why: e.source_unavailable_reason, tag: hiddenTag(Array.isArray(e.rounds) ? e.rounds[0] : null) });
     }
     if (timed(d.accepted)) {
       const href = site(d.registered_by_href) || site(start?.source_href);
@@ -166,11 +165,11 @@
     put($('three'), cells.map(([h, v]) => `<section class="dossier-card glass iss-cell"><h2>${h}</h2><p>${F(v, h)}${h === '接下来' && waitTag && nodot(T(v)) === nodot(T(wait)) ? waitTag : ''}</p></section>`).join(''));
 
     // 每看一次
-    const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href) || isChat(r.chat)), anyRun = rows.some(r => r.href && !isChat(r.href));
+    const rows = steps(d, repair), isChat = h => /^\/live\/chat\//.test(h || ''), anyChat = rows.some(r => isChat(r.href)), anyRun = rows.some(r => r.href && !isChat(r.href));
     const row = r => {
       const dotKind = r.outcome === 'not_fixed' || r.outcome === 'not_done' ? 'bad' : 'done';
       const repeated = r === rows.at(-1) && cells.some(([, v]) => nodot(T(r.text)) === nodot(T(v)));
-      const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.chat && go(r.chat, goName(r.chat)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
+      const meta = [r.who && esc(r.who), r.href && go(r.href, r.linkLabel || goName(r.href)), r.tag, T(r.why) && `<span class="iss-why">${F(r.why, '为什么打不开')}</span>`].filter(Boolean).join(' · ');
       return `<li class="run iss-step" data-dot="${dotKind}"><div class="run__main"><p><b class="iss-when">${esc(when(r.at))}</b>${r.kind ? `<span class="iss-kind">${esc(r.kind)}</span>` : ''}${r.step ? `<span class="iss-kind">${esc(r.step)}</span>` : ''}${r.live ? '<span class="iss-kind" data-live>正在办</span>' : ''}${repeated ? '' : stepText(r.text)}</p>${meta ? `<p class="iss-meta">${meta}</p>` : ''}</div></li>`;
     };
     const nextRow = s.closed ? '' : full ? `<li class="run iss-step" data-dot="next"><div class="run__main"><p>${esc(limit)} 次看满了，AI 停手</p></div></li>`

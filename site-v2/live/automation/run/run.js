@@ -198,7 +198,7 @@
   let chat = null, chatWatch = null;
   const CV = window.LiveChatView.create({ viewer: () => viewer, chat: () => chat?.data || null, at: () => chat?.meta?.at || null, route: p => T.path(p) || p });
   function watchChat(c) {
-    const key = c.available ? c.resource : '';
+    const key = c.resource || '';
     if (chatWatch?.key === key) return;
     chatWatch?.sub.stop(); chat = null; chatWatch = null;
     if (key) chatWatch = { key, sub: Live.watch(key, null, { phase(st) { chat = st; if (state) draw(); } }) };
@@ -464,8 +464,7 @@
       else if (!out.length) note = esc(gap || '这一轮说了什么没有存下来。');
       items.push(...out);
     }
-    const headerLink = viewer === 'public' && hiddenFromVisitor && c.headerHref ? ` · ${link(c.headerHref, '看对话页头 ›')}` : '';
-    if (note) items.push({ html: `<li class="ar-gap">${note}${headerLink}</li>` });
+    if (note) items.push({ html: `<li class="ar-gap">${note}</li>` });
     // 还在跑：最后一行写它这会儿在干什么；跑完了：派活程序说结论
     if (r.status === 'running') {
       const doing = d && !locked ? CV.visibleText(d.doing ?? d.progress) : '', now = doing || plainOf(r.activity);
@@ -476,7 +475,10 @@
 
     // 卡头：这场对话自己的状态（和这一轮的结局分开写）、条数；型号档位、各项时刻、帮手几个、所属项目、App 标签、压缩次数、问情况、打开对话；计划收在“计划”里
     // 访客版对话藏着时后台不给 state，看 metadata 里记的状态
-    const talkState = { running: '对话还在跑', done: '对话已结束', failed: '对话出错停了', unknown: '对话状态不明' }[c.state || d?.state || c.meta?.state] || '';
+    const ended = ['done', 'stopped', 'failed', 'ended_unknown'];
+    const conversationState = ended.includes(d?.state) ? d.state : c.state || c.meta?.state || d?.state;
+    const talkState = { running: '对话还在跑', done: '对话已结束', stopped: '对话已结束', failed: '对话出错停了',
+      ended_unknown: '对话已结束', unknown: '对话状态不明' }[conversationState] || '';
     // 本人版：后台标了这份对话对访客藏着（unavailable_reason=private 或给了 hidden_why），在原位挂“访客看不到”；标 rewritten 的挂“对外换了说法”（M684）
     const labeled = U.visitorFieldKind({ visitor_labels: r.labels }, 'conversation');
     const tag = viewer !== 'owner' ? (c.reason === 'private' || c.why || labeled !== 'rewritten' ? '' : U.visitorRewrittenTag('这一轮的对话', '', viewer)) : c.reason === 'private' || c.why || labeled === 'hidden' ? U.visitorHiddenTag('这一轮的对话', c.why.replace(/^访客看不到[：:]\s*/, ''), viewer)
@@ -501,10 +503,10 @@
       const mark = tag ? '' : U.visitorHiddenMark(d, '这场对话', viewer);
       if (mark) facts[0] = `<span class="live-unit">${facts[0] || ''}${mark}</span>`;
       meta = `<div class="ar-talk__meta"><p class="ar-talk__facts">${m.app}${facts.map(v => `<span>${v}</span>`).join('')}</p>${scanLine}${note ? `<p class="ar-talk__note">${note}</p>` : ''}${thinkGap ? `<p class="ar-talk__note">${esc(thinkGap)}</p>` : ''}${locked ? '' : `<div class="ar-talk__acts">${CV.actions(d)}</div>`}</div>`;
-      plan = locked ? '' : planFold(m.plan, ['done', 'stopped', 'failed', 'ended_unknown'].includes(c.state || d.state));
+      plan = locked ? '' : planFold(m.plan, ended.includes(conversationState));
     } else {
       // 对话没读到（访客版对话藏着、本人版还在读或读不到）：照后台给的 conversation.metadata 和 message_count 写卡头这一行，正文照旧
-      const facts = program ? '' : talkFacts(c.meta, c.count);
+      const facts = program ? '' : talkFacts(d || c.meta, c.count);
       if (facts || scanLine) meta = `<div class="ar-talk__meta">${facts ? `<p class="ar-talk__facts">${facts}</p>` : ''}${scanLine}</div>`;
     }
     return `<section class="tp-panel ar-card ar-talk"><div class="ar-talk__head"><h2>这一轮的对话</h2>${tag}${talkState ? `<small class="ar-talkstate">${talkState}</small>` : ''}<span class="ar-count">共 ${count} 条</span></div>${meta}${plan}<ol class="ar-chat">${items.map(x => x.html).join('')}</ol></section>`;

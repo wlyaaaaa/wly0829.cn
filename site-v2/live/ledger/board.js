@@ -4,7 +4,8 @@
 (() => {
   'use strict';
   const T = window.LiveTape, U = window.LiveUI, Live = window.Live, { esc } = U;
-  const { list, known, int, dec, link, when, big, stamp, day } = T;
+  const { list, known, int, dec, when, big, stamp, day } = T, R = window.LiveRuns;
+  const link = (href, ...args) => T.link(R.runPage(href), ...args);
   // 截至几点：回包里这一块自己的时刻，没有就用整包读到的时刻；都没有就不写“截至”两个字（M1095：右上角只剩“截至”）
   const asOf = d => esc(when(d?.at || d?.as_of || state?.meta?.at));
   const params = new URLSearchParams(location.search), project = params.get('project');
@@ -218,6 +219,13 @@
     }
     return groups;
   }
+  // 一件只剩摘要、没有逐轮经过时，写一句为什么
+  function gapText() {
+    const got = pickedState?.data;
+    if (got === undefined) return '逐轮经过这次没读到，先列摘要。';
+    const why = U.fieldText(got?.gap || got?.coverage?.gap || '', viewer).trim();
+    return why ? `没有逐轮经过：${esc(why)}` : '账本只留了这一件的摘要，逐轮经过没有记下来。';
+  }
   // 后台给的口径说明 {text, from}：近 7 天修好几次和自动任务页的“修好”、自动修理的成坏数的不是一回事，照写后台那句；
   // text 里没写哪天起的才补“几号起”
   function basis(b) {
@@ -268,13 +276,6 @@
     }
     return groups;
   }
-  // 一件只剩摘要、没有逐轮经过时，写一句为什么
-  function gapText() {
-    const got = pickedState?.data;
-    if (got === undefined) return '逐轮经过这次没读到，先列摘要。';
-    const why = U.fieldText(got?.gap || got?.coverage?.gap || '', viewer).trim();
-    return why ? `没有逐轮经过：${esc(why)}` : '账本只留了这一件的摘要，逐轮经过没有记下来。';
-  }
   function summaryItem(d, id) {
     const repeat = list(d.repeat_fixes?.items).map(r => ({ ...r, repeat: true }));
     return [...owed(d), ...settledRows(d), ...list(d.items), ...repeat].find(r => r.id === id)
@@ -286,7 +287,7 @@
   }
   function detail(d) {
     const summary = summaryItem(d, picked), fresh = pickedState?.data?.item;
-    const it = pickedState?.pending || pickedState?.failed ? summary || fresh || {} : { ...summary, ...fresh };
+    const it = { ...summary, ...fresh };
     const offlineGap = pickedState?.offlineMissing && (viewer === 'owner' ? '离线时没存这件的详情' : '');
     if (!it.id) return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2></div><p class="tp-empty">${!picked ? '点左边或上面任一件，这里看它的经过。'
       : pickedState?.pending ? '正在读这一件…' : pickedState?.notFound ? '这件不在账上了，可能已经并进别的一件。'
@@ -308,7 +309,11 @@
       const body = n > 1 ? `${every ? every + '一次，' : ''}${a.event === 'attempt' && !SETTLED[out] && !ROUND[out] ? `处理了 ${n} 轮` : `${label}，共 ${n} 次`}${g.text ? `，都是：${esc(g.text)}` : ''}` : `${label}${g.text ? `：${esc(g.text)}` : ''}`;
       // 这一步是哪一轮、哪场对话做的：后台给了地址（source_href）就挂“那一轮 ›”“那场对话 ›”；没地址照后台给的原因写一句小字（M722“点不进对话”）
       // 对话被藏的那一步：访客版后台给了那一轮的地址照给，原因（如“这一轮的对话仅本人可见。”）照字写在后面；本人版挂“访客看不到”
-      const src = [...g.rows].reverse().map(r => r.source_href || r.automation_run?.href).find(h => T.path(h));
+      const src = [...g.rows].reverse().map(r => {
+        const at = stamp(r.at), rounds = list(r.rounds), exact = rounds.find(x => x?.id && typeof r.evidence_ref === 'string' && r.evidence_ref.endsWith(`#${x.id}`));
+        const matching = rounds.filter(x => x && at != null && stamp(x.at) != null && stamp(x.at) - 2000 <= at && at <= stamp(x.end_at || x.at) + 600000);
+        return R.runHref(r.automation_run) || (exact || (matching.length === 1 ? matching[0] : null))?.source_href || r.source_href;
+      }).find(h => T.path(h));
       const why = g.rows.map(r => U.fieldText(r.source_unavailable_reason ?? '', viewer).trim()).find(Boolean);
       const hidden = g.rows.flatMap(r => list(r.rounds)).find(x => x?.visitor_labels?.conversation === 'hidden');
       // 访客版：那一轮标了只给本人看、访客页头已经发布时，后台另给页头读口 source_header_href（/computer-access/live/v1/chats/{访客别名}），照 HEADLINK A 挂“看对话页头 ›”（M1078）
@@ -318,8 +323,9 @@
       return `<li${failed ? ' data-tone="bad"' : ''}><b>${head}</b>${body}${go}</li>`;
     }).join('');
     const next = nextOf(it), oldAt = when(pickedState?.shownAt);
-    const note = pickedState?.pending ? '经过正在读…' : pickedState?.offlineMissing ? offlineGap : pickedState?.failed
-      ? `逐轮经过这次没读到${oldAt ? `，下面先列 ${esc(oldAt)} 读到的` : '，先列摘要'}。再点这件可以重试。` : lines ? '' : gapText();
+    const note = oldAt && (pickedState?.pending || pickedState?.failed) ? `经过截至 ${esc(oldAt)}`
+      : pickedState?.pending ? '经过正在读…' : pickedState?.offlineMissing ? offlineGap : pickedState?.failed
+        ? '逐轮经过这次没读到，先列摘要。再点这件可以重试。' : lines ? '' : gapText();
     const related = [it.task_name && `自动任务「${F(it.task_name)}」`, it.conversation_title && `对话「${F(it.conversation_title)}」`, it.project_name && `项目「${F(it.project_name)}」`].filter(Boolean).join(' · ');
     const chips = [it.state === 'working' && '正在办', it.repeat && (known(it.broken_30d) ? `近 ${int(repeatDays(d))} 天坏了 ${int(it.broken_30d)} 次` : it.reopen_count > 0 && `又出现过 ${int(it.reopen_count)} 次`), known(it.check_count) && `看过 ${int(it.check_count)} 次`, !it.settled && known(it.check_count) && maxChecks(it), it.done_when && `算完：${F(it.done_when, '怎么算完')}`].filter(Boolean);
     return `<section class="tp-panel lg-detail" id="detail"><div class="tp-panel__head"><h2>点开一件</h2>${link('/live/issue/?id=' + encodeURIComponent(it.id), '完整经过 ›')}</div>

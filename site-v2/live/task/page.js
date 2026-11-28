@@ -90,7 +90,7 @@
     warn: '部分完成',   // 只做完一部分的那一轮（后台 result=warn，如原话补漏“这次只补完一部分消息”），用列表“要留意”的黄色（M381）
   })[state] || '结果未读到';
   // 计划任务某一轮结果没读到时写清缘故：没记到结束、结束了但结果未确认（和列表同一个说法），或结果码的含义没登记
-  const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '结果未确认' : '';
+  const unknownRun = r => !r ? '' : r.end == null && r.start != null ? '没记到结束' : r.exit_code != null ? '结果码没登记' : r.end != null ? '已结束，结果未确认' : '';
   const result = (state, variant, run) => {
     const result = ['ok', 'done', 'failed', 'warn', 'running', 'stopped', 'disabled', 'paused', 'never', 'accepted'].includes(state) ? state : 'unknown';
     const tone = result === 'stopped' ? 'failed' : result;
@@ -347,9 +347,11 @@
     const completed = kind === 'plan' ? ['ok', 'failed', 'warn'] : ['ok', 'done', 'failed', 'stopped', 'warn'];
     const originalFinished = valid(original) && last?.start >= original && completed.includes(last.result);
     const resident = kind === 'plan' && ['resident', 'service_loop', 'on_demand', 'event'].includes(d.mode);
+    const oldRead = time(d.last_read_at), oldNext = time(d.last_read_next_at);
     const planStatus = stopped ? disabled ? disabledStatus(d) : showLast && label(d.state, kind)
       : valid(due) ? `${offline ? '原定' : '下次'} ${stamp(due, true)}`
       : valid(original) && !originalFinished ? `原定 ${stamp(original, true)}，${pending || '结果待更新'}`
+      : valid(oldRead) && valid(oldNext) ? `原定 ${stamp(oldNext, true)} · ${stamp(oldRead)} 的安排`
       : resident ? d.schedule ? '' : MODE[d.mode] : kind === 'plan' && triggerLine(d) ? triggerLine(d)
       : kind === 'plan' && Array.isArray(d.trigger_types) ? '没有排下一次' : kind !== 'pickup' ? kind === 'plan' ? '下次时间没读到' : '下次时间未读到' : '';
     const failed = kind === 'plan' && d.confirmed_failure === true && d.level === 'yellow' && d.last?.result === 'failed' && !protectedField(d.last);
@@ -357,7 +359,7 @@
     const warning = failed && `<span class="task-result" data-state="warn"><i class="task-dot" data-state="warn" aria-hidden="true"></i>上次${valid(failedAt) ? ` ${esc(stamp(failedAt))} ` : ''}出错</span>`;
     const why = failed && field(d.problem_reason ?? d.last.reason ?? d.why, '出错原因');
     const summary = failed ? d.state === 'running' && result('running', kind) : showLast || !planStatus ? textLast + stateHtml : '';
-    write($('task-status'), [warning, why, summary, esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
+    write($('task-status'), [warning, why, summary, showLast && valid(oldRead) && runTime(last) <= oldRead && `截至 ${esc(stamp(oldRead))}`, esc(planStatus), todayCount && `今天 ${todayCount}`].filter(Boolean).join(' · '));
     // Windows 名册记“还没运行过”、日志里却有运行的（任务后来重新登记过），说一句，免得和列表的“没跑过”对不上
     if (kind === 'plan' && d.state === 'never' && showLast) U.html($('task-status'), `${$('task-status').innerHTML}<small class="task-status__note">Windows 名册记的是“还没运行过”（列表照这个写“没跑过”），上面是 Windows 日志里读到的运行</small>`, false);
     const group = GROUP[d.group], mode = stopped ? '' : d.schedule ?? (kind === 'plan' && !resident && triggerLine(d) || MODE[d.mode]);

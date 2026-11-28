@@ -275,7 +275,7 @@
   // 暂缓（暂时不修）是灰点，和没做成的红点分开（M674）
   const tone = r => r.status === 'running' ? 'run' : r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : r.status === 'completed' ? 'ok' : 'off';
   // 暂缓的轮次大字只写“暂时不修”，为什么放着单独写一行小字（主控 11-25；QA 11-26 从下面那行拆出来）
-  const endText = r => r.deferred ? '暂时不修' : `没做成：${F(r.reason, '原因') || '原因没记下'}`;
+  const endText = r => r.deferred ? '暂时不修' : `没做成：${F(R.shortTitle(r.reason), '原因') || '原因没记下'}`;
   function card(d, v, c) {
     const r = c.run, since = T.stamp(r.startedAt);
     let head = `<p class="au-card__cat">${catLabel(d, c.category)}</p>`;
@@ -298,7 +298,7 @@
       const word = x => x.deferred ? '暂时不修' : x.status === 'incomplete' ? '没做成' : x.status === 'running' ? '正在跑' : '跑完';
       if (earlier.length) rounds = `<p class="au-card__rounds">${earlier.map(x => `<a href="${esc(x.href)}" data-tone="${tone(x)}">${nth(x) ? `第 ${int(nth(x))} 轮` : '未编号'} · ${range(x)} · ${word(x)} ›</a>`).join('')}</p>`;
     } else if (r.status === 'incomplete' || r.deferred) title = endText(r);
-    else title = R.oneVersion(F(r.summary, '这一轮做了什么')) || (r.status === 'running' ? '正在跑' : '跑完了');
+    else title = F(R.shortTitle(r.subject?.title || R.oneVersion(r.summary)), '这一轮做了什么') || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = Fm(r.activity, '正在干什么');
       const elapsed = elapsedRun(r);
@@ -366,6 +366,10 @@
   // 北京日期写成“11 月 24 日 周二”，今天的前面加“今天 · ”
   const zhDay = key => { const x = new Date(key + 'T12:00:00Z'); return `${key === today() ? '今天 · ' : ''}${x.getUTCMonth() + 1} 月 ${x.getUTCDate()} 日 周${'日一二三四五六'[x.getUTCDay()]}`; };
   // 出毛病的：按天排一长列（本人 11-24 选的 03 那种）：几点、哪一类、坏了什么、谁在处理、看这一轮
+  const problemTitle = (d, p) => {
+    const href = T.path(p.href), work = href && list(d.works).find(w => T.path(w.href) === href);
+    return R.shortTitle(work?.title || p.title || p.headline || p.text);
+  };
   function problemList(d, v) {
     if (!v.problems.length) return '<p class="au-empty">现在没有挂着的毛病。</p>';
     const days = new Map();
@@ -379,7 +383,7 @@
       const who = [p.repairing === true ? '<b class="au-ok">AI 在修</b>' : '', F(p.handler_text, '谁在处理') || (p.handler ? `已交${catLabel(d, p.handler)}` : '还没人接手')].filter(Boolean).join(' · ');
       const go = run ? `<a class="au-prob__go" href="${esc(run)}">${known(p.round) && p.round > 0 ? `看第 ${int(p.round)} 轮` : '看这一轮'} <span aria-hidden="true">›</span></a>` : '';
       return `<li class="au-prob"><span class="au-prob__dot" aria-hidden="true"></span><time>${esc(T.clock(p.at) || '')}</time><span class="au-prob__cat">${link(catPath(p.category), catLabel(d, p.category))}</span>
-        <b class="au-prob__what">${F(p.headline || p.title || p.text, '哪里坏了')}</b><span class="au-prob__who">${who}</span>${go}</li>`;
+        <b class="au-prob__what">${F(problemTitle(d, p), '哪里坏了')}</b><span class="au-prob__who">${who}</span>${go}</li>`;
     };
     return `${[...days.entries()].map(([key, ps]) => `<div class="au-probday"><h3>${key ? zhDay(key) : '时间没记下'}</h3><ul>${ps.map(row).join('')}</ul></div>`).join('')}
       <p class="tp-small au-probnote">只列现在还挂着的；修好了的在“近 72 小时跑完的”里，按“全部”回到${kinds(d)}表。</p>`;
@@ -561,7 +565,7 @@
     let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
     else if (pr && (pr.headline || pr.title || pr.text)) {
-      const headline = F(pr.headline || pr.title || pr.text, '哪里坏了');
+      const headline = F(problemTitle(d, pr), '哪里坏了');
       const name = F(c.title, '类别'), prefix = `${name} · `;
       const problem = name && headline.startsWith(prefix) ? headline.slice(prefix.length) : headline;
       tone = 'warn'; main = `出毛病：${problem || headline}`;
@@ -676,7 +680,7 @@
       const w = r.last_wake, started = w?.at || r.at;
       if (!T.stamp(started)) return '';
       const title = F(w?.chat_title, '那一场对话'), at = when(started), href = T.path(w?.chat_href);
-      const chat = title ? (href ? link(href, `${title} ›`) : title) : '';
+      const chat = href ? link(href, `${title || '那场对话'} ›`) : title;
       if (at === shown && href && chat) return `<small class="au-wake">上次跑的对话：${chat}</small>`;
       return `<small class="au-wake">上次跑：${esc(at)}${chat ? ` · ${chat}` : ''}</small>`;
     };

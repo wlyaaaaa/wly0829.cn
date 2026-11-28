@@ -29,6 +29,11 @@
       <div class="b6-tb__line">${dots}<span class="b6-tb__now" style="left:${here.toFixed(2)}%"><b>${pointLabel}</b><small>${esc(U.time(new Date(t).toISOString()))}</small></span></div></div>`;
   }
   const spent = s => { const m = Math.round(s / 60); return m < 60 ? `${m} 分钟` : `${Math.floor(m / 60)} 小时${m % 60 ? ` ${m % 60} 分` : ''}`; };
+  const automationHref = row => R.runHref(/^\/live\/chat(?:\/|\?|$)/.test(row.href || '') ? { ...row, href: '' } : row);
+  const shortProblemTitle = (value, viewer) => {
+    const text = U.fieldText(value, viewer).trim();
+    return text && !/[\r\n]/.test(text) && Array.from(text).length <= 64 ? value : null;
+  };
 
   // 首页自动任务卡（照“首页自动任务卡-v2”，本人 11-25 定内容、大字是今天跑完几轮，11-26 01:04 批照图施工）：
   // 大字今天跑完几轮、其中几轮没做成，0–24 点时间条每轮一个点；下面写在干或下一个、每处毛病、关着的类和近 7 天的结果。
@@ -46,12 +51,13 @@
     const running = items(d.running).map(r => {
       const category = R.categoryName(r.category, viewer), summary = r.title || r.summary;
       return { what: [category, summary !== `${category}正在进行` && summary !== category && summary].filter(Boolean),
-        round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: R.runHref(r) || r.href };
+        round: Number.isInteger(r.round) && r.round > 0 ? r.round : null, href: automationHref(r) };
     });
     const problems = items(d.problems).map(p => {
       const title = U.fieldText(p.title, viewer), text = U.fieldText(p.text, viewer);
       const repairing = typeof p.repairing === 'boolean' ? p.repairing : p.handler !== '本人';   // 旧包没有 repairing：照原来，写明等本人的才不算在修
-      return { title, text, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: R.runPage(p.href) };
+      const short = shortProblemTitle(p.headline, viewer) || shortProblemTitle(p.text, viewer);
+      return { title, text, short, raw: p, repairing, handler: p.handler_text || p.handler || '', round: count(p.round) && p.round > 0 ? p.round : null, href: automationHref(p) };
     });
     const aiSeconds = count(today.ai_seconds) ? today.ai_seconds : count(d.today?.ai_minutes) ? d.today.ai_minutes * 60 : null;
     const zeroAt = today.at || d.at;
@@ -199,23 +205,26 @@
       // 大字：今天跑完几轮（点了到自动任务页今天跑完的）；下面“其中几轮没做成 ›”，0 轮照写 0、不带链接
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
       const fail = v.failed == null ? '' : `<p class="b6-fail">${v.failed > 0 ? go(v.failedHref, `其中 ${esc(v.failed)} 轮没做成`) : '其中 0 轮没做成'}</p>`;
-      const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: R.runPage(r.href) || R.runHref(r),
+      const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: automationHref(r),
         tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮', offline ? '当时' : '现在') : '';
       // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
       const idle = offline ? '当时没任务在跑' : '这会儿空着';
       const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
         : `<p>${dot('off')}${next.title ? `${idle}&nbsp;· ${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
           : Array.isArray(d.running) && d.next === null ? `${idle}&nbsp;· 没有排定的运行` : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
-      // 只收住毛病的说明，接手状态和轮次继续显示。
+      // 同一事项也可能随修理回执出现，首页选短标题，详情仍去原来的事项。
+      const problemTitles = new Map(v.problems.filter(p => p.href && p.short).map(p => [p.href, p.short]));
       const problemLine = p => {
+        const short = p.short || problemTitles.get(p.href);
         // 摘一句的故障回包有时把沿用的原回复当成原因给出；“这轮沿用原话”是退回原回复的结果。
         const detail = p.title === '摘一句' && /(?:这轮|本轮)沿用原话/.test(p.text)
-          ? '摘要没能整理成可用文字，这次用了原来的回复' : p.raw.text;
-        const cause = p.title === '摘一句' && /^这次没写成摘要，用了原来的回复。原因[：:](.+?)。?$/.exec(p.text)?.[1];
+          ? '摘要没能整理成可用文字，这次用了原来的回复' : short;
+        const cause = p.title === '摘一句' && detail === p.raw.text && /^这次没写成摘要，用了原来的回复。原因[：:](.+?)。?$/.exec(p.text)?.[1];
         const detailHtml = cause ? `<span class="b6-problem__wide">${field(detail)}</span><span class="b6-problem__narrow">${esc(cause)}，用了原来的回复</span>`
           : field(detail);
-        const what = p.text && p.title && !p.text.includes(p.title)
-          ? `<span${p.title === '摘一句' ? '' : ' class="b6-problem__kind"'}>${field(p.raw.title)}&nbsp;· </span>${detailHtml}` : detailHtml || field(p.raw.title);
+        const category = shortProblemTitle(p.raw.title, viewer) || R.categoryName(p.raw.category, viewer) || '自动任务';
+        const what = detail && p.title && !U.fieldText(detail, viewer).includes(p.title)
+          ? `<span${p.title === '摘一句' ? '' : ' class="b6-problem__kind"'}>${field(category)}&nbsp;· </span>${detailHtml}` : detailHtml || field(category);
         const who = esc(handled(p)) + (p.round && !/轮/.test(p.handler) ? `&nbsp;· <span class="live-unit">第 ${p.round} 轮</span>` : '');
         return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `<span class="b6-problem__label">出毛病的：</span>${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${offline ? '<span class="live-unit">当时：</span>' : ''}${who}</span></p>`;
       };

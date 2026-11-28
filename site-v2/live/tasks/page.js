@@ -143,6 +143,8 @@
   };
   const stateDot = (value, label = '') => `<i class="task-state-dot" data-state="${value}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}></i>`;
   const shortStatus = { ok: '成功', failed: '出错', warn: '要留意', running: '正在跑', disabled: '停用', never: '没跑过', unknown: '没读到' };
+  const ended = last => Number.isFinite(Date.parse(last?.end));
+  const retainedResult = t => Number.isFinite(Date.parse(t.last_read_at)) && (ended(t.last) || ['ok', 'failed', 'warn'].includes(t.last?.result));
   function taskState(t) {
     if (t.enabled === false || t.state === 'disabled' || t.not_running_reason === 'disabled') return 'disabled';
     if (t.source_readable === false) return 'unknown';
@@ -177,14 +179,16 @@
     if (!maintenance) {
       const state = taskState(t), lastState = lastAt ? last?.result || 'unknown' : state === 'never' ? 'never' : '';
       const failed = confirmedFailure(t), shownAt = failed ? last.end || lastAt : lastAt;
-      const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next)
-        : MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到');
+      const oldAt = Number.isFinite(Date.parse(t.last_read_at)) ? stamp(t.last_read_at) : '';
+      const oldNext = oldAt && Number.isFinite(Date.parse(t.last_read_next_at)) ? `原定 ${nextAt(t.last_read_next_at)} · ${oldAt} 的安排` : '';
+      const scheduled = state === 'disabled' ? '停用' : next ? nextAt(next) : oldNext
+        || (MODE[t.mode] || (t.not_running_reason === 'on_demand' ? '按需' : triggerWhen(t) || '没读到'));
       const triggerTitle = !next && Array.isArray(t.trigger_types) && t.trigger_types.length ? ` title="${esc(`触发方式：${t.trigger_types.join('、')}`)}"` : '';
-      // 这次没读到运行状态的行一律写“这次没读到”（卡头也这样说），上次读到的结果放在指上去的提示里
-      const shown = t.source_readable === false ? 'unread' : state === 'warn' ? 'warn' : lastState;
+      // 这轮未更新时，仍显示后端保留的上次结果及读数时刻。
+      const shown = t.source_readable === false && !retainedResult(t) ? 'unread' : state === 'warn' ? 'warn' : lastState;
       // 上次那一轮只做完一部分（last.result=warn，M381）写“部分完成”，黄点照旧
       const lastWord = shown === 'unread' ? '这次没读到' : shown === 'warn' ? lastState === 'warn' ? '部分完成' : shortStatus.warn
-        : lastState === 'unknown' ? state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
+        : lastState === 'unknown' ? ended(last) ? '已结束，结果未确认' : state === 'disabled' ? '停用前结果不明' : unknownWhy(t) || shortStatus.unknown : shortStatus[lastState] || shortStatus.unknown;
       const lastTitle = shown === 'warn' ? ` title="${esc(warnWhy(t))}"` : (shown === 'unread' || lastState === 'unknown') && typeof t.status_text === 'string' ? ` title="${esc(t.status_text)}"` : '';
       const why = (failed || shown === 'warn') && !hidden ? `<p class="lb-sub task-why">${U.fieldHtml(failed ? t.problem_reason ?? last.reason ?? t.why : warnWhy(t), { name: '原因', place: 'body', kind: viewer })}</p>` : '';
       const registeredPurpose = t.purpose ?? sentence;
@@ -204,7 +208,7 @@
       const running = failed && state === 'running' ? `<span data-task-state>${stateDot('running')}${shortStatus.running}</span>` : '';
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
         `<span class="lb-row__lamp">${failed ? stateDot('warn', '上次运行失败') : fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${keepTaskWords(title)}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${keepTaskWords(purpose)}</p>` : ''}${verified}${fixNote}${keepTaskWords(why)}</div>
-        <div class="lb-cell lb-cell--time task-last">${shownAt ? `<time>${stamp(shownAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${outcomeDot}${esc(failed ? shortStatus.failed : lastWord)}</span>` : '—'}${running}${trouble ? week(t) : ''}</div>
+        <div class="lb-cell lb-cell--time task-last">${shownAt ? `<time>${stamp(shownAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${outcomeDot}${esc(failed ? shortStatus.failed : lastWord)}</span>` : '—'}${oldAt && shown !== 'unread' && lastState ? `<small>截至 ${esc(oldAt)}</small>` : ''}${running}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }
     const nameBody = U.fieldHtml(name, { name: '自动任务', kind: viewer, marker: true });
@@ -382,8 +386,8 @@
     const partial = d.q === 'partial' || d.coverage?.q === 'partial' || ranges.some(c => c.complete === false) || missing.length;
     const wording = ranges.length ? ranges.map(c => c.text).filter(Boolean) : [d.coverage?.text].filter(Boolean);
     const text = wording.flatMap(value => typeof value === 'object' ? [value] : value.split(/[，；,;]/).filter(s => /还在采集|从 \d{2,4}-\d{2}(?:-\d{2})? 开始记|还没读到|有缺口|不完整/.test(s)));
-    const runtimeMissing = rows.filter(t => t.source_readable === false).length;
-    coverageNote = !maintenance && runtimeMissing ? `${runtimeMissing} 项这次没读到运行状态，表里标着“这次没读到”，指上去能看上次读到的结果`
+    const runtimeMissing = rows.filter(t => t.source_readable === false && !retainedResult(t)).length;
+    coverageNote = !maintenance && runtimeMissing ? `${runtimeMissing} 项这次没读到运行状态`
       : !maintenance && d.unreadable_total > 0 ? '部分已登记任务的运行状态没读到'
       : partial && !U.offline?.() ? text.length ? text : missing.length ? missing : [received.length ? '运行记录覆盖不完整' : '任务运行记录没读到'] : [];
     $('coverage-label').hidden = $('coverage').hidden = true;

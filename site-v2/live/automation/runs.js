@@ -37,6 +37,11 @@
     return { program: false, text: text || (worker?.kind === 'ai' ? 'AI（型号没记下）' : ''), short: text };
   }
   const runPath = (category, id) => category && id ? T.path('/live/automation/run/', { type: category, run: id }) : '';
+  function shortTitle(value) {
+    if (typeof value !== 'string') return value;
+    const chars = Array.from(value.trim().split(/(?<=[。！？；])|\r?\n/u, 1)[0]);
+    return chars.length > 60 ? chars.slice(0, 59).join('') + '…' : chars.join('');
+  }
   // “用谁”点进智能体页看这一家干了多少：落在“三家各干了多少活”那块、亮出这一家（和首页智能体卡同一个落点，只看一家一律 ?family=）
   const agentsPath = (family, today = false) => !FAMILIES[family] ? '' : today
     ? `/live/agents/?hours=today&family=${family}#hours` : `/live/agents/?family=${family}#work`;
@@ -130,7 +135,7 @@
       (match, lead, _title, _version, count) => count && !withMessageCount ? match : lead + (count || ''))
     : s;
 
-  // 对话：后台给的是聊天读口地址 /computer-access/live/v1/chats/{id}（已按受众处理），页面拿号去读 chats/{id}、链到 /live/chat/?id={id}
+  // 对话正文和访客可见页头都通过同一轮内的后台读口显示。
   function chatOf(conv) {
     const chatId = href => {
       const id = /\/chats\/([^/?#]+)/.exec(href)?.[1] || (/^\/live\/chat\/\?(?:.*&)?id=([^&#]+)/.exec(href)?.[1]);
@@ -138,9 +143,8 @@
     };
     const chat = chatId(str(conv?.href));
     const header = conv?.content_locked === true ? chatId(str(conv.header_href)) : '';
-    return { available: conv?.available === true && !!chat, id: chat, resource: chat ? `chats/${encodeURIComponent(chat)}` : '',
-      href: chat ? T.path('/live/chat/', { id: chat }) : '', state: str(conv?.state),
-      headerHref: header ? T.path('/live/chat/', { id: header }) : '',
+    return { available: conv?.available === true && !!chat, id: chat, resource: chat || header ? `chats/${encodeURIComponent(chat || header)}` : '',
+      state: str(conv?.state),
       // 看不到的原因：private 是对访客藏了（hidden_why 写为什么），not_saved 是真没存下来；后台第 17 轮起给（主持 11-24 07:24）
       reason: ['private', 'not_saved'].includes(conv?.unavailable_reason) ? conv.unavailable_reason : '', why: str(conv?.hidden_why),
       // 卡头的事实：几条消息，和对话的软件、型号档位、状态、时刻、第几步、帮手数（metadata，有记录才给）；对话对访客藏着时两版也都给
@@ -241,5 +245,5 @@
     : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
       .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => m === NAMES['message-review'] ? m : verb ? `${verb}本人` : '本人')).join('');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, runningTime, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, shortTitle, agentsPath, minutesBetween, runningTime, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();

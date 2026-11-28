@@ -49,6 +49,7 @@
   // 没收到写入结果，只能等一次新读数来核对。暂停同时比对时刻。
   function settingReadback(update, setting, want, when) {
     const { mode, until_at: until } = setting || {};
+    if (!['on', 'off', 'paused'].includes(mode) || mode === 'paused' && want.until && !until) return;
     const stamp = value => typeof value === 'number' ? value * 1000 : Date.parse(value);
     if (mode === want.mode && (!want.until || stamp(until) === stamp(want.until))) { update?.('ok', '已保存'); return; }
     const current = mode === 'paused' ? `暂停到 ${when(typeof until === 'number' ? new Date(stamp(until)).toISOString() : until)}`

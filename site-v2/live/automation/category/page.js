@@ -68,7 +68,7 @@
     // 没有那件活的名字时：结果的第一句当标题，其余放下面小字；第一句太长就截一段当标题，整句照放小字里，不丢字
     const plain = R.oneVersion(U.fieldText(r.summary, viewer).trim()), first = plain.split(/(?<=[。；！？])/)[0] || '';
     const short = !thing && first && first !== plain ? (first.length > 46 ? esc(first.slice(0, 44)) + '…' : esc(first)) : '';
-    const title = r.excerptFallback ? '这次用了原来的回复。' : thing || (r.status === 'incomplete' && reason ? reason : short || summary) || (r.status === 'running' ? F(r.activity, '正在干什么') || '正在跑' : '跑完了');
+    const title = r.excerptFallback ? '这次用了原来的回复。' : F(R.shortTitle(r.subject?.title), '这件活') || (r.status === 'incomplete' && reason ? F(R.shortTitle(r.statusReason || r.reason), '原因') : short || F(R.shortTitle(R.oneVersion(r.summary)), '这一轮做了什么')) || (r.status === 'running' ? F(R.shortTitle(r.activity), '正在干什么') || '正在跑' : '跑完了');
     const subjectPrefix = thing.replace(/[。！？；]+$/u, '') || thing;
     const detail = r.excerptFallback ? '' : thing ? R.withoutSubject(summary, subjectPrefix) || R.withoutSubject(reason, subjectPrefix)
       : r.status === 'incomplete' && reason && reason !== title ? reason : short ? (first.length > 46 ? summary : esc(plain.slice(first.length).trim())) : '';
