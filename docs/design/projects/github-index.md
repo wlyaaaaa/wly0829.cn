@@ -111,7 +111,7 @@ export const githubIndexModules = [ /* 六个项目自有模块 */ ];
 5. 通过、发现问题或无法运行时会改变什么决定；
 6. 然后才进入 schema、Provider、refs、hash、generation 和回归细节。
 
-英文术语第一次出现使用 `English（中文含义）` 或紧邻解释。模块自己的 `concepts` 再解释该页会反复使用的术语，不能要求读者先去总览 glossary（术语表）猜。
+英文照写还是写中文、哪些英文第一次出现时括号写中文意思，照[项目规则](../../../AGENTS.md)“用词照大部分人的说法”。模块自己的 `concepts` 再解释该页会反复使用的术语，不能要求读者先去总览 glossary（术语表）猜。
 
 ## 公开安全边界
 
