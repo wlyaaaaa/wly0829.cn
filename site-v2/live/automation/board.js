@@ -623,10 +623,12 @@
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
     const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
-    const clock = keepDates(esc(when(r.at)));
+    const detail = [today, keepDates(esc(when(r.at)))].filter(Boolean).join(' · ');
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
-    return `${today ? `<small>${today}</small>` : ''}${text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : ''}${clock ? `<small>${clock}</small>` : duplicate && !today ? '—' : ''}`;
+    const summary = text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : '';
+    const foot = detail ? `<small>${detail}</small>` : duplicate ? '—' : '';
+    return today ? foot + summary : summary + foot;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
@@ -637,7 +639,8 @@
     const hasCounts = known(s.success) || known(s.failed);
     const nums = hasCounts ? `<span class="au-n" data-tone="ok">成 ${known(s.success) ? int(s.success) : '没读到'}</span> · <span class="au-n"${s.failed > 0 ? ' data-tone="bad"' : ''}>坏 ${known(s.failed) ? int(s.failed) : '没读到'}</span>`
       : '<span class="au-nobr">成了几轮、</span><wbr><span class="au-nobr">坏了几轮，</span><wbr><span class="au-nobr">这次没读到</span>';
-    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${!hasCounts || late ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<wbr><small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起记</span></small>` : ''}</span></div>`;
+    const wrap = !hasCounts || late && (!known(s.success) || !known(s.failed));
+    return `<div class="au-trend">${T.posneg(days, { width: 140, height: 30 })}<span${wrap ? ' class="au-trend__wrap"' : ''}>${nums}${late ? `<small><i> · </i><span class="au-nobr">${esc(T.day(s.recorded_since))} 起记</span></small>` : ''}</span></div>`;
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
