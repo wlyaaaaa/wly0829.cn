@@ -234,6 +234,7 @@ $catalog = (Resolve-Path -LiteralPath 'site-v2/live/_lib/live-opened-catalog.jso
 - **自动任务**（含 AI 约好的事、翻译官、自动修理）：PCConfig 的任务用途登记（`registries/dashboard_sources.json` 等）和自动任务类别（`tools/remote-computer-mcp/automation/`）→ 实况「自动任务」类别卡和详情、实况值守讲解。要人看：新增、改了、停了的任务类型，对它的做什么、为什么、怎么算做完；登记缺字段的交自动任务的维护方回源补，网站不另写一份。
 - **计划任务：** Windows 任务计划程序现场、PCConfig `docs/governance/scheduled_task_purpose_catalog.md` 和现有漂移检查回执 → `/live/tasks/`。要人看：页上“没写用途”的数，本人项目新增、停改的任务；用途照 PCConfig 原规矩补，不从网站倒推改任务。
 - **智能体：** 规则仓 `config/model-roster.json`、三家已装设置和适配覆盖 → 实况「智能体」卡、AI 百工谱讲哪个型号干什么的页。要人看：宿主或角色新增、改名、停用，型号换代（第二节）。
+- **压缩线：** 从 PCConfig `registries/dashboard_sources.json` 的 `agent_hooks` 找 Claude 桌面 Code 的 `settings.json` 和 Codex 的 `config.toml`。拿最近的自动压缩记录看中位是不是还在设置算出的数附近。Claude 侧汇总 `compactMetadata.preTokens`，Codex 读 `sessions` 中 `compacted` 前的 `token_count.info.last_token_usage.total_tokens`，报告时标明能否区分自动与手动。Antigravity 看 `~/.gemini/antigravity/conversations/` 的压缩记录有没有新增触发词元数字段。
 - **钩子：** 三家已装的钩子声明，人话说明在规则仓 `config/hook-catalog.json` → 实况「智能体」钩子表、百工谱讲钩子的段。要人看：表上写“没说明”的、删了还在描述的、同名钩子机制改了的；说明回 `hook-catalog.json` 改，再看本人版、访客版和百工谱。
 - **开场：** 活动规则的三家入口、规则仓 `docs/operations/context-hooks.md` → `/live/agents/opening/`。正文随规则发布自己跟；开场、恢复、压缩的触发机制变了才核说明。
 - **等你的事、AI 对话、AI 账本：** 各自的登记和采集接口 → 实况首页、`/live/items/`、`/live/chats/`、`/live/ledger/`。日常自己跟，不对；事项类别、按钮、关法，对话状态名，账本几轮、多久、何时交人这类机制改了，才核页面写死的说法和实况值守讲解。
