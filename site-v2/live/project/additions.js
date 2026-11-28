@@ -43,13 +43,6 @@
     if (!finite(v?.desktop) || m.private || [m, v].some(source => source.hidden || viewer !== 'owner' && (source.visibility === 'owner' || source.public === 'owner'))) return '';
     return `其中桌面操作 ${lower(m, 'desktop') || lower(v, 'desktop') ? '至少 ' : ''}${number(v.desktop)} 次`;
   }
-  function codeCharacters(size, lower) {
-    const n = size?.code_chars;
-    if (!finite(n)) return '';
-    const bounded = lower(size, 'code_chars'), tens = bounded ? Math.floor(n / 1000) / 10 : n / 10000;
-    // 单位和项目总览、文档一样写“万字”（本人说的是“代码字数”；全站只这一处原来写“万字符”）
-    return `${bounded ? '至少' : '约'} ${tens.toFixed(1)} 万字`;
-  }
   const personalDetailIds = new Set([
     'daily-preferences', 'career-development', 'personal-finance', 'personal-health',
     'personal-media', 'personal-materials', 'personal-romance', 'personal-formal-documents',
@@ -63,19 +56,19 @@
       const hasInterval = Number.isFinite(seconds) && seconds > 0;
       const minutes = hasInterval && Number((seconds / 60).toFixed(2));
       if (cadence === 'completion') {
-        return `<span class="pj-no-split"><small class="pj-cadence pj-cadence--wrap">每次做完才更新</small>${arrow}</span>`;
+        return `${arrow}<small class="pj-cadence">每次做完才更新</small>`;
       }
       if (hasInterval && cadence === 'sample') {
         const measured = seconds === 60 ? '每分钟量一次' : seconds < 60 ? `每 ${seconds} 秒量一次` : `每 ${minutes} 分钟量一次`;
-        return `<small class="pj-cadence pj-cadence--wrap">${e(measured)}</small>${arrow}`;
+        return `${arrow}<small class="pj-cadence">${e(measured)}</small>`;
       }
       if (hasInterval && !cadence) {
-        return `<small class="pj-cadence pj-cadence--wrap pj-cadence--refresh"><span class="pj-no-split">网页每 ${minutes} 分钟刷新一次，</span><wbr><span class="pj-no-split">内容不一定变</span></small>${arrow}`;
+        return `${arrow}<small class="pj-cadence" title="网页每 ${minutes} 分钟刷新一次，内容不一定变">每 ${minutes} 分钟刷新</small>`;
       }
     }
     const names = { live: '实时更新', sample: '定时测量', hourly: '每小时更新', daily: '每天更新', nightly: '每晚更新', weekly: '每周更新', monthly: '每月更新', manual: '手动更新', on_change: '变更时更新' };
     const text = Object.hasOwn(names, cadence) ? names[cadence] : typeof cadence === 'string' && /\p{Script=Han}/u.test(cadence) ? cadence : '';
-    return (text ? `<small class="pj-cadence">${e(text)}</small>` : '') + arrow;
+    return arrow + (text ? `<small class="pj-cadence">${e(text)}</small>` : '');
   }
   function weekly(data) {
     if (!data?.items?.length) return null;
@@ -107,15 +100,16 @@
   function agentsMoved(talk, metrics, viewer) {
     const subject = viewer === 'owner' ? '你' : '本人';
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date());
-    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : `今天${subject}说了几句`;
+    // 还没读到时写“正在读”，读到的不是今天的写“还没量到”，不写成一句没有数的“今天你说了几句”
+    const said = talk?.date === today && finite(talk.total) ? `今天${subject}说了 <b>${talk.status === 'partial' ? '至少 ' : ''}${number(talk.total)}</b> 句` : talk ? `今天${subject}说了几句还没量到` : `正在读今天${subject}说了几句`;
     const week = ['claude', 'codex', 'antigravity'].map(host => metrics.find(m => m.id === `${host}_d7`));
     const known = week.filter(m => finite(m?.value));
     // Antigravity 只记得到能核实的技能原文件读取，三家合起来一律写“至少”
     const used = known.length ? `近 7 天三家用技能 <b>${known.length < 3 || week[2] ? '至少 ' : ''}${number(known.reduce((n, m) => n + m.value, 0))}</b> 次` : '近 7 天三家用了多少技能';
     return {
       key: 'agents-moved', title: '',
-      head: `<a class="pj-moved-head" href="/live/agents/">三家用技能、跟${subject}说了几句，都在智能体页 <span class="more__chev">›</span></a>`,
-      html: `<p class="pj-moved-line"><a href="/live/agents/#talk">${said} <span class="more__chev">›</span></a><span aria-hidden="true">·</span><a href="/live/agents/#skills-used">${used} <span class="more__chev">›</span></a></p>`,
+      head: `<a class="pj-moved-head" href="/live/agents/">三家用技能、跟${subject}说了几句，都在智能体页&nbsp;<span class="more__chev">›</span></a>`,
+      html: `<p class="pj-moved-line"><a href="/live/agents/#talk">${said}&nbsp;<span class="more__chev">›</span></a><span aria-hidden="true">·</span><a href="/live/agents/#skills-used">${used}&nbsp;<span class="more__chev">›</span></a></p>`,
     };
   }
   function external(data, stamp) {
@@ -170,7 +164,7 @@
     html(block.viz, card.html + (card.chart ? '<div style="overflow-x:auto"><div data-addition-chart style="min-width:0px"></div></div>' : '') + (card.after || ''));
     if (card.chart) bars(block.viz.querySelector('[data-addition-chart]'), options).set(card.chart);
   }
-  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, codeCharacters, personalDetail, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
+  window.ProjectAdditions = { timestampObject, lowerBoundValue, structuredMetric, desktopNote, personalDetail, metricCadence, measurementColumns, measurementCell, measurementRows, rulesLengthReading, render, deviceColumns, hasDevices, deviceCell, recorded, hasSkillUsage,
     cards: (id, proj, viewer, source, stamp) => [batchProgress(source.batches, id, stamp), id === 'agents' && weekly(source.weekly), id === 'career-development' && showcase(proj.showcase), id === 'agents' && agentsMoved(source.corrections, (proj.sections || []).flatMap(s => s.metrics || []), viewer), id === 'wly0829.cn' && external(source.external, stamp), id === 'pcconfig' && software(source.software, stamp)].filter(Boolean),
   };
 })();

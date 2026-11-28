@@ -108,8 +108,8 @@
     if (o.groups) {
       const first = o.first || 5, opened = o.openGroups || new Set();
       return `<div class="book-page">${o.groups.map(g => {
-        const list = rows.filter(r => r.group === g.id), open = opened.has(g.id), shown = open ? list : list.slice(0, first);
-        const more = list.length > first ? `<button class="more book-group__more" type="button" data-book-group="${esc(g.id)}" aria-expanded="${open}">${open ? '收起' : `展开其余 ${list.length - first} 条`} <span class="more__chev">›</span></button>` : '';
+        const list = rows.filter(r => r.group === g.id), fold = UI().shouldFold(list.length - first), open = opened.has(g.id), shown = open || !fold ? list : list.slice(0, first);
+        const more = fold ? `<button class="more book-group__more" type="button" data-book-group="${esc(g.id)}" aria-expanded="${open}">${open ? '收起' : `展开其余 ${list.length - first} 条`} <span class="more__chev">›</span></button>` : '';
         const head = g.head === false ? '' : `<p class="book-group__head">${ICON[g.icon] || ''}<b>${esc(g.title)}</b><span class="book-group__n">${esc(g.count ?? `（${list.length}）`)}</span></p>`;
         return `<section class="book-group${g.head === false ? ' book-group--bare' : ''}" data-group="${esc(g.id)}" data-tone="${esc(g.tone || 'gray')}">${head}` +
           table(shown, 0) + (list.length ? '' : `<p class="book-empty">${g.empty ?? o.empty ?? ''}</p>`) + more + '</section>';
@@ -214,13 +214,13 @@
       if (grp) {
         const id = grp.dataset.bookGroup, open = !state.openGroups.has(id);
         if (open) state.openGroups.add(id); else state.openGroups.delete(id);
-        draw('group');
+        const paint = () => draw('group');
+        if (open) paint();
+        else UI().anchorFold(grp, paint, () => [...el.pages.querySelectorAll('[data-book-group]')].find(b => b.dataset.bookGroup === id));
         if (open && e.isTrusted) {
           const ledger = /^\/live\/ledger(?:\/|$)/.test(location.pathname);
           window.Live?.markOpened?.(ledger ? 'card/ledger/book-group' : 'card/records/book-group');
         }
-        const sec = [...el.pages.querySelectorAll('.book-group')].find(s => s.dataset.group === id);
-        if (!open && sec && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ block: 'start', behavior: 'smooth' });
         return;
       }
       const own = e.target.closest('[data-book-open]');

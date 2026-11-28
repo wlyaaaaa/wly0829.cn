@@ -80,16 +80,20 @@
     drawRank(host);
   }
   function drawRank(host) {
-    const state = host._paged, all = state.rows, n = Math.min(all.length, Math.max(RANK_STEP, state.shown)), btn = host.querySelector(':scope > .pj-rank-step');
+    const state = host._paged, all = state.rows, btn = host.querySelector(':scope > .pj-rank-step');
+    // 手上已有的只剩一条、后面也没得再读，就一起摆出来（M1190）
+    const asked = Math.min(all.length, Math.max(RANK_STEP, state.shown)), last = Number.isFinite(state.total) ? state.total <= all.length : !state.load;
+    const n = all.length - asked === 1 && last ? all.length : asked;
     window.LiveViz.rank(host.querySelector(':scope > .pj-rank-list'), { show: Infinity, ...state.rank }).set(all.slice(0, n));
     const left = (Number.isFinite(state.total) ? Math.max(state.total, all.length) : all.length) - n, end = left <= 0 && !state.load;
-    btn.hidden = end && n <= RANK_STEP;
+    btn.hidden = end && state.shown <= RANK_STEP;
     btn.toggleAttribute('data-open', end);
     btn.innerHTML = `${left > 0 ? `展开（还有 ${number(left)} 条）` : end ? '收起' : '接着读'} <span class="more__chev">›</span>`;
   }
   async function stepRank(host) {
     const state = host._paged, btn = host.querySelector(':scope > .pj-rank-step'), note = host.querySelector(':scope > .pj-rank-note');
-    if (btn.hasAttribute('data-open')) { state.shown = RANK_STEP; drawRank(host); if (host.getBoundingClientRect().top < 0) host.scrollIntoView({ block: 'start', behavior: 'instant' }); return; }
+    // 收起：按钮留在刚才的位置，不滚到这一块的顶（M1191）
+    if (btn.hasAttribute('data-open')) { const go = () => { state.shown = RANK_STEP; drawRank(host); }; if (window.LiveUI?.anchorFold) window.LiveUI.anchorFold(btn, go, () => btn, host); else go(); return; }
     if (state.shown < state.rows.length) { state.shown += RANK_STEP; drawRank(host); return; }
     if (!state.load || btn.disabled) return;
     btn.disabled = true; btn.textContent = '正在读…';

@@ -142,7 +142,7 @@
       :`<p>${title(list[0])}</p>${list[0].code?`<p>同一件事${road(list[0])}</p>`:''}`;
     const times=[[r.queued_at,'排上队'],[r.started_at,'开始发'],[r.at,'结束']].filter(([t])=>typeof t==='string'&&Number.isFinite(parse(t))).map(([t,w])=>`${clock(t)} ${w}`).join(' → ');
     const code=typeof r.error_detail_code==='string'&&r.error_detail_code?r.error_detail_code:typeof r.error_code==='string'?r.error_code:'',meaning=detailWords[code];
-    return `<details class="notify-detail" data-detail-key="${esc(key)}"${detailOpen.has(key)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">看明细</span><span class="delivery-more__open">收起明细</span><span class="more__chev" aria-hidden="true">›</span></summary>`
+    return `<details class="notify-detail" data-fold-anchor data-detail-key="${esc(key)}"${detailOpen.has(key)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">看明细</span><span class="delivery-more__open">收起明细</span><span class="more__chev" aria-hidden="true">›</span></summary>`
       +`<div class="delivery-detail">${which}`
       +(times?`<p>时间：${esc(times)}</p>`:'')
       +(code?`<p>原始原因：<code>${esc(code)}</code>${meaning?`，${esc(meaning)}`:''}${typeof r.result==='string'&&r.result?`；记录里写的结果是“${esc(r.result)}”`:''}</p>`:'')
@@ -180,7 +180,7 @@
   const batchFolds=new Set();
   function rememberBatchFold(e){
     const key=e.target.dataset.batchFold;if(!key)return;
-    if(e.target.open)batchFolds.add(key);else batchFolds.delete(key);
+    if(e.target.open&&!e.target.hasAttribute('data-fold-flat'))batchFolds.add(key);else batchFolds.delete(key);
   }
   function attentionChapter(el){
     const firstCount=4;
@@ -237,7 +237,8 @@
       const note=el.querySelector('[data-history-private]');note.hidden=true;note.textContent='';
       U.html(el.querySelector('[data-history-groups]'),[...groups].map(([key,items])=>{
         const id=`channel-${key}`,label=key==='private'?'其他提醒':key==='email'?'邮件':key==='phone'?'手机':channel(items[0])||'其他';
-        return `<section class="delivery-group"><p class="delivery-note">${esc(label)} · ${items.length} 次</p>${table(items.slice(0,5))}${items.length>5?`<details data-batch-fold="${esc(id)}"${batchFolds.has(id)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">展开（还有 ${items.length-5} 次）</span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span></summary>${table(items.slice(5))}</details>`:''}</section>`;
+        const fold=U.shouldFold(items.length-5);
+        return `<section class="delivery-group"><p class="delivery-note">${esc(label)} · ${items.length} 次</p>${table(fold?items.slice(0,5):items)}${fold?`<details data-fold-count="${items.length-5}" data-batch-fold="${esc(id)}"${batchFolds.has(id)?' open':''}><summary class="more live-disclosure delivery-more"><span class="delivery-more__closed">展开（还有 ${items.length-5} 次）</span><span class="delivery-more__open">收起</span><span class="more__chev" aria-hidden="true">›</span></summary>${table(items.slice(5))}</details>`:''}</section>`;
       }).join(''));
     }
     return {set:draw};
