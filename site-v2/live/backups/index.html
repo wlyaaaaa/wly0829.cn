@@ -32,6 +32,10 @@
 .page--backups .backup-grid th:not(:first-child) { width: auto; color: var(--ink); }
 .page--backups .backup-grid { font-size: 13px; border-spacing: 4px; }
 .page--backups .backup-grid col { width: var(--backup-col); }
+.page--backups .backup-grid col:nth-child(4) { width: 11.25%; }
+.page--backups .backup-grid col:is(:nth-child(5), :nth-child(6)) { width: 12.25%; }
+.page--backups .backup-grid col:is(:nth-child(7), :nth-child(8)) { width: 5.5%; }
+.page--backups .backup-grid col:nth-child(9) { width: 10.5%; }
 .page--backups .backup-grid :is(th,td) { vertical-align: top; padding: 4px 7px; overflow-wrap: anywhere; line-height: 1.4; }
 .page--backups .backup-grid thead tr > th { padding-inline: 4px; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--hair); white-space: normal; }
 .page--backups .backup-grid caption { padding: 0 7px 6px; text-align: left; }
@@ -51,14 +55,7 @@
   .page--backups .backup-grid td:is([data-copy="g"], [data-copy="h"]) { padding-inline: 3px; }
 }
 @media (min-width: 1440px) {
-  /* 十列都留够短值的宽度。窄一些的横屏从两侧各借最多 50px。 */
-  .page--backups #backup-matrix {
-    --backup-table-width: min(1380px, 100% + 100px);
-    width: var(--backup-table-width);
-    margin-inline: calc((100% - var(--backup-table-width)) / 2);
-  }
   .page--backups .backup-grid :is(th,td) { padding-inline: 3px; }
-  .page--backups .backup-grid col { width: var(--backup-wide-col); }
 }
 .page--backups .backup-grid b { font-weight: 400; }
 .page--backups .backup-grid td[data-copy]:is([data-state="complete"],[data-state="gap"],[data-state="stale"],[data-state="waiting"]) > b { font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -106,7 +103,7 @@
 @media (max-width: 1099px) {
   .page--backups .backup-grid, .page--backups .backup-grid :is(thead, tbody, caption) { display: block; }
   .page--backups .backup-grid colgroup { display: none; }
-  .page--backups .backup-grid tr { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .page--backups .backup-grid tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1.1fr)) repeat(2, minmax(0, .8fr)) minmax(0, 1.1fr) minmax(0, 1fr); gap: 4px; }
   .page--backups .backup-grid tr > :nth-child(1) { grid-column: span 2; }
   .page--backups .backup-grid tr > :nth-child(2) { grid-column: span 3; }
   .page--backups .backup-grid tr > :nth-child(3) { grid-column: span 2; }
