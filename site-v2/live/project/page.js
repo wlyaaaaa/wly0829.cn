@@ -379,12 +379,14 @@
     syncPage(b);
   }
   // 最近改动、最近产物：已读到的露完了，才出“更早的改动／再看”接着读
-  // 窄屏折行不拆词、不留单字行（本人看图 11-28）：分词后只在两字以上的词前面插可断点（<wbr>），单字跟着前一个词走（分词常把“动效”“读数”切成两个单字），
+  // 窄屏折行不拆词、不留单字行（本人看图 11-28）：分词后只在两字以上的词前面插可断点（<wbr>），单字跟着前一个词走（分词常把“动效”“读数”切成两个单字），副词、介词、否定这类单字跟后一个词走（“真干活”不断成“真／干活”），
   // 书名号和短引号里、“这”“每”这类字后面不断；最后一个断点后不足三个字、并上前一段也不超过五个字就不断（并完太长，窄格里会被硬拆）；“ · ”后面、数字和后面的单位、月和日之间换成不断行空格，折行时圆点跟着下一段走、日期不拆。在拼好的 HTML 上做、不改 DOM，实况刷新时照原样比对，不闪。
   // look.css 让这几块只在这些点、空格和标点后折行，一段比一整行还长才从中间断（不横向溢出）
   const wordCut = typeof Intl === 'object' && Intl.Segmenter ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
   if (wordCut) document.documentElement.classList.add('pj-words');
   // 分词把助词粘进来的“词”（的话、好的、你的、再把）不算词，前面不断
+  // 单字的副词、介词、否定词：分词常把它单切出来（真|干活、还|没读|到），它属于后面的词
+  const lead = s => /^[真很太最更都也还就才再又只先刚正越别不没未在把被给对向从往跟和与比让新旧]$/.test(s.segment);
   const hanzi = /[\u3400-\u9fff]/, wordy = s => s.isWordLike && [...s.segment].length > 1 && !/^[的了着过地得]|[的了把着地得]$/.test(s.segment);
   // “11-28 05:11”“2026-08-25”这类日期时刻整个不断开（连字符后面本来能断，窄格里会断成“11-/28”）
   // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
@@ -402,7 +404,11 @@
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
       if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
       const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && !/^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
+      const open = at => !quoted.some(([a, b]) => at > a && at < b), stuck = s => /^[这那每各该此]$/.test(s.segment) || /^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment);
+      segs.forEach((s, j) => { const next = segs[j + 1], prev = segs[j - 1];
+        // 单字的副词、介词、否定词（真干活、很快、都用、把它、不改、新模型）跟后面的词走：断在它前面，它和后面的词之间不断
+        if (lead(s) && prev && next && hanzi.test(next.segment[0]) && hanzi.test(prev.segment.at(-1)) && !lead(prev) && !stuck(prev) && !glued(t, s.index, s.segment) && open(s.index)) cuts.push(s.index);
+        if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !lead(s) && !stuck(s) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && open(next.index)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
       const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
@@ -1450,6 +1456,9 @@
       // M1002：“AI 记着的认识 95 项”读着像 AI 只记得这么多；这个数是说明书里整理成主题卡的认识张数（各类明细加起来），照实说。数照回包。
       if (raw && id === 'daily-preferences' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => m?.id !== 'cognitions' || m.label !== 'AI 记着的认识' ? m
         : { ...m, label: '整理成主题卡的认识', unit: '张', scope: '一张主题卡是 AI 对本人某一方面的整理，下面按类列出；整理时用到的原始资料和本人原话另算，见“根据什么”“材料攒了多少”。' }) }) };
+      // 识字放大镜：公开页不说“合成”（读着像数是编出来的，主持 11-28 09:52 按第 12 版看图定）。“正式版本合成质量案例”写成“正式版本质量案例”，两版一样；
+      // 读数名来自 LocalOCR 的 docs/live.contract.json，那边改了以后这句可删
+      if (raw && id === 'localocr' && Array.isArray(raw.sections)) raw = { ...raw, sections: raw.sections.map(s => !Array.isArray(s?.metrics) ? s : { ...s, metrics: s.metrics.map(m => typeof m?.label === 'string' && m.label.includes('正式版本合成质量案例') ? { ...m, label: m.label.replace('正式版本合成质量案例', '正式版本质量案例') } : m) }) };
       // 时刻是“这件事最后一次发生”的读数：不按多久算旧标旧，换成照这件事意思写的一句（M769 C 类）
       if (raw) raw = window.LiveProjectMoments?.settle(id, raw) ?? raw;
       // 原话存档读数写成“到 X 为止：24 小时 N 条，7 天 N 条”，读数名也不再叫“近”
