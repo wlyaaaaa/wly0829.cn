@@ -74,11 +74,13 @@
   }
   // 本人版给完整版，不挂“仅你可见”；对外换了说法的照旧提一句。
   const note = (item, what = '应用名') => viewer === 'owner' && item?.visibility === 'owner' ? '' : U.visibilityNote(item, viewer, item?.hidden_what || what) ? fh(item?.visibility === 'rewritten' ? '对外换了说法' : item, what) : '';
-  const listName = a => {
+  const listName = (a, keepRankHeight = false) => {
     if (marked(a.name) || viewer !== 'owner' && a.name == null && a.visibility === 'owner') return '';
     const tag = U.visitorRewrittenField(a, ['name', '$'], '这个应用名', viewer) || note(a);
     if (a.name == null && a.visibility === 'owner') return tag;
-    return `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${tag ? ` <span class="phone-mark">${tag}</span>` : ''}`;
+    // 流量排行的胶囊保持原大小，外层只占原来一行的高度，免得双列重新分行。
+    const markStyle = keepRankHeight && tag.includes('live-mark--reworded') ? ' style="display:inline-block;block-size:1lh;vertical-align:top"' : '';
+    return `${fh(a.name ?? (pcOffline() ? '应用' : U.collectionText("应用 · ")), '应用名', 'label')}${tag ? ` <span class="phone-mark"${markStyle}>${tag}</span>` : ''}`;
   };
   const paragraph = text => `<p class="use-note">${fh(text && typeof text === 'object' ? text : humanText(text))}</p>`;
   const detail = (label, text) => pcOffline() && !text ? '' : `<div><dt>${fh(label, '读数', 'label')}</dt><dd>${fh(text ?? unread(), sp(label))}</dd></div>`;
@@ -269,7 +271,7 @@
     const max = Math.max(0, ...(rows || []).map(a => a[field] ?? 0));
     for (const li of host.querySelectorAll('li[data-key]')) {
       const a = rows?.[Number(li.dataset.key)]; if (!a) continue;
-      const name = nameField(a), label = name === a || marked(name) ? U.fieldHtml(name, { name: '应用名', kind: viewer, marker: true }) : listName(a);
+      const name = nameField(a), label = name === a || marked(name) ? U.fieldHtml(name, { name: '应用名', kind: viewer, marker: true }) : listName(a, unit === 'B');
       U.html(li.querySelector('.vz-rank__name'), label + (a.opens == null ? '' : `<small>打开 ${formattedHtml(a.opens, lowerText(a, 'opens', `${sp(a.opens)} 次`), '打开次数')}</small>`), false);
       const bar = li.querySelector('.vz-rank__bar > i'); if (bar) { bar.style.setProperty('--v', max > 0 ? a[field] / max : 0); bar.hidden = a[field] == null; }
     }
@@ -636,7 +638,7 @@
       ${detail('最后一次放下', d?.last_putdown ? stampValue(d.last_putdown) : null)}</dl>
       ${Array.isArray(d?.first_after_unlock) && !d.first_after_unlock.length ? '' : `<h3 class="use-two__k">解锁后最先打开</h3>${markNote('解锁后应用', d?.first_after_unlock?.map(a => a.name ?? a))}
       ${d?.first_after_unlock == null ? paragraph(null) : shortList(d.first_after_unlock, a =>
-        `<p class="use-note">${listName(a, d.first_after_unlock, d)}${a.count == null ? pcOffline() ? '' : ` · ${U.collectionText('次数', a)}` : ` · ${formattedHtml(a.count, lowerText(a, 'count', `${sp(a.count)} 次`), '打开次数')}`}</p>`)}`}`;
+        `<p class="use-note">${listName(a)}${a.count == null ? pcOffline() ? '' : ` · ${U.collectionText('次数', a)}` : ` · ${formattedHtml(a.count, lowerText(a, 'count', `${sp(a.count)} 次`), '打开次数')}`}</p>`)}`}`;
     if (key === 'network') return `<dl class="phone-details">
       ${[['default_data_sim', '默认数据卡'], ['sim1', 'SIM1'], ['sim2', 'SIM2'], ['sim_seconds', '今天走 SIM 卡'], ['network_switches', '今天切网']]
         .filter(([id], i) => !metric(id)?.note && (i < 3 || val(id) != null || ['ok', 'stale', 'partial'].includes(d?.traffic?.state))).map(([id, label]) => detail(label, readValue(id))).join('')}
