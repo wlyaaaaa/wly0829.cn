@@ -182,7 +182,7 @@
       : `一共 ${int(info.total)} 条：AI 跑的 ${int(ai)} 轮${checks ? `，程序空查 ${int(checks)} 次` : ''}${other > 0 ? `，程序直接办、没叫 AI 的 ${int(other)} 次` : ''}`;
     const old = P.staleAt(runs) || (pageRetry ? runs?.meta?.at : '');
     const hint = [total, when(old) && `${esc(when(old))} 的数`].filter(Boolean).join(' · ');
-    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${hint ? `<small>${hint}</small>` : ''}</div>`;
+    const head = `<div class="ak-panel__head"><span class="ak-ico" aria-hidden="true">≡</span><h2>最近几轮</h2>${hint ? `<small>${wordsIn(hint)}</small>` : ''}</div>`;
     if (!runs?.data && (P.retrying(runs) || !runs || ['idle', 'wait', 'slow'].includes(runs.phase))) return `<section class="tp-panel ak-panel ak-recent">${head}<p class="au-empty">正在读…</p></section>`;
     if (!rows.length) {
       const next = catNext();

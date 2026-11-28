@@ -22,7 +22,7 @@
   const markup = /<span\b[^>]*class="[^"\n]*\b(?:live-unit|au-nobr|iss-nowrap|task-phrase|ah-keep)\b[^"\n]*"[^>]*>[^<]*<\/span>|<[^>]*>|&[\w#]+;/;
   const dates = /\d{1,2}[ \t]*月[ \t]*\d{1,2}[ \t]*日(?:[ \t]*(?:北京时间[ \t]*)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?![\w-])(?:[ \t]+(?:周[一二三四五六日][ \t]+)?\d{1,2}:\d{2}(?::\d{2})?)?|(?<![\w:])\d{1,2}:\d{2}(?::\d{2})?(?![\w:])/;
   const amounts = /第[ \t]*\d+[ \t]*轮|\d+(?:[.,]\d+)?[ \t]*(?:小时(?:[ \t]*\d+[ \t]*分(?:钟)?)?|分钟|分|秒|轮|次|件|条|项|份|天|处|个|[KMG]i?B)|\b[A-Z][ \t]*盘/;
-  const phrases = /这次(?:没读到|读不到)|不完整|看得到|几点跑|随时派|备份|完成|自己开工|下一次开工|自动接活|定时任务|自己|收到|当时|采集|软件|下载目录|验收|太久|回复/;
+  const phrases = /这次(?:没读到|读不到)|不完整|看得到|几点跑|随时派|备份|完成|自己开工|下一次开工|自动接活|计划任务|定时任务|自己|收到|当时|采集|软件|下载目录|验收|太久|回复/;
   const unitsFor = parts => new RegExp(`(${parts.map(part => part.source).join('|')})`, 'gu');
   const baseUnits = [markup, dates, amounts, phrases, /（[^（）\n]{1,10}）/];
   const units = unitsFor(baseUnits);

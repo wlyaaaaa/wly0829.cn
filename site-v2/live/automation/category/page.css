@@ -55,6 +55,7 @@
 .ak-panel__head { display: flex; align-items: center; gap: 12px; margin: 0 0 10px; }
 .ak-panel__head h2 { margin: 0; font-family: var(--black); font-size: 26px; line-height: 34px; }
 .ak-panel__head small { margin-left: auto; font-size: 13px; color: #6c6b64; }
+.ak-panel__head > :is(h2, .ak-ico) { flex: none; }
 .ak-ico { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--tp-green-soft); font-size: 18px; color: var(--tp-green-ink); }
 
 /* 最近几轮：左边一根竖线串起各轮 */

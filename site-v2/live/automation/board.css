@@ -89,11 +89,20 @@
 .au-now small a.tp-link { font-weight: 700; }
 .au-last { font-size: 14px; line-height: 21px; }
 .au-last small { display: block; margin-top: 2px; font-size: 12.5px; color: #6c6b64; }
-@media (min-width: 1400px) { .au-last-summary .live-unit { white-space: normal; } }
+@media (min-width: 1400px) {
+  .au-table thead th:nth-child(1) { width: 14%; }
+  .au-table thead th:nth-child(2) { width: 21%; }
+  .au-table thead th:nth-child(3) { width: 22%; }
+  .au-table thead th:nth-child(6) { width: 184px; }
+  .au-table td.au-last { padding-right: 6px; }
+  .au-last-summary .live-unit { white-space: normal; }
+  .au-last .au-today { text-wrap: wrap; }
+}
+@media (min-width: 1760px) { .au-table td.au-model { padding-inline: 8px 0; } }
 .au-go { text-align: right; }
 .tp .au-go a { display: inline-block; padding: 4px 2px; font-size: 22px; font-weight: 700; line-height: 1; color: #8a8981; text-decoration: none; transition: color .15s ease, transform .15s ease; }
 .au-row:hover .au-go a { color: var(--tp-green-ink); transform: translateX(3px); }
-.au-model, .tp .au-model .tp-link { white-space: normal; }
+.au-model, .tp .au-model .tp-link { white-space: normal; text-wrap: wrap; }
 .au-name b, .au-state { white-space: nowrap; }
 .au-warn { color: var(--tp-amber); font-weight: 700; }
 .au-warn a.tp-link { color: var(--tp-amber); white-space: normal; }

@@ -205,7 +205,11 @@
         if (r.category === 'excerpt' || r.legacy) continue;
         const actor = title(r.category), what = r.subject ? `${text(r.subject.title)}${r.subject.round ? ` 第 ${r.subject.round} 轮` : ''}` : text(r.summary);
         if (T.stamp(r.startedAt)) out.push({ at: r.startedAt, actor, html: `<span><em>开始</em>：${U.esc(startBody(what || '这一轮', actor))}</span>`, href: r.href, tone: 'ok' });
-        if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) out.push({ at: r.finishedAt, actor, html: `<span><em>跑完</em>：${U.esc(text(r.summary) || '跑完了')}</span>`, href: r.href, tone: 'ok' });
+        if (r.status === 'completed' && !r.deferred && T.stamp(r.finishedAt)) {
+          const empty = r.category === 'translator' && r.emptyCheck;
+          const label = empty ? '空查' : '跑完', summary = text(r.summary) || (empty ? '查过，没有新消息' : '跑完了');
+          out.push({ at: r.finishedAt, actor, html: `<span><em>${label}</em>：${U.esc(summary)}</span>`, href: r.href, tone: empty ? 'info' : 'ok' });
+        }
         if (r.deferred && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>暂时不修</em>：${U.esc(text(r.summary).replace(/^暂时不修\s*[·:：]\s*/, '') || '等下一次检查')}</span>`, href: r.href, tone: 'info' });
         else if (r.status === 'incomplete' && T.stamp(r.finishedAt || r.lastAt)) out.push({ at: r.finishedAt || r.lastAt, actor, html: `<span><em>停了</em>：${U.esc(text(r.reason) || '没做成')}</span>`, href: r.href, tone: 'bad' });
       }

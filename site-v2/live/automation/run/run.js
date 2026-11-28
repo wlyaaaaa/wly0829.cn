@@ -294,10 +294,15 @@
     const end = r.finishedAt || r.lastAt, after = r.resumedBy ? other(r.resumedBy) : null;
     const later = r.resumedBy ? `<p class="ar-msg__more"><a href="${esc(R.runPath(category, r.resumedBy))}">${after ? `${esc(clockOf(r, after.startedAt))} ` : '后来'}那一轮接着做 ›</a></p>` : '';
     const note = F(r.receipt.closingNote, '结局');
-    let body, tone, original = '';
-    if (r.excerptFallback && r.receipt.originalText.trim()) original = '<div class="ar-reply" data-excerpt-original></div>';
+    let body, tone, original = '', used = '';
+    if (r.excerptFallback && r.receipt.originalText.trim()) {
+      const reply = originalReply(r.receipt.originalText);
+      const inline = /^<p>(?:(?!<\/p>).)+<\/p>$/u.test(reply);
+      used = inline ? '<br>用的是：<span data-excerpt-original></span>' : '<br>用的是：';
+      if (!inline) original = '<div class="ar-reply" data-excerpt-original></div>';
+    }
     if (note) {
-      body = note + (original ? '<br>用的是：' : '');
+      body = note + used;
       tone = r.deferred ? 'off' : r.status === 'incomplete' ? 'bad' : 'ok';
     } else if (r.deferred) {
       // 为什么先放着：后台的 reason 写的就是这一轮暂缓的原因（两轮复查仍没达到原条件、交给谁接着查），原样写出来；
@@ -308,7 +313,7 @@
     } else if (r.excerptFallback) {
       const reason = U.fieldText(r.stop?.text || r.reason, viewer).trim()
         .match(/^这次没写成摘要，用了原来的回复。\s*原因：\s*([\s\S]+)$/u)?.[1];
-      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${original ? '<br>用的是：' : ''}`; tone = 'bad';
+      body = `这次用了原来的回复。${reason ? `<br>原因：${esc(reason)}` : ''}${used}`; tone = 'bad';
     } else if (r.status === 'incomplete') {
       const why = F(r.stop?.text, '原因') || F(r.reason, '原因') || '原因没记下';
       // 后台的原因句里已经写了“停在「这一步」”的，不再另写一遍“停在：……”
@@ -574,7 +579,10 @@
       ${three(r)}${made(r)}
       <div class="ar-grid"><div class="ar-main">${conversation(r)}</div>${side(r)}</div>`);
     const original = page.root.querySelector('[data-excerpt-original]');
-    if (original) original.innerHTML = originalReply(r.receipt.originalText);
+    if (original) {
+      const reply = originalReply(r.receipt.originalText);
+      original.innerHTML = original.tagName === 'SPAN' ? reply.slice(3, -4) : reply;
+    }
     const host = page.root.querySelector('.ar-talk__facts');
     if (host && chat?.data && U.draw10) {
       U.draw10.detail(host, chat.data, viewer);

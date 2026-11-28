@@ -616,6 +616,7 @@
   }
   const keepDates = html => html.replace(/<[^>]*>|(?:\d{1,2}-\d{1,2}|\d{1,2} *月 *\d{1,2} *日) +\d{1,2}:\d{2}(?::\d{2})?/gu,
     part => part.startsWith('<') ? part : `<span class="au-nobr">${part}</span>`);
+  const sentenceSegments = new Intl.Segmenter('zh-CN', { granularity: 'sentence' });
   function lastCell(c, problem) {
     const r = c.last_result, today = todayText(c);
     if (!r) return `${today ? `<small>${today}</small>` : ''}<span class="tp-muted">运行记录这次没读到</span>`;
@@ -623,11 +624,14 @@
     const bare = s => s.trim().replace(/[。.]$/, '');
     const duplicate = typeof headline === 'string' && typeof r.text === 'string' && bare(headline) === bare(r.text);
     const result = c.id === 'translator' ? R.oneVersion(r.text) : r.text;
+    const sentences = [...sentenceSegments.segment(U.fieldText(result, viewer).trim())];
+    const brief = sentences.length > 2 ? sentences[0].segment + sentences[1].segment.trimEnd() : '';
+    const shown = brief && typeof result === 'object' ? { ...result, value: brief, text: brief } : brief || result;
     const detail = [today, keepDates(esc(when(r.at)))].filter(Boolean).join(' · ');
-    const words = duplicate ? '' : keepDates(F(result, '上次结果'));
+    const words = duplicate ? '' : keepDates(F(shown, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
     const summary = text ? `<span class="au-last-summary">${wordsIn(text)}</span>` : '';
-    const foot = detail ? `<small>${detail}</small>` : duplicate ? '—' : '';
+    const foot = detail ? `<small${today ? ' class="au-today"' : ''}>${detail}</small>` : duplicate ? '—' : '';
     return today ? foot + summary : summary + foot;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）

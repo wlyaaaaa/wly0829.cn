@@ -155,7 +155,8 @@
       Number.isInteger(row.plan_count) ? `写回 ${row.plan_count} 份` : state_text, row.next_at && `下次 ${when(row.next_at)}`);
     const name = P.keepWords(field(row.label || row.title, '来源名称'));
     const source = row.id === 'website-release' ? link(route('/live/project/?id=wly0829.cn#website-status'), `${name}&nbsp;›`) : name;
-    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}<span>${source}</span></b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
+    const landed = anchor && location.hash === `#${anchor}`;
+    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}${landed ? ' class="aw-source--landed"' : ''}><b>${lamp(row)}<span>${source}</span></b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
   }
   function results(data, rows) {
     const r = data.results7;
@@ -350,7 +351,7 @@
         didLand = true;
         const fold = item.matches('details') ? item : item.querySelector('details');
         if (fold) fold.open = true;
-        requestAnimationFrame(() => item.scrollIntoView({ block: 'start' }));
+        requestAnimationFrame(() => $(target)?.scrollIntoView({ block: 'start' }));
       }
     }
   }
