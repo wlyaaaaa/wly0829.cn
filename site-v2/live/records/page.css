@@ -47,6 +47,15 @@
 #record-body .book-never { color: var(--book-warm); }
 #record-body .book-tools.has-picks .book-search { flex-basis: 200px; min-width: 0; }
 #record-body .book-pick__item { flex: 1 1 auto; padding-inline: 3px; }
+.rec-skill-pair { display: inline-flex; flex-wrap: wrap; gap: 0 .35em; }
+.rec-skill-pair > span { white-space: nowrap; }
+@media (max-width: 1100px) {
+  #record-body .book-tools.has-picks { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
+  #record-body .book-picks { grid-column: 1 / -1; margin-left: 0; }
+  #record-body .book-pick__list { margin-inline-end: 0; }
+  #record-body .book-table:has(.book-col-antigravity) th { word-break: keep-all; overflow-wrap: normal; }
+  #record-body .book-table:has(.book-col-antigravity) :is(.book-cell--d7, .book-cell--d30) { white-space: nowrap; }
+}
 /* 夜检进度：项目名比旁边几列长得多，项目列放宽，wlyaaaaa/sunshine-remote-streaming 一行写完 */
 #record-body .book--sheet .book-table:has(.book-col-phase) .book-col-name { width: 34%; }
 .book .book-table:has(.book-col-host_version) tr > :is(th, td) { padding-inline: 6px; }

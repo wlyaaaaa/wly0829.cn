@@ -1,6 +1,6 @@
-function showImage(image, url) {
+function showImage(image, url, failed = null) {
   image.onerror = () => {
-    image.onerror = null;
+    image.onerror = failed;
     image.src = url + '?retry=1';
   };
   image.src = url;
@@ -33,7 +33,10 @@ export async function mountInterface(id, host, words = html => html, { embedded 
     </nav>` : ''}
     ${embedded && note ? `<p>${esc(note)}</p>` : ''}
     <dialog class="pj-interface-view" aria-label="界面大图">
-      <figure><img decoding="async" alt=""><figcaption></figcaption></figure>
+      <p class="pj-interface-status" role="status" hidden></p>
+      <figure><img decoding="async" alt="" hidden></figure>
+      <p class="pj-interface-caption"></p>
+      <p class="pj-interface-scroll" hidden>滚动看整张图 ↓</p>
       <form class="pj-interface-controls" method="dialog">
         <button type="button" class="btn btn--sm">上一张</button>
         <button type="button" class="btn btn--sm">下一张</button>
@@ -44,22 +47,32 @@ export async function mountInterface(id, host, words = html => html, { embedded 
   const dialog = section.querySelector('dialog');
   const [previous, next] = dialog.querySelectorAll('button');
   const frame = dialog.querySelector('figure');
-  const full = frame.querySelector('img'), caption = frame.querySelector('figcaption');
+  const full = frame.querySelector('img'), caption = dialog.querySelector('.pj-interface-caption');
+  const status = dialog.querySelector('.pj-interface-status'), hint = dialog.querySelector('.pj-interface-scroll');
   let selected = 0;
-  full.onload = () => {
+  function showReady() {
     const scrollable = shots[selected][3] || full.naturalHeight >= 3 * full.naturalWidth;
     dialog.style.setProperty('--pj-interface-image-width', full.naturalWidth + 'px');
     frame.classList.toggle('is-scrollable', scrollable);
     if (scrollable) frame.tabIndex = 0;
     else frame.removeAttribute('tabindex');
+    status.hidden = true;
+    full.hidden = false;
     frame.scrollTop = 0;
-  };
+    hint.hidden = !scrollable || frame.scrollHeight <= frame.clientHeight;
+  }
+  full.addEventListener('load', showReady);
+  function imageFailed() { status.textContent = '图片暂时打不开'; }
   function show(index) {
     const [, original, label] = shots[index];
     selected = index;
-    frame.scrollTop = 0;
+    full.hidden = hint.hidden = true;
+    frame.classList.remove('is-scrollable');
+    frame.removeAttribute('tabindex');
+    status.hidden = false;
+    status.textContent = '图片加载中';
     full.removeAttribute('src');
-    showImage(full, original);
+    showImage(full, original, imageFailed);
     full.alt = label;
     caption.textContent = label;
     previous.disabled = index === 0;

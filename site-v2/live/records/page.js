@@ -28,6 +28,7 @@
   const missingHtml = (s, what) => locked(s) ? marker({ visibility: 'owner' }, 'public', titleText(what, '这些记录')) : U.fieldHtml(missingText(s, what), { name: '记录内容', kind: recordViewer });
   const skillUsageSection = id === 'agents' && ['skill_usage', 'skill_rows'].includes(section);
   const label = { results: '处理结果', archives: '档案检查', site_todo_missing_intros: '还没介绍页', ...(skillUsageSection ? { [section]: '技能使用' } : {}) };
+  const governanceNames = { site_login_health: '常用网站登录检查' };
   const meaning = {
     completed: '流程已执行完', unsupported: '这类输入暂不能处理', failed: '这次没有执行成功',
     complete: '整段都有内容', partial: '只转到其中一部分', unknown: '暂时无法判断',
@@ -109,7 +110,7 @@
 
   let projectStaleAt = null, recordsStaleAt = null;
   function updateCutoff() {
-    const at = [projectStaleAt, recordsStaleAt].filter(Boolean).sort((a, b) => Date.parse(a) - Date.parse(b))[0];
+    const at = recordAt ? null : recordSource ? recordsStaleAt : projectStaleAt;
     // 项目的一句话介绍在项目页写过；明细页每页都重复它（“电脑的户口本和总接线…”）只会让人以为和这份明细有关，这里不再写。
     const description = at && !shownCutoff(staleText({ stale: true }, at)) ? esc(staleText({ stale: true }, at)) : '';
     $('say').hidden = !description; U.html($('say'), description);
@@ -118,6 +119,14 @@
   function shownCutoff(text) {
     const el = $('record-at'), shown = !el.hidden && el.dateTime ? staleText({ stale: true }, el.dateTime) : '';
     return !!shown && U.sameCutoffNote(U.fieldText(text), shown);
+  }
+  const sourceTime = data => data?.source_at || data?.observed_at || data?.at;
+  const itemTime = row => row?.file_at || row?.at || row?.observed_utc;
+  const withTime = (data, meta) => data && (sourceTime(data) ? data : { ...data, at: meta?.at });
+  function showRefreshNote(el, s) {
+    const at = s.data && s.fallbackNote && (sourceTime(s.data) || s.shownAt);
+    const note = !recordAt && at && !shownCutoff(staleText({ stale: true }, at)) && `数据截至 ${stamp(at)}`;
+    U.blockNote(el, { fallbackNote: note || '' });
   }
   function knowledgeCells(r) {
     r = { ...r, text: uncite(r.text), detail: uncite(r.detail) };
@@ -250,8 +259,8 @@
     const source = recordSource || group?.metrics?.find(m => m.section === section || m.id === section) || group || project;
     // 页头第二行已写“截至 …”时，状态说明里同一时刻的“数据截止 …”不再说第二遍（M746）
     const status = U.status({ ...source, level: source?.header_level ?? source?.level }, { cutoffShown: shownCutoff });
-    const projectTitle = id === 'pcconfig' && section === 'freeze_records' && recordAt ? '' : titleText(project.name, '项目') || '项目';
-    U.html($('head'), status.lamp + U.head([projectTitle, '项目逐项明细'].filter(Boolean).map(sp).join(' · '), { lamp: false }));
+    const projectTitle = titleText(project.name || project.label, '项目') || '项目';
+    U.html($('head'), status.lamp + U.head(`${sp(projectTitle)} · 逐项明细`, { lamp: false }));
     L.tone(hero, status.tone);
     const meta = [project.changed?.at && `最近变化 ${stamp(project.changed.at)}`].filter(Boolean);
     U.html($('meta'), meta.map(s => `<span>${text(s)}${project.changed?.text ? `：${U.fieldHtml(project.changed.text, { name: '最近变化', kind: recordViewer })}` : ''}</span>`).join('') + status.note); $('meta').hidden = !meta.length && !status.note;
@@ -271,11 +280,15 @@
     } else title.textContent = [showName, countLabel].filter(Boolean).join(' · ');
     title.hidden = !title.textContent;
     const metric = project?.sections?.flatMap(s => s.metrics || []).find(m => m.section === section);
-    const at = recordSource?.source_at || recordSource?.observed_at || metric?.at || recordSource?.at;
+    const sourceAt = recordSource ? sourceTime(recordSource) : section === 'results' ? metric?.at : null;
+    const selectedAt = recordAt && items.length ? recordAt : null;
+    const lastAt = items.map(itemTime).filter(at => Number.isFinite(Date.parse(at))).reduce((last, at) => !last || Date.parse(at) > Date.parse(last) ? at : last, null);
+    const latest = !recordAt && lastAt && (!sourceAt || Date.parse(lastAt) > Date.parse(sourceAt));
+    const at = recordAt ? selectedAt : latest ? lastAt : sourceAt;
     const cutoff = $('record-at');
     cutoff.hidden = !at;
-    cutoff.textContent = at ? `截至 ${stamp(at)}` : '';
-    if (at) cutoff.dateTime = at;
+    cutoff.textContent = at ? `${selectedAt ? '记录于' : latest ? '最新记录' : '截至'} ${stamp(at)}` : '';
+    cutoff.dateTime = at || '';
   }
   function drawProject(d) {
     project = d;
@@ -392,7 +405,7 @@
     })();
   }
   const restCount = () => Math.max(0, (Number.isFinite(recordTotal) ? recordTotal : 0) - items.filter(r => r && !r.private_count).length);
-  const missingRest = () => `${restCount() ? `还差 ${restCount()} 项` : '后面还有'}刚才没读到，正在重取`;
+  const missingRest = () => `正在读其余${restCount() ? ` ${restCount()} 项` : '记录'}`;
   // 我的说明书一组（两版同一套）：全文照旧铺开，上面一个目录列全每一项，点名字跳到那一项的全文（M421，本人 11-22 14:04 选 B）
   function drawToc(ordered) {
     tocRows = ordered;
@@ -419,7 +432,7 @@
       return `<li><a href="#" data-toc="${esc(key)}"${current}><span class="record-toc__n">${String(i + 1).padStart(2, '0')}</span><span class="record-toc__t"><b>${esc(name)}</b>${first ? `<small>${esc(first)}</small>` : ''}</span></a></li>`;
     });
     const total = Math.max(Number.isFinite(recordTotal) ? recordTotal : 0, rows.length);
-    U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>其余 ${total - rows.length} 项${fillMiss ? '刚才没读到，正在重取' : '正在读'}</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
+    U.html(box, `<p class="record-toc__head">这一组 ${total} 项${rows.length < total ? `<small>正在读其余 ${total - rows.length} 项</small>` : ''}</p><p class="record-toc__sub">点名字跳到那一项的全文；全文在下面，一个字不少</p><ol class="record-toc__list">${rows.join('')}</ol>`);
   }
   // 说明书一类有几条：先读项目回包里这一类的条数，没有再读后台那一句里的数
   function knowledgeCount(row) {
@@ -456,14 +469,16 @@
   function skillUsageTable(data, ordered, A) {
     const columns = [
       { id: 'name', label: '技能名' }, { id: 'd7', label: '近 7 天' }, { id: 'd30', label: '近 30 天' },
-      { id: 'claude', label: 'Claude 7 天/30 天' }, { id: 'codex', label: 'Codex 7 天/30 天' },
-      { id: 'antigravity', label: 'Antigravity 7 天/30 天' }, { id: 'last', label: '最近一次' },
+      { id: 'claude', label: 'Claude 7／30天' }, { id: 'codex', label: 'Codex 7／30天' },
+      { id: 'antigravity', label: 'Antigravity 7／30天' }, { id: 'last', label: '最近一次' },
     ];
     const rows = ordered.map((r, i) => {
       const row = bookRow(r, data, i), n = A.recorded;
       if (row.wide) return row;
-      const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), `${n(r.claude_d7)} / ${n(r.claude_d30 ?? r.claude)}`, `${n(r.codex_d7)} / ${n(r.codex_d30 ?? r.codex)}`,
-        [r.antigravity_d7, r.antigravity_d30].map(value => value == null ? n(value) : `至少 ${n(value)}`).join(' / '), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没有记录')];
+      const pair = (a, b) => `<span class="rec-skill-pair"><span>${esc(a)} /</span><span>${esc(b)}</span></span>`;
+      const observed = value => value == null ? n(value) : `至少 ${n(value)}`;
+      const cells = [row.nameCell ?? row.cells[0], n(r.d7), n(r.d30 ?? r.count), pair(n(r.claude_d7), n(r.claude_d30 ?? r.claude)), pair(n(r.codex_d7), n(r.codex_d30 ?? r.codex)),
+        pair(observed(r.antigravity_d7), observed(r.antigravity_d30)), row.never ? `<span class="book-never">${text('没用过')}</span>` : text(r.last_at ? humanTime(r.last_at) : '没有记录')];
       // 名字格只放名字；Claude、Codex 各自的累计和最近一次点开这一行看。摘要卡“用得最多”写近 30 天、“很久没用”写最近一次（这张表第 2、3 格不是这两样）
       return { ...row, cells, detail: row.skillMore || row.detail || '', pick: { count: cells[2], last: r.last ? text(stamp(r.last)) : cells[6] }, sort: { ...row.sort, at: Date.parse(r.last_at) } };
     });
@@ -526,7 +541,8 @@
     const plain = value => U.fieldText(value, recordViewer).trim();
     const candidate = [r.title, r.name, r.label, businessName, r.component_id, r.id].find(value => plain(value) && !/^(?:没有记录|未记录|未知)$/.test(plain(value)));
     const captured = section === 'freeze_records' && r.at ? `诊断现场 · ${U.date(r.at)} ${U.time(r.at)}` : '';
-    const name = candidate || plain(r.text).split(/[。！？\n]/, 1)[0].slice(0, 48) || captured || `第 ${i + 1} 条 · 名称还没读到`;
+    const knownName = id === 'pcconfig' && section === 'governance' && Object.hasOwn(governanceNames, candidate) && governanceNames[candidate];
+    const name = knownName || candidate || plain(r.text).split(/[。！？\n]/, 1)[0].slice(0, 48) || captured || `第 ${i + 1} 条 · 名称还没读到`;
     // M767：本人版里后台在这一行标了 visitor_labels（技能用量明细是 label、名册是 name）的，名字下挂签；访客版只挂其中的“对外换了说法”（M930），没标的不挂
     const mark = marker(r, recordViewer, '这项记录的内容') || U.visitorLabel(r, ['$', 'label', 'name', 'title'], skills ? '这个技能名' : '这一项的名称', recordViewer), small = mark ? `<small>${mark}</small>` : '';
     const label = `<span>${text(name)}</span>`;
@@ -592,14 +608,14 @@
     $('record-section').hidden = $('record-title').hidden = false;
     const cursor = recordAt && params.get('cursor');
     recordWatch = window.Live.watch(`projects/${enc(id)}/records`, cursor ? { section, cursor } : { section }, {
-      data: (d, meta) => { recordViewer = meta.viewer?.kind || 'public'; drawRecords(d); recordsStaleAt = isStale(d) ? d.at || meta.at : null; updateCutoff(); },
+      data: (d, meta) => { recordViewer = meta.viewer?.kind || 'public'; drawRecords(withTime(d, meta)); recordsStaleAt = isStale(d) ? sourceTime(d) || meta.at : null; updateCutoff(); },
       phase: (s) => { if (s.data == null) ['none', 'gone'].includes(s.phase) ? recordRead.done(false) : recordRead.set(s); },
       link(s) {
         if (s.data == null && ['none', 'gone'].includes(s.phase)) {
           U.html($('record-note'), missingHtml(s, sectionName));
           if ([404, 503].includes(s.meta?.status)) { if (!$('head').querySelector('.lamp')) $('head').insertAdjacentHTML('afterbegin', '<span class="lamp" data-tone="off" aria-hidden="true"></span>'); $('head').querySelector('.lamp').setAttribute('data-tone', 'off'); L.tone(hero, 'gray'); }
         }
-        U.blockNote($('record-section'), s);
+        showRefreshNote($('record-section'), s);
       },
     });
   }
@@ -645,15 +661,23 @@
   async function loadNext() {
     const cursor = next, source = recordSource;
     if (!cursor) return;
-    const s = await window.Live.get(`projects/${enc(id)}/records`, { section, cursor });
+    const read = () => window.Live.get(`projects/${enc(id)}/records`, { section, cursor });
+    let s = await read();
+    while (!fillOn && s.again && source === recordSource && cursor === next) {
+      showRefreshNote($('record-section'), { data: source, fallbackNote: true });
+      await s.again;
+      if (source !== recordSource || cursor !== next) return;
+      s = await read();
+    }
     if (source !== recordSource || cursor !== next) return;
-    const at = d => d?.source_at || d?.observed_at || d?.at;
-    if (s.data && (s.meta.viewer?.kind || 'public') === recordViewer && at(source) === at(s.data) && s.data.next !== cursor) {
-      drawRecords(s.data, true); recordsStaleAt ||= isStale(s.data) ? s.data.at || s.meta.at : null; updateCutoff();
+    showRefreshNote($('record-section'), {});
+    const data = withTime(s.data, s.meta);
+    if (data && (s.meta.viewer?.kind || 'public') === recordViewer && sourceTime(source) === sourceTime(data) && data.next !== cursor) {
+      drawRecords(data, true); recordsStaleAt ||= isStale(data) ? sourceTime(data) : null; updateCutoff();
     } else if (fillOn && fillOn === fillRun) {
       // 说明书本人版正在一次取全：这一批没读到，由取全那边隔几秒再取（M548）。
       // 这一批和第一批截止时刻不同 = 数据换了一版：先重读第一批，新的一版到了从头取。
-      if (s.data && at(source) !== at(s.data)) await window.Live.get(`projects/${enc(id)}/records`, { section });
+      if (data && sourceTime(source) !== sourceTime(data)) await window.Live.get(`projects/${enc(id)}/records`, { section });
     } else {
       U.html($('record-note'), locked(s) || s.offline ? missingHtml(s, sectionName) : '下一页暂时读不到，已读到的留在这里。');
     }
@@ -678,7 +702,8 @@
           $('meta').hidden = $('say').hidden = $('acts').hidden = true;
           L.tone(hero, 'gray');
         }
-        [hero.querySelector('.card__body'), $('summary')].forEach(el => U.blockNote(el, s));
+        if (!recordSource) showRefreshNote(body, s);
+        else showRefreshNote(body, {});
       },
     });
   }
