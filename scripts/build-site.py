@@ -303,7 +303,14 @@ def build(dist, full=False, cache_dir=None, *, record_local=False):
     started = time.monotonic()
     destination = dist
     dist = ROOT / '.cache/site-build' / hashlib.sha256(str(destination).encode()).hexdigest()[:16]
-    dist.mkdir(parents=True, exist_ok=True)
+    assembly = load('assembly_cache', 'site-v2/site-assembly/组装.py')
+    assembled = (ROOT / cache_dir if cache_dir is not None else assembly.CACHE).resolve() / 'assembled'
+
+    def trim_caches(key=None, stage=None):
+        assembly.keep_recent_trees(assembled, r'[0-9a-f]{64}', key, marker='.complete')
+        assembly.keep_recent_trees(dist.parent, r'[0-9a-f]{16}|finalize-[a-z0-9_]+', stage,
+                                   marker='release-identity.json')
+
     timings = {}
     def step(name, operation):
         before = time.monotonic()
@@ -331,11 +338,17 @@ def build(dist, full=False, cache_dir=None, *, record_local=False):
                               seconds=round(time.monotonic() - started, 3), timings=timings,
                               output_changes={'updated': [], 'removed': []})
                 runtime.oss.write(previous, cached)
+                trim_caches()
                 print(json.dumps({'status': 'built', 'cache': 'sealed-output', 'seconds': cached['seconds'],
                                   'timings': timings, 'output': str(destination)}, ensure_ascii=False))
                 return cached
     options = (['--full'] if full else []) + (['--cache-dir', str(cache_dir)] if cache_dir else [])
-    step('assembly', lambda: run(sys.executable, '-B', '-X', 'utf8', str(ROOT / 'site-v2/site-assembly/组装.py'), '--output', str(dist), '--不检查', *options))
+    dist.mkdir(parents=True, exist_ok=True)
+    step('assembly', lambda: run(sys.executable, '-B', '-X', 'utf8', str(ROOT / 'site-v2/site-assembly/组装.py'),
+                                 '--output', str(dist), '--不检查', '--defer-cache-prune', *options))
+    key_file = dist / '.assembly-cache-key'
+    key = key_file.read_text(encoding='ascii')
+    key_file.unlink()
     redirects = step('redirects', lambda: legacy_routes(dist, runtime))
     connected = step('buttons', lambda: connect_cockpit(dist))
     step('controls', lambda: controls(dist))
@@ -363,6 +376,7 @@ def build(dist, full=False, cache_dir=None, *, record_local=False):
         live_project.record('build', ROOT, destination, receipt, record_local=record_local)
     except Exception as error:
         print('构建已成功，实况登记失败：' + str(error), file=sys.stderr)
+    trim_caches(key, dist.name)
     print(json.dumps({'status': 'built', 'html_files': receipt['html_files'], 'preserved_cockpit_files': 0,
                       'seconds': receipt['seconds'], 'timings': timings, 'output': str(destination)}, ensure_ascii=False))
     return receipt

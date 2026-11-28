@@ -70,9 +70,11 @@ def test_whole_build_checks_links_and_survives_record_failure(tmp_path, monkeypa
     runtime = build.load('unit_runtime', 'site-astro/tools/build_runtime.py')
     policy = build.load('unit_policy', 'scripts/site_public_words.py')
     monkeypatch.setattr(build, 'ROOT', tmp_path/'repo')
+    monkeypatch.setattr(assembly, 'CACHE', tmp_path/'assembly-cache')
     monkeypatch.setattr(build, 'load', lambda name, rel: runtime if rel.endswith('build_runtime.py') else policy if rel.endswith('site_public_words.py') else assembly)
     def assemble(*args):
         folder = Path(args[args.index('--output') + 1]); (folder/'公用').mkdir(parents=True)
+        (folder/'.assembly-cache-key').write_text('a'*64, 'ascii')
         (folder/'公用/页名到地址.json').write_text('{}', 'utf-8')
         (folder/'index.html').write_text('<h1>public</h1>', 'utf-8')
     monkeypatch.setattr(build, 'run', assemble)
