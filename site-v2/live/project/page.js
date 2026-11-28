@@ -158,6 +158,7 @@
     if (reading) return { html: `<span class="pj-text">${U.fieldHtml(reading, { name: '项目读数', kind: projectViewer })}</span>`, plain: U.fieldText(reading, projectViewer), long: true };
     // 读数本身是个时刻（“画面更新于”这类）：用后端给的那句（“07-28 05:51”），没给就按北京时间写，不露机器格式
     if (isStamp(m.value) && (m.text != null || Number.isFinite(Date.parse(/(?:Z|[+-]\d\d:\d\d)$/.test(m.value) || m.value.length === 10 ? m.value : `${m.value}+08:00`)))) return rawValue({ ...m, value: null, text: m.text ?? stamp(m.value) });
+    if (unknownValue(m) && /^没有记录[。]?$/.test(U.fieldText(m.text ?? '', projectViewer).trim())) return { html: '<span class="pj-none">暂时读不到</span>', plain: '暂时读不到', long: false };
     if (m.text != null || m.value?.text != null || isStamp(m.value)) { const text = isoText(metricText(m.text ?? m.value?.text ?? m.value)); return { html: `<span class="${/还没读到|还在采集|开始记|没读全|还不准/.test(text) ? 'pj-none' : 'pj-text'}">${keepWords(isoText(U.fieldHtml(m.value && typeof m.value === 'object' ? m.value : m, { name: '项目读数', kind: projectViewer })))}</span>`, plain: text, long: [...text].length > 12 }; }
     if (m.count != null) return { html: `<b>${esc(num(m.count))}</b><small>项</small>`, plain: `${num(m.count)} 项`, long: false };
     if (m.value && typeof m.value === 'object') {
@@ -342,7 +343,7 @@
     return {
       key: item.id,
       cls: 'row row--flat pj-item',
-      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${name}</span>${nameTag}</p><p class="row__sub">${[explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · ')}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
+      html: `<span></span><div class="row__text"><p class="row__main"><span class="row__title">${keepWords(name)}</span>${nameTag}</p><p class="row__sub">${keepWords([explanation ? U.fieldHtml(explanation, { name: '产物说明', kind: projectViewer }) : '', note].filter(Boolean).join(' · '))}</p>${solves}${details}${action ? `<div class="acts">${action}</div>` : noteLine}</div><span class="pj-at">${sharedAt ? '' : esc(stamp(it.at, it.at_precision))}</span>`,
     };
   }
 
@@ -389,8 +390,9 @@
   // 连着写的串（路径、色号、SKILL.md、site-v2/live 这类带“/ . - _ : #”的英文串）包成一块：放得下整串挪到下一行，比一整行还长才在里面断；
   // 紧跟的“，”“。”和前面的“（”一起包进去，标点不单独落到行首。只认带字母或色号的，纯数字（3.5、1,234）照旧
   const connected = run => /^#[0-9A-Fa-f]{3,8}$/.test(run) || /[A-Za-z]/.test(run) && /[\/\\._:#@+=-]/.test(run);
-  const glueDates = t => t.replace(/((?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-]))|[（「『“《]?(?<![&\w#\\\/.-])(#[0-9A-Fa-f]{3,8}\b|[A-Za-z0-9][\w.~@#%+=:\\\/-]*[A-Za-z0-9\/#%])[，。；：、！？）」』”》]{0,2}/g,
-    (m, date, run) => date ? `<span class="pj-no-split">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
+  // 数字带单位（7天、3 份、38357 行、53.1 KB）和中文日期时刻（11月25日 01:31）整块不拆：只包一层不折行的字，前后照常折
+  const glueDates = t => t.replace(/((?<![\d-])(?:\d{4}-)?\d{1,2}-\d{1,2}(?: \d{1,2}:\d{2})?(?![\d-]))|((?<![&#\w.])(?:\d{4}年)?\d{1,2}月\d{1,2}日(?:(?: |&nbsp;)\d{1,2}:\d{2})?|(?<![&#\w.])\d[\d,.]*(?: |&nbsp;)?(?:分钟|小时|万字|万行|万条|万|亿|KB|MB|GB|TB|%|[天条份行次个字项件种套张页位台秒周年月号岁元块篇首段轮批代句幅处格类样]))|[（「『“《]?(?<![&\w#\\\/.-])(#[0-9A-Fa-f]{3,8}\b|[A-Za-z0-9][\w.~@#%+=:\\\/-]*[A-Za-z0-9\/#%])[，。；：、！？）」』”》]{0,2}/g,
+    (m, date, unit, run) => date ? `<span class="pj-no-split">${m}</span>` : unit ? `<span class="pj-nb">${m}</span>` : connected(run) ? `<span class="pj-run">${m}</span>` : m);
   // “一”打头的（资料一改、菜单一点）跟前面的词连着；“有没有”“是不是”这类正反问不拆；数字加量词后面（三种版式、两个文件）不断
   const glued = (t, at, next) => /^一/.test(next) || /^[没不]/.test(next) && t[at - 1] === next[1] ||/[\d零〇一二两三四五六七八九十百千万几多每这那哪某](?:\s|&nbsp;)?[个种份条次件张项篇页位台套首段类款样]$/.test(t.slice(0, at));
   function keepWords(html) {
@@ -400,7 +402,7 @@
       t = t.replaceAll(' · ', ' ·&nbsp;').replace(/(?<![\w.])(\d[\d,.]*) (?=[\u3400-\u9fff])|([年月]) (?=\d)/g, '$1$2&nbsp;');
       if (!wordCut || !/[\u3400-\u9fff]{2}/.test(t)) return glueDates(t);
       const segs = [...wordCut.segment(t)], cuts = [], quoted = [...t.matchAll(/《[^》]{1,16}》|“[^”]{1,10}”|「[^」]{1,10}」/g)].map(m => [m.index, m.index + m[0].length]);
-      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
+      segs.forEach((s, j) => { const next = segs[j + 1]; if (next && wordy(next) && hanzi.test(s.segment.at(-1)) && !/^[这那每各该此]$/.test(s.segment) && !/^[\d零〇一二两三四五六七八九十百千万亿几]+$/.test(s.segment) && !glued(t, next.index, next.segment) && hanzi.test(next.segment[0]) && !quoted.some(([a, b]) => next.index > a && next.index < b)) cuts.push(next.index); });
       const count = from => t.slice(from).replace(/&\w+;|[^\u3400-\u9fffA-Za-z0-9]/g, '').length, last = cuts.at(-1);
       const before = last && Math.max(cuts.at(-2) ?? 0, ...[...t.slice(0, last).matchAll(/[\s，。、；：！？）》”]/g)].map(m => m.index + 1));
       if (last && count(last) < 3 && count(before) <= 5) cuts.pop();
@@ -747,7 +749,7 @@
   }
   function graphBlock(key, label) {
     const b = block(key, 'figs'); b.el.classList.add('pj-sec--chart');
-    U.html(b.head, `<b>${esc(label)}</b>`); b.main.hidden = true;
+    U.html(b.head, `<b>${keepWords(esc(label))}</b>`); b.main.hidden = true;
     if (!b.viz) { b.viz = document.createElement('div'); b.viz.className = 'pj-viz'; b.cutoff.after(b.viz); }
     drawRecordCutoff(b); return b;
   }
