@@ -30,14 +30,6 @@
   const $ = (id) => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
-  const plugin = id === 'pcconfig' ? ['/live/project/pcconfig.js', '/live/project/pcconfig.css']
-    : id === 'agents' ? ['/live/project/agents.js', '/live/project/agents.css'] : null;
-  if (plugin) {
-    const [script, href] = plugin;
-    const style = Object.assign(document.createElement('link'), { rel: 'stylesheet', href });
-    document.head.append(style);
-    await import(script).catch(() => style.remove());
-  }
   const interfaceProjects = new Set(['passwordcenter', 'proxyclean', 'pcconfig', 'pc-panel-hub', 'video-scaffold', 'localocr', 'ai-cli-profile-manager', 'wly0829.cn', 'agents', 'chineseasr']);
   let interfaceLoad;
   // 个别项目自己的几块（账房先生：finance.js）：adapt 改这一页的数据，strip 加关键数字第一格，board 加卡

@@ -126,7 +126,7 @@
     return render(rows.slice(0, 5)) + (rows.length > 5 ? `<details class="env-details" data-fold-count="${rows.length - 5}"${foldAttrs(key)}><summary><span class="disclosure-closed">展开（还有 ${rows.length - 5} 条）</span><span class="disclosure-open">收起</span></summary>${render(rows.slice(5))}</details>` : '');
   }
   const DAILY_STEP = 6, DAY = 86400000;
-  let daily = null, dailyPhase = null, dailyShown = DAILY_STEP;
+  let daily = null, dailyShown = DAILY_STEP;
   const dayKey = at => new Date(at + 8 * 3600000).toISOString().slice(0, 10);
   function dailyChange(change, d) {
     const now = Date.parse(referenceTime('software') || new Date().toISOString());
@@ -135,29 +135,28 @@
     if (Number.isFinite(date)) return { text: `${U.date(date)} 起用这版`, recent: recent(date) };
     if (validAt(change?.after) && validAt(change?.by)) {
       const from = Date.parse(change.after), by = Date.parse(change.by);
-      const end = by - (new Date(by + 8 * 3600000).getUTCHours() < 6 ? DAY : 0);
-      const a = U.date(from), b = U.date(Math.max(from, end));
-      return { text: a === b ? `${a} 起用这版` : `${a} 到 ${b} 之间换成这版`, recent: recent(by) };
+      const a = U.date(from), b = U.date(by);
+      return { text: a === b ? `${a} 换成这版` : `${a} 到 ${b} 之间换成这版`, recent: recent(by) };
     }
     const start = Date.parse(d.started_at), seen = Date.parse(d.observed_at);
     const days = Number.isFinite(start) && Number.isFinite(seen) ? Math.min(7, Math.round((Date.parse(dayKey(seen)) - Date.parse(dayKey(start))) / DAY)) : 0;
-    return { text: days > 0 ? `近 ${days} 天没换过` : '没有换版本的记录', recent: false };
+    return days > 0 ? { text: `近 ${days} 天没换过`, recent: false } : null;
   }
   function dailyBlock() {
     const d = daily?.data, items = d?.items, kind = daily?.viewer;
     const title = n => `<p class="env-sub"><b>日用软件</b>${n ? ` · ${esc(n)}` : ''}<span>这里记现在的版本和最近一次换版本</span></p>`;
-    if (!Array.isArray(items)) return d || ['none', 'gone'].includes(dailyPhase) ? `${title('')}<p class="env-note">${esc(missing('日用软件', d))}</p>` : '';
+    if (!Array.isArray(items) || (!items.length && d.q !== 'ok')) return `${title('')}<div class="fog" aria-label="正在更新">${U.ghost.rows(3)}</div>`;
+    if (!items.length) return `${title('')}<p class="env-note">这一轮没有日用软件条目</p>`;
     const cards = items.slice(0, dailyShown).map(row => {
-      const version = row.version ? esc(sp(row.version)) : row.installed === false ? '没装' : '版本这次没读到';
-      const change = row.version && (Object.hasOwn(row, 'last_change') ? dailyChange(row.last_change, d)
-        : row.installed_or_updated_on ? dailyChange({ at: row.installed_or_updated_on }, d)
-        : { text: '没有换版本的记录', recent: false });
-      return `<li class="env-app"><b>${U.fieldHtml(row.name, { name: '软件', kind })}</b><span>${version}</span>${change ? `<span class="env-app__change${change.recent ? ' is-recent' : ''}">${esc(change.text)}</span>` : ''}</li>`;
+      const version = row.version ? esc(sp(row.version)) : row.installed === false ? '未安装' : U.ghost.value();
+      const change = row.installed_or_updated_on ? dailyChange({ at: row.installed_or_updated_on }, d)
+        : Object.hasOwn(row, 'last_change') ? dailyChange(row.last_change, d) : null;
+      const history = change ? esc(change.text) : row.date_gap ? '安装或升级日期未登记' : U.ghost.value();
+      return `<li class="env-app"><b>${U.fieldHtml(row.name, { name: '软件', kind })}</b><span>${version}</span>${row.installed === false ? '' : `<span class="env-app__change${change?.recent ? ' is-recent' : ''}">${history}</span>`}</li>`;
     }).join('');
     const cutoff = validAt(d.observed_at) || validAt(d.at);
-    const notes = [cutoff && `截止 ${date(cutoff)}`, d.usage_gap, d.q === 'stale' && (d.gap || '旧读数')].filter(Boolean).map(sp);
     const left = items.length - dailyShown;
-    return `${title(count(items.length, '个', d))}${notes.length ? `<p class="env-note">${esc(notes.join(' · '))}</p>` : ''}${cards ? `<ul class="env-apps">${cards}</ul>` : '<p class="env-note">这一轮没有日用软件条目</p>'}${left > 0 ? `<button type="button" class="more" data-daily-more>还有 ${left} 个 ›</button>` : ''}`;
+    return `${title(`${items.length} 个`)}${cutoff ? `<p class="env-note">截止 ${esc(date(cutoff))}</p>` : ''}<ul class="env-apps">${cards}</ul>${left > 0 ? `<button type="button" class="more" data-daily-more>还有 ${left} 个 ›</button>` : ''}`;
   }
   function software(el) {
     el.innerHTML = '<p class="env-note"></p><div class="env-versions"></div><div data-software-more></div><div class="env-daily" id="daily-software"></div>';
@@ -311,8 +310,11 @@
     link(s) { links[key] = s; if (key === 'software') { bar?.set(s); L.offline(s.offline); repaint(); } else if (s.offline) repaint(); else updateNotes(); },
   });
   window.Live.watch(params.has('fixture') ? 'projects/pcconfig/records-software_versions' : 'projects/pcconfig/records', { section: 'software_versions' }, {
-    phase(s) { dailyPhase = s.phase; if (!s.data && ['none', 'gone'].includes(s.phase)) repaint(); },
-    data(d, meta) { daily = { data: d, viewer: meta?.viewer?.kind }; repaint(); },
+    data(d, meta) {
+      if (!Array.isArray(d?.items)) return;
+      daily = { data: d, viewer: meta?.viewer?.kind };
+      repaint();
+    },
   });
   window.Live.watch('projects/pcconfig', null, { data(d) {
     // 后端 03:45：正式接入时这三组还在 registry 分组下、没有单独的 environment 分组，两种形状都给 data.environment，先读它
