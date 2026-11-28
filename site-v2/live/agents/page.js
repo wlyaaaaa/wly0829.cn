@@ -335,7 +335,7 @@
     const waits = HOSTS.map(h => x(h).waits_for_owner === false || /EAGER/.test(String(x(h).approval || '')));
     const rulesLink = link('/rules/', `${rulePart('规则页放的是网站上发布的那版，')}<wbr>${rulePart('每天 07:20 查一次、有新版才换，')}<wbr>${rulePart('所以可能比本机现用的旧 ›')}`);
     const rows = [
-      row(`<span title="${ruleHint}">${RULE_CHECK}</span>`, entries.map(ruleStatus), { diff: entries.map(e => e.current === false) }),
+      row(`<span title="${ruleHint}">${RULE_CHECK}</span> ${link('/live/project/?id=agents#rule-history', '逐版记录 ›')}`, entries.map(ruleStatus), { diff: entries.map(e => e.current === false) }),
       // 开场页那一格点进开场页，直接落在这一家（本人 11-24 01:36 定 FEDQ2 选 A）
       row('入口规则多少字', HOSTS.map((h, i) => `${known(entries[i].characters) ? `${int(entries[i].characters)} 字` : '没读到'}${link(`/live/agents/opening/?family=${h.id}`, '看开场页 ›')}`)),
       row('自带记忆', HOSTS.map(memory), { diff: HOSTS.map(h => x(h).memory === true) }),
@@ -349,7 +349,7 @@
     return `<section class="tp-panel" id="settings"><div class="tp-panel__head"><h2>开场和接续 · 动手和权限<small>三家一样的合成一格，不一样的标黄</small></h2></div>
       <table class="tp-table ag-config"><thead><tr><th scope="col">项目</th>${HOSTS.map(h => `<th scope="col" data-host="${h.id}"${dimAttr(h.id)}><i class="tp-swatch"></i>${h.name}</th>`).join('')}</tr></thead>
       <tbody>${rows.join('')}</tbody></table>
-      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}${rulesLink} · ${link('/live/project/?id=agents#rule-history', '逐版记录 ›')}</p></section>`;
+      <p class="tp-small ag-foot">${codexReview ? 'Codex 动工具前要批准的，先由它自带的审核模型审；这只管工具请求，要你点头或验证的大事照规矩还是找你。' : ''}${rulesLink}</p></section>`;
   }
 
   // 拦、错只有新格式的记录里有；旧日志只记了次数和耗时。后台给 blocked_samples（记了拦没拦的有几次），比次数少就照实写只算了其中几次，不当全部

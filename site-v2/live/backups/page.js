@@ -29,7 +29,16 @@
   const plain = text => { const note = D.backupRestoreNote(text); return note !== text ? note : ''; };
   let data = null, headline = '', lit = false, viewer = 'public';
   let restorePending = location.hash === '#restore' && performance.getEntriesByType('navigation')[0]?.type !== 'back_forward';
-  addEventListener('hashchange', () => { restorePending = location.hash === '#restore' && !$('points').childElementCount; });
+  const landRestore = () => {
+    if (!restorePending || !$('points').childElementCount) return;
+    requestAnimationFrame(() => {
+      if (!restorePending || location.hash !== '#restore') return;
+      restorePending = false;
+      $('restore').scrollIntoView({ block: 'start', behavior: 'instant' });
+      $('topbar').dispatchEvent(new Event('live:anchor-landed'));
+    });
+  };
+  addEventListener('hashchange', () => { restorePending = location.hash === '#restore'; landRestore(); });
   for (const event of ['wheel', 'touchmove', 'pointerdown', 'keydown']) {
     addEventListener(event, () => { restorePending = false; }, { passive: true });
   }
@@ -48,7 +57,7 @@
   document.querySelector('[data-back]').addEventListener('click', U.restoreBack);
   // 表格里的时刻、计数各自不断开；格子窄时，开头的说明（如“副本内容日期”“G 盘副本 ·”）也整体不断开，只在说明和时刻之间折行，“份 · 按”“没核实”连在一起（M781）；
   // 时刻里的日期和钟点各包一层，窄窗口的大小列放不下整个时刻时只在两者之间折行（见页内样式）；时刻后面紧跟的句号、逗号等一起包进去，折行时不剩一个“。”在下一行开头
-  const tableText = value => esc(value).replace(/(^[^\s<\d][^<]{0,8}? )?((?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?)|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|\d+ 项读数不完整|份 · 按|已确认|没有(?:副本|记录)?|没核实|没读到|未登记|未列出|不适用|恢复点|副本(?:日期)?|原件|缺失|清单|(?:备份|上传|读取)失败|(?:大)?部分成功/g,
+  const tableText = value => esc(value).replace(/(^[^\s<\d][^<]{0,8}? )?((?:\d{4}-)?\d{2}-\d{2} \d{2}:\d{2}[。，、；）]?)|\d+ 类(?:读到记录|本次没读到|未登记|不适用)|\d+ 项读数不完整|份 · 按|已确认|没有(?:副本|记录)?|没核实|没读到|未登记|未列出|不适用|恢复点|副本(?:日期)?|原件|缺失|清单|照片|(?:备份|上传|读取)失败|(?:大)?部分成功/g,
     (word, prefix, time) => time
       ? `${prefix ? `<span class="backup-unit">${prefix.trimEnd()}</span> ` : ''}<span class="backup-unit backup-at"><span>${time.replace(' ', '</span> <span>')}</span></span>`
       : `<span class="backup-unit">${word}</span>`);
@@ -394,11 +403,7 @@
     U.html($('coverage'), coverage); $('coverage').hidden = !coverage;
     if (!lit) { lit = true; L.lightUp([hero, $('backup-matrix'), $('sets'), $('points')]); }
     // 表格和恢复点到齐后再落一次，避免打开链接时停在未填满的表格位置。
-    if (restorePending) requestAnimationFrame(() => {
-      if (!restorePending || location.hash !== '#restore') return;
-      restorePending = false;
-      $('restore').scrollIntoView({ block: 'start', behavior: 'instant' });
-    });
+    landRestore();
     U.land({ keepOnBack: true });
   }
   window.Live.watch('backups', null, { phase(s) { if (s.data == null && !s.meta?.publicationRevoked) { homeRead.set(s); detailReads.forEach(r => r.set(s)); } },

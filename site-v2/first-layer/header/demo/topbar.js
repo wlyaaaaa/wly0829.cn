@@ -138,6 +138,12 @@
     lastY = y;
   }
 
+  // 跨很长一段的链接落点也是开始阅读的位置，下一次手动滚动照常收放。
+  bar.addEventListener('live:anchor-landed', () => {
+    lastY = Math.max(0, window.scrollY);
+    setState(lastY <= TOP ? 'full' : 'compact');
+    bar.dataset.hidden = 'false';
+  });
   window.addEventListener('scroll', () => {
     if (ticking) return;
     ticking = true;
