@@ -107,12 +107,26 @@
   function runsOf(d) {
     const list = Array.isArray(d.runs) && d.runs.length ? d.runs : d.recent || [], runs = new Map(), plan = variantOf(d) === 'plan';
     const strength = { ok: 3, failed: 3, stopped: 3, warn: 3, done: 2, running: 1 };
-    for (const source of [...list, ...(d.last ? [d.last] : [])]) {
-      if (!source || protectedField(source)) continue;
-      const run = asRun(source), at = runTime(run);
+    // 清理脚本比 Windows 调度器晚启动：这两份回执可以指向同一轮。
+    const history = list.filter(r => r && !protectedField(r)).map(asRun);
+    const last = d.last && !protectedField(d.last) ? asRun(d.last) : null;
+    const candidates = last ? [...history, last] : history;
+    const native = d.id === 'task-016904572d963efcbca591e0' ? candidates.filter(r => typeof r.run_key === 'string' && r.run_key) : [];
+    const duplicates = new Set();
+    for (const run of candidates) {
+      const at = runTime(run);
       if (at == null || at > now) continue;
+      const alias = !run.run_key && run.start != null && run.end != null && native.find(r =>
+        r.start != null && r.start < run.start && r.result === run.result && (r.end === run.end ||
+          r.end == null && r.run_key.startsWith('scheduler:') && r.start === time(d.windows_last_start) &&
+          run.start === time(d.last?.started ?? d.last?.start) && run.end === time(d.last?.finished ?? d.last?.end)));
+      if (alias) {
+        const second = Math.floor(run.start / 1000);
+        if (run !== last && second !== Math.floor(alias.start / 1000)) duplicates.add(second);
+        run.start = alias.start; run.length = (run.end - run.start) / 1000;
+      }
       // 同一轮：Windows 日志的开始时刻带毫秒，上次运行只记到秒，按秒合并，免得一轮显示成两行
-      const key = plan ? Math.floor(at / 1000) : at, prior = runs.get(key);
+      const key = plan ? Math.floor(runTime(run) / 1000) : at, prior = runs.get(key);
       if (!prior) runs.set(key, run);
       else {
         for (const [key, value] of Object.entries(run)) {
@@ -121,7 +135,7 @@
         if ((strength[run.result] || 0) > (strength[prior.result] || 0)) prior.result = run.result;
       }
     }
-    return [...runs.values()].sort((a, b) => runTime(b) - runTime(a));
+    return { runs: [...runs.values()].sort((a, b) => runTime(b) - runTime(a)), duplicates };
   }
   function crumbs(d, kind) {
     const plan = kind === 'plan', list = plan ? '/live/tasks/' : '/live/automation/';
@@ -283,7 +297,8 @@
     const from = time(coverage?.from), to = time(coverage?.to);
     const range = valid(from) && valid(to) && from <= to && to <= now ? `记录覆盖 ${stamp(from)} 至 ${stamp(to)}` : '';
     const gap = covered ? '' : runs.length ? '只显示已读到的轮次' : '运行记录未读到';
-    const reason = text(d.gap).startsWith('最近一次记录于') && range ? '' : field(d.gap, '缺数原因');
+    const freshHistory = valid(to) && time(d.runs_at) === to && coverage.reliable !== false && !coverage.gap_reason;
+    const reason = range && (text(d.gap).startsWith('最近一次记录于') || freshHistory && U.isReadingCutoff(text(d.gap))) ? '' : field(d.gap, '缺数原因');
     return [...new Set([esc(range), reason, esc(gap)].filter(Boolean))].join(' · ');
   }
   function disabledStatus(d) {
@@ -518,13 +533,20 @@
   const bar = U.topbar({ ask: () => task ? `请看实况的任务「${text(task.name)}」，说明怎么跑、最近结果及该关注什么。` : '' });
   const stopChecks = () => { detailWatches.forEach(w => w.stop()); detailWatches = []; };
   function render(d) {
-    const page = pageOf(d), kind = variantOf(d), runs = runsOf(page ? { ...d, runs: [...d.runs, ...olderRuns.values()] } : d), upcoming = nextRuns(d);
+    const page = pageOf(d), kind = variantOf(d), upcoming = nextRuns(d);
+    const { runs, duplicates } = runsOf(page ? { ...d, runs: [...d.runs, ...olderRuns.values()] } : d);
+    const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
+    const cutoff = dayStart(now) - 6 * DAY;
+    const observed = duplicates.size && cursor && runTime(runs.at(-1)) > cutoff;
+    const affectedDays = new Set([...duplicates].map(second => new Date(second * 1000 + BJ).toISOString().slice(0, 10)));
+    const stats = duplicates.size ? { ...d, runs_summary: null, coverage: observed ? { ...d.coverage, complete: false, reliable: false } : d.coverage,
+      days7: Array.isArray(d.days7) ? d.days7.map(day => affectedDays.has(day.date) ? { ...day, outcome: null, partial: true } : day) : d.days7 } : d;
     document.body.dataset.variant = kind;
     document.body.dataset.scheme = kind === 'plan' ? d.group || 'other' : kind === 'pickup' ? d.illustration_key || ART[d.id] || 'pickup-repair' : 'moon-calendar';
     $('task-body').hidden = false;
-    const { rows, coverage, covered, outcome } = metrics(d, runs, kind);
+    const { rows, covered, outcome } = metrics(stats, runs, kind);
     const quiet = quietWeek(d, runs, kind, covered) || (neverRan(d, kind) ? '还没跑过' : '');
-    crumbs(d, kind); renderHero(d, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
+    crumbs(d, kind); renderHero(stats, kind, upcoming, kind === 'pickup' && rows[0][2], runs, quiet);
     schedulePrompt(d, kind);
     // 统计格用同一批次的结果；旧包按格里使用的次数分档。
     $('task-stats').dataset.outcome = kind === 'plan' ? outcome : '';
@@ -535,8 +557,7 @@
       const display = kind === 'plan' && key === 'average' ? keepDuration(number) : number;
       return `<div class="glass task-stat" data-stat="${key}"${whole ? ' data-whole' : ''}${none ? ' data-none' : ''}><dt>${label}</dt><dd${number ? '' : reason ? ' data-unknown data-why' : ' data-unknown'}${note ? ` title="${esc(note)}"` : ''}>${display || esc(whole ? reason + label : reason || '未读到')}</dd></div>`;
     }).join(''), false);
-    const total = page ? Math.max(runs.length, Number(page.total) || 0) : runs.length;
-    const cursor = page ? deepCursor !== undefined ? deepCursor : page.next_cursor ?? null : null;
+    const total = page ? Math.max(runs.length, (Number(page.total) || 0) - duplicates.size) : runs.length;
     const second = r => Math.floor(runTime(r) / 1000);
     const old = legacyRun && (runs.find(r => r.run_key === legacyRun) || pickedRun && runs.find(r => second(r) === second(pickedRun))) || null;
     // 要看的那一次比已取的都早：先摆已取的，“再看”按钮在中间，那一次单独摆在最后并展开
@@ -561,7 +582,7 @@
     const more = cursor || !page && left ? `<button type="button" class="more" data-runs-more${pageLoading ? ' disabled' : ''}>${pageFailed || readMore}</button>` : '';
     U.html($('runs-rest'), (shown.length ? history(d, shown, kind, open) : '') + more + (detached ? history(d, [detached], kind, open, !shown.length) : ''), false);
     if (target >= 0 || detached) runsFold._liveOpen();
-    write($('run-coverage'), quiet ? '' : readNotice(d, coverage, runs, covered));
+    write($('run-coverage'), quiet ? '' : readNotice(d, d.coverage, runs, covered));
     $('future').hidden = kind !== 'schedule';
     if (kind === 'schedule') {
       U.html($('future-runs'), upcoming.map(t => `<li><time datetime="${new Date(t).toISOString()}">${esc(stamp(t, true))}</time></li>`).join(''), false);

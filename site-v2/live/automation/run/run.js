@@ -48,7 +48,6 @@
   // 标题后面的签不单独掉到下一行：和标题最后两个字（或最后那个日期时刻）连在一起换行
   const withTag = (html, tag) => !tag ? html : /<span class="live-unit">[^<]*<\/span>$/.test(html) ? html.replace(/(<span class="live-unit">[^<]*<\/span>)$/, `<span class="ar-tail">$1${tag}</span>`)
     : /(?:&[#\w]+;|[^<>&\s]){1,2}$/.test(html) ? html.replace(/((?:&[#\w]+;|[^<>&\s]){1,2})$/, `<span class="ar-tail">$1${tag}</span>`) : html + tag;
-  const span = m => !known(m) ? '' : m < 1 ? `${Math.max(1, Math.round(m * 60))} 秒` : m < 60 ? `${Math.round(m)} 分钟` : `${Math.floor(m / 60)} 小时 ${Math.round(m % 60)} 分`;
   const nth = r => known(r.subject?.round) && r.subject.round > 0 ? r.subject.round : null;
   // 回执里“这次带入：……读到……”那串明细（receipt.scan）不进大标题和结论，挪到对话卡头（主控 11-26）
   const SCAN = /这次带入[:：][\s\S]*$/;
@@ -109,14 +108,14 @@
   };
   function tags(r) {
     const d = chat?.data || r.conversation.meta;
-    const minutes = r.status === 'running' && T.stamp(r.startedAt) ? (Date.now() - T.stamp(r.startedAt)) / 60000 : r.minutes;
+    const elapsed = r.status === 'running' && R.runningTime(r, state);
     const whole = R.minutesBetween(r.queuedAt || r.startedAt, r.finishedAt);
     // 派活先启动、随后 AI 对话才开始时，不能把含派活启动的时长写成对话处理时间。
     const runSpan = R.minutesBetween(r.startedAt, r.finishedAt);
     const workLabel = !longerThanChat(r, d) ? 'AI 实际 ' : T.dec(runSpan) === T.dec(r.workedMinutes)
       ? `任务运行 ${T.when(r.startedAt)} 起，` : '后台记录用时 ';
     const time = [clockRange(r), whole != null && `整轮 ${T.dec(whole)} 分钟`,
-      r.status === 'running' && minutes != null && `已跑 <span data-ran="${T.stamp(r.startedAt)}">${span(minutes)}</span>`,
+      elapsed && `已跑 ${elapsed}`,
       r.status !== 'running' && !r.who?.program && r.workedMinutes != null && `${workLabel}${T.dec(r.workedMinutes)} 分钟`].filter(Boolean).join(' · ');
     // 型号点了到智能体页看这一家干了多少（和自动任务页“用谁”那一列同一个去处）；程序自己办的、认不出哪一家的照原样写字
     const worker = { model: U.fieldText(d?.model, viewer), host: d?.software, effort: d?.effort };
@@ -572,10 +571,6 @@
       if (fold && compactOpen) fold.open = true;
     }
   }
-
-  setInterval(() => {
-    for (const el of document.querySelectorAll('[data-ran]')) el.textContent = span((Date.now() - Number(el.dataset.ran)) / 60000);
-  }, 1000);
 
   let page;
   page = T.boot({ resource: `automation/runs/${encodeURIComponent(category || '_')}/${encodeURIComponent(id || '_')}`, back,

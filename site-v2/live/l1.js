@@ -1252,7 +1252,8 @@
       const card = cards[id], p = parts[id];
       const view = window.LiveBatchHome.render(id, data[id], { viewer, route, href: href(id), offline: !!lastState?.offline, now: lastState?.now || data.at });
       U.html(p.head, view.head);
-      U.html(p.batch, view.body);
+      if (id === 'automation') paintHTML(p.batch, view.body);
+      else U.html(p.batch, view.body);
       p.batch.hidden = false;
       Light.tone(card, view.tone === 'repair' ? 'blue' : view.tone === 'owner' ? 'amber' : view.tone === 'ok' ? 'green' : 'off');
     }

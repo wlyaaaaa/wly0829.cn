@@ -49,8 +49,13 @@
     const runs = (Array.isArray(c.runs) ? c.runs : []).filter(r => at(r.started_at) || at(r.finished_at)).sort((a, b) => (at(b.finished_at) ?? at(b.started_at)) - (at(a.finished_at) ?? at(a.started_at)));
     const done = runs.filter(r => r.result !== 'running' && at(r.finished_at));
     const last = done[0] || null, week = done.filter(r => now - at(r.finished_at) < 7 * DAY);
-    const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: 0, runs: 0 }; });
-    for (const r of week) { const day = days.find(x => x.key === K.dayKey(at(r.finished_at))); if (day) { day.bytes += num(r.freed_bytes) || 0; day.runs++; } }
+    const days = Array.from({ length: 7 }, (_, i) => { const t = now - (6 - i) * DAY; return { key: K.dayKey(t), bytes: null, runs: 0 }; });
+    for (const r of week) {
+      const day = days.find(x => x.key === K.dayKey(at(r.finished_at)));
+      if (!day) continue;
+      if (num(r.freed_bytes) != null) day.bytes = (day.bytes ?? 0) + r.freed_bytes;
+      day.runs++;
+    }
     const errors = week.filter(r => r.result === 'error'), deleted = week.reduce((n, r) => n + (num(r.protected_deleted) || 0), 0);
     // 按需更新快核（M928）：对照任务触发器的 Repetition.Interval 和接口 cleanup.interval_hours。
     const hours = c.interval_hours > 0 ? num(c.interval_hours) : null;
@@ -58,7 +63,7 @@
     let next = at(c.next_run_at), estimated = false;
     if (!next && last && hours && !running) { next = at(last.finished_at) + hours * 3600000; estimated = true; }
     const overdue = !!(!running && hours && last && now - at(last.finished_at) > lateHours(hours) * 3600000);
-    return { c, runs, last, week, days, total: days.reduce((n, x) => n + x.bytes, 0), errors, deleted, hours, next, estimated, overdue, running };
+    return { c, runs, last, week, days, total: days.reduce((n, x) => n + (x.bytes ?? 0), 0), errors, deleted, hours, next, estimated, overdue, running };
   }
 
   // 按需更新快核（M928）核法：“没按时跑”由下面 lateHours 计算，现两轮间隔再加 1 小时（间隔取 cleanup.interval_hours，现 6 小时，合计 13 小时）；变了核对“下次”那格
@@ -115,7 +120,9 @@
   function total(g, viewer) {
     if (!g?.last) return '<p class="cl-k">近 7 天共腾出</p><p class="cl-big is-gray">—</p>';
     const max = Math.max(...g.days.map(x => x.bytes), 1);
-    const bars = g.days.map((x, i) => `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} 腾出 ${K.size(x.bytes)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(K.size(x.bytes))}</em>` : ''}</li>`).join('');
+    const bars = g.days.map((x, i) => x.bytes == null
+      ? `<li data-missing title="${esc(x.key)} 没记录"><span>${esc(x.key)}</span>${x.runs || i === 6 ? '<em>没记录</em>' : ''}</li>`
+      : `<li${i === 6 ? ' class="is-today"' : ''}><b style="--h:${x.bytes ? Math.max(4, Math.round(x.bytes / max * 66)) : 2}px" title="${esc(`${x.key} 腾出 ${K.size(x.bytes)} · ${x.runs} 轮`)}"></b><span>${esc(x.key)}</span>${i === 6 || x.bytes === max && x.bytes ? `<em>${esc(K.size(x.bytes))}</em>` : ''}</li>`).join('');
     const recent = num(g.last.freed_bytes);
     const amount = recent == null ? K.field(g.last.freed_bytes_gap, '本轮腾出量缺因', viewer) : `腾出 ${K.size(recent)}`;
     const last = [`最近一轮 ${when(g.last.finished_at)}`, amount].filter(Boolean).join(' ');
@@ -209,7 +216,7 @@
     const lastNote = g.last ? `上次 ${hm(g.last.finished_at)} ${g.last.result === 'ok' ? '跑完' : '结束'}${minutes != null ? ` · 用时 ${Math.max(1, Math.round(minutes / 60))} 分钟` : ''}` : '';
     const nextAt = g.next ? new Date(g.next).toISOString() : '';
     const nextText = g.next ? `下次${g.estimated ? '约 ' : ' '}${U.date(nextAt) === U.date(new Date().toISOString()) || g.next - Date.now() < 18 * 3600000 ? hm(nextAt) : when(nextAt)}` : '下次';
-    const runNote = g.running ? `<span class="task-result" data-state="running" data-result="running"><i class="task-dot" data-state="running" aria-hidden="true"></i>正在跑</span> · ${esc(hm(g.running.started_at))} 开始` : esc(lastNote);
+    const runNote = g.running ? `<span class="task-result" data-state="running" data-result="running"><i class="task-dot" data-state="running" aria-hidden="true"></i>正在跑</span> · ${U.nowrap(hm(g.running.started_at))} 开始` : U.nowrap(lastNote);
     const nextNote = [runNote, ...[
       g.running && [progress(g.running, viewer, g), g.c.q === 'stale' && '旧读数'].filter(Boolean).join(' · '),
       g.estimated && `读不到自动任务的下次时间，按上次加 ${g.hours} 小时估`,

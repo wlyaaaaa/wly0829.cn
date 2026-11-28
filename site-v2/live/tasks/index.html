@@ -34,6 +34,9 @@
 #task-side { align-self: stretch; }
 /* 右边一栏展开“再看”“变化”时在栏里滚动，不把左边标题、中间大卡和下面的搜索往下推 */
 #task-side { contain: size; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+#task-side:has(#changes-box[open]) { scroll-snap-type: y proximity; }
+#changes > li { scroll-snap-align: end; }
+#changes-title { scroll-snap-align: start; }
 /* 首屏统计格按字的长短排，标签不折成两行 */
 .page--tasks .lbp-stats { display: flex; flex-wrap: wrap; }
 .page--tasks .lbp-stat { flex: 1 1 auto; }

@@ -42,6 +42,7 @@
   let doneShown = STEP;
   const catPath = id => T.path('/live/automation/category/', { type: id }), howPath = id => T.path('/live/automation/how/', { type: id });
   const F = (v, name) => T.field(v, viewer, name);
+  const wordsIn = html => window.AutomationPresentation.keepWords(R.asOwner(html, viewer));
   const cn = (v, id) => id === 'message-review' ? R.catName(id, viewer)
     : viewer === 'owner' || typeof v !== 'string' ? v : v.replace(/^替你/, '替本人');
   const you = () => T.you(viewer);
@@ -299,7 +300,8 @@
     else title = R.oneVersion(F(r.summary, '这一轮做了什么')) || (r.status === 'running' ? '正在跑' : '跑完了');
     if (r.status === 'running') {
       const doing = Fm(r.activity, '正在干什么');
-      meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起，<span data-ran="${since}">跑了 ${minutes((Date.now() - since) / 1000)}</span>` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
+      const elapsed = elapsedRun(r);
+      meta = [who(r), since ? `${esc(T.clock(r.startedAt))} 起${elapsed ? `，跑了 ${elapsed}` : ''}` : '', doing && `正在${doing.replace(/^正在/, '')}`].filter(Boolean).join(' · ');
     } else {
       body += r.status === 'incomplete' && !r.deferred ? '' : outputs(r);
       // 暂缓的为什么放着、在等什么单独一行；下面那行照别的卡只写几点、谁、为什么开这一轮
@@ -493,11 +495,11 @@
     return `<section class="tp-panel au-use" id="usage"><div class="tp-panel__head"><h2>近 7 天后台 AI 共用了</h2></div><p class="au-use__num">${label}${known(seconds) ? '<small class="au-use__basis">只算自动任务各类登记的每次调用</small>' : ''}${covered}</p>${chart}${gaps.length ? `<p class="tp-small au-use__gaps">${gaps.join('；')}</p>` : ''}</section>`;
   }
 
-  // 跑着的卡：跑了几分钟，每秒往前走；七类表“现在”那格写“已 N 分钟”
-  setInterval(() => {
-    for (const el of document.querySelectorAll('[data-ran]')) el.textContent = `跑了 ${minutes((Date.now() - Number(el.dataset.ran)) / 1000)}`;
-    for (const el of document.querySelectorAll('[data-since]')) el.textContent = `已 ${minutes((Date.now() - Number(el.dataset.since)) / 1000)}`;
-  }, 1000);
+  // 两处用同一份运行列表的时刻，刷新后一起更新。
+  const elapsedRun = run => {
+    const reading = board?.running || pages.get(run?.category);
+    return R.runningTime(run, reading);
+  };
 
   // 停等条：哪几类因为登录过期、额度用完停着，几点起，期间看了几次（后台 check_count）；
   // 接上以后读 feed 里 kind=resumed 的那行（provider＋started_at 对上同一段等待），写“几点接上”，24 小时后不再出
@@ -567,7 +569,7 @@
   // “现在”那格（照第一屏图）：灯＋一句话，下面一行小字。先后：停等（登录过期、额度用完）＞出毛病＞正在跑＞关着＞暂停到＞空着等下次
   function nowCell(d, c, v) {
     const p = pauseOf(d, c.id), pr = c.problem, st = c.state || {}, m = mode(c);
-    const live = v.live.find(x => x.category === c.id)?.run, since = T.stamp(live?.startedAt);
+    const live = v.live.find(x => x.category === c.id)?.run;
     const waiting = F(st.waiting_for ?? c.waiting_for, '在等什么');
     let tone = 'idle', main, sub = F(c.schedule_text, '排期说明');
     if (p) { tone = 'warn'; main = `停着：${pauseText(p)}${checks(p.check_count)}`; }
@@ -579,7 +581,8 @@
       sub = [pr.repairing === true ? 'AI 在修' : F(pr.handler_text, '谁在处理'), known(pr.round) && pr.round > 0 ? `第 ${int(pr.round)} 轮` : ''].filter(Boolean).join('，') || sub;
     } else if (c.running || st.kind === 'running' || live) {
       tone = 'run';
-      const ran = since ? `<span data-since="${since}">已 ${minutes((Date.now() - since) / 1000)}</span>` : known(st.elapsed_seconds) ? `已 ${minutes(st.elapsed_seconds)}` : '';
+      const elapsed = elapsedRun(live) || (known(st.elapsed_seconds) ? minutes(st.elapsed_seconds) : '');
+      const ran = elapsed ? `<span class="au-nobr">已 ${elapsed}</span>` : '';
       const doing = live && (F(live.activity, '正在干什么') || (live.subject ? F(live.subject.title, '这件活') : ''));
       main = `正在跑${ran ? ` · ${ran}` : ''}`; sub = doing ? `${doing.replace(/^正在/, '')}` : sub;
     } else if (m === 'off') { tone = 'off'; main = '关着，不用排时间'; sub = waiting || sub; }
@@ -596,8 +599,7 @@
       if (T.stamp(next) == null && !waiting && !sub) sub = '几点跑、什么情况下跑，这次没读到。';
       if (T.stamp(next) == null && !stalled(d) && waiting && sub === waiting) sub = '';   // 在等的和排期是同一句时，下面小字不再写一遍
     }
-    if (c.id === 'message-review') main = main.replace(/立即检查/g, '<span class="au-nobr">$&</span>');
-    return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${main}</b>${sub ? `<small>${sub}</small>` : ''}</p></div>`;
+    return `<div class="au-now" data-tone="${tone}"><span class="au-now__dot" aria-hidden="true"></span><p><b>${wordsIn(main)}</b>${sub ? `<small>${wordsIn(sub)}</small>` : ''}</p></div>`;
   }
   // AI 约好的事今天做完几件、用了几分钟，跟在上次结果的钟点后面
   function todayText(c) {
@@ -618,7 +620,7 @@
     const detail = [keepDates(esc(when(r.at))), todayText(c)].filter(Boolean).join(' · ');
     const words = duplicate ? '' : keepDates(F(result, '上次结果'));
     const text = c.id === 'auto-repair' ? words.replace(/\p{Script=Han}{5,8}[。！？]$/u, '<span class="au-nobr">$&</span>') : words;
-    return `${text}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
+    return `${wordsIn(text)}${detail ? `<small>${detail}</small>` : duplicate ? '—' : ''}`;
   }
   // 近 30 天：小柱图和“成 N · 坏 N”，从几号起记；成坏怎么数的口径放在这一类的页上（表里只留数，照第一屏图）
   function trendCell(c) {
@@ -633,9 +635,9 @@
   }
   // 用谁：点了到智能体页看这一家干了多少；认不出哪一家的照原样写字
   function modelCell(c) {
-    const text = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
+    const text = [c.model, c.model_effort].filter(Boolean).map(v => `<span class="au-nobr">${esc(v)}</span>`).join(' · ');
     const family = text && R.agentsPath(R.familyOf({ host: c.host, model: c.model }));
-    return !text ? '没读到' : family ? link(family, `${text} ›`) : text;
+    return !text ? '<span class="au-nobr">没读到</span>' : family ? link(family, `${text} ›`) : text;
   }
   // 七类表（照第一屏图）：任务和怎么干、现在、上次结果、近 30 天、用谁、开关、›。点一行到这一类的页，“怎么干 ›”到怎么干页（本人 11-24：八类卡点进去是另一页，怎么干看机制）
   function table(d, v) {
@@ -647,7 +649,7 @@
       <tbody>${cats.map(c => {
         const g = c.how_to || {}, p = pauseOf(d, c.id);
         return `<tr id="cat-${c.id}" data-row="${c.id}" class="au-row${p ? ' is-paused' : ''}" data-mode="${esc(mode(c) || '')}">
-          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${esc(g.short || '')}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
+          <th scope="row"><a class="au-name" href="${esc(catPath(c.id))}"><b>${F(cn(c.title, c.id))}</b><span>${wordsIn(esc(g.short || ''))}</span></a><a class="au-how" href="${esc(howPath(c.id))}">怎么干 ›</a></th>
           <td class="au-nowcell">${nowCell(d, c, v)}</td><td class="au-last">${lastCell(c, !p && c.problem)}</td><td>${trendCell(c)}</td><td class="au-model">${modelCell(c)}</td>
           <td class="au-switchcell">${switchCell(c, offline)}</td><td class="au-go"><a href="${esc(catPath(c.id))}" aria-label="进${esc(U.fieldText(cn(c.title, c.id), viewer))}这一类">›</a></td></tr>`;
       }).join('')}</tbody></table>

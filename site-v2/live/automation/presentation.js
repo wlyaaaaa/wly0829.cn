@@ -16,5 +16,19 @@
     if (!name) return '';
     return `<span class="auto-tag" data-kind="${esc(kind)}">${name}${who ? ` · ${esc(who)}` : ''}</span>`;
   }
-  window.AutomationPresentation = { lamp, tag, kinds };
+  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const single = /^\p{Script=Han}$/u;
+  const keep = word => `<span class="live-unit">${word}</span>`;
+  // 和实况首页一样，在词之间留换行处，单字跟相邻的词一起走。
+  const keepWords = html => html.replace(/<[^>]*>|&[\w#]+;|第[ \t]*\d+[ \t]*轮|\d+(?:[.,]\d+)?[ \t]*(?:小时(?:[ \t]*\d+[ \t]*分(?:钟)?)?|分钟|分|秒|轮|次|件|条|份)|[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)+|\p{Script=Han}{2,}/gu, part => {
+    if (/^[<&]/.test(part)) return part;
+    if (part.length <= 4 || !/^\p{Script=Han}+$/u.test(part)) return keep(part);
+    const words = [];
+    for (const { segment } of segmenter.segment(part)) {
+      if (words.length && (single.test(segment) || single.test(words.at(-1)))) words[words.length - 1] += segment;
+      else words.push(segment);
+    }
+    return words.map(keep).join('<wbr>');
+  });
+  window.AutomationPresentation = { lamp, tag, kinds, keepWords };
 })();

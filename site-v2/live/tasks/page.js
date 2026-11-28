@@ -20,6 +20,9 @@
   let board = null, dataAt = null, batchAt = null, pick = p.get('group') || '', projectList = null, projectKey = '', generation = 0;
   let runningReading = null;
   const taskLiveWords = new WeakMap();
+  const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
+  const keepTaskWords = html => html.replace(/<[^>]+>|\p{Script=Han}{2,}/gu, part => part.startsWith('<') ? part :
+    Array.from(segmenter.segment(part), ({ segment }) => segment.length > 1 ? `<span class="task-phrase">${segment}</span>` : segment).join(''));
   function taskWords() {
     for (const el of document.querySelectorAll('[data-task-state]')) {
       const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), off = U.offline?.();
@@ -86,7 +89,13 @@
     if (!e.target.open) return;
     const side = $('task-side'), head = $('changes-title');
     // 展开的内容是一点点长出来的，跟着长几帧，直到“变化”标题停在栏顶
-    const start = performance.now(), follow = () => { side.scrollTop += head.getBoundingClientRect().top - side.getBoundingClientRect().top - 8; if (performance.now() - start < 700) requestAnimationFrame(follow); };
+    const start = performance.now(), follow = () => {
+      const { top, bottom } = side.getBoundingClientRect();
+      side.scrollTop += head.getBoundingClientRect().top - top - 8;
+      if (performance.now() - start < 700) return void requestAnimationFrame(follow);
+      const cut = [...$('changes').children].map(row => row.getBoundingClientRect()).find(row => row.top < bottom && row.bottom > bottom);
+      if (cut) side.scrollTop += side.scrollTop >= bottom - cut.top ? cut.top - bottom : cut.bottom - bottom;
+    };
     requestAnimationFrame(follow);
   });
   const changesTitle = $('changes-title') || changesBox.querySelector('.part');
@@ -194,7 +203,7 @@
       const outcomeDot = failed ? stateDot('warn') : stateDot(shown === 'unread' ? 'unknown' : shown);
       const running = failed && state === 'running' ? `<span data-task-state>${stateDot('running')}${shortStatus.running}</span>` : '';
       return { key: t.id, cls: `row row--flat lb-row task-compact${attention(t) ? ' is-attention' : ''}${fixing ? ' is-fixing' : ''}`, html:
-        `<span class="lb-row__lamp">${failed ? stateDot('warn', '上次运行失败') : fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${title}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${purpose}</p>` : ''}${verified}${fixNote}${why}</div>
+        `<span class="lb-row__lamp">${failed ? stateDot('warn', '上次运行失败') : fixing ? stateDot('fixing', 'AI 在修') : stateDot(state, shortStatus[state])}</span><div class="lb-cell lb-cell--name"><p><a class="row__title" href="${esc(detail)}">${keepTaskWords(title)}</a></p>${purpose ? `<p class="lb-sub task-purpose" title="${esc(fullPurpose)}">${keepTaskWords(purpose)}</p>` : ''}${verified}${fixNote}${keepTaskWords(why)}</div>
         <div class="lb-cell lb-cell--time task-last">${shownAt ? `<time>${stamp(shownAt)}</time>` : ''}${lastState ? `<span data-task-state${lastTitle}>${outcomeDot}${esc(failed ? shortStatus.failed : lastWord)}</span>` : '—'}${running}${trouble ? week(t) : ''}</div>
         <div class="lb-cell lb-cell--time"><span data-task-state${triggerTitle}>${esc(scheduled)}</span></div><div class="row__acts">${actions}</div>` };
     }
@@ -305,7 +314,7 @@
   function render(d, append = false) {
     function changeDetail(c) {
       if (typeof c.owner_detail !== 'string' || !c.owner_detail.trim()) return '';
-      return `<details data-fold-anchor><summary>变更详情</summary><p class="row__sub">${esc(c.owner_detail)}</p></details>`;
+      return `<details data-fold-anchor><summary>变更详情</summary><p class="row__sub">${keepTaskWords(U.nowrap(c.owner_detail))}</p></details>`;
     }
     if (d?.q === 'warming') { page = d; waiting('正在准备'); taskHead(); groupsRead.done(); changesRead.done(); return; }
     if (d && !maintenance && !scheduledPacket(d)) {
@@ -390,7 +399,7 @@
     showChangeEmpty(changeEmpty);
     U.list($('changes'), changeEmpty ? empty(changeEmpty) : [...detailLock, ...d.changes7.map(c => ({
       key: c.id, cls: 'row row--flat',
-      html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer })}</a><span class="row__meta">${esc({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化')} · ${stamp(c.at)}</span></p>${changeDetail(c)}</div>`,
+      html: `<span></span><div class="row__text"><p class="row__main"><a class="row__title" href="${esc(route(`/live/task/?id=${encodeURIComponent(c.id)}`))}">${keepTaskWords(U.fieldHtml(changeName(c) || '自动任务', { name: '自动任务', place: 'title', kind: viewer }))}</a><span class="row__meta">${keepTaskWords(U.nowrap({ added: '新增', disabled: '停用了', missing: '现在找不到', enabled: typeof c.label === 'string' && c.label || '又开启' }[c.kind] || '有变化'))} · ${U.nowrap(stamp(c.at))}</span></p>${changeDetail(c)}</div>`,
     }))]);
     taskHead(moved);
     cursor = d.next; nextPage.hidden = !cursor; nextPage.textContent = nextLabel; groupsRead.done(); changesRead.done(); L.lightUp([hero, $('groups'), $('changes')]);
@@ -609,10 +618,10 @@
       legend && esc(legend).replace(/灰格：那天结果没读到|不用跑|停用中|这天没跑|等下一轮跑/g, '<span class="task-phrase">$&</span>'),
       ...[...new Set(rows.map(t => t.days7_gap).filter(Boolean))].map(noteField),
     ].filter(Boolean).join(' · ');
-    const rosterOld = Date.now() - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
-    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册停在 ${U.time(dataAt)}，之后没更新` : ''
+    const rosterOld = Date.parse(now) - Date.parse(dataAt) > (Number(page?.stale_after) || 360) * 1000;
+    const statusNote = !maintenance && dataAt && page?.gray_reason === 'stale' ? rosterOld ? `任务名册仍沿用 ${U.time(dataAt)} 的读数` : ''
       : status.note.replace(/(?:^| · )(?:有 \d+ 件事要留意|\d+ 项要处理)(?: · |$)/gu, ' · ').replace(/^(?: · )|(?: · )$/g, '');
-    U.html($('note'), [note, statusNote].filter(Boolean).join(' · ')); $('note').hidden = !note && !statusNote;
+    U.html($('note'), keepTaskWords([note, statusNote].filter(Boolean).join(' · '))); $('note').hidden = !note && !statusNote;
     drawStats(moved);
     L.tone(hero, page);
     if (page) heroRead.done(); taskWords();

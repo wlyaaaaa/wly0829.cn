@@ -41,6 +41,7 @@
   const agentsPath = (family, today = false) => !FAMILIES[family] ? '' : today
     ? `/live/agents/?hours=today&family=${family}#hours` : `/live/agents/?family=${family}#work`;
   const minutesBetween = (a, b) => { const x = T.stamp(a), y = T.stamp(b); return x != null && y != null && y >= x ? (y - x) / 60000 : null; };
+  const runningTime = (row, reading) => U.minutes(minutesBetween(row?.startedAt, reading?.meta?.at));
   const OUTPUT = {
     owner_item: { where: '等你的事那张卡', go: '去那张卡' },
     ledger_item: { where: '账本那件', go: '去账本那件' },
@@ -240,5 +241,5 @@
     : html.split(/(<!--automation-original-->[\s\S]*?<!--\/automation-original-->)/g)
       .map((part, i) => i % 2 ? part : part.replace(YOU, (m, verb) => m === NAMES['message-review'] ? m : verb ? `${verb}本人` : '本人')).join('');
 
-  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
+  window.AutomationRuns = { CATS, NAMES, FAMILIES, catName, familyOf, whoOf, run, detail, page, fallback, runPath, agentsPath, minutesBetween, runningTime, ticker, deferredNote, deferredWhy, withoutSubject, oneVersion, asOwner, original, roundTag, versionTail };
 })();

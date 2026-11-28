@@ -423,6 +423,8 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
 .b6-body p.b6-fail { margin: 0 0 2px; font-size: 16px; font-weight: 650; color: #3a4642; }
 .b6-lines p { font-size: 14.5px; }
 #automation .b6-body p { text-wrap: pretty; }
+#automation .l1-unit { white-space: nowrap; }
+#automation .b6-problem__narrow { display: none; }
 #automation .b6-problem__summary {
   display: -webkit-inline-box;
   max-inline-size: 100%;
@@ -433,6 +435,15 @@ body.page--live #needs .row.notice-target { outline-offset: -2px; }
   -webkit-line-clamp: 2;
 }
 .page--live:not(.live-unreadable) .b6-card .b6-lines > p > .b6-dot:first-child { margin-left: -25px; margin-right: calc(25px - .65em); }
+@media (max-width: 1024px) {
+  .page--live .board #automation.b6-card[data-pic="right"] .card__body { padding-right: 18px; }
+  #automation.b6-card .card__pic { bottom: auto; height: 205px; mask-image: linear-gradient(270deg, #000, transparent), linear-gradient(#000 55%, transparent); mask-composite: intersect; }
+  #automation .b6-problem { position: relative; }
+  .page--live #automation .b6-problem > .b6-dot:first-child { position: absolute; inset: .58em auto auto -25px; margin: 0; }
+  #automation .b6-problem__summary { display: -webkit-box; }
+  #automation :is(.b6-problem__label,.b6-problem__kind,.b6-problem__wide) { display: none; }
+  #automation .b6-problem__narrow { display: inline; }
+}
 .b6-lg { display: flex; align-items: center; gap: 22px; margin: 8px 0 0; }
 .b6-lg__owed { display: inline-flex; align-items: baseline; gap: 10px; font-size: 22px; font-weight: 700; color: #20302b !important; text-decoration: none !important; }
 .b6-lg__sep { width: 1px; align-self: stretch; margin: 12px 0; background: #293c4126; }

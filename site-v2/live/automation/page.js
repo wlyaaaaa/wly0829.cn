@@ -116,7 +116,11 @@ window.LegacyAutomation = function (bar) {
     const quantity = g => count(g?.total) ? g.total : count(g?.known_total) && g.known_total > 0 ? `至少 ${g.known_total}` : null;
     const values = [quantity(known[0]), started, quantity(known[1]), upcoming ? next(upcoming) : null];
     const labels = ['种 AI 自动接活', '今天开工次数', '项 AI 定时任务', '下一次开工'];
-    U.html($('stats'), labels.map((label, i) => `<div><dt>${label}</dt><dd class="${values[i] == null ? 'is-word' : i === 3 && values[i].includes(' ') ? 'is-dated' : ''}">${values[i] ?? (waiting ? '正在读' : '未读到')}</dd></div>`).join(''));
+    U.html($('stats'), labels.map((label, i) => {
+      const value = values[i], dated = i === 3 && value?.includes(' ');
+      const text = dated ? value.split(' ').map(part => `<span class="live-unit">${part}</span>`).join(' ') : value;
+      return `<div><dt>${label}</dt><dd class="${value == null ? 'is-word' : dated ? 'is-dated' : ''}">${text ?? (waiting ? '正在读' : '未读到')}</dd></div>`;
+    }).join(''));
     const note = !display.length ? waiting ? '正在读' : '最近开工的时间和结果这次没读到。' : (activity ? activity.today_runs_q === 'partial' : partial) ? '按已读到的开工时间排列。' : '';
     const readFrom = activity?.first_read_at, readTo = activity?.at;
     const readNote = time(readTo) && `开工回执读于 ${time(readFrom) && readFrom !== readTo ? `${time(readFrom)} 至 ` : ''}${time(readTo)}`;

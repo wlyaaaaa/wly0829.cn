@@ -163,7 +163,7 @@
     const state_text = resultPill[row.status]?.[0];
     const info = words(row.period || row.trigger, row.at ? `上次 ${when(row.at)}` : row.gap || (!row.at && row.q !== 'ok' && '这里还看不到'),
       Number.isInteger(row.plan_count) ? `写回 ${row.plan_count} 份` : state_text, row.next_at && `下次 ${when(row.next_at)}`);
-    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}${field(row.label || row.title, '来源名称')}</b><span>${info}</span>${row.purpose ? `<small>${field(row.purpose)}</small>` : ''}</li>`;
+    return `<li${anchor ? ` id="${esc(anchor)}"` : ''}><b>${lamp(row)}${field(row.label || row.title, '来源名称')}</b><span>${P.keepWords(asOwner(info))}</span>${row.purpose ? `<small>${P.keepWords(asOwner(field(row.purpose)))}</small>` : ''}</li>`;
   }
   function results(data, rows) {
     const r = data.results7;
@@ -185,7 +185,10 @@
     const rows = data.setting_log;
     if (!Array.isArray(rows)) return empty('这里还看不到');
     if (!rows.length) return empty('还没改过设置');
-    return `<ul class="aw-log">${rows.map(row => `<li><time>${when(row.at)}</time><span>${field(row.text)}</span><small>${words(row.device, row.result)}</small></li>`).join('')}</ul>`;
+    return `<ul class="aw-log aw-log--settings">${rows.map(row => {
+      const session = /^(?:claude|codex|antigravity):[\w-]{12,}$/i.test(U.fieldText(row.device, audience));
+      return `<li><time>${when(row.at)}</time><span>${P.keepWords(field(row.text))}</span><small>${P.keepWords(words(session ? '' : row.device, row.result))}</small></li>`;
+    }).join('')}</ul>`;
   }
   function mechanism(data) {
     const id = data.id, guide = data.how_to || {};

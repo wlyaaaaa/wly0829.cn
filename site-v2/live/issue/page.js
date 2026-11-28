@@ -18,7 +18,7 @@
   const F = (v, name = '') => U.fieldHtml(v, { name, kind: viewer });
   const T = v => U.fieldText(v ?? '', viewer).trim();
   const you = () => viewer === 'owner' ? '你' : '本人';
-  const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后/g, word =>
+  const keepTitleWords = html => html.replace(/<[^>]+>|已?了结|有没有|以后|超时/g, word =>
     word.startsWith('<') ? word : `<span class="iss-nowrap">${word}</span>`);
   const publicText = text => text.replace(/“[^”]*”|你(?!们)/g, word => word === '你' ? '本人' : word);
   // 保留双引号内的显示字；标签本身只处理 title，链接地址照原值。
@@ -268,7 +268,7 @@
     const rows = fact('原文', raw) + fact('最近更新', timed(d.changed) ? esc(when(d.changed)) : '');
     if (!rows) return '';
     return `<details class="dossier-card dossier-card--raw glass" id="raw" data-fold-anchor${$('raw')?.open ? ' open' : ''}>
-      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span>原始记录
+      <summary class="dossier-card__title dossier-fold live-disclosure"><span class="dossier-icon" data-icon="raw" aria-hidden="true"></span><span class="iss-nowrap">原始记录</span>
         <span class="live-unit" style="margin-inline-start:auto"><span class="disclosure-closed">展开看原始记录全文</span><span class="disclosure-open">收起</span> <span class="dossier-fold__chev" style="display:inline-block" aria-hidden="true">›</span></span></summary>
       <dl class="rec-facts">${rows}</dl>
       <button type="button" class="more" data-close-raw>收起 <span class="more__chev" aria-hidden="true">‹</span></button></details>`;

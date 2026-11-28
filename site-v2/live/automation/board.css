@@ -73,7 +73,7 @@
 .tp .au-row[data-mode="off"]:hover > :not(.au-switchcell):not(.au-nowcell) a { color: var(--tp-green-ink); }
 .au-name { display: grid; gap: 1px; color: inherit; text-decoration: none; }
 .au-name b { font-size: 17px; font-weight: 800; }
-.au-name span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
+.au-name > span { font-size: 12.5px; font-weight: 400; color: #6c6b64; white-space: normal; }
 .au-name:hover b { text-decoration: underline; text-underline-offset: 3px; }
 .au-name:focus-visible, .au-how:focus-visible, .au-go a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
 .tp a.au-how { display: inline-block; margin-top: 2px; font-size: 13.5px; font-weight: 700; color: var(--tp-green-ink); text-decoration: none; }
@@ -93,6 +93,7 @@
 .tp .au-go a { display: inline-block; padding: 4px 2px; font-size: 22px; font-weight: 700; line-height: 1; color: #8a8981; text-decoration: none; transition: color .15s ease, transform .15s ease; }
 .au-row:hover .au-go a { color: var(--tp-green-ink); transform: translateX(3px); }
 .au-model, .tp .au-model .tp-link { white-space: normal; }
+.au-name b, .au-state { white-space: nowrap; }
 .au-warn { color: var(--tp-amber); font-weight: 700; }
 .au-warn a.tp-link { color: var(--tp-amber); white-space: normal; }
 .tp a.tp-link.au-warn { white-space: normal; }
@@ -120,8 +121,13 @@
 /* 电脑上把窗口拉窄（1400 以下）时：栏不再死撑一行，柱图跟着栏宽缩，“暂停到…”换到开关下面，免得“现在”“上次结果”挤成一字一行（M902）。
    1440 宽和手机（按 1440 等比缩小）不受影响 */
 @media (max-width: 1399px) {
-  .au-table thead th:nth-child(4) { width: 15%; }
-  .au-table thead th:nth-child(6) { width: 110px; }
+  .au-table thead th:nth-child(1) { width: 17%; }
+  .au-table thead th:nth-child(2) { width: 20%; }
+  .au-table thead th:nth-child(3) { width: auto; }
+  .au-table thead th:nth-child(4) { width: 12%; }
+  .au-table thead th:nth-child(5) { width: 14%; }
+  .au-table thead th:nth-child(6) { width: 96px; }
+  .au-table td, .au-table th { padding-inline: 8px; }
   .au-table tbody th, .au-model, .au-trend > span, .au-switchcell { white-space: normal; }
   .au-trend { justify-items: stretch; }
   .au-trend .tp-chart { width: 100%; max-width: 150px; height: auto; }

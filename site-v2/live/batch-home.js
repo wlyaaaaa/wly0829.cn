@@ -16,7 +16,7 @@
   // 点 = [{at, kind, href, tip}]，kind：ok 做成（绿）、bad 没做成（橙）、late 到点没看（橙实点）、next 还没到（空心圈）。比今天早的点压在 0 点那头。
   const DAY_MS = 86400000;
   const dayStart = now => { const t = Date.parse(now) || Date.now(); return Math.floor((t + 8 * 3600000) / DAY_MS) * DAY_MS - 8 * 3600000; };
-  function timebar(points, now, route, label) {
+  function timebar(points, now, route, label, pointLabel = '现在') {
     const start = dayStart(now), t = Date.parse(now) || Date.now();
     const x = at => Math.max(0, Math.min(100, (at - start) / DAY_MS * 100)), here = x(t);
     const dots = points.map(p => {
@@ -26,7 +26,7 @@
     }).join('');
     // “现在”离两头太近时不写 0 点、24 点，免得字叠在一起
     return `<div class="b6-tb" role="group" aria-label="${esc(label)}">${here > 9 ? '<span class="b6-tb__from">0 点</span>' : ''}${here < 91 ? '<span class="b6-tb__to">24 点</span>' : ''}
-      <div class="b6-tb__line">${dots}<span class="b6-tb__now" style="left:${here.toFixed(2)}%"><b>现在</b><small>${esc(U.time(new Date(t).toISOString()))}</small></span></div></div>`;
+      <div class="b6-tb__line">${dots}<span class="b6-tb__now" style="left:${here.toFixed(2)}%"><b>${pointLabel}</b><small>${esc(U.time(new Date(t).toISOString()))}</small></span></div></div>`;
   }
   const spent = s => { const m = Math.round(s / 60); return m < 60 ? `${m} 分钟` : `${Math.floor(m / 60)} 小时${m % 60 ? ` ${m % 60} 分` : ''}`; };
 
@@ -196,25 +196,30 @@
       const big = `<div class="b6-big b6-big--runs"><a href="${esc(route(v.todayHref))}"><em>${num(v.finished)}</em><span>今天跑完的轮</span></a></div>`;
       const fail = v.failed == null ? '' : `<p class="b6-fail">${v.failed > 0 ? go(v.failedHref, `其中 ${esc(v.failed)} 轮没做成`) : '其中 0 轮没做成'}</p>`;
       const bar = v.runs ? timebar(v.runs.map(r => ({ at: r.at, kind: r.ok === false ? 'bad' : 'ok', href: R.runPage(r.href) || R.runHref(r),
-        tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮') : '';
+        tip: `${clock(r.at)} ${r.ok === false ? '没做成' : '做成了'}${r.title ? ` · ${U.fieldText(r.title, viewer)}` : ''}` })), now, route, '今天每一轮', offline ? '当时' : '现在') : '';
       // 第一行：在干哪一轮；空闲时写上次结果和下次时间。
-      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}在干：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `第 ${r.round} 轮` : '看经过')}</p>`).join('')
-        : `<p>${dot('off')}${next.title ? `这会儿空着&nbsp;· ${lastDone}${go(next.href, `下一个 ${nextWhen} ${field(next.title, '任务名称')}`)}`
-          : Array.isArray(d.running) && d.next === null ? '这会儿空着&nbsp;· 没有排定的运行' : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
+      const idle = offline ? '当时没任务在跑' : '这会儿空着';
+      const doing = v.running.length ? v.running.map(r => `<p>${dot('ok')}${offline ? '当时在干' : '在干'}：${r.what.map(w => field(w)).join('&nbsp;· ')} ${go(r.href, r.round ? `<span class="live-unit">第 ${r.round} 轮</span>` : '看经过')}</p>`).join('')
+        : `<p>${dot('off')}${next.title ? `${idle}&nbsp;· ${lastDone}${go(next.href, `${offline ? '原定下一个' : '下一个'} ${nextWhen} ${field(next.title, '任务名称')}`)}`
+          : Array.isArray(d.running) && d.next === null ? `${idle}&nbsp;· 没有排定的运行` : '在跑的和下一个<span class="live-unit">这次没读到</span>'}</p>`;
       // 只收住毛病的说明，接手状态和轮次继续显示。
       const problemLine = p => {
         // 摘一句的故障回包有时把沿用的原回复当成原因给出；“这轮沿用原话”是退回原回复的结果。
         const detail = p.title === '摘一句' && /(?:这轮|本轮)沿用原话/.test(p.text)
           ? '摘要没能整理成可用文字，这次用了原来的回复' : p.raw.text;
-        const what = p.text && p.title && !p.text.includes(p.title) ? `${field(p.raw.title)}&nbsp;· ${field(detail)}` : field(detail || p.raw.title);
-        const who = [handled(p), p.round && !/轮/.test(p.handler) && `第 ${p.round} 轮`].filter(Boolean).map(esc).join('&nbsp;· ');
-        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `出毛病的：${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${who}</span></p>`;
+        const cause = p.title === '摘一句' && /^这次没写成摘要，用了原来的回复。原因[：:](.+?)。?$/.exec(p.text)?.[1];
+        const detailHtml = cause ? `<span class="b6-problem__wide">${field(detail)}</span><span class="b6-problem__narrow">${esc(cause)}，用了原来的回复</span>`
+          : field(detail);
+        const what = p.text && p.title && !p.text.includes(p.title)
+          ? `<span${p.title === '摘一句' ? '' : ' class="b6-problem__kind"'}>${field(p.raw.title)}&nbsp;· </span>${detailHtml}` : detailHtml || field(p.raw.title);
+        const who = esc(handled(p)) + (p.round && !/轮/.test(p.handler) ? `&nbsp;· <span class="live-unit">第 ${p.round} 轮</span>` : '');
+        return `<p class="b6-problem">${dot(p.repairing ? 'repair' : 'owner')}<span class="b6-problem__summary">${goWrap(p.href, `<span class="b6-problem__label">出毛病的：</span>${keepWords(what)}`)}</span><wbr>&nbsp;· <span class="b6-muted">${offline ? '当时：' : ''}${who}</span></p>`;
       };
       const trouble = v.problems.length ? v.problems.map(problemLine).join('') : Array.isArray(d.problems) ? `<p>${dot('ok')}没有出毛病的</p>` : '';
       const disabled = items(d.disabled).map(row => `<p class="b6-muted b6-disabled">${dot('off')}${link(row.href, field(row.title))}&nbsp;· 关着</p>`).join('');
       const w = v.week, week = w ? `<p>${dot('ok')}${goWrap(R.listHref(), `近 7 天替${own}：记下新消息 ${num(w.messages_logged)} 条&nbsp;· 修好 <span class="live-unit">${num(w.repaired)} 件</span>&nbsp;· 规矩改好 ${num(w.rules_fixed)} 处`)}</p>` : '';
       return { tone, head, body: publicHtml(`${big}${fail}${bar}<div class="b6-lines">${doing}${trouble}${disabled}${week}</div>
-        <p class="b6-muted b6-foot">${v.noAiWork ? '今天后台 AI 还没干活' : v.aiSeconds > 0 ? `今天后台 AI 用了 ${esc(spent(v.aiSeconds))}` : '今天后台 AI 用时<span class="live-unit">这次没读到</span>'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
+        <p class="b6-muted b6-foot">${v.noAiWork ? '今天后台 AI 还没干活' : v.aiSeconds > 0 ? `今天后台 AI 用了 ${U.nowrap(spent(v.aiSeconds))}` : '今天后台 AI 用时<span class="live-unit">这次没读到</span>'}&nbsp;· ${num(d.category_count)} 类里开着 ${num(d.enabled_count)} 类</p>`, viewer) };
     }
     if (id === 'agents') {
       const v = agentsView(d, { viewer, now });
