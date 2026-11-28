@@ -15,7 +15,7 @@
   const text = (m, otherwise = MISSING) => m?.text || m?.value?.text || m?.unknown_text || otherwise;
   const select = (line, id) => line?.sections?.find(s => s.id === id);
   const fixture = new URLSearchParams(location.search).get('fixture'), related = path => fixture === null ? path : `${path}&fixture=${encodeURIComponent(fixture)}`;
-  const detail = m => m?.section ? `<a class="career-detail" href="${esc(related(`/live/records/?project=${ID}&section=${encodeURIComponent(m.section)}`))}">明细 ›</a>` : '';
+  const detail = m => m?.section ? `<a class="career-detail" href="${esc(related(`/live/records/?project=${ID}&section=${encodeURIComponent(m.section)}`))}" aria-label="${esc(m.label ? `${m.label}明细` : '明细')}">明细 ›</a>` : '';
   const row = (label, reading, tail = '') => `<div class="career-row"><b>${esc(label)}</b><span>${reading}</span>${tail}</div>`;
   const tile = (label, reading, small = '') => `<div><span>${esc(label)}</span><strong>${reading}</strong>${small}</div>`;
   const pager = (kind, i, pages, busy = false) => [-1, 1].map(step => `<button type="button" data-career-${kind}="${step}" aria-label="${kind === 'line' ? (step < 0 ? '上一条学习线' : '下一条学习线') : (step < 0 ? '上一页产物' : '下一页产物')}"${busy || i + step < 0 || i + step >= pages ? ' disabled' : ''}>${step < 0 ? '‹' : '›'}</button>`).join('');
@@ -57,15 +57,16 @@
   }
 
   function prepared(make, line) {
-    const metrics = select(line, 'prepared')?.metrics, m = get(metrics), lectures = value(m('lectures')), queue = value(m('question_queue')), history = value(m('question_history'));
+    const metrics = select(line, 'prepared')?.metrics, m = get(metrics), lectureMetric = m('lectures');
+    const lectures = value(lectureMetric), queue = value(m('question_queue')), history = value(m('question_history'));
     const labels = lectures?.sections?.map(it => `${it.label} ${it.count}`).join(' · ');
     const q = queue?.total == null ? esc(text(m('question_queue'))) : `<b>${count(queue.total, '题')}</b>${queue.taught != null ? ` · 已教 ${esc(queue.taught)} · 待教 ${esc(queue.pending_teach)} · 待问 ${esc(queue.pending_ask)}` : ''}`;
     const read = (key, label, extra = '') => row(label, count(value(m(key)), m(key)?.unit) + extra, detail(m(key)));
-    const body = `<div class="career-hero-num">${count(lectures?.total ?? lectures?.count, '篇讲义')} <small>${esc(labels || '')}</small></div>
+    const body = `<div class="career-lecture-count"><div class="career-hero-num">${count(lectures?.total ?? lectures?.count, '篇讲义')} <small>${esc(labels || '')}</small></div>${detail(lectureMetric)}</div>
       ${read('exercise_groups', '配套练习')}${row('题单', q + (line?.queue_at ? `<small>${esc(cutoff(line.queue_at))}</small>` : ''), detail(m('question_queue')))}
       ${row('题单问答记录', history?.questions != null ? `${count(history.questions, '题')} · ${count(history.records, '条')}（含初次授课）` : esc(text(m('question_history'))), detail(m('question_history')))}
       ${read('lecture_files', '讲义文件', '（含多种格式）')}${read('practice_files', '练习目录文件')}`;
-    return card(make, 'career-prepared', '老师备了什么', 'school', (metrics?.some(m => m.value != null || m.text) ? body : MISSING) + foot(cutoff(line?.at, '截止', m('lectures')), note(metrics)));
+    return card(make, 'career-prepared', '老师备了什么', 'school', (metrics?.some(m => m.value != null || m.text) ? body : MISSING) + foot(cutoff(line?.at, '截止', lectureMetric), note(metrics)));
   }
 
   function goal(make, line, viewer) {
@@ -82,13 +83,15 @@
   }
 
   let selected, current, draw = () => {}, artifactHost, art, first, artPage = 0, loading = false, failed = false, viewer, subscription;
+  const artifactTitle = title => title.split(/(（[^（）]{1,18}）)/u).map((part, i) => i % 2 ? `<span class="live-unit">${esc(part)}</span>` : U.nowrap(part)).join('');
   function showArtifacts() {
     const items = art?.items || [], total = art?.total ?? current?.artifacts?.count, pages = Math.ceil((total ?? items.length) / PAGE);
     const rows = items.slice(artPage * PAGE, artPage * PAGE + PAGE).map((it, i) => {
       const title = U.fieldText(it.title || it.recent_title, viewer), target = U.artifactAction(it, viewer, x => x);
       const tag = U.visitorHiddenMark(it, '这份成品', viewer, { keys: ['$'] });
       const hasTime = it.at_precision !== 'date' && it.kind !== '我上过的课';
-      return `<li><span>${esc(title)} ${tag}</span><time>${esc(date(it.at, hasTime))}</time>${target ? U.actions({ id: `${ID}-${artPage}-${i}`, title }, [target]) : ''}</li>`;
+      const description = it.recent_detail && U.fieldHtml(it.recent_detail, { name: '产物说明', kind: viewer });
+      return `<li><div>${artifactTitle(title)} ${tag}${description ? `<p class="row__sub">${description}</p>` : ''}</div><time>${esc(date(it.at, hasTime))}</time>${target ? U.actions({ id: `${ID}-${artPage}-${i}`, title }, [target]) : ''}</li>`;
     });
     if (artifactHost) U.html(artifactHost, `<ul class="career-artifacts">${rows.join('')}</ul>${rows.length ? '' : art && !items.length ? '还没有产物' : MISSING}
       <div class="career-foot"><span>${total != null ? `共 ${esc(total)} 份` : ''}${pages ? ` · ${artPage + 1}/${pages} 页 ${pager('art', artPage, pages, loading)}` : ''}</span><span>${esc([failed && MISSING, cutoff(current?.artifacts?.at || art?.source_at || art?.at, '截止', art)].filter(Boolean).join(' · '))}</span></div>`, false);
