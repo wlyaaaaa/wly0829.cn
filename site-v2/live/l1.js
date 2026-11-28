@@ -1471,9 +1471,7 @@
       const why = id === 'computer' && recorded ? latest ? `上次读到 ${latest}` : recorded.replace(/^最近一次记录于/, '上次读到') : reason;
       if (lack) { if (!lackWhy.has(lack)) lackWhy.set(lack, why === reason ? g?.reason : why); continue; }
       const repeatsReading = sameNote(recorded, describedReading) || datedBackupCutoff && U.sameCutoffNote(recorded, describedReading);
-      const detail = describedAt && repeatsReading ? '' : why
-        .replace('本轮没有读到可用记录', '本轮来源未返回可用记录')
-        .replace('这次没读到', '这次读取失败').replace('读不到', '无法读取');
+      const detail = describedAt && repeatsReading ? '' : why;
       if (!grayWhy.has(detail)) grayWhy.set(detail, []);
       grayWhy.get(detail).push(g?.name);
     }
