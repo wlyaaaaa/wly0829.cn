@@ -183,8 +183,12 @@
       // 标题右边不写日期（本人 11-24 13:00 说不要，M720）；要本人动手时照旧在标题后面写“要你做 ›”
       const status = toOwner ? link(d.attention.href, `要${own}做 ›`) : '', next = d.next || {};
       const head = cardTitle('自动任务', href, tone, status);
-      const handled = p => p.handler === '本人' ? `等${own}处理`
-        : p.handler ? `${p.repairing && !/^已交|在修/.test(p.handler) ? '已交' : ''}${p.handler}` : p.repairing ? 'AI 在修' : '还没人接手';
+      const handled = p => {
+        if (p.handler === '本人') return `等${own}处理`;
+        if (!p.handler) return p.repairing ? 'AI 在修' : '还没人接手';
+        const assigned = p.repairing && !/^已交|在修/.test(p.handler) && !(offline && p.handler.startsWith('等'));
+        return `${assigned ? '已交' : ''}${p.handler}`;
+      };
       const clock = x => U.date(x) === U.date(now) ? U.time(x) : time(x);
       const keepWords = html => html.split(/(<[^>]*>)/).map((part, i) => i % 2 ? part
         : part.replace(/验收|太久|回复/g, '<span class="live-unit">$&</span>')).join('');

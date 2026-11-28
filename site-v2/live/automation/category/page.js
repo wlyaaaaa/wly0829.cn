@@ -141,13 +141,15 @@
     const lastText = lastAt ? `上次 ${esc(when(lastAt))}${lt ? ` <span class="ak-dot" data-tone="${lt.tone}"></span><b data-tone="${lt.tone}">${lt.text}</b>` : ''}`
       : '<span class="tp-muted">运行记录这次没读到</span>';
     const [tone, now] = nowText(d, c, rows);
+    const title = F(cn(c.title), '类别');
+    const status = title ? now.split(title).map(wordsIn).join(`<span class="au-nobr">${title}</span>`) : wordsIn(now);
     const model = [c.model, c.model_effort].filter(Boolean).map(esc).join(' · ');
     const family = model && R.agentsPath(R.familyOf({ host: c.host, model: c.model }), true);
     const description = [esc(c.how_to?.short || ''), F(c.schedule_text, '排期说明')].filter(Boolean).join('。');
     const result = F(c.last_result?.text, '上次结果');
     return `<section class="glass ak-hero"><div class="ak-hero__copy">
-        <div class="ak-hero__title"><h1>${F(cn(c.title), '类别')}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
-        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${now}</b></p>
+        <div class="ak-hero__title"><h1>${title}</h1>${model ? (family ? `<a class="ak-pill" href="${esc(T.path(family))}">${model}</a>` : `<span class="ak-pill">${model}</span>`) : ''}</div>
+        <p class="ak-hero__state">${lastText}<span class="ak-sep">·</span>现在：<span class="ak-dot" data-tone="${tone}"></span><b data-tone="${tone}">${status}</b></p>
         ${c.last_result?.text ? `<p class="ak-hero__last">上次结果：${id === 'translator' ? R.oneVersion(result, true) : result}</p>` : ''}
         <p class="ak-hero__what">${description}</p>
         <div class="ak-hero__ctl au-switchcell">${switchCell(c)}<a class="ak-how" href="${esc(T.path('/live/automation/how/', { type: id }))}">怎么干 <span aria-hidden="true">›</span></a></div>

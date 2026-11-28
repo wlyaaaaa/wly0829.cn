@@ -121,7 +121,7 @@ test('automation work page shows one work and the read-only categories for owner
       assert.doesNotMatch(render(audience, type), /data-setting|默认档位|关了：|设置记录/);
     }
     const backup = render(audience, 'backup');
-    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：<\/b>测试范围.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>要(?:你)?本人恢复原件/s);
+    assert.match(backup, /<span class="aw-type__model">Sol · high<\/span>.*管：<\/b>(?:<[^>]+>)*测试范围.*关了：.*aw-example-tag">比如<.*设置记录.*这里还看不到.*不管：<\/b>要(?:你)?本人恢复原件/s);
     assert.ok(backup.includes(audience === 'owner' ? '什么时候派：</b>要你本人确认' : '什么时候派：</b>要本人确认'));
     assert.match(render(audience, 'backup', { setting_log: [] }), /设置记录.*还没改过设置/s);
   }

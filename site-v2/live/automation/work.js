@@ -139,7 +139,7 @@
   function workLine(row) {
     const target = route(row.href) || workHref(row.id), note = words(row.state_text, row.group === 'running' && row.attempts > 0 && `第 ${row.attempts} 次修理`,
       row.group === 'done' && row.verified && at(row.changed_at) && `已验 ${when(row.changed_at)}`, ...chatActivity(row));
-    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${rowTitle(row)}</b>${note ? `<small>${note}</small>` : ''}`)}</li>`;
+    return `<li>${line(target, `${lamp(row) || '<i class="aw-nolamp"></i>'}<b>${P.keepWords(asOwner(rowTitle(row)))}</b>${note ? `<small>${note}</small>` : ''}`)}</li>`;
   }
   const workRows = (rows, name = '这里没有活') => rows.length
     ? `<ul class="aw-lines">${rows.map(workLine).join('')}</ul>` : empty(name);
@@ -225,7 +225,7 @@
     const art = ART[data.id] || hero;
     const head = `<section class="glass aw-hero aw-type-hero"><img alt="" src="${esc(art)}" class="aw-art">
       <div class="aw-lead"><div class="aw-type-top"><h1>${lamp(data, false)}${field(data.title, '类型名称')}</h1><div class="aw-type-settings">${controls}${message(data.id)}</div></div>
-      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${esc(description)}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
+      <div class="aw-type-top aw-type-top--lines">${description ? `<p class="aw-covers"><b>管：</b>${P.keepWords(esc(description))}</p>` : '<span></span>'}${!readOnly && !retired(data.id) && off ? `<p class="aw-off"><b>关了：</b>${esc(off)}</p>` : ''}</div>
       ${counters}${example ? `<p class="aw-type-example"><span class="aw-example-tag">比如</span><span>${esc(example)}</span></p>` : ''}</div></section>`;
     const work = workRows(active, '这一类现在没有活') + (past.length
       ? `<details class="aw-past" data-fold-count="${past.length}"${active.length ? '' : ' open'}><summary class="aw-more-link">看这一类全部 ${rows.length} 件</summary>${workRows(past)}</details>` : '');
